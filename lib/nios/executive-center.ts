@@ -23,6 +23,8 @@ import { buildSocialConversionVerdict, fetchFacebookSnapshot, type SocialConvers
 import { checkFirebaseHealth, type FirebaseHealth } from './intelligence/firebase-health';
 import { fetchNotificationForensics, type NotificationForensicsReport } from './intelligence/notification-forensics';
 import { generateNiosDiagnostics } from './intelligence/diagnostics';
+import { buildGrowthEngineResult } from './growth/engine';
+import type { GrowthEngineResult } from './growth/types';
 import type { NiosDiagnostic } from './intelligence/diagnostics';
 import type {
   DailySnapshot,
@@ -97,6 +99,8 @@ export interface NiosExecutiveData {
   stale?: boolean;
   /** Forense de notificaciones por canal (telegram, facebook, push, etc.). */
   notificationForensics?: NotificationForensicsReport | null;
+  /** N5 — Motor de crecimiento: oportunidades + PLAN DE HOY (≤5 acciones). */
+  growth?: GrowthEngineResult | null;
 }
 
 const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
@@ -242,8 +246,18 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
     notificationForensics,
   };
 
+  const growth = buildGrowthEngineResult(
+    snapshot,
+    articles,
+    snapshot?.gsc || null,
+    snapshot?.ga4 || null,
+    snapshot?.trust || null,
+    snapshot?.learningPatterns || [],
+  );
+
   return {
     ...data,
+    growth,
     ceoVerdict: buildCeoVerdict(data),
   };
 };
