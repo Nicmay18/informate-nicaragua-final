@@ -6,6 +6,7 @@
  */
 
 import type { NiosExecutiveData } from './executive-center';
+import { findTopOpportunities, type NiosGrowthOpportunity } from './nios-growth-radar';
 
 export interface NiosBriefSection {
   title: string;
@@ -20,6 +21,7 @@ export interface NiosBrief {
   statusLabel: string;
   headline: string;
   sections: NiosBriefSection[];
+  opportunities: NiosGrowthOpportunity[];
   plan: { text: string; source: 'ceo' | 'repair' | 'human' }[];
   sources: { name: string; status: string; note: string }[];
   freshness: { ageHours: number | null; stale: boolean; note: string };
@@ -130,12 +132,12 @@ export function buildNiosBrief(data: NiosExecutiveData): NiosBrief {
 
   // 3. Oportunidades / contenido
   const contentItems: NiosBriefSection['items'] = [];
-  const contentOpps = (data.contentOpportunity as any)?.opportunities;
-  if (contentOpps?.length) {
-    contentOpps.slice(0, 3).forEach((o: any) => {
+  const topOpportunities = findTopOpportunities(data, 5);
+  if (topOpportunities.length) {
+    topOpportunities.slice(0, 3).forEach((o) => {
       contentItems.push({
-        label: 'Oportunidad',
-        value: `${o.query || o.tema || 'Tema'}${o.reason ? ` — ${o.reason}` : ''}`,
+        label: `Oportunidad · ${o.impact} · ${o.confidence}`,
+        value: `${o.title}. ${o.evidence}. Acción: ${o.action}.`,
         status: 'ok',
       });
     });
@@ -241,6 +243,7 @@ export function buildNiosBrief(data: NiosExecutiveData): NiosBrief {
     statusLabel: statusLabelText,
     headline: data.ceoVerdict.whatIsHappening,
     sections,
+    opportunities: topOpportunities,
     plan,
     sources,
     freshness: { ageHours: age, stale: data.stale ?? false, note: freshnessNote },

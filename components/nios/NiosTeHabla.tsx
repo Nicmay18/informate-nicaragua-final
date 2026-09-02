@@ -1,7 +1,19 @@
 import type { NiosBrief } from '@/lib/nios/nios-speaks';
+import type { NiosGrowthOpportunity } from '@/lib/nios/nios-growth-radar';
 
 interface Props {
   brief: NiosBrief;
+}
+
+function impactColor(impact: 'Alto' | 'Medio' | 'Bajo'): string {
+  switch (impact) {
+    case 'Alto':
+      return '#dc2626';
+    case 'Medio':
+      return '#ca8a04';
+    default:
+      return '#64748b';
+  }
 }
 
 function statusColor(status: 'ok' | 'warning' | 'alert' | 'neutral' | undefined): string {
@@ -100,6 +112,37 @@ export function NiosTeHabla({ brief }: Props) {
           </div>
         ))}
       </div>
+
+      {brief.opportunities.length > 0 && (
+        <div style={{ marginBottom: 24 }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, marginBottom: 10 }}>🚀 Top 5 oportunidades de hoy</h3>
+          <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {brief.opportunities.slice(0, 5).map((o: NiosGrowthOpportunity, i) => (
+              <li
+                key={i}
+                style={{
+                  border: '1px solid var(--border)',
+                  borderLeft: `4px solid ${impactColor(o.impact)}`,
+                  borderRadius: 8,
+                  padding: '10px 12px',
+                  fontSize: '0.92rem',
+                }}
+              >
+                <div style={{ fontWeight: 700 }}>{o.title}</div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: 2 }}>
+                  {o.evidence} · Confianza {o.confidence.toLowerCase()} · Impacto {o.impact.toLowerCase()}
+                </div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', marginTop: 4 }}>
+                  Acción: {o.action}
+                </div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', marginTop: 2 }}>
+                  Resultado esperado: {o.expectedResult}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {brief.plan.length > 0 && (
         <div style={{ marginBottom: 24 }}>
