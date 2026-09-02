@@ -311,9 +311,11 @@ function problemsForMissingContext(noticia: NoticiaInput, result: MeniResult): E
   const list: EditorialProblem[] = [];
   const text = `${noticia.titulo} ${noticia.resumen || ''} ${noticia.contenido}`;
 
-  const isSucesos = result.categoria === 'Sucesos' || result.suggestedProfile === 'sucesos';
-  const isHealth = /\b(salud|enfermedad|médico|medico|vacuna|hospital|MINSA|clínica)\b/i.test(text);
-  const isSports = result.categoria === 'Deportes' || result.suggestedProfile === 'deportes';
+  const isSucesos = result.categoria === 'Sucesos' || result.suggestedProfile === 'sucesos' || result.profile_used === 'sucesos';
+  const hasHealthTerm = /\b(salud|enfermedad|médico|medico|vacuna|hospital|MINSA|clínica)\b/i.test(text);
+  const isHealthProfile = result.suggestedProfile === 'salud' || result.profile_used === 'salud';
+  const isHealth = hasHealthTerm && isHealthProfile;
+  const isSports = result.categoria === 'Deportes' || result.suggestedProfile === 'deportes' || result.profile_used === 'deportes';
 
   if (isSucesos) {
     if (!hasMatch(text, /\b\d{1,3}\s+(?:años|año)\b/i)) {
@@ -342,7 +344,8 @@ function problemsForMissingContext(noticia: NoticiaInput, result: MeniResult): E
         field: 'contenido',
       });
     }
-    if (!hasMatch(text, /\b(carro|moto|camion|autobus|microbus|vehículo|vehiculo|camión)\b/i)) {
+    const isTraffic = /\b(accidente|tránsito|tráfico|trafico|vial|carretera|colisión|choque|derrape|vuelco|conductor|peatón|atropello|vehículo|vehiculo)\b/i.test(text);
+    if (isTraffic && !hasMatch(text, /\b(carro|moto|camion|autobus|vehículo|vehiculo|camión)\b/i)) {
       list.push({
         id: 'missing-vehicle',
         problem: 'No se menciona el vehículo involucrado.',
@@ -355,7 +358,7 @@ function problemsForMissingContext(noticia: NoticiaInput, result: MeniResult): E
         field: 'contenido',
       });
     }
-    if (!hasMatch(text, /\b(hospital|clínica|policía|bomberos|MINSA|INSS|alcaldía|ministerio|institución)\b/i)) {
+    if (!hasMatch(text, /\b(hospital|clínica|policía|bomberos|MINSA|INSS|alcaldía|ministerio|institución|fiscalía|fiscalia|tribunal|juzgado|medicina legal|autoridad|autoridades)\b/i)) {
       list.push({
         id: 'missing-institution',
         problem: 'No se identifica una institución relacionada.',
