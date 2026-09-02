@@ -1,5 +1,8 @@
 import { getNiosReport, type NiosModuleReport, type NiosRecommendation } from '@/lib/nios';
 import { getDailyEditorReport } from '@/lib/nios/daily-editor';
+import { getNiosExecutiveData } from '@/lib/nios/executive-center';
+import { buildNiosBrief } from '@/lib/nios/nios-speaks';
+import { NiosTeHabla } from '@/components/nios/NiosTeHabla';
 import { NiosExecutiveDashboard } from '@/components/nios/NiosExecutiveDashboard';
 import { NiosV3Dashboard } from '@/components/nios/NiosV3Dashboard';
 import { NiosV4Dashboard } from '@/components/nios/NiosV4Dashboard';
@@ -22,7 +25,12 @@ function formatDate(iso: string): string {
 }
 
 export default async function NiosPanelPageContent() {
-  const [report, daily] = await Promise.all([getNiosReport(), getDailyEditorReport()]);
+  const [report, daily, rawData] = await Promise.all([
+    getNiosReport(),
+    getDailyEditorReport(),
+    getNiosExecutiveData().catch(() => null),
+  ]);
+  const brief = rawData ? buildNiosBrief(rawData) : null;
 
   return (
     <main className="nios">
@@ -46,6 +54,15 @@ export default async function NiosPanelPageContent() {
           <span className="nios-chip">{Object.keys(report.modules).length} módulos activos</span>
         </div>
       </header>
+
+      {brief ? (
+        <NiosTeHabla brief={brief} />
+      ) : (
+        <div className="nios-speak-fallback" style={{ border: '1px solid var(--border)', borderRadius: 14, padding: 20, marginBottom: 24 }}>
+          <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: 8 }}>Buenos días</h2>
+          <p style={{ color: 'var(--text-secondary)' }}>NIOS está arrancando. Aún no tengo datos suficientes para hablar. Revisá GSC, GA4 y Firebase en Vercel.</p>
+        </div>
+      )}
 
       <NiosExecutiveDashboard daily={daily} />
 
