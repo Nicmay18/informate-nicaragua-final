@@ -89,6 +89,8 @@ export interface QualityGateInput {
   titulo: string;
   contenido: string;
   categoria: string;
+  /** Perfil semántico detectado por MENI. Si se provee, se usa en lugar de categoria para reglas de perfil. */
+  perfil?: string;
   departamento?: string;
   fuenteOriginal?: string;
   entidadesPrevias?: EntityMap;

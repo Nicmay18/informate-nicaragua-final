@@ -116,6 +116,15 @@ const SUCESOS_EVENT_MARKERS = new Set([
   'agredido', 'agredida', 'pelea',
 ]);
 
+const JUDICIAL_FORCE_MARKERS = new Set([
+  'parricidio', 'fiscalia', 'proceso penal', 'acusado', 'acusada',
+  'imputado', 'imputada', 'procesado', 'procesada', 'condenado', 'condenada',
+  'sentencia', 'tribunal', 'juzgado', 'prision preventiva', 'prision',
+  'causa penal', 'expediente judicial',
+  'medicina legal', 'medico legal', 'peritaje', 'peritaje forense',
+  'dictamen forense', 'dictamen medico', 'crimen', 'homicidio', 'asesinato',
+]);
+
 const NACIONALES_SERVICE_MARKERS = new Set([
   'inss', 'seguro social', 'prestacion', 'beneficio', 'beneficios', 'tramite',
   'tramites', 'solicitar', 'solicitud', 'requisitos', 'como solicitar',
@@ -147,6 +156,11 @@ function overrideProfileFromContext(
   const full = `${titulo} ${contenido} ${resumen}`;
   const hasService = hasAnyMarker(full, NACIONALES_SERVICE_MARKERS);
   const hasEvent = hasAnyMarker(full, SUCESOS_EVENT_MARKERS);
+  const hasJudicial = hasAnyMarker(full, JUDICIAL_FORCE_MARKERS);
+
+  // Si el perfil es salud/nacionales y hay indicios judiciales/forenses, gana sucesos.
+  // "Medicina Legal" es forense, no salud. No forzar sucesos sobre internacional/deportes.
+  if ((perfil === 'salud' || perfil === 'nacionales') && hasJudicial) return 'sucesos';
 
   // perfil dice sucesos pero el contenido es de trámites/servicio institucional
   if (perfil === 'sucesos' && hasService && !hasEvent) return 'nacionales';

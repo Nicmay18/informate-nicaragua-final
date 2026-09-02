@@ -30,7 +30,7 @@ import { runEditorialBrain } from '@/lib/meni/editorial-brain';
 import { detectTier, TIER_THRESHOLDS, type EditorialTier } from '@/lib/meni/editorial-tiers';
 import { getPerfilEditorial } from '@/lib/meni/editorial-profiles';
 import { buildEditorialReason } from '@/lib/meni/editorial-reason';
-import { detectContentProfile } from '@/lib/meni/profile-detector';
+import { detectContentProfile, type MeniContentProfile } from '@/lib/meni/profile-detector';
 import { computeInputHash } from '@/lib/meni/hash';
 import { computeContextScore } from '@/lib/meni/contextualiza';
 import { filterRecommendations } from '@/lib/meni/recommendation-filter';
@@ -101,11 +101,13 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     categoria: input.categoria,
   });
   const categoria = editorialClassification.finalCategory;
+  const perfil: MeniContentProfile = (editorialClassification.suggestedProfile as MeniContentProfile) || contentProfile.profile_detected;
   logMeni('Content profile detected', {
     profile: contentProfile.profile_detected,
     confidence: contentProfile.profile_confidence,
     perfilIdentificado,
     categoria,
+    perfil,
     classification: editorialClassification,
   });
 
@@ -118,13 +120,13 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   let thresholds = { ...TIER_THRESHOLDS[tier] };
 
   // Aplicar criterios del perfil editorial según tipo_noticia_detectada
-  const perfil = getPerfilEditorial(categoria, input.contenido);
+  const criterios = getPerfilEditorial(perfil, input.contenido);
   thresholds = {
     ...thresholds,
-    exigeServiceValue: perfil.bloqueaPorServicio,
-    exigeContexto: perfil.exigeContexto,
-    exigeDifferentialValue: perfil.exigeDiferencial,
-    minPalabras: Math.max(thresholds.minPalabras, perfil.minPalabras),
+    exigeServiceValue: criterios.bloqueaPorServicio,
+    exigeContexto: criterios.exigeContexto,
+    exigeDifferentialValue: criterios.exigeDiferencial,
+    minPalabras: Math.max(thresholds.minPalabras, criterios.minPalabras),
   };
 
   // Aplicar overrides del Learning Engine si existen
@@ -155,6 +157,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     ...input,
     categoria: categoria,
     categoriaSugerida: categoria,
+    perfil: perfil,
     fuente: input.contenido,
     tierThresholds: thresholds,
     evaluacion,
@@ -189,6 +192,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     titulo: input.titulo,
     contenido: input.contenido,
     categoria,
+    perfil: perfil,
     stage: 'POST_LLM',
     sourceOfTruth: {
       score: editorialDecision.score,
@@ -254,7 +258,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
       };
 
   // ── FASE 4 + 5: Explicabilidad y veredicto único ──
-  const contextScore = computeContextScore(input.titulo, input.contenido, input.resumen, contentProfile.profile_detected);
+  const contextScore = computeContextScore(input.titulo, input.contenido, input.resumen, perfil);
   const estadoFinal: MeniResult['estadoFinal'] = scoreIsValid
     ? (aprobadoFinal ? 'APROBADO' : calificacion === 'MEJORAR' ? 'MEJORAR' : 'NO_PUBLICAR')
     : 'EVALUATION_ERROR';
@@ -277,7 +281,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // ── FASE 6: Recomendaciones dinámicas por perfil ──
   const recomendacionesContextuales = filterRecommendations(
     recomendacionesFinal,
-    contentProfile.profile_detected,
+    perfil,
     input.titulo,
     input.contenido,
     input.resumen,
@@ -396,7 +400,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     editorialReason,
     articleHash,
     evaluationTimestamp: now.toISOString(),
-    profile_used: contentProfile.profile_detected,
+    profile_used: perfil,
     profile_confidence: contentProfile.profile_confidence,
     matched_keywords: contentProfile.matched_keywords,
     matched_entities: contentProfile.matched_entities,

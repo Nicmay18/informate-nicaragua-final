@@ -247,7 +247,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     input.knowledgeContext?.antecedentes,
   );
 
-  const categoriaForPatterns = input.categoriaSugerida || input.categoria || 'General';
+  const categoriaForPatterns = perfil;
   const textoCategoria = [input.titulo, input.contenido, input.resumen].filter(Boolean).join(' ');
   const evaluacionCategoria = calcularEvaluacionCategoria(categoriaForPatterns, textoCategoria);
 

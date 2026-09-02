@@ -229,4 +229,23 @@ describe('MENI Profile Detector — Tests de regresión', () => {
       expect(result.profile_detected).not.toBe('nacionales');
     });
   });
+
+  describe('Caso 12: Medicina Legal y parricidio => SUCESOS (no salud)', () => {
+    it('clasifica una noticia forense como sucesos', () => {
+      const titulo = 'Medicina Legal determina estado mental de acusada de parricidio';
+      const contenido = `
+        La Fiscalía General informó que Medicina Legal evaluó el estado mental
+        de la mujer acusada de parricidio. El proceso penal continúa en el
+        tribunal correspondiente. La investigación policial recabó un dictamen
+        forense y peritajes para establecer responsabilidades. La causa penal
+        sigue abierta mientras se determina la condena.
+      `;
+      const resumen = 'Medicina Legal evalúa a acusada de parricidio.';
+
+      const result = detectContentProfile(titulo, contenido, resumen);
+
+      expect(result.profile_detected).toBe('sucesos');
+      expect(result.profile_detected).not.toBe('salud');
+    });
+  });
 });

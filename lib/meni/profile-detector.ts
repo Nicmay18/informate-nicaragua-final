@@ -503,6 +503,26 @@ function normalize(text: string): string {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
+// Marcadores judiciales/forenses. Tienen prioridad sobre salud:
+// "Medicina Legal" es forense, no una nota de salud.
+const JUDICIAL_TERMS = [
+  'medicina legal', 'medico legal', 'proceso penal', 'parricidio',
+  'fiscalia', 'acusado', 'acusada', 'imputado', 'imputada',
+  'procesado', 'procesada', 'condenado', 'condenada', 'sentencia',
+  'tribunal', 'juzgado', 'prision preventiva', 'causa penal',
+  'expediente judicial',
+  'crimen', 'homicidio', 'asesinato', 'delito grave',
+  'peritaje', 'peritaje forense', 'dictamen forense', 'dictamen medico',
+];
+
+// Núcleo explícito de violencia de género. Una mujer acusada de parricidio
+// no es violencia de género; necesita términos como 'femicidio', 'expareja'...
+const GENDER_VIOLENCE_CORE = [
+  'femicidio', 'feminicidio',
+  'violencia contra mujer', 'violencia de genero', 'violencia intrafamiliar',
+  'maltrato', 'agredio', 'agredio a', 'expareja', 'ex pareja', 'pareja',
+];
+
 function countMatches(text: string, signal: ProfileSignal): { count: number; hits: string[] } {
   const normalizedText = normalize(text);
   const normalizedKeyword = normalize(signal.keyword);
@@ -612,6 +632,21 @@ export function detectContentProfile(
   if (hasNaturalDisaster && hasForeignCountry) {
     scores.internacional += 10;
     scores.ambiente = 0;
+  }
+
+  // Prioridad judicial: Medicina Legal, Fiscalía, proceso penal, etc.
+  // Debe ganar siempre a salud u otros perfiles cuando el núcleo es judicial.
+  const normalizedFull = normalize(fullText);
+  const hasJudicial = JUDICIAL_TERMS.some((term) => normalizedFull.includes(term));
+  const hasGenderViolenceCore = GENDER_VIOLENCE_CORE.some((term) => normalizedFull.includes(term));
+  if (hasJudicial) {
+    // Violencia de género es más específica que sucesos cuando hay núcleo explícito.
+    if (hasGenderViolenceCore && scores.violencia_genero > 0) {
+      scores.violencia_genero += 12;
+    } else {
+      scores.sucesos += 12;
+    }
+    if (scores.salud > 0) scores.salud = Math.max(0, scores.salud - 6);
   }
 
   // Ambiente solo gana sobre nacionales/sucesos si hay señales fuertes (volcán, sismo, contaminación)

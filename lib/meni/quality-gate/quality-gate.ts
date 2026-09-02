@@ -52,8 +52,9 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   const textoPlano = stripHtml(`${input.titulo} ${input.contenido}`);
   const entidades = extractEntities(textoPlano);
   const useSource = input.sourceOfTruth != null;
+  const perfil = input.perfil || input.categoria;
 
-  const explanationIndexBase = computeExplanationIndex(textoPlano, input.fuenteOriginal, input.categoria);
+  const explanationIndexBase = computeExplanationIndex(textoPlano, input.fuenteOriginal, perfil);
   const explanationIndex = useSource && input.sourceOfTruth?.explanationIndex
     ? { ...explanationIndexBase, ...input.sourceOfTruth.explanationIndex }
     : explanationIndexBase;
@@ -65,8 +66,8 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
     ...detectTerminologyVariants(textoPlano),
     ...detectUnsupportedClaims(textoPlano),
     ...detectFillerLanguage(textoPlano),
-    ...detectSensationalism(textoPlano, input.categoria),
-    ...detectTitleRepetition(input.titulo, input.categoria, input.titulosPrevios),
+    ...detectSensationalism(textoPlano, perfil),
+    ...detectTitleRepetition(input.titulo, perfil, input.titulosPrevios),
   ];
 
   // Detector de transcripción párrafo a párrafo (requiere fuente original)
@@ -74,7 +75,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
 
   if (input.stage === 'POST_LLM' && !useSource) {
     // Solo cuando no hay fuente de verdad editorial se evalúan estos criterios aquí.
-    issues = [...issues, ...detectServiceValue(input.categoria, textoPlano)];
+    issues = [...issues, ...detectServiceValue(perfil, textoPlano)];
     issues = [...issues, ...transcription.issues];
     if (porQueLeerAqui !== undefined) {
       issues = [...issues, ...detectDifferentialValue(porQueLeerAqui)];
