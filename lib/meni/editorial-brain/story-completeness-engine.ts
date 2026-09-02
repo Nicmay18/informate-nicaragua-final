@@ -81,7 +81,7 @@ function detectarContextoFaltante(texto: string, tipo: StoryType, categoria?: st
   if (tipo === 'accidente' && /accidente|choque/i.test(t) && !/velocidad|causa|imprudencia|vía/i.test(t)) {
     faltantes.push('Causa probable del accidente');
   }
-  if (tipo === 'muerte' && /muerte|fallecido/i.test(t) && !/causa|investigación|autopsia/i.test(t)) {
+  if (tipo === 'muerte' && /muerte|fallecido/i.test(t) && !/causa|investigaci[oó]n|autopsia|peritaje|dictamen|proceso/i.test(t)) {
     faltantes.push('Causa de muerte e investigación');
   }
   if (tipo === 'delito' && /detención|captura/i.test(t) && !/cargo|delito|proceso|judicial/i.test(t)) {
@@ -132,9 +132,9 @@ export function runStoryCompletenessEngine(
   const cerrada = totalFaltantes === 0;
 
   let score = 100;
-  score -= respuestasFaltantes.length * 10;
-  score -= contextoFaltante.length * 8;
-  score -= dudasPendientes.length * 5;
+  score -= respuestasFaltantes.length * 5;
+  score -= contextoFaltante.length * 4;
+  score -= dudasPendientes.length * 3;
   score = Math.max(0, Math.min(score, 100));
 
   return { cerrada, respuestasFaltantes, contextoFaltante, dudasPendientes, score };

@@ -71,7 +71,7 @@ const NATIONALITY_WORDS: Record<string, string> = {
   canadiense: 'Canadá',
 };
 
-const COUNTRY_WORDS: Record<string, string> = {
+export const COUNTRY_WORDS: Record<string, string> = {
   nicaragua: 'Nicaragua',
   panamá: 'Panamá',
   panama: 'Panamá',
@@ -103,7 +103,7 @@ const COUNTRY_WORDS: Record<string, string> = {
   canada: 'Canadá',
 };
 
-const CITY_WORDS: Record<string, string> = {
+export const CITY_WORDS: Record<string, string> = {
   managua: 'Managua',
   león: 'León',
   leon: 'León',

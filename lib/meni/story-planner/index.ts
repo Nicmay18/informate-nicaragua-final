@@ -25,12 +25,12 @@ function detectarTipo(texto: string, categoria?: string): StoryType {
   if (/coca[ií]na|droga|narcot|decomiso|ocupaci[oó]n.*kilos?|kilos?.*(ocup|decom|incaut)/i.test(t)) return 'operativo_antidrogas';
   if (/operativo|allanamiento|captura|detenci[oó]n|aprehensi[oó]n|redada/i.test(t)) return 'operativo_policial';
   if (/accidente|choque|colisi[oó]n|volcadura|atropello|v[ií]ctima.*v[ií]a|v[ií]a.*fallecido/i.test(t)) return 'accidente_transito';
-  if (/homicidio|asesinato|muerte violenta|ejecutado|balacera|cad[eá]ver|fallecido.*arma|arma.*fallecido/i.test(t)) return 'homicidio';
+  if (/(?:\b)(?:homicidio|asesinato|parricidio|femicidio|muert[oa]s?|fallecid[oa]s?|falleci[oó]|muerte\s+violenta|ejecutado|balacera|cad[eá]ver|arma.*fallecido|fallecido.*arma)(?:\b)/i.test(t)) return 'homicidio';
   if (/incendio|fuego|siniestro|conflagraci[oó]n|conato/i.test(t)) return 'incendio';
   if (/dengue|malaria|covid|virus|epidemia|brote|salud|hospital|intoxicaci[oó]n|enfermedad/i.test(t)) return 'salud_publica';
   if (/precio|inflaci[oó]n|salario|econom[ií]a|d[oó]lar|c[oó]rdoba|exportaci[oó]n|importaci[oó]n|canasta/i.test(t)) return 'economia';
   if (/pol[ií]tica|gobierno|asamblea|partido|elecci[oó]n|reforma|decreto|presidente|ministro/i.test(t)) return 'politica_nacional';
-  if (/internacional|estados unidos|onu|ue|russia|china|am[eé]rica|mundo|exterior/i.test(t)) return 'hecho_internacional';
+  if (/(?:^|\W)(?:internacional|onu|russia|china|mundo|exterior|estados\s+unidos)(?=$|\W)|\bue\b|(?:^|\W)am[eé]rica(?=$|\W)/i.test(t)) return 'hecho_internacional';
   if (/deporte|f[uú]tbol|b[eé]isbol|boxeo|campeonato|selecci[oó]n|liga|torneo/i.test(t)) return 'deporte';
   if (/inundaci[oó]n|deslave|lluvia|tormenta|terremoto|hurac[aá]n|desastre|evacuaci[oó]n/i.test(t)) return 'desastre_natural';
   if (/educaci[oó]n|colegio|universidad|estudiante|maestro|profesor|escuela/i.test(t)) return 'educacion';

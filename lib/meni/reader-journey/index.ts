@@ -31,7 +31,7 @@ function detectarTipo(texto: string): TipoHecho {
   if (/dengue|malaria|covid|salud|epidemia|brote|intoxicaci[oó]n/i.test(t)) return 'salud';
   if (/precio|inflaci[oó]n|salario|econom[ií]a|d[oó]lar/i.test(t)) return 'economia';
   if (/pol[ií]tica|gobierno|asamblea|reforma|decreto/i.test(t)) return 'politica';
-  if (/internacional|onu|ue|estados unidos|russia|china/i.test(t)) return 'internacional';
+  if (/(?:^|\W)(?:internacional|onu|russia|china|mundo|exterior|estados\s+unidos)(?=$|\W)|\bue\b|(?:^|\W)am[eé]rica(?=$|\W)/i.test(t)) return 'internacional';
   if (/\b(deporte|f[uú]tbol|b[eé]isbol|campeonato)\b/i.test(t)) return 'deporte';
   if (/\b(inundaci[oó]n|deslave|tormenta|terremoto|hurac[aá]n)\b/i.test(t)) return 'desastre';
   if (/\b(educaci[oó]n|colegio|universidad)\b/i.test(t)) return 'educacion';

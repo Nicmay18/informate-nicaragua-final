@@ -88,7 +88,8 @@ function calcularServicio(tipo: string, texto: string): number {
   const t = texto.toLowerCase();
   const base: Record<string, number> = {
     economia: 90, salud: 90, desastre: 85, educacion: 75,
-    accidente: 70, siniestro: 65, general: 30, deporte: 20,
+    accidente: 70, siniestro: 65, muerte: 80, delito: 80,
+    general: 30, deporte: 20,
   };
   let score = base[tipo] ?? 35;
   if (/recomendación|precaución|prevención|qué hacer|cómo/i.test(t)) score = Math.min(score + 15, 100);

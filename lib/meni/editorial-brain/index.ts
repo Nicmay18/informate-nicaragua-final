@@ -13,8 +13,7 @@
 
 import { CONTRATO_GLOBAL } from '../editorial-contract';
 import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
-import { USE_MENI_SCORE_V2, MENI_V2_WEIGHTS, MENI_V2_BLEND, MIN_APPROVED_SCORE } from '@/lib/meni/scoring';
-import type { EvaluacionEditorial } from '@/lib/editorial';
+import { MIN_APPROVED_SCORE } from '@/lib/meni/scoring';
 import { INDIVIDUAL_SPORTS_KEYWORDS } from '../editorial-profiles';
 import { runNewsValueEngine } from './news-value-engine';
 import { runCompetitionEngine } from './competition-engine';
@@ -27,16 +26,11 @@ import { runReaderRetentionEngine } from './reader-retention-engine';
 import { runStoryCompletenessEngine } from './story-completeness-engine';
 import { runIntelligenceEngine } from '@/lib/meni/intelligence';
 import { computeEditorialDNA } from '@/lib/meni/editorial-dna/engine';
-import type { EditorialDnaResult } from '@/lib/meni/editorial-dna/types';
 import { runStoryPlanner } from '@/lib/meni/story-planner';
 import { runAntiClickbait } from '@/lib/meni/anti-clickbait';
 import { runReaderJourney } from '@/lib/meni/reader-journey';
 import { runUtilityGate } from './utility-gate';
 import { buildDiagnostico } from './diagnostico';
-import { analyzeUtilidad } from '@/lib/meni/utilidad';
-import { analyzeProfundidad } from '@/lib/meni/profundidad';
-import { analyzeEEAT } from '@/lib/meni/eeat';
-import { calcularPenalizacionEditorial } from '@/lib/meni/penalizacion-editorial';
 import { verifyEditorialDecisions } from './verification';
 import { computeRanking, analyzeSaturation } from '@/lib/meni/editor-jefe/ranking';
 import { applyPatternsToDiagnostic } from '@/lib/meni/editor-jefe/correction-tracker';
@@ -251,23 +245,17 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   const textoCategoria = [input.titulo, input.contenido, input.resumen].filter(Boolean).join(' ');
   const evaluacionCategoria = calcularEvaluacionCategoria(categoriaForPatterns, textoCategoria);
 
-  const { score, puntosPerdidos } = USE_MENI_SCORE_V2
-    ? calcularScoreEjecutivoV2(
-        acciones,
-        evaluacionCategoria.puntosPerdidos,
-        editorialDna.bloquear || tieneProblemasGraves,
-        { readerLearning, editorialContribution },
-        editorialDna,
-        input.evaluacion,
-        input,
-      )
-    : calcularScoreEjecutivo(
-        acciones,
-        evaluacionCategoria.puntosPerdidos,
-        editorialDna.bloquear || tieneProblemasGraves,
-        { readerLearning, editorialContribution },
-        evaluacionCategoria.bonusValorEditorial,
-      );
+  const { puntosPerdidos } = calcularScoreEjecutivo(
+    acciones,
+    evaluacionCategoria.puntosPerdidos,
+    editorialDna.bloquear || tieneProblemasGraves,
+    { readerLearning, editorialContribution },
+    evaluacionCategoria.bonusValorEditorial,
+  );
+
+  // El score final es el ADN NI, que integra métricas editoriales ponderadas.
+  // El score ejecutivo se conserva solo como diagnóstico de puntos perdidos.
+  const score = editorialDna.adnNI;
   const minScore = input.tierThresholds?.minAdnNI ?? 60;
 
   // Veredicto ejecutivo se deriva del score transparente, no de pesos heredados.
@@ -592,51 +580,6 @@ function calcularEvaluacionCategoria(
 
 export type { EditorialDecision, EditorialBrainInput, EvaluacionCategoria, LlmInstructions, PuntoPerdido } from './types';
 
-function calcularScoreEjecutivoV2(
-  acciones: string[],
-  puntosCategoria: PuntoPerdido[],
-  bloquear: boolean,
-  respuestas: { readerLearning: string; editorialContribution: string },
-  editorialDna: EditorialDnaResult,
-  evaluacion: EvaluacionEditorial | undefined,
-  input: EditorialBrainInput,
-): { score: number; puntosPerdidos: PuntoPerdido[] } {
-  // 1. Base con penalizaciones V1. No se vuelven a duplicar.
-  const base = calcularScoreEjecutivo(acciones, puntosCategoria, bloquear, respuestas);
-
-  // 2. Dimensiones editoriales con analizadores V3 para utilidad, profundidad y EEAT.
-  const utilidad = analyzeUtilidad(input, evaluacion);
-  const profundidad = analyzeProfundidad(input, evaluacion);
-  const originalidad = editorialDna.selloNI.originalidad;
-  const eeat = evaluacion ? analyzeEEAT(evaluacion).score : 0;
-  const aportePropio = evaluacion?.evidence?.originality?.tieneAportePropio ? 100 : 0;
-  const adnNI = editorialDna.adnNI;
-
-  // 3. Pesos centralizados en lib/meni/scoring.ts. Los puntos perdidos ya están en base.score.
-  const w = MENI_V2_WEIGHTS;
-  const totalDim = w.utilidad + w.profundidad + w.originalidad + w.eeat + w.aportePropio + w.adnNI;
-
-  const valorEditorial =
-    (utilidad * w.utilidad +
-      profundidad * w.profundidad +
-      originalidad * w.originalidad +
-      eeat * w.eeat +
-      aportePropio * w.aportePropio +
-      adnNI * w.adnNI) /
-    totalDim;
-
-  // 4. Penalización editorial V3.2 (capa aditiva por dimensiones críticas bajas).
-  const penalizacionEditorial = calcularPenalizacionEditorial({ utilidad, profundidad, eeat });
-
-  // 5. Blend base/valor centralizado.
-  let score = Math.round(
-    base.score * MENI_V2_BLEND.base + valorEditorial * MENI_V2_BLEND.valor - penalizacionEditorial,
-  );
-  if (bloquear) score = Math.min(score, 74);
-  score = Math.max(0, Math.min(100, score));
-
-  return { score, puntosPerdidos: base.puntosPerdidos };
-}
 
 function calcularScoreEjecutivo(
   acciones: string[],

@@ -40,7 +40,7 @@ function appliesToProfile(mensaje: string, profile: MeniContentProfile): boolean
   const nMsg = normalize(mensaje);
 
   const profileStopwords: Record<MeniContentProfile, string[]> = {
-    sucesos: ['sintoma', 'sintomas', 'prevencion', 'prevenir', 'como se transmite', 'transmision', 'vacuna', 'enfermedad'],
+    sucesos: ['sintoma', 'sintomas', 'prevencion', 'prevenir', 'como se transmite', 'transmision', 'vacuna', 'enfermedad', 'exterior', 'internacional', 'mundo', 'paises', 'países', 'global'],
     violencia_genero: ['sintoma', 'sintomas', 'como se transmite', 'vacuna'],
     nacionales: [],
     politica: ['sintoma', 'sintomas', 'como se transmite'],

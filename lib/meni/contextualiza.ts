@@ -1,4 +1,5 @@
 import type { MeniContentProfile } from './profile-detector';
+import { CITY_WORDS } from '@/lib/nios/editorial-diagnosis';
 
 /**
  * MENI Contextualiza — Auditoría explicable
@@ -28,6 +29,8 @@ export interface ContextScore {
   impacto_social: ContextSubscore;
   fuentes: ContextSubscore;
 }
+
+const GEO_NOMBRES = [...new Set(Object.values(CITY_WORDS).map(v => v.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')))];
 
 interface ContextDetector {
   name: keyof ContextScore;
@@ -175,6 +178,7 @@ const DETECTORS: ContextDetector[] = [
       'municipio', 'departamento', 'barrio', 'comunidad', 'carretera', 'km',
       'lugar', 'zona', 'sector', 'región', 'localidad', 'municipio de',
       'departamento de',
+      ...GEO_NOMBRES,
     ],
     maximo: 10,
     pesoPorMatch: 5,
@@ -197,6 +201,8 @@ const DETECTORS: ContextDetector[] = [
       'familias', 'consecuencia', 'menores', 'deja', 'familiares', 'familia',
       'hijos', 'víctimas', 'población', 'afectados', 'afecta a',
       'consecuencias', 'repercusiones',
+      'hija', 'hijo', 'niño', 'niña', 'infantil', 'parricidio', 'fallecido',
+      'muerte', 'luto', 'duelo',
     ],
     maximo: 15,
     pesoPorMatch: 7.5,
@@ -211,6 +217,9 @@ const DETECTORS: ContextDetector[] = [
       'de manera extraoficial', 'según especialistas', 'según la propia',
       'coinciden en que', 'recomiendan', 'describen', 'atribuyen',
       'según la ley', 'hipótesis', 'especialistas',
+      'según', 'segun', 'de acuerdo con', 'peritaje', 'peritajes', 'dictamen',
+      'fiscalía', 'fiscalia', 'medicina legal', 'medico legal', 'médico legal',
+      'versión preliminar', 'determinó', 'determino', 'pericias',
     ],
     maximo: 20,
     pesoPorMatch: 10,
