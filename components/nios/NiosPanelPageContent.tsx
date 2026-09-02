@@ -2,7 +2,9 @@ import { getNiosReport, type NiosModuleReport, type NiosRecommendation } from '@
 import { getDailyEditorReport } from '@/lib/nios/daily-editor';
 import { getNiosExecutiveData } from '@/lib/nios/executive-center';
 import { buildNiosBrief } from '@/lib/nios/nios-speaks';
+import { proposeActionsFromOpportunities } from '@/lib/nios/action-engine';
 import { NiosTeHabla } from '@/components/nios/NiosTeHabla';
+import { NiosPlanOfToday } from '@/components/nios/NiosPlanOfToday';
 import { NiosExecutiveDashboard } from '@/components/nios/NiosExecutiveDashboard';
 import { NiosV3Dashboard } from '@/components/nios/NiosV3Dashboard';
 import { NiosV4Dashboard } from '@/components/nios/NiosV4Dashboard';
@@ -31,6 +33,7 @@ export default async function NiosPanelPageContent() {
     getNiosExecutiveData().catch(() => null),
   ]);
   const brief = rawData ? buildNiosBrief(rawData) : null;
+  const initialActions = brief ? await proposeActionsFromOpportunities(brief.opportunities) : [];
 
   return (
     <main className="nios">
@@ -63,6 +66,8 @@ export default async function NiosPanelPageContent() {
           <p style={{ color: 'var(--text-secondary)' }}>NIOS está arrancando. Aún no tengo datos suficientes para hablar. Revisá GSC, GA4 y Firebase en Vercel.</p>
         </div>
       )}
+
+      <NiosPlanOfToday actions={initialActions} />
 
       <NiosExecutiveDashboard daily={daily} />
 

@@ -16,6 +16,8 @@ export interface NiosGrowthOpportunity {
   expectedResult: string;
   confidence: 'Alta' | 'Media' | 'Baja';
   impact: 'Alto' | 'Medio' | 'Bajo';
+  target: string;
+  before: Record<string, unknown>;
 }
 
 function impactFromClicks(clicks: number): 'Alto' | 'Medio' | 'Bajo' {
@@ -39,10 +41,12 @@ export function findTopOpportunities(data: NiosExecutiveData, limit = 5): NiosGr
         kind: 'seo-query',
         title: `Mejorar CTR para "${q.query}"`,
         evidence: `${q.impressions} impresiones · ${q.clicks} clics · CTR ${(q.ctr * 100).toFixed(1)}%`,
-        action: 'Revisar título y meta description del artículo que rankea.',
+        action: 'Preparar experimento de título/meta para el artículo que rankea por esta consulta.',
         expectedResult: 'Aumentar clics sin crear contenido nuevo.',
         confidence: q.impressions >= 500 ? 'Alta' : 'Media',
         impact: impactFromClicks(q.clicks),
+        target: q.query,
+        before: { query: q.query, impressions: q.impressions, clicks: q.clicks, ctr: q.ctr, position: q.position },
       });
     });
   }
@@ -59,10 +63,12 @@ export function findTopOpportunities(data: NiosExecutiveData, limit = 5): NiosGr
         kind: 'seo-page',
         title: `Optimizar título de ${p.url.split('/').pop() || p.url}`,
         evidence: `${p.impressions} impresiones · ${p.clicks} clics · posición ${p.position.toFixed(1)}`,
-        action: 'Actualizar título y mejorar intención de búsqueda.',
+        action: 'Preparar propuesta de título/meta para esta URL.',
         expectedResult: 'Subir CTR y posición promedio.',
         confidence: 'Media',
         impact: impactFromClicks(p.clicks),
+        target: p.url,
+        before: { url: p.url, slug: p.url.split('/').pop() || p.url, impressions: p.impressions, clicks: p.clicks, ctr: p.ctr, position: p.position },
       });
     });
   }
@@ -77,10 +83,12 @@ export function findTopOpportunities(data: NiosExecutiveData, limit = 5): NiosGr
           kind: 'content-momentum',
           title: `Impulsar "${a.slug}"`,
           evidence: `${a.trend} +${a.delta} vistas · fuente ${a.attribution?.source || 'desconocida'}`,
-          action: 'Redistribuir en Telegram/Facebook y agregar enlaces internos.',
+          action: 'Preparar copias de redistribución para Telegram.',
           expectedResult: 'Mantener o acelerar crecimiento de vistas.',
           confidence: 'Media',
           impact: a.delta >= 50 ? 'Alto' : 'Medio',
+          target: a.slug,
+          before: { slug: a.slug, trend: a.trend, delta: a.delta, source: a.attribution?.source },
         });
       });
   }
@@ -92,10 +100,12 @@ export function findTopOpportunities(data: NiosExecutiveData, limit = 5): NiosGr
         kind: 'content-recirculation',
         title: `Recircular "${a.titulo || a.slug}"`,
         evidence: `${a.vistas ?? 0} vistas acumuladas.`,
-        action: 'Republicar en redes o reenviar resumen diario.',
+        action: 'Preparar copias de redistribución para Telegram.',
         expectedResult: 'Recuperar tráfico de contenido probado.',
         confidence: 'Alta',
         impact: (a.vistas ?? 0) >= 1000 ? 'Alto' : 'Medio',
+        target: a.slug,
+        before: { slug: a.slug, titulo: a.titulo, vistas: a.vistas },
       });
     });
   }
@@ -113,6 +123,8 @@ export function findTopOpportunities(data: NiosExecutiveData, limit = 5): NiosGr
         expectedResult: 'Captar tráfico de búsqueda emergente.',
         confidence: 'Media',
         impact: 'Medio',
+        target: o.query || o.tema || 'detectada',
+        before: { query: o.query, tema: o.tema, reason: o.reason },
       });
     });
   }
