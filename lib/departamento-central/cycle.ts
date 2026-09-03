@@ -1,0 +1,204 @@
+import { getAdminDb } from '@/lib/firebase-admin';
+import { logger } from '@/lib/logger';
+import type { DepartamentoDailyReport, SiteHealthCheck } from './types';
+
+const SITE_ROOT = 'https://nicaraguainformate.com';
+const TIMEOUT_MS = 20000;
+
+async function checkUrl(path: string): Promise<SiteHealthCheck> {
+  const url = `${SITE_ROOT}${path}`;
+  const started = Date.now();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    const res = await fetch(url, {
+      method: 'HEAD',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
+      },
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    return {
+      url,
+      status: res.status,
+      ok: res.status >= 200 && res.status < 400,
+      responseMs: Date.now() - started,
+    };
+  } catch (err) {
+    clearTimeout(timer);
+    return {
+      url,
+      status: 0,
+      ok: false,
+      responseMs: Date.now() - started,
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
+}
+
+async function loadLast24hActions(): Promise<{ completed: number; pending: number; failed: number; items: string[] }> {
+  const db = getAdminDb();
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+  const [completedSnap, pendingSnap, failedSnap] = await Promise.all([
+    db.collection('nios_actions').where('completedAt', '>=', since).count().get(),
+    db.collection('nios_actions').where('status', '==', 'PENDING').count().get(),
+    db.collection('nios_actions').where('failedAt', '>=', since).count().get(),
+  ]);
+
+  const completed = completedSnap.data().count;
+  const pending = pendingSnap.data().count;
+  const failed = failedSnap.data().count;
+
+  return {
+    completed,
+    pending,
+    failed,
+    items: [
+      completed > 0 ? `${completed} acciones completadas` : '',
+      pending > 0 ? `${pending} acciones esperando aprobación` : '',
+      failed > 0 ? `${failed} acciones fallaron` : '',
+    ].filter(Boolean),
+  };
+}
+
+async function loadIncidents(): Promise<{ active: number; resolved: number; items: string[] }> {
+  const db = getAdminDb();
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+  const [activeSnap, resolvedSnap] = await Promise.all([
+    db.collection('depto_incidents').where('status', '==', 'active').count().get(),
+    db.collection('depto_incidents').where('resolvedAt', '>=', since).count().get(),
+  ]);
+
+  const active = activeSnap.data().count;
+  const resolved = resolvedSnap.data().count;
+
+  const items: string[] = [];
+  if (active > 0) items.push(`${active} incidente(s) activo(s)`);
+  if (resolved > 0) items.push(`${resolved} incidente(s) resuelto(s) en las últimas 24h`);
+
+  return { active, resolved, items };
+}
+
+async function loadGrowthOpportunities(): Promise<{ count: number; note: string }> {
+  const db = getAdminDb();
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const snap = await db.collection('nios_growth_opportunities').where('createdAt', '>=', since).count().get();
+  const count = snap.data().count;
+
+  if (count === 0) {
+    return { count: 0, note: 'No se generaron nuevas oportunidades de crecimiento en las últimas 24h.' };
+  }
+
+  return { count, note: `${count} oportunidades de crecimiento detectadas.` };
+}
+
+async function loadEditorialNotes(): Promise<{ count: number; note: string }> {
+  const db = getAdminDb();
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+  const [supervisorSnap, meniSnap] = await Promise.all([
+    db.collection('supervisor_cycles').where('runAt', '>=', since).count().get(),
+    db.collection('meni_diagnosis').where('timestamp', '>=', since).count().get(),
+  ]);
+
+  const count = supervisorSnap.data().count + meniSnap.data().count;
+  const note = count === 0
+    ? 'Sin nuevas revisiones editoriales automáticas en las últimas 24h.'
+    : `${count} revisiones editoriales registradas.`;
+
+  return { count, note };
+}
+
+async function loadLearnings(): Promise<string[]> {
+  const db = getAdminDb();
+  const snap = await db.collection('nios_memory').where('kind', '==', 'learning').orderBy('timestamp', 'desc').limit(3).get();
+  return snap.docs.map((d) => {
+    const data = d.data();
+    return typeof data.note === 'string' ? data.note : String(data.note || '');
+  }).filter(Boolean);
+}
+
+export async function runDepartamentoCentralCycle(): Promise<DepartamentoDailyReport> {
+  const started = Date.now();
+  const now = new Date().toISOString();
+
+  const [rootHealth, noticiasHealth] = await Promise.all([
+    checkUrl('/'),
+    checkUrl('/noticias/'),
+  ]);
+
+  const actions = await loadLast24hActions();
+  const incidents = await loadIncidents();
+  const growth = await loadGrowthOpportunities();
+  const editorial = await loadEditorialNotes();
+  const learnings = await loadLearnings();
+
+  const siteStatus: 'ok' | 'warning' | 'critical' =
+    rootHealth.ok && noticiasHealth.ok ? 'ok' : 'critical';
+
+  const incidentItems = [...incidents.items];
+  if (!rootHealth.ok) incidentItems.push(`Página principal responde ${rootHealth.status || 'error'}: ${rootHealth.error || 'sin respuesta'}`);
+  if (!noticiasHealth.ok) incidentItems.push(`Sección /noticias responde ${noticiasHealth.status || 'error'}`);
+
+  const summaryLines: string[] = [];
+  summaryLines.push(siteStatus === 'ok' ? 'El sitio está funcionando.' : 'El sitio tiene problemas de disponibilidad.');
+  if (actions.items.length > 0) summaryLines.push(actions.items.join(' · '));
+  if (incidentItems.length > 0) summaryLines.push(...incidentItems);
+  if (growth.count > 0) summaryLines.push(growth.note);
+  if (learnings.length > 0) summaryLines.push(`Aprendizajes registrados: ${learnings.length}`);
+
+  const nextWork = actions.pending > 0
+    ? `Hay ${actions.pending} acción(es) esperando aprobación. Es la prioridad.`
+    : growth.count > 0
+    ? `Revisar ${growth.count} oportunidades de crecimiento detectadas.`
+    : 'Continuar vigilancia del sitio, SEO y contenido.';
+
+  logger.info('[departamento-central] Ciclo completado', { siteStatus, durationMs: Date.now() - started });
+
+  return {
+    date: now.slice(0, 10),
+    runAt: now,
+    site: {
+      status: siteStatus,
+      root: rootHealth,
+      noticias: noticiasHealth,
+    },
+    corrections: {
+      name: 'correcciones',
+      ok: actions.failed === 0,
+      count: actions.completed,
+      note: `Completadas ${actions.completed} · Fallaron ${actions.failed} · Pendientes ${actions.pending}`,
+    },
+    approvals: {
+      name: 'aprobaciones',
+      ok: actions.pending <= 5,
+      count: actions.pending,
+      note: actions.pending > 0 ? `${actions.pending} acciones esperan aprobación humana.` : 'No hay acciones pendientes de aprobación.',
+    },
+    growth: {
+      name: 'crecimiento',
+      ok: true,
+      count: growth.count,
+      note: growth.note,
+    },
+    editorial: {
+      name: 'editorial',
+      ok: true,
+      count: editorial.count,
+      note: editorial.note,
+    },
+    incidents: {
+      level: incidentItems.length > 0 ? 'critical' : 'ok',
+      active: incidents.active,
+      resolved: incidents.resolved,
+      items: incidentItems,
+    },
+    learning: learnings,
+    summary: summaryLines.join('\n'),
+    nextWork,
+  };
+}

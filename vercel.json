@@ -31,6 +31,7 @@
   ],
   "crons": [
     { "path": "/api/cron/nios-collect", "schedule": "0 8 * * *" },
-    { "path": "/api/cron/resumen-diario", "schedule": "0 12 * * *" }
+    { "path": "/api/cron/resumen-diario", "schedule": "0 12 * * *" },
+    { "path": "/api/cron/departamento-central", "schedule": "0 6 * * *" }
   ]
 }
