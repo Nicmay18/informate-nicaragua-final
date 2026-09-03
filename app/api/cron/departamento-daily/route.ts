@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
-import { runScheduler } from '@/lib/departamento-central/scheduler';
+import { runDepartamentoCentralCycle } from '@/lib/departamento-central/cycle';
+import { saveDepartamentoReport } from '@/lib/departamento-central/store';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -17,15 +18,18 @@ export async function GET(request: Request) {
   const started = Date.now();
 
   try {
-    const result = await runScheduler();
+    const report = await runDepartamentoCentralCycle();
+    await saveDepartamentoReport(report);
+
     return NextResponse.json({
       success: true,
-      ...result,
+      runAt: report.runAt,
+      site: report.site.status,
       durationMs: Date.now() - started,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Error desconocido';
-    logger.error('[departamento-central-cron] Error:', { error: message });
+    logger.error('[departamento-daily-cron] Error:', { error: message });
     return NextResponse.json({ error: message, durationMs: Date.now() - started }, { status: 500 });
   }
 }

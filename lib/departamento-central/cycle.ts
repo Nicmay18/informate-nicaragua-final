@@ -2,43 +2,8 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 import { openIncident, resolveIncident, getIncidentsSummary } from './incidents';
 import { recordLearning } from './learning';
-import type { DepartamentoDailyReport, SiteHealthCheck } from './types';
-
-const SITE_ROOT = 'https://nicaraguainformate.com';
-const TIMEOUT_MS = 20000;
-
-async function checkUrl(path: string): Promise<SiteHealthCheck> {
-  const url = `${SITE_ROOT}${path}`;
-  const started = Date.now();
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-
-  try {
-    const res = await fetch(url, {
-      method: 'HEAD',
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36',
-      },
-      signal: controller.signal,
-    });
-    clearTimeout(timer);
-    return {
-      url,
-      status: res.status,
-      ok: res.status >= 200 && res.status < 400,
-      responseMs: Date.now() - started,
-    };
-  } catch (err) {
-    clearTimeout(timer);
-    return {
-      url,
-      status: 0,
-      ok: false,
-      responseMs: Date.now() - started,
-      error: err instanceof Error ? err.message : String(err),
-    };
-  }
-}
+import { checkUrl } from './health';
+import type { DepartamentoDailyReport } from './types';
 
 async function loadLast24hActions(): Promise<{ completed: number; pending: number; failed: number; items: string[] }> {
   const db = getAdminDb();

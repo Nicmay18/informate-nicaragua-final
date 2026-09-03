@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
-import { runScheduler } from '@/lib/departamento-central/scheduler';
+import { runWatchdog } from '@/lib/departamento-central/watchdog';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60;
+export const maxDuration = 30;
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   const started = Date.now();
 
   try {
-    const result = await runScheduler();
+    const result = await runWatchdog();
     return NextResponse.json({
       success: true,
       ...result,
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Error desconocido';
-    logger.error('[departamento-central-cron] Error:', { error: message });
+    logger.error('[departamento-watchdog-cron] Error:', { error: message });
     return NextResponse.json({ error: message, durationMs: Date.now() - started }, { status: 500 });
   }
 }

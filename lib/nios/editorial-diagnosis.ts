@@ -312,9 +312,9 @@ function problemsForMissingContext(noticia: NoticiaInput, result: MeniResult): E
   const text = `${noticia.titulo} ${noticia.resumen || ''} ${noticia.contenido}`;
 
   const isSucesos = result.categoria === 'Sucesos' || result.suggestedProfile === 'sucesos' || result.profile_used === 'sucesos';
-  const hasHealthTerm = /\b(salud|enfermedad|médico|medico|vacuna|hospital|MINSA|clínica)\b/i.test(text);
+  const hasHealthTerm = /\b(salud|enfermedad|médico|medico|vacuna|vacunación|hospital|MINSA|clínica)\b/i.test(text);
   const isHealthProfile = result.suggestedProfile === 'salud' || result.profile_used === 'salud';
-  const isHealth = hasHealthTerm && isHealthProfile;
+  const isHealth = hasHealthTerm || isHealthProfile;
   const isSports = result.categoria === 'Deportes' || result.suggestedProfile === 'deportes' || result.profile_used === 'deportes';
 
   if (isSucesos) {
@@ -358,11 +358,11 @@ function problemsForMissingContext(noticia: NoticiaInput, result: MeniResult): E
         field: 'contenido',
       });
     }
-    if (!hasMatch(text, /\b(hospital|clínica|policía|bomberos|MINSA|INSS|alcaldía|ministerio|institución|fiscalía|fiscalia|tribunal|juzgado|medicina legal|autoridad|autoridades)\b/i)) {
+    if (!hasMatch(text, /\b(hospital|clínica|policía|bomberos|MINSA|INSS|alcaldía|ministerio|institución|fiscalía|fiscalia|tribunal|juzgado|medicina legal|Cruz Roja|defensa civil)\b/i)) {
       list.push({
         id: 'missing-institution',
         problem: 'No se identifica una institución relacionada.',
-        cause: 'Sucesos de tránsito o emergencias suelen involucrar cuerpos de socorro o autoridades.',
+        cause: 'Sucesos de tránsito o emergencias suelen involucrar cuerpos de socorro o autoridades específicas.',
         impact: 'La nota pierde atribución y contexto oficial.',
         recommendation: 'Incluir la institución que atendió o investigó el hecho.',
         priority: 'low',
@@ -643,12 +643,12 @@ export function runEditorialDiagnosis(noticia: NoticiaInput, result: MeniResult)
   const humanActions = problems.filter((p) => p.requiresHuman);
 
   let editorialStatus: EditorialStatus = 'READY';
-  if (!result.aprobado || result.scoreFinal === null) {
+  if (result.classificationConflict) {
+    editorialStatus = 'CONFLICT';
+  } else if (!result.aprobado || result.scoreFinal === null) {
     editorialStatus = 'BLOCKED';
   } else if (problems.some((p) => p.priority === 'critical')) {
     editorialStatus = 'BLOCKED';
-  } else if (result.classificationConflict) {
-    editorialStatus = 'CONFLICT';
   } else if (humanActions.length > 0) {
     editorialStatus = 'NEEDS_REVIEW';
   } else if (result.scoreFinal < 90) {
