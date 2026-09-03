@@ -518,6 +518,7 @@
           <div class="nav-label">Principal</div>
           <ul class="nav-menu">
             <li class="nav-item"><a class="nav-link active" onclick="showTab('dashboard-tab', this)"><i class="fas fa-chart-pie"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a class="nav-link" onclick="showTab('centro-comando-tab', this)"><i class="fas fa-satellite-dish" style="color: var(--danger);"></i><span>Centro de Comando</span><span class="nav-badge" style="background: var(--danger); color: white;">NUEVO</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('nueva-tab', this)"><i class="fas fa-plus-circle"></i><span>Nueva Noticia</span><span class="nav-badge">Nuevo</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('noticias-tab', this)"><i class="fas fa-newspaper"></i><span>Noticias</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('evaluador-tab', this)"><i class="fas fa-microscope"></i><span>Evaluador</span></a></li>
@@ -643,6 +644,11 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- CENTRO DE COMANDO -->
+      <div id="centro-comando-tab" class="tab-content">
+        <iframe src="/panel/centro-de-comando" title="Centro de Comando" style="width: 100%; height: calc(100vh - 90px); border: none; display: block;"></iframe>
       </div>
 
       <!-- NUEVA NOTICIA -->
