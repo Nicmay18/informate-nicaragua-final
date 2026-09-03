@@ -115,7 +115,12 @@ export function middleware(request: NextRequest) {
   }
 
   if (BLOCKED_API_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
-    return new NextResponse(null, { status: 404 });
+    return new NextResponse(null, {
+      status: 404,
+      headers: {
+        'Cache-Control': 'no-store, max-age=0, must-revalidate',
+      },
+    });
   }
 
   if (isSensitiveApiPath(pathname)) {
@@ -124,7 +129,13 @@ export function middleware(request: NextRequest) {
   }
 
   if (BLOCKED_BOTS.some((bot) => ua.includes(bot))) {
-    return new NextResponse('Forbidden', { status: 403 });
+    return new NextResponse('Forbidden', {
+      status: 403,
+      headers: {
+        'Cache-Control': 'no-store, max-age=0, must-revalidate',
+        Vary: 'User-Agent',
+      },
+    });
   }
 
   if (pathname === '/panel.html') {
