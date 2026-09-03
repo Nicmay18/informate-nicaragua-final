@@ -1,5 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
+import { openIncident, resolveIncident, getIncidentsSummary } from './incidents';
+import { recordLearning } from './learning';
 import type { DepartamentoDailyReport, SiteHealthCheck } from './types';
 
 const SITE_ROOT = 'https://nicaraguainformate.com';
@@ -64,23 +66,16 @@ async function loadLast24hActions(): Promise<{ completed: number; pending: numbe
   };
 }
 
-async function loadIncidents(): Promise<{ active: number; resolved: number; items: string[] }> {
-  const db = getAdminDb();
-  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-
-  const [activeSnap, resolvedSnap] = await Promise.all([
-    db.collection('depto_incidents').where('status', '==', 'active').count().get(),
-    db.collection('depto_incidents').where('resolvedAt', '>=', since).count().get(),
-  ]);
-
-  const active = activeSnap.data().count;
-  const resolved = resolvedSnap.data().count;
+async function loadIncidents(): Promise<{ active: number; resolved: number; items: string[]; activeItems: string[] }> {
+  const summary = await getIncidentsSummary();
 
   const items: string[] = [];
-  if (active > 0) items.push(`${active} incidente(s) activo(s)`);
-  if (resolved > 0) items.push(`${resolved} incidente(s) resuelto(s) en las últimas 24h`);
+  if (summary.active > 0) items.push(`${summary.active} incidente(s) activo(s)`);
+  if (summary.resolved24h > 0) items.push(`${summary.resolved24h} incidente(s) resuelto(s) en las últimas 24h`);
 
-  return { active, resolved, items };
+  const activeItems = summary.items.map((i) => i.title);
+
+  return { active: summary.active, resolved: summary.resolved24h, items, activeItems };
 }
 
 async function loadGrowthOpportunities(): Promise<{ count: number; note: string }> {
@@ -140,9 +135,54 @@ export async function runDepartamentoCentralCycle(): Promise<DepartamentoDailyRe
   const siteStatus: 'ok' | 'warning' | 'critical' =
     rootHealth.ok && noticiasHealth.ok ? 'ok' : 'critical';
 
-  const incidentItems = [...incidents.items];
-  if (!rootHealth.ok) incidentItems.push(`Página principal responde ${rootHealth.status || 'error'}: ${rootHealth.error || 'sin respuesta'}`);
-  if (!noticiasHealth.ok) incidentItems.push(`Sección /noticias responde ${noticiasHealth.status || 'error'}`);
+  const incidentItems = [...incidents.items, ...incidents.activeItems];
+  if (!rootHealth.ok) {
+    const title = `Disponibilidad de la página principal: ${rootHealth.status || 'timeout'}`;
+    await openIncident({
+      type: 'site-availability',
+      severity: 'critical',
+      title,
+      url: rootHealth.url,
+      status: 'active',
+      detectedAt: now,
+    });
+    incidentItems.push(`Página principal responde ${rootHealth.status || 'error'}: ${rootHealth.error || 'sin respuesta'}`);
+  } else {
+    const titleRoot = 'Disponibilidad de la página principal';
+    await resolveIncident(titleRoot, {
+      diagnosis: 'Se detectó una respuesta correcta (HTTP 200) en la página principal.',
+      correction: 'No se requieren correcciones; el incidente se resolvió o no existía.',
+      verification: `Verificación real: HTTP ${rootHealth.status} en ${rootHealth.responseMs}ms.`,
+      learning: 'El sitio responde correctamente.',
+    });
+    await recordLearning({
+      source: 'departamento-central',
+      kind: 'learning',
+      note: 'Mantener un sitio con caché controlado es crítico: una respuesta 403 generada por un bot puede ser cacheada por el CDN y afectar a todos.',
+      tags: ['disponibilidad', 'cdn', 'cache', 'middleware'],
+    });
+  }
+
+  if (!noticiasHealth.ok) {
+    const title = `Disponibilidad de /noticias: ${noticiasHealth.status || 'timeout'}`;
+    await openIncident({
+      type: 'site-availability',
+      severity: 'critical',
+      title,
+      url: noticiasHealth.url,
+      status: 'active',
+      detectedAt: now,
+    });
+    incidentItems.push(`Sección /noticias responde ${noticiasHealth.status || 'error'}`);
+  } else {
+    const titleNews = 'Disponibilidad de la sección /noticias';
+    await resolveIncident(titleNews, {
+      diagnosis: 'La sección de noticias responde correctamente.',
+      correction: 'No se requiere acción.',
+      verification: `Verificación real: HTTP ${noticiasHealth.status} en ${noticiasHealth.responseMs}ms.`,
+      learning: 'La sección de noticias está disponible.',
+    });
+  }
 
   const summaryLines: string[] = [];
   summaryLines.push(siteStatus === 'ok' ? 'El sitio está funcionando.' : 'El sitio tiene problemas de disponibilidad.');
