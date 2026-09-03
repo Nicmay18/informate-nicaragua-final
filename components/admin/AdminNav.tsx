@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const ADMIN_LINKS = [
+  { href: '/admin/centro-de-comando', label: '🏢 Centro de Comando' },
   { href: '/admin/nios', label: 'NIOS' },
   { href: '/admin/meni', label: 'Criterio Editorial' },
   { href: '/admin/meni-dashboard', label: 'Dashboard MENI' },
