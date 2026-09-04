@@ -34,6 +34,7 @@
     { "path": "/api/cron/resumen-diario", "schedule": "0 12 * * *" },
     { "path": "/api/cron/departamento-central", "schedule": "0 0 * * *" },
     { "path": "/api/cron/departamento-daily", "schedule": "0 6 * * *" },
-    { "path": "/api/cron/departamento-watchdog", "schedule": "0 1 * * *" }
+    { "path": "/api/cron/departamento-watchdog", "schedule": "0 1 * * *" },
+    { "path": "/api/cron/nios-ceo-loop", "schedule": "*/5 * * * *" }
   ]
 }

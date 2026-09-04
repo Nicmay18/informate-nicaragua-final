@@ -4,7 +4,7 @@
  * No crea lógica editorial. Solo persiste el estado de las recomendaciones ejecutivas.
  */
 
-import type { Firestore } from 'firebase-admin/firestore';
+import { FieldPath, type Firestore } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import type { CeoDecision } from './ceo-decision-engine';
 
@@ -164,4 +164,18 @@ export async function recordCeoLoopRun(record: Omit<CEOLoopRecord, 'id' | 'kind'
     createdAt: record.timestamp,
   });
   return ref.id;
+}
+
+export async function getLatestCeoLoopRecord(limit = 1): Promise<CEOLoopRecord | null> {
+  const db = getAdminDb();
+  const snap = await db
+    .collection('nios_memory')
+    .orderBy(FieldPath.documentId(), 'desc')
+    .limit(20)
+    .get();
+  const loops = snap.docs
+    .map((d) => d.data() as CEOLoopRecord & { kind?: string })
+    .filter((d) => d.kind === 'ceo_loop')
+    .sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
+  return loops.slice(0, limit)[0] || null;
 }

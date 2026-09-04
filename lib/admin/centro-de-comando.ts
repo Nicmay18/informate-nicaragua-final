@@ -1,5 +1,8 @@
+import { FieldPath } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
+import type { CEOLoopRecord } from '@/lib/nios/ceo-memory';
+import { getLatestCeoLoopRecord } from '@/lib/nios/ceo-memory';
 import { getNiosExecutiveData } from '@/lib/nios/executive-center';
 import type { NiosExecutiveData } from '@/lib/nios/executive-center';
 import { getDepartamentoWorkSummary } from '@/lib/departamento-central/summary';
@@ -69,6 +72,12 @@ export interface CentroDeComandoData {
   learnings: LearningItem[];
   content: ContentHealth | null;
   nios: NiosExecutiveData | null;
+  niosLoop: {
+    record: CEOLoopRecord | null;
+    autonomyScore: number;
+    autonomyMax: number;
+    autonomyReport: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'>;
+  } | null;
 }
 
 function timeGreeting(): string {
@@ -94,30 +103,51 @@ async function getLatestHeartbeatTime(): Promise<string | null> {
   }
 }
 
+function buildAutonomyReport(record: CEOLoopRecord): Record<string, 'REAL' | 'PARTIAL' | 'DEAD'> {
+  const report: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'> = {
+    OBSERVE: record.observations.length > 0 ? 'REAL' : 'DEAD',
+    DIAGNOSE: record.diagnoses.length > 0 ? 'REAL' : 'DEAD',
+    DECIDE: record.decisions.length > 0 ? 'REAL' : 'DEAD',
+    EXECUTE: (record.executions.length + record.repaired.length) > 0 ? 'REAL' : 'DEAD',
+    VERIFY:
+      record.verifications.length > 0
+        ? record.verifications.some((v) => v.verified)
+          ? 'REAL'
+          : 'PARTIAL'
+        : 'DEAD',
+    LEARN: record.learnings.length > 0 ? 'REAL' : 'DEAD',
+    MEMORY: record.id ? 'REAL' : 'DEAD',
+    CRON: record.trigger?.startsWith('cron/') ? 'REAL' : 'DEAD',
+  };
+  return report;
+}
+
 async function getPendingActions(): Promise<PendingAction[]> {
   try {
     const db = getAdminDb();
     const snap = await db
       .collection('nios_actions')
       .where('status', '==', 'PENDING')
-      .orderBy('proposedAt', 'desc')
-      .limit(20)
+      .limit(50)
       .get();
-    return snap.docs.map((d) => {
-      const a = d.data() as NiosAction;
-      return {
-        id: d.id,
-        title: a.title,
-        evidence: a.evidence,
-        proposal: a.proposal,
-        kind: a.kind,
-        impact: a.impact,
-        confidence: a.confidence,
-        createdAt: a.proposedAt || a.createdAt,
-        articleId: a.articleId,
-        target: a.target,
-      };
-    });
+    return snap.docs
+      .map((d) => {
+        const a = d.data() as NiosAction;
+        return {
+          id: d.id,
+          title: a.title,
+          evidence: a.evidence,
+          proposal: a.proposal,
+          kind: a.kind,
+          impact: a.impact,
+          confidence: a.confidence,
+          createdAt: a.proposedAt || a.createdAt,
+          articleId: a.articleId,
+          target: a.target,
+        };
+      })
+      .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+      .slice(0, 20);
   } catch (err) {
     logger.error('[centro-de-comando] Error consultando acciones pendientes:', err);
     return [];
@@ -129,21 +159,25 @@ async function getRecentLearnings(): Promise<LearningItem[]> {
     const db = getAdminDb();
     const snap = await db
       .collection('nios_memory')
-      .where('kind', 'in', ['learning', 'action_learning', 'insight'])
-      .orderBy('timestamp', 'desc')
-      .limit(20)
+      .orderBy(FieldPath.documentId(), 'desc')
+      .limit(50)
       .get();
-    return snap.docs.map((d) => {
-      const m = d.data() as { kind?: string; learning?: string; observation?: string; text?: string; timestamp?: string; actionId?: string };
-      const text = m.learning || m.observation || m.text || 'Aprendizaje registrado';
-      return {
-        id: d.id,
-        kind: m.kind || 'learning',
-        text,
-        timestamp: m.timestamp || new Date().toISOString(),
-        actionId: m.actionId,
-      };
-    });
+    const allowed = new Set(['learning', 'action_learning', 'insight']);
+    return snap.docs
+      .map((d) => {
+        const m = d.data() as { kind?: string; learning?: string; observation?: string; text?: string; timestamp?: string; createdAt?: string; actionId?: string };
+        const text = m.learning || m.observation || m.text || 'Aprendizaje registrado';
+        const ts = m.timestamp || m.createdAt || new Date().toISOString();
+        return {
+          id: d.id,
+          kind: m.kind || 'learning',
+          text,
+          timestamp: ts,
+          actionId: m.actionId,
+        };
+      })
+      .filter((l) => allowed.has(l.kind))
+      .slice(0, 10);
   } catch (err) {
     logger.error('[centro-de-comando] Error consultando aprendizajes:', err);
     return [];
@@ -191,6 +225,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     pendingActionsResult,
     learningsResult,
     contentResult,
+    niosLoopResult,
   ] = await Promise.allSettled([
     getNiosExecutiveData().catch((e) => {
       logger.error('[centro-de-comando] NIOS executive data falló:', e);
@@ -224,6 +259,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     getPendingActions(),
     getRecentLearnings(),
     getContentHealth(),
+    getLatestCeoLoopRecord(),
   ]);
 
   const nios = niosResult.status === 'fulfilled' ? niosResult.value : null;
@@ -239,6 +275,15 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
   const pendingActions = pendingActionsResult.status === 'fulfilled' ? pendingActionsResult.value : [];
   const learnings = learningsResult.status === 'fulfilled' ? learningsResult.value : [];
   const content = contentResult.status === 'fulfilled' ? contentResult.value : null;
+  const latestLoop = niosLoopResult.status === 'fulfilled' ? niosLoopResult.value : null;
+  const niosLoop = latestLoop
+    ? {
+        record: latestLoop,
+        autonomyScore: latestLoop.autonomyScore ?? 0,
+        autonomyMax: 8,
+        autonomyReport: buildAutonomyReport(latestLoop),
+      }
+    : null;
 
   const level = health.overall;
   const labelMap = { HEALTHY: 'OPERATIVO', DEGRADED: 'DEGRADADO', CRITICAL: 'CRÍTICO' } as const;
@@ -268,6 +313,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     learnings,
     content,
     nios,
+    niosLoop,
   };
 }
 

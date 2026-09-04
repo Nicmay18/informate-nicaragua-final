@@ -129,6 +129,31 @@ type NiosData = {
   topMovingArticles?: { slug: string; titulo: string; momentum: number }[];
 };
 
+type LoopObservation = { source: string; status: string; note: string; dataAgeHours: number | null };
+type LoopDiagnosis = { id: string; source: string; severity: string; status: string; problem: string; expectedResult: string };
+type LoopDecision = { id: string; source: string; problem: string; decision: string; priority: number; reason: string; expectedResult?: string };
+type LoopRepaired = { repairId: string; problem: string; action: string; status: string; verification: string };
+type LoopLearning = { decisionId: string; problem: string; impact: string; confidence: number; timestamp: string };
+
+type NiosLoop = {
+  record: {
+    id?: string;
+    status: 'COMPLETE' | 'PARTIAL' | 'FAILED';
+    timestamp: string;
+    summary: string;
+    observations: LoopObservation[];
+    diagnoses: LoopDiagnosis[];
+    decisions: LoopDecision[];
+    repaired: LoopRepaired[];
+    pendingHuman: number;
+    failedRepairs: number;
+    learnings: LoopLearning[];
+  } | null;
+  autonomyScore: number;
+  autonomyMax: number;
+  autonomyReport: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'>;
+};
+
 type Data = {
   greeting: string;
   generatedAt: string;
@@ -151,6 +176,7 @@ type Data = {
   learnings: Learning[];
   content: ContentHealth | null;
   nios: NiosData | null;
+  niosLoop: NiosLoop | null;
 };
 
 const STATUS_EMOJI: Record<string, string> = {
@@ -328,6 +354,68 @@ export default function CentroDeComandoPage() {
               <div className="text-sm text-slate-500">trabajos fallidos</div>
             </div>
           </div>
+        </Card>
+
+        {/* Ciclo operativo NIOS */}
+        <Card title="Ciclo operativo NIOS" emoji="🧠">
+          {data.niosLoop?.record ? (
+            <div className="space-y-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="text-3xl font-bold text-indigo-700">{data.niosLoop.autonomyScore}<span className="text-base text-slate-500 font-medium">/{data.niosLoop.autonomyMax}</span></div>
+                <div className="text-sm text-slate-600">puntos de autonomía del ciclo OODA</div>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(data.niosLoop.autonomyReport).map(([stage, status]) => (
+                  <span key={stage} className={`text-xs px-2 py-1 rounded-full border font-medium ${status === 'REAL' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : status === 'PARTIAL' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-slate-100 text-slate-500 border-slate-200'}`}>
+                    {stage}: {status === 'REAL' ? '✅' : status === 'PARTIAL' ? '⚠️' : '—'}
+                  </span>
+                ))}
+              </div>
+              <p className="text-sm text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">{data.niosLoop.record.summary}</p>
+              {data.niosLoop.record.pendingHuman > 0 && (
+                <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+                  🟡 {data.niosLoop.record.pendingHuman} acción{data.niosLoop.record.pendingHuman === 1 ? '' : 'es'} pendiente{data.niosLoop.record.pendingHuman === 1 ? '' : 's'} de aprobación humana.
+                </div>
+              )}
+              {data.niosLoop.record.failedRepairs > 0 && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-sm text-rose-800">
+                  🔴 {data.niosLoop.record.failedRepairs} reparación{data.niosLoop.record.failedRepairs === 1 ? '' : 'es'} fallida{data.niosLoop.record.failedRepairs === 1 ? '' : 's'}.
+                </div>
+              )}
+              {data.niosLoop.record.observations.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold text-slate-500 uppercase mb-2">Observaciones</h3>
+                  <ul className="space-y-2 text-sm">
+                    {data.niosLoop.record.observations.slice(0, 5).map((o, i) => (
+                      <li key={i} className="p-3 bg-slate-50 rounded-xl border border-slate-100"><span className="font-semibold text-slate-800">{o.source}</span> — {o.note} <span className="text-xs text-slate-400 ml-1">({o.status})</span></li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {data.niosLoop.record.decisions.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold text-slate-500 uppercase mb-2">Decisiones</h3>
+                  <ul className="space-y-2 text-sm">
+                    {data.niosLoop.record.decisions.slice(0, 5).map((d, i) => (
+                      <li key={i} className="p-3 bg-slate-50 rounded-xl border border-slate-100"><span className="font-semibold text-slate-800">{d.source}</span> — {d.problem} <span className="text-xs text-slate-400 ml-1">({d.decision})</span></li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {data.niosLoop.record.learnings.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-semibold text-slate-500 uppercase mb-2">Aprendizajes</h3>
+                  <ul className="space-y-2 text-sm">
+                    {data.niosLoop.record.learnings.slice(0, 5).map((l, i) => (
+                      <li key={i} className="p-3 bg-slate-50 rounded-xl border border-slate-100">{l.impact} <span className="text-xs text-slate-400 ml-1">{fmtAgo(l.timestamp)}</span></li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          ) : (
+            <p className="text-slate-500">NIOS aún no ha completado un ciclo operativo. El próximo cron o una ejecución manual lo generará.</p>
+          )}
         </Card>
 
         {/* Mientras no estabas */}
