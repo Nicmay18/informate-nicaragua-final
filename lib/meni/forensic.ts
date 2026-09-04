@@ -1,7 +1,7 @@
 import type { EvaluacionEditorial } from '@/lib/editorial';
 import type { MeniForense, MeniRecomendacion, MeniForenseEvidencia } from './types';
 import type { NoticiaInput } from './types';
-import type { ContentProfileResult, MeniContentProfile } from './profile-detector';
+import type { MeniContentProfile } from './profile-detector';
 
 type EvidenciaTipo =
   | 'citaDirecta'
@@ -38,7 +38,8 @@ function contienePalabras(texto: string, palabras: string[]): boolean {
 }
 
 function detectarCitaDirecta(texto: string): boolean {
-  return /["«»“”‘’].{3,200}?["«»“”‘’]/.test(texto);
+  // Comillas en una o varias líneas (hasta 600 caracteres) o contenido en blockquote.
+  return /["«»“”‘’].{3,600}?["«»“”‘’]/s.test(texto) || /<blockquote[^>]*>/i.test(texto);
 }
 
 function detectarAtribucion(texto: string): boolean {
@@ -49,8 +50,25 @@ function detectarAtribucion(texto: string): boolean {
     'indico que', 'indicaron que', 'declaro que', 'declararon que',
     'dijo que', 'dijeron que', 'afirmo que', 'afirmaron que',
     'explico que', 'explicaron que', 'anuncio que', 'anunciaron que',
+    'manifesto', 'manifesto que', 'manifestaron que',
+    'senalo', 'senalo que', 'senalando', 'senalaron que',
+    'preciso', 'preciso que', 'precisaron que',
+    'destaco', 'destaco que', 'destacaron que',
+    'subrayo', 'subrayo que', 'subrayaron que',
+    'agrego', 'agrego que', 'agregaron que',
+    'expreso', 'expreso que', 'expresaron que',
+    'reitero', 'reitero que', 'reiteraron que',
+    'aseguro', 'aseguro que', 'aseguraron que',
+    'puntualizo', 'puntualizo que', 'puntualizaron que',
+    'sostuvo', 'sostuvieron que',
   ];
-  return contieneFrases(texto, frases);
+  const verbos = [
+    'dijo', 'afirmo', 'manifesto', 'senalo', 'indico', 'informo',
+    'confirmo', 'declaro', 'explico', 'anuncio', 'preciso', 'destaco',
+    'subrayo', 'agrego', 'expreso', 'reitero', 'aseguro', 'puntualizo',
+    'sostuvo', 'advirtio',
+  ];
+  return contieneFrases(texto, frases) || contienePalabras(texto, verbos);
 }
 
 function detectarPrecios(texto: string): boolean {
@@ -117,7 +135,13 @@ function getForensicMode(profile: MeniContentProfile, input: NoticiaInput): Fore
   }
   if (profile === 'economia') return 'economia';
   if (profile === 'salud') return 'salud';
-  if (profile === 'politica' || profile === 'nacionales') return 'politica_nacional';
+  // cultura, educacion, ambiente y astronomia se publican como Nacionales;
+  // por tanto el análisis forense sigue las reglas de nacionales/política.
+  if (
+    profile === 'politica' || profile === 'nacionales' ||
+    profile === 'cultura' || profile === 'educacion' ||
+    profile === 'ambiente' || profile === 'astronomia'
+  ) return 'politica_nacional';
   return 'actualidad';
 }
 
@@ -232,16 +256,16 @@ function checksToRecomendaciones(checks: MeniForenseEvidencia[]): MeniRecomendac
 export function analyzeForensic(
   result: EvaluacionEditorial,
   input: NoticiaInput,
-  contentProfile: ContentProfileResult,
+  resolvedProfile: MeniContentProfile,
 ): MeniForense {
-  const forense = result.evidence.forense;
+  const forense = result.evidence.meni?.forense ?? result.evidence.forense;
   const score = result.forense.score ?? 0;
 
   let nivel: MeniForense['nivel'] = 'VERDE';
   if (forense.nivelRiesgo === 'Crítico' || forense.nivelRiesgo === 'Alto') nivel = 'ROJO';
   else if (forense.nivelRiesgo === 'Medio') nivel = 'AMARILLO';
 
-  const mode = getForensicMode(contentProfile.profile_detected, input);
+  const mode = getForensicMode(resolvedProfile, input);
   const evidencias = buildForensicChecks(input, mode);
   const recomendaciones = checksToRecomendaciones(evidencias);
 

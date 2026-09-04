@@ -114,6 +114,13 @@ export interface EvidenceSignals {
   esNotaVerificable: boolean;
 }
 
+// REGLA 2b: MeniEvidence — agrupa la evidencia específica de MENI
+// (forense + datos concretos) para separarla de la evidencia editorial genérica.
+export interface MeniEvidence {
+  forense: ForenseEvidence;
+  datosConcretos: EvidenceSignals['datosConcretos'] & { instituciones: number };
+}
+
 export interface FollowUpEvidence {
   tieneSeguimiento: boolean;
   actualizable: boolean;
@@ -156,6 +163,11 @@ export interface ArticleEvidence {
   risk: RiskEvidence;
   category: string;
   tipoContenido: TipoContenido;
+
+  // Evidencia específica de MENI (forense + datos concretos).
+  // Los campos `forense` y `evidence` se mantienen por compatibilidad
+  // hasta que los módulos core migren a `meni`.
+  meni?: MeniEvidence;
 
   // Metadata
   noticia: NoticiaInput;

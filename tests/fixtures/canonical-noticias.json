@@ -83,14 +83,14 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.9,
+      "scoreFinal": 98.5,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 96,
         "EEAT": 100,
         "DISCOVER": 100,
         "ADSENSE": 100,
-        "VALOR_EDITORIAL": 95,
+        "VALOR_EDITORIAL": 97,
         "FORENSE": 100
       }
     }
@@ -563,11 +563,11 @@
       "keywords": ""
     },
     "expected": {
-      "scoreFinal": 97.7,
+      "scoreFinal": 98.95,
       "veredicto": "cobertura_especial",
       "scores": {
         "SEO": 93,
-        "EEAT": 95,
+        "EEAT": 100,
         "DISCOVER": 100,
         "ADSENSE": 100,
         "VALOR_EDITORIAL": 100,

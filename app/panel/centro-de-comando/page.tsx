@@ -242,6 +242,7 @@ export default function CentroDeComandoPage() {
     fetchData();
     intervalRef.current = setInterval(fetchData, 30_000);
     return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {

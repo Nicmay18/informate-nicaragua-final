@@ -121,6 +121,13 @@ export interface EvidenceSignals {
   esNotaVerificable: boolean;
 }
 
+// Evidencia específica de MENI (forense + datos concretos).
+// Se agrupa para separarla de la evidencia editorial genérica.
+export interface MeniEvidence {
+  forense: ForenseEvidence;
+  datosConcretos: EvidenceSignals['datosConcretos'] & { instituciones: number };
+}
+
 export interface FollowUpEvidence {
   tieneSeguimiento: boolean;
   actualizable: boolean;
@@ -158,6 +165,8 @@ export interface ArticleEvidence {
   risk: RiskEvidence;
   category: string;
   tipoContenido: TipoContenido;
+  /** Evidencia específica de MENI (forense + datos concretos). */
+  meni?: MeniEvidence;
   noticia: NoticiaInput;
   textoPlano: string;
   parrafos: string[];

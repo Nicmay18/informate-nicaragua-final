@@ -23,6 +23,7 @@ import type {
   FollowUpEvidence,
   SourceEvidence,
   RiskEvidence,
+  MeniEvidence,
 } from './types';
 import { detectCategory } from './category-detector';
 
@@ -37,15 +38,47 @@ const ATRIBUCIONES_FALSAS = /\b(?:seg[uú]n fuentes (?:an[oó]nimas|confidencial
 
 const NOMBRES_PROPIOS = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3}\b/g;
 
-const INSTITUCIONES = /\b(?:Polic[ií]a Nacional|Fiscal[ií]a|Bomberos|Cruz Roja|Medicina Legal|Hospital|Ministerio|MINSa|MINED|INETER|SINAPRED|COMUPRED|Alcald[ií]a|Asamblea Nacional|Banco Central|ENATREL|ENACAL|Telecom|Tigo|Claro|UNAN|UCA|FAO|OMS|OPS|UNESCO|UNICEF|ACNUR|OEA|FMI|BID|BCN|MAG|MARENA|MTI|INTUR|Procuradur[ií]a|Corte Suprema|Consejo Supremo Electoral)\b/g;
+// Lista de instituciones nicaragüenses y multilaterales (sin duplicados genéricos).
+const INSTITUCIONES_KNOWN = [
+  'Policía Nacional', 'Policía', 'Fiscalía', 'Bomberos', 'Cruz Roja',
+  'Medicina Legal', 'Hospital', 'Ministerio de Salud', 'MINSA', 'MINED', 'INETER',
+  'SINAPRED', 'COMUPRED', 'Alcaldía', 'Asamblea Nacional', 'Banco Central',
+  'ENATREL', 'ENACAL', 'Telecom', 'Tigo', 'Claro', 'UNAN', 'UCA', 'FAO',
+  'OMS', 'OPS', 'UNESCO', 'UNICEF', 'ACNUR', 'OEA', 'FMI', 'BID', 'BCN',
+  'MAG', 'MARENA', 'MTI', 'INTUR', 'MIFIC', 'MIGE', 'MEFCCA', 'MIFAMILIA',
+  'INSS', 'IPSFA', 'INATEC', 'Procuraduría', 'Corte Suprema',
+  'Consejo Supremo Electoral', 'Gobierno de Nicaragua', 'Gobierno',
+  'Presidencia', 'Copresidencia', 'Poder Judicial', 'Ejército de Nicaragua',
+  'Fuerza Naval', 'Distrito Naval', 'INVUR', 'INSS', 'IPSFA',
+];
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const INSTITUCIONES = new RegExp('\\b(?:' + INSTITUCIONES_KNOWN.map(escape).join('|') + ')\\b', 'gi');
 
-const FUENTES_OFICIALES = /\b(?:Polic[ií]a(?:\s+Nacional)?|Fiscal[ií]a|Ministerio|Poder\s+Judicial|Corte\s+Suprema|Autoridad(?:es)?|Oficiales?|Bomberos|Cruz\s+Roja|Medicina\s+Legal|Hospital|MINSa|MINED|INETER|SINAPRED|COMUPRED|Alcald[ií]a|Asamblea\s+Nacional|Banco\s+Central|ENATREL|ENACAL|FAO|OMS|OPS|UNESCO|UNICEF|ACNUR|OEA|FMI|BID|BCN|MAG|MARENA|MTI|INTUR|Direcci[oó]n)\b/gi;
+const FUENTES_OFICIALES_KNOWN = [
+  'Policía Nacional', 'Policía', 'Fiscalía', 'Ministerio de Salud', 'MINSA',
+  'Poder Judicial', 'Corte Suprema', 'Bomberos', 'Cruz Roja', 'Medicina Legal',
+  'Hospital', 'MINED', 'INETER', 'SINAPRED', 'COMUPRED', 'Alcaldía',
+  'Asamblea Nacional', 'Banco Central', 'ENATREL', 'ENACAL', 'FAO', 'OMS',
+  'OPS', 'UNESCO', 'UNICEF', 'ACNUR', 'OEA', 'FMI', 'BID', 'BCN', 'MAG',
+  'MARENA', 'MTI', 'INTUR', 'MIFIC', 'MIGE', 'MEFCCA', 'MIFAMILIA', 'INSS',
+  'IPSFA', 'INATEC', 'Gobierno de Nicaragua', 'Gobierno', 'Presidencia',
+  'Copresidencia', 'Ejército de Nicaragua', 'Fuerza Naval', 'Distrito Naval',
+  'INVUR', 'Ministerio de Educación', 'Ministerio de Gobernación',
+  'Ministerio de Obras Públicas', 'Ministerio de Transporte', 'Ministerio de Agricultura',
+];
+const FUENTES_OFICIALES = new RegExp('\\b(?:' + FUENTES_OFICIALES_KNOWN.map(escape).join('|') + ')\\b', 'gi');
 
 const FECHAS_REGEX = /\b(?:\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|\d{4}|2025|2024)\b/gi;
 
 const HORAS_REGEX = /\b(?:\d{1,2}:\d{2}(?:\s*(?:am|pm))?)\b/gi;
 
-const CIFRAS_REGEX = /\b(?:C?\$[\d.,]+|\d+(?:\.\d+)?(?:\s*(?:millones|mil|mill[oó]n|d[oó]lares|c[oó]rdobas|libras|kilos|km|hect[aá]reas|manzanas|puntos|por ciento|%|kg|mm|cm|metros)))\b/gi;
+// Cifras: soporta separadores de miles, decimales y unidades/sustantivos de conteo.
+const CIFRAS_UNIDADES = '(?:millones|mil|mill[oó]n|por ciento|%|c[oó]rdobas|d[oó]lares|USD|kg|g|mm|cm|km|metros|hect[aá]reas|manzanas|puntos)';
+const CIFRAS_SUSTANTIVOS = '(?:estudiantes?|mochilas?|paquetes?|uniformes?|[uú]tiles?|centros?|escolares?|escuelas?|viviendas?|familias?|beneficiarios?|personas?|habitantes?|comunidades?|trabajadores?|empleos?|niñ[oa]s?|adultos?|mayores?|j[oó]venes?|c[oó]rdobas|d[oó]lares|USD)';
+const CIFRAS_REGEX = new RegExp(
+  '\\b(?:C?\\$[\\d.,]+|\\d{1,3}(?:,\\d{3})+(?:\\.\\d+)?|\\d+(?:\\.\\d+)?)(?:(?:\\s*' + CIFRAS_UNIDADES + ')|(?:\\s+' + CIFRAS_SUSTANTIVOS + '))?\\b',
+  'gi'
+);
 
 const LUGARES_REGEX = /\b(?:Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|Matagalpa|Chinandega|Tipitapa|Bluefields|Rivas|Carazo|Boaco|Chontales|Nueva Segovia|Madriz|R[ií]o San Juan|Costa Caribe(?:\s+(?:Norte|Sur))?|Barrio\s+\w+|Colonia\s+\w+|km\s+\d+)\b/gi;
 
@@ -135,11 +168,11 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   );
 
   const tieneMarcaPropia = /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano);
-  const tieneVerificacionPropia = /informaci[oó]n\s+verificada(?:\s+por\s+Nicaragua\s+Informate)?|confirmado\s+por\s+este\s+medio|en\s+el\s+lugar\s+del\s+hecho|equipo\s+de\s+Nicaragua\s+Informate|report[oó]\s+desde|verificaci[oó]n\s+propia|testigos\s+identificados|cobertura\s+propia|fotograf[íi]as\s+propias|datos\s+obtenidos\s+por\s+este\s+medio/i.test(textoPlano);
+  const tieneVerificacionPropia = /informaci[oó]n\s+verificada(?:\s+por\s+Nicaragua\s+Informate)?|confirmado\s+por\s+este\s+medio|en\s+el\s+lugar\s+del\s+hecho|equipo\s+de\s+Nicaragua\s+Informate|report[oó]\s+desde|verificaci[oó]n\s+propia|cobertura\s+propia|testigos\s+identificados|fotograf[íi]as\s+propias|datos\s+obtenidos\s+por\s+este\s+medio|verific[oó]|constat[oó]|consult[oó]/i.test(textoPlano);
 
   const valorEditorial: ValorEditorialEvidence = {
     tieneFuentePropia: tieneMarcaPropia || tieneVerificacionPropia || /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano) || ((textoPlano.match(LUGARES_REGEX) || []).length >= 3 && palabraCount >= 400 && uniqueFuentes.length >= 3) || (/\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano) && /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano)),
-    tieneCitaEspecifica: /seg[uú]n|indic[oó]|manifest[oó]|se[nñ]al[oó]|inform[oó]/i.test(textoPlano),
+    tieneCitaEspecifica: /\b(?:seg[uú]n|indic[oó]|manifest[oó]|se[nñ]al[oó]|inform[oó]|dijo|afirm[oó]|anunció|confirm[oó]|explic[oó]|precis[oó]|destac[oó]|subray[oó]|agreg[oó]|expres[oó]|reiter[oó]|puntualiz[oó]|sostuvo|asegur[oó])\b/i.test(textoPlano),
     tieneAtribucionVaga: tieneAtribucionesFalsas,
     nombresPropiosCount: nombresPropios.length,
     institucionesCount: instituciones.length,
@@ -265,6 +298,12 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     esNotaVerificable: fechasCount + cifrasCount + lugaresCount + nombresCount >= 3,
   };
 
+  // ── MENI EVIDENCE ─────────────────────────────
+  const meni: MeniEvidence = {
+    forense,
+    datosConcretos: { ...evidence.datosConcretos, instituciones: instituciones.length },
+  };
+
   // ── FOLLOW UP ────────────────────────────────
   const followUp: FollowUpEvidence = {
     tieneSeguimiento: /\b(?:actualizaci[oó]n|pr[oó]ximas?\s+horas|se\s+espera|en\s+desarrollo|m[aá]s\s+informaci[oó]n|contin[uú]an|investigaciones?\s+(?:contin[uú]an|en\s+curso)|se\s+actualizar[aá]|actualizar[aá]\s+esta)\b/i.test(textoPlano),
@@ -330,6 +369,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     risk,
     category,
     tipoContenido,
+    meni,
     noticia,
     textoPlano,
     parrafos,
