@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useAdminFetch } from '@/hooks/useAdminFetch';
+import type { NiosConflict } from '@/lib/nios/conflict-detector';
 
 type DeptoJob = {
   jobId: string;
@@ -177,6 +178,7 @@ type Data = {
   content: ContentHealth | null;
   nios: NiosData | null;
   niosLoop: NiosLoop | null;
+  conflicts: NiosConflict[];
 };
 
 const STATUS_EMOJI: Record<string, string> = {
@@ -441,6 +443,39 @@ export default function CentroDeComandoPage() {
             </div>
           ) : (
             <p className="text-slate-500">NIOS aún no ha completado un ciclo operativo. El próximo cron o una ejecución manual lo generará.</p>
+          )}
+        </Card>
+
+        {/* Conflictos y escalaciones */}
+        <Card title="Conflictos y escalaciones" emoji="⚠️">
+          {data.conflicts.length > 0 ? (
+            <div className="space-y-3">
+              <div className="flex flex-wrap gap-2">
+                {['critical', 'warning', 'info'].map((sev) => {
+                  const count = data.conflicts.filter((c) => c.severity === sev).length;
+                  if (count === 0) return null;
+                  const style = sev === 'critical' ? 'bg-rose-50 text-rose-700 border-rose-100' : sev === 'warning' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-slate-50 text-slate-600 border-slate-100';
+                  const label = sev === 'critical' ? 'Crítico' : sev === 'warning' ? 'Advertencia' : 'Info';
+                  return <span key={sev} className={`text-xs px-2 py-1 rounded-full border font-medium ${style}`}>{label}: {count}</span>;
+                })}
+              </div>
+              <ul className="space-y-2 text-sm">
+                {data.conflicts.slice(0, 8).map((c) => (
+                  <li key={c.id} className={`p-3 rounded-xl border ${c.severity === 'critical' ? 'bg-rose-50 border-rose-100' : c.severity === 'warning' ? 'bg-amber-50 border-amber-100' : 'bg-slate-50 border-slate-100'}`}>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold uppercase text-slate-500">{c.category}</span>
+                      {c.severity === 'critical' && <span className="text-xs px-2 py-0.5 rounded bg-rose-200 text-rose-800">Crítico</span>}
+                      {c.severity === 'warning' && <span className="text-xs px-2 py-0.5 rounded bg-amber-200 text-amber-800">Advertencia</span>}
+                    </div>
+                    <div className="font-semibold text-slate-800 mt-1">{c.title}</div>
+                    <div className="text-slate-600 mt-0.5">{c.description}</div>
+                    <div className="text-xs text-slate-400 mt-1">Fuentes: {c.sources.join(', ')} · {fmtAgo(c.detectedAt)}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <p className="text-slate-500">No se detectaron conflictos ni escalaciones entre subsistemas en el ciclo más reciente.</p>
           )}
         </Card>
 

@@ -3,6 +3,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 import type { CEOLoopRecord } from '@/lib/nios/ceo-memory';
 import { getLatestCeoLoopRecord } from '@/lib/nios/ceo-memory';
+import { detectConflicts, type NiosConflict } from '@/lib/nios/conflict-detector';
 import { getNiosExecutiveData } from '@/lib/nios/executive-center';
 import type { NiosExecutiveData } from '@/lib/nios/executive-center';
 import { getDepartamentoWorkSummary } from '@/lib/departamento-central/summary';
@@ -78,6 +79,7 @@ export interface CentroDeComandoData {
     autonomyMax: number;
     autonomyReport: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'>;
   } | null;
+  conflicts: NiosConflict[];
 }
 
 function timeGreeting(): string {
@@ -284,6 +286,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
         autonomyReport: buildAutonomyReport(latestLoop),
       }
     : null;
+  const conflicts = detectConflicts({ nios, loop: latestLoop });
 
   const level = health.overall;
   const labelMap = { HEALTHY: 'OPERATIVO', DEGRADED: 'DEGRADADO', CRITICAL: 'CRÍTICO' } as const;
@@ -314,6 +317,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     content,
     nios,
     niosLoop,
+    conflicts,
   };
 }
 
