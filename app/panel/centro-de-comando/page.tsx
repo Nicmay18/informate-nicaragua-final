@@ -240,6 +240,7 @@ export default function CentroDeComandoPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [newActivity, setNewActivity] = useState(false);
+  const [runningCycle, setRunningCycle] = useState(false);
   const prevLastWork = useRef<string | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { adminFetch } = useAdminFetch();
@@ -261,6 +262,21 @@ export default function CentroDeComandoPage() {
       setError(e instanceof Error ? e.message : 'Error desconocido');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const runNiosLoop = async () => {
+    if (runningCycle) return;
+    setRunningCycle(true);
+    try {
+      const res = await adminFetch('/api/admin/nios/loop', { method: 'POST' });
+      const json = await res.json();
+      if (!res.ok || !json.ok) throw new Error(json.error || 'Error ejecutando ciclo NIOS');
+      await fetchData();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Error ejecutando ciclo NIOS');
+    } finally {
+      setRunningCycle(false);
     }
   };
 
@@ -358,6 +374,16 @@ export default function CentroDeComandoPage() {
 
         {/* Ciclo operativo NIOS */}
         <Card title="Ciclo operativo NIOS" emoji="🧠">
+          <div className="mb-4">
+            <button
+              onClick={runNiosLoop}
+              disabled={runningCycle}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm rounded-lg hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {runningCycle ? '⏳ Ejecutando ciclo…' : '▶ Ejecutar ciclo NIOS ahora'}
+            </button>
+            {runningCycle && <p className="text-xs text-slate-500 mt-2">El ciclo puede tardar hasta 60s. Se refrescará automáticamente.</p>}
+          </div>
           {data.niosLoop?.record ? (
             <div className="space-y-4">
               <div className="flex flex-wrap items-center gap-3">
