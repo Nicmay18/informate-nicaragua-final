@@ -1,5 +1,6 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
+import { executeOperationalRepair } from '@/lib/nios/operational-loop';
 import { runMeni } from '@/lib/meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { runEditorialDiagnosis } from '@/lib/nios/editorial-diagnosis';
@@ -183,6 +184,13 @@ export async function executeJob(job: DeptoJob): Promise<void> {
         break;
       case 'watchdog':
         await watchdogRecoveryWorker(job);
+        break;
+      case 'operational-repair':
+        {
+          const db = getAdminDb();
+          const result = await executeOperationalRepair(db, job);
+          await completeJob(job.jobId, result);
+        }
         break;
       default:
         await completeJob(job.jobId, { skipped: true, reason: 'Tipo de trabajo no implementado' });

@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminToken } from '@/lib/auth';
 import { revalidateTag, revalidatePath } from 'next/cache';
-import { notifyGoogleIndexingDeduped } from '@/lib/google-indexing';
 
 export const maxDuration = 30;
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
-import { ensureUniqueSlug } from '@/lib/slug';
-import { normalizarTitulo } from '@/lib/meni/titulo';
-import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { logger } from '@/lib/logger';
 
@@ -111,6 +107,12 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
 export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
+    const [{ normalizarTitulo }, { ensureUniqueSlug }, { guardarConMeni }] = await Promise.all([
+      import('@/lib/meni/titulo'),
+      import('@/lib/slug'),
+      import('@/lib/editorial/guardar-con-meni'),
+    ]);
+
     const body = await request.json();
     const { titulo, resumen, contenido, categoria, imagen, autor, destacada, publicado } = body;
 
@@ -274,6 +276,7 @@ export async function POST(request: NextRequest) {
     // Notificar a Google Indexing API cuando la noticia se publica
     let googleIndexing: { ok: boolean; status: 'sent' | 'duplicate' | 'error' | 'skipped' } = { ok: false, status: 'skipped' };
     if (publicado !== false) {
+      const { notifyGoogleIndexingDeduped } = await import('@/lib/google-indexing');
       const articleUrl = `https://nicaraguainformate.com/noticias/${slug}`;
       googleIndexing = await notifyGoogleIndexingDeduped(articleUrl);
     }

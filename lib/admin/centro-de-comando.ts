@@ -21,6 +21,7 @@ import type {
   DeptoJob,
 } from '@/lib/departamento-central/types';
 import type { NiosAction } from '@/lib/nios/action-engine';
+import { getOperationalSummary, type OperationalSummary } from '@/lib/nios/operational-loop';
 import type { Noticia } from '@/lib/types';
 import type { NoticiaInput } from '@/lib/meni';
 
@@ -82,6 +83,7 @@ export interface CentroDeComandoData {
     autonomyReport: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'>;
   } | null;
   conflicts: NiosConflict[];
+  operationalSummary: OperationalSummary | null;
 }
 
 function timeGreeting(): string {
@@ -261,6 +263,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     contentResult,
     niosLoopResult,
     noticiasResult,
+    operationalSummaryResult,
   ] = await Promise.allSettled([
     getNiosExecutiveData().catch((e) => {
       logger.error('[centro-de-comando] NIOS executive data falló:', e);
@@ -299,9 +302,17 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
       logger.error('[centro-de-comando] Noticias para forense fallaron:', e);
       return [] as NoticiaInput[];
     }),
+    getOperationalSummary(getAdminDb()).catch((e) => {
+      logger.error('[centro-de-comando] Operational summary falló:', e);
+      return null;
+    }),
   ]);
 
   const nios = niosResult.status === 'fulfilled' ? niosResult.value : null;
+  const operationalSummary =
+    operationalSummaryResult.status === 'fulfilled'
+      ? (operationalSummaryResult.value as unknown as OperationalSummary | null)
+      : null;
   const summary = summaryResult.status === 'fulfilled' ? summaryResult.value : null;
   const report = reportResult.status === 'fulfilled' ? reportResult.value : null;
   const jobs = jobsResult.status === 'fulfilled' ? jobsResult.value : [];
@@ -356,6 +367,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     nios,
     niosLoop,
     conflicts,
+    operationalSummary,
   };
 }
 

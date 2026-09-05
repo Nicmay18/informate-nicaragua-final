@@ -45,7 +45,8 @@ export type DeptoJobType =
   | 'editorial-batch'
   | 'daily-report'
   | 'watchdog'
-  | 'cleanup';
+  | 'cleanup'
+  | 'operational-repair';
 
 export type DeptoJobStatus =
   | 'pending'

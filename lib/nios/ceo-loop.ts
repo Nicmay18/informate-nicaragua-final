@@ -20,6 +20,8 @@ import {
   type CeoEnrichedDecision,
 } from './ceo-action-registry';
 import { calculateLearningBoost, loadCeoLearningPatterns, type CeoLearningPattern } from './ceo-learning';
+import { processOperationalConflicts, loadNoticiasAsInputs } from './operational-loop';
+import type { NiosExecutiveData } from './executive-center';
 import { logger } from '@/lib/logger';
 
 export interface CEOLoopResult {
@@ -353,6 +355,33 @@ export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): 
     snapshotDate: observatory.snapshotDate,
     learningPatterns: learningPatterns.length,
   };
+
+  // OPERATIONAL LOOP: cerrar ciclo con incidentes, jobs, aprobaciones y memoria
+  try {
+    const noticias = await loadNoticiasAsInputs(db, 3);
+    const niosForConflicts = {
+      gsc: observatory.gsc,
+      ga4: observatory.ga4,
+      articlesCount: noticias.length,
+    } as unknown as NiosExecutiveData;
+
+    const operational = await processOperationalConflicts(
+      db,
+      { nios: niosForConflicts, loop: loopRecord as unknown as CEOLoopRecord, noticias },
+      { executeNow: false },
+    );
+
+    loopRecord.report = {
+      ...(loopRecord.report as Record<string, unknown>),
+      operational,
+    };
+  } catch (err) {
+    logger.error('[ceo-loop] processOperationalConflicts failed:', err);
+    loopRecord.report = {
+      ...(loopRecord.report as Record<string, unknown>),
+      operationalError: err instanceof Error ? err.message : String(err),
+    };
+  }
 
   // MEMORY
   let id = '';

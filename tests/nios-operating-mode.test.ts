@@ -140,10 +140,12 @@ describe('NIOS Operating Mode', () => {
     expect(report.blocked).toHaveLength(0);
   });
 
-  it('real pipeline produces a valid operating report', async () => {
+  const hasRealGa4 = Boolean(process.env.NIOS_GA4_PROPERTY_ID);
+
+  (hasRealGa4 ? it : it.skip)('real pipeline produces a valid operating report', async () => {
     const [gsc, ga4] = await Promise.all([
       collectGSC('sc-domain:nicaraguainformate.com', 7),
-      collectGA4(process.env.NIOS_GA4_PROPERTY_ID || '', 1),
+      collectGA4(process.env.NIOS_GA4_PROPERTY_ID as string, 1),
     ]);
 
     const report = generateOperatingReport({

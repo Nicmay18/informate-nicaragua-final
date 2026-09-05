@@ -179,6 +179,12 @@ type Data = {
   nios: NiosData | null;
   niosLoop: NiosLoop | null;
   conflicts: NiosConflict[];
+  operationalSummary?: {
+    teams: Record<string, { state: 'IDLE' | 'WORKING' | 'BLOCKED'; current: string[]; count: number; lastAt: string | null }>;
+    incidents: unknown[];
+    approvals: unknown[];
+    feed: string[];
+  } | null;
 };
 
 const STATUS_EMOJI: Record<string, string> = {
@@ -793,6 +799,36 @@ export default function CentroDeComandoPage() {
             </div>
           ) : (
             <p className="text-slate-500">El Departamento aún no ha reportado estado por componente.</p>
+          )}
+        </Card>
+
+        {/* Equipos operativos */}
+        <Card title="Equipos operativos" emoji="🛠">
+          {data.operationalSummary?.teams && Object.keys(data.operationalSummary.teams).length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {Object.entries(data.operationalSummary.teams).map(([team, status]) => (
+                <div key={team} className={`rounded-xl p-3 border ${status.state === 'IDLE' ? 'bg-emerald-50 border-emerald-100' : status.state === 'WORKING' ? 'bg-amber-50 border-amber-100' : 'bg-rose-50 border-rose-100'}`}>
+                  <div className="text-xs uppercase text-slate-500">{team}</div>
+                  <div className={`text-lg font-bold ${status.state === 'IDLE' ? 'text-emerald-700' : status.state === 'WORKING' ? 'text-amber-700' : 'text-rose-700'}`}>{status.state}</div>
+                  <div className="text-xs text-slate-500">{status.count > 0 ? `${status.count} abierto(s)` : 'Sin incidentes activos'}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-slate-500">No hay datos operativos recientes.</p>
+          )}
+        </Card>
+
+        {/* Mientras no estabas */}
+        <Card title="Mientras no estabas" emoji="👋">
+          {data.operationalSummary?.feed && data.operationalSummary.feed.length > 0 ? (
+            <ul className="space-y-2 text-sm">
+              {data.operationalSummary.feed.slice(0, 10).map((item, idx) => (
+                <li key={idx} className="py-2 border-b border-slate-100 last:border-0 text-slate-700">{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-slate-500">No hay eventos nuevos desde tu última visita.</p>
           )}
         </Card>
 

@@ -7,10 +7,11 @@ import { collectGA4 } from '@/lib/nios/intelligence/ga4-collector';
 dotenv.config({ path: '.env.local' });
 
 describe('Misión 9 — Activación real de fuentes (end-to-end)', () => {
-  const siteUrl = process.env.NIOS_GSC_SITE_URL || process.env.NIOS_SITE_URL || 'https://nicaraguainformate.com';
+  const hasCustomGscSite = Boolean(process.env.NIOS_GSC_SITE_URL || process.env.NIOS_SITE_URL);
+  const siteUrl = (process.env.NIOS_GSC_SITE_URL || process.env.NIOS_SITE_URL || 'https://nicaraguainformate.com') as string;
   const ga4PropertyId = process.env.NIOS_GA4_PROPERTY_ID || '';
 
-  it('GSC real connection with NIOS_SITE_URL', { timeout: 60000 }, async () => {
+  (hasCustomGscSite ? it : it.skip)('GSC real connection with NIOS_SITE_URL', { timeout: 60000 }, async () => {
     const snapshot = await collectGSC(siteUrl, 7);
 
     console.log('[M9-GSC]', {
