@@ -7148,9 +7148,9 @@ VERIFICACIÓN FINAL
 
     function renderAnalisisForense(data) {
       // Fallback: si el backend no envía nivel, calcularlo por puntuación
+      const score = Number.isFinite(data.puntuacion) ? data.puntuacion : 0;
       let nivel = data.nivel;
       if (!nivel || nivel === 'undefined') {
-        const score = data.puntuacion || 0;
         if (score >= 75) nivel = 'ORO';
         else if (score >= 60) nivel = 'PLATA';
         else if (score >= 40) nivel = 'BRONCE';
@@ -7164,7 +7164,7 @@ VERIFICACIÓN FINAL
       let html = '<div style="background:' + bgNivel[nivel] + ';border:1px solid ' + colorNivel[nivel] + ';border-radius:12px;padding:16px;margin-bottom:16px;">';
       html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
       html += '<div><h3 style="margin:0;font-size:18px;color:' + colorNivel[nivel] + ';">' + iconoNivel[nivel] + ' NIVEL ' + nivel + '</h3>';
-      html += '<p style="margin:4px 0 0;font-size:14px;color:var(--gray-700);">Puntuacion: ' + data.puntuacion + '/100</p></div>';
+      html += '<p style="margin:4px 0 0;font-size:14px;color:var(--gray-700);">Puntuacion: ' + score + '/100</p></div>';
       const veAprobado = data.filtros && data.filtros.valorEditorial && data.filtros.valorEditorial.aprobado;
       const veColor = veAprobado ? '#16a34a' : '#dc2626';
       const veBg = veAprobado ? '#dcfce7' : '#fee2e2';

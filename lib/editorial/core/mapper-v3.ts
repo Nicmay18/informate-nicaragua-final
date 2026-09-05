@@ -69,10 +69,23 @@ export function mapV4ToV3(v4: EvaluacionEditorial): ResultadoAnalisis {
     metadataSugerida.metaDescription = v4.evidence.noticia.resumen.slice(0, 155);
   }
 
+  // Fallback robusto: si scoreFinal no es un número finito, calcular un promedio
+  // ponderado simple de los módulos para evitar mostrar `undefined/100` en UI.
+  const modulos = [v4.seo, v4.eeat, v4.discover, v4.adsense, v4.valorEditorial, v4.forense];
+  const scores = modulos
+    .map((m) => m?.score)
+    .filter((s): s is number => typeof s === 'number' && Number.isFinite(s));
+  const puntuacion =
+    typeof v4.scoreFinal === 'number' && Number.isFinite(v4.scoreFinal)
+      ? v4.scoreFinal
+      : scores.length > 0
+        ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 1000) / 1000
+        : 0;
+
   return {
     aprobado,
     nivel,
-    puntuacion: v4.scoreFinal,
+    puntuacion,
     filtros,
     accionesRequeridas,
     metadataSugerida,
