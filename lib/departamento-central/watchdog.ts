@@ -42,14 +42,16 @@ export async function runWatchdog(): Promise<{
     }
   }
 
+  const stuckSince = new Date(Date.now() - MAX_JOB_RUNTIME_MS).toISOString();
   const stuckSnap = await db
     .collection('depto_jobs')
     .where('status', '==', 'running')
-    .where('startedAt', '<=', new Date(Date.now() - MAX_JOB_RUNTIME_MS).toISOString())
-    .limit(10)
+    .limit(50)
     .get();
 
   for (const doc of stuckSnap.docs) {
+    const data = doc.data() as { startedAt?: string };
+    if (!data.startedAt || data.startedAt > stuckSince) continue;
     await db.collection('depto_jobs').doc(doc.id).update({
       status: 'failed',
       error: 'Timeout detectado por watchdog',
@@ -59,7 +61,11 @@ export async function runWatchdog(): Promise<{
     logger.warn('[depto-watchdog] Trabajo atascado marcado como fallido', { jobId: doc.id });
   }
 
-  const pendingCount = (await db.collection('depto_jobs').where('status', 'in', ['pending', 'retry']).count().get()).data().count || 0;
+  const [pendingCountSnap, retryCountSnap] = await Promise.all([
+    db.collection('depto_jobs').where('status', '==', 'pending').count().get(),
+    db.collection('depto_jobs').where('status', '==', 'retry').count().get(),
+  ]);
+  const pendingCount = (pendingCountSnap.data().count || 0) + (retryCountSnap.data().count || 0);
   if (pendingCount > PENDING_QUEUE_LIMIT) {
     await openIncident({
       type: 'infrastructure',

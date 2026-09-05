@@ -75,11 +75,13 @@ async function loadEditorialNotes(): Promise<{ count: number; note: string }> {
 
 async function loadLearnings(): Promise<string[]> {
   const db = getAdminDb();
-  const snap = await db.collection('nios_memory').where('kind', '==', 'learning').orderBy('timestamp', 'desc').limit(3).get();
-  return snap.docs.map((d) => {
-    const data = d.data();
-    return typeof data.note === 'string' ? data.note : String(data.note || '');
-  }).filter(Boolean);
+  const snap = await db.collection('nios_memory').orderBy('timestamp', 'desc').limit(20).get();
+  return snap.docs
+    .map((d) => ({ id: d.id, ...d.data() } as { kind?: string; note?: string; timestamp?: string }))
+    .filter((d) => d.kind === 'learning')
+    .slice(0, 3)
+    .map((d) => (typeof d.note === 'string' ? d.note : String(d.note || '')))
+    .filter(Boolean);
 }
 
 export async function runDepartamentoCentralCycle(): Promise<DepartamentoDailyReport> {

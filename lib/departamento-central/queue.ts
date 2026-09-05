@@ -173,13 +173,16 @@ export async function getRecentJobs(limit = 20): Promise<DeptoJob[]> {
 
 export async function getDeadLetter(limit = 20): Promise<DeptoJob[]> {
   const db = getAdminDb();
-  const snap = await db.collection(JOBS).where('status', '==', 'dead-letter').orderBy('createdAt', 'desc').limit(limit).get();
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() } as DeptoJob));
+  const snap = await db.collection(JOBS).orderBy('createdAt', 'desc').limit(limit * 10).get();
+  return snap.docs
+    .map((d) => ({ id: d.id, ...d.data() } as DeptoJob))
+    .filter((j) => j.status === 'dead-letter')
+    .slice(0, limit);
 }
 
 export async function getWorkDone24h(): Promise<number> {
   const db = getAdminDb();
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const snap = await db.collection(JOBS).where('status', '==', 'completed').where('completedAt', '>=', since).count().get();
-  return snap.data().count || 0;
+  const snap = await db.collection(JOBS).where('completedAt', '>=', since).limit(1000).get();
+  return snap.docs.filter((d) => (d.data() as { status?: string }).status === 'completed').length;
 }

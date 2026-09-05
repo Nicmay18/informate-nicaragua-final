@@ -21,9 +21,18 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
     db.collection('supervisor_cycles').where('runAt', '>=', since).count().get(),
   ]);
 
-  const [actionsPending, learningsSnap, health] = await Promise.all([
+  const learningsSnap = await db
+    .collection('nios_memory')
+    .orderBy('timestamp', 'desc')
+    .limit(100)
+    .get()
+    .then((snap) => snap.docs.filter((d) => {
+      const data = d.data() as { kind?: string; timestamp?: string };
+      return data.kind === 'learning' && (data.timestamp || '') >= since;
+    }).length);
+
+  const [actionsPending, health] = await Promise.all([
     db.collection('nios_actions').where('status', '==', 'PENDING').count().get(),
-    db.collection('nios_memory').where('kind', '==', 'learning').where('timestamp', '>=', since).count().get(),
     getDepartmentHealth(),
   ]);
 
@@ -59,7 +68,7 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
     opportunitiesFound: opportunities.data().count || 0,
     actionsExecuted: workDone,
     verifications: verifications.data().count || 0,
-    learnings: learningsSnap.data().count || 0,
+    learnings: learningsSnap || 0,
     pendingApprovals: actionsPending.data().count || 0,
     activeJobs: pending,
     failedJobs: failed,
