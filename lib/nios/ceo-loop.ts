@@ -386,14 +386,7 @@ export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): 
   // MEMORY
   let id = '';
   let memoryRecorded = false;
-  try {
-    id = await recordCeoLoopRun(loopRecord);
-    memoryRecorded = true;
-  } catch (err) {
-    logger.error('[ceo-loop] recordCeoLoopRun failed:', err);
-  }
-
-  const autonomy = calculateAutonomy({
+  let autonomy = calculateAutonomy({
     observations,
     diagnoses,
     decisions,
@@ -404,6 +397,28 @@ export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): 
     memoryRecorded,
     trigger,
   });
+
+  try {
+    id = await recordCeoLoopRun({ ...loopRecord, autonomyScore: autonomy.score });
+    memoryRecorded = true;
+    // Re-calcular con memoria real y persistir el score final.
+    autonomy = calculateAutonomy({
+      observations,
+      diagnoses,
+      decisions,
+      executions,
+      failedRepairs: loopRecord.failedRepairs,
+      verifications,
+      learnings,
+      memoryRecorded,
+      trigger,
+    });
+    if (id) {
+      await db.collection('nios_memory').doc(id).update({ autonomyScore: autonomy.score });
+    }
+  } catch (err) {
+    logger.error('[ceo-loop] recordCeoLoopRun failed:', err);
+  }
 
   const record: CEOLoopRecord = {
     ...loopRecord,
