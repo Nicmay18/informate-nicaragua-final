@@ -1,4 +1,3 @@
-import { FieldPath } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 import type { CEOLoopRecord } from '@/lib/nios/ceo-memory';
@@ -163,12 +162,13 @@ async function getPendingActions(): Promise<PendingAction[]> {
 async function getRecentLearnings(): Promise<LearningItem[]> {
   try {
     const db = getAdminDb();
+    const allowed = new Set(['learning', 'action_learning', 'insight']);
+    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const snap = await db
       .collection('nios_memory')
-      .orderBy(FieldPath.documentId(), 'desc')
-      .limit(50)
+      .where('timestamp', '>=', since)
+      .limit(200)
       .get();
-    const allowed = new Set(['learning', 'action_learning', 'insight']);
     return snap.docs
       .map((d) => {
         const m = d.data() as { kind?: string; learning?: string; observation?: string; text?: string; timestamp?: string; createdAt?: string; actionId?: string };
@@ -183,6 +183,7 @@ async function getRecentLearnings(): Promise<LearningItem[]> {
         };
       })
       .filter((l) => allowed.has(l.kind))
+      .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
       .slice(0, 10);
   } catch (err) {
     logger.error('[centro-de-comando] Error consultando aprendizajes:', err);
