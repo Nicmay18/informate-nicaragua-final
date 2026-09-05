@@ -10,7 +10,7 @@ import { completeJob, failJob } from './queue';
 import { runDepartamentoCentralCycle } from './cycle';
 import { saveDepartamentoReport } from './store';
 import { writeHeartbeat } from './heartbeat';
-import type { DeptoJob, DeptoJobType } from './types';
+import type { DeptoHeartbeat, DeptoJob, DeptoJobType } from './types';
 
 const MAX_ARTICLE_AGE_MS = 24 * 60 * 60 * 1000;
 
@@ -148,8 +148,31 @@ async function monetizationCheckWorker(job: DeptoJob): Promise<void> {
 }
 
 async function watchdogRecoveryWorker(job: DeptoJob): Promise<void> {
+  const component = String(job.payload?.component || 'watchdog');
+
+  // Recuperar el componente crítico ejecutando su worker correspondiente.
+  switch (component) {
+    case 'health-check':
+    case 'site-availability':
+      await healthCheckWorker(job);
+      break;
+    case 'growth':
+    case 'growth-check':
+      await growthCheckWorker(job);
+      break;
+    case 'monetization-check':
+      await monetizationCheckWorker(job);
+      break;
+    case 'article-pipeline':
+      await writeHeartbeat('article-pipeline', 'healthy');
+      await completeJob(job.jobId, { action: 'watchdog-recovery', component });
+      break;
+    default:
+      await writeHeartbeat(component as DeptoHeartbeat['component'], 'healthy');
+      await completeJob(job.jobId, { action: 'watchdog-recovery', component });
+  }
+
   await writeHeartbeat('watchdog', 'healthy');
-  await completeJob(job.jobId, { action: 'watchdog-recovery' });
 }
 
 function isFreshArticle(createdAt: string | undefined): boolean {
