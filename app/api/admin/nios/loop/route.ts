@@ -5,7 +5,7 @@ import { runCEOLoop } from '@/lib/nios/ceo-loop';
 import { getLatestCeoLoopRecord } from '@/lib/nios/ceo-memory';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 300;
+export const maxDuration = 60;
 
 function isAuthorized(request: NextRequest): boolean {
   const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
