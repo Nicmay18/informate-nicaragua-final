@@ -212,7 +212,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/panel',
-        destination: '/api/panel',
+        destination: '/panel/centro-de-comando',
         permanent: false,
       },
       {
@@ -252,37 +252,32 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/admin/growth',
-        destination: '/admin/nios',
+        destination: '/panel/nios',
         permanent: false,
       },
       {
         source: '/admin/crecimiento',
-        destination: '/admin/nios',
+        destination: '/panel/nios/performance',
         permanent: false,
       },
       {
         source: '/admin/meni-dashboard',
-        destination: '/admin/nios',
+        destination: '/panel/nios/editorial-strategy',
         permanent: false,
       },
       {
         source: '/admin/knowledge-center',
-        destination: '/admin/nios',
+        destination: '/panel/nios',
         permanent: false,
       },
       {
         source: '/admin/entities',
-        destination: '/admin/nios',
+        destination: '/panel/entities',
         permanent: false,
       },
       {
-        source: '/panel/nios',
-        destination: '/admin/nios',
-        permanent: false,
-      },
-      {
-        source: '/panel/entities',
-        destination: '/admin/nios',
+        source: '/admin/nios',
+        destination: '/panel/nios',
         permanent: false,
       },
       {

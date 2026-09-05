@@ -346,7 +346,7 @@ export default function CentroDeComandoPage() {
         </header>
 
         {/* Estado general */}
-        <Card title="Estado general" emoji="🌡️" link="/admin/nios" linkLabel="Ir a NIOS →">
+        <Card title="Estado general" emoji="🌡️" link="/panel/nios" linkLabel="Ir a NIOS →">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <EstadoPill dot={estadoGeneral.dot} label={estadoGeneral.label} sub="sistema operativo" />
             <div>
@@ -547,7 +547,7 @@ export default function CentroDeComandoPage() {
         )}
 
         {/* Lo que resolví */}
-        <Card title="Lo que resolví" emoji="🛠️" link="/admin/nios/reparaciones" linkLabel="Reparaciones →">
+        <Card title="Lo que resolví" emoji="🛠️" link="/panel/nios" linkLabel="Reparaciones →">
           {resolvedIncidents.length > 0 ? (
             <div className="space-y-3">
               {resolvedIncidents.slice(0, 5).map((inc) => (
@@ -566,7 +566,7 @@ export default function CentroDeComandoPage() {
         </Card>
 
         {/* Lo que necesito de ti */}
-        <Card title="Necesito de ti" emoji="🟡" link="/admin/nios/recovery" linkLabel="Acciones →">
+        <Card title="Necesito de ti" emoji="🟡" link="/panel/nios" linkLabel="Acciones →">
           {pendingActions.length > 0 ? (
             <div className="space-y-3">
               {pendingActions.slice(0, 5).map((a) => (
@@ -587,7 +587,7 @@ export default function CentroDeComandoPage() {
         </Card>
 
         {/* Plan de hoy */}
-        <Card title="Plan de hoy" emoji="🎯" link="/admin/nios" linkLabel="NIOS →">
+        <Card title="Plan de hoy" emoji="🎯" link="/panel/nios" linkLabel="NIOS →">
           {nios?.growth && nios.growth.plan.length > 0 ? (
             <div className="space-y-3">
               <p className="text-slate-700 text-sm">{nios.growth.speaks}</p>
@@ -617,7 +617,7 @@ export default function CentroDeComandoPage() {
         </Card>
 
         {/* Salud del contenido */}
-        <Card title="Salud del contenido" emoji="📰" link="/admin/meni" linkLabel="MENI →">
+        <Card title="Salud del contenido" emoji="📰" link="/panel/nios/editorial-strategy" linkLabel="MENI →">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
               <div className="text-xs text-slate-500 uppercase">Notas revisadas</div>
@@ -642,7 +642,7 @@ export default function CentroDeComandoPage() {
         </Card>
 
         {/* Crecimiento */}
-        <Card title="Crecimiento" emoji="📈" link="/admin/nios/google-intelligence" linkLabel="Google Intelligence →">
+        <Card title="Crecimiento" emoji="📈" link="/panel/nios/performance" linkLabel="Google Intelligence →">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
               <div className="text-xs text-slate-500 uppercase">Impresiones (GSC)</div>
@@ -690,7 +690,7 @@ export default function CentroDeComandoPage() {
         </Card>
 
         {/* Negocio */}
-        <Card title="Negocio" emoji="💰" link="/admin/nios/adsense-recovery" linkLabel="AdSense →">
+        <Card title="Negocio" emoji="💰" link="/panel/nios/performance" linkLabel="AdSense →">
           {nios?.adsense ? (
             <div className="space-y-3">
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
