@@ -26,17 +26,17 @@ export async function writeHeartbeat(
   ).toISOString();
 
   const snap = await db.collection(COLLECTION).where('component', '==', component).limit(1).get();
-  const data = {
+  const data: Record<string, unknown> = {
     component,
     status,
     lastRunAt,
     nextExpectedAt,
-    note: options?.note,
-    durationMs: options?.durationMs,
-    jobsCompleted: options?.jobsCompleted,
-    jobsFailed: options?.jobsFailed,
     updatedAt: lastRunAt,
   };
+  if (options?.note !== undefined) data.note = options.note;
+  if (options?.durationMs !== undefined) data.durationMs = options.durationMs;
+  if (options?.jobsCompleted !== undefined) data.jobsCompleted = options.jobsCompleted;
+  if (options?.jobsFailed !== undefined) data.jobsFailed = options.jobsFailed;
 
   if (snap.empty) {
     await db.collection(COLLECTION).add(data);
