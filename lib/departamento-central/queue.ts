@@ -61,7 +61,9 @@ export async function enqueueJob(input: {
     payload: input.payload,
   };
 
-  await db.collection(JOBS).doc(job.jobId).set(job);
+  // Elimina campos undefined antes de escribir en Firestore.
+  const cleanJob = JSON.parse(JSON.stringify(job)) as typeof job;
+  await db.collection(JOBS).doc(job.jobId).set(cleanJob);
   logger.info('[depto-queue] Trabajo encolado', { jobId: job.jobId, type: job.type, priority: job.priority });
   return job.jobId;
 }
