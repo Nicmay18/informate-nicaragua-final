@@ -830,15 +830,17 @@ export async function rejectOperationalApproval(
 
 export async function expireStaleApprovals(db: Firestore, ttlDays = 7): Promise<number> {
   const since = new Date(Date.now() - ttlDays * 24 * 60 * 60 * 1000).toISOString();
+  // Evita índice compuesto: filtra por kind y refina en memoria.
   const snap = await db
     .collection(COLLECTION)
     .where('kind', '==', 'operational_approval')
-    .where('estado', '==', 'PENDING')
-    .where('createdAt', '<=', since)
+    .limit(200)
     .get();
 
   let expired = 0;
   for (const doc of snap.docs) {
+    const a = doc.data() as OperationalApproval;
+    if (a.estado !== 'PENDING' || !a.createdAt || a.createdAt > since) continue;
     await doc.ref.update({ estado: 'EXPIRED', updatedAt: now() });
     expired++;
   }
@@ -888,26 +890,29 @@ export async function detectRepeatedPatterns(
 }
 
 export async function getOperationalTeamStatuses(db: Firestore): Promise<Record<OperationalTeam, OperationalTeamStatus>> {
+  // Evita índice compuesto: consulta por kind y filtra/ordena en memoria.
   const snap = await db
     .collection(COLLECTION)
     .where('kind', '==', 'operational_incident')
-    .where('state', 'not-in', ['RESOLVED'])
-    .orderBy('updatedAt', 'desc')
-    .limit(200)
+    .limit(300)
     .get();
+
+  const docs = snap.docs
+    .map((d) => d.data() as OperationalIncident)
+    .filter((inc) => inc.state !== 'RESOLVED')
+    .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
 
   const statuses: Record<OperationalTeam, OperationalTeamStatus> = {} as Record<OperationalTeam, OperationalTeamStatus>;
   for (const team of ALL_TEAMS) {
     statuses[team] = { state: 'IDLE', current: [], count: 0, lastAt: null };
   }
 
-  for (const doc of snap.docs) {
-    const inc = doc.data() as OperationalIncident;
+  for (const inc of docs) {
     const team = inc.team;
     if (!statuses[team]) continue;
 
     statuses[team].count++;
-    if (!statuses[team].lastAt || inc.updatedAt > statuses[team].lastAt) {
+    if (!statuses[team].lastAt || (inc.updatedAt && inc.updatedAt > statuses[team].lastAt!)) {
       statuses[team].lastAt = inc.updatedAt;
     }
 
@@ -924,25 +929,28 @@ export async function getOperationalTeamStatuses(db: Firestore): Promise<Record<
 }
 
 export async function getOperationalFeed(db: Firestore, limit = 20): Promise<string[]> {
+  // Evita índices compuestos: consulta por kind y ordena en memoria.
   const [incidentsSnap, memorySnap] = await Promise.all([
     db
       .collection(COLLECTION)
       .where('kind', '==', 'operational_incident')
-      .orderBy('updatedAt', 'desc')
-      .limit(limit)
+      .limit(limit * 3)
       .get(),
     db
       .collection(COLLECTION)
       .where('kind', '==', 'operational_memory')
-      .orderBy('fecha', 'desc')
-      .limit(limit)
+      .limit(limit * 3)
       .get(),
   ]);
 
   const items: { at: string; text: string }[] = [];
 
-  for (const doc of incidentsSnap.docs) {
-    const inc = doc.data() as OperationalIncident;
+  const incidentDocs = incidentsSnap.docs
+    .map((d) => d.data() as OperationalIncident)
+    .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))
+    .slice(0, limit);
+
+  for (const inc of incidentDocs) {
     if (inc.transitions && inc.transitions.length > 0) {
       const last = inc.transitions[inc.transitions.length - 1];
       items.push({
@@ -954,8 +962,12 @@ export async function getOperationalFeed(db: Firestore, limit = 20): Promise<str
     }
   }
 
-  for (const doc of memorySnap.docs) {
-    const m = doc.data() as OperationalMemoryEntry;
+  const memoryDocs = memorySnap.docs
+    .map((d) => d.data() as OperationalMemoryEntry)
+    .sort((a, b) => (b.fecha || '').localeCompare(a.fecha || ''))
+    .slice(0, limit);
+
+  for (const m of memoryDocs) {
     items.push({
       at: m.fecha,
       text: `[MEMORIA] ${m.equipo}: ${m.problema} → ${m.resultado}`,
@@ -963,31 +975,37 @@ export async function getOperationalFeed(db: Firestore, limit = 20): Promise<str
   }
 
   return items
+    .filter((i) => i.at)
     .sort((a, b) => b.at.localeCompare(a.at))
     .slice(0, limit)
     .map((i) => i.text);
 }
 
 export async function getOperationalSummary(db: Firestore): Promise<OperationalSummary> {
+  // Evita índices compuestos: consulta por kind y filtra/ordena en memoria.
   const [incidentsSnap, approvalsSnap, teamStatuses] = await Promise.all([
     db
       .collection(COLLECTION)
       .where('kind', '==', 'operational_incident')
-      .orderBy('updatedAt', 'desc')
-      .limit(100)
+      .limit(200)
       .get(),
     db
       .collection(COLLECTION)
       .where('kind', '==', 'operational_approval')
-      .where('estado', '==', 'PENDING')
-      .orderBy('createdAt', 'desc')
-      .limit(50)
+      .limit(100)
       .get(),
     getOperationalTeamStatuses(db),
   ]);
 
-  const incidents = incidentsSnap.docs.map((d) => d.data() as OperationalIncident);
-  const approvals = approvalsSnap.docs.map((d) => d.data() as OperationalApproval);
+  const incidents = incidentsSnap.docs
+    .map((d) => d.data() as OperationalIncident)
+    .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))
+    .slice(0, 100);
+  const approvals = approvalsSnap.docs
+    .map((d) => d.data() as OperationalApproval)
+    .filter((a) => a.estado === 'PENDING')
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
+    .slice(0, 50);
   const feed = await getOperationalFeed(db, 20);
 
   return { teams: teamStatuses, incidents, approvals, feed };
