@@ -21,6 +21,8 @@ import type {
   DeptoJob,
 } from '@/lib/departamento-central/types';
 import type { NiosAction } from '@/lib/nios/action-engine';
+import type { Noticia } from '@/lib/types';
+import type { NoticiaInput } from '@/lib/meni';
 
 export interface PendingAction {
   id: string;
@@ -214,6 +216,36 @@ async function getContentHealth(): Promise<ContentHealth | null> {
   }
 }
 
+async function getLatestNoticiasForForense(limit = 3): Promise<NoticiaInput[]> {
+  try {
+    const db = getAdminDb();
+    const snap = await db
+      .collection('noticias')
+      .orderBy('fecha', 'desc')
+      .limit(limit)
+      .get();
+    const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as Noticia[];
+    return docs.map(mapNoticiaToNoticiaInput);
+  } catch (err) {
+    logger.error('[centro-de-comando] Error leyendo noticias para forense:', err);
+    return [];
+  }
+}
+
+function mapNoticiaToNoticiaInput(n: Noticia): NoticiaInput {
+  return {
+    id: n.id,
+    titulo: n.titulo,
+    resumen: n.resumen ?? '',
+    contenido: n.contenido ?? n.resumen ?? '',
+    categoria: n.categoria,
+    autor: n.autor ?? 'Redacción',
+    fecha: n.fecha,
+    slug: n.slug,
+    imagen: n.imagen || n.featuredImage || '',
+  };
+}
+
 export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
   const [
     niosResult,
@@ -228,6 +260,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     learningsResult,
     contentResult,
     niosLoopResult,
+    noticiasResult,
   ] = await Promise.allSettled([
     getNiosExecutiveData().catch((e) => {
       logger.error('[centro-de-comando] NIOS executive data falló:', e);
@@ -262,6 +295,10 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     getRecentLearnings(),
     getContentHealth(),
     getLatestCeoLoopRecord(),
+    getLatestNoticiasForForense(3).catch((e) => {
+      logger.error('[centro-de-comando] Noticias para forense fallaron:', e);
+      return [] as NoticiaInput[];
+    }),
   ]);
 
   const nios = niosResult.status === 'fulfilled' ? niosResult.value : null;
@@ -278,6 +315,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
   const learnings = learningsResult.status === 'fulfilled' ? learningsResult.value : [];
   const content = contentResult.status === 'fulfilled' ? contentResult.value : null;
   const latestLoop = niosLoopResult.status === 'fulfilled' ? niosLoopResult.value : null;
+  const noticias = noticiasResult.status === 'fulfilled' ? noticiasResult.value : undefined;
   const niosLoop = latestLoop
     ? {
         record: latestLoop,
@@ -286,7 +324,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
         autonomyReport: buildAutonomyReport(latestLoop),
       }
     : null;
-  const conflicts = detectConflicts({ nios, loop: latestLoop });
+  const conflicts = detectConflicts({ nios, loop: latestLoop, noticias });
 
   const level = health.overall;
   const labelMap = { HEALTHY: 'OPERATIVO', DEGRADED: 'DEGRADADO', CRITICAL: 'CRÍTICO' } as const;
