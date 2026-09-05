@@ -36,13 +36,14 @@ export async function enqueueJob(input: {
     const existing = await db
       .collection(JOBS)
       .where('dedupKey', '==', input.dedupKey)
-      .where('status', 'in', ['pending', 'running', 'completed'])
       .limit(1)
       .get();
     if (!existing.empty) {
       const first = existing.docs[0].data() as DeptoJob;
-      logger.debug('[depto-queue] Trabajo duplicado ignorado', { dedupKey: input.dedupKey, existingJobId: first.jobId });
-      return first.jobId;
+      if (['pending', 'running', 'completed'].includes(first.status)) {
+        logger.debug('[depto-queue] Trabajo duplicado ignorado', { dedupKey: input.dedupKey, existingJobId: first.jobId });
+        return first.jobId;
+      }
     }
   }
 
@@ -65,31 +66,39 @@ export async function enqueueJob(input: {
   return job.jobId;
 }
 
+const PRIORITY_RANK: Record<string, number> = { P0: 0, P1: 1, P2: 2, P3: 3 };
+
 export async function claimNextJob(): Promise<DeptoJob | null> {
   const db = getAdminDb();
   const now = new Date().toISOString();
 
   const snap = await db
     .collection(JOBS)
-    .where('status', 'in', ['pending', 'retry'])
     .where('scheduledFor', '<=', now)
     .orderBy('scheduledFor', 'asc')
-    .orderBy('priority', 'asc')
-    .limit(1)
+    .limit(50)
     .get();
 
-  if (snap.empty) return null;
+  const candidates = snap.docs
+    .map((d) => ({ id: d.id, ...d.data() } as DeptoJob))
+    .filter((j) => ['pending', 'retry'].includes(j.status))
+    .sort((a, b) => {
+      const pa = PRIORITY_RANK[a.priority] ?? 99;
+      const pb = PRIORITY_RANK[b.priority] ?? 99;
+      if (pa !== pb) return pa - pb;
+      return (a.scheduledFor ?? '').localeCompare(b.scheduledFor ?? '');
+    });
 
-  const doc = snap.docs[0];
-  const data = { id: doc.id, ...doc.data() } as DeptoJob;
+  const next = candidates[0];
+  if (!next) return null;
 
-  await db.collection(JOBS).doc(doc.id).update({
+  await db.collection(JOBS).doc(next.id ?? next.jobId).update({
     status: 'running',
     startedAt: now,
-    attempts: (data.attempts || 0) + 1,
+    attempts: (next.attempts || 0) + 1,
   });
 
-  return data;
+  return next;
 }
 
 export async function completeJob(

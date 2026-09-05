@@ -303,14 +303,14 @@ async function findActiveIncidentByConflictId(
 ): Promise<OperationalIncident | null> {
   const snap = await db
     .collection(COLLECTION)
-    .where('kind', '==', 'operational_incident')
     .where('conflictId', '==', conflictId)
-    .where('state', 'not-in', ['RESOLVED', 'FAILED'])
-    .orderBy('updatedAt', 'desc')
-    .limit(1)
+    .limit(20)
     .get();
-  if (snap.empty) return null;
-  return snap.docs[0].data() as OperationalIncident;
+  const active = snap.docs
+    .map((d) => d.data() as OperationalIncident)
+    .filter((inc) => inc.kind === 'operational_incident' && !['RESOLVED', 'FAILED'].includes(inc.state))
+    .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+  return active[0] || null;
 }
 
 export async function getOperationalIncidentById(db: Firestore, id: string): Promise<OperationalIncident | null> {
@@ -854,10 +854,8 @@ export async function detectRepeatedPatterns(
   const since = new Date(Date.now() - windowDays * 24 * 60 * 60 * 1000).toISOString();
   const snap = await db
     .collection(COLLECTION)
-    .where('kind', '==', 'operational_memory')
-    .where('fecha', '>=', since)
     .orderBy('fecha', 'desc')
-    .limit(200)
+    .limit(300)
     .get();
 
   const groups: Record<
@@ -867,6 +865,7 @@ export async function detectRepeatedPatterns(
 
   for (const doc of snap.docs) {
     const m = doc.data() as OperationalMemoryEntry;
+    if (m.kind !== 'operational_memory' || !m.fecha || m.fecha < since) continue;
     const key = m.problema || 'problema-desconocido';
     if (!groups[key]) {
       groups[key] = { count: 0, since: m.fecha, lastAt: m.fecha, severity: 'info' };

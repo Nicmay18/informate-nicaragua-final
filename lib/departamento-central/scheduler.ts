@@ -23,11 +23,15 @@ async function hasRecentJob(
     const snap = await db
       .collection('depto_jobs')
       .where('type', '==', type)
-      .where('createdAt', '>=', since)
-      .where('status', 'in', ['pending', 'running', 'completed'])
-      .limit(1)
+      .limit(50)
       .get();
-    return !snap.empty;
+    return snap.docs.some((d) => {
+      const j = d.data() as { createdAt?: string; status?: string };
+      return (
+        (j.createdAt || '') >= since &&
+        ['pending', 'running', 'completed'].includes(j.status || '')
+      );
+    });
   } catch (err) {
     logger.error('[depto-scheduler] Error consultando trabajos recientes:', err);
     return true;
