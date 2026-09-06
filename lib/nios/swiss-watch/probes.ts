@@ -485,6 +485,98 @@ export async function probeNiosSnapshot(
   }
 }
 
+/** Resultado de verificar los artefactos publicos de AdSense / SEO. */
+export interface AdsenseArtifactProbe {
+  adsTxtAccessible: boolean;
+  adsTxtContent: string | null;
+  adsTxtHasPublisherId: boolean;
+  robotsAllowsCrawling: boolean;
+  sitemapAccessible: boolean;
+}
+
+/**
+ * Verifica ads.txt, robots.txt y sitemap.xml publicamente.
+ * Usa el dominio configurado en NIOS_SITE_URL o NEXT_PUBLIC_SITE_URL.
+ * Nunca confia en asunciones de build: las prueba con HTTP real.
+ */
+export async function probeAdsenseArtifacts(
+  timeoutMs = 2500,
+): Promise<AdsenseArtifactProbe> {
+  const defaultResult: AdsenseArtifactProbe = {
+    adsTxtAccessible: false,
+    adsTxtContent: null,
+    adsTxtHasPublisherId: false,
+    robotsAllowsCrawling: false,
+    sitemapAccessible: false,
+  };
+
+  const base =
+    process.env.NIOS_SITE_URL?.trim() ||
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+    'https://nicaraguainformate.com';
+
+  const fetchText = async (path: string): Promise<{ ok: boolean; text: string }> => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(`${base.replace(/\/$/, '')}${path}`, {
+        signal: controller.signal,
+        headers: { 'User-Agent': 'NIOS-SwissWatch/1.0' },
+      });
+      const text = await res.text();
+      return { ok: res.ok, text };
+    } catch (err) {
+      logger.warn(`[swiss-watch] Error leyendo artefacto ${path}`, {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return { ok: false, text: '' };
+    } finally {
+      clearTimeout(timer);
+    }
+  };
+
+  try {
+    const [ads, robots, sitemap] = await Promise.all([
+      fetchText('/ads.txt'),
+      fetchText('/robots.txt'),
+      fetchText('/sitemap.xml'),
+    ]);
+
+    const adsTxtContent = ads.ok ? ads.text : null;
+    const adsTxtHasPublisherId = adsTxtContent
+      ? /google\.com\s*,\s*pub-\d+/i.test(adsTxtContent)
+      : false;
+
+    // robots.txt permite rastreo si responde OK y no bloquea la raiz para todos.
+    const robotsBlocksAll = robots.ok
+      ? /User-agent:\s*\*\s*Disallow:\s*\/\s*$/im.test(robots.text) ||
+        /Disallow:\s*\/\s*$/im.test(robots.text)
+      : true;
+    const robotsAllowsCrawling = robots.ok && !robotsBlocksAll;
+
+    const sitemapBody = sitemap.text.trim().toLowerCase();
+    const sitemapLooksValid =
+      sitemapBody.startsWith('<?xml') ||
+      sitemapBody.startsWith('<urlset') ||
+      sitemapBody.startsWith('<sitemapindex') ||
+      sitemapBody.length > 100;
+    const sitemapAccessible = sitemap.ok && sitemapLooksValid;
+
+    return {
+      adsTxtAccessible: ads.ok,
+      adsTxtContent,
+      adsTxtHasPublisherId,
+      robotsAllowsCrawling,
+      sitemapAccessible,
+    };
+  } catch (err) {
+    logger.error('[swiss-watch] Error en probeAdsenseArtifacts', {
+      error: err instanceof Error ? err.message : String(err),
+    });
+    return defaultResult;
+  }
+}
+
 /**
  * Agrega varios estados en el peor caso, respetando la jerarquia:
  * RED > BLOCKED_EXTERNAL > UNKNOWN > YELLOW > GREEN.

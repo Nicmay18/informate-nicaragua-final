@@ -23,6 +23,7 @@ import {
   probeHeartbeat,
   probeIncidents,
   probeNiosSnapshot,
+  probeAdsenseArtifacts,
   worstStatus,
 } from './probes';
 import { evaluateAdSenseReadiness, REQUIRED_LEGAL_PAGES } from './adsense-readiness';
@@ -140,6 +141,7 @@ export interface BoardInput {
   incidents: Awaited<ReturnType<typeof probeIncidents>>;
   snapshot: Awaited<ReturnType<typeof probeNiosSnapshot>>;
   adsense: AdSenseReadinessVerdict;
+  adsenseArtifacts?: Awaited<ReturnType<typeof probeAdsenseArtifacts>>;
   errors: string[];
 }
 
@@ -707,24 +709,26 @@ export async function getSwissWatchBoard(now = new Date()): Promise<SwissWatchBo
     errors.push(`No se pudieron cargar las noticias: ${message}`);
   }
 
-  const [firebase, firestore, heartbeat, incidents, snapshot] = await Promise.all([
+  const [firebase, firestore, heartbeat, incidents, snapshot, adsenseArtifacts] = await Promise.all([
     probeFirebase(),
     probeFirestoreOperational(),
     probeHeartbeat(now.getTime()),
     probeIncidents(),
     probeNiosSnapshot(now.getTime()),
+    probeAdsenseArtifacts(),
   ]);
 
   const adsense = evaluateAdSenseReadiness(
     {
       noticias,
       existingLegalPages: EXISTING_LEGAL_PAGES,
-      // ads.txt y robots.txt son artefactos estaticos versionados en public/.
-      adsTxtAccessible: true,
-      adsTxtContent: 'google.com',
-      robotsAllowsCrawling: true,
-      sitemapAccessible: true,
-      adsenseClientIdConfigured: Boolean(process.env.GOOGLE_ADSENSE_CLIENT_ID?.trim()),
+      adsTxtAccessible: adsenseArtifacts.adsTxtAccessible,
+      adsTxtContent: adsenseArtifacts.adsTxtContent,
+      robotsAllowsCrawling: adsenseArtifacts.robotsAllowsCrawling,
+      sitemapAccessible: adsenseArtifacts.sitemapAccessible,
+      adsenseClientIdConfigured:
+        Boolean(process.env.GOOGLE_ADSENSE_CLIENT_ID?.trim()) ||
+        adsenseArtifacts.adsTxtHasPublisherId,
     },
     now,
   );
@@ -734,7 +738,7 @@ export async function getSwissWatchBoard(now = new Date()): Promise<SwissWatchBo
   }
 
   return buildBoard(
-    { noticias, firebase, firestore, heartbeat, incidents, snapshot, adsense, errors },
+    { noticias, firebase, firestore, heartbeat, incidents, snapshot, adsense, adsenseArtifacts, errors },
     now,
   );
 }
