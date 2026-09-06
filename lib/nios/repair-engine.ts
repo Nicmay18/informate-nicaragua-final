@@ -29,7 +29,7 @@ const MAX_REPAIR_CYCLES = 3;
 const COLLECTION_SNAPSHOTS = 'nios_daily_snapshots';
 const SNAPSHOT_VERSION = '2.1-repaired';
 
-export type NiosRepairActionType = 'AUTO_REPAIR' | 'HUMAN_ACTION' | 'VERIFY_ONLY';
+export type NiosRepairActionType = 'AUTO_REPAIR' | 'HUMAN_ACTION' | 'BLOCKED_EXTERNAL' | 'VERIFY_ONLY';
 
 export type NiosRepairActionStatus =
   | 'PLANNED'
@@ -38,6 +38,7 @@ export type NiosRepairActionStatus =
   | 'VERIFIED'
   | 'FAILED'
   | 'WAITING_HUMAN'
+  | 'BLOCKED'
   | 'SKIPPED';
 
 export type NiosRepairActionPriority = 'P0' | 'P1' | 'P2' | 'P3';
@@ -93,6 +94,7 @@ export interface NiosRepairEngineResult {
   modeChanged: boolean;
   repaired: NiosRepairRecord[];
   pendingHuman: NiosRepairAction[];
+  blockedExternal: NiosRepairAction[];
   failedRepairs: NiosRepairAction[];
   skipped: NiosRepairAction[];
   verification: NiosRepairVerification[];
@@ -142,7 +144,7 @@ function isAutoRepairable(diagnostic: NiosDiagnostic, state: NiosSystemState): b
 
 function actionTypeFor(diagnostic: NiosDiagnostic, state: NiosSystemState): NiosRepairActionType {
   if (isAutoRepairable(diagnostic, state)) return 'AUTO_REPAIR';
-  if (diagnostic.requiresHuman) return 'HUMAN_ACTION';
+  if (diagnostic.requiresHuman) return 'BLOCKED_EXTERNAL';
   return 'VERIFY_ONLY';
 }
 
@@ -210,7 +212,8 @@ function buildActions(diagnostics: NiosDiagnostic[], state: NiosSystemState): Ni
   return diagnostics.map((d) => {
     const type = actionTypeFor(d, state);
     const canAutoRepair = type === 'AUTO_REPAIR';
-    const status: NiosRepairActionStatus = canAutoRepair ? 'PLANNED' : d.requiresHuman ? 'WAITING_HUMAN' : 'SKIPPED';
+    const isBlockedExternal = type === 'BLOCKED_EXTERNAL';
+    const status: NiosRepairActionStatus = canAutoRepair ? 'PLANNED' : isBlockedExternal ? 'BLOCKED' : 'SKIPPED';
 
     let before: Record<string, unknown> | undefined;
     let after: Record<string, unknown> | undefined;
@@ -275,14 +278,15 @@ async function repairSnapshotForDate(
 }
 
 async function repairAdminCache(): Promise<NiosRepairVerification> {
-  const before = { tags: ['dashboard-calidad'] };
+  const tags = ['dashboard-calidad', 'nios-daily-snapshot', 'nios-snapshot', 'noticias'];
+  const before = { tags };
   try {
-    revalidateTag('dashboard-calidad');
+    tags.forEach((tag) => revalidateTag(tag));
     return {
       before,
-      after: { tags: ['dashboard-calidad'], invalidatedAt: new Date().toISOString() },
+      after: { tags, invalidatedAt: new Date().toISOString() },
       verified: true,
-      message: 'Caché del dashboard administrativo invalidada correctamente.',
+      message: `Caché de administración invalidada: ${tags.join(', ')}.`,
     };
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
@@ -446,6 +450,7 @@ export async function runRepairEngine(state: NiosRepairEngineState): Promise<Nio
   });
 
   const pendingHuman = actions.filter((a) => a.type === 'HUMAN_ACTION');
+  const blockedExternal = actions.filter((a) => a.type === 'BLOCKED_EXTERNAL');
   const failedRepairs = actions.filter((a) => a.status === 'FAILED');
   const skipped = actions.filter((a) => a.status === 'SKIPPED');
 
@@ -453,6 +458,7 @@ export async function runRepairEngine(state: NiosRepairEngineState): Promise<Nio
 Ciclos: ${cycles}/${maxCycles}.
 Reparaciones verificadas: ${repaired.length}.
 Pendientes humanos: ${pendingHuman.length}.
+Bloqueos externos: ${blockedExternal.length}.
 Fallidas: ${failedRepairs.length}.
 Omitidas: ${skipped.length}.
 Modo final: ${finalReport.mode}.`;
@@ -462,6 +468,7 @@ Modo final: ${finalReport.mode}.`;
     modeChanged: finalReport.mode !== initialMode,
     repaired,
     pendingHuman,
+    blockedExternal,
     failedRepairs,
     skipped,
     verification: verifications,

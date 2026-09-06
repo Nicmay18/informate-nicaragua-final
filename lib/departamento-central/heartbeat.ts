@@ -4,13 +4,24 @@ import type { DeptoHeartbeat, DeptoHealthLevel } from './types';
 
 const COLLECTION = 'depto_heartbeat';
 
+const CRON_DEFAULT_INTERVAL_MS = 25 * 60 * 60 * 1000; // 25h cubre crons diarios con drift
+
 const EXPECTED_INTERVALS: Record<string, number> = {
-  scheduler: 10 * 60 * 1000,
-  'health-check': 5 * 60 * 1000,
-  growth: 30 * 60 * 1000,
-  watchdog: 15 * 60 * 1000,
+  scheduler: CRON_DEFAULT_INTERVAL_MS,
+  'health-check': CRON_DEFAULT_INTERVAL_MS,
+  growth: CRON_DEFAULT_INTERVAL_MS,
+  watchdog: CRON_DEFAULT_INTERVAL_MS,
   'daily-report': 26 * 60 * 60 * 1000,
+  'monetization-check': CRON_DEFAULT_INTERVAL_MS,
+  'article-pipeline': CRON_DEFAULT_INTERVAL_MS,
 };
+
+export function getExpectedInterval(component: string): number {
+  if (component.startsWith('cron/') || component.startsWith('cron/api/cron/')) {
+    return CRON_DEFAULT_INTERVAL_MS;
+  }
+  return EXPECTED_INTERVALS[component] || CRON_DEFAULT_INTERVAL_MS;
+}
 
 export async function writeHeartbeat(
   component: DeptoHeartbeat['component'],
@@ -28,7 +39,7 @@ export async function writeHeartbeat(
   const lastRunAt = now.toISOString();
   const nextExpectedAt =
     options?.nextExpectedAt ??
-    new Date(now.getTime() + (EXPECTED_INTERVALS[component] || 60 * 60 * 1000)).toISOString();
+    new Date(now.getTime() + getExpectedInterval(component)).toISOString();
 
   const snap = await db.collection(COLLECTION).where('component', '==', component).limit(1).get();
   const data: Record<string, unknown> = {
@@ -51,8 +62,6 @@ export async function writeHeartbeat(
 
   logger.debug('[depto-heartbeat] Heartbeat actualizado', { component, status });
 }
-
-const CRON_DEFAULT_INTERVAL_MS = 25 * 60 * 60 * 1000; // 25h cubre crons diarios con drift
 
 export async function recordCronHeartbeat(
   cronPath: string,
@@ -97,13 +106,13 @@ export async function getDepartmentHealth(): Promise<{
 
   for (const doc of snap.docs) {
     const h = doc.data() as DeptoHeartbeat;
-    const expected = new Date(h.nextExpectedAt).getTime();
     const last = new Date(h.lastRunAt).getTime();
+    const expected = last + getExpectedInterval(h.component);
 
     if (h.status === 'down' || now > expected + 5 * 60 * 1000) {
       components[h.component] = 'CRITICAL';
       worst = 'CRITICAL';
-    } else if (now > expected || now - last > (EXPECTED_INTERVALS[h.component] || 60 * 60 * 1000) * 2) {
+    } else if (now > expected || now - last > getExpectedInterval(h.component) * 2) {
       components[h.component] = 'DEGRADED';
       if (worst === 'HEALTHY') worst = 'DEGRADED';
     } else if (h.status === 'degraded') {

@@ -10,6 +10,7 @@
  */
 
 import { getAdminDb } from '@/lib/firebase-admin';
+import { getExpectedInterval } from '@/lib/departamento-central/heartbeat';
 import { logger } from '@/lib/logger';
 import { collectGscData } from '@/lib/nios/collectors/gsc';
 import { collectGa4Data } from '@/lib/nios/collectors/ga4';
@@ -284,11 +285,13 @@ export async function probeHeartbeat(
         nextExpectedAt?: string;
       };
       const lastRunAt = data.lastRunAt ?? null;
-      const ageMs = lastRunAt ? now - new Date(lastRunAt).getTime() : null;
-      const expected = data.nextExpectedAt ? new Date(data.nextExpectedAt).getTime() : null;
+      const lastMs = lastRunAt ? new Date(lastRunAt).getTime() : null;
+      const ageMs = lastMs !== null ? now - lastMs : null;
+      const expected =
+        lastMs !== null ? lastMs + getExpectedInterval(data.component ?? doc.id) : null;
 
       let status: HeartbeatProbe['status'] = 'UNKNOWN';
-      if (data.status === 'down') {
+      if (!lastRunAt || data.status === 'down') {
         status = 'CRITICAL';
       } else if (expected !== null && now > expected + 5 * 60 * 1000) {
         status = 'CRITICAL';
