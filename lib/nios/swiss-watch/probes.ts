@@ -705,6 +705,290 @@ export async function probeAdsenseArtifacts(
   }
 }
 
+export interface PublicSignal {
+  status: SwissStatus;
+  reason: string;
+  evidence: SwissEvidence[];
+}
+
+export interface PublicRuntimeSignals {
+  adsenseArtifacts: AdsenseArtifactProbe;
+  performance: PublicSignal;
+  ux: PublicSignal;
+  design: PublicSignal;
+  monetization: PublicSignal;
+  codebase: PublicSignal;
+  development: PublicSignal;
+}
+
+/**
+ * Obtiene señales reales desde el runtime publico del sitio:
+ * TTFB, estructura UX, tokens de design, artefactos AdSense/SEO y
+ * presencia de configuracion de codebase/development.
+ * Nunca expone secretos ni inventa metricas.
+ */
+export async function probePublicRuntimeSignals(
+  timeoutMs = 10000,
+): Promise<PublicRuntimeSignals> {
+  const base =
+    process.env.NIOS_SITE_URL?.trim() ||
+    process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+    'https://nicaraguainformate.com';
+
+  const fetchText = async (path: string): Promise<{ ok: boolean; text: string }> => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const res = await fetch(`${base.replace(/\/$/, '')}${path}`, {
+        signal: controller.signal,
+        headers: { 'User-Agent': 'NIOS-SwissWatch/1.0' },
+      });
+      const text = await res.text();
+      return { ok: res.ok, text };
+    } catch (err) {
+      logger.warn(`[swiss-watch] Error leyendo pagina publica ${path}`, {
+        error: err instanceof Error ? err.message : String(err),
+      });
+      return { ok: false, text: '' };
+    } finally {
+      clearTimeout(timer);
+    }
+  };
+
+  const homeStart = Date.now();
+  const [home, ads, robots, sitemap] = await Promise.all([
+    fetchText('/'),
+    fetchText('/ads.txt'),
+    fetchText('/robots.txt'),
+    fetchText('/sitemap.xml'),
+  ]);
+  const homeMs = home.ok ? Date.now() - homeStart : null;
+  const html = home.text;
+  const htmlLower = html.toLowerCase();
+
+  const adsTxtContent = ads.ok ? ads.text : null;
+  const adsTxtHasPublisherId = adsTxtContent
+    ? /google\.com\s*,\s*pub-\d+/i.test(adsTxtContent)
+    : false;
+  const robotsBlocksAll = robots.ok
+    ? /User-agent:\s*\*\s*Disallow:\s*\/\s*$/im.test(robots.text) ||
+      /Disallow:\s*\/\s*$/im.test(robots.text)
+    : true;
+  const robotsAllowsCrawling = robots.ok && !robotsBlocksAll;
+  const sitemapBody = sitemap.text.trim().toLowerCase();
+  const sitemapLooksValid =
+    sitemapBody.startsWith('<?xml') ||
+    sitemapBody.startsWith('<urlset') ||
+    sitemapBody.startsWith('<sitemapindex') ||
+    sitemapBody.length > 100;
+  const sitemapAccessible = sitemap.ok && sitemapLooksValid;
+
+  const adsenseArtifacts: AdsenseArtifactProbe = {
+    adsTxtAccessible: ads.ok,
+    adsTxtContent,
+    adsTxtHasPublisherId,
+    robotsAllowsCrawling,
+    sitemapAccessible,
+  };
+
+  // ── PERFORMANCE (TTFB) ───────────────────────────────────────────────────
+  let performance: PublicSignal;
+  if (!home.ok || homeMs === null) {
+    performance = {
+      status: 'RED',
+      reason: `La home publica no responde (${base}).`,
+      evidence: [evidence('TTFB home publica', 'HTTP no OK o timeout', 'runtime', false)],
+    };
+  } else if (homeMs <= 800) {
+    performance = {
+      status: 'GREEN',
+      reason: `TTFB medido desde el probe: ${homeMs}ms.`,
+      evidence: [evidence('TTFB home publica', `${homeMs}ms`, 'runtime', true)],
+    };
+  } else if (homeMs <= 3000) {
+    performance = {
+      status: 'YELLOW',
+      reason: `TTFB medido desde el probe: ${homeMs}ms (supera 800ms).`,
+      evidence: [evidence('TTFB home publica', `${homeMs}ms`, 'runtime', false)],
+    };
+  } else {
+    performance = {
+      status: 'RED',
+      reason: `TTFB muy alto: ${homeMs}ms.`,
+      evidence: [evidence('TTFB home publica', `${homeMs}ms`, 'runtime', false)],
+    };
+  }
+
+  // ── UX ─────────────────────────────────────────────────────────────────
+  const uxChecks = {
+    nav: htmlLower.includes('<nav'),
+    main: htmlLower.includes('<main') || htmlLower.includes('role="main"'),
+    h1: /<h1[>\s]/i.test(html),
+    lang: /<html[^>]+lang=/i.test(html),
+    viewport: htmlLower.includes('name="viewport"'),
+    skip: htmlLower.includes('skip') || htmlLower.includes('href="#main"'),
+  };
+  const uxScore = Object.values(uxChecks).filter(Boolean).length;
+  const uxStatus: SwissStatus =
+    uxScore >= 5 ? 'GREEN' : uxScore >= 3 ? 'YELLOW' : 'RED';
+  const ux: PublicSignal = {
+    status: uxStatus,
+    reason: `Estructura UX publica: ${uxScore}/6 checks (${Object.entries(uxChecks)
+      .filter(([, v]) => v)
+      .map(([k]) => k)
+      .join(', ') || 'ninguno'}).`,
+    evidence: [
+      evidence(
+        'Estructura UX home publica',
+        JSON.stringify(uxChecks),
+        'runtime',
+        uxStatus === 'GREEN',
+      ),
+    ],
+  };
+
+  // ── DESIGN ─────────────────────────────────────────────────────────────
+  const designChecks = {
+    accent: html.includes('--rd-accent'),
+    serif: html.includes('--rd-serif'),
+    sans: html.includes('--rd-sans'),
+    radius: html.includes('--rd-radius'),
+    favicon: htmlLower.includes('rel="icon"') || htmlLower.includes('rel="shortcut icon"'),
+    themeColor: htmlLower.includes('name="theme-color"'),
+    darkMode:
+      htmlLower.includes('prefers-color-scheme') || htmlLower.includes('class="dark"'),
+  };
+  const designScore = Object.values(designChecks).filter(Boolean).length;
+  const designStatus: SwissStatus =
+    designScore >= 5 ? 'GREEN' : designScore >= 3 ? 'YELLOW' : 'RED';
+  const design: PublicSignal = {
+    status: designStatus,
+    reason: `Tokens de design publicos: ${designScore}/7 (${Object.entries(designChecks)
+      .filter(([, v]) => v)
+      .map(([k]) => k)
+      .join(', ') || 'ninguno'}).`,
+    evidence: [
+      evidence(
+        'Tokens de design home publica',
+        JSON.stringify(designChecks),
+        'runtime',
+        designStatus === 'GREEN',
+      ),
+    ],
+  };
+
+  // ── MONETIZATION ───────────────────────────────────────────────────────
+  const adsReady =
+    adsenseArtifacts.adsTxtAccessible &&
+    adsenseArtifacts.adsTxtHasPublisherId &&
+    adsenseArtifacts.robotsAllowsCrawling &&
+    adsenseArtifacts.sitemapAccessible;
+  const monetization: PublicSignal = adsReady
+    ? {
+        status: 'YELLOW',
+        reason:
+          'Artefactos AdSense/SEO listos. Sin cuenta activa aprobada no hay RPM/CTR reales.',
+        evidence: [
+          evidence(
+            'Artefactos monetizacion',
+            'ads.txt, robots.txt y sitemap accesibles con publisher ID',
+            'runtime',
+            false,
+          ),
+        ],
+      }
+    : {
+        status: 'RED',
+        reason:
+          'Faltan artefactos publicos requeridos para AdSense (ads.txt, robots.txt, sitemap).',
+        evidence: [
+          evidence(
+            'Artefactos monetizacion',
+            JSON.stringify({
+              adsTxt: adsenseArtifacts.adsTxtAccessible,
+              publisherId: adsenseArtifacts.adsTxtHasPublisherId,
+              robots: adsenseArtifacts.robotsAllowsCrawling,
+              sitemap: adsenseArtifacts.sitemapAccessible,
+            }),
+            'runtime',
+            false,
+          ),
+        ],
+      };
+
+  // ── CODEBASE / DEVELOPMENT (config presente en runtime) ─────────────────
+  let codebase: PublicSignal = {
+    status: 'UNKNOWN',
+    reason: 'No se pudo leer configuracion del runtime.',
+    evidence: [evidence('Configuracion codebase', 'No disponible', 'runtime', false)],
+  };
+  let development: PublicSignal = {
+    status: 'UNKNOWN',
+    reason: 'No se pudo verificar scripts de desarrollo en runtime.',
+    evidence: [evidence('Scripts development', 'No disponible', 'runtime', false)],
+  };
+
+  try {
+    const fs = await import('node:fs/promises');
+    const root = process.cwd();
+    const [pkgRaw, tsconfigRaw] = await Promise.allSettled([
+      fs.readFile(`${root}/package.json`, 'utf-8'),
+      fs.readFile(`${root}/tsconfig.json`, 'utf-8'),
+    ]);
+
+    const pkg =
+      pkgRaw.status === 'fulfilled' ? (JSON.parse(pkgRaw.value) as Record<string, unknown>) : null;
+
+    codebase = {
+      status: 'YELLOW',
+      reason: pkg && tsconfigRaw.status === 'fulfilled'
+        ? 'package.json y tsconfig.json presentes en el runtime. Dead code/duplicacion requiere CI.'
+        : 'Archivos de configuracion no accesibles en el runtime.',
+      evidence: [
+        evidence(
+          'Configuracion codebase',
+          `package.json=${pkg ? 'OK' : 'MISS'}, tsconfig.json=${tsconfigRaw.status === 'fulfilled' ? 'OK' : 'MISS'}`,
+          'runtime',
+          !!(pkg && tsconfigRaw.status === 'fulfilled'),
+        ),
+      ],
+    };
+
+    const scripts = typeof pkg?.scripts === 'object' && pkg?.scripts !== null
+      ? (pkg.scripts as Record<string, string>)
+      : {};
+    const hasBuild = 'build' in scripts;
+    const hasTest = 'test' in scripts;
+    const hasLint = 'lint' in scripts;
+    const hasTypeCheck = 'type-check' in scripts;
+    const devScore = [hasBuild, hasTest, hasLint, hasTypeCheck].filter(Boolean).length;
+    development = {
+      status: devScore >= 2 ? 'YELLOW' : 'RED',
+      reason: `Scripts de CI presentes: build=${hasBuild}, test=${hasTest}, lint=${hasLint}, type-check=${hasTypeCheck}. Cobertura real se mide en repo.`,
+      evidence: [
+        evidence(
+          'Scripts development',
+          JSON.stringify({ build: hasBuild, test: hasTest, lint: hasLint, 'type-check': hasTypeCheck }),
+          'runtime',
+          devScore >= 2,
+        ),
+      ],
+    };
+  } catch {
+    // Si fs no esta disponible (edge/browser) dejar UNKNOWN
+  }
+
+  return {
+    adsenseArtifacts,
+    performance,
+    ux,
+    design,
+    monetization,
+    codebase,
+    development,
+  };
+}
+
 /**
  * Agrega varios estados en el peor caso, respetando la jerarquia:
  * RED > BLOCKED_EXTERNAL > UNKNOWN > YELLOW > GREEN.

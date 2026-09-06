@@ -16,9 +16,10 @@ export {
   probeHeartbeat,
   probeIncidents,
   probeNiosSnapshot,
+  probePublicRuntimeSignals,
   worstStatus,
 } from './probes';
-export type { CollectionProbe, HeartbeatProbe } from './probes';
+export type { CollectionProbe, HeartbeatProbe, PublicSignal, PublicRuntimeSignals } from './probes';
 export {
   evaluateAdSenseReadiness,
   REQUIRED_LEGAL_PAGES,

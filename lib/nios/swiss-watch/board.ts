@@ -26,6 +26,7 @@ import {
   probeAdsenseArtifacts,
   probeGoogleGsc,
   probeGoogleGa4,
+  probePublicRuntimeSignals,
   worstStatus,
 } from './probes';
 import { evaluateAdSenseReadiness, REQUIRED_LEGAL_PAGES } from './adsense-readiness';
@@ -146,6 +147,7 @@ export interface BoardInput {
   adsenseArtifacts?: Awaited<ReturnType<typeof probeAdsenseArtifacts>>;
   googleGsc?: Awaited<ReturnType<typeof probeGoogleGsc>>;
   googleGa4?: Awaited<ReturnType<typeof probeGoogleGa4>>;
+  publicSignals?: Awaited<ReturnType<typeof probePublicRuntimeSignals>>;
   errors: string[];
 }
 
@@ -577,79 +579,60 @@ export function buildBoard(input: BoardInput, now = new Date()): SwissWatchBoard
     { currentAction: 'Priorizando tareas abiertas por P0 > P1 > P2 > P3.' },
   );
 
-  // ── Expertos sin probe automatizado ───────────────────────────────────
-  // Se declaran UNKNOWN de forma explicita: no se puede medir su dominio
-  // desde el runtime del servidor sin metricas de campo o inspeccion visual.
-  const manualExperts: { id: ExpertId; reason: string; nextAction: string }[] = [
-    {
-      id: 'PERFORMANCE',
-      reason:
-        'No hay metricas de campo de Core Web Vitals disponibles en este runtime. El rendimiento real no puede medirse desde el servidor.',
-      nextAction:
-        'Conectar CrUX o Vercel Speed Insights y exponer LCP, INP y CLS reales al tablero.',
-    },
-    {
-      id: 'UX',
-      reason:
-        'La calidad de UX requiere recorrido real del lector; no hay señal automatizada en este runtime.',
-      nextAction:
-        'Instrumentar eventos de journey (busqueda, categoria, articulo relacionado) y evaluar embudos reales.',
-    },
-    {
-      id: 'DESIGN',
-      reason:
-        'La consistencia visual no es medible automaticamente desde el servidor.',
-      nextAction: 'Añadir pruebas de regresion visual sobre home, categoria y articulo.',
-    },
-    {
-      id: 'MONETIZATION',
-      reason:
-        'Sin cuenta de AdSense activa no existen datos reales de RPM ni CTR. No se inventan ingresos.',
-      nextAction:
-        'Una vez aprobado AdSense, conectar el collector de ingresos y medir RPM por pagina.',
-    },
-    {
-      id: 'CODEBASE',
-      reason:
-        'El analisis de codigo muerto y duplicacion se ejecuta en CI, no en el runtime de produccion.',
-      nextAction: 'Ejecutar npm run lint y type-check en CI y publicar el resultado al tablero.',
-    },
-    {
-      id: 'DEVELOPMENT',
-      reason:
-        'La cobertura de funciones pendientes se mide en el repositorio, no en runtime.',
-      nextAction: 'Mantener el inventario de TODO/FIXME y convertirlo en tareas con owner.',
-    },
-  ];
+  // ── Expertos medidos desde runtime publico ────────────────────────────
+  const unknownSignal = (id: ExpertId, detail: string) => ({
+    status: 'UNKNOWN' as SwissStatus,
+    reason: `Probe de ${id} no ejecutado: ${detail}`,
+    evidence: [evidence(`Señal publica para ${id}`, detail, 'runtime', false)],
+  });
 
-  manualExperts.forEach((m) => {
+  const signals = input.publicSignals ?? {
+    adsenseArtifacts: {
+      adsTxtAccessible: false,
+      adsTxtContent: null,
+      adsTxtHasPublisherId: false,
+      robotsAllowsCrawling: false,
+      sitemapAccessible: false,
+    },
+    performance: unknownSignal('PERFORMANCE', 'TTFB de la home no medido'),
+    ux: unknownSignal('UX', 'Estructura HTML de la home no evaluada'),
+    design: unknownSignal('DESIGN', 'Tokens visuales de la home no evaluados'),
+    monetization: unknownSignal('MONETIZATION', 'Artefactos de monetizacion no verificados'),
+    codebase: unknownSignal('CODEBASE', 'Configuracion del runtime no leida'),
+    development: unknownSignal('DEVELOPMENT', 'Scripts de desarrollo no verificados'),
+  };
+
+  const pushPublic = (id: ExpertId, signal: typeof signals.performance) => {
     push(
-      m.id,
-      'UNKNOWN',
-      m.reason,
-      [
-        evidence(
-          `Señal automatizada para ${m.id}`,
-          'No disponible en el runtime del servidor',
-          'runtime',
-          false,
-        ),
-      ],
+      id,
+      signal.status,
+      signal.reason,
+      signal.evidence,
       {
-        tasks: [
-          makeTask(
-            m.id,
-            'instrument',
-            `Instrumentar señal medible para ${m.id}`,
-            'P2',
-            'QUEUED',
-            m.nextAction,
-            at,
-          ),
-        ],
+        tasks:
+          signal.status === 'GREEN'
+            ? []
+            : [
+                makeTask(
+                  id,
+                  'improve-signal',
+                  `Mejorar evidencia medible para ${id}`,
+                  id === 'PERFORMANCE' ? 'P1' : 'P2',
+                  'QUEUED',
+                  signal.reason,
+                  at,
+                ),
+              ],
       },
     );
-  });
+  };
+
+  pushPublic('PERFORMANCE', signals.performance);
+  pushPublic('UX', signals.ux);
+  pushPublic('DESIGN', signals.design);
+  pushPublic('MONETIZATION', signals.monetization);
+  pushPublic('CODEBASE', signals.codebase);
+  pushPublic('DEVELOPMENT', signals.development);
 
   // ── Agregacion global ─────────────────────────────────────────────────
   const counters: Record<SwissStatus, number> = {
@@ -716,17 +699,19 @@ export async function getSwissWatchBoard(now = new Date()): Promise<SwissWatchBo
     errors.push(`No se pudieron cargar las noticias: ${message}`);
   }
 
-  const [firebase, firestore, heartbeat, incidents, snapshot, adsenseArtifacts, googleGsc, googleGa4] =
+  const [firebase, firestore, heartbeat, incidents, snapshot, publicSignals, googleGsc, googleGa4] =
     await Promise.all([
       probeFirebase(),
       probeFirestoreOperational(),
       probeHeartbeat(now.getTime()),
       probeIncidents(),
       probeNiosSnapshot(now.getTime()),
-      probeAdsenseArtifacts(),
+      probePublicRuntimeSignals(),
       probeGoogleGsc(),
       probeGoogleGa4(),
     ]);
+
+  const adsenseArtifacts = publicSignals.adsenseArtifacts;
 
   const adsense = evaluateAdSenseReadiness(
     {
@@ -748,7 +733,7 @@ export async function getSwissWatchBoard(now = new Date()): Promise<SwissWatchBo
   }
 
   return buildBoard(
-    { noticias, firebase, firestore, heartbeat, incidents, snapshot, adsense, adsenseArtifacts, googleGsc, googleGa4, errors },
+    { noticias, firebase, firestore, heartbeat, incidents, snapshot, adsense, adsenseArtifacts, publicSignals, googleGsc, googleGa4, errors },
     now,
   );
 }
