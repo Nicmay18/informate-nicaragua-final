@@ -36,7 +36,7 @@
     { "path": "/api/cron/departamento-daily", "schedule": "0 6 * * *" },
     { "path": "/api/cron/departamento-watchdog", "schedule": "0 1 * * *" },
     { "path": "/api/cron/nios-ceo-loop", "schedule": "0 2 * * *" },
-    { "path": "/api/cron/supervisor-watch", "schedule": "0 */2 * * *" },
+    { "path": "/api/cron/supervisor-watch", "schedule": "0 4 * * *" },
     { "path": "/api/cron/traffic-cleanup", "schedule": "0 3 * * *" }
   ]
 }
