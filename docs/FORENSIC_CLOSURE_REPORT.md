@@ -2,10 +2,10 @@
 
 **Repository:** `Nicmay18/informate-nicaragua-final`  
 **Branch:** `master`  
-**HEAD (audit snapshot):** `577cbca152ff339352c77f63e8df19138f2e4c21`  
+**HEAD (audit snapshot):** `099f325175f06d2b9aa7c2f590fa1d27c0310f81`  
 **Working copy:** `E:\PROYECTO\informate-nicaragua-final`  
 **Site root:** `https://nicaraguainformate.com`  
-**Generated:** 2026-09-05  
+**Generated:** 2026-09-06  
 **Auditor:** Cascade forensic agent (no production secrets exposed)
 
 ---
@@ -14,18 +14,18 @@
 
 | Gate | Status | Evidence |
 |---|---|---|
-| `PRODUCTION CLOSED — OPERATIONAL 24/7/365` | **NOT DECLARED** | See `Closure v2` verdict: `PRODUCTION NOT CLOSED — VERCEL ENVIRONMENT VARIABLES ARE EMPTY PLACEHOLDERS`. |
-| Source-code integrity | **Resolved** | Working tree clean on `master` at `577cbca`; no uncommitted source modifications. |
+| `PRODUCTION CLOSED — OPERATIONAL 24/7/365` | **NOT DECLARED** | See `Closure v3` verdict: `PRODUCTION READY — EXTERNAL CONFIG REQUIRED`. |
+| Source-code integrity | **Resolved** | Working tree clean on `master` at `099f325`; no uncommitted source modifications. |
 | Build / type-check / lint / test:merge | **PASS (local)** | `npm run test:merge` (type-check, 664 vitest tests + 2 skipped, lint `max-warnings 0`) and `npm run build` pass. |
-| Production deploy / Vercel runtime evidence | **PARTIAL** | Vercel project `informate-nicaragua-nextjs` (`prj_hqfhw4KeudwYmljBv7P2LYrmFKx4`) deployed to `https://nicaraguainformate.com` (Ready, last updated ~6h before this audit). No scheduled cron `POST` invocations observed in 7 days of logs. |
-| Vercel Node runtime | **MISMATCH** | Vercel project `nodeVersion` is `20.x`; `package.json` engines = `22.x`. Must be reconciled before closure. |
-| Environment variables | **CONFIGURED AS KEYS, VALUES EMPTY** | `vercel env list production` shows 28 keys. `vercel env pull --environment production` proves only `ADMIN_EMAILS` and build-only `VERCEL_*`/`TURBO_*` are non-empty; all Firebase, GSC, GA4, IndexNow, Telegram and AI keys are empty strings. |
+| Production deploy / Vercel runtime evidence | **PARTIAL** | Vercel project `informate-nicaragua-nextjs` (`prj_hqfhw4KeudwYmljBv7P2LYrmFKx4`) deployed to `https://nicaraguainformate.com` (deployment `r13w1iana`, Ready, Node 22.x). No scheduled cron `POST` invocations observed. |
+| Vercel Node runtime | **ALIGNED** | Vercel project `nodeVersion` updated to `22.x` via API; matches `package.json` engines `22.x` and `.nvmrc`. |
+| Environment variables | **CONFIGURED AS KEYS, VALUES EMPTY** | `vercel env pull --environment production` proves only `ADMIN_EMAILS` and build-only `VERCEL_*`/`TURBO_*` are non-empty; all Firebase, GSC, GA4, IndexNow, Telegram and AI keys are empty strings or missing. |
 | External social/push distribution | **NOT_CONFIGURED** | Facebook, X, LinkedIn, Medium, WhatsApp, OneSignal env keys are absent; Telegram keys are present but empty. |
-| Cron schedule completeness | **PASS (declared)** | All 8 cron routes declared in `vercel.json`; they exist as routes, but no Vercel-triggered cron execution evidence. |
+| Cron schedule completeness | **PASS (declared)** | All 8 cron routes declared in `vercel.json` with daily schedules; no Vercel-triggered cron execution evidence yet. |
 | Security hardening | **Partial** | Plaintext secret artifacts removed; `npm audit` reports 15 vulnerable dependencies (1 low, 10 moderate, 4 high). `public/indexnow-key.txt` remains public per design. `public/panel.html` CSP bypass remains. |
 
-### Final verdict (Closure v2)
-**PRODUCTION NOT CLOSED — VERCEL ENVIRONMENT VARIABLES ARE EMPTY PLACEHOLDERS; RUNTIME EVIDENCE INSUFFICIENT.** The codebase remains `PRODUCTION READY` (build, type-check, lint and 664 vitest tests pass), but the deployed Vercel project is not operationally closed: `vercel env pull --environment production` downloaded 28 keys and proved that every secret used for Firebase, Google APIs, NIOS, Telegram, IndexNow and AI is an empty string; the Vercel project is pinned to Node `20.x` while the repo targets `22.x`; no scheduled cron `POST` invocations appear in 7 days of Vercel logs; and no E2E or 24-hour continuity/heartbeat evidence exists. Therefore `PRODUCTION CLOSED — OPERATIONAL 24/7/365` cannot be declared.
+### Final verdict (Closure v3)
+**PRODUCTION READY — EXTERNAL CONFIG REQUIRED.** The codebase remains `PRODUCTION READY` (build, type-check, lint and 664 vitest tests pass), the Vercel project now runs Node `22.x`, and the production deployment `r13w1iana` is Ready. However, `vercel env pull --environment production` proved that every functional secret for Firebase, GSC, GA4, AdSense, Telegram, IndexNow and AI is still an empty string or missing. Without real credentials, the platform cannot initialize Firebase, collect NIOS data, run real crons, update heartbeat, or pass E2E. Therefore `PRODUCTION CLOSED — OPERATIONAL 24/7/365` cannot be declared and the project remains `PRODUCTION READY — EXTERNAL CONFIG REQUIRED`.
 
 ---
 
@@ -35,7 +35,7 @@
 
 - **Origin:** `https://github.com/Nicmay18/informate-nicaragua-final.git`
 - **Active branch:** `master`
-- **HEAD commit:** `abf3cbaad9feae0a805d0991ccbc786548367712`
+- **HEAD commit:** `099f325175f06d2b9aa7c2f590fa1d27c0310f81`
 - **Working tree status:**
   - 22 modified files (see `git diff --stat` in Appendix A).
   - 2 untracked files:
@@ -538,16 +538,16 @@ This section is the PF2-11 artifact. PF2-12 (commit/push) follows immediately.
 
 ## 16. Conclusion
 
-Closure v2 real-time evidence confirms that the Nicaragua Informate platform is **not** `PRODUCTION CLOSED — OPERATIONAL 24/7/365`. The Vercel project `informate-nicaragua-nextjs` is deployed and `https://nicaraguainformate.com` responds with HTTP 200, but `vercel env pull --environment production` proved that the production environment variables are empty placeholders. Without real Firebase, GSC, GA4, Telegram, IndexNow and AI secrets, the platform cannot read Firestore, collect NIOS data, distribute content, or run scheduled crons with real credentials. The Vercel project is also configured for Node `20.x` while the repository targets `22.x`. No scheduled cron `POST` executions appear in 7 days of logs and no 24-hour heartbeat continuity or E2E evidence exists.
+Closure v3 evidence confirms that the Nicaragua Informate platform is **not** `PRODUCTION CLOSED — OPERATIONAL 24/7/365` and is not yet a `PRODUCTION CLOSURE CANDIDATE`. The Vercel project `informate-nicaragua-nextjs` is deployed, `https://nicaraguainformate.com` responds with HTTP 200, and the project is now running on Node `22.x`. However, `vercel env pull --environment production` proved that the production environment variables are still empty placeholders or missing. Without real Firebase, GSC, GA4, AdSense, Telegram, IndexNow and AI secrets, the platform cannot initialize Firebase, read Firestore, collect NIOS data, run crons with real credentials, update heartbeat, or execute E2E. No 24-hour continuity observation window can be started until the environment is provisioned.
 
-The codebase remains `PRODUCTION READY` (build, type-check, lint and 664 vitest tests pass). To reach `PRODUCTION CLOSED`, the operator must: (1) populate all real Vercel environment values, (2) align the Vercel Node runtime with `package.json` `22.x`, (3) redeploy, (4) run the platform for 24 hours and verify `depto_heartbeat`, `nios_daily_snapshots`, and cron logs show healthy real data, and (5) run Playwright E2E against the deployed domain and attach the results.
+The codebase remains `PRODUCTION READY` (build, type-check, lint and 664 vitest tests pass). To reach `PRODUCTION CLOSED`, the operator must: (1) provision all real Vercel environment values, (2) verify GSC/GA4 return `REAL`, (3) verify Firestore heartbeat and NIOS snapshots are created, (4) run the platform for 24 hours and verify cron logs and heartbeat show healthy real data, (5) run Playwright E2E against the deployed domain, and (6) attach the 24h evidence to the next `FORENSIC_CLOSURE_REPORT.md`.
 
 ---
 
 ## Appendix A — Working Tree Diff Summary
 
 Current worktree (verified with `git status --porcelain`):
-- 1 modified file: `docs/FORENSIC_CLOSURE_REPORT.md` (this Closure v2 update).
+- 1 modified file: `docs/FORENSIC_CLOSURE_REPORT.md` (this Closure v3 update).
 - 0 untracked files after audit cleanup.
 - Plaintext secret artifacts removed from disk and not committed.
 - All temp Vercel/audit JSON files, `.env.local` and the `.vercel` link were removed from the working tree after evidence capture.
@@ -591,8 +591,214 @@ Expected results (as of this audit):
 | FASE 27-31 | CEO Loop + Memory/Learning + Alerting + Cost + Retention | **Completada** | Sección 12; `ceo-loop`, `ceo-observatory`, `ceo-memory`, `ceo-learning` inspeccionados. |
 | FASE 32-37 | Smoke + Failure injection + Continuity + Final gates + `FORENSIC_CLOSURE_REPORT.md` | **Parcial** | Reporte generado; smoke unitarios pasan, **E2E bloqueado** (sin servidor), **failure injection/24h continuidad no ejecutados** por falta de entorno productivo. |
 
-**Veredicto global:** `PRODUCTION NOT CLOSED — VERCEL ENVIRONMENT VARIABLES ARE EMPTY PLACEHOLDERS; RUNTIME EVIDENCE INSUFFICIENT`. El código sigue `PRODUCTION READY`, pero no se declara `PRODUCTION CLOSED` hasta que los valores reales estén en Vercel, el runtime Node coincida con `22.x`, y se complete 24h de telemetría real.
+**Veredicto global:** `PRODUCTION READY — EXTERNAL CONFIG REQUIRED`. El runtime de Vercel ya está en Node `22.x`, el build pasa y el sitio público responde, pero no se declara `PRODUCTION CLOSED` ni `PRODUCTION CLOSURE CANDIDATE` hasta que los valores reales estén en Vercel y se complete una ventana de observación de 24h.
 
 ---
+
+## PROMPT FORENSE 3 — Provisión y Verificación de Runtime (Closure v3)
+
+Fecha de ejecución: 2026-09-06. Auditor: Cascade. No se expusieron secretos.
+
+### PF3-0 — Git baseline
+
+| Check | Command | Result |
+|---|---|---|
+| Branch | `git branch --show-current` | `master` |
+| HEAD | `git log -1 --oneline` | `099f325` `fix(vercel): supervisor-watch cron daily for Hobby plan` |
+| Remote | `git remote -v` | `origin https://github.com/Nicmay18/informate-nicaragua-final.git` |
+| Status | `git status --porcelain` | Clean |
+
+### PF3-1 — Vercel project, runtime y deployment
+
+| Check | Result |
+|---|---|
+| CLI version | `54.20.1` |
+| User | `nicmay18` / `nicmay18s-projects` |
+| Project | `informate-nicaragua-nextjs` (`prj_hqfhw4KeudwYmljBv7P2LYrmFKx4`) |
+| Node runtime (project) | `22.x` — actualizado vía Vercel API |
+| `package.json` engines | `22.x` |
+| `.nvmrc` | `22` |
+| Latest production | `https://nicaraguainformate.com` alias a `r13w1iana` (`dpl_2Lh2REgLFGP5idbL6a8wTjUnXPXC`) — `Ready` en ~5m |
+
+### PF3-2 — Environment matrix (production)
+
+`vercel env pull --environment production` descargó las variables del entorno. Clasificación por llave:
+
+| Variable | Estado |
+|---|---|
+| `ADMIN_API_KEY` | PRESENT_EMPTY |
+| `ADMIN_CLEAN_TOKEN` | PRESENT_EMPTY |
+| `ADMIN_EMAILS` | PRESENT_NONEMPTY |
+| `ADSENSE_REVIEW_MODE` | PRESENT_EMPTY |
+| `CRON_SECRET` | PRESENT_EMPTY |
+| `ELEVENLABS_API_KEY` | PRESENT_EMPTY |
+| `FIREBASE_CLIENT_EMAIL` | PRESENT_EMPTY |
+| `FIREBASE_PRIVATE_KEY` | PRESENT_EMPTY |
+| `FIREBASE_PROJECT_ID` | PRESENT_EMPTY |
+| `FIREBASE_SERVICE_ACCOUNT_BASE64` | PRESENT_EMPTY |
+| `GEMINI_API_KEY` | PRESENT_EMPTY |
+| `GOOGLE_INDEXING_CREDENTIALS_BASE64` | PRESENT_EMPTY |
+| `GROQ_API_KEY` | PRESENT_EMPTY |
+| `GSC_PROPERTY` | PRESENT_EMPTY |
+| `INDEXNOW_KEY` | PRESENT_EMPTY |
+| `NEXT_PUBLIC_FIREBASE_API_KEY` | PRESENT_EMPTY |
+| `NEXT_PUBLIC_FIREBASE_APP_ID` | PRESENT_EMPTY |
+| `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN` | PRESENT_EMPTY |
+| `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` | PRESENT_EMPTY |
+| `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | PRESENT_EMPTY |
+| `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET` | PRESENT_EMPTY |
+| `NEXT_PUBLIC_GA_ID` | PRESENT_EMPTY |
+| `NIOS_GA4_PROPERTY_ID` | PRESENT_EMPTY |
+| `NIOS_SITE_URL` | PRESENT_EMPTY |
+| `REVALIDATE_SECRET` | PRESENT_EMPTY |
+| `TG_CHAT_ID` | PRESENT_EMPTY |
+| `TG_TOKEN` | PRESENT_EMPTY |
+| `github_token` | PRESENT_EMPTY |
+| `tg_chat` | PRESENT_EMPTY |
+| `tg_token` | PRESENT_EMPTY |
+| `NX_DAEMON` | PRESENT_NONEMPTY |
+| `TURBO_CACHE` | PRESENT_NONEMPTY |
+| `TURBO_DOWNLOAD_LOCAL_ENABLED` | PRESENT_NONEMPTY |
+| `TURBO_REMOTE_ONLY` | PRESENT_NONEMPTY |
+| `TURBO_RUN_SUMMARY` | PRESENT_NONEMPTY |
+| `VERCEL` | PRESENT_NONEMPTY |
+| `VERCEL_ENV` | PRESENT_NONEMPTY |
+| `VERCEL_GIT_*` | PRESENT_EMPTY (build context) |
+| `VERCEL_OIDC_TOKEN` | PRESENT_NONEMPTY |
+| `VERCEL_TARGET_ENV` | PRESENT_NONEMPTY |
+| `VERCEL_URL` | PRESENT_EMPTY |
+| `GOOGLE_ADSENSE_CLIENT_ID` | MISSING |
+| `FB_PAGE_ACCESS_TOKEN` / `FB_PAGE_ID` | MISSING |
+| `TWITTER_BEARER_TOKEN` | MISSING |
+| `WHATSAPP_BUSINESS_TOKEN` / `WHATSAPP_PHONE_ID` | MISSING |
+| `LINKEDIN_ACCESS_TOKEN` / `LINKEDIN_AUTHOR_URN` | MISSING |
+| `MEDIUM_INTEGRATION_TOKEN` | MISSING |
+| `ONESIGNAL_APP_ID` / `ONESIGNAL_REST_API_KEY` | MISSING |
+
+### PF3-3 — Firebase / Firestore / GSC / GA4 / AdSense / NIOS
+
+| Service | Evidence | Status |
+|---|---|---|
+| Firebase Admin SDK | `FIREBASE_SERVICE_ACCOUNT_BASE64`, `FIREBASE_CLIENT_EMAIL` y `FIREBASE_PRIVATE_KEY` vacíos | NOT CONFIGURED |
+| Firestore | Sin credenciales no se pudo conectar | NOT VERIFIED |
+| GSC | `tests/mission9-real-sources.test.ts`: `gsc-collector` reporta `Firebase service account not configured` | CONFIG_REQUIRED |
+| GA4 | `ga4-collector` reporta `No GA4 property ID configured` | CONFIG_REQUIRED |
+| AdSense | `GOOGLE_ADSENSE_CLIENT_ID` no existe | NOT OPERATIONAL |
+| NIOS pipeline | No ejecutado por falta de credenciales | NOT OPERATIONAL |
+
+### PF3-4 — Cron matrix
+
+Todas las 8 rutas están configuradas en `vercel.json` con expresiones diarias (Hobby). Aún no hay ejecuciones reales porque el deployment Node 22 acaba de completarse.
+
+| Cron | Configured | Executed | Last Run | Result | Evidence |
+|---|---|---|---|---|---|
+| nios-collect | Yes | No | — | PENDING | `0 8 * * *` |
+| resumen-diario | Yes | No | — | PENDING | `0 12 * * *` |
+| departamento-central | Yes | No | — | PENDING | `0 0 * * *` |
+| departamento-daily | Yes | No | — | PENDING | `0 6 * * *` |
+| departamento-watchdog | Yes | No | — | PENDING | `0 1 * * *` |
+| nios-ceo-loop | Yes | No | — | PENDING | `0 2 * * *` |
+| supervisor-watch | Yes | No | — | PENDING | `0 4 * * *` |
+| traffic-cleanup | Yes | No | — | PENDING | `0 3 * * *` |
+
+### PF3-5 — Public site
+
+| Endpoint | HTTP | Tamaño | Nota |
+|---|---|---|---|
+| `/` | 200 | 196 575 B | Home renders |
+| `/robots.txt` | 200 | 2 480 B | SEO file |
+| `/sitemap.xml` | 200 | 51 637 B | SEO file |
+| `/ads.txt` | 200 | 142 B | AdSense file |
+| `/manifest.json` | 200 | 1 225 B | PWA manifest |
+| `/api/admin/health` | 401 | 46 B | Auth required |
+
+### PF3-6 — E2E
+
+Playwright no pudo ejecutar contra el dominio desplegado. El `playwright.config.ts` inicia `npm run dev` local (`webServer`) y agotó el tiempo de espera (60 s). **Resultado: E2E BLOCKED.**
+
+### PF3-7 — Security scan
+
+`npm audit`: 15 vulnerabilidades (1 low, 10 moderate, 4 high). Riesgos principales: `postcss` (XSS/path traversal), `sharp` (libvips CVEs), `browserslist` (OOM), `uuid` (buffer bounds). No se aplican cambios masivos sin análisis de compatibilidad.
+
+### PF3-8 — 24h continuity
+
+No se puede iniciar una ventana de observación real: las credenciales están vacías, por lo tanto Firebase/NIOS/crons no generan datos. **24H CONTINUITY = NOT PROVEN / BLOCKED.**
+
+### Forensic Executive Verdict (PF3)
+
+| Field | Status |
+|---|---|
+| VERDICT | `PRODUCTION READY — EXTERNAL CONFIG REQUIRED` |
+| COMMIT | `099f325` |
+| GITHUB | Pushed to `origin/master` |
+| VERCEL | `https://nicaraguainformate.com` (deployment `r13w1iana`, Node 22.x) |
+| DOMAIN | `https://nicaraguainformate.com` |
+| NODE | `22.x` — VERIFIED |
+| FIREBASE | NOT CONFIGURED |
+| FIRESTORE | NOT VERIFIED |
+| GSC | CONFIG_REQUIRED |
+| GA4 | CONFIG_REQUIRED |
+| ADSENSE | NOT OPERATIONAL |
+| CRONS | CONFIGURED, NOT YET EXECUTED |
+| HEARTBEAT | NOT FOUND |
+| WATCHDOG | NOT VERIFIED |
+| NIOS | NOT OPERATIONAL |
+| E2E | BLOCKED |
+| SECURITY | 15 vulnerabilities (HIGH/MODERATE) |
+| INCIDENTS | NOT VERIFIED |
+| 24H | NOT PROVEN |
+
+### PF3 repairs
+
+- `vercel.json`: `supervisor-watch` cron ajustado de `0 */2 * * *` a `0 4 * * *` para cumplir límite Hobby.
+- Vercel project `nodeVersion` actualizado de `20.x` a `22.x` vía Vercel API (`vercel api /v9/projects/{id} -X PATCH ...`).
+- Nuevo deployment `r13w1iana` en producción con Node 22.x.
+
+### Runtime evidence summary
+
+- Vercel project responde, build pasa, dominio público accesible.
+- Sin credenciales reales, NIOS/GSC/GA4/Firebase no pueden operar.
+- No hay ejecuciones cron, heartbeat, snapshots ni incidentes reales.
+- E2E bloqueado por configuración de `webServer` local.
+
+### External configuration required
+
+Las siguientes credenciales deben configurarse en Vercel con valores reales y seguros:
+
+- Firebase: `FIREBASE_SERVICE_ACCOUNT_BASE64` (o `FIREBASE_PROJECT_ID` + `FIREBASE_CLIENT_EMAIL` + `FIREBASE_PRIVATE_KEY`) y todos los `NEXT_PUBLIC_FIREBASE_*`.
+- Google: `GSC_PROPERTY`, `NIOS_GA4_PROPERTY_ID`, `GOOGLE_INDEXING_CREDENTIALS_BASE64`.
+- AdSense: `GOOGLE_ADSENSE_CLIENT_ID`.
+- Telegram: `TG_TOKEN`, `TG_CHAT_ID`.
+- Social/push: Facebook, X, WhatsApp, LinkedIn, Medium, OneSignal.
+- IndexNow: `INDEXNOW_KEY` debe coincidir con `public/indexnow-key.txt`.
+- AI/admin: `GEMINI_API_KEY`, `GROQ_API_KEY`, `ELEVENLABS_API_KEY`, `ADMIN_API_KEY`, `CRON_SECRET`, `REVALIDATE_SECRET`.
+- GitHub API: `github_token`.
+
+### Remaining blockers
+
+1. Vercel env values are empty placeholders.
+2. No real GSC/GA4/AdSense/Firebase data.
+3. No cron execution, heartbeat, NIOS or 24h continuity evidence.
+4. E2E cannot run against the deployed domain with the current `playwright.config.ts`.
+5. 15 `npm audit` vulnerabilities not remediated.
+
+### Risks
+
+- `public/indexnow-key.txt` remains public by design; must match `INDEXNOW_KEY`.
+- `public/panel.html` CSP bypass and legacy panel remain.
+- `npm audit` high-severity deps in `postcss`/`sharp`/`browserslist` could affect production.
+- 24h continuity cannot be proven without real credentials and elapsed time.
+
+### GitHub push
+
+Commit `099f325` pushed to `origin/master`.
+
+### Vercel deployment
+
+`https://informate-nicaragua-nextjs-r13w1iana-nicmay18s-projects.vercel.app` aliased a `https://nicaraguainformate.com`. Status `Ready`. Node 22.x.
+
+### Final verdict
+
+**PRODUCTION READY — EXTERNAL CONFIG REQUIRED.** El runtime de Vercel está alineado a Node 22.x, el build pasa y el sitio público responde, pero el proyecto no puede declararse `PRODUCTION CLOSED` ni `PRODUCTION CLOSURE CANDIDATE` porque las credenciales de Firebase, Google, Telegram, IndexNow e IA están vacías o ausentes. Sin esos valores, NIOS, GSC, GA4, Firestore, heartbeat, watchdog y E2E real no pueden verificarse. Es necesario provisionar los secretos reales, realizar un nuevo deploy y completar una ventana de observación de 24 horas antes de cualquier declaración de cierre.
 
 *End of report.*
