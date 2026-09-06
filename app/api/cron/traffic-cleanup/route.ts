@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
-import { cleanupTrafficLog, trafficLogTTLDays } from '@/lib/analytics/traffic-cleanup';
+import { cleanupTrafficLog, trafficLogTTLDays } from '@/lib/analytics/traffic-ttl';
 import { logger } from '@/lib/logger';
 
 export const maxDuration = 60;

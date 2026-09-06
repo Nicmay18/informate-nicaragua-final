@@ -3,7 +3,6 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runCEOLoop } from '@/lib/nios/ceo-loop';
-import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;

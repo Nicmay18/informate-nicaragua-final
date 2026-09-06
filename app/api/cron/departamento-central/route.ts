@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runScheduler } from '@/lib/departamento-central/scheduler';

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
-import { runDepartamentoCentralCycle, saveDepartamentoReport } from '@/lib/departamento-central';
+import { runDepartamentoCentralCycle } from '@/lib/departamento-central/cycle';
+import { saveDepartamentoReport } from '@/lib/departamento-central/store';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';

@@ -1,4 +1,4 @@
-import { getAdminDb } from '@/lib/firebase-admin';
+import { NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runWatchdog } from '@/lib/departamento-central/watchdog';

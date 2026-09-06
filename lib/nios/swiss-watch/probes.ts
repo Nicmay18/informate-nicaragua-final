@@ -524,15 +524,16 @@ export async function probeGoogleGsc(timeoutMs = 15000): Promise<GoogleProbe> {
       ),
     ]);
 
-    const status = mapGoogleDataStatus(gsc.dataStatus);
-    const pagesCount = gsc.pages?.length ?? 0;
-    const queriesCount = gsc.queries?.length ?? 0;
+    const raw = gsc as unknown as { dataStatus: string; pages?: unknown[]; queries?: unknown[] };
+    const status = mapGoogleDataStatus(raw.dataStatus);
+    const pagesCount = raw.pages?.length ?? 0;
+    const queriesCount = raw.queries?.length ?? 0;
     const reason =
       status === 'GREEN'
         ? `GSC autenticado y devolvio ${pagesCount} paginas y ${queriesCount} consultas.`
         : status === 'YELLOW'
           ? 'GSC autenticado; no hay datos para el rango consultado (CONNECTED_NO_DATA).'
-          : `GSC dataStatus=${gsc.dataStatus}`;
+          : `GSC dataStatus=${raw.dataStatus}`;
 
     return {
       status,
@@ -540,12 +541,12 @@ export async function probeGoogleGsc(timeoutMs = 15000): Promise<GoogleProbe> {
       evidence: [
         evidence(
           'GSC realtime collector',
-          `${gsc.dataStatus} — ${pagesCount} páginas, ${queriesCount} consultas`,
+          `${raw.dataStatus} — ${pagesCount} páginas, ${queriesCount} consultas`,
           'runtime',
           status === 'GREEN',
         ),
       ],
-      dataStatus: gsc.dataStatus,
+      dataStatus: raw.dataStatus,
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
@@ -574,15 +575,16 @@ export async function probeGoogleGa4(timeoutMs = 15000): Promise<GoogleProbe> {
       ),
     ]);
 
-    const status = mapGoogleDataStatus(ga4.dataStatus);
-    const pagesCount = ga4.pages?.length ?? 0;
-    const users = ga4.totalUsers ?? 0;
+    const raw = ga4 as unknown as { dataStatus: string; pages?: unknown[]; totalUsers?: number };
+    const status = mapGoogleDataStatus(raw.dataStatus);
+    const pagesCount = raw.pages?.length ?? 0;
+    const users = raw.totalUsers ?? 0;
     const reason =
       status === 'GREEN'
         ? `GA4 autenticado y devolvio ${pagesCount} paginas y ${users} usuarios.`
         : status === 'YELLOW'
           ? 'GA4 autenticado; no hay datos para el rango consultado (CONNECTED_NO_DATA).'
-          : `GA4 dataStatus=${ga4.dataStatus}`;
+          : `GA4 dataStatus=${raw.dataStatus}`;
 
     return {
       status,
@@ -590,12 +592,12 @@ export async function probeGoogleGa4(timeoutMs = 15000): Promise<GoogleProbe> {
       evidence: [
         evidence(
           'GA4 realtime collector',
-          `${ga4.dataStatus} — ${pagesCount} páginas, ${users} usuarios`,
+          `${raw.dataStatus} — ${pagesCount} páginas, ${users} usuarios`,
           'runtime',
           status === 'GREEN',
         ),
       ],
-      dataStatus: ga4.dataStatus,
+      dataStatus: raw.dataStatus,
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);

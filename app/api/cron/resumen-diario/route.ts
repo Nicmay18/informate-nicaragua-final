@@ -1,7 +1,7 @@
+import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
-import { resolveTelegramConfig } from '@/lib/distribution/telegram';
 import { logger } from '@/lib/logger';
 import { getTelegramConfig } from '@/lib/telegram';
 
