@@ -79,7 +79,7 @@ export interface DeptoJob {
 
 export interface DeptoHeartbeat {
   id?: string;
-  component: 'scheduler' | 'health-check' | 'article-pipeline' | 'growth' | 'monetization-check' | 'watchdog' | 'daily-report';
+  component: string;
   status: 'healthy' | 'degraded' | 'down';
   lastRunAt: string;
   nextExpectedAt: string;

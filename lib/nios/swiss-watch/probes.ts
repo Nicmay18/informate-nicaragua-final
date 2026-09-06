@@ -11,6 +11,8 @@
 
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
+import { collectGscData } from '@/lib/nios/collectors/gsc';
+import { collectGa4Data } from '@/lib/nios/collectors/ga4';
 import type { SwissEvidence, SwissStatus } from './types';
 
 /** Construye una evidencia con timestamp coherente. */
@@ -481,6 +483,130 @@ export async function probeNiosSnapshot(
         evidence('Lectura de nios_daily_snapshots', `Error: ${message}`, 'firestore', false),
       ],
       latestDate: null,
+    };
+  }
+}
+
+/** Resultado de un probe de Google (GSC o GA4). */
+export interface GoogleProbe {
+  status: SwissStatus;
+  reason: string;
+  evidence: SwissEvidence[];
+  dataStatus: string;
+}
+
+function mapGoogleDataStatus(status: string): SwissStatus {
+  switch (status) {
+    case 'CONNECTED_WITH_DATA':
+      return 'GREEN';
+    case 'CONNECTED_NO_DATA':
+      return 'YELLOW';
+    case 'NOT_CONFIGURED':
+      return 'BLOCKED_EXTERNAL';
+    case 'ACCESS_DENIED':
+    case 'API_ERROR':
+      return 'RED';
+    default:
+      return 'UNKNOWN';
+  }
+}
+
+/**
+ * Realiza una llamada real al collector de GSC y devuelve solo estado seguro.
+ * Nunca expone credenciales, claves ni tokens.
+ */
+export async function probeGoogleGsc(timeoutMs = 15000): Promise<GoogleProbe> {
+  try {
+    const gsc = await Promise.race([
+      collectGscData({ days: 7 }),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('timeout')), timeoutMs),
+      ),
+    ]);
+
+    const status = mapGoogleDataStatus(gsc.dataStatus);
+    const pagesCount = gsc.pages?.length ?? 0;
+    const queriesCount = gsc.queries?.length ?? 0;
+    const reason =
+      status === 'GREEN'
+        ? `GSC autenticado y devolvio ${pagesCount} paginas y ${queriesCount} consultas.`
+        : status === 'YELLOW'
+          ? 'GSC autenticado; no hay datos para el rango consultado (CONNECTED_NO_DATA).'
+          : `GSC dataStatus=${gsc.dataStatus}`;
+
+    return {
+      status,
+      reason,
+      evidence: [
+        evidence(
+          'GSC realtime collector',
+          `${gsc.dataStatus} — ${pagesCount} páginas, ${queriesCount} consultas`,
+          'runtime',
+          status === 'GREEN',
+        ),
+      ],
+      dataStatus: gsc.dataStatus,
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    const isTimeout = message === 'timeout';
+    return {
+      status: isTimeout ? 'UNKNOWN' : 'RED',
+      reason: isTimeout
+        ? 'El probe de GSC no completo en el tiempo permitido.'
+        : `Error inesperado en probe GSC: ${message}`,
+      evidence: [evidence('GSC realtime collector', message, 'runtime', false)],
+      dataStatus: 'ERROR',
+    };
+  }
+}
+
+/**
+ * Realiza una llamada real al collector de GA4 y devuelve solo estado seguro.
+ * Nunca expone credenciales, claves ni tokens.
+ */
+export async function probeGoogleGa4(timeoutMs = 15000): Promise<GoogleProbe> {
+  try {
+    const ga4 = await Promise.race([
+      collectGa4Data({ days: 7 }),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('timeout')), timeoutMs),
+      ),
+    ]);
+
+    const status = mapGoogleDataStatus(ga4.dataStatus);
+    const pagesCount = ga4.pages?.length ?? 0;
+    const users = ga4.totalUsers ?? 0;
+    const reason =
+      status === 'GREEN'
+        ? `GA4 autenticado y devolvio ${pagesCount} paginas y ${users} usuarios.`
+        : status === 'YELLOW'
+          ? 'GA4 autenticado; no hay datos para el rango consultado (CONNECTED_NO_DATA).'
+          : `GA4 dataStatus=${ga4.dataStatus}`;
+
+    return {
+      status,
+      reason,
+      evidence: [
+        evidence(
+          'GA4 realtime collector',
+          `${ga4.dataStatus} — ${pagesCount} páginas, ${users} usuarios`,
+          'runtime',
+          status === 'GREEN',
+        ),
+      ],
+      dataStatus: ga4.dataStatus,
+    };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    const isTimeout = message === 'timeout';
+    return {
+      status: isTimeout ? 'UNKNOWN' : 'RED',
+      reason: isTimeout
+        ? 'El probe de GA4 no completo en el tiempo permitido.'
+        : `Error inesperado en probe GA4: ${message}`,
+      evidence: [evidence('GA4 realtime collector', message, 'runtime', false)],
+      dataStatus: 'ERROR',
     };
   }
 }

@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger';
 import { runCEOLoop, type CEOLoopResult } from '@/lib/nios/ceo-loop';
 import { generateCEODailyBrief } from '@/lib/nios/ceo-daily-brief';
 import { validateTrafficReader } from '@/lib/analytics/traffic-reader';
+import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -27,6 +28,8 @@ export async function GET(request: NextRequest) {
   if (!isAuthorized(request)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
+
+  const startedAt = Date.now();
 
   try {
     const db = getAdminDb();
@@ -57,6 +60,7 @@ export async function GET(request: NextRequest) {
       logger.error('[nios-collect] traffic validation failed:', err);
     }
 
+    await recordCronHeartbeat('/api/cron/nios-collect', { durationMs: Date.now() - startedAt });
     return NextResponse.json({
       success: result.success,
       date: result.date,

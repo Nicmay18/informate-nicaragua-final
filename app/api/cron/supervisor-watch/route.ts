@@ -14,6 +14,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runSupervisorWatchCycle, checkMediumHealth, applySafeAutoFixes } from '@/lib/supervisor';
+import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { logger } from '@/lib/logger';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 
@@ -71,6 +72,7 @@ export async function GET(request: Request) {
       logger.warn('[supervisor-cron] Error persistiendo cycle summary:', e);
     }
 
+    await recordCronHeartbeat('/api/cron/supervisor-watch', { durationMs: Date.now() - startedAt });
     return NextResponse.json({
       success: true,
       ...cycleSummary,

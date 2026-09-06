@@ -24,6 +24,8 @@ import {
   probeIncidents,
   probeNiosSnapshot,
   probeAdsenseArtifacts,
+  probeGoogleGsc,
+  probeGoogleGa4,
   worstStatus,
 } from './probes';
 import { evaluateAdSenseReadiness, REQUIRED_LEGAL_PAGES } from './adsense-readiness';
@@ -142,6 +144,8 @@ export interface BoardInput {
   snapshot: Awaited<ReturnType<typeof probeNiosSnapshot>>;
   adsense: AdSenseReadinessVerdict;
   adsenseArtifacts?: Awaited<ReturnType<typeof probeAdsenseArtifacts>>;
+  googleGsc?: Awaited<ReturnType<typeof probeGoogleGsc>>;
+  googleGa4?: Awaited<ReturnType<typeof probeGoogleGa4>>;
   errors: string[];
 }
 
@@ -336,22 +340,25 @@ export function buildBoard(input: BoardInput, now = new Date()): SwissWatchBoard
   );
 
   // ── GOOGLE INTELLIGENCE ───────────────────────────────────────────────
-  const googleEnv = probeEnvPresence(REQUIRED_ENV.GOOGLE_INTELLIGENCE ?? []);
-  const googleStatus: SwissStatus =
-    googleEnv.missing.length > 0
-      ? 'BLOCKED_EXTERNAL'
-      : input.snapshot.status === 'GREEN'
-        ? 'GREEN'
-        : 'YELLOW';
+  const googleGsc = input.googleGsc ?? {
+    status: 'UNKNOWN' as SwissStatus,
+    reason: 'Probe GSC no ejecutado en esta construccion de tablero.',
+    evidence: [evidence('GSC probe', 'Sin dato', 'runtime', false)],
+    dataStatus: 'UNKNOWN',
+  };
+  const googleGa4 = input.googleGa4 ?? {
+    status: 'UNKNOWN' as SwissStatus,
+    reason: 'Probe GA4 no ejecutado en esta construccion de tablero.',
+    evidence: [evidence('GA4 probe', 'Sin dato', 'runtime', false)],
+    dataStatus: 'UNKNOWN',
+  };
+  const googleStatus = worstStatus([googleGsc.status, googleGa4.status]);
+  const googleReason = `${googleGsc.reason} | ${googleGa4.reason}`;
   push(
     'GOOGLE_INTELLIGENCE',
     googleStatus,
-    googleEnv.missing.length > 0
-      ? `Falta configuracion de Google en runtime: ${googleEnv.missing.join(', ')}.`
-      : input.snapshot.status === 'GREEN'
-        ? 'GSC y GA4 configurados y existe un snapshot NIOS fresco.'
-        : `GSC y GA4 configurados, pero el snapshot NIOS no es fresco: ${input.snapshot.reason}`,
-    [...googleEnv.evidence, ...input.snapshot.evidence],
+    googleReason,
+    [...googleGsc.evidence, ...googleGa4.evidence],
     {
       tasks:
         googleStatus === 'GREEN'
@@ -709,14 +716,17 @@ export async function getSwissWatchBoard(now = new Date()): Promise<SwissWatchBo
     errors.push(`No se pudieron cargar las noticias: ${message}`);
   }
 
-  const [firebase, firestore, heartbeat, incidents, snapshot, adsenseArtifacts] = await Promise.all([
-    probeFirebase(),
-    probeFirestoreOperational(),
-    probeHeartbeat(now.getTime()),
-    probeIncidents(),
-    probeNiosSnapshot(now.getTime()),
-    probeAdsenseArtifacts(),
-  ]);
+  const [firebase, firestore, heartbeat, incidents, snapshot, adsenseArtifacts, googleGsc, googleGa4] =
+    await Promise.all([
+      probeFirebase(),
+      probeFirestoreOperational(),
+      probeHeartbeat(now.getTime()),
+      probeIncidents(),
+      probeNiosSnapshot(now.getTime()),
+      probeAdsenseArtifacts(),
+      probeGoogleGsc(),
+      probeGoogleGa4(),
+    ]);
 
   const adsense = evaluateAdSenseReadiness(
     {
@@ -738,7 +748,7 @@ export async function getSwissWatchBoard(now = new Date()): Promise<SwissWatchBo
   }
 
   return buildBoard(
-    { noticias, firebase, firestore, heartbeat, incidents, snapshot, adsense, adsenseArtifacts, errors },
+    { noticias, firebase, firestore, heartbeat, incidents, snapshot, adsense, adsenseArtifacts, googleGsc, googleGa4, errors },
     now,
   );
 }

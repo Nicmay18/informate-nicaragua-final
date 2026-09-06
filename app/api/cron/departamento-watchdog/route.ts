@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runWatchdog } from '@/lib/departamento-central/watchdog';
 import { logger } from '@/lib/logger';
 
@@ -18,6 +19,7 @@ export async function GET(request: Request) {
 
   try {
     const result = await runWatchdog();
+    await recordCronHeartbeat('/api/cron/departamento-watchdog', { durationMs: Date.now() - started });
     return NextResponse.json({
       success: true,
       ...result,

@@ -1,6 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
-import { NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
+import { resolveTelegramConfig } from '@/lib/distribution/telegram';
 import { logger } from '@/lib/logger';
 import { getTelegramConfig } from '@/lib/telegram';
 
@@ -82,6 +83,8 @@ export async function GET(request: Request) {
   if (!verifyAdminOrCronToken(secret) && !verifyAdminOrCronToken(bearer)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+
+  const startedAt = Date.now();
 
   try {
     const db = getAdminDb();
@@ -165,6 +168,7 @@ export async function GET(request: Request) {
       messageId: data.result?.message_id || null,
     });
 
+    await recordCronHeartbeat('/api/cron/resumen-diario', { durationMs: Date.now() - startedAt });
     return NextResponse.json({
       success: true,
       fecha: iso,

@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
+import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
-import { runDepartamentoCentralCycle } from '@/lib/departamento-central/cycle';
-import { saveDepartamentoReport } from '@/lib/departamento-central/store';
+import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
+import { runDepartamentoCentralCycle, saveDepartamentoReport } from '@/lib/departamento-central';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -21,6 +22,7 @@ export async function GET(request: Request) {
     const report = await runDepartamentoCentralCycle();
     await saveDepartamentoReport(report);
 
+    await recordCronHeartbeat('/api/cron/departamento-daily', { durationMs: Date.now() - started });
     return NextResponse.json({
       success: true,
       runAt: report.runAt,

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
-import { cleanupTrafficLog, trafficLogTTLDays } from '@/lib/analytics/traffic-ttl';
+import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
+import { cleanupTrafficLog, trafficLogTTLDays } from '@/lib/analytics/traffic-cleanup';
 import { logger } from '@/lib/logger';
 
 export const maxDuration = 60;
@@ -20,11 +21,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
 
+  const startedAt = Date.now();
+
   try {
     const db = getAdminDb();
     const olderThanDays = trafficLogTTLDays();
     const result = await cleanupTrafficLog(db, olderThanDays, 500);
 
+    await recordCronHeartbeat('/api/cron/traffic-cleanup', { durationMs: Date.now() - startedAt });
     return NextResponse.json({
       success: true,
       olderThanDays,

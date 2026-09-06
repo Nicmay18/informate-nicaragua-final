@@ -15,14 +15,20 @@ const EXPECTED_INTERVALS: Record<string, number> = {
 export async function writeHeartbeat(
   component: DeptoHeartbeat['component'],
   status: DeptoHeartbeat['status'],
-  options?: { note?: string; durationMs?: number; jobsCompleted?: number; jobsFailed?: number },
+  options?: {
+    note?: string;
+    durationMs?: number;
+    jobsCompleted?: number;
+    jobsFailed?: number;
+    nextExpectedAt?: string;
+  },
 ): Promise<void> {
   const db = getAdminDb();
   const now = new Date();
   const lastRunAt = now.toISOString();
-  const nextExpectedAt = new Date(
-    now.getTime() + (EXPECTED_INTERVALS[component] || 60 * 60 * 1000),
-  ).toISOString();
+  const nextExpectedAt =
+    options?.nextExpectedAt ??
+    new Date(now.getTime() + (EXPECTED_INTERVALS[component] || 60 * 60 * 1000)).toISOString();
 
   const snap = await db.collection(COLLECTION).where('component', '==', component).limit(1).get();
   const data: Record<string, unknown> = {
@@ -44,6 +50,25 @@ export async function writeHeartbeat(
   }
 
   logger.debug('[depto-heartbeat] Heartbeat actualizado', { component, status });
+}
+
+const CRON_DEFAULT_INTERVAL_MS = 25 * 60 * 60 * 1000; // 25h cubre crons diarios con drift
+
+export async function recordCronHeartbeat(
+  cronPath: string,
+  options?: { status?: DeptoHeartbeat['status']; durationMs?: number; note?: string },
+): Promise<void> {
+  const component = cronPath.startsWith('cron/') ? cronPath : `cron${cronPath}`;
+  const nextExpectedAt = new Date(Date.now() + CRON_DEFAULT_INTERVAL_MS).toISOString();
+  try {
+    await writeHeartbeat(component, options?.status ?? 'healthy', {
+      durationMs: options?.durationMs,
+      note: options?.note ?? `Cron ${cronPath} ejecutado`,
+      nextExpectedAt,
+    });
+  } catch (err) {
+    logger.warn('[depto-heartbeat] No se pudo escribir heartbeat de cron', { cronPath, error: err });
+  }
 }
 
 export async function getLatestHeartbeat(

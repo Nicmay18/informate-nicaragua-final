@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runCEOLoop } from '@/lib/nios/ceo-loop';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -14,9 +16,12 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401 });
   }
 
+  const startedAt = Date.now();
+
   try {
     const db = getAdminDb();
     const { record, autonomy } = await runCEOLoop(db, 'cron/nios-ceo-loop');
+    await recordCronHeartbeat('/api/cron/nios-ceo-loop', { durationMs: Date.now() - startedAt });
     return NextResponse.json({
       ok: true,
       id: record.id,
