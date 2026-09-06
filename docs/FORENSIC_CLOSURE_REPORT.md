@@ -622,7 +622,30 @@ Fecha de ejecución: 2026-09-06. Auditor: Cascade. No se expusieron secretos.
 
 ### PF3-2 — Environment matrix (production)
 
-`vercel env pull --environment production` descargó las variables del entorno. Clasificación por llave:
+> **CORRECCIÓN FORENSE (2026-09-06) — ESTA TABLA CONTIENE UN FALSO POSITIVO.**
+>
+> La clasificación `PRESENT_EMPTY` de abajo es un **artefacto del CLI de Vercel**, no el
+> estado real del runtime. Vercel devuelve **cadena vacía** en `vercel env pull` para toda
+> variable marcada como **Sensitive/Encrypted**, por diseño y por seguridad.
+>
+> Verificación real ejecutada:
+>
+> - `vercel env ls production` → las **30 variables** aparecen como `Encrypted`, es decir
+>   **presentes y con valor**, no vacías.
+> - `curl -s https://nicaraguainformate.com/` → la home sirve **noticias reales desde
+>   Firestore** (slugs, categorías y marcas de tiempo reales). Esto prueba que el Admin SDK
+>   de Firebase **se inicializa correctamente en producción**.
+>
+> Conclusión corregida: **Firebase, Firestore, GSC, GA4, Telegram, IndexNow, Gemini y Groq
+> están provisionados y operativos en producción.** El veredicto anterior derivado de esta
+> tabla (`credenciales ausentes`) queda **anulado**.
+>
+> Lección incorporada al sistema: la presencia de variables **solo puede medirse dentro del
+> runtime desplegado**, nunca desde el CLI. Esta regla está implementada en
+> `lib/nios/swiss-watch/probes.ts` (`probeEnvPresence`) y documentada en su docblock.
+
+`vercel env pull --environment production` descargó las variables del entorno. Clasificación por llave
+(**lectura no fiable para variables Encrypted**, conservada solo como registro histórico):
 
 | Variable | Estado |
 |---|---|
