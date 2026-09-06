@@ -75,13 +75,13 @@ describe('Misión 10 — Diagnóstico, repair plan y CEO operativo', () => {
     expect(ga4Diag!.requiresHuman).toBe(true);
   });
 
-  it('AdSense se documenta como NOT_CONFIGURED sin bloquear', () => {
+  it('AdSense se documenta como DISABLED_BY_SCOPE sin bloquear', () => {
     delete process.env.GOOGLE_ADSENSE_CLIENT_ID;
     const diagnostics = generateNiosDiagnostics(null, null);
     const adsense = diagnostics.find((d) => d.source === 'AdSense');
 
     expect(adsense).toBeDefined();
-    expect(adsense!.status).toBe('NOT_CONFIGURED');
+    expect(adsense!.status).toBe('DISABLED_BY_SCOPE');
     expect(adsense!.severity).toBe('info');
     expect(adsense!.requiresHuman).toBe(false);
     expect(adsense!.impact).toContain('No bloquea');

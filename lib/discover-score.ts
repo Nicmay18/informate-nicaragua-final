@@ -1,4 +1,5 @@
 import type { Noticia } from '@/lib/types';
+import { countWords } from '@/lib/utils/word-count';
 
 export interface DiscoverRecommendation {
   area: string;
@@ -18,15 +19,6 @@ const MAX_TITLE = 60;
 const MIN_WORDS = 350;
 const IDEAL_WORDS = 600;
 const MAX_AGE_DAYS = 7;
-
-function countWords(text?: string): number {
-  if (!text) return 0;
-  return text.trim().split(/\s+/).filter(Boolean).length;
-}
-
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
 
 function countImagesInContent(contenido?: string): number {
   if (!contenido) return 0;
@@ -62,7 +54,7 @@ function titleLengthScore(titulo: string): number {
 }
 
 function articleLengthScore(palabras?: number, contenido?: string): number {
-  const words = palabras || countWords(contenido ? stripHtml(contenido) : '');
+  const words = palabras || countWords(contenido || '');
   if (words >= IDEAL_WORDS) return 100;
   if (words >= MIN_WORDS) return 70 + ((words - MIN_WORDS) / (IDEAL_WORDS - MIN_WORDS)) * 30;
   if (words > 0) return (words / MIN_WORDS) * 70;

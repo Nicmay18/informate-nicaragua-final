@@ -58,6 +58,8 @@ export type NiosDataStatus =
   | 'CONFIG_REQUIRED'
   | 'INVALID_CONFIGURATION'
   | 'NOT_CONFIGURED'
+  | 'STALE'
+  | 'DISABLED_BY_SCOPE'
   | 'TIMEOUT'
   | 'NETWORK_ERROR';
 
@@ -375,6 +377,11 @@ export interface ThinContentArticle {
   scoreMeni: number | null;
   gscImpressions: number;
   reasons: string[];
+  wordCount?: number;
+  threshold?: number;
+  policy?: string;
+  status?: 'OK' | 'THIN' | 'THIN_CANDIDATE' | 'THIN_CONFIRMED' | string;
+  source?: string;
 }
 
 export interface AdSenseRecoveryReport {
@@ -755,6 +762,8 @@ export const DATA_STATUS_LABELS: Record<NiosDataStatus, string> = {
   CONFIG_REQUIRED: 'Configuración requerida',
   INVALID_CONFIGURATION: 'Configuración inválida',
   NOT_CONFIGURED: 'No configurado',
+  STALE: 'Datos desactualizados',
+  DISABLED_BY_SCOPE: 'Deshabilitado por alcance',
   TIMEOUT: 'Tiempo de espera agotado',
   NETWORK_ERROR: 'Error de red',
 };

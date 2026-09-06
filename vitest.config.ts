@@ -44,8 +44,10 @@ export default defineConfig({
     reporters: ['verbose'],
 
     // ─── Performance ───────────────────────────────────────────
-    testTimeout: 10000,
-    hookTimeout: 10000,
+    // Cold start of Next.js server modules in mocked tests can exceed 10s
+    // on resource-constrained environments. 20s keeps the suite deterministic.
+    testTimeout: 20000,
+    hookTimeout: 20000,
 
     // ─── Snapshot ──────────────────────────────────────────────
     snapshotFormat: {

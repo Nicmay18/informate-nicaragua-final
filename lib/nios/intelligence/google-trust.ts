@@ -307,6 +307,11 @@ export function generateThinContentReport(articles: ArticleFusion[]): ThinConten
       scoreMeni: article.scoreMeni,
       gscImpressions: article.gscImpressions,
       reasons: thin.flags,
+      wordCount: article.palabras,
+      threshold: THIN_WORDS_THRESHOLD,
+      policy: 'GOOGLE_TRUST',
+      status: thin.isThin ? 'THIN' : 'OK',
+      source: 'google-trust',
     };
   }).filter(a => a.reasons.length > 0);
 }

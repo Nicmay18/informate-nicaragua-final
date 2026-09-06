@@ -29,10 +29,6 @@ export function clamp(value: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, value));
 }
 
-export function countWords(texto: string): number {
-  return (texto || '').split(/\s+/).filter(Boolean).length;
-}
-
 export function stripHtml(html: string): string {
   return (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }

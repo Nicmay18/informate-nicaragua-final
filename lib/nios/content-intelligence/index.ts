@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
+import { countWords } from '@/lib/utils/word-count';
 export interface ContentIntelligence {
   duplicateGroups: { key: string; count: number; slugs: string[]; reason: string }[];
   cannibalization: { keyword: string; count: number; slugs: string[] }[];
@@ -40,6 +41,10 @@ function normalizeWords(text: string): string[] {
 }
 
 const EVERGREEN_TRIGGERS = ['cómo', 'requisitos', 'pasos', 'guía', 'costo', 'dólar', 'salario', 'pasaporte', 'apostilla', 'récord policial', 'migración', 'turismo', 'cuándo', 'dónde', 'qué es', 'cómo funciona'];
+
+function articleWordCount(n: Noticia): number {
+  return n.palabras || countWords(n.contenido || '');
+}
 
 export function runContentIntelligence(noticias: Noticia[], guides: EvergreenArticle[] = []): ContentIntelligence {
   void guides;
@@ -98,11 +103,11 @@ export function runContentIntelligence(noticias: Noticia[], guides: EvergreenArt
     .map((n) => ({ slug: n.slug, title: n.titulo, reason: 'Sin enlaces internos relacionados.' }));
 
   const lowContext = published
-    .filter((n) => (n.palabras || 0) > 0 && (n.palabras || 0) < 200)
-    .map((n) => ({ slug: n.slug, title: n.titulo, wordCount: n.palabras || 0, reason: 'Contenido corto, posible falta de contexto.' }));
+    .filter((n) => articleWordCount(n) > 0 && articleWordCount(n) < 200)
+    .map((n) => ({ slug: n.slug, title: n.titulo, wordCount: articleWordCount(n), reason: 'Contenido corto, posible falta de contexto.' }));
 
-  const tooShort = published.filter((n) => (n.palabras || 0) > 0 && (n.palabras || 0) < 150).map((n) => ({ slug: n.slug, title: n.titulo, words: n.palabras || 0 }));
-  const tooLong = published.filter((n) => (n.palabras || 0) > 1200).map((n) => ({ slug: n.slug, title: n.titulo, words: n.palabras || 0 }));
+  const tooShort = published.filter((n) => articleWordCount(n) > 0 && articleWordCount(n) < 150).map((n) => ({ slug: n.slug, title: n.titulo, words: articleWordCount(n) }));
+  const tooLong = published.filter((n) => articleWordCount(n) > 1200).map((n) => ({ slug: n.slug, title: n.titulo, words: articleWordCount(n) }));
   const lowViews = published.filter((n) => (n.vistas || 0) < 5).map((n) => ({ slug: n.slug, title: n.titulo, views: n.vistas || 0 }));
 
   const growing = published

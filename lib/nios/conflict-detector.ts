@@ -49,7 +49,9 @@ export interface NiosConflict {
 }
 
 function uid(prefix: string): string {
-  return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  // IDs deterministas para que findActiveIncidentByConflictId pueda deduplicar
+  // conflictos entre ejecuciones del loop operativo.
+  return prefix;
 }
 
 function statusFromDataStatus(status: string | undefined): ConflictStatus {
@@ -71,6 +73,8 @@ function statusFromDataStatus(status: string | undefined): ConflictStatus {
       return 'DATA_CONFLICT';
     case 'TIMEOUT':
     case 'NETWORK_ERROR':
+    case 'STALE':
+    case 'DISABLED_BY_SCOPE':
       return 'SOURCE_FAILURE';
     default:
       return 'NO_DATA';

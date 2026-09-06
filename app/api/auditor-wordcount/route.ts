@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { evaluate, mapV4ToV3, type NoticiaInput } from '@/lib/editorial';
 import { isAdminRequest, unauthorized } from '@/lib/auth';
+import { countWords } from '@/lib/utils/word-count';
 
 /**
  * Auditoría integrada con el motor editorial V4 ("jefe IA").
@@ -16,19 +17,6 @@ import { isAdminRequest, unauthorized } from '@/lib/auth';
  *   o NOTICIA de actualidad pueden ser excelentes incluso siendo cortos.
  */
 
-function stripHtml(html: string): string {
-  return (html || '')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&[a-z]+;/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function countWords(text: string): number {
-  return (text.match(/\b[a-záéíóúñA-ZÁÉÍÓÚÑ]+\b/g) || []).length;
-}
-
 export async function GET(request: NextRequest) {
   if (!isAdminRequest(request)) {
     return unauthorized();
@@ -41,8 +29,7 @@ export async function GET(request: NextRequest) {
     const resultados = snapshot.docs.map((doc) => {
       const data = doc.data();
       const contenidoHtml = typeof data.contenido === 'string' ? data.contenido : String(data.contenido || '');
-      const textoPlano = stripHtml(contenidoHtml);
-      const palabras = countWords(textoPlano);
+      const palabras = countWords(contenidoHtml);
 
       const noticia: NoticiaInput = {
         titulo: data.titulo || '(sin título)',

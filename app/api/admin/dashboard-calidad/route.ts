@@ -3,6 +3,7 @@ import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
+import { countWords } from '@/lib/utils/word-count';
 
 export const revalidate = 0;
 export const maxDuration = 30;
@@ -18,7 +19,7 @@ interface MetricasCalidad {
     count: number;
     porcentaje: number;
     ids: string[];
-    detalles?: Array<{id: string; titulo: string; palabrasCampo: any; palabrasConteo: number; palabrasUsadas: number}>;
+    detalles?: Array<{id: string; titulo: string; palabrasCampo: any; palabrasConteo: number; palabrasUsadas: number; wordCount?: number; threshold?: number; policy?: string; status?: string; source?: string}>;
   };
   conNoindex: number;
   sinImagen: number;
@@ -63,72 +64,77 @@ async function computeDashboardMetrics() {
   const snapshot = await db.collection('noticias').get();
 
   let totalPalabras = 0;
-    let totalStrong = 0;
-    let totalBlockquotes = 0;
-    let thinCount = 0;
-    let conNoindex = 0;
-    let sinImagen = 0;
-    let sinAutor = 0;
-    let sinFechaActualizacion = 0;
-    let titulosOpt = 0;
-    let metaOpt = 0;
-    let conLinks = 0;
-    let frescas = 0;
-    const totalAutoresUnicos = new Set<string>();
-    let totalFuentes = 0;
-    let totalTiempoLectura = 0;
-    let estructuraRicaCount = 0;
-    let datosEstadisticosCount = 0;
-    let recursosUtilesCount = 0;
-    let ctaCount = 0;
-    let evergreenCount = 0;
-    let totalValorWords = 0;
-    let meniScoreSum = 0;
-    let meniConScore = 0;
-    let meniAprobados = 0;
+  let totalStrong = 0;
+  let totalBlockquotes = 0;
+  let thinCount = 0;
+  let conNoindex = 0;
+  let sinImagen = 0;
+  let sinAutor = 0;
+  let sinFechaActualizacion = 0;
+  let titulosOpt = 0;
+  let metaOpt = 0;
+  let conLinks = 0;
+  let frescas = 0;
+  const totalAutoresUnicos = new Set<string>();
+  let totalFuentes = 0;
+  let totalTiempoLectura = 0;
+  let estructuraRicaCount = 0;
+  let datosEstadisticosCount = 0;
+  let recursosUtilesCount = 0;
+  let ctaCount = 0;
+  let evergreenCount = 0;
+  let totalValorWords = 0;
+  let meniScoreSum = 0;
+  let meniConScore = 0;
+  let meniAprobados = 0;
 
-    const thinIds: string[] = [];
-    const thinDetails: Array<{id: string; titulo: string; palabrasCampo: any; palabrasConteo: number; palabrasUsadas: number}> = [];
-    const categorias: Record<string, number> = {};
-    const alertas: string[] = [];
-    const problemasCriticos: string[] = [];
-    const problemasAdvertencia: string[] = [];
-    const recomendaciones: string[] = [];
+  const thinIds: string[] = [];
+  const thinDetails: Array<{id: string; titulo: string; palabrasCampo: any; palabrasConteo: number; palabrasUsadas: number; wordCount?: number; threshold?: number; policy?: string; status?: string; source?: string}> = [];
+  const categorias: Record<string, number> = {};
+  const alertas: string[] = [];
+  const problemasCriticos: string[] = [];
+  const problemasAdvertencia: string[] = [];
+  const recomendaciones: string[] = [];
 
-    const ahora = Date.now();
-    const sieteDias = 7 * 24 * 60 * 60 * 1000;
+  const ahora = Date.now();
+  const sieteDias = 7 * 24 * 60 * 60 * 1000;
 
-    for (const doc of snapshot.docs) {
-      const data = doc.data();
-      const contenidoRaw = data.contenido || '';
-      const contenido = contenidoRaw.replace(/<[^>]*>/g, ' ');
-      // Usar data.palabras si existe y es numérico válido (>0), sino contar del contenido
-      const palabrasConteo = contenido.split(/\s+/).filter((p: string) => p.length > 0).length;
-      const palabrasCampo = typeof data.palabras === 'number' ? data.palabras : (parseInt(data.palabras, 10) || 0);
-      const palabras = palabrasCampo > 0 ? palabrasCampo : palabrasConteo;
-      const titulo = (data.titulo || '').trim();
-      const resumen = (data.resumen || '').trim();
+  for (const doc of snapshot.docs) {
+    const data = doc.data();
+    const contenidoRaw = data.contenido || '';
+    const contenido = contenidoRaw.replace(/<[^>]*>/g, ' ');
+    // Usar data.palabras si existe y es numérico válido (>0), sino contar del contenido con función canónica
+    const palabrasConteo = countWords(contenidoRaw);
+    const palabrasCampo = typeof data.palabras === 'number' ? data.palabras : (parseInt(data.palabras, 10) || 0);
+    const palabras = palabrasCampo > 0 ? palabrasCampo : palabrasConteo;
+    const titulo = (data.titulo || '').trim();
+    const resumen = (data.resumen || '').trim();
 
-      totalPalabras += palabras;
-      totalStrong += (contenidoRaw.match(/<strong>/gi) || []).length;
-      totalBlockquotes += (contenidoRaw.match(/<blockquote>/gi) || []).length;
+    totalPalabras += palabras;
+    totalStrong += (contenidoRaw.match(/<strong>/gi) || []).length;
+    totalBlockquotes += (contenidoRaw.match(/<blockquote>/gi) || []).length;
 
-      if (palabras < 350) {
-        thinCount++;
-        thinIds.push(doc.id);
-        thinDetails.push({
-          id: doc.id,
-          titulo: titulo || '(sin título)',
-          palabrasCampo: data.palabras,
-          palabrasConteo,
-          palabrasUsadas: palabras,
-        });
-      }
-      if (data.noindex === true) conNoindex++;
-      if (!data.imagenDestacada && !data.imagen) sinImagen++;
-      if (!data.autor) sinAutor++;
-      else totalAutoresUnicos.add(data.autor);
-      if (!data.fechaActualizacion) sinFechaActualizacion++;
+    if (palabras < 350) {
+      thinCount++;
+      thinIds.push(doc.id);
+      thinDetails.push({
+        id: doc.id,
+        titulo: titulo || '(sin título)',
+        palabrasCampo: data.palabras,
+        palabrasConteo,
+        palabrasUsadas: palabras,
+        wordCount: palabras,
+        threshold: 350,
+        policy: 'DASHBOARD_QUALITY',
+        status: 'THIN',
+        source: 'dashboard-calidad',
+      });
+    }
+    if (data.noindex === true) conNoindex++;
+    if (!data.imagenDestacada && !data.imagen) sinImagen++;
+    if (!data.autor) sinAutor++;
+    else totalAutoresUnicos.add(data.autor);
+    if (!data.fechaActualizacion) sinFechaActualizacion++;
 
       // Títulos optimizados (30-65 chars ideal, matches editor panel)
       if (titulo.length >= 30 && titulo.length <= 65) titulosOpt++;

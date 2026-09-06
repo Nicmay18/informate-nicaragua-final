@@ -9,6 +9,7 @@ import type { Firestore } from 'firebase-admin/firestore';
 import type { Noticia } from '@/lib/types';
 import type { GSCSnapshot, GA4Snapshot, ArticleFusion, GSCQueryRow } from './types';
 import { logger } from '@/lib/logger';
+import { countWords } from '@/lib/utils/word-count';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -124,7 +125,7 @@ export function mergeArticleData(
       categoria: n.categoria,
       autor: n.autor || '',
       fechaPublicacion: n.fecha,
-      palabras: n.palabras || 0,
+      palabras: n.palabras || countWords(n.contenido || ''),
       scoreMeni: n.scoreMeni ?? null,
       tags: n.tags || [],
       relatedLinksCount: n.related_links?.length || 0,
@@ -165,6 +166,7 @@ export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Pro
       'autor',
       'fecha',
       'palabras',
+      'contenido',
       'scoreMeni',
       'tags',
       'related_links',
@@ -190,7 +192,7 @@ export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Pro
         imagen: d.imagen || '',
         fecha: d.fecha || new Date().toISOString(),
         autor: d.autor || '',
-        palabras: d.palabras || 0,
+        palabras: d.palabras || countWords(d.contenido || ''),
         scoreMeni: d.scoreMeni ?? null,
         tags: d.tags || [],
         related_links: d.related_links || [],

@@ -75,6 +75,8 @@ rebuild-*.ps1
 
 # Reportes, logs y caché local
 *-report.json
+playwright-report/
+test-results/
 scripts/cache/
 diffstat.txt
 gitbranch.txt

@@ -1,4 +1,5 @@
 import { generateSlug } from '@/lib/slug';
+import { countWords } from '@/lib/utils/word-count';
 
 const IA_TRANSITIONS = [
   'además',
@@ -27,11 +28,6 @@ const EMOTIONAL_FILLER_REPLACEMENTS: Array<[RegExp, string]> = [
   [/\blamentable\b/gi, ''],
   [/\bfatal\b/gi, 'grave'],
 ];
-
-function countWords(text: string): number {
-  const words = text.match(/\b[a-záéíóúñA-ZÁÉÍÓÚÑ]+\b/g);
-  return words ? words.length : 0;
-}
 
 function getFirstSentence(text: string): string {
   const plain = text

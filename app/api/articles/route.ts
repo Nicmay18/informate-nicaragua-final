@@ -4,12 +4,9 @@ import { generateSlug } from '@/lib/slug';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { logger } from '@/lib/logger';
+import { countWords } from '@/lib/utils/word-count';
 
 export const maxDuration = 30;
-
-function countWords(text: string): number {
-  return text.trim().split(/\s+/).filter((w) => w.length > 0).length;
-}
 
 export async function POST(request: NextRequest) {
   try {

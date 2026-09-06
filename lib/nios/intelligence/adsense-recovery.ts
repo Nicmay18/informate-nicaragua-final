@@ -84,6 +84,11 @@ export function generateAdSenseRecoveryReport(
       scoreMeni: a.scoreMeni,
       gscImpressions: a.gscImpressions,
       reasons: a.palabras < 400 ? [`Menos de 400 palabras (${a.palabras})`] : [],
+      wordCount: a.palabras,
+      threshold: 400,
+      policy: 'ADSENSE_RECOVERY',
+      status: 'THIN',
+      source: 'adsense-recovery',
     }));
 
   // Artículos que bloquean (sin autor, thin con 0 impresiones reales, o MENI alto ignorado)

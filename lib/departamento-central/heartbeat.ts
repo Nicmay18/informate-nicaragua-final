@@ -7,7 +7,6 @@ const COLLECTION = 'depto_heartbeat';
 const EXPECTED_INTERVALS: Record<string, number> = {
   scheduler: 10 * 60 * 1000,
   'health-check': 5 * 60 * 1000,
-  'article-pipeline': 60 * 60 * 1000,
   growth: 30 * 60 * 1000,
   watchdog: 15 * 60 * 1000,
   'daily-report': 26 * 60 * 60 * 1000,

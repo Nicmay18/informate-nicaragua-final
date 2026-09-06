@@ -49,10 +49,18 @@ export function generateCEOStatusReport(
   const generatedAt = new Date().toISOString();
   const health = repairPlan.health;
 
+  const adSenseDiagnostic = diagnostics.find((d) => d.source === 'AdSense');
+  const adSenseStatus = adSenseDiagnostic?.status ?? 'DISABLED_BY_SCOPE';
+  const adSenseNote =
+    adSenseDiagnostic?.problem ??
+    (adSenseStatus === 'DISABLED_BY_SCOPE'
+      ? 'AdSense no est\u00e1 habilitado en el alcance operativo actual.'
+      : 'No hay collector real configurado.');
+
   const data: NiosDataStatusEntry[] = [
     { source: 'GSC', status: gscStatus ?? 'NO_DATA' },
     { source: 'GA4', status: ga4Status ?? 'NO_DATA' },
-    { source: 'AdSense', status: 'NOT_CONFIGURED', note: 'No hay collector real configurado.' },
+    { source: 'AdSense', status: adSenseStatus, note: adSenseNote },
     { source: 'Facebook', status: 'REAL', value: 23952, note: 'FACEBOOK_VIEWS aislado del site traffic.' },
   ];
 

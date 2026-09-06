@@ -31,10 +31,15 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
       return data.kind === 'learning' && (data.timestamp || '') >= since;
     }).length);
 
-  const [actionsPending, health] = await Promise.all([
+  const [actionsPending, health, operationalApprovals] = await Promise.all([
     db.collection('nios_actions').where('status', '==', 'PENDING').count().get(),
     getDepartmentHealth(),
+    db.collection('nios_memory').where('kind', '==', 'operational_approval').limit(200).get(),
   ]);
+
+  const operationalApprovalsPending = operationalApprovals.docs.filter(
+    (d) => (d.data() as { estado?: string }).estado === 'PENDING',
+  ).length;
 
   const lastWorkAt =
     (latestReport?.runAt) ??
@@ -69,7 +74,7 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
     actionsExecuted: workDone,
     verifications: verifications.data().count || 0,
     learnings: learningsSnap || 0,
-    pendingApprovals: actionsPending.data().count || 0,
+    pendingApprovals: (actionsPending.data().count || 0) + operationalApprovalsPending,
     activeJobs: pending,
     failedJobs: failed,
     deadLetterJobs: deadLetter,

@@ -192,7 +192,7 @@ export function detectMeniForenseConflicts(
       if (comparison.confianza < minConfianza && comparison.conflictos.length > 0) {
         const conflict = comparison.conflictos[0];
         conflicts.push({
-          id: `meni-forense-${input.slug}-${Date.now()}`,
+          id: `meni-forense-${input.slug}`,
           severity: conflict.tipo === 'falso_negativo' ? 'warning' : 'info',
           category: 'meni-forense',
           status: 'MENI_FORENSE',
@@ -213,7 +213,7 @@ export function detectMeniForenseConflicts(
       }
     } catch (err) {
       conflicts.push({
-        id: `meni-forense-error-${input.slug}-${Date.now()}`,
+        id: `meni-forense-error-${input.slug}`,
         severity: 'info',
         category: 'meni-forense',
         status: 'MENI_FORENSE',

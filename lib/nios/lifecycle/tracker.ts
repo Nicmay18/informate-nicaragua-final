@@ -9,6 +9,7 @@
  */
 
 import type { Noticia } from '@/lib/contracts';
+import { countWords } from '@/lib/utils/word-count';
 
 export type ContentSubstanceClassification =
   | 'EDITORIALLY_COMPLETE'
@@ -52,8 +53,7 @@ export interface LifecycleInsight {
 }
 
 export function cleanWordCount(text = ''): number {
-  const clean = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  return clean ? clean.split(/\s+/).length : 0;
+  return countWords(text);
 }
 
 export function evaluateContentSubstance(article: Partial<Noticia>): {

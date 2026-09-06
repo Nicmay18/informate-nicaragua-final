@@ -112,11 +112,11 @@ function actionStatus(a: NiosRepairAction): NiosOperatingAction['status'] {
 }
 
 function isBlockedStatus(status: NiosDataStatus): boolean {
-  return ['ACCESS_BLOCKED', 'CONFIG_REQUIRED', 'INVALID_CONFIGURATION', 'DATA_CONFLICT'].includes(status);
+  return ['ACCESS_BLOCKED', 'INVALID_CONFIGURATION', 'CONFIG_REQUIRED', 'NOT_CONFIGURED', 'TIMEOUT', 'NETWORK_ERROR'].includes(status);
 }
 
 function isWorkingStatus(status: NiosDataStatus): boolean {
-  return ['REAL', 'NOT_CONFIGURED', 'CONNECTED_NO_DATA'].includes(status);
+  return ['REAL', 'CONNECTED_NO_DATA', 'DISABLED_BY_SCOPE', 'STALE'].includes(status);
 }
 
 export function generateOperatingReport(input: NiosOperatingReportInput): NiosOperatingReport {

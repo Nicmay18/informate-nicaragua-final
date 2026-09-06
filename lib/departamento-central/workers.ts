@@ -10,7 +10,7 @@ import { completeJob, failJob } from './queue';
 import { runDepartamentoCentralCycle } from './cycle';
 import { saveDepartamentoReport } from './store';
 import { writeHeartbeat } from './heartbeat';
-import type { DeptoHeartbeat, DeptoJob, DeptoJobType } from './types';
+import type { DeptoJob, DeptoJobType } from './types';
 
 const MAX_ARTICLE_AGE_MS = 24 * 60 * 60 * 1000;
 
@@ -163,13 +163,8 @@ async function watchdogRecoveryWorker(job: DeptoJob): Promise<void> {
     case 'monetization-check':
       await monetizationCheckWorker(job);
       break;
-    case 'article-pipeline':
-      await writeHeartbeat('article-pipeline', 'healthy');
-      await completeJob(job.jobId, { action: 'watchdog-recovery', component });
-      break;
     default:
-      await writeHeartbeat(component as DeptoHeartbeat['component'], 'healthy');
-      await completeJob(job.jobId, { action: 'watchdog-recovery', component });
+      throw new Error(`watchdog recovery no implementado para componente: ${component}`);
   }
 
   await writeHeartbeat('watchdog', 'healthy');
