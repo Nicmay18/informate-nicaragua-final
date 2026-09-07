@@ -197,6 +197,24 @@ describe('Distribution Command', () => {
     const dist = buildDistributionCommand(sucesosDominadoDataset(), NOW.getTime());
     expect(dist.plans[0].category).toBe('Nacionales');
   });
+
+  it('con 0 vistas no aplica bonificaciones de categoría, palabras o imagen', () => {
+    const dist = buildDistributionCommand(
+      [noticia(1, { vistas: 0, categoria: 'Nacionales', palabras: 800, imagen: 'https://example.com/img.jpg' })],
+      NOW.getTime(),
+    );
+    expect(dist.plans.length).toBeGreaterThan(0);
+    expect(dist.plans[0].score).toBe(0);
+    expect(dist.plans[0].priority).toBe('baja');
+  });
+
+  it('con vistas > 0 aplica las bonificaciones configuradas', () => {
+    const dist = buildDistributionCommand(
+      [noticia(2, { vistas: 1, categoria: 'Nacionales', palabras: 800, imagen: 'https://example.com/img.jpg' })],
+      NOW.getTime(),
+    );
+    expect(dist.plans[0].score).toBe(66); // 1 + Nacionales(40) + palabras(15) + imagen(10)
+  });
 });
 
 describe('Content Opportunity Hunter', () => {

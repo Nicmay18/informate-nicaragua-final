@@ -384,4 +384,28 @@ describe('NIOS Operational Loop', () => {
     expect(memories.length).toBeGreaterThan(0);
     expect(memories.some((m) => m.problema === 'Snapshot inconsistente')).toBe(true);
   });
+
+  it('reprocesar un conflicto persistente con incidente ya en ACTION_REQUIRED no lanza error ni lo reinicia', async () => {
+    mockedDetectConflicts.mockReturnValue([trafficMissingConflict()]);
+
+    const first = await processOperationalConflicts(
+      db,
+      { nios: null, loop: null, noticias: undefined },
+      { enqueueJob: vi.fn().mockResolvedValue('job-x') },
+    );
+    const incident = first.incidents[0] as OperationalIncident;
+    expect(incident.state).toBe('ACTION_REQUIRED');
+
+    // El mismo conflicto sigue activo en el siguiente ciclo (todavía no hay aprobación humana).
+    const second = await processOperationalConflicts(
+      db,
+      { nios: null, loop: null, noticias: undefined },
+      { enqueueJob: vi.fn().mockResolvedValue('job-y') },
+    );
+
+    expect(second.incidents.length).toBe(1);
+    expect(second.incidents[0].id).toBe(incident.id);
+    expect(second.incidents[0].state).toBe('ACTION_REQUIRED');
+    expect(db.__docs[incident.id].state).toBe('ACTION_REQUIRED');
+  });
 });

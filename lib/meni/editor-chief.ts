@@ -1,10 +1,30 @@
 import type { EvaluacionEditorial } from '@/lib/editorial';
-import type { MeniValorEditorial } from './types';
+import type { MeniValorEditorial, NoticiaInput } from './types';
+import type { MeniContentProfile } from './profile-detector';
+import { detectAportePropioGastronomia } from './forensic';
 
-export function buildValorEditorial(result: EvaluacionEditorial): MeniValorEditorial {
+export function buildValorEditorial(
+  result: EvaluacionEditorial,
+  input?: NoticiaInput,
+  perfil?: MeniContentProfile,
+): MeniValorEditorial {
+  const baseAporte = !!result.evidence.originality.tieneAportePropio;
+  const baseItems = result.evidence.originality.aportePropioItems.slice(0, 6);
+
+  let aportePropio = baseAporte;
+  let items = baseItems;
+
+  if (perfil === 'gastronomia' && input) {
+    const gastronomia = detectAportePropioGastronomia(input);
+    if (gastronomia.tiene) {
+      aportePropio = true;
+      items = [...new Set([...baseItems, ...gastronomia.items])].slice(0, 6);
+    }
+  }
+
   return {
-    aportePropio: !!result.evidence.originality.tieneAportePropio,
-    items: result.evidence.originality.aportePropioItems.slice(0, 6),
+    aportePropio,
+    items,
     utilidad: result.evidence.utility.preguntasRespondidas.slice(0, 6),
     preguntasAbiertas: result.evidence.utility.oportunidades.slice(0, 6),
   };

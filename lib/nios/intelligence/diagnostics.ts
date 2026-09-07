@@ -341,7 +341,34 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
   };
 }
 
-function niosDiagnostic(): NiosDiagnostic {
+function niosDiagnostic(lastCacheInvalidationAt?: string | null): NiosDiagnostic {
+  const now = Date.now();
+  const invalidatedAt = lastCacheInvalidationAt ? new Date(lastCacheInvalidationAt).getTime() : 0;
+  const cacheFresh = lastCacheInvalidationAt && now - invalidatedAt < 5 * 60 * 1000;
+  const dataAgeHours = lastCacheInvalidationAt
+    ? Math.max(0, Math.round((now - invalidatedAt) / 36e5))
+    : null;
+
+  if (cacheFresh) {
+    return {
+      id: 'nios-cache-refresh',
+      severity: 'low',
+      source: 'NIOS',
+      status: 'REAL' as NiosDataStatus,
+      problem: 'La caché de los dashboards administrativos fue invalidada recientemente.',
+      cause: `Next.js unstable_cache se invalidó a las ${lastCacheInvalidationAt}; la próxima petición recalculará desde Firestore.`,
+      impact: 'Los datos actualizados estarán disponibles tras la siguiente carga del panel.',
+      recommendedAction: 'Ninguna; la caché se encuentra dentro de la ventana de invalidación.',
+      action: 'NO_ACTION',
+      autoFixAvailable: false,
+      requiresHuman: false,
+      expectedResult: 'El dashboard reflejará los datos más recientes en la siguiente petición.',
+      lastAttemptAt: lastCacheInvalidationAt,
+      dataAgeHours,
+      confidence: 90,
+    };
+  }
+
   return {
     id: 'nios-cache-refresh',
     severity: 'low',
@@ -356,7 +383,7 @@ function niosDiagnostic(): NiosDiagnostic {
     requiresHuman: false,
     expectedResult: 'Caché de dashboards admin invalidada; la siguiente petición recalculará desde Firestore.',
     lastAttemptAt: new Date().toISOString(),
-    dataAgeHours: 0,
+    dataAgeHours,
     confidence: 90,
   };
 }
@@ -405,6 +432,7 @@ function adSenseDiagnostic(): NiosDiagnostic {
 export function generateNiosDiagnostics(
   gsc: GSCSnapshot | null,
   ga4: GA4Snapshot | null,
+  lastCacheInvalidationAt?: string | null,
 ): NiosDiagnostic[] {
-  return [gscDiagnostic(gsc), ga4Diagnostic(ga4), adSenseDiagnostic(), niosDiagnostic()];
+  return [gscDiagnostic(gsc), ga4Diagnostic(ga4), adSenseDiagnostic(), niosDiagnostic(lastCacheInvalidationAt)];
 }

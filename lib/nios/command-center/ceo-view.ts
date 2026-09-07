@@ -43,7 +43,7 @@ export function buildMediaHealth(cc: BusinessCommandCenter): MediaHealth {
   const authority = clampScore(cc.authority.score);
   const home = clampScore(cc.home.score);
   const seo = clampScore((cc.trust.pillars.find((p) => p.id === 'experience')?.score || 0));
-  const distribution = clampScore(cc.distribution.pending > 0 ? 80 : 50);
+  const distribution = clampScore(cc.distribution.plans[0]?.score ?? 0);
   const business = clampScore(cc.business.score);
 
   const pillars = [

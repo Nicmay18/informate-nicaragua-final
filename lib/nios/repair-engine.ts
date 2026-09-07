@@ -277,14 +277,21 @@ async function repairSnapshotForDate(
   logger.info(`[repair-engine] Repaired snapshot ${date} with ${articles.length} articles`);
 }
 
-async function repairAdminCache(): Promise<NiosRepairVerification> {
-  const tags = ['dashboard-calidad', 'nios-daily-snapshot', 'nios-snapshot', 'noticias'];
+async function repairAdminCache(db: Firestore): Promise<NiosRepairVerification> {
+  const tags = ['dashboard-calidad', 'nios-daily-snapshot', 'nios-snapshot', 'noticias', 'nios-telemetry'];
   const before = { tags };
   try {
     tags.forEach((tag) => revalidateTag(tag));
+    const invalidatedAt = new Date().toISOString();
+    await db.collection('nios_cache_invalidations').doc('latest').set({
+      invalidatedAt,
+      tags,
+      source: 'repair-engine',
+      createdAt: invalidatedAt,
+    });
     return {
       before,
-      after: { tags, invalidatedAt: new Date().toISOString() },
+      after: { tags, invalidatedAt },
       verified: true,
       message: `Caché de administración invalidada: ${tags.join(', ')}.`,
     };
@@ -334,7 +341,7 @@ async function executeRepair(
   if (action.id === 'nios-snapshot-inconsistent') {
     verification = await repairSnapshotConsistency(state);
   } else if (action.id === 'nios-cache-refresh' || action.diagnostic.action === 'INVALIDATE_CACHE') {
-    verification = await repairAdminCache();
+    verification = await repairAdminCache(state.db);
   } else {
     verification = {
       before: action.before ?? {},

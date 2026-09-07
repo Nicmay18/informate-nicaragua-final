@@ -111,7 +111,7 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
     getHistoricalSnapshots(db, 14),
   ]);
 
-  const [reliability, alerts, telemetryHistory] = await Promise.all([
+  const [reliability, alerts, telemetryHistory, lastCacheInvalidationAt] = await Promise.all([
     buildReliabilitySnapshot(db, 7),
     getActiveAlerts(db, 7),
     db
@@ -120,6 +120,11 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
       .limit(7)
       .get()
       .then((s) => s.docs.map((d) => d.data() as NiosTelemetryDocument)),
+    db
+      .collection('nios_cache_invalidations')
+      .doc('latest')
+      .get()
+      .then((d) => (d.exists ? ((d.data() as { invalidatedAt?: string }).invalidatedAt ?? null) : null)),
   ]);
 
   const telemetry = telemetryHistory[0] || null;
@@ -204,7 +209,7 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
     ? Math.max(0, Math.round((now.getTime() - new Date(lastRunAt).getTime()) / 36e5))
     : null;
   const stale = dataAgeHours === null || dataAgeHours > 25;
-  const diagnostics = generateNiosDiagnostics(snapshot?.gsc ?? null, snapshot?.ga4 ?? null);
+  const diagnostics = generateNiosDiagnostics(snapshot?.gsc ?? null, snapshot?.ga4 ?? null, lastCacheInvalidationAt);
 
   const data: CeoVerdictInput = {
     snapshot,

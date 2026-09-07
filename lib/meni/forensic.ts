@@ -123,10 +123,11 @@ function esCoberturaEventoPasado(input: NoticiaInput): boolean {
 }
 
 type ForensicBehavior = 'REQUERIDO' | 'OPCIONAL' | 'NO_APLICA';
-type ForensicMode = 'actualidad' | 'politica_nacional' | 'economia' | 'salud' | 'turismo_guia' | 'turismo_cobertura' | 'general';
+type ForensicMode = 'actualidad' | 'politica_nacional' | 'economia' | 'salud' | 'turismo_guia' | 'turismo_cobertura' | 'gastronomia' | 'general';
 
 function getForensicMode(profile: MeniContentProfile, input: NoticiaInput): ForensicMode {
-  if (profile === 'turismo' || profile === 'gastronomia') {
+  if (profile === 'gastronomia') return 'gastronomia';
+  if (profile === 'turismo') {
     if (esGuiaTuristica(input)) return 'turismo_guia';
     if (esCoberturaEventoPasado(input)) return 'turismo_cobertura';
     const texto = fullText(input);
@@ -152,35 +153,52 @@ function behaviorFor(
 ): ForensicBehavior {
   switch (tipo) {
     case 'atribucionPeriodistica':
-      return mode === 'general' ? 'OPCIONAL' : 'REQUERIDO';
+      // Notas gastronómicas pueden construirse a partir de documentación
+      // institucional, recetas, testimonios y curaduría; la atribución de
+      // fuente directa es valiosa pero no obligatoria en cada párrafo.
+      if (mode === 'gastronomia' || mode === 'general') return 'OPCIONAL';
+      return 'REQUERIDO';
     case 'citaDirecta':
       if (mode === 'politica_nacional') return 'REQUERIDO';
-      if (mode === 'turismo_guia' || mode === 'turismo_cobertura' || mode === 'economia' || mode === 'salud') return 'OPCIONAL';
+      if (mode === 'gastronomia' || mode === 'turismo_guia' || mode === 'turismo_cobertura' || mode === 'economia' || mode === 'salud') return 'OPCIONAL';
       return 'NO_APLICA';
     case 'precios':
-      if (mode === 'economia' || mode === 'turismo_guia') return 'REQUERIDO';
+      if (mode === 'economia') return 'REQUERIDO';
+      if (mode === 'gastronomia' || mode === 'turismo_guia') return 'OPCIONAL';
       return 'NO_APLICA';
     case 'costos':
       if (mode === 'economia') return 'REQUERIDO';
-      if (mode === 'turismo_guia') return 'OPCIONAL';
+      if (mode === 'gastronomia' || mode === 'turismo_guia') return 'OPCIONAL';
       return 'NO_APLICA';
     case 'horarios':
-      return mode === 'turismo_guia' ? 'REQUERIDO' : 'NO_APLICA';
+      if (mode === 'turismo_guia') return 'REQUERIDO';
+      if (mode === 'gastronomia') return 'OPCIONAL';
+      return 'NO_APLICA';
     case 'ubicacion':
       if (mode === 'turismo_guia' || mode === 'turismo_cobertura') return 'REQUERIDO';
+      if (mode === 'gastronomia') return 'OPCIONAL';
       return 'NO_APLICA';
     case 'comoLlegar':
-      return mode === 'turismo_guia' ? 'REQUERIDO' : 'NO_APLICA';
+      if (mode === 'turismo_guia') return 'REQUERIDO';
+      if (mode === 'gastronomia') return 'OPCIONAL';
+      return 'NO_APLICA';
     case 'condicionesVisita':
-      return mode === 'turismo_guia' ? 'REQUERIDO' : 'NO_APLICA';
+      if (mode === 'turismo_guia') return 'REQUERIDO';
+      if (mode === 'gastronomia') return 'OPCIONAL';
+      return 'NO_APLICA';
     case 'recomendaciones':
       if (mode === 'turismo_guia') return 'REQUERIDO';
+      if (mode === 'gastronomia') return 'OPCIONAL';
       if (mode === 'salud' && contienePalabras(fullText(input), ['prevenir', 'evitar', 'cuidar', 'sintoma', 'prevencion'])) return 'OPCIONAL';
       return 'NO_APLICA';
     case 'telefonos':
-      return mode === 'turismo_guia' ? 'REQUERIDO' : 'NO_APLICA';
+      if (mode === 'turismo_guia') return 'REQUERIDO';
+      if (mode === 'gastronomia') return 'OPCIONAL';
+      return 'NO_APLICA';
     case 'direcciones':
-      return mode === 'turismo_guia' ? 'REQUERIDO' : 'NO_APLICA';
+      if (mode === 'turismo_guia') return 'REQUERIDO';
+      if (mode === 'gastronomia') return 'OPCIONAL';
+      return 'NO_APLICA';
     default:
       return 'NO_APLICA';
   }
@@ -215,6 +233,32 @@ const EVIDENCIA_LABELS: Record<EvidenciaTipo, string> = {
   comoLlegar: 'Indicaciones de cómo llegar',
   ubicacion: 'Ubicación del lugar o evento',
 };
+
+export function detectAportePropioGastronomia(input: NoticiaInput): { tiene: boolean; items: string[] } {
+  const texto = fullText(input);
+  const items: string[] = [];
+
+  const fuentesPrimarias = /\b(?:asale|real academia|academia real|academia nicarag[uü]ense|mined|iber\s*cocinas|unan-managua|unan managua|testimonio|entrevista|receta\s+original|tradición\s+familiar|voz\s+de\s+nicaragua)\b/i;
+  if (fuentesPrimarias.test(texto)) items.push('fuentes primarias o curaduría documental');
+
+  const comparacionVariantes = /\b(?:variante|version|ver[ií]sion|diferente\s+forma|diferente\s+manera|cada\s+familia|cada\s+region|en\s+managua|en\s+le[oó]n|en\s+granada|de\s+una\s+forma|de\s+otra\s+forma|una\s+prepara|otra\s+prepara|se\s+prepara)\b/i;
+  if (comparacionVariantes.test(texto)) items.push('comparación o variación de recetas');
+
+  const contextoHistorico = /\b(?:origen|historia|desde\s+hace|a[nñ]os?\s+de\s+tradici[oó]n|tradicional|herencia\s+cultural|patrimonio\s+gastron[oó]mico|cultura\s+alimentaria|identidad\s+nacional)\b/i;
+  if (contextoHistorico.test(texto)) items.push('contexto histórico o cultural');
+
+  const diferenciasRecetas = /\b(?:mientras\s+que|aunque|sin\s+embargo|pero|algunas?\s+agrega|otras?\s+agrega|diferencia\s+principal|lo\s+diferencia|lo\s+caracteriza|ingredientes?\s+distinto)\b/i;
+  if (diferenciasRecetas.test(texto)) items.push('identificación de diferencias entre recetas');
+
+  const explicacionSignificado = /\b(?:significa|representa|es\s+una?|se\s+convierte|más\s+que|significado\s+gastron[oó]mico|sentido\s+cultural|simbolo\s+de)\b/i;
+  if (explicacionSignificado.test(texto)) items.push('explicación del significado gastronómico');
+
+  // Si hay al menos 2 señales, se considera que la nota aporta algo propio
+  // como curaduría cultural: no requiere reporteo de campo ni marca propia.
+  const tiene = items.length >= 2 && /\b(?:receta|plato|comida|sabor|ingrediente|gastronom[ií]a|cocina|repocheta|gallo\s+pinto|nacatamal|quesillo|vigor[oó]n)\b/i.test(texto);
+
+  return { tiene, items };
+}
 
 function buildForensicChecks(input: NoticiaInput, mode: ForensicMode): MeniForenseEvidencia[] {
   const texto = fullText(input);

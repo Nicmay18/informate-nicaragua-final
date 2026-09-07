@@ -488,40 +488,6 @@ async function closeApprovalsForIncident(
   return closed;
 }
 
-async function closeOrphanedApprovals(db: Firestore): Promise<number> {
-  const snap = await db.collection(COLLECTION).where('kind', '==', 'operational_approval').limit(200).get();
-  const approvals = snap.docs
-    .map((d) => ({ id: d.id, data: d.data() as OperationalApproval, ref: d.ref }))
-    .filter((a) => a.data.estado === 'PENDING');
-
-  const byIncident: Record<string, typeof approvals[0][]> = {};
-  for (const a of approvals) {
-    byIncident[a.data.incidentId] = byIncident[a.data.incidentId] || [];
-    byIncident[a.data.incidentId].push(a);
-  }
-
-  let closed = 0;
-  for (const incidentId in byIncident) {
-    const list = byIncident[incidentId].sort((a, b) =>
-      (b.data.createdAt || '').localeCompare(a.data.createdAt || ''),
-    );
-    const incidentDoc = await db.collection(COLLECTION).doc(incidentId).get();
-    const incident = incidentDoc.exists ? (incidentDoc.data() as OperationalIncident) : null;
-    const keepOnlyNewest = incident?.state === 'ACTION_REQUIRED';
-    for (let i = 0; i < list.length; i++) {
-      if (!keepOnlyNewest || i > 0) {
-        await list[i].ref.update({
-          estado: 'EXPIRED',
-          updatedAt: now(),
-          razonCierre: keepOnlyNewest && i > 0 ? 'Aprobación duplicada' : 'Incidente no requiere aprobación activa',
-        });
-        closed++;
-      }
-    }
-  }
-  return closed;
-}
-
 async function recordOperationalMemory(
   db: Firestore,
   incident: OperationalIncident,
@@ -585,9 +551,8 @@ export async function processOperationalConflicts(
   const result: OperationalLoopResult = { incidents: [], approvals: [], jobs: [], memory: [], patterns: [], summary: '' };
   const enqueue = options?.enqueueJob ?? defaultEnqueueOperationalRepair;
 
-  // Reconciliar aprobaciones acumuladas en ejecuciones previas.
-  await closeOrphanedApprovals(db);
-  await expireStaleApprovals(db, 7);
+  // Reconciliar aprobaciones acumuladas: cierra huérfanas/terminales, unifica duplicados y marca externas.
+  await reconcileOperationalApprovals(db);
 
   for (const conflict of conflicts) {
     let incident = await findActiveIncidentByConflictId(db, conflict.id);
@@ -599,6 +564,19 @@ export async function processOperationalConflicts(
 
     // Si ya está en estado terminal, no lo reprocesamos.
     if (['RESOLVED', 'FAILED', 'ESCALATED'].includes(incident.state)) {
+      result.incidents.push(incident);
+      continue;
+    }
+
+    // Si el incidente ya avanzó más allá de DETECTED (p.ej. ACTION_REQUIRED
+    // esperando aprobación humana, o RUNNING/VERIFICATION en ejecución), no
+    // lo reprocesamos aquí: forzar una transición a INVESTIGATING desde esos
+    // estados es una transición inválida (ver ALLOWED_TRANSITIONS) y hacía
+    // que el ciclo lanzara una excepción en cada corrida, abortando el
+    // procesamiento del resto de conflictos. Esos estados ya se gestionan
+    // por sus propios flujos (aprobación humana, ejecución de reparación,
+    // verificación manual).
+    if (incident.state !== 'DETECTED') {
       result.incidents.push(incident);
       continue;
     }
@@ -1123,17 +1101,13 @@ export async function getOperationalFeed(db: Firestore, limit = 20): Promise<str
 
 export async function getOperationalSummary(db: Firestore): Promise<OperationalSummary> {
   // Evita índices compuestos: consulta por kind y filtra/ordena en memoria.
-  const [incidentsSnap, approvalsSnap, teamStatuses] = await Promise.all([
+  const [incidentsSnap, approvals, teamStatuses] = await Promise.all([
     db
       .collection(COLLECTION)
       .where('kind', '==', 'operational_incident')
       .limit(200)
       .get(),
-    db
-      .collection(COLLECTION)
-      .where('kind', '==', 'operational_approval')
-      .limit(100)
-      .get(),
+    getRealPendingApprovals(db),
     getOperationalTeamStatuses(db),
   ]);
 
@@ -1141,14 +1115,9 @@ export async function getOperationalSummary(db: Firestore): Promise<OperationalS
     .map((d) => d.data() as OperationalIncident)
     .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''))
     .slice(0, 100);
-  const approvals = approvalsSnap.docs
-    .map((d) => d.data() as OperationalApproval)
-    .filter((a) => a.estado === 'PENDING')
-    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))
-    .slice(0, 50);
   const feed = await getOperationalFeed(db, 20);
 
-  return { teams: teamStatuses, incidents, approvals, feed };
+  return { teams: teamStatuses, incidents, approvals: approvals.slice(0, 50), feed };
 }
 
 export async function runOperationalVerification(db: Firestore, incidentId: string): Promise<Record<string, unknown>> {
@@ -1179,6 +1148,132 @@ export async function runOperationalVerification(db: Firestore, incidentId: stri
   await closeApprovalsForIncident(db, incidentId, 'Verificación manual fallida');
   await recordOperationalMemory(db, incident, verification.message, 'FAILED');
   return { verified: false, state: 'FAILED' };
+}
+
+export interface ApprovalReconciliationResult {
+  pending: OperationalApproval[];
+  blockedExternal: OperationalApproval[];
+  orphanTerminal: OperationalApproval[];
+  duplicate: OperationalApproval[];
+  totalPendingReviewed: number;
+}
+
+function byCreatedAtDesc<T extends { createdAt?: string }>(a: T, b: T): number {
+  return (b.createdAt || '').localeCompare(a.createdAt || '');
+}
+
+async function fetchApprovalsWithIncidentState(
+  db: Firestore,
+): Promise<ApprovalReconciliationResult> {
+  const snap = await db.collection(COLLECTION).where('kind', '==', 'operational_approval').limit(500).get();
+  const all = snap.docs.map((d) => {
+    const data = d.data() as OperationalApproval;
+    return { ...data, id: d.id };
+  });
+  const pending = all.filter((a) => a.estado === 'PENDING').sort(byCreatedAtDesc);
+
+  const byIncident: Record<string, OperationalApproval[]> = {};
+  for (const a of pending) {
+    byIncident[a.incidentId] = byIncident[a.incidentId] || [];
+    byIncident[a.incidentId].push(a);
+  }
+
+  const result: ApprovalReconciliationResult = {
+    pending: [],
+    blockedExternal: [],
+    orphanTerminal: [],
+    duplicate: [],
+    totalPendingReviewed: pending.length,
+  };
+
+  for (const [incidentId, list] of Object.entries(byIncident)) {
+    const incidentDoc = await db.collection(COLLECTION).doc(incidentId).get();
+    const incident = incidentDoc.exists ? (incidentDoc.data() as OperationalIncident) : null;
+    const isRealIncident = incident && incident.kind === 'operational_incident';
+    const state = isRealIncident ? incident.state : null;
+    const terminal = ['RESOLVED', 'FAILED', 'ESCALATED'];
+
+    if (!isRealIncident || state === null || terminal.includes(state)) {
+      result.orphanTerminal.push(...list);
+      continue;
+    }
+
+    const kept = list.filter((a) => a.estado === 'PENDING').sort(byCreatedAtDesc);
+    if (kept.length === 0) continue;
+
+    if (kept.some((a) => a.action === 'configure-source' || a.estado === 'BLOCKED_EXTERNAL')) {
+      result.blockedExternal.push(...kept);
+      continue;
+    }
+
+    if (state === 'ACTION_REQUIRED' && kept.length > 1) {
+      result.pending.push(kept[0]);
+      result.duplicate.push(...kept.slice(1));
+      continue;
+    }
+
+    if (state === 'ACTION_REQUIRED') {
+      result.pending.push(...kept);
+      continue;
+    }
+
+    // Incidente en DETECTED/INVESTIGATING/VERIFICATION: aún no requiere aprobación.
+    result.orphanTerminal.push(...kept);
+  }
+
+  return result;
+}
+
+export async function getRealPendingApprovals(db: Firestore): Promise<OperationalApproval[]> {
+  const reconciled = await fetchApprovalsWithIncidentState(db);
+  return reconciled.pending;
+}
+
+export async function reconcileOperationalApprovals(db: Firestore): Promise<{
+  pending: number;
+  blockedExternal: number;
+  orphanTerminal: number;
+  duplicate: number;
+}> {
+  const reconciled = await fetchApprovalsWithIncidentState(db);
+
+  for (const a of reconciled.orphanTerminal) {
+    await db.collection(COLLECTION).doc(a.id).update({
+      estado: 'EXPIRED',
+      updatedAt: now(),
+      razonCierre: 'Aprobación huérfana o incidente terminal; no requiere acción humana',
+    });
+  }
+
+  for (const a of reconciled.duplicate) {
+    await db.collection(COLLECTION).doc(a.id).update({
+      estado: 'EXPIRED',
+      updatedAt: now(),
+      razonCierre: 'Aprobación duplicada; se conserva la más reciente',
+    });
+  }
+
+  for (const a of reconciled.blockedExternal) {
+    await db.collection(COLLECTION).doc(a.id).update({
+      estado: 'BLOCKED_EXTERNAL',
+      updatedAt: now(),
+      razonCierre: 'Dependencia externa; no es aprobación humana',
+    });
+  }
+
+  logger.info('[operational-loop] Aprobaciones reconciliadas', {
+    pending: reconciled.pending.length,
+    blockedExternal: reconciled.blockedExternal.length,
+    orphanTerminal: reconciled.orphanTerminal.length,
+    duplicate: reconciled.duplicate.length,
+  });
+
+  return {
+    pending: reconciled.pending.length,
+    blockedExternal: reconciled.blockedExternal.length,
+    orphanTerminal: reconciled.orphanTerminal.length,
+    duplicate: reconciled.duplicate.length,
+  };
 }
 
 export async function loadNoticiasAsInputs(db: Firestore, limit = 3): Promise<NoticiaInput[]> {

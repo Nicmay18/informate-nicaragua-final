@@ -172,7 +172,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   const eeat = analyzeEEAT(evaluacion);
   const discover = analyzeDiscover(evaluacion);
   const adsense = analyzeAdSense(evaluacion);
-  const valorEditorial = buildValorEditorial(evaluacion);
+  const valorEditorial = buildValorEditorial(evaluacion, input, perfil);
   const auditoria = audit(evaluacion);
 
   const textoPlano = evaluacion.evidence.textoPlano ?? (input.contenido || '');

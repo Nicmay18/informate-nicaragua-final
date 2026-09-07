@@ -8,6 +8,13 @@ import { enqueueJob } from './queue';
 const MAX_JOB_RUNTIME_MS = 30 * 60 * 1000;
 const PENDING_QUEUE_LIMIT = 100;
 
+// Componentes para los que existe un worker de recuperación real
+// (ver watchdogRecoveryWorker en ./workers.ts). Para el resto, no tiene
+// sentido encolar un job de recuperación: siempre fallaría con
+// "no implementado" y, sin dedupKey, se acumularía un job nuevo en cada
+// corrida del watchdog, inflando la cola indefinidamente.
+const RECOVERABLE_COMPONENTS = new Set(['health-check', 'site-availability', 'growth', 'growth-check', 'monetization-check']);
+
 export async function runWatchdog(): Promise<{
   health: string;
   stale: string[];
@@ -30,14 +37,19 @@ export async function runWatchdog(): Promise<{
         status: 'active',
         detectedAt: now.toISOString(),
       });
-      if (component !== 'watchdog') {
+      if (component !== 'watchdog' && RECOVERABLE_COMPONENTS.has(component)) {
+        const hourBucket = new Date().toISOString().slice(0, 13);
         await enqueueJob({
           type: 'watchdog',
           priority: 'P0',
           source: 'watchdog',
           payload: { component },
+          dedupKey: `watchdog:recovery:${component}:${hourBucket}`,
         });
         actions.push(`recovery-job-for-${component}`);
+      } else if (component !== 'watchdog') {
+        logger.warn('[depto-watchdog] Componente crítico sin recuperación automática disponible', { component });
+        actions.push(`no-recovery-available-for-${component}`);
       }
     }
   }

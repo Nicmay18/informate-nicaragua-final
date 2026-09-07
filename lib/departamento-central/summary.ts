@@ -3,6 +3,7 @@ import { getLatestDepartamentoReport } from './store';
 import { getDepartmentHealth } from './heartbeat';
 import { getWorkDone24h, countJobsByStatus, getRecentJobs } from './queue';
 import { getIncidentsSummary } from './incidents';
+import { getRealPendingApprovals } from '@/lib/nios/operational-loop';
 import type { DepartamentoWorkSummary } from './types';
 
 export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSummary> {
@@ -34,12 +35,10 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
   const [actionsPending, health, operationalApprovals] = await Promise.all([
     db.collection('nios_actions').where('status', '==', 'PENDING').count().get(),
     getDepartmentHealth(),
-    db.collection('nios_memory').where('kind', '==', 'operational_approval').limit(200).get(),
+    getRealPendingApprovals(db),
   ]);
 
-  const operationalApprovalsPending = operationalApprovals.docs.filter(
-    (d) => (d.data() as { estado?: string }).estado === 'PENDING',
-  ).length;
+  const operationalApprovalsPending = operationalApprovals.length;
 
   const lastWorkAt =
     (latestReport?.runAt) ??

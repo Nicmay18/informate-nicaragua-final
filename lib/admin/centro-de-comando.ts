@@ -20,7 +20,7 @@ import type {
   DeptoJob,
 } from '@/lib/departamento-central/types';
 import type { NiosAction } from '@/lib/nios/action-engine';
-import { getOperationalSummary, type OperationalSummary } from '@/lib/nios/operational-loop';
+import { getOperationalSummary, getRealPendingApprovals, type OperationalSummary } from '@/lib/nios/operational-loop';
 import type { Noticia } from '@/lib/types';
 import type { NoticiaInput } from '@/lib/meni';
 
@@ -130,9 +130,9 @@ function buildAutonomyReport(record: CEOLoopRecord): Record<string, 'REAL' | 'PA
 async function getPendingActions(): Promise<PendingAction[]> {
   try {
     const db = getAdminDb();
-    const [actionsSnap, approvalsSnap] = await Promise.all([
+    const [actionsSnap, realApprovals] = await Promise.all([
       db.collection('nios_actions').where('status', '==', 'PENDING').limit(100).get(),
-      db.collection('nios_memory').where('kind', '==', 'operational_approval').limit(200).get(),
+      getRealPendingApprovals(db),
     ]);
 
     const fromActions = actionsSnap.docs.map((d) => {
@@ -151,24 +151,18 @@ async function getPendingActions(): Promise<PendingAction[]> {
       };
     });
 
-    const fromApprovals = approvalsSnap.docs
-      .map((d) => {
-        const a = d.data() as Record<string, any>;
-        if (a.estado !== 'PENDING') return null;
-        return {
-          id: a.id || d.id,
-          title: (a.motivo as string) || (a.action as string) || '(aprobación operacional)',
-          evidence: a.evidencia ? JSON.stringify(a.evidencia) : '',
-          proposal: (a.efectoEsperado as string) || (a.action as string) || '',
-          kind: 'operational_approval',
-          impact: (a.equipo as string) || '',
-          confidence: String(a.riesgo ?? ''),
-          createdAt: (a.createdAt as string) || new Date().toISOString(),
-          articleId: null,
-          target: (a.action as string) || '',
-        };
-      })
-      .filter(Boolean) as PendingAction[];
+    const fromApprovals = realApprovals.map((a) => ({
+      id: a.id,
+      title: a.motivo || a.action || '(aprobación operacional)',
+      evidence: a.evidencia ? JSON.stringify(a.evidencia) : '',
+      proposal: a.efectoEsperado || a.action || '',
+      kind: 'operational_approval',
+      impact: a.equipo || '',
+      confidence: String(a.riesgo ?? ''),
+      createdAt: a.createdAt || new Date().toISOString(),
+      articleId: null,
+      target: a.action || '',
+    }));
 
     return [...fromActions, ...fromApprovals]
       .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''))

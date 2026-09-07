@@ -122,6 +122,7 @@ export function buildDistributionCommand(noticias: Noticia[], now = Date.now()):
       title: n.titulo,
       category: n.categoria,
       priority,
+      score,
       reason: `${reason} Score de distribución: ${score}.`,
       copies: buildCopies(n),
     };

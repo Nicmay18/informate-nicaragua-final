@@ -149,6 +149,7 @@ export interface DistributionPlan {
   title: string;
   category: string;
   priority: Severity;
+  score: number;
   reason: string;
   copies: ChannelCopy[];
 }

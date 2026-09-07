@@ -23,6 +23,13 @@ export function getExpectedInterval(component: string): number {
   return EXPECTED_INTERVALS[component] || CRON_DEFAULT_INTERVAL_MS;
 }
 
+// Componentes disparados por eventos (no por un cron periódico): sólo corren
+// cuando hay trabajo real que procesar (p.ej. un artículo nuevo). La ausencia
+// de ejecución durante el intervalo esperado NO significa una falla; sólo
+// significa que no hubo trabajo. Por eso se excluyen de la detección de
+// staleness por tiempo y se reportan según su último status real.
+const EVENT_DRIVEN_COMPONENTS = new Set(['article-pipeline']);
+
 export async function writeHeartbeat(
   component: DeptoHeartbeat['component'],
   status: DeptoHeartbeat['status'],
@@ -106,6 +113,20 @@ export async function getDepartmentHealth(): Promise<{
 
   for (const doc of snap.docs) {
     const h = doc.data() as DeptoHeartbeat;
+
+    if (EVENT_DRIVEN_COMPONENTS.has(h.component)) {
+      if (h.status === 'down') {
+        components[h.component] = 'CRITICAL';
+        worst = 'CRITICAL';
+      } else if (h.status === 'degraded') {
+        components[h.component] = 'DEGRADED';
+        if (worst === 'HEALTHY') worst = 'DEGRADED';
+      } else {
+        components[h.component] = 'HEALTHY';
+      }
+      continue;
+    }
+
     const last = new Date(h.lastRunAt).getTime();
     const expected = last + getExpectedInterval(h.component);
 
