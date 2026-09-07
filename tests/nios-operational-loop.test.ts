@@ -293,7 +293,11 @@ describe('NIOS Operational Loop', () => {
 
     expect(ga4Incident.team).toBe('GOOGLE');
     expect(meniIncident.team).toBe('FORENSE');
-    expect(result.approvals[0].estado).toBe('PENDING');
+
+    const ga4Approval = result.approvals.find((a) => a.incidentId === ga4Incident.id);
+    const meniApproval = result.approvals.find((a) => a.incidentId === meniIncident.id);
+    expect(ga4Approval?.estado).toBe('BLOCKED_EXTERNAL');
+    expect(meniApproval?.estado).toBe('PENDING');
   });
 
   it('aprueba una aprobación y pasa el incidente a RUNNING', async () => {

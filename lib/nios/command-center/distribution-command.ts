@@ -89,19 +89,28 @@ export function buildDistributionCommand(noticias: Noticia[], now = Date.now()):
 
   const scored = pool
     .map((n) => {
-      let score = n.vistas || 0;
-      if (n.categoria === 'Nacionales') score += 40;
-      if (n.categoria === 'Economía' || n.categoria === 'Tecnología') score += 25;
-      if (n.categoria === 'Sucesos') score -= 20;
-      if ((n.palabras || 0) >= 500) score += 15;
-      if (n.imagen && !n.imagen.includes('logo')) score += 10;
+      const views = n.vistas || 0;
+      let score = views;
+      // Solo aplicar bonificaciones si la nota ya generó tráfico real.
+      if (views > 0) {
+        if (n.categoria === 'Nacionales') score += 40;
+        if (n.categoria === 'Economía' || n.categoria === 'Tecnología') score += 25;
+        if (n.categoria === 'Sucesos') score -= 20;
+        if ((n.palabras || 0) >= 500) score += 15;
+        if (n.imagen && !n.imagen.includes('logo')) score += 10;
+      }
       return { n, score };
     })
     .sort((a, b) => b.score - a.score)
     .slice(0, 6);
 
-  const plans: DistributionPlan[] = scored.map(({ n, score }, i) => {
-    const priority: Severity = i === 0 ? 'critica' : i < 3 ? 'alta' : 'media';
+  const plans: DistributionPlan[] = scored.map(({ n, score }) => {
+    let priority: Severity;
+    if (score >= 60) priority = 'critica';
+    else if (score >= 30) priority = 'alta';
+    else if (score >= 10) priority = 'media';
+    else priority = 'baja';
+
     const reason =
       n.categoria === 'Sucesos'
         ? 'Distribuir con cuidado: alto alcance pero no construye marca.'

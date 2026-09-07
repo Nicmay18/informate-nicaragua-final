@@ -77,6 +77,58 @@ function titleForMetric(kind: NiosGrowthOpportunity['kind'], title: string): str
   return title;
 }
 
+export function makeCtrOpportunity(
+  slug: string,
+  page: { impressions: number; clicks: number; position: number; url?: string },
+): NiosGrowthOpportunity {
+  const ctr = page.impressions > 0 ? page.clicks / page.impressions : 0;
+  const url = page.url || `https://nicaraguainformate.com/noticias/${slug}`;
+  return {
+    kind: 'seo-page',
+    title: `Optimizar título de ${slug}`,
+    evidence: `${page.impressions} impresiones · ${page.clicks} clics · CTR ${(ctr * 100).toFixed(1)}% · posición ${page.position.toFixed(1)}`,
+    action: 'Preparar propuesta de título/meta para esta URL.',
+    expectedResult: 'Subir CTR y posición promedio.',
+    confidence: page.impressions >= 500 ? 'Alta' : 'Media',
+    impact: page.clicks >= 10 ? 'Alto' : page.clicks >= 1 ? 'Medio' : 'Bajo',
+    target: url,
+    before: { url, slug, impressions: page.impressions, clicks: page.clicks, ctr, position: page.position },
+  };
+}
+
+export async function proposeCtrExperiment(
+  slug: string,
+  page: { impressions: number; clicks: number; position: number; url?: string },
+): Promise<NiosAction | null> {
+  const opportunity = makeCtrOpportunity(slug, page);
+  const actions = await proposeActionsFromOpportunities([opportunity]);
+  return actions[0] || null;
+}
+
+export function makeRecirculationOpportunity(article: {
+  slug: string;
+  titulo: string;
+  resumen?: string;
+  vistas?: number;
+}): NiosGrowthOpportunity {
+  return {
+    kind: 'content-recirculation',
+    title: `Recircular "${article.titulo}"`,
+    evidence: `${article.vistas ?? 0} vistas acumuladas.`,
+    action: 'Preparar copias de redistribución para Telegram.',
+    expectedResult: 'Recuperar tráfico de contenido probado.',
+    confidence: (article.vistas ?? 0) >= 500 ? 'Alta' : 'Media',
+    impact: (article.vistas ?? 0) >= 1000 ? 'Alto' : 'Medio',
+    target: article.slug,
+    before: { slug: article.slug, titulo: article.titulo, resumen: article.resumen, vistas: article.vistas },
+  };
+}
+
+export async function proposeRecirculationActions(articles: { slug: string; titulo: string; resumen?: string; vistas?: number }[]): Promise<NiosAction[]> {
+  const opportunities = articles.slice(0, 4).map(makeRecirculationOpportunity);
+  return proposeActionsFromOpportunities(opportunities);
+}
+
 async function findExistingProposal(opportunityId: string): Promise<NiosAction | null> {
   try {
     const snap = await db().collection('nios_actions').where('opportunityId', '==', opportunityId).limit(5).get();

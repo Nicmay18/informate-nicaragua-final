@@ -99,7 +99,7 @@ export interface OperationalIncident {
   attemptCount: number;
 }
 
-export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXPIRED';
+export type ApprovalStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXPIRED' | 'BLOCKED_EXTERNAL';
 
 export interface OperationalApproval {
   id: string;
@@ -297,6 +297,17 @@ function requiresApproval(conflict: NiosConflict, diagnosis: OperationalDiagnosi
   return true;
 }
 
+function isExternalSourceConflict(conflict: NiosConflict): boolean {
+  return (
+    (conflict.category === 'traffic-source' || conflict.category === 'source-failure') &&
+    ['NO_DATA', 'ACCESS_BLOCKED', 'INVALID_CONFIGURATION', 'SOURCE_FAILURE'].includes(conflict.status)
+  );
+}
+
+function isHumanApprovalSummary(conflict: NiosConflict): boolean {
+  return conflict.category === 'human-approval' && conflict.status === 'HUMAN_APPROVAL_REQUIRED';
+}
+
 async function findActiveIncidentByConflictId(
   db: Firestore,
   conflictId: string,
@@ -399,6 +410,7 @@ async function createApproval(
   db: Firestore,
   incident: OperationalIncident,
   diagnosis: OperationalDiagnosis,
+  status: ApprovalStatus = 'PENDING',
 ): Promise<OperationalApproval> {
   const ref = db.collection(COLLECTION).doc();
   const approval: OperationalApproval = {
@@ -413,11 +425,101 @@ async function createApproval(
     solicitante: 'NIOS',
     equipo: diagnosis.responsibleTeam,
     efectoEsperado: `Resolución controlada: ${diagnosis.action}`,
-    estado: 'PENDING',
+    estado: status,
     createdAt: now(),
   };
   await ref.set(sanitize(approval) as any);
   return approval;
+}
+
+async function findActiveApprovalByIncidentId(
+  db: Firestore,
+  incidentId: string,
+): Promise<OperationalApproval | null> {
+  const snap = await db.collection(COLLECTION).where('incidentId', '==', incidentId).limit(20).get();
+  const active = snap.docs
+    .map((d) => d.data() as OperationalApproval)
+    .filter((a) => a.kind === 'operational_approval' && !['APPROVED', 'REJECTED', 'EXPIRED'].includes(a.estado))
+    .sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+  return active[0] || null;
+}
+
+async function createOrUpdateApproval(
+  db: Firestore,
+  incident: OperationalIncident,
+  diagnosis: OperationalDiagnosis,
+  status: ApprovalStatus = 'PENDING',
+): Promise<OperationalApproval> {
+  const existing = await findActiveApprovalByIncidentId(db, incident.id);
+  if (existing) {
+    const ref = db.collection(COLLECTION).doc(existing.id);
+    const updated: OperationalApproval = {
+      ...existing,
+      action: diagnosis.action,
+      motivo: incident.description,
+      evidencia: incident.evidence,
+      impacto: incident.description,
+      riesgo: incident.severity === 'critical' ? 0.9 : incident.severity === 'warning' ? 0.5 : 0.2,
+      equipo: diagnosis.responsibleTeam,
+      efectoEsperado: `Resolución controlada: ${diagnosis.action}`,
+      estado: status,
+      updatedAt: now(),
+    };
+    await ref.set(sanitize(updated) as any, { merge: true });
+    return updated;
+  }
+  return createApproval(db, incident, diagnosis, status);
+}
+
+async function closeApprovalsForIncident(
+  db: Firestore,
+  incidentId: string,
+  reason = '',
+): Promise<number> {
+  const snap = await db.collection(COLLECTION).where('incidentId', '==', incidentId).limit(20).get();
+  let closed = 0;
+  for (const doc of snap.docs) {
+    const a = doc.data() as OperationalApproval;
+    if (a.kind === 'operational_approval' && a.estado === 'PENDING') {
+      await doc.ref.update({ estado: 'EXPIRED', updatedAt: now(), razonCierre: reason });
+      closed++;
+    }
+  }
+  return closed;
+}
+
+async function closeOrphanedApprovals(db: Firestore): Promise<number> {
+  const snap = await db.collection(COLLECTION).where('kind', '==', 'operational_approval').limit(200).get();
+  const approvals = snap.docs
+    .map((d) => ({ id: d.id, data: d.data() as OperationalApproval, ref: d.ref }))
+    .filter((a) => a.data.estado === 'PENDING');
+
+  const byIncident: Record<string, typeof approvals[0][]> = {};
+  for (const a of approvals) {
+    byIncident[a.data.incidentId] = byIncident[a.data.incidentId] || [];
+    byIncident[a.data.incidentId].push(a);
+  }
+
+  let closed = 0;
+  for (const incidentId in byIncident) {
+    const list = byIncident[incidentId].sort((a, b) =>
+      (b.data.createdAt || '').localeCompare(a.data.createdAt || ''),
+    );
+    const incidentDoc = await db.collection(COLLECTION).doc(incidentId).get();
+    const incident = incidentDoc.exists ? (incidentDoc.data() as OperationalIncident) : null;
+    const keepOnlyNewest = incident?.state === 'ACTION_REQUIRED';
+    for (let i = 0; i < list.length; i++) {
+      if (!keepOnlyNewest || i > 0) {
+        await list[i].ref.update({
+          estado: 'EXPIRED',
+          updatedAt: now(),
+          razonCierre: keepOnlyNewest && i > 0 ? 'Aprobación duplicada' : 'Incidente no requiere aprobación activa',
+        });
+        closed++;
+      }
+    }
+  }
+  return closed;
 }
 
 async function recordOperationalMemory(
@@ -483,6 +585,10 @@ export async function processOperationalConflicts(
   const result: OperationalLoopResult = { incidents: [], approvals: [], jobs: [], memory: [], patterns: [], summary: '' };
   const enqueue = options?.enqueueJob ?? defaultEnqueueOperationalRepair;
 
+  // Reconciliar aprobaciones acumuladas en ejecuciones previas.
+  await closeOrphanedApprovals(db);
+  await expireStaleApprovals(db, 7);
+
   for (const conflict of conflicts) {
     let incident = await findActiveIncidentByConflictId(db, conflict.id);
 
@@ -505,6 +611,7 @@ export async function processOperationalConflicts(
     await updateIncident(db, incident);
 
     if (diagnosis.autoRepairable) {
+      await closeApprovalsForIncident(db, incident.id, 'Conflicto ahora reparable automáticamente');
       await transitionIncident(
         db,
         incident,
@@ -539,6 +646,33 @@ export async function processOperationalConflicts(
           { maxAttempts: options.maxAttempts },
         );
       }
+    } else if (isHumanApprovalSummary(conflict)) {
+      // Decisiones del CEO se trackean en niosLoop.record.pendingHuman / nios_actions.
+      await closeApprovalsForIncident(db, incident.id, 'Decisiones humanas gestionadas en el ciclo CEO');
+      await transitionIncident(
+        db,
+        incident,
+        'ESCALATED',
+        'Decisiones humanas del CEO gestionadas en el ciclo de negocio; no se duplican como aprobación operativa',
+        'CEO',
+        { pendingHuman: conflict.evidence?.pendingHuman },
+      );
+      const memory = await recordOperationalMemory(db, incident, 'Decisiones del CEO trackeadas en niosLoop', 'ESCALATED');
+      result.memory.push(memory);
+    } else if (isExternalSourceConflict(conflict)) {
+      // Dependencias externas (credenciales, permisos) no son aprobaciones humanas pendientes.
+      await transitionIncident(
+        db,
+        incident,
+        'ACTION_REQUIRED',
+        `Dependencia externa: ${diagnosis.action}`,
+        diagnosis.responsibleTeam,
+        { external: true, action: diagnosis.action },
+      );
+      const approval = await createOrUpdateApproval(db, incident, diagnosis, 'BLOCKED_EXTERNAL');
+      incident.approvalId = approval.id;
+      await updateIncident(db, incident);
+      result.approvals.push(approval);
     } else if (requiresApproval(conflict, diagnosis)) {
       await transitionIncident(
         db,
@@ -548,11 +682,12 @@ export async function processOperationalConflicts(
         diagnosis.responsibleTeam,
         { requiresApproval: true },
       );
-      const approval = await createApproval(db, incident, diagnosis);
+      const approval = await createOrUpdateApproval(db, incident, diagnosis, 'PENDING');
       incident.approvalId = approval.id;
       await updateIncident(db, incident);
       result.approvals.push(approval);
     } else {
+      await closeApprovalsForIncident(db, incident.id, 'Sin acción requerida; solo monitoreo');
       await transitionIncident(
         db,
         incident,
@@ -631,6 +766,7 @@ export async function executeOperationalRepair(
 
     if (verification.verified) {
       await transitionIncident(db, incident, 'RESOLVED', verification.message, team, verification.after, 'RESOLVED');
+      await closeApprovalsForIncident(db, incidentId, 'Reparación verificada');
       await recordOperationalMemory(db, incident, verification.message, 'RESOLVED');
       return { verified: true, message: verification.message, incidentId, state: 'RESOLVED' };
     }
@@ -645,11 +781,13 @@ export async function executeOperationalRepair(
         verification.after,
         'ESCALATED',
       );
+      await closeApprovalsForIncident(db, incidentId, 'Escalado por máximo de intentos');
       await recordOperationalMemory(db, incident, verification.message, 'ESCALATED');
       return { verified: false, message: verification.message, incidentId, state: 'ESCALATED' };
     }
 
     await transitionIncident(db, incident, 'FAILED', `Verificación fallida: ${verification.message}`, team, verification.after, 'FAILED');
+    await closeApprovalsForIncident(db, incidentId, 'Reparación fallida');
     await recordOperationalMemory(db, incident, verification.message, 'FAILED');
     return { verified: false, message: verification.message, incidentId, state: 'FAILED' };
   } catch (err) {
@@ -658,11 +796,13 @@ export async function executeOperationalRepair(
 
     if (incident.attemptCount >= (options?.maxAttempts ?? MAX_ATTEMPTS)) {
       await transitionIncident(db, incident, 'ESCALATED', `Error en ejecución: ${message}`, team, undefined, 'ESCALATED');
+      await closeApprovalsForIncident(db, incidentId, 'Error en ejecución');
       await recordOperationalMemory(db, incident, message, 'ESCALATED');
       return { verified: false, error: message, incidentId, state: 'ESCALATED' };
     }
 
     await transitionIncident(db, incident, 'FAILED', `Error en ejecución: ${message}`, team, undefined, 'FAILED');
+    await closeApprovalsForIncident(db, incidentId, 'Error en ejecución');
     await recordOperationalMemory(db, incident, message, 'FAILED');
     return { verified: false, error: message, incidentId, state: 'FAILED' };
   }
@@ -1023,17 +1163,20 @@ export async function runOperationalVerification(db: Firestore, incidentId: stri
 
   if (verification.verified) {
     await transitionIncident(db, incident, 'RESOLVED', verification.message, team, verification.after, 'RESOLVED');
+    await closeApprovalsForIncident(db, incidentId, 'Verificación manual exitosa');
     await recordOperationalMemory(db, incident, verification.message, 'RESOLVED');
     return { verified: true, state: 'RESOLVED' };
   }
 
   if (incident.attemptCount >= MAX_ATTEMPTS) {
     await transitionIncident(db, incident, 'ESCALATED', verification.message, team, verification.after, 'ESCALATED');
+    await closeApprovalsForIncident(db, incidentId, 'Escalado por máximo de intentos');
     await recordOperationalMemory(db, incident, verification.message, 'ESCALATED');
     return { verified: false, state: 'ESCALATED' };
   }
 
   await transitionIncident(db, incident, 'FAILED', verification.message, team, verification.after, 'FAILED');
+  await closeApprovalsForIncident(db, incidentId, 'Verificación manual fallida');
   await recordOperationalMemory(db, incident, verification.message, 'FAILED');
   return { verified: false, state: 'FAILED' };
 }
