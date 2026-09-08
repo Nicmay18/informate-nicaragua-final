@@ -32,14 +32,12 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
       return data.kind === 'learning' && (data.timestamp || '') >= since;
     }).length);
 
-  const [actionsPending, health, operationalApprovals] = await Promise.all([
-    db.collection('nios_actions').where('status', '==', 'PENDING').count().get(),
+  const [health, operationalApprovals] = await Promise.all([
     getDepartmentHealth(),
     getRealPendingApprovals(db),
   ]);
 
   const operationalApprovalsPending = operationalApprovals.length;
-  const pendingActions = actionsPending.data().count || 0;
 
   const lastWorkAt =
     (latestReport?.runAt) ??
