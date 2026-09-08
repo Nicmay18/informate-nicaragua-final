@@ -32,8 +32,7 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
       return data.kind === 'learning' && (data.timestamp || '') >= since;
     }).length);
 
-  const [actionsPending, health, operationalApprovals] = await Promise.all([
-    db.collection('nios_actions').where('status', '==', 'PENDING').count().get(),
+  const [health, operationalApprovals] = await Promise.all([
     getDepartmentHealth(),
     getRealPendingApprovals(db),
   ]);
@@ -73,7 +72,9 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
     actionsExecuted: workDone,
     verifications: verifications.data().count || 0,
     learnings: learningsSnap || 0,
-    pendingApprovals: (actionsPending.data().count || 0) + operationalApprovalsPending,
+    // pendingApprovals representa exclusivamente decisiones que requieren aprobación humana.
+    // Las acciones PENDING son trabajo operativo y se muestran por separado en el Command Center.
+    pendingApprovals: operationalApprovalsPending,
     activeJobs: pending,
     failedJobs: failed,
     deadLetterJobs: deadLetter,
