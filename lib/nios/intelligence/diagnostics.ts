@@ -392,34 +392,23 @@ function adSenseDiagnostic(): NiosDiagnostic {
   const hasClientId = Boolean(process.env.GOOGLE_ADSENSE_CLIENT_ID);
   const meta = diagnosticMeta(null);
 
-  if (hasClientId) {
-    return {
-      id: 'adsense-config-present',
-      severity: 'medium',
-      source: 'AdSense',
-      status: 'NOT_CONFIGURED',
-      problem: 'Existe GOOGLE_ADSENSE_CLIENT_ID pero no hay collector real.',
-      cause: 'No se implementó un módulo de recolección de datos de AdSense API.',
-      impact: 'Los reportes de AdSense se generan solo con datos internos (GA4/GSC).',
-      recommendedAction: 'Implementar lib/nios/intelligence/adsense-collector.ts o eliminar GOOGLE_ADSENSE_CLIENT_ID si no es necesario.',
-      action: 'REQUIRES_HUMAN_DECISION',
-      autoFixAvailable: false,
-      requiresHuman: true,
-      expectedResult: 'Decisión sobre si AdSense API entra en el alcance actual.',
-      variable: 'GOOGLE_ADSENSE_CLIENT_ID',
-      ...meta,
-    };
-  }
-
+  // Si no hay collector implementado, la fuente está fuera de alcance actual;
+  // no es NOT_CONFIGURED porque no falta una configuración requerida.
   return {
     id: 'adsense-disabled-by-scope',
     severity: 'info',
     source: 'AdSense',
     status: 'DISABLED_BY_SCOPE' as NiosDataStatus,
-    problem: 'AdSense no está habilitado en el alcance operativo actual.',
-    cause: 'GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integraci\u00f3n AdSense API est\u00e1 desactivada por alcance.',
+    problem: hasClientId
+      ? 'AdSense está configurado pero el collector real está fuera del alcance operativo actual.'
+      : 'AdSense no está configurado ni habilitado en el alcance operativo actual.',
+    cause: hasClientId
+      ? 'Existe GOOGLE_ADSENSE_CLIENT_ID pero el módulo de recolección de AdSense API no está implementado en este alcance.'
+      : 'GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.',
     impact: 'No bloquea NIOS; no se reportan ingresos reales de AdSense. El resto de NIOS funciona sin AdSense.',
-    recommendedAction: 'Si se requiere AdSense API, configurar GOOGLE_ADSENSE_CLIENT_ID e implementar collector. Mientras tanto, NIOS operar\u00e1 sin datos de AdSense.',
+    recommendedAction: hasClientId
+      ? 'Implementar lib/nios/intelligence/adsense-collector.ts si se prioriza AdSense; de lo contrario, quitar la variable.'
+      : 'Si se requiere AdSense API, configurar GOOGLE_ADSENSE_CLIENT_ID e implementar collector. Mientras tanto, NIOS operará sin datos de AdSense.',
     action: 'NO_ACTION',
     autoFixAvailable: false,
     requiresHuman: false,

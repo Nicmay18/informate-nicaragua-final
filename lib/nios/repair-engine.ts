@@ -144,7 +144,13 @@ function isAutoRepairable(diagnostic: NiosDiagnostic, state: NiosSystemState): b
 
 function actionTypeFor(diagnostic: NiosDiagnostic, state: NiosSystemState): NiosRepairActionType {
   if (isAutoRepairable(diagnostic, state)) return 'AUTO_REPAIR';
-  if (diagnostic.requiresHuman) return 'BLOCKED_EXTERNAL';
+  if (diagnostic.requiresHuman) {
+    // Autorización explícita de un tercero: el humano debe conceder acceso externo.
+    if (diagnostic.action === 'REQUIRES_HUMAN_AUTHORIZATION') return 'BLOCKED_EXTERNAL';
+    // Cualquier otra intervención humana (configuración, decisión, investigación)
+    // se modela como acción humana interna.
+    return 'HUMAN_ACTION';
+  }
   return 'VERIFY_ONLY';
 }
 
@@ -213,7 +219,14 @@ function buildActions(diagnostics: NiosDiagnostic[], state: NiosSystemState): Ni
     const type = actionTypeFor(d, state);
     const canAutoRepair = type === 'AUTO_REPAIR';
     const isBlockedExternal = type === 'BLOCKED_EXTERNAL';
-    const status: NiosRepairActionStatus = canAutoRepair ? 'PLANNED' : isBlockedExternal ? 'BLOCKED' : 'SKIPPED';
+    const isHumanAction = type === 'HUMAN_ACTION';
+    const status: NiosRepairActionStatus = canAutoRepair
+      ? 'PLANNED'
+      : isBlockedExternal
+        ? 'BLOCKED'
+        : isHumanAction
+          ? 'WAITING_HUMAN'
+          : 'SKIPPED';
 
     let before: Record<string, unknown> | undefined;
     let after: Record<string, unknown> | undefined;
