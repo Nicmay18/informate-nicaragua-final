@@ -1201,7 +1201,11 @@ async function fetchApprovalsWithIncidentState(
     const kept = list.filter((a) => a.estado === 'PENDING').sort(byCreatedAtDesc);
     if (kept.length === 0) continue;
 
-    if (kept.some((a) => a.action === 'configure-source' || a.estado === 'BLOCKED_EXTERNAL')) {
+    const isIncidentExternal = incident.transitions.some(
+      (t) => t.to === 'ACTION_REQUIRED' && t.evidence?.external === true,
+    );
+
+    if (kept.some((a) => a.action === 'configure-source' || a.estado === 'BLOCKED_EXTERNAL') || isIncidentExternal) {
       result.blockedExternal.push(...kept);
       continue;
     }

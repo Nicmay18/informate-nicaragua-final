@@ -8,6 +8,8 @@ import {
   approveOperationalApproval,
   rejectOperationalApproval,
   detectRepeatedPatterns,
+  getRealPendingApprovals,
+  reconcileOperationalApprovals,
   type OperationalIncident,
 } from '@/lib/nios/operational-loop';
 import type { NiosConflict } from '@/lib/nios/conflict-detector';
@@ -407,5 +409,100 @@ describe('NIOS Operational Loop', () => {
     expect(second.incidents[0].id).toBe(incident.id);
     expect(second.incidents[0].state).toBe('ACTION_REQUIRED');
     expect(db.__docs[incident.id].state).toBe('ACTION_REQUIRED');
+  });
+
+  it('getRealPendingApprovals no cuenta aprobaciones de incidentes externos', async () => {
+    const incidentId = 'inc-external';
+    const approvalId = 'app-external';
+    await db.collection('nios_memory').doc(incidentId).set({
+      id: incidentId,
+      kind: 'operational_incident',
+      state: 'ACTION_REQUIRED',
+      transitions: [
+        {
+          from: 'DETECTED',
+          to: 'ACTION_REQUIRED',
+          at: '2026-09-12T12:00:00Z',
+          cause: 'Dependencia externa',
+          actor: 'NIOS',
+          evidence: { external: true, action: 'add-google-service-account' },
+        },
+      ],
+    });
+    await db.collection('nios_memory').doc(approvalId).set({
+      id: approvalId,
+      kind: 'operational_approval',
+      incidentId,
+      action: 'add-google-service-account',
+      estado: 'PENDING',
+      createdAt: '2026-09-12T12:01:00Z',
+    });
+
+    const pending = await getRealPendingApprovals(db);
+    expect(pending).toHaveLength(0);
+  });
+
+  it('getRealPendingApprovals cuenta aprobaciones humanas reales', async () => {
+    const incidentId = 'inc-human';
+    const approvalId = 'app-human';
+    await db.collection('nios_memory').doc(incidentId).set({
+      id: incidentId,
+      kind: 'operational_incident',
+      state: 'ACTION_REQUIRED',
+      transitions: [
+        {
+          from: 'DETECTED',
+          to: 'ACTION_REQUIRED',
+          at: '2026-09-12T12:00:00Z',
+          cause: 'Requiere aprobación humana',
+          actor: 'NIOS',
+          evidence: { requiresApproval: true },
+        },
+      ],
+    });
+    await db.collection('nios_memory').doc(approvalId).set({
+      id: approvalId,
+      kind: 'operational_approval',
+      incidentId,
+      action: 'human-review',
+      estado: 'PENDING',
+      createdAt: '2026-09-12T12:01:00Z',
+    });
+
+    const pending = await getRealPendingApprovals(db);
+    expect(pending).toHaveLength(1);
+  });
+
+  it('reconcileOperationalApprovals marca aprobaciones externas como BLOCKED_EXTERNAL', async () => {
+    const incidentId = 'inc-external-rec';
+    const approvalId = 'app-external-rec';
+    await db.collection('nios_memory').doc(incidentId).set({
+      id: incidentId,
+      kind: 'operational_incident',
+      state: 'ACTION_REQUIRED',
+      transitions: [
+        {
+          from: 'DETECTED',
+          to: 'ACTION_REQUIRED',
+          at: '2026-09-12T12:00:00Z',
+          cause: 'Dependencia externa',
+          actor: 'NIOS',
+          evidence: { external: true },
+        },
+      ],
+    });
+    await db.collection('nios_memory').doc(approvalId).set({
+      id: approvalId,
+      kind: 'operational_approval',
+      incidentId,
+      action: 'configure-source',
+      estado: 'PENDING',
+      createdAt: '2026-09-12T12:01:00Z',
+    });
+
+    const result = await reconcileOperationalApprovals(db);
+    expect(result.pending).toBe(0);
+    expect(result.blockedExternal).toBe(1);
+    expect(db.__docs[approvalId].estado).toBe('BLOCKED_EXTERNAL');
   });
 });
