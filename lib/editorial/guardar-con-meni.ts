@@ -3,7 +3,7 @@ import { runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput, MeniResult } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
 import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
-import { resolvePublicCategory } from './canonical';
+import { resolvePublicCategory, PUBLIC_CATEGORY_TO_PROFILE } from './canonical';
 import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
 
@@ -76,6 +76,7 @@ export async function guardarConMeni(
     categoria: input.categoria,
     perfil: meni.profile_used,
   });
+  const canonicalPerfil = PUBLIC_CATEGORY_TO_PROFILE[canonicalCategoria] ?? meni.profile_used;
 
   // Decisión del Agente Supervisor Editorial Permanente (REGLA DE CIERRE)
   // MENI evalúa. El Supervisor decide. El Supervisor puede decir NO aunque MENI diga sí,
@@ -86,7 +87,7 @@ export async function guardarConMeni(
     contenido: finalContenido,
     resumen: input.resumen,
     categoria: canonicalCategoria,
-    perfil: meni.profile_used,
+    perfil: canonicalPerfil,
     imagen: input.imagen,
     scoreMeni: meni.scoreFinal ?? undefined,
     aprobadoMeni: meni.aprobado,
@@ -132,7 +133,7 @@ export async function guardarConMeni(
     evaluationTimestamp: meni.evaluationTimestamp,
     editorialTier: meni.editorialTier,
     editorialReason: meni.editorialReason,
-    perfil: meni.profile_used,
+    perfil: canonicalPerfil,
     profile_confidence: meni.profile_confidence,
     categoria: canonicalCategoria,
     palabras,
@@ -141,7 +142,7 @@ export async function guardarConMeni(
     fuentesComplementarias,
     autorFoto,
     publicCategory: canonicalCategoria,
-    profileInternal: meni.profile_used,
+    profileInternal: canonicalPerfil,
     research: input.research,
     story: input.story,
   };

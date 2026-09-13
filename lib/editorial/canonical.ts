@@ -68,6 +68,15 @@ export const PROFILE_TO_PUBLIC_CATEGORY: Record<MeniContentProfile, PublicCatego
   gastronomia: 'Nacionales',
 };
 
+export const PUBLIC_CATEGORY_TO_PROFILE: Record<PublicCategory, MeniContentProfile> = {
+  'Sucesos': 'sucesos',
+  'Nacionales': 'nacionales',
+  'Internacionales': 'internacional',
+  'Tecnología': 'tecnologia',
+  'Deportes': 'deportes',
+  'Espectáculos': 'espectaculos',
+};
+
 /**
  * resolveEditorialClassification — Resolución completa de categoría con trazabilidad.
  *
