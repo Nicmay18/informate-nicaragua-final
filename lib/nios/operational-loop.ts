@@ -163,10 +163,10 @@ export interface OperationalLoopResult {
 }
 
 const ALLOWED_TRANSITIONS: Record<OperationalState, OperationalState[]> = {
-  DETECTED: ['INVESTIGATING', 'ESCALATED'],
+  DETECTED: ['INVESTIGATING', 'ESCALATED', 'RESOLVED'],
   INVESTIGATING: ['ACTION_REQUIRED', 'RESOLVED', 'ESCALATED'],
   ACTION_REQUIRED: ['RUNNING', 'ESCALATED', 'RESOLVED', 'FAILED'],
-  RUNNING: ['VERIFICATION', 'FAILED'],
+  RUNNING: ['VERIFICATION', 'FAILED', 'RESOLVED'],
   VERIFICATION: ['RESOLVED', 'FAILED', 'INVESTIGATING', 'ESCALATED'],
   RESOLVED: [],
   FAILED: ['INVESTIGATING', 'ESCALATED', 'ACTION_REQUIRED'],
@@ -302,6 +302,11 @@ function isExternalSourceConflict(conflict: NiosConflict): boolean {
     (conflict.category === 'traffic-source' || conflict.category === 'source-failure') &&
     ['NO_DATA', 'ACCESS_BLOCKED', 'INVALID_CONFIGURATION', 'SOURCE_FAILURE'].includes(conflict.status)
   );
+}
+
+function isBlockedExternalConflict(conflict: NiosConflict): boolean {
+  if (isExternalSourceConflict(conflict)) return true;
+  return conflict.category === 'meni-forense' || (conflict.category === 'repair' && conflict.status === 'REPAIR_FAILURE');
 }
 
 function isHumanApprovalSummary(conflict: NiosConflict): boolean {
@@ -480,7 +485,7 @@ async function closeApprovalsForIncident(
   let closed = 0;
   for (const doc of snap.docs) {
     const a = doc.data() as OperationalApproval;
-    if (a.kind === 'operational_approval' && a.estado === 'PENDING') {
+    if (a.kind === 'operational_approval' && !['APPROVED', 'REJECTED', 'EXPIRED'].includes(a.estado)) {
       await doc.ref.update({ estado: 'EXPIRED', updatedAt: now(), razonCierre: reason });
       closed++;
     }
@@ -637,13 +642,14 @@ export async function processOperationalConflicts(
       );
       const memory = await recordOperationalMemory(db, incident, 'Decisiones del CEO trackeadas en niosLoop', 'ESCALATED');
       result.memory.push(memory);
-    } else if (isExternalSourceConflict(conflict)) {
-      // Dependencias externas (credenciales, permisos) no son aprobaciones humanas pendientes.
+    } else if (isBlockedExternalConflict(conflict)) {
+      // Bloqueos externos o de equipo (credenciales, permisos, forense, reparación) no son aprobaciones humanas pendientes.
+      const isSource = isExternalSourceConflict(conflict);
       await transitionIncident(
         db,
         incident,
         'ACTION_REQUIRED',
-        `Dependencia externa: ${diagnosis.action}`,
+        isSource ? `Dependencia externa: ${diagnosis.action}` : `Bloqueo de equipo: ${diagnosis.action}`,
         diagnosis.responsibleTeam,
         { external: true, action: diagnosis.action },
       );
@@ -680,6 +686,33 @@ export async function processOperationalConflicts(
     }
 
     result.incidents.push(incident);
+  }
+
+  // Resolver incidentes activos cuyo conflicto ya no se detecta en este ciclo.
+  const activeConflictIds = new Set(conflicts.map((c) => c.id));
+  const allActiveSnap = await db
+    .collection(COLLECTION)
+    .where('kind', '==', 'operational_incident')
+    .limit(300)
+    .get();
+  for (const incDoc of allActiveSnap.docs) {
+    const inc = incDoc.data() as OperationalIncident;
+    if (['RESOLVED', 'FAILED', 'ESCALATED'].includes(inc.state)) continue;
+    if (activeConflictIds.has(inc.conflictId)) continue;
+    try {
+      await transitionIncident(
+        db,
+        inc,
+        'RESOLVED',
+        'Conflicto no detectado en el ciclo actual; resuelto por reconciliación',
+        'AUDITOR',
+        { stale: true },
+        'Resuelto por ausencia en ciclo actual',
+      );
+      await closeApprovalsForIncident(db, inc.id, 'Incidente resuelto por ausencia en ciclo actual');
+    } catch (err) {
+      logger.error('[operational-loop] Error resolviendo incidente stale', { incidentId: inc.id, error: err instanceof Error ? err.message : String(err) });
+    }
   }
 
   result.patterns = await detectRepeatedPatterns(db, 7, 3);
@@ -1205,7 +1238,9 @@ async function fetchApprovalsWithIncidentState(
       (t) => t.to === 'ACTION_REQUIRED' && t.evidence?.external === true,
     );
 
-    if (kept.some((a) => a.action === 'configure-source' || a.estado === 'BLOCKED_EXTERNAL') || isIncidentExternal) {
+    const isBlockedAction = (a: OperationalApproval) =>
+      ['configure-source', 'editorial-review', 'retry-or-escalate'].includes(a.action) || a.estado === 'BLOCKED_EXTERNAL';
+    if (kept.some((a) => isBlockedAction(a)) || isIncidentExternal) {
       result.blockedExternal.push(...kept);
       continue;
     }

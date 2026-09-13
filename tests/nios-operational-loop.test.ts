@@ -139,6 +139,34 @@ function meniForenseConflict(): NiosConflict {
   } as unknown as NiosConflict;
 }
 
+function dataConflictNotSnapshot(): NiosConflict {
+  return {
+    id: 'obs-Google-DATA_CONFLICT',
+    severity: 'critical',
+    category: 'data-integrity',
+    status: 'DATA_CONFLICT',
+    sources: ['Google'],
+    title: 'Datos inconsistentes en Google',
+    description: 'La fuente Google reporta datos que no coinciden.',
+    evidence: { source: 'Google', note: 'mismatch' },
+    detectedAt: new Date().toISOString(),
+  } as unknown as NiosConflict;
+}
+
+function repairFailureConflict(): NiosConflict {
+  return {
+    id: 'repair-failed',
+    severity: 'critical',
+    category: 'repair',
+    status: 'REPAIR_FAILURE',
+    sources: ['nios-repair-engine'],
+    title: 'Reparaciones automáticas fallidas',
+    description: 'El motor de reparación falló en 1 intento(s).',
+    evidence: { failedRepairs: 1 },
+    detectedAt: new Date().toISOString(),
+  } as unknown as NiosConflict;
+}
+
 function verifiedRepairResult() {
   return {
     mode: 'VERIFIED',
@@ -277,7 +305,7 @@ describe('NIOS Operational Loop', () => {
     expect(db.__docs[incident.id].state).toBe('ESCALATED');
   });
 
-  it('crea aprobación humana para conflictos NO_DATA y MENI_FORENSE', async () => {
+  it('NO_DATA externo y MENI_FORENSE se clasifican como BLOCKED_EXTERNAL, no como humanos', async () => {
     mockedDetectConflicts.mockReturnValue([trafficMissingConflict(), meniForenseConflict()]);
 
     const result = await processOperationalConflicts(
@@ -299,7 +327,7 @@ describe('NIOS Operational Loop', () => {
     const ga4Approval = result.approvals.find((a) => a.incidentId === ga4Incident.id);
     const meniApproval = result.approvals.find((a) => a.incidentId === meniIncident.id);
     expect(ga4Approval?.estado).toBe('BLOCKED_EXTERNAL');
-    expect(meniApproval?.estado).toBe('PENDING');
+    expect(meniApproval?.estado).toBe('BLOCKED_EXTERNAL');
   });
 
   it('aprueba una aprobación y pasa el incidente a RUNNING', async () => {
@@ -504,5 +532,81 @@ describe('NIOS Operational Loop', () => {
     expect(result.pending).toBe(0);
     expect(result.blockedExternal).toBe(1);
     expect(db.__docs[approvalId].estado).toBe('BLOCKED_EXTERNAL');
+  });
+
+  it('clasifica MENI_FORENSE y REPAIR_FAILURE como BLOCKED_EXTERNAL, no pendientes humanos', async () => {
+    mockedDetectConflicts.mockReturnValue([meniForenseConflict(), repairFailureConflict()]);
+
+    await processOperationalConflicts(
+      db,
+      { nios: { articlesCount: 2 } as any, loop: null, noticias: undefined },
+      { enqueueJob: vi.fn().mockResolvedValue('job-x') },
+    );
+
+    const approvals = Object.values(db.__docs).filter((d) => d.kind === 'operational_approval');
+    expect(approvals.length).toBe(2);
+    expect(approvals.every((a) => (a as any).estado === 'BLOCKED_EXTERNAL')).toBe(true);
+
+    const pending = await getRealPendingApprovals(db);
+    expect(pending).toHaveLength(0);
+  });
+
+  it('mantiene aprobación humana real para DATA_CONFLICT no auto-reparable', async () => {
+    mockedDetectConflicts.mockReturnValue([dataConflictNotSnapshot()]);
+
+    await processOperationalConflicts(
+      db,
+      { nios: { articlesCount: 2 } as any, loop: null, noticias: undefined },
+      { enqueueJob: vi.fn().mockResolvedValue('job-x') },
+    );
+
+    const pending = await getRealPendingApprovals(db);
+    expect(pending).toHaveLength(1);
+    expect(pending[0].action).toBe('investigate');
+  });
+
+  it('idempotencia: tres corridas con los mismos conflictos no aumentan pending', async () => {
+    const conflicts = [dataConflictNotSnapshot(), meniForenseConflict(), repairFailureConflict()];
+    mockedDetectConflicts.mockReturnValue(conflicts);
+
+    for (let i = 0; i < 3; i++) {
+      await processOperationalConflicts(
+        db,
+        { nios: { articlesCount: 2 } as any, loop: null, noticias: undefined },
+        { enqueueJob: vi.fn().mockResolvedValue(`job-${i}`) },
+      );
+    }
+
+    const pending = await getRealPendingApprovals(db);
+    expect(pending).toHaveLength(1);
+    const approvals = Object.values(db.__docs).filter((d) => d.kind === 'operational_approval' && d.estado !== 'EXPIRED');
+    expect(approvals.length).toBeLessThanOrEqual(3);
+  });
+
+  it('resuelve incidentes stale cuando el conflicto deja de detectarse', async () => {
+    const first = [dataConflictNotSnapshot(), meniForenseConflict()];
+    mockedDetectConflicts.mockReturnValue(first);
+
+    await processOperationalConflicts(
+      db,
+      { nios: { articlesCount: 2 } as any, loop: null, noticias: undefined },
+      { enqueueJob: vi.fn().mockResolvedValue('job-a') },
+    );
+
+    mockedDetectConflicts.mockReturnValue([dataConflictNotSnapshot()]);
+
+    await processOperationalConflicts(
+      db,
+      { nios: { articlesCount: 2 } as any, loop: null, noticias: undefined },
+      { enqueueJob: vi.fn().mockResolvedValue('job-b') },
+    );
+
+    const meniIncident = Object.values(db.__docs).find(
+      (d) => d.kind === 'operational_incident' && d.conflictId === 'meni-forense-abc',
+    );
+    expect(meniIncident?.state).toBe('RESOLVED');
+
+    const pending = await getRealPendingApprovals(db);
+    expect(pending).toHaveLength(1);
   });
 });
