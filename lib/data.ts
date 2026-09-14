@@ -3,7 +3,9 @@ import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { capitalizeFirst, normalizeEditorialTitle } from './formateo';
 import { logger } from './logger';
 import { unstable_cache, revalidateTag } from 'next/cache';
-import { getEditorialDecision, isPublicArticle, resolvePublicCategory } from './editorial/canonical';
+import { getEditorialDecision, isPublicArticle, resolvePublicCategory, shouldIndexArticle } from './editorial/canonical';
+import { cleanArticleBody } from './sanitize';
+import { isToxicSlug } from './seo-toxic';
 
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
@@ -118,8 +120,8 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
     id: d.id,
     slug: data.slug || d.id,
     titulo: normalizeEditorialTitle(capitalizeFirst(data.titulo || '')),
-    resumen: data.resumen || '',
-    contenido: data.contenido,
+    resumen: cleanArticleBody(data.resumen || ''),
+    contenido: cleanArticleBody(data.contenido),
     categoria: resolvePublicCategory({
     perfil: data.perfil,
     categoria: data.categoria,
@@ -183,7 +185,7 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
       .limit(fetchLimit)
       .get();
 
-    const noticias = snap.docs.map(mapDocToNoticia).filter(isPublicNews);
+    const noticias = snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
 
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
@@ -222,7 +224,7 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
       .select(...LIST_FIELDS)
       .get();
 
-    const noticias = snap.docs.map(mapDocToNoticia).filter(isPublicNews);
+    const noticias = snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
     // Deduplicar por slug
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
@@ -253,7 +255,7 @@ const _cachedGetMasLeidas = unstable_cache(
         .select(...LIST_FIELDS)
         .get();
 
-      const noticias = snap.docs.map(mapDocToNoticia).filter(isPublicNews);
+      const noticias = snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
 
       const now = Date.now();
       const withinDays = (n: Noticia, days: number) => {
@@ -318,8 +320,12 @@ const _cachedGetBySlug = unstable_cache(
         const doc = snap.docs[0];
         const data = doc.data() as FirestoreNoticiaData;
         const docSlug = data.slug || doc.id;
+        if (isToxicSlug(docSlug)) {
+          logger.warn('[data.ts] Slug bloqueado por contenido tóxico o no verificado:', docSlug);
+          return null;
+        }
         const titulo = normalizeEditorialTitle(capitalizeFirst(data.titulo || ''));
-        const contenido = data.contenido || '';
+        const contenido = cleanArticleBody(data.contenido);
         if (!docSlug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20 || !data.categoria?.trim()) {
           logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });
           return null;
@@ -328,7 +334,7 @@ const _cachedGetBySlug = unstable_cache(
           id: doc.id,
           slug: docSlug,
           titulo,
-          resumen: data.resumen || '',
+          resumen: cleanArticleBody(data.resumen || ''),
           contenido,
           categoria: resolvePublicCategory({
     perfil: data.perfil,
@@ -406,7 +412,7 @@ export async function getAllSlugs(): Promise<string[]> {
           estado: data.estado,
           noindex: data.noindex,
         };
-        return isPublicArticle(article) ? data.slug : null;
+        return isPublicArticle(article) && !isToxicSlug(data.slug || '') ? data.slug : null;
       })
       .filter(Boolean) as string[];
   } catch (err) {
@@ -436,8 +442,8 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           id: doc.id,
           slug,
           titulo: data.titulo || '',
-          resumen: data.resumen || '',
-          contenido: data.contenido || '',
+          resumen: cleanArticleBody(data.resumen || ''),
+          contenido: cleanArticleBody(data.contenido || ''),
           categoria: data.categoria || 'Actualidad',
           imagen: normalizeImage(data.imagen || '', data.imagenRedes),
           imagenRedes: data.imagenRedes || undefined,
@@ -456,7 +462,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           archived: data.archived,
         } as Noticia;
       })
-      .filter((n): n is Noticia => n !== null && isPublicNews(n))
+      .filter((n): n is Noticia => n !== null && isPublicNews(n) && !isToxicSlug(n.slug))
       .slice(0, validatedCount);
   } catch (err) {
     logger.error('[data.ts] getRelatedNews error:', err instanceof Error ? err.message : String(err));
@@ -492,7 +498,7 @@ export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE
       .limit(fetchLimit)
       .get();
 
-    return snap.docs.map(mapDocToNoticia).filter(isPublicNews).slice(0, validatedPageSize);
+    return snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug)).slice(0, validatedPageSize);
   } catch (err) {
     logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
     return [];
@@ -543,7 +549,7 @@ export async function getCategoryPaginated(categoria: string, page: number = 1, 
       .limit(fetchLimit)
       .get();
 
-    return snap.docs.map(mapDocToNoticia).filter(isPublicNews).slice(0, validatedPageSize);
+    return snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug)).slice(0, validatedPageSize);
   } catch (err) {
     logger.error(`[data.ts] getCategoryPaginated error ${categoria}:`, err instanceof Error ? err.message : String(err));
     return [];
@@ -577,4 +583,85 @@ export async function getCategoryCount(categoria: string): Promise<number> {
       return 0;
     }
   }
+}
+
+const MAX_SITEMAP_LIMIT = 1000;
+
+/**
+ * Noticias aptas para sitemap: publicadas, aprobadas, no archivadas,
+ * no noindex y no tóxicas. Trae los campos mínimos necesarios.
+ */
+const _cachedGetSitemapNews = unstable_cache(
+  async () => {
+    try {
+      const { adminDb } = await import('./firebase-admin');
+      const snap = await adminDb
+        .collection('noticias')
+        .where('estado', '==', 'publicado')
+        .orderBy('fecha', 'desc')
+        .select(
+          'slug',
+          'titulo',
+          'categoria',
+          'perfil',
+          'fecha',
+          'fechaActualizacion',
+          'publishedAt',
+          'dateModified',
+          'aprobadoMeni',
+          'publicado',
+          'archived',
+          'estado',
+          'noindex',
+          'imagen',
+          'imagenRedes',
+          'resumen',
+          'contenido'
+        )
+        .limit(MAX_SITEMAP_LIMIT)
+        .get();
+
+      return snap.docs
+        .map((d: any) => {
+          const data = d.data() as FirestoreNoticiaData;
+          const docSlug = data.slug || d.id;
+          if (isToxicSlug(docSlug)) return null;
+          const noticia: Noticia = {
+            id: d.id,
+            slug: docSlug,
+            titulo: normalizeEditorialTitle(capitalizeFirst(data.titulo || '')),
+            resumen: cleanArticleBody(data.resumen || ''),
+            contenido: cleanArticleBody(data.contenido),
+            categoria: resolvePublicCategory({
+              perfil: data.perfil,
+              categoria: data.categoria,
+              titulo: data.titulo || '',
+              contenido: data.contenido || '',
+              resumen: data.resumen || '',
+            }),
+            perfil: data.perfil || '',
+            imagen: normalizeImage(data.imagen || '', data.imagenRedes),
+            imagenRedes: data.imagenRedes || undefined,
+            fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
+            fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
+            estado: data.estado || 'publicado',
+            publicado: data.publicado,
+            archived: data.archived,
+            aprobadoMeni: data.aprobadoMeni,
+            noindex: !!data.noindex,
+          };
+          return isPublicArticle(noticia) && shouldIndexArticle(noticia) ? noticia : null;
+        })
+        .filter(Boolean) as Noticia[];
+    } catch (err) {
+      logger.error('[data.ts] getSitemapNews error:', err instanceof Error ? err.message : String(err));
+      return [];
+    }
+  },
+  ['sitemap-news-full'],
+  { revalidate: 3600, tags: ['sitemap-news-full'] }
+);
+
+export async function getSitemapNews(): Promise<Noticia[]> {
+  return _cachedGetSitemapNews();
 }

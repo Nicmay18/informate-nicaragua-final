@@ -9,6 +9,7 @@
 export const BLOCKED_SLUGS: string[] = [
   'tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente',
   'conductor-se-fuga-tras-causar-muerte-de-joven-en',
+  'apple-presenta-el-iphone-duo-su-primer-modelo-plegable',
 ];
 
 /** Retorna true solo si el slug está en la lista exacta de bloqueados */

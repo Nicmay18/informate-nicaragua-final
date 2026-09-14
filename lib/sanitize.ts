@@ -1,5 +1,31 @@
 import { escapeJsonLd } from './jsonld';
 
+/**
+ * Elimina marcadores de citas generados por IA que pudieron quedar en el cuerpo.
+ * Patrones: :contentReference[oaicite:N]{index=N} y variantes.
+ */
+export function stripAICitationMarkers(content: string | undefined | null): string {
+  if (!content) return '';
+  return String(content)
+    .replace(/:contentReference\[[^\]]*\]\{[^}]*\}/g, '')
+    .replace(/:contentReference\[[^\]]*\]/g, '')
+    .replace(/\[\s*oaicite:\d+\s*\]/g, '')
+    .replace(/\boaici?te:\d+\b/gi, '')
+    .replace(/\bcontentReference\b/gi, '')
+    .replace(/:contentReference\b/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+/**
+ * Limpieza canónica del cuerpo de un artículo: elimina marcadores técnicos
+ * y normaliza espacios. Se aplica en la capa de datos para que todo
+ * render/consulta vea el contenido limpio.
+ */
+export function cleanArticleBody(content: string | undefined | null): string {
+  return stripAICitationMarkers(content);
+}
+
 // Server-safe HTML sanitizer. Replaces isomorphic-dompurify because it tries
 // to read browser/default-stylesheet.css via jsdom at runtime, which fails in
 // Vercel's serverless environment with ENOENT.
@@ -122,7 +148,7 @@ function buildAttrs(tag: string, attrs: Map<string, string>): string {
 export function sanitizeArticleHtml(dirty: string | undefined | null): string {
   if (!dirty) return '';
 
-  const input = String(dirty);
+  const input = stripAICitationMarkers(dirty);
   const out: string[] = [];
   const tagStack: string[] = [];
   let i = 0;

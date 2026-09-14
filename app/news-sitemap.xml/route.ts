@@ -1,9 +1,7 @@
-﻿import { getNews } from '@/lib/data';
+﻿import { getSitemapNews } from '@/lib/data';
 import { unstable_cache } from 'next/cache';
 import { normalizeEditorialTitle } from '@/lib/formateo';
-import { isToxicSlug } from '@/lib/seo-toxic';
 import { safeDate } from '@/app/sitemap';
-import { shouldIndexArticle } from '@/lib/editorial/canonical';
 import { logger } from '@/lib/logger';
 
 const SITE_URL = 'https://nicaraguainformate.com';
@@ -22,11 +20,11 @@ function escapeXml(str: string): string {
 
 async function fetchNewsSitemapRaw() {
   const cutoffMs = Date.now() - 48 * 60 * 60 * 1000; // 48 horas — Google News sitemap spec
-  const articles = await getNews(100);
+  const articles = await getSitemapNews();
   return articles
     .filter((a) => {
       const d = safeDate(a.fecha);
-      return !isNaN(d.getTime()) && d.getTime() >= cutoffMs && !isToxicSlug(a.slug) && shouldIndexArticle(a);
+      return !isNaN(d.getTime()) && d.getTime() >= cutoffMs;
     })
     .map((a) => ({
       slug: a.slug,

@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getNews } from '@/lib/data';
+import { getSitemapNews } from '@/lib/data';
 import { categoryToSlug } from '@/lib/types';
 import { shouldIndexArticle } from '@/lib/editorial/canonical';
 import { isToxicSlug } from '@/lib/seo-toxic';
@@ -13,8 +13,8 @@ export const revalidate = 3600;
 
 const baseUrl = 'https://nicaraguainformate.com';
 
-const cachedGetNews = unstable_cache(
-  async () => getNews(200),
+const cachedGetSitemapNews = unstable_cache(
+  async () => getSitemapNews(),
   ['sitemap-news'],
   { revalidate: 3600, tags: ['sitemap-news'] }
 );
@@ -105,7 +105,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   try {
-    const articles = await cachedGetNews();
+    const articles = await cachedGetSitemapNews();
 
     const cleanArticles = articles.filter(article => {
       if (isToxicSlug(article.slug)) return false;
