@@ -158,28 +158,61 @@ export async function POST(request: NextRequest) {
     // orderBy('fecha','desc') (ordena por tipo antes que por valor → notas
     // viejas dominaban la portada y las nuevas quedaban fuera del limit).
     const parsedFecha = body.fecha ? new Date(body.fecha) : null;
-    updateData.fecha = parsedFecha && !isNaN(parsedFecha.getTime())
+    const bodyFechaTs = parsedFecha && !isNaN(parsedFecha.getTime())
       ? Timestamp.fromDate(parsedFecha)
-      : Timestamp.now();
+      : null;
+
+    // Leer el doc existente UNA vez: se usa para preservar `fecha` y `publishedAt`.
+    let existingData: Record<string, unknown> = {};
+    let existingCreateTime: Timestamp | null = null;
+    if (id) {
+      try {
+        const existing = await db.collection('noticias').doc(id).get();
+        existingData = existing.data() || {};
+        existingCreateTime = existing.createTime || null;
+      } catch { /* continuar con defaults */ }
+    }
+
+    if (bodyFechaTs) {
+      updateData.fecha = bodyFechaTs;
+    } else if (id) {
+      // Re-guardado sin fecha explícita: preservar la fecha original de
+      // publicación. Antes se pisaba con Timestamp.now() → notas de hace
+      // semanas aparecían como "hace X horas".
+      const prev = existingData.fecha;
+      if (prev instanceof Timestamp) {
+        updateData.fecha = prev;
+      } else {
+        const prevDate = prev ? new Date(prev as string) : null;
+        updateData.fecha = prevDate && !isNaN(prevDate.getTime())
+          ? Timestamp.fromDate(prevDate)
+          : (existingCreateTime || Timestamp.now());
+      }
+    } else {
+      updateData.fecha = Timestamp.now();
+    }
 
     // CAUSA RAÍZ: timestamps canónicos para ordenamiento consistente (igual que news/route.ts)
     // Solo setear publishedAt la primera vez que se publica; dateModified siempre se actualiza.
     if (publicado) {
       if (!id) {
         updateData.publishedAt = Timestamp.now();
-      } else {
-        // Preservar publishedAt existente; solo setear si no estaba publicado antes
-        try {
-          const existing = await db.collection('noticias').doc(id).get();
-          const existingData = existing.data() || {};
-          if (!existingData.publishedAt && (existingData.publicado !== true)) {
-            updateData.publishedAt = Timestamp.now();
-          } else if (existingData.publishedAt) {
-            updateData.publishedAt = existingData.publishedAt;
-          }
-        } catch {
-          updateData.publishedAt = Timestamp.now();
+      } else if (existingData.publishedAt) {
+        updateData.publishedAt = existingData.publishedAt;
+      } else if (existingData.publicado === true) {
+        // Doc viejo ya publicado sin publishedAt: backfill con la fecha
+        // original (o createTime del doc), NUNCA con now().
+        const orig = existingData.fecha;
+        if (orig instanceof Timestamp) {
+          updateData.publishedAt = orig;
+        } else {
+          const origDate = orig ? new Date(orig as string) : null;
+          updateData.publishedAt = origDate && !isNaN(origDate.getTime())
+            ? Timestamp.fromDate(origDate)
+            : (existingCreateTime || Timestamp.now());
         }
+      } else {
+        updateData.publishedAt = Timestamp.now();
       }
       updateData.dateModified = Timestamp.now();
     }
