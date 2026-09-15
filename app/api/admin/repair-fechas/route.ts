@@ -48,6 +48,16 @@ interface Fix {
   slug: string;
   reason: string;
   changes: Record<string, unknown>;
+  current: { fecha: string | null; publishedAt: string | null; createTime: string | null };
+  proposed: { fecha: string | null; publishedAt: string | null };
+}
+
+function iso(ms: number | null): string | null {
+  return ms !== null ? new Date(ms).toISOString() : null;
+}
+
+function tsToIso(v: unknown): string | null {
+  return v instanceof Timestamp ? v.toDate().toISOString() : null;
 }
 
 async function collectFixes(): Promise<{ scanned: number; fixes: Fix[] }> {
@@ -91,7 +101,21 @@ async function collectFixes(): Promise<{ scanned: number; fixes: Fix[] }> {
     }
 
     if (Object.keys(changes).length > 0) {
-      fixes.push({ id: doc.id, slug, reason: reasons.join(' | '), changes });
+      fixes.push({
+        id: doc.id,
+        slug,
+        reason: reasons.join(' | '),
+        changes,
+        current: {
+          fecha: iso(fechaMs),
+          publishedAt: iso(publishedAtMs),
+          createTime: iso(createMs),
+        },
+        proposed: {
+          fecha: tsToIso(changes.fecha) ?? iso(fechaMs),
+          publishedAt: tsToIso(changes.publishedAt) ?? iso(publishedAtMs),
+        },
+      });
     }
   }
 
@@ -112,6 +136,8 @@ export async function GET(request: NextRequest) {
         slug: f.slug,
         reason: f.reason,
         fields: Object.keys(f.changes),
+        current: f.current,
+        proposed: f.proposed,
       })),
     });
   } catch (err) {
