@@ -9,7 +9,6 @@ import {
   buildBreadcrumbJsonLdEnhanced,
   buildOrganizationJsonLdEnhanced,
   buildWebSiteJsonLdEnhanced,
-  generarFaqSchema,
 } from '@/lib/seo/schema';
 import { generateOptimizedTitle, validateTitle, type NoticiaTipo } from '@/lib/seo/title';
 import { resolveEffectiveSeo } from '@/lib/seo/effective';
@@ -202,8 +201,6 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     : 0;
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
-  const faqSchema = generarFaqSchema(noticia.contenido || '', noticia.resumen);
-
   const nonce = await getCspNonce();
 
   return (
@@ -212,9 +209,6 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildWebSiteJsonLdEnhanced()) }} />
       <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
       <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
-      {faqSchema && (
-        <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(faqSchema) }} />
-      )}
       <ArticlePage noticia={noticiaWithLinks} related={related} />
     </>
   );

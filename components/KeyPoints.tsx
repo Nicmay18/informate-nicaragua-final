@@ -3,7 +3,7 @@
 // No imports needed for useMemo
 
 interface KeyPointsProps {
-  titulo: string;
+  titulo?: string;
   resumen?: string;
   contenido?: string;
   categoria?: string;
@@ -35,8 +35,6 @@ export default function KeyPoints({ puntosClave }: KeyPointsProps) {
     borderBottom: '2px solid #111827',
   };
 
-  const labels = ['Qué / Dónde', 'Por qué / Cómo', 'Consecuencia / Impacto'];
-
   return (
     <section style={sectionStyle} aria-label="Resumen de puntos clave">
       <h2 style={titleStyle}>
@@ -46,16 +44,16 @@ export default function KeyPoints({ puntosClave }: KeyPointsProps) {
         Puntos Clave
       </h2>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         {puntosClave.map((point, i) => (
-          <Point key={i} label={labels[i] || `Punto ${i + 1}`} text={point} />
+          <Point key={i} text={point} />
         ))}
       </div>
     </section>
   );
 }
 
-function Point({ label, text }: { label: string; text: string }) {
+function Point({ text }: { text: string }) {
   const dotStyle: React.CSSProperties = {
     position: 'absolute',
     left: 0,
@@ -69,9 +67,6 @@ function Point({ label, text }: { label: string; text: string }) {
   return (
     <div style={{ position: 'relative', paddingLeft: 20 }}>
       <span style={dotStyle} aria-hidden="true" />
-      <span style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#111827', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
-        {label}
-      </span>
       <p style={{ fontSize: 14, color: '#4b5563', lineHeight: 1.6, margin: 0 }}>
         {text}
       </p>

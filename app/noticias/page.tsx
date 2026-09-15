@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
-import { getNewsPaginated, getNewsCount, getMasLeidas, PAGE_SIZE } from '@/lib/data';
+import { getNewsPaginated, getNewsCount, PAGE_SIZE } from '@/lib/data';
 import { categoryToSlug, slugToCategory } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
-import type { HomePageData } from '@/lib/db/homepage';
 import PaginationWrapper from '@/components/PaginationWrapper';
-import HomePagePro from '@/components/HomePagePro';
+import NoticiasList from '@/components/NoticiasList';
 import { logger } from '@/lib/logger';
 
 export const dynamicParams = true;
@@ -77,12 +76,10 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
   const page = Math.max(1, parseInt(params.page || '1', 10) || 1);
 
   let noticias: Noticia[] = [];
-  let masLeidas: Noticia[] = [];
   let totalCount = 0;
   try {
-    [noticias, masLeidas, totalCount] = await Promise.all([
+    [noticias, totalCount] = await Promise.all([
       getNewsPaginated(page, PAGE_SIZE),
-      getMasLeidas(),
       getNewsCount(),
     ]);
   } catch (error) {
@@ -91,16 +88,6 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
 
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
-
-  const [hero, ...rest] = noticias;
-  const homeData: HomePageData = {
-    hero: hero ?? null,
-    ultimas: rest,
-    enPortada: [],
-    breaking: [],
-    porCategoria: {},
-    masLeidas,
-  };
 
   return (
     <>
@@ -114,7 +101,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
         currentPage={currentPage}
         totalPages={totalPages}
       >
-        <HomePagePro data={homeData} />
+        <NoticiasList noticias={noticias} />
       </PaginationWrapper>
     </>
   );

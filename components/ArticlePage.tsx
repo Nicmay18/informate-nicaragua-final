@@ -10,6 +10,7 @@ import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { injectInternalLinks } from '@/lib/article-links';
+import { editorialCleanup, isSensitiveArticle, CLEANUP_ALLOWED_SLUGS, normalizeText, jaccardSimilarity } from '@/lib/editorial-cleanup';
 import { trackViewAction } from '@/app/actions/track-view';
 import { getArticleMetricsAction } from '@/app/actions/get-article-metrics';
 import KeyPoints from './KeyPoints';
@@ -17,7 +18,6 @@ import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
 import NewsletterSignup from './NewsletterSignup';
 import ReadingProgress from './ReadingProgress';
-import ArticleFaq from './ArticleFaq';
 import SupportMedium from './editorial/SupportMedium';
 import { logger } from '@/lib/logger';
 import { FALLBACK_IMAGE, type Noticia } from '@/lib/types';
@@ -115,14 +115,43 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   const rawAuthorPhoto = autorData?.photo || noticia.autorFoto;
   const authorPhoto = rawAuthorPhoto && !rawAuthorPhoto.toLowerCase().includes('logo') ? rawAuthorPhoto : undefined;
 
-  const pieDeFoto = noticia.pieFoto?.trim()
-    ? noticia.pieFoto
-    : 'Foto: Nicaragua Informate / Archivo';
+  // Pie de foto: solo se muestra si hay caption real; nunca se inventa uno genérico
+  const pieDeFoto = noticia.pieFoto?.trim() || '';
 
   // Procesar TOC para artículos largos y mejorar HTML (enlaces/imágenes)
   const { html: processedHtml, items: tocItems } = injectTocIds(noticia.contenido || '');
   const enhancedHtml = enhanceArticleHtml(processedHtml, SITE_CONFIG.url);
   const showToc = tocItems.length >= 3;
+
+  // Limpieza editorial en render: dedup de oraciones exactas + muletillas.
+  // La limpieza estructural (entrada=bajada) se omite en notas sensibles,
+  // salvo los artículos clase C autorizados explícitamente.
+  const allowStructural =
+    !isSensitiveArticle(noticia.titulo, noticia.resumen, noticia.contenido) ||
+    CLEANUP_ALLOWED_SLUGS.has(noticia.slug);
+  const cleanedHtml = editorialCleanup(enhancedHtml || noticia.resumen || '', noticia.resumen, allowStructural);
+
+  // Enlaces inline "Si te interesa" (máx 2) — se excluyen de "Lea también"
+  const inlineLinks = (noticia.related_links || []).slice(0, 2);
+  const inlineSlugs = new Set(
+    inlineLinks.map((l) => l.url.split('/').filter(Boolean).pop() || ''),
+  );
+  const relatedShown = related.filter((r) => !inlineSlugs.has(r.slug)).slice(0, 3);
+
+  // Puntos clave: solo si hay datos reales y sustantivos (no duplican bajada/título)
+  const keyPoints = useMemo(() => {
+    const pts = (noticia.puntosClave || []).map((p) => p.trim()).filter((p) => p.length >= 40);
+    if (pts.length < 2) return [];
+    const resumenN = normalizeText(noticia.resumen || '');
+    const tituloN = normalizeText(noticia.titulo || '');
+    return pts
+      .filter((p) => {
+        if (resumenN && jaccardSimilarity(p, resumenN) >= 0.6) return false;
+        if (tituloN && jaccardSimilarity(p, tituloN) >= 0.7) return false;
+        return true;
+      })
+      .slice(0, 3);
+  }, [noticia.puntosClave, noticia.resumen, noticia.titulo]);
 
   // Container principal (estilos en article-page.css)
 
@@ -286,17 +315,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         </div>
         </header>
 
-        {/* AdSense 728x90 — debajo del título, lazy-loaded */}
-        <Suspense fallback={null}>
-          <AdsenseUnit
-            slot="3827619433"
-            format="horizontal"
-            responsive={true}
-            minHeight={90}
-            style={{ margin: '0 0 24px', maxWidth: 728, marginLeft: 'auto', marginRight: 'auto' }}
-          />
-        </Suspense>
-
         {/* Imagen destacada — aspect-ratio 16:9 responsive, max 480px */}
         {noticia.imagen && (
           <figure style={{ margin: 0, marginBottom: 8 }} itemProp="image" itemScope itemType="https://schema.org/ImageObject">
@@ -323,12 +341,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                 );
               })()}
             </div>
-            <figcaption style={captionStyle}>
-              <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
-              {noticia.pieFoto?.trim() && (
+            {pieDeFoto && (
+              <figcaption style={captionStyle}>
+                <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
                 <span style={{ color: '#9ca3af', marginLeft: 4 }}>| Nicaragua Informate</span>
-              )}
-            </figcaption>
+              </figcaption>
+            )}
           </figure>
         )}
 
@@ -342,7 +360,64 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </div>
         )}
 
-        {/* Fuentes declaradas */}
+        {/* Audio — lazy-loaded, no bloquea LCP */}
+        <Suspense fallback={null}>
+          <AudioButton articleId={noticia.id} titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
+        </Suspense>
+
+        {/* Puntos Clave — solo cuando hay puntos reales y sustantivos */}
+        {keyPoints.length >= 2 && (
+          <KeyPoints puntosClave={keyPoints} />
+        )}
+
+        {/* AdSense 300x250 — inline entre contenido superior y cuerpo */}
+        <Suspense fallback={null}>
+          <AdsenseUnit
+            slot="4492386174"
+            format="rectangle"
+            responsive={true}
+            minHeight={250}
+            style={{ margin: '24px auto', maxWidth: 336, display: 'flex', justifyContent: 'center' }}
+          />
+        </Suspense>
+
+        {/* Tabla de contenidos (artículos largos) */}
+        {showToc && (
+          <nav aria-label="Tabla de contenidos" style={{ margin: '24px 0', padding: '16px 20px', backgroundColor: '#f9fafb', borderRadius: 8, border: '1px solid #e5e5e5' }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, margin: '0 0 12px' }}>En este artículo</p>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+              {tocItems.map((item) => (
+                <li key={item.id} style={{ margin: '6px 0', paddingLeft: item.level === 3 ? 16 : 0 }}>
+                  <a href={`#${item.id}`} style={{ fontSize: 14, color: '#374151', textDecoration: 'none', fontWeight: item.level === 2 ? 600 : 400 }}>
+                    {item.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
+
+        {/* Contenido — limpieza editorial + sanitización antes de inyección para prevenir XSS */}
+        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(injectInternalLinks(cleanedHtml, inlineLinks)) }} />
+
+        {/* In-article Ad — lazy-loaded para no afectar LCP */}
+        <Suspense fallback={null}>
+          <AdsenseUnit
+            slot="2957454965"
+            format="fluid"
+            layout="in-article"
+            style={{ margin: '32px 0' }}
+          />
+        </Suspense>
+
+        {/* Pull Quote — lazy-loaded */}
+        <Suspense fallback={null}>
+          <PullQuote contenido={noticia.contenido || ''} />
+        </Suspense>
+
+        </section>
+
+        {/* Fuentes declaradas — al final del artículo, no antes del cuerpo */}
         {(noticia.fuente || (noticia.fuentesComplementarias && noticia.fuentesComplementarias.length > 0)) && (
           <div
             style={{
@@ -373,64 +448,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             )}
           </div>
         )}
-
-        {/* Audio — lazy-loaded, no bloquea LCP */}
-        <Suspense fallback={null}>
-          <AudioButton articleId={noticia.id} titulo={noticia.titulo} resumen={noticia.resumen || ''} contenido={noticia.contenido || ''} />
-        </Suspense>
-
-        {/* 3 Puntos Clave */}
-        <KeyPoints titulo={noticia.titulo} resumen={noticia.resumen} contenido={noticia.contenido} categoria={category.name} puntosClave={noticia.puntosClave} />
-
-        {/* AdSense 300x250 — inline entre contenido superior y cuerpo */}
-        <Suspense fallback={null}>
-          <AdsenseUnit
-            slot="4492386174"
-            format="rectangle"
-            responsive={true}
-            minHeight={250}
-            style={{ margin: '24px auto', maxWidth: 336, display: 'flex', justifyContent: 'center' }}
-          />
-        </Suspense>
-
-        {/* Tabla de contenidos (artículos largos) */}
-        {showToc && (
-          <nav aria-label="Tabla de contenidos" style={{ margin: '24px 0', padding: '16px 20px', backgroundColor: '#f9fafb', borderRadius: 8, border: '1px solid #e5e5e5' }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: '#6b7280', textTransform: 'uppercase', letterSpacing: 1, margin: '0 0 12px' }}>En este artículo</p>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {tocItems.map((item) => (
-                <li key={item.id} style={{ margin: '6px 0', paddingLeft: item.level === 3 ? 16 : 0 }}>
-                  <a href={`#${item.id}`} style={{ fontSize: 14, color: '#374151', textDecoration: 'none', fontWeight: item.level === 2 ? 600 : 400 }}>
-                    {item.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        )}
-
-        {/* Contenido — sanitizado antes de inyección para prevenir XSS */}
-        <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(injectInternalLinks(enhancedHtml || noticia.resumen || '', noticia.related_links)) }} />
-
-        {/* In-article Ad — lazy-loaded para no afectar LCP */}
-        <Suspense fallback={null}>
-          <AdsenseUnit
-            slot="2957454965"
-            format="fluid"
-            layout="in-article"
-            style={{ margin: '32px 0' }}
-          />
-        </Suspense>
-
-        {/* Pull Quote — lazy-loaded */}
-        <Suspense fallback={null}>
-          <PullQuote contenido={noticia.contenido || ''} />
-        </Suspense>
-
-        {/* FAQ visible — mejora SEO y AI Search */}
-        <ArticleFaq contenidoHtml={noticia.contenido || ''} resumen={noticia.resumen || ''} />
-
-        </section>
 
         {/* Tags */}
         {tags.length > 0 && (
@@ -469,12 +486,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           <NewsletterSignup />
         </div>
 
-        {/* Lea también */}
-        {related.length > 0 && (
+        {/* Lea también — máx 3, sin duplicar los enlaces inline "Si te interesa" */}
+        {relatedShown.length > 0 && (
           <aside aria-label="Lea también" style={{ marginTop: 40, paddingTop: 32, borderTop: '1px solid #e2e8f0' }}>
             <h2 style={{ fontSize: 18, fontWeight: 800, color: '#0f172a', margin: '0 0 20px' }}>Lea también</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
-              {related.slice(0, 4).map(item => {
+              {relatedShown.map(item => {
                 const itemCat = getCategory(item.categoria);
                 return (
                   <Link

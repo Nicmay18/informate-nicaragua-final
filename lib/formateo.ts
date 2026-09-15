@@ -170,5 +170,15 @@ export function normalizeEditorialTitle(title: string): string {
   return title
     .replace(/\s*-\s*Managua\s*$/i, '')
     .replace(/\s*-\s*[A-Z]\s*$/i, '')
-    .trim();
+    .trim()
+    .replace(
+      // Concordancia: sujeto femenino plural + participio masculino → femenino.
+      // Ej.: "Tres personas resultan afectados" → "afectadas".
+      /\b(personas|mujeres|víctimas|victimas|familias|niñas|ninas|adolescentes mujeres|ciudadanas|trabajadoras|estudiantes mujeres|menores de edad|menores)\b([^.\n]{0,60}?)\bafectados\b/gi,
+      (m: string) => m.replace(/afectados\b/i, 'afectadas'),
+    )
+    .replace(
+      /\b(una|la|esta|esa)\s+(persona|mujer|víctima|victima|niña|nina|ciudadana|trabajadora|estudiante mujer|menor)\b([^.\n]{0,60}?)\bafectado\b/gi,
+      (m) => m.replace(/afectado\b/i, 'afectada'),
+    );
 }
