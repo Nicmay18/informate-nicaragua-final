@@ -119,7 +119,7 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
   return {
     id: d.id,
     slug: data.slug || d.id,
-    titulo: normalizeEditorialTitle(capitalizeFirst(data.titulo || '')),
+    titulo: normalizeEditorialTitle(capitalizeFirst(cleanArticleBody(data.titulo || ''))),
     resumen: cleanArticleBody(data.resumen || ''),
     contenido: cleanArticleBody(data.contenido),
     categoria: resolvePublicCategory({
@@ -134,24 +134,31 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
     imagenRedes: data.imagenRedes || undefined,
     fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
     fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
-    autor: data.autor,
+    autor: data.autor ? cleanArticleBody(data.autor) : data.autor,
     autorFoto: data.autorFoto,
     destacada: data.destacada,
     vistas: data.vistas,
     palabras: data.palabras,
-    tags: data.tags || data.palabrasClave || [],
-    pieFoto: data.pieFoto,
-    puntosClave: data.puntosClave,
-    metaDescription: data.metaDescription || data.metaDescripcion || '',
-    keywords: data.keywords || (Array.isArray(data.palabrasClave) ? data.palabrasClave.join(', ') : '') || '',
+    tags: (() => {
+      const rawTags = data.tags || data.palabrasClave;
+      return Array.isArray(rawTags)
+        ? rawTags.map((t: unknown) => cleanArticleBody(String(t ?? ''))).filter(Boolean)
+        : [];
+    })(),
+    pieFoto: cleanArticleBody(data.pieFoto) || undefined,
+    puntosClave: Array.isArray(data.puntosClave)
+      ? data.puntosClave.map((p: unknown) => cleanArticleBody(String(p ?? ''))).filter(Boolean)
+      : data.puntosClave,
+    metaDescription: cleanArticleBody(data.metaDescription || data.metaDescripcion || ''),
+    keywords: cleanArticleBody(data.keywords || (Array.isArray(data.palabrasClave) ? data.palabrasClave.join(', ') : '') || ''),
     estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
     publicado: data.publicado,
     aprobadoMeni: data.aprobadoMeni,
     archived: data.archived,
     noindex: !!data.noindex,
-    fuente: data.fuente,
+    fuente: cleanArticleBody(data.fuente) || undefined,
     fuentesComplementarias: Array.isArray(data.fuentesComplementarias)
-      ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string')
+      ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string').map((f: string) => cleanArticleBody(f)).filter(Boolean)
       : undefined,
   };
 }
@@ -170,22 +177,44 @@ export function invalidateFirestoreCache() {
   } catch { /* runtime only */ }
 }
 
+/**
+ * Pool de documentos publicados. Consulta por AMBOS campos de fecha
+ * (`fecha` legacy de tipo mixto string/Timestamp y `publishedAt` Timestamp
+ * canónico) y une los resultados. CAUSA RAÍZ del bug de portada: orderBy
+ * sobre un campo de tipo mixto ordena por tipo antes que por valor, lo que
+ * dejaba noticias nuevas fuera del limit y mostraba notas viejas primero.
+ */
+async function fetchPublishedDocs(fields: string[], fetchLimit: number, categoria?: string): Promise<QueryDocumentSnapshot[]> {
+  const { adminDb } = await import('./firebase-admin');
+  const buildQuery = (orderField: 'fecha' | 'publishedAt') => {
+    let q: any = adminDb.collection('noticias').where('estado', '==', 'publicado');
+    if (categoria) q = q.where('categoria', '==', categoria);
+    return q.orderBy(orderField, 'desc').select(...fields).limit(fetchLimit);
+  };
+
+  const byFecha = await buildQuery('fecha').get();
+  let publishedAtDocs: QueryDocumentSnapshot[] = [];
+  try {
+    const byPublishedAt = await buildQuery('publishedAt').get();
+    publishedAtDocs = byPublishedAt.docs;
+  } catch (err) {
+    logger.warn('[data.ts] orderBy publishedAt no disponible, usando solo fecha:', err instanceof Error ? err.message : String(err));
+  }
+
+  const merged = new Map<string, QueryDocumentSnapshot>();
+  for (const d of [...byFecha.docs, ...publishedAtDocs]) merged.set(d.id, d);
+  return Array.from(merged.values());
+}
+
 /** Query base para listados: publicadas, ordenadas, proyectadas */
 async function fetchNoticiasList(fields: string[], limit: number): Promise<Noticia[]> {
   try {
-    const { adminDb } = await import('./firebase-admin');
     // Traer más de lo necesario porque isPublicNews filtra post-query
     // (aprobadoMeni y archived no se filtran en Firestore por compatibilidad de índices)
     const fetchLimit = Math.min(limit * 3, 200);
-    const snap = await adminDb
-      .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .orderBy('fecha', 'desc')
-      .select(...fields)
-      .limit(fetchLimit)
-      .get();
+    const docs = await fetchPublishedDocs(fields, fetchLimit);
 
-    const noticias = snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
+    const noticias = docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
 
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
@@ -213,18 +242,10 @@ export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Notic
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
   try {
-    const { adminDb } = await import('./firebase-admin');
     const fetchLimit = Math.min(validatedCount * 2, 100);
-    const snap = await adminDb
-      .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .where('categoria', '==', categoria)
-      .orderBy('fecha', 'desc')
-      .limit(fetchLimit)
-      .select(...LIST_FIELDS)
-      .get();
+    const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
 
-    const noticias = snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
+    const noticias = docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
     // Deduplicar por slug
     const unique = new Map<string, Noticia>();
     for (const n of noticias) {
@@ -324,7 +345,7 @@ const _cachedGetBySlug = unstable_cache(
           logger.warn('[data.ts] Slug bloqueado por contenido tóxico o no verificado:', docSlug);
           return null;
         }
-        const titulo = normalizeEditorialTitle(capitalizeFirst(data.titulo || ''));
+        const titulo = normalizeEditorialTitle(capitalizeFirst(cleanArticleBody(data.titulo || '')));
         const contenido = cleanArticleBody(data.contenido);
         if (!docSlug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20 || !data.categoria?.trim()) {
           logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });
@@ -348,24 +369,28 @@ const _cachedGetBySlug = unstable_cache(
           imagenRedes: data.imagenRedes || undefined,
           fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
           fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
-          autor: data.autor,
+          autor: data.autor ? cleanArticleBody(data.autor) : data.autor,
           autorFoto: data.autorFoto,
           destacada: data.destacada,
           vistas: data.vistas,
           palabras: data.palabras,
-          tags: data.tags,
-          pieFoto: data.pieFoto,
-          puntosClave: data.puntosClave,
-          metaDescription: data.metaDescription || data.metaDescripcion || '',
-          keywords: data.keywords || '',
+          tags: Array.isArray(data.tags)
+            ? data.tags.map((t: unknown) => cleanArticleBody(String(t ?? ''))).filter(Boolean)
+            : data.tags,
+          pieFoto: cleanArticleBody(data.pieFoto) || undefined,
+          puntosClave: Array.isArray(data.puntosClave)
+            ? data.puntosClave.map((p: unknown) => cleanArticleBody(String(p ?? ''))).filter(Boolean)
+            : data.puntosClave,
+          metaDescription: cleanArticleBody(data.metaDescription || data.metaDescripcion || ''),
+          keywords: cleanArticleBody(data.keywords || ''),
           estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
           publicado: data.publicado,
           aprobadoMeni: data.aprobadoMeni,
           archived: data.archived,
           noindex: !!data.noindex,
-          fuente: data.fuente,
+          fuente: cleanArticleBody(data.fuente) || undefined,
           fuentesComplementarias: Array.isArray(data.fuentesComplementarias)
-            ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string')
+            ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string').map((f: string) => cleanArticleBody(f)).filter(Boolean)
             : undefined,
         };
         if (!isPublicArticle(noticia)) {
@@ -424,16 +449,9 @@ export async function getAllSlugs(): Promise<string[]> {
 export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
   const validatedCount = validateCount(count, 3);
   try {
-    const { adminDb } = await import('./firebase-admin');
-    const snap = await adminDb
-      .collection('noticias')
-      .where('categoria', '==', categoria)
-      .where('estado', '==', 'publicado')
-      .orderBy('fecha', 'desc')
-      .limit(validatedCount + 10)
-      .get();
+    const docs = await fetchPublishedDocs([...LIST_FIELDS], validatedCount + 10, categoria);
 
-    return snap.docs
+    return docs
       .map((doc: any) => {
         const data = doc.data();
         const slug = data.slug || doc.id;
@@ -463,6 +481,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
         } as Noticia;
       })
       .filter((n): n is Noticia => n !== null && isPublicNews(n) && !isToxicSlug(n.slug))
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, validatedCount);
   } catch (err) {
     logger.error('[data.ts] getRelatedNews error:', err instanceof Error ? err.message : String(err));
@@ -485,20 +504,15 @@ export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE
   const validatedPage = Math.max(1, page);
   const validatedPageSize = Math.max(1, pageSize);
   try {
-    const { adminDb } = await import('./firebase-admin');
     const offset = (validatedPage - 1) * validatedPageSize;
     // Traer más para compensar el filtro isPublicNews
-    const fetchLimit = Math.min(validatedPageSize * 3, 100);
-    const snap = await adminDb
-      .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .orderBy('fecha', 'desc')
-      .select(...LIST_FIELDS)
-      .offset(offset)
-      .limit(fetchLimit)
-      .get();
+    const fetchLimit = Math.min(offset + validatedPageSize * 3, 300);
+    const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit);
 
-    return snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug)).slice(0, validatedPageSize);
+    return docs.map(mapDocToNoticia)
+      .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+      .slice(offset, offset + validatedPageSize);
   } catch (err) {
     logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
     return [];
@@ -536,20 +550,14 @@ export async function getCategoryPaginated(categoria: string, page: number = 1, 
   const validatedPage = Math.max(1, page);
   const validatedPageSize = Math.max(1, pageSize);
   try {
-    const { adminDb } = await import('./firebase-admin');
     const offset = (validatedPage - 1) * validatedPageSize;
-    const fetchLimit = Math.min(validatedPageSize * 3, 100);
-    const snap = await adminDb
-      .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .where('categoria', '==', categoria)
-      .orderBy('fecha', 'desc')
-      .select(...LIST_FIELDS)
-      .offset(offset)
-      .limit(fetchLimit)
-      .get();
+    const fetchLimit = Math.min(offset + validatedPageSize * 3, 300);
+    const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
 
-    return snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug)).slice(0, validatedPageSize);
+    return docs.map(mapDocToNoticia)
+      .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+      .slice(offset, offset + validatedPageSize);
   } catch (err) {
     logger.error(`[data.ts] getCategoryPaginated error ${categoria}:`, err instanceof Error ? err.message : String(err));
     return [];
@@ -594,12 +602,8 @@ const MAX_SITEMAP_LIMIT = 1000;
 const _cachedGetSitemapNews = unstable_cache(
   async () => {
     try {
-      const { adminDb } = await import('./firebase-admin');
-      const snap = await adminDb
-        .collection('noticias')
-        .where('estado', '==', 'publicado')
-        .orderBy('fecha', 'desc')
-        .select(
+      const docs = await fetchPublishedDocs(
+        [
           'slug',
           'titulo',
           'categoria',
@@ -616,12 +620,12 @@ const _cachedGetSitemapNews = unstable_cache(
           'imagen',
           'imagenRedes',
           'resumen',
-          'contenido'
-        )
-        .limit(MAX_SITEMAP_LIMIT)
-        .get();
+          'contenido',
+        ],
+        MAX_SITEMAP_LIMIT
+      );
 
-      return snap.docs
+      return docs
         .map((d: any) => {
           const data = d.data() as FirestoreNoticiaData;
           const docSlug = data.slug || d.id;

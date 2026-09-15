@@ -153,9 +153,14 @@ export async function POST(request: NextRequest) {
       estado: publicado ? 'publicado' : 'borrador',
     };
 
-    // CRÍTICO: Establecer fecha de publicación si no existe
-    // Usar fecha del body si se proporciona, o fechaActualizacion
-    updateData.fecha = body.fecha || new Date();
+    // CRÍTICO: `fecha` debe ser SIEMPRE Timestamp. Antes se guardaba el string
+    // ISO del body, lo que mezclaba tipos en Firestore y rompía
+    // orderBy('fecha','desc') (ordena por tipo antes que por valor → notas
+    // viejas dominaban la portada y las nuevas quedaban fuera del limit).
+    const parsedFecha = body.fecha ? new Date(body.fecha) : null;
+    updateData.fecha = parsedFecha && !isNaN(parsedFecha.getTime())
+      ? Timestamp.fromDate(parsedFecha)
+      : Timestamp.now();
 
     // CAUSA RAÍZ: timestamps canónicos para ordenamiento consistente (igual que news/route.ts)
     // Solo setear publishedAt la primera vez que se publica; dateModified siempre se actualiza.
