@@ -459,7 +459,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
         return {
           id: doc.id,
           slug,
-          titulo: data.titulo || '',
+          titulo: cleanArticleBody(data.titulo || ''),
           resumen: cleanArticleBody(data.resumen || ''),
           contenido: cleanArticleBody(data.contenido || ''),
           categoria: data.categoria || 'Actualidad',
@@ -467,12 +467,14 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           imagenRedes: data.imagenRedes || undefined,
           fecha: safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha),
           fechaActualizacion: safeDateString(data.dateModified) || safeDateString(data.fechaActualizacion),
-          autor: data.autor,
+          autor: data.autor ? cleanArticleBody(data.autor) : data.autor,
           autorFoto: data.autorFoto,
           destacada: data.destacada,
           vistas: data.vistas,
           palabras: data.palabras,
-          tags: data.tags,
+          tags: Array.isArray(data.tags)
+            ? data.tags.map((t: unknown) => cleanArticleBody(String(t ?? ''))).filter(Boolean)
+            : data.tags,
           estado: data.estado || 'publicado',
           noindex: !!data.noindex,
           aprobadoMeni: data.aprobadoMeni,
@@ -633,7 +635,7 @@ const _cachedGetSitemapNews = unstable_cache(
           const noticia: Noticia = {
             id: d.id,
             slug: docSlug,
-            titulo: normalizeEditorialTitle(capitalizeFirst(data.titulo || '')),
+            titulo: normalizeEditorialTitle(capitalizeFirst(cleanArticleBody(data.titulo || ''))),
             resumen: cleanArticleBody(data.resumen || ''),
             contenido: cleanArticleBody(data.contenido),
             categoria: resolvePublicCategory({
