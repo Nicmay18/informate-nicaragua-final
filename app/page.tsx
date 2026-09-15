@@ -75,7 +75,7 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
     },
   },
-  manifest: '/site.webmanifest',
+  manifest: '/manifest.json',
   appleWebApp: {
     title: 'Nicaragua Informate',
     statusBarStyle: 'default',
