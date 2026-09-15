@@ -56,6 +56,17 @@ function iso(ms: number | null): string | null {
   return ms !== null ? new Date(ms).toISOString() : null;
 }
 
+/**
+ * Solo se aplican reparaciones conservadoras que no cambian la fecha editorial:
+ *  - fecha:string->Timestamp
+ *  - publishedAt:backfill<-fecha
+ * Se excluye cualquier caso que use createTime o marque clobbered (requieren
+ * revisión editorial humana).
+ */
+function isSafeFix(f: Fix): boolean {
+  return !/clobbered|createTime/i.test(f.reason);
+}
+
 function tsToIso(v: unknown): string | null {
   return v instanceof Timestamp ? v.toDate().toISOString() : null;
 }
@@ -128,13 +139,17 @@ export async function GET(request: NextRequest) {
   }
   try {
     const { scanned, fixes } = await collectFixes();
+    const safeCount = fixes.filter(isSafeFix).length;
     return NextResponse.json({
       mode: 'dry-run',
       scanned,
       toRepair: fixes.length,
+      safe: safeCount,
+      skipped: fixes.length - safeCount,
       fixes: fixes.map((f) => ({
         slug: f.slug,
         reason: f.reason,
+        safe: isSafeFix(f),
         fields: Object.keys(f.changes),
         current: f.current,
         proposed: f.proposed,
@@ -153,23 +168,27 @@ export async function POST(request: NextRequest) {
   try {
     const db = getAdminDb();
     const { scanned, fixes } = await collectFixes();
+    const safeFixes = fixes.filter(isSafeFix);
+    const skippedFixes = fixes.filter((f) => !isSafeFix(f));
 
     const BATCH = 400;
     let written = 0;
-    for (let i = 0; i < fixes.length; i += BATCH) {
+    for (let i = 0; i < safeFixes.length; i += BATCH) {
       const batch = db.batch();
-      for (const f of fixes.slice(i, i + BATCH)) {
+      for (const f of safeFixes.slice(i, i + BATCH)) {
         batch.update(db.collection('noticias').doc(f.id), f.changes);
       }
       await batch.commit();
-      written += Math.min(BATCH, fixes.length - i);
+      written += Math.min(BATCH, safeFixes.length - i);
     }
 
     return NextResponse.json({
       mode: 'applied',
       scanned,
       repaired: written,
-      fixes: fixes.map((f) => ({ slug: f.slug, reason: f.reason })),
+      skipped: skippedFixes.length,
+      skippedSlugs: skippedFixes.map((f) => f.slug),
+      fixes: safeFixes.map((f) => ({ slug: f.slug, reason: f.reason })),
     });
   } catch (err) {
     logger.error('[repair-fechas] POST error:', err);
