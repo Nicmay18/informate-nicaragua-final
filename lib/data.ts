@@ -179,60 +179,91 @@ export function invalidateFirestoreCache() {
   } catch { /* runtime only */ }
 }
 
+/** Timestamp límite para partir el campo `fecha` por tipo (ver fetchPublishedDocs). */
+const FECHA_TYPE_BOUNDARY = new Date('2100-01-01T00:00:00Z');
+
+/** Fecha canónica de un doc crudo: publishedAt → fechaPublicacion → fecha. */
+function canonicalDocTs(data: FirestoreNoticiaData): number {
+  const s = safeDateString(data.publishedAt) || safeDateString(data.fechaPublicacion) || safeDateString(data.fecha);
+  const t = s ? new Date(s).getTime() : 0;
+  return isNaN(t) ? 0 : t;
+}
+
 /**
- * Pool de documentos publicados. Consulta por AMBOS campos de fecha
- * (`fecha` legacy de tipo mixto string/Timestamp y `publishedAt` Timestamp
- * canónico) y une los resultados. CAUSA RAÍZ del bug de portada: orderBy
- * sobre un campo de tipo mixto ordena por tipo antes que por valor, lo que
- * dejaba noticias nuevas fuera del limit y mostraba notas viejas primero.
+ * Pool de documentos publicados. CAUSA RAÍZ del bug de portada: `fecha` es
+ * un campo de TIPO MIXTO (strings ISO legacy + Timestamps nuevos) y Firestore
+ * orderBy ordena por tipo antes que por valor — en DESC todos los strings van
+ * primero, así que las notas nuevas (Timestamp) quedaban fuera del limit.
  *
- * El query `estado + orderBy(publishedAt)` requiere índice compuesto. Si no
- * existe aún en Firebase, se cae a `orderBy(publishedAt)` solo (índice
- * single-field siempre disponible) filtrando estado/categoria en memoria.
+ * Solución sin migrar datos: partir el query por tipo usando el orden de
+ * tipos de Firestore (timestamp < string):
+ *  - `fecha < ts(2100)` matchea SOLO Timestamps (y tipos menores) → orderBy
+ *    fecha desc ordena correctamente las notas nuevas.
+ *  - `fecha > ts(2100)` matchea SOLO strings → orderBy desc = ISO lexicográfico
+ *    = cronológico para las notas legacy.
+ *  - `publishedAt` desc cubre docs sin `fecha`. El query indexado
+ *    estado+publishedAt puede no existir aún → fallback a orderBy single-field
+ *    con filtro estado/categoria en memoria.
+ * Ambos queries de fecha usan el índice compuesto estado+fecha ya existente.
+ * El merge final se reordena por fecha canónica en memoria.
  */
 async function fetchPublishedDocs(fields: string[], fetchLimit: number, categoria?: string): Promise<QueryDocumentSnapshot[]> {
   const { adminDb } = await import('./firebase-admin');
-  // El select debe incluir los campos usados para filtrar en memoria y para
-  // resolver la fecha canónica en mapDocToNoticia.
-  const selectFields = Array.from(new Set([...fields, 'estado', 'categoria', 'publishedAt']));
+  const { Timestamp } = await import('firebase-admin/firestore');
+  // El select debe incluir los campos usados para filtrar/ordenar en memoria
+  // y para resolver la fecha canónica en mapDocToNoticia.
+  const selectFields = Array.from(new Set([...fields, 'estado', 'categoria', 'publishedAt', 'fechaPublicacion', 'fecha']));
+  const boundary = Timestamp.fromDate(FECHA_TYPE_BOUNDARY);
 
-  const buildQuery = (orderField: 'fecha' | 'publishedAt') => {
+  const base = () => {
     let q: any = adminDb.collection('noticias').where('estado', '==', 'publicado');
     if (categoria) q = q.where('categoria', '==', categoria);
-    return q.orderBy(orderField, 'desc').select(...selectFields).limit(fetchLimit);
+    return q;
   };
 
-  const byFecha = await buildQuery('fecha').get();
-  let publishedAtDocs: QueryDocumentSnapshot[] = [];
-  try {
-    const byPublishedAt = await buildQuery('publishedAt').get();
-    publishedAtDocs = byPublishedAt.docs;
-  } catch (err) {
-    logger.warn('[data.ts] query indexado publishedAt no disponible, usando fallback single-field:', err instanceof Error ? err.message : String(err));
-    // Fallback sin índice compuesto: orderBy(publishedAt) solo usa el índice
-    // single-field automático. Se filtran estado/categoria en memoria.
+  const safeGet = async (label: string, q: any): Promise<QueryDocumentSnapshot[]> => {
     try {
+      return (await q.get()).docs;
+    } catch (err) {
+      logger.warn(`[data.ts] query ${label} falló:`, err instanceof Error ? err.message : String(err));
+      return [];
+    }
+  };
+
+  const [tsDocs, stringDocs] = await Promise.all([
+    // Solo fecha tipo Timestamp (tipos < string en el orden de Firestore)
+    safeGet('fecha-timestamp', base().where('fecha', '<', boundary).orderBy('fecha', 'desc').select(...selectFields).limit(fetchLimit)),
+    // Solo fecha tipo string (tipos > timestamp)
+    safeGet('fecha-string', base().where('fecha', '>', boundary).orderBy('fecha', 'desc').select(...selectFields).limit(fetchLimit)),
+  ]);
+
+  // publishedAt cubre docs sin `fecha` o con fecha inválida. Intenta el query
+  // indexado (estado[+categoria]+publishedAt); si el índice compuesto no
+  // existe, cae al orderBy single-field con filtro en memoria.
+  let publishedAtDocs: QueryDocumentSnapshot[] = [];
+  {
+    let q: any = base().orderBy('publishedAt', 'desc').select(...selectFields).limit(fetchLimit);
+    publishedAtDocs = await safeGet('publishedAt-indexed', q);
+    if (publishedAtDocs.length === 0) {
       const fbLimit = Math.min(Math.max(fetchLimit * 2, 250), 500);
-      const snap = await adminDb
-        .collection('noticias')
-        .orderBy('publishedAt', 'desc')
-        .select(...selectFields)
-        .limit(fbLimit)
-        .get();
-      publishedAtDocs = snap.docs.filter((d) => {
+      const snap = await safeGet('publishedAt-single-field',
+        adminDb.collection('noticias').orderBy('publishedAt', 'desc').select(...selectFields).limit(fbLimit));
+      publishedAtDocs = snap.filter((d) => {
         const data = d.data() as FirestoreNoticiaData;
         if (data.estado !== 'publicado') return false;
         if (categoria && data.categoria !== categoria) return false;
         return true;
       });
-    } catch (err2) {
-      logger.error('[data.ts] fallback publishedAt falló, usando solo fecha:', err2 instanceof Error ? err2.message : String(err2));
     }
   }
 
   const merged = new Map<string, QueryDocumentSnapshot>();
-  for (const d of [...byFecha.docs, ...publishedAtDocs]) merged.set(d.id, d);
-  return Array.from(merged.values());
+  for (const d of [...tsDocs, ...stringDocs, ...publishedAtDocs]) merged.set(d.id, d);
+  // Reordenar por fecha canónica: el orden de Firestore por tipo mixto no es
+  // cronológico, y los callers asumen el pool ordenado antes de hacer slice.
+  return Array.from(merged.values()).sort(
+    (a, b) => canonicalDocTs(b.data() as FirestoreNoticiaData) - canonicalDocTs(a.data() as FirestoreNoticiaData)
+  );
 }
 
 /** Query base para listados: publicadas, ordenadas, proyectadas */
