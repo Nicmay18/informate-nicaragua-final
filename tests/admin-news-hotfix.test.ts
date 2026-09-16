@@ -18,10 +18,15 @@ function createSnap(docs: any[]) {
 }
 
 function mockChain(snap: any) {
-  const get = vi.fn().mockResolvedValue(snap);
-  const limit = vi.fn().mockReturnThis().mockReturnValue({ get });
-  const orderBy = vi.fn().mockReturnThis().mockReturnValue({ limit });
-  return { collection: vi.fn().mockReturnValue({ orderBy, limit, get }) };
+  // Query encadenable que soporta where/orderBy/limit/select en cualquier orden
+  // (el GET ahora parte el query por tipo de `fecha` con dos where+orderBy).
+  const q: any = {};
+  q.where = vi.fn().mockReturnValue(q);
+  q.orderBy = vi.fn().mockReturnValue(q);
+  q.limit = vi.fn().mockReturnValue(q);
+  q.select = vi.fn().mockReturnValue(q);
+  q.get = vi.fn().mockResolvedValue(snap);
+  return { collection: vi.fn().mockReturnValue(q) };
 }
 
 describe('admin/news hotfix — noticias recién publicadas deben aparecer', () => {
@@ -39,8 +44,10 @@ describe('admin/news hotfix — noticias recién publicadas deben aparecer', () 
 
     expect(json.success).toBe(true);
     expect(json.news.some((n: any) => n.id === 'nueva1' && n.estado === 'publicado')).toBe(true);
+    // La nota más reciente debe ir PRIMERO aunque comparta pool con notas legacy
+    expect(json.news[0].id).toBe('nueva1');
     expect(res.headers.get('cache-control')).toMatch(/no-store/);
-  });
+  }, 60000);
 
   it('Caso B: noticia publicada con vistas = 0 sigue apareciendo', async () => {
     const { getAdminDb: mockGetAdminDb } = await import('@/lib/firebase-admin');

@@ -5,6 +5,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
 import { normalizeEditorialTitle } from '@/lib/formateo';
+import { categoryToSlug } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
@@ -292,6 +293,19 @@ export async function POST(request: NextRequest) {
     revalidateTag('sitemap-news');
     revalidatePath('/');
     revalidatePath('/noticias');
+    // CAUSA RAÍZ (edición de nota publicada): la URL del artículo y su categoría
+    // NO se revalidaban aquí — dependían de una segunda llamada del navegador a
+    // /api/revalidate. Si esa llamada fallaba, el artículo público seguía
+    // mostrando la versión vieja hasta expirar el ISR. El servidor debe
+    // garantizar la revalidación por sí mismo en el mismo request del guardado.
+    const slugParaRevalidar = finalSlug || (existingData.slug as string) || '';
+    if (slugParaRevalidar) revalidatePath(`/noticias/${slugParaRevalidar}`);
+    const catsParaRevalidar = new Set<string>();
+    if (updateData.categoria) catsParaRevalidar.add(String(updateData.categoria));
+    if (existingData.categoria) catsParaRevalidar.add(String(existingData.categoria));
+    for (const cat of catsParaRevalidar) {
+      revalidatePath(`/categoria/${categoryToSlug(cat)}`);
+    }
     revalidatePath('/feed.xml');
     revalidatePath('/sitemap.xml');
     revalidatePath('/news-sitemap.xml');

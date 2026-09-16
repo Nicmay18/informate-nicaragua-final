@@ -6,6 +6,7 @@ export const maxDuration = 30;
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
+import { categoryToSlug } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
@@ -27,8 +28,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       return NextResponse.json({ success: false, error: 'Noticia no encontrada' }, { status: 404 });
     }
 
-    // Provenance gate: si se cambia contenido o titulo, requerir MENI + Supervisor
-    const contentChanged = body.contenido !== undefined || body.titulo !== undefined;
+    // Provenance gate: si se cambia contenido, titulo o resumen, requerir MENI + Supervisor.
+    // `resumen` antes caía en el camino metadata-only donde NO estaba permitido y
+    // se descartaba silenciosamente (Admin guardaba pero el cambio nunca llegaba a Firestore).
+    const contentChanged = body.contenido !== undefined || body.titulo !== undefined || body.resumen !== undefined;
     const tryingToPublish = body.publicado === true;
     const alreadyApproved = snap.data()?.aprobadoMeni === true;
 
@@ -154,6 +157,13 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     revalidatePath('/');
     revalidatePath('/noticias');
     revalidatePath(`/noticias/${slug}`);
+    // Categoría: revalidar la anterior y la actual (puede haber cambiado)
+    const catBefore = snap.data()?.categoria;
+    const after = await ref.get();
+    const catAfter = after.data()?.categoria;
+    for (const cat of new Set([catBefore, catAfter].filter(Boolean))) {
+      revalidatePath(`/categoria/${categoryToSlug(String(cat))}`);
+    }
     revalidatePath('/news-sitemap.xml');
     revalidatePath('/sitemap.xml');
 
@@ -246,6 +256,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       revalidatePath('/');
       revalidatePath('/noticias');
       if (slugBefore) revalidatePath(`/noticias/${slugBefore}`);
+      if (beforeData.categoria) revalidatePath(`/categoria/${categoryToSlug(String(beforeData.categoria))}`);
 
       return NextResponse.json({
         success: true,
@@ -296,6 +307,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     revalidatePath('/');
     revalidatePath('/noticias');
     if (slugBefore) revalidatePath(`/noticias/${slugBefore}`);
+    if (beforeData.categoria) revalidatePath(`/categoria/${categoryToSlug(String(beforeData.categoria))}`);
 
     return NextResponse.json({
       success: !existsAfter,

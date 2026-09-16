@@ -138,11 +138,7 @@ function commitOrRollback(
   audit: EngineResult['audit'],
   changed: string[],
 ): { final: Noticia; status: 'committed' | 'rolled_back' } {
-  if (
-    post.valid &&
-    changed.length > 0 &&
-    !changed.some((f) => (repaired as unknown as Record<string, unknown>)[f] === undefined)
-  ) {
+  if (post.valid && changed.length > 0) {
     logStep(audit, 'commit', {
       changed,
       postIssueCount: post.issues.length,

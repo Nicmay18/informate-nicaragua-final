@@ -6,12 +6,61 @@ export const maxDuration = 30;
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
+import { categoryToSlug } from '@/lib/types';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
 function isAuthorized(request: NextRequest): boolean {
   return verifyAdminToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
+}
+
+function toIsoDate(value: any): string | null {
+  if (!value) return null;
+  if (typeof value?.toDate === 'function') {
+    try {
+      const d = value.toDate();
+      return d instanceof Date && !isNaN(d.getTime()) ? d.toISOString() : null;
+    } catch { return null; }
+  }
+  if (typeof value === 'string') return value;
+  if (value instanceof Date) return isNaN(value.getTime()) ? null : value.toISOString();
+  return null;
+}
+
+/** Fecha canónica en ms: publishedAt → fechaPublicacion → fecha (misma regla que lib/data.ts). */
+function canonicalMs(data: Record<string, any>): number {
+  const s = toIsoDate(data.publishedAt) || toIsoDate(data.fechaPublicacion) || toIsoDate(data.fecha);
+  const t = s ? Date.parse(s) : NaN;
+  return Number.isNaN(t) ? 0 : t;
+}
+
+/**
+ * Pool de documentos para el Admin ordenado por fecha canónica.
+ * CAUSA RAÍZ (igual que la portada): `fecha` es de TIPO MIXTO en Firestore
+ * (strings ISO legacy + Timestamps nuevos) y orderBy ordena por tipo antes que
+ * por valor — en DESC los strings van primero y las notas nuevas (Timestamp)
+ * quedaban al final de la lista del Admin (o fuera del limit al crecer).
+ * Solución sin migrar datos: partir el query por tipo y reordenar en memoria.
+ */
+async function fetchAdminDocs(db: FirebaseFirestore.Firestore, fetchLimit: number) {
+  const boundary = Timestamp.fromDate(new Date('2100-01-01T00:00:00Z'));
+  const col = db.collection('noticias');
+  const safeGet = async (q: FirebaseFirestore.Query) => {
+    try { return (await q.get()).docs; } catch (e) {
+      logger.warn('[admin/news GET] query falló:', e instanceof Error ? e.message : String(e));
+      return [];
+    }
+  };
+  const [tsDocs, stringDocs] = await Promise.all([
+    safeGet(col.where('fecha', '<', boundary).orderBy('fecha', 'desc').limit(fetchLimit)),
+    safeGet(col.where('fecha', '>', boundary).orderBy('fecha', 'desc').limit(fetchLimit)),
+  ]);
+  const merged = new Map<string, FirebaseFirestore.QueryDocumentSnapshot>();
+  for (const d of [...tsDocs, ...stringDocs]) merged.set(d.id, d);
+  return Array.from(merged.values())
+    .sort((a, b) => canonicalMs(b.data()) - canonicalMs(a.data()))
+    .slice(0, fetchLimit);
 }
 
 export async function GET(request: NextRequest) {
@@ -53,8 +102,8 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(500).get();
-    const news = snap.docs.map((d) => {
+    const docs = await fetchAdminDocs(db, 500);
+    const news = docs.map((d) => {
       const data = d.data();
       return {
         id: d.id,
@@ -270,6 +319,7 @@ export async function POST(request: NextRequest) {
     revalidatePath('/');
     revalidatePath('/noticias');
     revalidatePath(`/noticias/${slug}`);
+    revalidatePath(`/categoria/${categoryToSlug(finalCategoria)}`);
     revalidatePath('/news-sitemap.xml');
     revalidatePath('/sitemap.xml');
 
