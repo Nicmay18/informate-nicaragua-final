@@ -242,7 +242,7 @@ async function fetchPublishedDocs(fields: string[], fetchLimit: number, categori
   // existe, cae al orderBy single-field con filtro en memoria.
   let publishedAtDocs: QueryDocumentSnapshot[] = [];
   {
-    let q: any = base().orderBy('publishedAt', 'desc').select(...selectFields).limit(fetchLimit);
+    const q: any = base().orderBy('publishedAt', 'desc').select(...selectFields).limit(fetchLimit);
     publishedAtDocs = await safeGet('publishedAt-indexed', q);
     if (publishedAtDocs.length === 0) {
       const fbLimit = Math.min(Math.max(fetchLimit * 2, 250), 500);
