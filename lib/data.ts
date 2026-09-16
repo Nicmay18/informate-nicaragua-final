@@ -29,6 +29,8 @@ export const LIST_FIELDS = [
   'categoria',
   'perfil',
   'fecha',
+  'fechaPublicacion',
+  'publishedAt',
   'fechaActualizacion',
   'vistas',
   'estado',
@@ -183,13 +185,21 @@ export function invalidateFirestoreCache() {
  * canónico) y une los resultados. CAUSA RAÍZ del bug de portada: orderBy
  * sobre un campo de tipo mixto ordena por tipo antes que por valor, lo que
  * dejaba noticias nuevas fuera del limit y mostraba notas viejas primero.
+ *
+ * El query `estado + orderBy(publishedAt)` requiere índice compuesto. Si no
+ * existe aún en Firebase, se cae a `orderBy(publishedAt)` solo (índice
+ * single-field siempre disponible) filtrando estado/categoria en memoria.
  */
 async function fetchPublishedDocs(fields: string[], fetchLimit: number, categoria?: string): Promise<QueryDocumentSnapshot[]> {
   const { adminDb } = await import('./firebase-admin');
+  // El select debe incluir los campos usados para filtrar en memoria y para
+  // resolver la fecha canónica en mapDocToNoticia.
+  const selectFields = Array.from(new Set([...fields, 'estado', 'categoria', 'publishedAt']));
+
   const buildQuery = (orderField: 'fecha' | 'publishedAt') => {
     let q: any = adminDb.collection('noticias').where('estado', '==', 'publicado');
     if (categoria) q = q.where('categoria', '==', categoria);
-    return q.orderBy(orderField, 'desc').select(...fields).limit(fetchLimit);
+    return q.orderBy(orderField, 'desc').select(...selectFields).limit(fetchLimit);
   };
 
   const byFecha = await buildQuery('fecha').get();
@@ -198,7 +208,26 @@ async function fetchPublishedDocs(fields: string[], fetchLimit: number, categori
     const byPublishedAt = await buildQuery('publishedAt').get();
     publishedAtDocs = byPublishedAt.docs;
   } catch (err) {
-    logger.warn('[data.ts] orderBy publishedAt no disponible, usando solo fecha:', err instanceof Error ? err.message : String(err));
+    logger.warn('[data.ts] query indexado publishedAt no disponible, usando fallback single-field:', err instanceof Error ? err.message : String(err));
+    // Fallback sin índice compuesto: orderBy(publishedAt) solo usa el índice
+    // single-field automático. Se filtran estado/categoria en memoria.
+    try {
+      const fbLimit = Math.min(Math.max(fetchLimit * 2, 250), 500);
+      const snap = await adminDb
+        .collection('noticias')
+        .orderBy('publishedAt', 'desc')
+        .select(...selectFields)
+        .limit(fbLimit)
+        .get();
+      publishedAtDocs = snap.docs.filter((d) => {
+        const data = d.data() as FirestoreNoticiaData;
+        if (data.estado !== 'publicado') return false;
+        if (categoria && data.categoria !== categoria) return false;
+        return true;
+      });
+    } catch (err2) {
+      logger.error('[data.ts] fallback publishedAt falló, usando solo fecha:', err2 instanceof Error ? err2.message : String(err2));
+    }
   }
 
   const merged = new Map<string, QueryDocumentSnapshot>();
