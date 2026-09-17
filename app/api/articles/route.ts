@@ -171,6 +171,24 @@ export async function POST(request: NextRequest) {
       invalidateFirestoreCache();
     } catch (e) { /* noop */ }
 
+    // CAUSA RAÍZ: esta ruta (publicación automatizada) nunca revalidaba rutas
+    // públicas — solo revalidateTag. Las notas publicadas por automatización
+    // quedaban invisibles en /noticias y su categoría hasta que expirara el
+    // ISR. Revalidar igual que guardar-directo y admin/news.
+    try {
+      const { revalidatePath } = await import('next/cache');
+      const { categoryToSlug } = await import('@/lib/types');
+      revalidatePath('/');
+      revalidatePath('/noticias');
+      revalidatePath(`/noticias/${finalSlug}`);
+      if (finalCategoria) revalidatePath(`/categoria/${categoryToSlug(String(finalCategoria))}`);
+      revalidatePath('/news-sitemap.xml');
+      revalidatePath('/sitemap.xml');
+      revalidatePath('/feed.xml');
+    } catch (e) {
+      logger.warn('[articles] revalidatePath error (non-blocking):', e);
+    }
+
     // Notificar a Google Indexing API (no bloquea la respuesta)
     const articleUrl = `https://nicaraguainformate.com/noticias/${finalSlug}`;
     import('@/lib/google-indexing').then(({ notifyGoogleIndexing }) => {

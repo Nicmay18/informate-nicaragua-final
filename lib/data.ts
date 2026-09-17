@@ -562,19 +562,30 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
 
 export const PAGE_SIZE = 12;
 
-export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
-  const validatedPage = Math.max(1, page);
-  const validatedPageSize = Math.max(1, pageSize);
-  try {
-    const offset = (validatedPage - 1) * validatedPageSize;
+// Tag 'noticias': asocia el listado al tag que invalidan todas las rutas de
+// publicación (invalidateFirestoreCache / /api/revalidate). Sin esta capa,
+// revalidateTag no tocaba /noticias porque sus datos no estaban etiquetados.
+const _cachedGetNewsPaginated = unstable_cache(
+  async (page: number, pageSize: number): Promise<Noticia[]> => {
+    const offset = (page - 1) * pageSize;
     // Traer más para compensar el filtro isPublicNews
-    const fetchLimit = Math.min(offset + validatedPageSize * 3, 300);
+    const fetchLimit = Math.min(offset + pageSize * 3, 300);
     const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit);
 
     return docs.map(mapDocToNoticia)
       .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-      .slice(offset, offset + validatedPageSize);
+      .slice(offset, offset + pageSize);
+  },
+  ['noticias-paginadas'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
+export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
+  const validatedPage = Math.max(1, page);
+  const validatedPageSize = Math.max(1, pageSize);
+  try {
+    return await _cachedGetNewsPaginated(validatedPage, validatedPageSize);
   } catch (err) {
     logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
     return [];
@@ -608,18 +619,26 @@ export async function getNewsCount(): Promise<number> {
   }
 }
 
-export async function getCategoryPaginated(categoria: string, page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
-  const validatedPage = Math.max(1, page);
-  const validatedPageSize = Math.max(1, pageSize);
-  try {
-    const offset = (validatedPage - 1) * validatedPageSize;
-    const fetchLimit = Math.min(offset + validatedPageSize * 3, 300);
+const _cachedGetCategoryPaginated = unstable_cache(
+  async (categoria: string, page: number, pageSize: number): Promise<Noticia[]> => {
+    const offset = (page - 1) * pageSize;
+    const fetchLimit = Math.min(offset + pageSize * 3, 300);
     const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
 
     return docs.map(mapDocToNoticia)
       .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-      .slice(offset, offset + validatedPageSize);
+      .slice(offset, offset + pageSize);
+  },
+  ['categoria-paginada'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
+export async function getCategoryPaginated(categoria: string, page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
+  const validatedPage = Math.max(1, page);
+  const validatedPageSize = Math.max(1, pageSize);
+  try {
+    return await _cachedGetCategoryPaginated(categoria, validatedPage, validatedPageSize);
   } catch (err) {
     logger.error(`[data.ts] getCategoryPaginated error ${categoria}:`, err instanceof Error ? err.message : String(err));
     return [];
