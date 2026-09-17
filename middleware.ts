@@ -197,6 +197,37 @@ export function middleware(request: NextRequest) {
     response.headers.set('Content-Security-Policy', relaxedCsp.join('; '));
   }
 
+  // CAUSA RAÍZ (listados congelados en producción): sin Cache-Control explícito,
+  // el CDN aplica su TTL por defecto (observado: `private, max-age=14400` con
+  // last-modified fijo) y sirve /noticias con horas de retraso aunque Next.js
+  // ya renderice la versión nueva — verificado: la misma URL con query distinta
+  // devolvía las notas de hoy y sin query devolvía las de ayer.
+  // Portada y listados son contenido público que cambia con cada publicación:
+  // TTL de borde corto + stale-while-revalidate.
+  const isLiveIndex =
+    pathname === '/' ||
+    pathname === '/noticias' ||
+    pathname === '/categoria' ||
+    pathname.startsWith('/categoria/');
+  if (isLiveIndex) {
+    response.headers.set(
+      'Cache-Control',
+      'public, max-age=0, s-maxage=60, stale-while-revalidate=300'
+    );
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  }
+
+  // Artículo individual (lectores): una corrección desde Admin debe verse sin
+  // esperar el TTL por defecto del CDN. `must-revalidate` en el navegador +
+  // s-maxage corto en el borde.
+  if (pathname.startsWith('/noticias/')) {
+    response.headers.set(
+      'Cache-Control',
+      'public, max-age=0, s-maxage=300, stale-while-revalidate=600'
+    );
+    response.headers.set('CDN-Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+  }
+
   const isCrawler = ALLOWED_CRAWLERS.some((bot) => ua.includes(bot));
   if (isCrawler && (pathname.startsWith('/noticias/') || pathname.startsWith('/categoria/') || pathname.startsWith('/entidad/') || pathname.startsWith('/tema/'))) {
     response.headers.set(
