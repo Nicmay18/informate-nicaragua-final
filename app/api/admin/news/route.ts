@@ -23,7 +23,15 @@ function toIsoDate(value: any): string | null {
       return d instanceof Date && !isNaN(d.getTime()) ? d.toISOString() : null;
     } catch { return null; }
   }
-  if (typeof value === 'string') return value;
+  if (typeof value === 'string') {
+    const ms = Date.parse(value);
+    return Number.isFinite(ms) ? new Date(ms).toISOString() : null;
+  }
+  if (typeof value === 'object' && ('seconds' in value || '_seconds' in value)) {
+    const ms = Number(value.seconds ?? value._seconds) * 1000 + Number(value.nanoseconds ?? value._nanoseconds ?? 0) / 1e6;
+    const d = new Date(ms);
+    return Number.isFinite(d.getTime()) ? d.toISOString() : null;
+  }
   if (value instanceof Date) return isNaN(value.getTime()) ? null : value.toISOString();
   return null;
 }
@@ -43,24 +51,9 @@ function canonicalMs(data: Record<string, any>): number {
  * quedaban al final de la lista del Admin (o fuera del limit al crecer).
  * Solución sin migrar datos: partir el query por tipo y reordenar en memoria.
  */
-async function fetchAdminDocs(db: FirebaseFirestore.Firestore, fetchLimit: number) {
-  const boundary = Timestamp.fromDate(new Date('2100-01-01T00:00:00Z'));
-  const col = db.collection('noticias');
-  const safeGet = async (q: FirebaseFirestore.Query) => {
-    try { return (await q.get()).docs; } catch (e) {
-      logger.warn('[admin/news GET] query falló:', e instanceof Error ? e.message : String(e));
-      return [];
-    }
-  };
-  const [tsDocs, stringDocs] = await Promise.all([
-    safeGet(col.where('fecha', '<', boundary).orderBy('fecha', 'desc').limit(fetchLimit)),
-    safeGet(col.where('fecha', '>', boundary).orderBy('fecha', 'desc').limit(fetchLimit)),
-  ]);
-  const merged = new Map<string, FirebaseFirestore.QueryDocumentSnapshot>();
-  for (const d of [...tsDocs, ...stringDocs]) merged.set(d.id, d);
-  return Array.from(merged.values())
-    .sort((a, b) => canonicalMs(b.data()) - canonicalMs(a.data()))
-    .slice(0, fetchLimit);
+async function fetchAdminDocs(db: FirebaseFirestore.Firestore) {
+  const snap = await db.collection('noticias').get();
+  return snap.docs.sort((a, b) => canonicalMs(b.data()) - canonicalMs(a.data()) || a.id.localeCompare(b.id));
 }
 
 export async function GET(request: NextRequest) {
@@ -102,7 +95,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    const docs = await fetchAdminDocs(db, 500);
+    const docs = await fetchAdminDocs(db);
     const news = docs.map((d) => {
       const data = d.data();
       return {
@@ -113,12 +106,13 @@ export async function GET(request: NextRequest) {
         contenido: data.contenido || '',
         categoria: data.categoria || 'General',
         imagen: data.imagen || '',
-        fecha: data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || new Date().toISOString(),
+        fecha: toIsoDate(data.publishedAt) || toIsoDate(data.fechaPublicacion) || toIsoDate(data.fecha) || '',
         autor: data.autor || 'Nicaragua Informate',
         destacada: !!data.destacada,
         vistas: data.vistas || 0,
         publicado: data.publicado !== false,
         estado: data.estado || (data.publicado === false ? 'borrador' : 'publicado'),
+        archived: data.archived === true,
         puntosClave: data.puntosClave || [],
         palabras: data.palabras || 0,
         nivel: data.nivel || 'SIN NIVEL',

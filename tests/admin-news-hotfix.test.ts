@@ -30,6 +30,54 @@ function mockChain(snap: any) {
 }
 
 describe('admin/news hotfix — noticias recién publicadas deben aparecer', () => {
+  it('recupera todos los tipos y fechas ausentes sin rangos ni límites que oculten documentos', async () => {
+    const { getAdminDb } = await import('@/lib/firebase-admin');
+    const rows = Array.from({ length: 2101 }, (_, i) => ({
+      id: `nota-${String(i).padStart(4, '0')}`,
+      data: {
+        fecha: i % 2 ? new Date(1700000000000 + i * 1000).toISOString() : { toDate: () => new Date(1700000000000 + i * 1000) },
+        publicado: true,
+      },
+    }));
+    const docs = createSnap(rows).docs;
+    docs.push({ id: 'sin-fecha', data: () => ({}) });
+    const get = vi.fn().mockResolvedValue({ docs });
+    vi.mocked(getAdminDb).mockReturnValue({ collection: vi.fn().mockReturnValue({ get }) } as any);
+    const { GET } = await import('@/app/api/admin/news/route');
+    const { NextRequest } = await import('next/server');
+    const res = await GET(new NextRequest('http://localhost/api/admin/news'));
+    const json = await res.json();
+    expect(res.status).toBe(200);
+    expect(json.news).toHaveLength(2102);
+    expect(json.news.map((n: any) => n.id)).toEqual([...rows].reverse().map(n => n.id).concat('sin-fecha'));
+    expect(json.news.at(-1).fecha).toBe('');
+    expect(get).toHaveBeenCalledTimes(1);
+  }, 60000);
+
+  it('usa la primera fecha canónica válida y no mueve una edición por dateModified', async () => {
+    const { getAdminDb } = await import('@/lib/firebase-admin');
+    const docs = createSnap([
+      { id: 'a', data: { publishedAt: 'inválida', fechaPublicacion: '2026-09-17T10:00:00Z', fecha: null } },
+      { id: 'b', data: { fecha: '2026-09-16T10:00:00Z', dateModified: '2026-09-18T10:00:00Z' } },
+      { id: 'c', data: { fecha: null } },
+    ]).docs;
+    vi.mocked(getAdminDb).mockReturnValue({ collection: () => ({ get: async () => ({ docs }) }) } as any);
+    const { GET } = await import('@/app/api/admin/news/route');
+    const { NextRequest } = await import('next/server');
+    const json = await (await GET(new NextRequest('http://localhost/api/admin/news'))).json();
+    expect(json.news.map((n: any) => n.id)).toEqual(['a', 'b', 'c']);
+    expect(json.news[0].fecha).toBe('2026-09-17T10:00:00.000Z');
+  });
+
+  it('un fallo de lectura no se convierte en una lista parcial exitosa', async () => {
+    const { getAdminDb } = await import('@/lib/firebase-admin');
+    vi.mocked(getAdminDb).mockReturnValue({ collection: () => ({ get: async () => { throw new Error('lectura fallida'); } }) } as any);
+    const { GET } = await import('@/app/api/admin/news/route');
+    const { NextRequest } = await import('next/server');
+    const res = await GET(new NextRequest('http://localhost/api/admin/news'));
+    expect(res.status).toBe(500);
+    expect((await res.json()).success).toBe(false);
+  });
   it('Caso A: noticia publicada nueva aparece en /api/admin/news', async () => {
     const { getAdminDb: mockGetAdminDb } = await import('@/lib/firebase-admin');
     mockGetAdminDb.mockReturnValue(mockChain(createSnap([

@@ -1047,6 +1047,12 @@
           <button class="filter-btn" onclick="filtrarNoticias('Tecnología', this)">💻 Tecnología</button>
           <button class="filter-btn" onclick="filtrarNoticias('General', this)">📰 General</button>
           <div style="display: flex; gap: 4px; margin-left: auto; align-items: center;">
+            <select id="filtroEstado" aria-label="Estado" onchange="buscarNoticias(document.getElementById('searchNoticias').value)">
+              <option value="">Todos los estados</option>
+              <option value="publicado">Publicado</option>
+              <option value="borrador">Borrador</option>
+              <option value="archivado">Archivado</option>
+            </select>
             <select id="filtroNivel" onchange="aplicarFiltroNivel(this.value)" style="padding: 7px 10px; border: 1px solid var(--gray-200); border-radius: var(--radius-md); font-size: 12px; background: white; color: var(--gray-700); cursor: pointer;">
               <option value="">🏆 Nivel</option>
               <option value="ORO">🥇 ORO</option>
@@ -3661,6 +3667,9 @@ sin texto ni marcas de agua, composición periodística"
 
     async function cargarDatosIniciales() {
       await Promise.all([cargarEstadisticas(), cargarUltimasNoticias()]);
+      if (new URLSearchParams(window.location.search).get('tab') === 'noticias') {
+        showTab('noticias-tab', document.querySelector('.nav-link[onclick*="noticias-tab"]'));
+      }
       const searchInput = document.getElementById('searchNoticias');
       if (searchInput) {
         searchInput.addEventListener('input', (e) => {
@@ -3709,11 +3718,16 @@ sin texto ni marcas de agua, composición periodística"
 
     function invalidatePanelCache() { _panelCache = null; _panelCacheTime = 0; }
 
+    function esPublicadaAdmin(n) {
+      return n.publicado === true && n.estado === 'publicado' && n.archived !== true;
+    }
+
     async function cargarEstadisticas() {
       try {
         const noticias = await getNoticiasCache();
         const totalNoticias = noticias.length;
-        document.getElementById('statNoticias').textContent = totalNoticias.toLocaleString();
+        document.getElementById('statNoticias').textContent = noticias.filter(esPublicadaAdmin).length.toLocaleString();
+        document.querySelector('#statNoticiasChange span').textContent = `${totalNoticias.toLocaleString()} noticias en total (todos los estados)`;
 
         const conteo = {}; categorias.forEach(c => conteo[c.id] = 0);
         let totalPalabras = 0;
@@ -3844,7 +3858,7 @@ sin texto ni marcas de agua, composición periodística"
       }
 
       // Filtrar publicados en cliente y tomar las 5 mas recientes
-      const publicadas = noticias.filter(n => n.estado === 'publicado' || !n.estado).slice(0, 5);
+      const publicadas = noticias.filter(esPublicadaAdmin).slice(0, 5);
       const aMostrar = publicadas.length > 0 ? publicadas : noticias.slice(0, 5);
 
       container.innerHTML = aMostrar.map(n => {
@@ -4386,6 +4400,7 @@ sin texto ni marcas de agua, composición periodística"
             const item = document.createElement('div');
             item.className = 'news-item';
             item.setAttribute('data-id', n.id);
+            item.setAttribute('data-estado', esPublicadaAdmin(n) ? 'publicado' : n.estado === 'publicado' ? 'inconsistente' : n.estado || 'borrador');
             item.setAttribute('data-nivel', n.nivel || 'SIN NIVEL');
             item.setAttribute('data-autor', (n.autor || '').toLowerCase());
             item.setAttribute('data-contenido', ((n.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase()).slice(0, 300));
@@ -4494,6 +4509,7 @@ sin texto ni marcas de agua, composición periodística"
           window._buscarHandler = (e) => buscarNoticias(e.target.value);
           searchInput.addEventListener('input', window._buscarHandler);
         }
+        await window.buscarNoticias(searchInput ? searchInput.value : '');
       } catch (error) { showToast('Error cargando noticias', 'error'); }
     };
 
@@ -4519,7 +4535,9 @@ sin texto ni marcas de agua, composición periodística"
         const nivel = (item.getAttribute('data-nivel') || 'SIN NIVEL').toUpperCase();
         const matchQuery = !q || titulo.includes(q) || categoria.includes(q) || id.includes(q) || autor.includes(q) || contenido.includes(q);
         const matchNivel = !nivelFiltro || nivel === nivelFiltro;
-        const match = matchQuery && matchNivel;
+        const estadoFiltro = document.getElementById('filtroEstado')?.value || '';
+        const matchEstado = !estadoFiltro || item.getAttribute('data-estado') === estadoFiltro;
+        const match = matchQuery && matchNivel && matchEstado;
         item.style.setProperty('display', match ? 'flex' : 'none', 'important');
         if (match) visibleCount++;
       });
@@ -4533,6 +4551,10 @@ sin texto ni marcas de agua, composición periodística"
       const filtrosActivos = [];
       if (q) filtrosActivos.push(`"${q}"`);
       if (nivelFiltro) filtrosActivos.push(nivelFiltro);
+      const estadoFiltro = document.getElementById('filtroEstado')?.value || '';
+      if (estadoFiltro) filtrosActivos.push(estadoFiltro);
+      const titleEl = document.getElementById('noticiasCountTitle');
+      if (titleEl) titleEl.textContent = `Gestión de Noticias (${visibleCount})`;
       counter.textContent = filtrosActivos.length > 0
         ? `Filtros: ${filtrosActivos.join(' + ')} — ${visibleCount} resultado${visibleCount !== 1 ? 's' : ''}`
         : `${visibleCount} noticias`;

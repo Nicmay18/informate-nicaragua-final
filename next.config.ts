@@ -251,6 +251,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/admin/news',
+        destination: '/panel.html?tab=noticias',
+        permanent: false,
+      },
+      {
         source: '/admin/growth',
         destination: '/panel/nios',
         permanent: false,
