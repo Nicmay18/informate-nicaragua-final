@@ -16,6 +16,24 @@ function loadPanel(rows: any[]) {
 const visible = () => Array.from(document.querySelectorAll<HTMLElement>('.news-item')).filter(el => el.style.display !== 'none');
 
 describe('Panel real: listado continuo y filtros', () => {
+  it('usa una URL distinta en cada lectura y reintento para evitar respuestas antiguas del CDN', async () => {
+    const fetch = vi.fn()
+      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({ news: [{ id: 'old' }] }) })
+      .mockResolvedValueOnce({ ok: false, status: 401 })
+      .mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({ news: [{ id: 'new' }, { id: 'old' }] }) });
+    const localStorage = { getItem: () => 'test-admin', removeItem: vi.fn() };
+    let sequence = 0;
+    const window = { crypto: { randomUUID: () => `request-${++sequence}` } };
+    const source = panel.slice(panel.indexOf('    let _panelCache ='), panel.indexOf('    function esPublicadaAdmin('));
+    const load = new Function('window', 'fetch', 'localStorage', 'fetchAdminToken', `${source}\nreturn getNoticiasCache;`)(window, fetch, localStorage, vi.fn());
+    expect(await load()).toEqual([{ id: 'old' }]);
+    expect(await load()).toEqual([{ id: 'new' }, { id: 'old' }]);
+    const urls = fetch.mock.calls.map(([url]) => new URL(url, 'https://nicaraguainformate.com'));
+    expect(new Set(urls.map(url => url.href)).size).toBe(3);
+    expect(urls.every(url => url.pathname === '/api/admin/news' && url.searchParams.has('_refresh'))).toBe(true);
+    expect(fetch.mock.calls.every(([, options]) => options.cache === 'no-store' && options.headers['x-admin-token'] === 'test-admin')).toBe(true);
+  });
+
   it('renderiza todos los registros en orden, incluidos los posteriores a 50 y 100', async () => {
     const rows = Array.from({ length: 442 }, (_, i) => ({ id: String(i), titulo: `Noticia ${i}`, categoria: 'Sucesos', publicado: true, estado: 'publicado', fecha: new Date(1800000000000 - i * 1000).toISOString() }));
     const { w, toast } = loadPanel(rows);

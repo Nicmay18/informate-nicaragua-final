@@ -3682,6 +3682,13 @@ sin texto ni marcas de agua, composición periodística"
     let _panelCacheTime = 0;
     const _PANEL_CACHE_TTL = 0; // administración no debe servir listas viejas tras publicar
 
+    // URL única por lectura: Cloudflare cachea /api/admin/news por URL y ya
+    // sirvió una respuesta antigua; el parámetro evita claves de caché viejas.
+    function adminNewsUrl() {
+      const salt = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+      return '/api/admin/news?_refresh=' + salt;
+    }
+
     async function getNoticiasCache() {
       if (_panelCache && Date.now() - _panelCacheTime < _PANEL_CACHE_TTL) return _panelCache;
       let adminToken = localStorage.getItem('admin_api_key') || '';
@@ -3689,7 +3696,7 @@ sin texto ni marcas de agua, composición periodística"
         await fetchAdminToken();
         adminToken = localStorage.getItem('admin_api_key') || '';
       }
-      const resp = await fetch('/api/admin/news', {
+      const resp = await fetch(adminNewsUrl(), {
         headers: { 'x-admin-token': adminToken },
         cache: 'no-store'
       });
@@ -3697,7 +3704,7 @@ sin texto ni marcas de agua, composición periodística"
         localStorage.removeItem('admin_api_key');
         await fetchAdminToken();
         adminToken = localStorage.getItem('admin_api_key') || '';
-        const resp2 = await fetch('/api/admin/news', {
+        const resp2 = await fetch(adminNewsUrl(), {
           headers: { 'x-admin-token': adminToken },
           cache: 'no-store'
         });

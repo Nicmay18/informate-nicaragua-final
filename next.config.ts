@@ -252,7 +252,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/admin/news',
-        destination: '/panel.html?tab=noticias',
+        destination: '/panel.html?tab=noticias&v=2',
         permanent: false,
       },
       {
