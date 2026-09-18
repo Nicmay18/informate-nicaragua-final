@@ -1,5 +1,6 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { getTelegramConfig } from '@/lib/telegram';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 /** Escape para Telegram HTML parse_mode: solo < > & " ' */
 function escTelegram(texto: string): string {
@@ -16,22 +17,23 @@ function sinAcentos(str: string): string {
 }
 
 export async function POST(request: NextRequest) {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, Accept, Origin',
-  };
-
-  if (request.method === 'OPTIONS') {
-    return new NextResponse(null, { status: 200, headers });
+  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
+  const token =
+    request.headers.get('x-admin-token') ||
+    request.headers.get('x-admin-key') ||
+    new URL(request.url).searchParams.get('secret');
+  if (!verifyAdminOrCronToken(token) && !verifyAdminOrCronToken(bearer)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   }
+
+  const headers: Record<string, string> = {};
 
   try {
     const body = await request.json();
-    const { noticia, config } = body;
+    const { noticia } = body;
     const cfg = await getTelegramConfig();
-    const TG_TOKEN = config?.telegram?.token || cfg.token;
-    const TG_CHAT_ID = config?.telegram?.chatId || cfg.chatId;
+    const TG_TOKEN = cfg.token;
+    const TG_CHAT_ID = cfg.chatId;
 
     if (!TG_TOKEN) return NextResponse.json({ error: 'Falta token de Telegram' }, { status: 400, headers });
     if (!TG_CHAT_ID) return NextResponse.json({ error: 'Falta chat ID de Telegram' }, { status: 400, headers });

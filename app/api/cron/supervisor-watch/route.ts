@@ -25,8 +25,9 @@ export async function GET(request: Request) {
   // Auth por CRON_SECRET (query param o header)
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('secret') || request.headers.get('x-cron-secret');
+  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
 
-  if (!verifyAdminOrCronToken(secret)) {
+  if (!verifyAdminOrCronToken(secret) && !verifyAdminOrCronToken(bearer)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

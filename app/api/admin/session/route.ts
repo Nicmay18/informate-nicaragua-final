@@ -26,20 +26,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Token sin email asociado' }, { status: 401 });
     }
 
-    // Si ADMIN_EMAILS está configurado, verificar que el email esté autorizado
+    // Fail-closed: sin allowlist configurada nadie puede obtener la API key
     const allowedEmails = (process.env.ADMIN_EMAILS || '')
       .split(',')
       .map(e => e.trim().toLowerCase())
       .filter(Boolean);
 
-    if (allowedEmails.length > 0) {
-      const email = decoded.email.toLowerCase();
-      if (!allowedEmails.includes(email)) {
-        return NextResponse.json(
-          { error: 'Email no autorizado para acceso administrativo' },
-          { status: 403 }
-        );
-      }
+    if (allowedEmails.length === 0) {
+      logger.error('[session] ADMIN_EMAILS no configurado; acceso denegado');
+      return NextResponse.json({ error: 'Acceso administrativo no configurado' }, { status: 403 });
+    }
+
+    const email = decoded.email.toLowerCase();
+    if (!allowedEmails.includes(email)) {
+      return NextResponse.json(
+        { error: 'Email no autorizado para acceso administrativo' },
+        { status: 403 }
+      );
     }
 
     const apiKey = process.env.ADMIN_API_KEY;

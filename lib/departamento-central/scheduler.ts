@@ -38,13 +38,18 @@ async function hasRecentJob(
   }
 }
 
+function timeBucket(periodMs: number): string {
+  return String(Math.floor(Date.now() / periodMs));
+}
+
 async function maybeEnqueueHealthCheck(): Promise<string | null> {
   if (await hasRecentJob('health-check', 4.5 * 60 * 1000)) return null;
+  const bucket = timeBucket(5 * 60 * 1000);
   return enqueueJob({
     type: 'health-check',
     priority: 'P0',
     source: 'scheduler',
-    dedupKey: dedup('health-check', '5min'),
+    dedupKey: dedup('health-check', bucket, bucket),
   });
 }
 
@@ -61,46 +66,52 @@ async function maybeEnqueueDailyReport(): Promise<string | null> {
 
 async function maybeEnqueueGrowth(): Promise<string | null> {
   if (await hasRecentJob('growth-check', 29 * 60 * 1000)) return null;
+  const bucket = timeBucket(30 * 60 * 1000);
   return enqueueJob({
     type: 'growth-check',
     priority: 'P2',
     source: 'scheduler',
-    dedupKey: dedup('growth-check', '30min'),
+    dedupKey: dedup('growth-check', bucket, bucket),
   });
 }
 
 async function maybeEnqueueMonetization(): Promise<string | null> {
   if (await hasRecentJob('monetization-check', 59 * 60 * 1000)) return null;
+  const bucket = timeBucket(60 * 60 * 1000);
   return enqueueJob({
     type: 'monetization-check',
     priority: 'P2',
     source: 'scheduler',
-    dedupKey: dedup('monetization-check', 'hourly'),
+    dedupKey: dedup('monetization-check', bucket, bucket),
   });
 }
 
 async function enqueueNewArticles(): Promise<number> {
   const db = getAdminDb();
-  const since = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+  const since = new Date(Date.now() - 2 * 60 * 60 * 1000);
 
   try {
+    // dateModified se escribe como Timestamp en cada creacion/edicion.
+    // El campo 'updatedAt' no existe en el esquema actual.
     const snap = await db
       .collection('noticias')
-      .where('updatedAt', '>=', since)
-      .orderBy('updatedAt', 'desc')
+      .where('dateModified', '>=', since)
+      .orderBy('dateModified', 'desc')
       .limit(20)
       .get();
 
     let enqueued = 0;
     for (const doc of snap.docs) {
       const data = doc.data();
-      const updatedAt = String(data?.updatedAt || data?.createdAt || '');
+      const modified =
+        data?.dateModified?.toDate?.()?.toISOString?.() ||
+        String(data?.dateModified || '');
       const jobId = await enqueueJob({
         type: 'article-pipeline',
         priority: (data?.priority as DeptoPriority) || 'P2',
         source: 'firestore-noticia',
         payload: { articleId: doc.id, createdAt: data?.createdAt },
-        dedupKey: `article-pipeline:${doc.id}:${updatedAt}`,
+        dedupKey: `article-pipeline:${doc.id}:${modified}`,
       });
       if (jobId) enqueued++;
     }

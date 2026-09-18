@@ -5,10 +5,22 @@ import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { logger } from '@/lib/logger';
 import { countWords } from '@/lib/utils/word-count';
+import { verifyAdminOrCronToken } from '@/lib/auth';
 
 export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
+  const token =
+    request.headers.get('x-admin-token') ||
+    request.headers.get('x-admin-key') ||
+    searchParams.get('token') ||
+    searchParams.get('secret');
+  if (!verifyAdminOrCronToken(token) && !verifyAdminOrCronToken(bearer)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const { titulo, contenido, resumen, categoria, imagen, autor, premium } = body;

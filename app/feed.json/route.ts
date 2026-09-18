@@ -4,8 +4,8 @@
  * Spec: https://jsonfeed.org/version/1.1
  */
 
-import { adminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
+import { fetchFeedArticles } from '@/lib/feed-articles';
 
 export const revalidate = 86400;
 
@@ -27,30 +27,22 @@ function toAbsoluteUrl(url?: string): string {
 
 const cachedFetchFeedJson = unstable_cache(
   async () => {
-    const snapshot = await adminDb
-      .collection('noticias')
-      .orderBy('fecha', 'desc')
-      .limit(50)
-      .get();
-    return snapshot.docs.map((doc) => {
-      const d = doc.data();
-      let dateIso = '';
-      try {
-        dateIso = d.fecha?.toDate ? d.fecha.toDate().toISOString() : new Date(d.fecha).toISOString();
-      } catch { dateIso = new Date().toISOString(); }
-      const imgUrl = toAbsoluteUrl(d.imagen as string);
+    const articles = await fetchFeedArticles(50);
+    return articles.map((a) => {
+      const dateIso = new Date(a.pubDate).toISOString();
+      const imgUrl = toAbsoluteUrl(a.imagen);
       return {
-        id: d.slug as string,
-        url: `https://nicaraguainformate.com/noticias/${d.slug}`,
-        title: d.titulo as string,
-        content_text: stripHtml(d.contenido || d.resumen || ''),
-        content_html: d.contenido || '',
-        summary: d.resumen || '',
+        id: a.slug,
+        url: `https://nicaraguainformate.com/noticias/${a.slug}`,
+        title: a.title,
+        content_text: stripHtml(a.contenido || a.description || ''),
+        content_html: a.contenido || '',
+        summary: a.description || '',
         image: imgUrl,
         date_published: dateIso,
         date_modified: dateIso,
-        authors: [{ name: d.autor || 'Redacción Nicaragua Informate' }],
-        tags: [d.categoria || 'General'],
+        authors: [{ name: a.autor }],
+        tags: [a.category],
         language: 'es-NI',
       };
     });
