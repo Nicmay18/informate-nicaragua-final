@@ -35,7 +35,85 @@ import { verifyEditorialDecisions } from './verification';
 import { computeRanking, analyzeSaturation } from '@/lib/meni/editor-jefe/ranking';
 import { applyPatternsToDiagnostic } from '@/lib/meni/editor-jefe/correction-tracker';
 import { buildMemoriaEditorial } from '@/lib/meni/editor-jefe/editorial-memory';
+
 import { getCategoryProfile } from './profiles';
+
+type HumanEditorCheck = {
+  id: 'lead_5w' | 'title_length' | 'ai_transitions' | 'emotional_filler';
+  ok: boolean;
+  critical: boolean;
+  message: string;
+};
+
+function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
+  const title = (input.titulo || '').trim();
+  const body = (input.contenido || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const firstParagraph = (input.contenido || '')
+    .replace(/<[^>]+>/g, ' ')
+    .split(/\n\s*\n|\r\n\r\n/)
+    .map(p => p.replace(/\s+/g, ' ').trim())
+    .find(Boolean) || body.slice(0, 450);
+
+  const lowerLead = firstParagraph.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const hasWhat = /\b(murio|murio|fallecio|resulto|resultaron|dejo|causo|ocurrio|sucedio|reporto|informo|anuncio|aprobo|detuvo|capturo|choco|colisiono|atropello|investiga|investigan|denuncio|presento|inicio|comenzo|gano|perdio|llego|regreso|fue encontrado|fue hallado|se registro|se produjo)\b/i.test(lowerLead);
+  const hasWhere = /\b(en|desde|hacia|sobre|entre|cerca de|frente a|a la altura de|km\.?|kilometro|managua|nicaragua|municipio|barrio|comarca|comunidad|carretera|avenida|calle|departamento)\b/i.test(lowerLead);
+  const hasWhen = /\b(hoy|ayer|anoche|esta manana|este martes|este miercoles|este jueves|este viernes|este sabado|este domingo|este lunes|martes|miercoles|jueves|viernes|sabado|domingo|lunes|\d{1,2} de [a-z]+|\d{1,2}\/\d{1,2}\/\d{2,4}|\d{1,2}:\d{2}|madrugada|manana|tarde|noche|horas?)\b/i.test(lowerLead);
+
+  const leadOk = hasWhat && hasWhere && hasWhen;
+  const titleOk = title.length >= 30 && title.length <= 65;
+  const aiTransitions = ['ademas', 'no obstante', 'sin embargo', 'por otro lado', 'en este sentido'];
+  const transitionHits = aiTransitions.filter(t => body.toLowerCase().includes(t));
+  const transitionsOk = transitionHits.length === 0;
+
+  const fillerPatterns = [
+    /\btragedia que estremece\b/i,
+    /\bterrible tragedia\b/i,
+    /\bdesgarrador(?:a)?\b/i,
+    /\bconmovedor(?:a)?\b/i,
+    /\bescalofriante\b/i,
+    /\bdramatic(?:o|a)\b/i,
+    /\ben medio del dolor\b/i,
+    /\bimpactante escena\b/i,
+    /\bno podia creer\b/i,
+    /\buna historia que conmueve\b/i,
+  ];
+  const fillerHits = fillerPatterns.filter(p => p.test(body)).length;
+
+  return [
+    {
+      id: 'lead_5w',
+      ok: leadOk,
+      critical: true,
+      message: leadOk
+        ? 'CHECK LEAD 5W: OK (qué/dónde/cuándo presentes en el lead).'
+        : 'CHECK LEAD 5W: FALLA CRÍTICA — el lead no deja claros qué, dónde y cuándo. Mejorar antes de publicar.',
+    },
+    {
+      id: 'title_length',
+      ok: titleOk,
+      critical: false,
+      message: titleOk
+        ? `CHECK TITULAR: OK (${title.length} caracteres).`
+        : `CHECK TITULAR: MEJORAR — ${title.length} caracteres; objetivo editorial 30–65.`,
+    },
+    {
+      id: 'ai_transitions',
+      ok: transitionsOk,
+      critical: false,
+      message: transitionsOk
+        ? 'CHECK TRANSICIONES: OK — no detecta conectores-IA de la lista de control.'
+        : `CHECK TRANSICIONES: MEJORAR — detectados: ${transitionHits.join(', ')}.`,
+    },
+    {
+      id: 'emotional_filler',
+      ok: fillerHits === 0,
+      critical: false,
+      message: fillerHits === 0
+        ? 'CHECK RELLENO EMOCIONAL: OK.'
+        : `CHECK RELLENO EMOCIONAL: MEJORAR — detectadas ${fillerHits} expresiones de carga emocional.`,
+    },
+  ];
+}
 
 export { verifyEditorialDecisions };
 export type { EditorialVerification, EditorialVerificationItem } from './types';
@@ -126,9 +204,18 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     contenido: input.contenido,
   });
 
-  // Recomendación editorial — el editor guía, no bloquea
-  const recomendacionesCount = utilityGate.recomendacionesEditoriales.length + diagnostico.queLeFaltaParaReferencia.length;
-  const tieneProblemasGraves = antiClickbait.veredicto === 'bloqueado';
+  // Checks deterministas del auditor humano: no sustituyen al Editorial Brain;
+  // añaden una barrera editorial explícita antes del veredicto.
+  const humanChecks = runHumanEditorChecks(input);
+  const humanCriticalIssues = humanChecks.filter(c => c.critical && !c.ok);
+  const humanCheckActions = humanChecks.filter(c => !c.ok).map(c => c.message);
+
+  // Recomendación editorial — un lead 5W roto nunca publica.
+  const recomendacionesCount =
+    utilityGate.recomendacionesEditoriales.length +
+    diagnostico.queLeFaltaParaReferencia.length +
+    humanCheckActions.length;
+  const tieneProblemasGraves = antiClickbait.veredicto === 'bloqueado' || humanCriticalIssues.length > 0;
 
   const recomendacionEditorial: RecomendacionEditorial = tieneProblemasGraves
     ? 'revisar'
@@ -136,10 +223,12 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     ? 'publicar'
     : 'mejorar';
 
-  // Backward compat: bloquear = true solo para 'revisar'
   const bloquear = recomendacionEditorial === 'revisar';
   const motivosBloqueo: string[] = [];
   if (antiClickbait.veredicto === 'bloqueado') motivosBloqueo.push(`Anti Clickbait: ${antiClickbait.razon}`);
+  if (humanCriticalIssues.length > 0) {
+    motivosBloqueo.push(...humanCriticalIssues.map(c => c.message));
+  }
   if (utilityGate.recomendacionesEditoriales.length > 0) {
     motivosBloqueo.push(...utilityGate.recomendacionesEditoriales);
   }
@@ -223,10 +312,16 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   });
 
   // Acciones y puntos perdidos determinan el score ejecutivo transparente.
-  const acciones = diagnostico.queLeFaltaParaReferencia.length > 0
+  const accionesBase = diagnostico.queLeFaltaParaReferencia.length > 0
     ? diagnostico.queLeFaltaParaReferencia
     : utilityGate.recomendacionesEditoriales.length > 0
     ? utilityGate.recomendacionesEditoriales
+    : [];
+
+  const acciones = humanCheckActions.length > 0
+    ? [...humanCheckActions, ...accionesBase]
+    : accionesBase.length > 0
+    ? accionesBase
     : ['Lista para publicar'];
 
   const readerLearning = computarReaderLearning(
@@ -261,9 +356,9 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // Veredicto ejecutivo se deriva del score transparente, no de pesos heredados.
   // Alineado con el umbral canónico de aprobación de MENI: >= MIN_APPROVED_SCORE es PUBLICABLE.
   const finalRecomendacion: RecomendacionEditorial =
-    editorialDna.bloquear || tieneProblemasGraves || score < 75
+    editorialDna.bloquear || tieneProblemasGraves || humanCriticalIssues.length > 0 || score < 75
       ? 'revisar'
-      : score < MIN_APPROVED_SCORE
+      : humanCheckActions.length > 0 || score < MIN_APPROVED_SCORE
       ? 'mejorar'
       : 'publicar';
 
