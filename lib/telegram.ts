@@ -2,8 +2,8 @@
  * Configuración de Telegram, normalizada para Vercel.
  *
  * Orden de resolución:
- * 1. Firestore config.collection('config').doc('admin').telegram.{token,chatId}
- * 2. Variables de entorno (varios nombres compatibles)
+ * 1. Variables de entorno (varios nombres compatibles) — fuente controlada por el operador
+ * 2. Firestore config.collection('config').doc('admin').telegram.{token,chatId}
  */
 import type { Firestore } from 'firebase-admin/firestore';
 
@@ -24,6 +24,12 @@ export interface TelegramConfig {
 }
 
 export async function getTelegramConfig(db?: Firestore): Promise<TelegramConfig> {
+  const envToken = getEnvVar(TOKEN_KEYS);
+  const envChatId = getEnvVar(CHAT_ID_KEYS);
+  if (envToken && envChatId) {
+    return { token: envToken, chatId: envChatId };
+  }
+
   if (db) {
     try {
       const snap = await db.collection('config').doc('admin').get();
@@ -34,11 +40,9 @@ export async function getTelegramConfig(db?: Firestore): Promise<TelegramConfig>
         return { token, chatId };
       }
     } catch {
-      // Fallback a env
+      // Fallback a env parcial
     }
   }
 
-  const token = getEnvVar(TOKEN_KEYS) || '';
-  const chatId = getEnvVar(CHAT_ID_KEYS) || '';
-  return { token, chatId };
+  return { token: envToken || '', chatId: envChatId || '' };
 }

@@ -90,8 +90,8 @@ async function sendTelegram(db: Firestore, input: PipelineInput): Promise<{ ok: 
   try {
     const snap = await db.collection('config').doc('admin').get();
     const data = snap.data() || {};
-    const token = data.telegram?.token || process.env.TG_TOKEN || '';
-    const chatId = data.telegram?.chatId || process.env.TG_CHAT_ID || process.env.TG_CHAT || '';
+    const token = process.env.TG_TOKEN || data.telegram?.token || '';
+    const chatId = process.env.TG_CHAT_ID || process.env.TG_CHAT || data.telegram?.chatId || '';
     if (!token || !chatId) return { ok: false, error: 'Faltan credenciales Telegram' };
 
     const url = buildUrl(input.slug, 'telegram');
