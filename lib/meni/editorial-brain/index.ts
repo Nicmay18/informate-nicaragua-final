@@ -93,8 +93,8 @@ function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
       ok: titleOk,
       critical: false,
       message: titleOk
-        ? \`CHECK TITULAR: OK (\${title.length} caracteres).\`
-        : \`CHECK TITULAR: MEJORAR — \${title.length} caracteres; objetivo editorial 30–65.\`,
+        ? `CHECK TITULAR: OK (${title.length} caracteres).`
+        : `CHECK TITULAR: MEJORAR — ${title.length} caracteres; objetivo editorial 30–65.`,
     },
     {
       id: 'ai_transitions',
@@ -102,7 +102,7 @@ function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
       critical: false,
       message: transitionsOk
         ? 'CHECK TRANSICIONES: OK — no detecta conectores-IA de la lista de control.'
-        : \`CHECK TRANSICIONES: MEJORAR — detectados: \${transitionHits.join(', ')}.\`,
+        : `CHECK TRANSICIONES: MEJORAR — detectados: ${transitionHits.join(', ')}.`,
     },
     {
       id: 'emotional_filler',
@@ -110,7 +110,7 @@ function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
       critical: false,
       message: fillerHits === 0
         ? 'CHECK RELLENO EMOCIONAL: OK.'
-        : \`CHECK RELLENO EMOCIONAL: MEJORAR — detectadas \${fillerHits} expresiones de carga emocional.\`,
+        : `CHECK RELLENO EMOCIONAL: MEJORAR — detectadas ${fillerHits} expresiones de carga emocional.`,
     },
   ];
 }
