@@ -102,7 +102,11 @@ export function middleware(request: NextRequest) {
   if (pathname.startsWith('/api/admin/')) {
     const PUBLIC_ADMIN_ROUTES = ['/api/admin/session', '/api/admin/estado', '/api/admin/config', '/api/admin/repair-fechas'];
     if (PUBLIC_ADMIN_ROUTES.includes(pathname)) {
-      return NextResponse.next();
+      const pubResponse = NextResponse.next();
+      pubResponse.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+      pubResponse.headers.set('CDN-Cache-Control', 'no-store');
+      pubResponse.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
+      return pubResponse;
     }
 
     const unauthorized = requireAdminAuth(request);
@@ -111,6 +115,14 @@ export function middleware(request: NextRequest) {
     const response = NextResponse.next();
     response.headers.set('X-RateLimit-Limit', '60');
     response.headers.set('X-RateLimit-Remaining', '60');
+    // Cloudflare tiene una regla "Cache Everything" que ignora el
+    // Cache-Control del origen: una respuesta autenticada 200 quedaba
+    // servible sin credenciales en la misma URL (verificado: HIT con
+    // datos del Admin). CDN-Cache-Control/Cloudflare-CDN-Cache-Control
+    // son los headers que CF respeta para decisiones de edge cache.
+    response.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    response.headers.set('CDN-Cache-Control', 'no-store');
+    response.headers.set('Cloudflare-CDN-Cache-Control', 'no-store');
     return response;
   }
 
