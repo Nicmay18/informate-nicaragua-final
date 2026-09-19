@@ -6,6 +6,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { incrementView, flush } from '@/lib/view-counter';
 import { CATEGORIES, isLutoNews, type Noticia } from '@/lib/types';
+import { rankNoticias, selectDestacada } from '@/lib/home-ranking';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
@@ -173,8 +174,10 @@ const SECTION_LIMITS: Record<string, number> = {
  */
 export async function getHomePageData(): Promise<HomePageData> {
   const categoryNames = CATEGORIES.map(c => c.name);
+  // La portada necesita un universo mayor que "las últimas 15": el ranking editorial
+  // debe poder rescatar una noticia importante aunque no sea la más reciente.
   const [latest, masLeidas, ...categoryResults] = await Promise.all([
-    getNews(15),
+    getNews(60),
     getMasLeidas(5),
     ...categoryNames.map(name => getNewsByCategory(name, 8)),
   ]);
@@ -184,31 +187,43 @@ export async function getHomePageData(): Promise<HomePageData> {
 
   const used = new Set<string>();
 
-  // HERO: noticia aprobada/publicada más reciente, no luto, con imagen preferible
-  const heroCandidates = latest;
-  const hero = heroCandidates.find(n => !isLutoNews(n)) ?? heroCandidates[0] ?? null;
+  // PRINCIPALES: decisión editorial. La recencia vive en "Última hora".
+  // El ranking ya combina frescura, interés público, MENI, categoría y SEO.
+  const ranked = rankNoticias(latest);
+  const hero = selectDestacada(ranked.filter(n => !isLutoNews(n))) ?? ranked[0] ?? null;
   if (hero) used.add(hero.id);
 
-  // ÚLTIMAS NOTICIAS: 10 más recientes excluyendo hero
+  // Principales: diversidad deliberada. Una nota recién publicada no desplaza
+  // automáticamente una noticia más importante.
+  const principales: Noticia[] = [];
+  const principalCounts: Record<string, number> = {};
+  for (const n of ranked) {
+    if (principales.length >= 5) break;
+    if (used.has(n.id)) continue;
+    const cap = n.categoria === 'Sucesos' ? 2 : 2;
+    const count = principalCounts[n.categoria] || 0;
+    if (count >= cap) continue;
+    principales.push(n);
+    principalCounts[n.categoria] = count + 1;
+    used.add(n.id);
+  }
+  const enPortada = principales;
+
+  // ÚLTIMAS NOTICIAS: carril puramente cronológico.
   const ultimas = latest.filter(n => !used.has(n.id)).slice(0, 10);
   ultimas.forEach(n => used.add(n.id));
 
-  // EN PORTADA: 3 más recientes, máximo 1 por categoría
-  const enPortadaRaw = latest.filter(n => !used.has(n.id));
-  const enPortada = enPortadaRaw.slice(0, 6).filter((n, i, arr) => arr.findIndex(x => x.categoria === n.categoria) === i).slice(0, 3);
-  enPortada.forEach(n => used.add(n.id));
-
-  // ÚLTIMA HORA: 4 más recientes, máximo 2 Sucesos
-  const breakingRaw = latest.filter(n => !used.has(n.id)).slice(0, 15);
+  // ÚLTIMA HORA: carril de recencia, independiente del ranking editorial.
+  const breakingRaw = latest.filter(n => !used.has(n.id)).slice(0, 20);
   const breaking: Noticia[] = [];
   const catCounts: Record<string, number> = {};
   for (const n of breakingRaw) {
     if (breaking.length >= 4) break;
-    catCounts[n.categoria] = (catCounts[n.categoria] || 0) + 1;
-    if (catCounts[n.categoria] <= 2 || n.categoria !== 'Sucesos') {
-      breaking.push(n);
-      used.add(n.id);
-    }
+    const count = catCounts[n.categoria] || 0;
+    if (n.categoria === 'Sucesos' && count >= 2) continue;
+    breaking.push(n);
+    catCounts[n.categoria] = count + 1;
+    used.add(n.id);
   }
 
   // SECCIONES POR CATEGORÍA: tomar de consulta directa por categoría, excluyendo usados

@@ -16,6 +16,9 @@
 import type { ArticleFusion, GoogleTrustArticle, GoogleTrustReport, ThinContentArticle } from './types';
 
 const THIN_WORDS_THRESHOLD = 400;
+
+// GSC/GA4 are evidence sources, not assumptions. A blocked or missing source
+// must never be converted into a negative Google signal.
 const HIGH_RISK_THRESHOLD = 40;
 const MEDIUM_RISK_THRESHOLD = 70;
 
@@ -50,8 +53,8 @@ function calculateEditorialAuthorityScore(article: ArticleFusion): {
 function calculateContentValueScore(article: ArticleFusion): number {
   const scores: number[] = [];
 
-  // Tráfico orgánico real (máximo 20 pts)
-  const organicTraffic = article.gscClicks;
+  // Tráfico orgánico real (máximo 20 pts). Solo cuenta si GSC es REAL.
+  const organicTraffic = article.gscStatus === 'REAL' ? article.gscClicks : 0;
   let trafficScore = 0;
   if (organicTraffic >= 100) trafficScore = 20;
   else if (organicTraffic >= 20) trafficScore = 15;
