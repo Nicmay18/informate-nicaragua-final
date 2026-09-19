@@ -344,6 +344,8 @@ export interface GoogleTrustArticle {
   isDuplicateRisk: boolean;
   isUpdated: boolean;
   googleTrustScore: number;
+  /** Internal editorial estimate. Never presented as Google's own score. */
+  trustSourceLabel?: 'internal_estimate';
   editorialAuthorityScore: number;
   contentValueScore: number;
   thinContentFlags: string[];
@@ -367,6 +369,7 @@ export interface GoogleTrustReport {
   articles: GoogleTrustArticle[];
   topBlocked: GoogleTrustArticle[];
   summary: string;
+  sourceStatus?: NiosDataStatus | 'MIXED';
 }
 
 export interface ThinContentArticle {
