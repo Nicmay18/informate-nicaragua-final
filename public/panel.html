@@ -5898,7 +5898,7 @@ window.batchRestore = async function() {
       const fbPage2Id = document.getElementById('configFbPage2Id').value.trim();
       const fbPage2Token = document.getElementById('configFbPage2Token').value.trim();
       
-      let adminApiKey = document.getElementById('configAdminApiKey').value.trim();
+      let adminApiKey = (document.getElementById('configAdminApiKey')?.value || '').trim() || localStorage.getItem('admin_api_key') || '';
       if (adminApiKey === '••••••••••••' || adminApiKey.includes('•••')) {
         adminApiKey = localStorage.getItem('admin_api_key') || '';
       }
