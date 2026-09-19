@@ -126,7 +126,9 @@ export default function CorreccionesPage() {
   async function loadNewsBySlug(slug: string): Promise<NewsDoc | null> {
     const token = getAdminToken();
     const res = await fetch(`/api/admin/news?slug=${encodeURIComponent(slug)}`, {
+      method: 'POST',
       headers: { 'x-admin-token': token },
+      body: JSON.stringify({ action: 'list' }),
       cache: 'no-store',
     });
     if (!res.ok) return null;

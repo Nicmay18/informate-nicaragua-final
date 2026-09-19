@@ -49,6 +49,7 @@ export default function MeniDashboardPage() {
       try {
         const token = getAdminToken();
         const res = await fetch(`/api/admin/meni-dashboard?dias=${dias}`, {
+          method: 'POST',
           headers: { 'x-admin-token': token },
         });
         if (!res.ok) throw new Error('Error al cargar dashboard');

@@ -39,6 +39,7 @@ export default function ArquitecturaPage() {
     setError(null);
     try {
       const res = await fetch('/api/admin/meni/registry', {
+        method: 'POST',
         headers: { 'x-admin-token': getAdminToken() || '' },
       });
       const json = await res.json();

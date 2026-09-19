@@ -57,6 +57,7 @@ export default function CEOAgentPage() {
     setError(null);
     try {
       const res = await fetch('/api/admin/ceo-agent/daily', {
+        method: 'POST',
         headers: { 'x-admin-token': getAdminToken() || '' },
       });
       const json = await res.json();
