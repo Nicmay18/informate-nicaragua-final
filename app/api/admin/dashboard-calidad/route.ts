@@ -432,3 +432,6 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+// Cloudflare no cachea POST: lecturas admin via POST para no exponer datos en CDN
+export { GET as POST };

@@ -373,3 +373,6 @@ function parseFirestoreDate(val: any): Date | null {
   const d = new Date(val);
   return isNaN(d.getTime()) ? null : d;
 }
+
+// Cloudflare no cachea POST: lecturas admin via POST para no exponer datos en CDN
+export { GET as POST };

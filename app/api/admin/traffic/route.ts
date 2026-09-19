@@ -100,3 +100,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ ok: false, error: msg }, { status: 500 });
   }
 }
+
+// Cloudflare no cachea POST: lecturas admin via POST para no exponer datos en CDN
+export { GET as POST };

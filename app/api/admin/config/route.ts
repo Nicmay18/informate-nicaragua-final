@@ -12,7 +12,7 @@ function validateStringField(value: unknown, fallback: string, max = 500): strin
   return s.slice(0, max);
 }
 
-export async function GET(request: NextRequest) {
+async function readConfig(request: NextRequest) {
   if (!isAdminRequest(request)) {
     return unauthorized();
   }
@@ -53,6 +53,10 @@ export async function GET(request: NextRequest) {
   }
 }
 
+export async function GET(request: NextRequest) {
+  return readConfig(request);
+}
+
 export async function POST(request: NextRequest) {
   if (!isAdminRequest(request)) {
     return unauthorized();
@@ -63,6 +67,12 @@ export async function POST(request: NextRequest) {
     body = await request.json();
   } catch {
     return badRequest('Body inválido');
+  }
+
+  // Cloudflare no cachea POST: lectura via POST {action:'read'} para no
+  // exponer el estado de configuración en CDN público.
+  if (body && typeof body === 'object' && !Array.isArray(body) && (body as Record<string, unknown>).action === 'read') {
+    return readConfig(request);
   }
 
   if (!body || typeof body !== 'object' || Array.isArray(body)) {

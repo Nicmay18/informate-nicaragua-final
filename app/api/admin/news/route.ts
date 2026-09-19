@@ -56,7 +56,7 @@ async function fetchAdminDocs(db: FirebaseFirestore.Firestore) {
   return snap.docs.sort((a, b) => canonicalMs(b.data()) - canonicalMs(a.data()) || a.id.localeCompare(b.id));
 }
 
-export async function GET(request: NextRequest) {
+async function listNews(request: NextRequest) {
   if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
     const db = getAdminDb();
@@ -134,6 +134,10 @@ export async function GET(request: NextRequest) {
   }
 }
 
+export async function GET(request: NextRequest) {
+  return listNews(request);
+}
+
 async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: string) {
   try {
     const snap = await db.collection('noticias').where('categoria', '==', categoriaLinks).orderBy('fecha', 'desc').limit(4).get();
@@ -156,7 +160,12 @@ export async function POST(request: NextRequest) {
       import('@/lib/editorial/guardar-con-meni'),
     ]);
 
-    const body = await request.json();
+    const body = await request.json().catch(() => null);
+    // Cloudflare no cachea POST: el panel lista via POST {action:'list'} para
+    // evitar que la regla "Cache Everything" sirva datos admin sin auth.
+    if (!body || body.action === 'list') {
+      return listNews(request);
+    }
     const { titulo, resumen, contenido, categoria, imagen, autor, destacada, publicado } = body;
 
     if (!titulo || !resumen || !contenido || !categoria) {

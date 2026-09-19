@@ -3697,7 +3697,9 @@ sin texto ni marcas de agua, composición periodística"
         adminToken = localStorage.getItem('admin_api_key') || '';
       }
       const resp = await fetch(adminNewsUrl(), {
+        method: 'POST',
         headers: { 'x-admin-token': adminToken },
+        body: JSON.stringify({ action: 'list' }),
         cache: 'no-store'
       });
       if (resp.status === 401) {
@@ -3705,7 +3707,9 @@ sin texto ni marcas de agua, composición periodística"
         await fetchAdminToken();
         adminToken = localStorage.getItem('admin_api_key') || '';
         const resp2 = await fetch(adminNewsUrl(), {
+          method: 'POST',
           headers: { 'x-admin-token': adminToken },
+          body: JSON.stringify({ action: 'list' }),
           cache: 'no-store'
         });
         if (!resp2.ok) throw new Error('Error cargando noticias: ' + resp2.status);
@@ -4672,7 +4676,7 @@ sin texto ni marcas de agua, composición periodística"
       const key = document.getElementById('configAdminApiKey').value.trim();
       if (!key) { el.innerHTML = '<span style="color:#dc2626;"><i class="fas fa-times-circle"></i> Ingresá la key</span>'; return; }
       try {
-        const resp = await fetch('/api/admin/config', { method: 'GET' });
+        const resp = await fetch('/api/admin/config', { method: 'POST', body: JSON.stringify({ action: 'read' }) });
         // No hay endpoint de ping, guardamos directo
         localStorage.setItem('admin_api_key', key);
         el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Guardada</span>';
@@ -5344,7 +5348,7 @@ window.batchRestore = async function() {
       if (!token) { statusDiv.style.display = 'block'; statusDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-exclamation-circle"></i> Configurá el Admin API Key en Configuración > APIs y Tokens</span>'; return; }
       btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando caché del sitio...';
       try {
-        const res = await fetch('/api/admin/cache-purge?token=' + encodeURIComponent(token), { method: 'GET' });
+        const res = await fetch('/api/admin/cache-purge?token=' + encodeURIComponent(token), { method: 'POST' });
         if (res.ok) {
           const data = await res.json();
           statusDiv.innerHTML = '<span style="color:var(--success);"><i class="fas fa-check-circle"></i> ✓ ' + (data.mensaje || 'Caché purgada') + ' Refrescá el sitio (F5) para ver los cambios.</span>';
@@ -5417,7 +5421,7 @@ window.batchRestore = async function() {
       appendAgenteLog('Cargando métricas...', 'info');
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/metricas', { headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
+        const res = await fetch('/api/admin/metricas', { method: 'POST', headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
         const data = await res.json();
         if (!data.success) throw new Error(data.error);
 
@@ -5570,7 +5574,7 @@ window.batchRestore = async function() {
     window.cargarAuditoria = async function() {
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/auditor-dashboard', { headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
+        const res = await fetch('/api/admin/auditor-dashboard', { method: 'POST', headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const d = await res.json();
 
@@ -5782,7 +5786,7 @@ window.batchRestore = async function() {
         // 1. Intentar obtener config de Vercel (env vars) via API primero
         let vercelConfig = null;
         try {
-          const res = await fetch('/api/admin/config');
+          const res = await fetch('/api/admin/config', { method: 'POST', body: JSON.stringify({ action: 'read' }) });
           if (res.ok) {
             const json = await res.json();
             if (json.success && json.config) vercelConfig = json.config;
@@ -6019,7 +6023,7 @@ window.batchRestore = async function() {
         const hasLocal = !!localKey;
 
         // 2. Ping al servidor para ver si tiene ADMIN_API_KEY
-        const estadoRes = await fetch('/api/admin/estado');
+        const estadoRes = await fetch('/api/admin/estado', { method: 'POST' });
         const estado = await estadoRes.json();
         const serverHasKey = estado.servidor?.adminApiKeyConfigurada;
 
@@ -6560,7 +6564,7 @@ VERIFICACIÓN FINAL
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
         const [resp, noticiasCache] = await Promise.all([
-          fetch('/api/admin/traffic', { cache: 'no-store', headers: { 'x-admin-token': adminToken } }),
+          fetch('/api/admin/traffic', { method: 'POST', cache: 'no-store', headers: { 'x-admin-token': adminToken } }),
           getNoticiasCache().catch(() => [])
         ]);
         const text = await resp.text();
@@ -7616,7 +7620,7 @@ VERIFICACIÓN FINAL
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
         const url = '/api/admin/dashboard-calidad' + (force ? '?force=1' : '');
-        const resp = await fetch(url, { headers: { 'x-admin-token': adminToken } });
+        const resp = await fetch(url, { method: 'POST', headers: { 'x-admin-token': adminToken } });
         const data = await resp.json();
         if (!resp.ok) throw new Error(data.error || 'Error');
         panel.innerHTML = renderDashboardCalidad(data);
