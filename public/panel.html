@@ -2427,16 +2427,6 @@ sin texto ni marcas de agua, composición periodística"
       if (!file.type.startsWith('image/')) { showToast('Selecciona una imagen válida', 'error'); return; }
       if (file.size > 5 * 1024 * 1024) { showToast('Máximo 5MB', 'error'); return; }
 
-      const token = localStorage.getItem('admin_github_token') || '';
-      if (!token) {
-        showToast('Configura tu token de GitHub en la pestaña Configuración', 'error');
-        // Fallback: guardar data URI temporalmente para preview
-        const reader = new FileReader();
-        reader.onload = e => { document.getElementById('imagenUrl').value = e.target.result; actualizarPreview(); };
-        reader.readAsDataURL(file);
-        return;
-      }
-
       const conLuto = document.getElementById('conLuto')?.checked || false;
       showLoading(true, conLuto ? 'Procesando collage con luto...' : 'Procesando imagen...');
       try {
@@ -2638,8 +2628,6 @@ sin texto ni marcas de agua, composición periodística"
       const repo = 'informate-images';
       const path = 'images/';
 
-      if (!token) throw new Error('No hay token de GitHub configurado. Ve a Configuración > GitHub.');
-
       // Convertir blob a base64
       const base64 = await new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -2647,6 +2635,19 @@ sin texto ni marcas de agua, composición periodística"
         reader.onerror = reject;
         reader.readAsDataURL(blob);
       });
+
+      // Sin token local: subir via endpoint del servidor (usa GITHUB_TOKEN de Vercel o config/admin)
+      if (!token) {
+        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const res = await fetch('/api/admin/upload-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+          body: JSON.stringify({ image: base64, filename })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) throw new Error(data.error || `Error ${res.status}`);
+        return data.url || data.path;
+      }
 
       const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}${filename}`;
       const branch = localStorage.getItem('admin_github_branch') || 'main';
@@ -4080,11 +4081,6 @@ sin texto ni marcas de agua, composición periodística"
 
       // Si la imagen es un data URI (fallback), intentar subir a GitHub
       if (imagenUrl.startsWith('data:')) {
-        const token = localStorage.getItem('admin_github_token') || '';
-        if (!token) {
-          showToast('La imagen no está subida a GitHub. Configura el token en Configuración.', 'error');
-          return;
-        }
         showLoading(true, 'Subiendo imagen a GitHub...');
         try {
           const slug = generarSlug(titulo).substring(0, 40) || 'noticia';
