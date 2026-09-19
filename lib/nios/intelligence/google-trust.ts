@@ -17,6 +17,9 @@ import type { ArticleFusion, GoogleTrustArticle, GoogleTrustReport, ThinContentA
 
 const THIN_WORDS_THRESHOLD = 400;
 
+// GSC is evidence, never a proxy for article thinness. A blocked/unverified
+// source must not turn missing impressions into a content-quality failure.
+
 // GSC/GA4 are evidence sources, not assumptions. A blocked or missing source
 // must never be converted into a negative Google signal.
 const HIGH_RISK_THRESHOLD = 40;
@@ -145,7 +148,7 @@ function detectThinContent(article: ArticleFusion): { isThin: boolean; flags: st
   }
 
   if (article.gscStatus === 'REAL' && article.palabras >= 200 && article.gscImpressions === 0 && article.scoreMeni !== null && article.scoreMeni < 80) {
-    flags.push('Poca información nueva: score MENI bajo y 0 impresiones');
+    flags.push('Baja visibilidad orgánica con GSC REAL: score MENI bajo y 0 impresiones');
   }
 
   return { isThin: flags.length > 0, flags };
