@@ -76,8 +76,9 @@ function classifyMeniVerdict(article: ArticleFusion, days: number): {
     };
   }
 
-  // MENI posible sobreestimación: score alto + GSC sin datos
-  if (sm !== null && sm >= 85 && gscImpressions < 10) {
+  // MENI posible sobreestimación: solo puede plantearse con GSC REAL.
+  // Si la fuente no está disponible, el caso queda como insuficiente.
+  if (article.gscStatus === 'REAL' && sm !== null && sm >= 85 && gscImpressions < 10) {
     return {
       verdict: 'meni_sobreestima_hipotesis',
       conclusion: `MENI ${sm} pero GSC solo ${gscImpressions} impresiones en ${days} días. HIPÓTESIS: MENI podría sobreestimar, o el contenido podría no estar indexado, no tener demanda, o ser muy reciente. Se requiere verificación manual.`,
@@ -93,6 +94,13 @@ function classifyMeniVerdict(article: ArticleFusion, days: number): {
   }
 
   // Datos insuficientes
+  if (article.gscStatus !== 'REAL') {
+    return {
+      verdict: 'datos_insuficientes',
+      conclusion: `GSC no está disponible como fuente REAL (${article.gscStatus ?? 'NO_DATA'}). No se puede medir la calibración de MENI contra Google.`,
+    };
+  }
+
   if (gscImpressions === 0) {
     return {
       verdict: 'datos_insuficientes',
