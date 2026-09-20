@@ -1,0 +1,3623 @@
+{
+  "capturedAt": "2026-09-20T19:36:35.040Z",
+  "nios_actions": {
+    "total": 110,
+    "byStatus": {
+      "PENDING": 104,
+      "FAILED": 5,
+      "RUNNING": 1
+    },
+    "byKey": {
+      "seo-page-https-nicaraguainformate-com-noticias-nicaragua-inicia-septi-2026-09-16": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-coyote-vs-acme-llega-a-2026-09-12": 1,
+      "content-recirculation-bntteiqtorrl2x7opjvg-2026-09-02": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-16": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-17": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-13": 1,
+      "content-recirculation-qkurwkzg1j2bg01evvru-2026-09-04": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-antorcha-centroamerica-2026-09-18": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-coyote-vs-acme-llega-a-2026-09-13": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-09": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-10": 1,
+      "seo-query-coyote-vs-acme-nicaragua-2026-09-05": 1,
+      "seo-query-citas-para-apostillar-en-nicaragua-2026-09-12": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-10": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-04": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-20": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-coyote-vs-acme-llega-a-2026-09-09": 1,
+      "content-recirculation-ux9pk8h7raeciyy8fhrc-2026-09-05": 1,
+      "content-recirculation-ux9pk8h7raeciyy8fhrc-2026-09-06": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-09": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-10": 1,
+      "content-recirculation-qkurwkzg1j2bg01evvru-2026-09-03": 1,
+      "seo-query-salario-minimo-nicaragua-2026-2026-09-19": 1,
+      "seo-query-citas-para-apostillar-en-nicaragua-2026-09-13": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-14": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-16": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-cosa-de-horno-el-sabor-2026-09-08": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-07": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-02": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-04": 1,
+      "seo-query-yoltamal-2026-09-15": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-nicaragua-inicia-septi-2026-09-17": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-vacaciones-patrias-dia-2026-09-13": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-03": 1,
+      "content-recirculation-ux9pk8h7raeciyy8fhrc-2026-09-02": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-13": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-15": 1,
+      "content-recirculation-ux9pk8h7raeciyy8fhrc-2026-09-03": 1,
+      "seo-query-coyote-vs-acme-nicaragua-2026-09-04": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-nicaragua-inicia-septi-2026-09-19": 1,
+      "content-recirculation-ux9pk8h7raeciyy8fhrc-2026-09-04": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-coyote-vs-acme-llega-a-2026-09-10": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-07": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-servicios-policiales-d-2026-09-07": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-19": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-cosa-de-horno-el-sabor-2026-09-07": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-09": 1,
+      "content-recirculation-bntteiqtorrl2x7opjvg-2026-09-03": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-vacaciones-patrias-dia-2026-09-15": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-netflix-revive-la-capt-2026-09-02": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-14": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-cosa-de-horno-el-sabor-2026-09-06": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-08": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-guia-de-senalizacion-v-2026-09-02": 1,
+      "seo-query-yoltamal-2026-09-19": 1,
+      "content-recirculation-qkurwkzg1j2bg01evvru-2026-09-02": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-03": 1,
+      "seo-page-https-nicaraguainformate-com-guia-salario-minimo-nicaragua-2-2026-09-02": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-14": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-servicios-policiales-d-2026-09-08": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-05": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-vacaciones-patrias-dia-2026-09-14": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-02": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-campo-de-girasoles-en--2026-09-20": 1,
+      "seo-query-menu-kfc-nicaragua-2026-09-08": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-14": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-08": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-19": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-antorcha-centroamerica-2026-09-19": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-16": 1,
+      "seo-page-https-nicaraguainformate-com-guia-anular-recurso-policial-ni-2026-09-19": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-servicios-policiales-d-2026-09-06": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-19": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-07": 1,
+      "content-recirculation-qkurwkzg1j2bg01evvru-2026-09-05": 1,
+      "seo-query-coyote-vs-acme-nicaragua-2026-09-03": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-como-sacar-y-apostilla-2026-09-16": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-06": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-18": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-13": 1,
+      "seo-page-https-nicaraguainformate-com-guia-anular-recurso-policial-ni-2026-09-20": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-vacaciones-patrias-dia-2026-09-16": 1,
+      "seo-query-yoltamal-2026-09-18": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-06": 1,
+      "seo-query-salario-minimo-nicaragua-2026-2026-09-18": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-muere-harold-gutierrez-2026-09-20": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-como-sacar-y-apostilla-2026-09-17": 1,
+      "seo-query-yoltamal-2026-09-16": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-eclipse-lunar-parcial--2026-09-03": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-09": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-antorcha-centroamerica-2026-09-20": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-10": 1,
+      "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-05": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-17": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-12": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-05": 1,
+      "seo-query-yoltamal-2026-09-17": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-vacaciones-patrias-dia-2026-09-12": 1,
+      "seo-query-coyote-vs-acme-nicaragua-2026-09-02": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-campo-de-girasoles-en--2026-09-19": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-20": 1,
+      "growth-distribution-recirculation-investigan-presunto-femicidio-seguido-de-suicidio-en-nagarote-1788367501963": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-eclipse-lunar-parcial--2026-09-04": 1,
+      "content-recirculation-qkurwkzg1j2bg01evvru-2026-09-06": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-15": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-15": 1,
+      "content-recirculation-cohleroajufn8mvqeqzp-2026-09-12": 1,
+      "content-recirculation-j8ge2zjed6yehqvtbsrv-2026-09-06": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-nicaragua-inicia-septi-2026-09-18": 1,
+      "seo-page-https-nicaraguainformate-com-noticias-yoltamal-el-tamal-de-m-2026-09-15": 1
+    },
+    "sample": [
+      {
+        "docId": "0RgER3OfyVXXSeFQFM62",
+        "id": "0RgER3OfyVXXSeFQFM62",
+        "actionId": "0RgER3OfyVXXSeFQFM62",
+        "opportunityId": "seo-page-https-nicaraguainformate-com-noticias-nicaragua-inicia-septi-2026-09-16",
+        "articleId": null,
+        "target": "https://nicaraguainformate.com/noticias/nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias",
+        "kind": "seo-page",
+        "title": "Optimizar título de nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias",
+        "evidence": "175 impresiones · 0 clics · posición 7.9",
+        "proposal": "Preparar propuesta de título/meta para esta URL.",
+        "objective": "Subir CTR y posición promedio.",
+        "metric": "CTR, clics y posición durante las próximas 72 horas",
+        "impact": "Bajo",
+        "confidence": "Media",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-16T14:03:01.397Z",
+        "proposedAt": "2026-09-16T14:03:01.397Z",
+        "before": {
+          "url": "https://nicaraguainformate.com/noticias/nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias",
+          "slug": "nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias",
+          "impressions": 175,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.9
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "1l4LIL5QSFFxogencb83",
+        "id": "1l4LIL5QSFFxogencb83",
+        "actionId": "1l4LIL5QSFFxogencb83",
+        "opportunityId": "seo-page-https-nicaraguainformate-com-noticias-coyote-vs-acme-llega-a-2026-09-12",
+        "articleId": null,
+        "target": "https://nicaraguainformate.com/noticias/coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+        "kind": "seo-page",
+        "title": "Optimizar título de coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+        "evidence": "148 impresiones · 0 clics · posición 7.8",
+        "proposal": "Preparar propuesta de título/meta para esta URL.",
+        "objective": "Subir CTR y posición promedio.",
+        "metric": "CTR, clics y posición durante las próximas 72 horas",
+        "impact": "Bajo",
+        "confidence": "Media",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-12T12:40:38.541Z",
+        "proposedAt": "2026-09-12T12:40:38.541Z",
+        "before": {
+          "url": "https://nicaraguainformate.com/noticias/coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+          "slug": "coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+          "impressions": 148,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.8
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "2DYdF7YRy2ggr4mUdh7K",
+        "id": "2DYdF7YRy2ggr4mUdh7K",
+        "actionId": "2DYdF7YRy2ggr4mUdh7K",
+        "opportunityId": "content-recirculation-bntteiqtorrl2x7opjvg-2026-09-02",
+        "articleId": null,
+        "target": "bNTteIqTORrl2X7opjvG",
+        "kind": "content-recirculation",
+        "title": "Recircular en Telegram: Madrugada trágica en Matagalpa tras presunto robo de ganado",
+        "evidence": "917 vistas acumuladas.",
+        "proposal": "Preparar copias de redistribución para Telegram.",
+        "objective": "Recuperar tráfico de contenido probado.",
+        "metric": "Vistas, sesiones y alcance durante las próximas 72 horas",
+        "impact": "Medio",
+        "confidence": "Alta",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-02T20:53:15.153Z",
+        "proposedAt": "2026-09-02T20:53:15.153Z",
+        "before": {
+          "slug": "bNTteIqTORrl2X7opjvG",
+          "titulo": "Madrugada trágica en Matagalpa tras presunto robo de ganado",
+          "vistas": 917
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "3MYxgOMZRhknWS1x8UTI",
+        "id": "3MYxgOMZRhknWS1x8UTI",
+        "actionId": "3MYxgOMZRhknWS1x8UTI",
+        "opportunityId": "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-16",
+        "articleId": null,
+        "target": "IhqPS6c7vxNQarIR05Lz",
+        "kind": "content-recirculation",
+        "title": "Recircular en Telegram: Motociclista muere tras ataque a balazos en Sébaco",
+        "evidence": "1264 vistas acumuladas.",
+        "proposal": "Preparar copias de redistribución para Telegram.",
+        "objective": "Recuperar tráfico de contenido probado.",
+        "metric": "Vistas, sesiones y alcance durante las próximas 72 horas",
+        "impact": "Alto",
+        "confidence": "Alta",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-16T01:01:09.442Z",
+        "proposedAt": "2026-09-16T01:01:09.442Z",
+        "before": {
+          "slug": "IhqPS6c7vxNQarIR05Lz",
+          "titulo": "Motociclista muere tras ataque a balazos en Sébaco",
+          "vistas": 1264
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "47pJytKNkGEQhDXJlsis",
+        "id": "47pJytKNkGEQhDXJlsis",
+        "actionId": "47pJytKNkGEQhDXJlsis",
+        "opportunityId": "content-recirculation-cohleroajufn8mvqeqzp-2026-09-17",
+        "articleId": null,
+        "target": "COhLEROaJUFN8MvQEqZp",
+        "kind": "content-recirculation",
+        "title": "Recircular en Telegram: INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
+        "evidence": "1371 vistas acumuladas.",
+        "proposal": "Preparar copias de redistribución para Telegram.",
+        "objective": "Recuperar tráfico de contenido probado.",
+        "metric": "Vistas, sesiones y alcance durante las próximas 72 horas",
+        "impact": "Alto",
+        "confidence": "Alta",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-17T14:02:04.169Z",
+        "proposedAt": "2026-09-17T14:02:04.169Z",
+        "before": {
+          "slug": "COhLEROaJUFN8MvQEqZp",
+          "titulo": "INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
+          "vistas": 1371
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "48ni3O2NVRShfHshssoq",
+        "id": "48ni3O2NVRShfHshssoq",
+        "actionId": "48ni3O2NVRShfHshssoq",
+        "opportunityId": "content-recirculation-cohleroajufn8mvqeqzp-2026-09-13",
+        "articleId": null,
+        "target": "COhLEROaJUFN8MvQEqZp",
+        "kind": "content-recirculation",
+        "title": "Recircular en Telegram: INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
+        "evidence": "1369 vistas acumuladas.",
+        "proposal": "Preparar copias de redistribución para Telegram.",
+        "objective": "Recuperar tráfico de contenido probado.",
+        "metric": "Vistas, sesiones y alcance durante las próximas 72 horas",
+        "impact": "Alto",
+        "confidence": "Alta",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-13T00:22:52.201Z",
+        "proposedAt": "2026-09-13T00:22:52.201Z",
+        "before": {
+          "slug": "COhLEROaJUFN8MvQEqZp",
+          "titulo": "INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
+          "vistas": 1369
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "4NjnB4Qg7EQN1rVezEbu",
+        "id": "4NjnB4Qg7EQN1rVezEbu",
+        "actionId": "4NjnB4Qg7EQN1rVezEbu",
+        "opportunityId": "content-recirculation-qkurwkzg1j2bg01evvru-2026-09-04",
+        "articleId": null,
+        "target": "qkurWkzG1J2bG01EVVru",
+        "kind": "content-recirculation",
+        "title": "Recircular en Telegram: Camioneta impacta dos motos en Managua y deja tres lesionados",
+        "evidence": "1080 vistas acumuladas.",
+        "proposal": "Preparar copias de redistribución para Telegram.",
+        "objective": "Recuperar tráfico de contenido probado.",
+        "metric": "Vistas, sesiones y alcance durante las próximas 72 horas",
+        "impact": "Alto",
+        "confidence": "Alta",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-04T02:26:09.797Z",
+        "proposedAt": "2026-09-04T02:26:09.797Z",
+        "before": {
+          "slug": "qkurWkzG1J2bG01EVVru",
+          "titulo": "Camioneta impacta dos motos en Managua y deja tres lesionados",
+          "vistas": 1080
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "4gb0oushHAzDfxiF7UAx",
+        "id": "4gb0oushHAzDfxiF7UAx",
+        "actionId": "4gb0oushHAzDfxiF7UAx",
+        "opportunityId": "seo-page-https-nicaraguainformate-com-noticias-antorcha-centroamerica-2026-09-18",
+        "articleId": null,
+        "target": "https://nicaraguainformate.com/noticias/antorcha-centroamericana-recorrera-nicaragua-del-10-al-13",
+        "kind": "seo-page",
+        "title": "Optimizar título de antorcha-centroamericana-recorrera-nicaragua-del-10-al-13",
+        "evidence": "367 impresiones · 0 clics · posición 8.7",
+        "proposal": "Preparar propuesta de título/meta para esta URL.",
+        "objective": "Subir CTR y posición promedio.",
+        "metric": "CTR, clics y posición durante las próximas 72 horas",
+        "impact": "Bajo",
+        "confidence": "Media",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-18T18:53:20.303Z",
+        "proposedAt": "2026-09-18T18:53:20.303Z",
+        "before": {
+          "url": "https://nicaraguainformate.com/noticias/antorcha-centroamericana-recorrera-nicaragua-del-10-al-13",
+          "slug": "antorcha-centroamericana-recorrera-nicaragua-del-10-al-13",
+          "impressions": 367,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 8.7
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "5CAlW0lQ6JInOiJ9skQ4",
+        "id": "5CAlW0lQ6JInOiJ9skQ4",
+        "actionId": "5CAlW0lQ6JInOiJ9skQ4",
+        "opportunityId": "seo-page-https-nicaraguainformate-com-noticias-coyote-vs-acme-llega-a-2026-09-13",
+        "articleId": null,
+        "target": "https://nicaraguainformate.com/noticias/coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+        "kind": "seo-page",
+        "title": "Optimizar título de coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+        "evidence": "148 impresiones · 0 clics · posición 7.8",
+        "proposal": "Preparar propuesta de título/meta para esta URL.",
+        "objective": "Subir CTR y posición promedio.",
+        "metric": "CTR, clics y posición durante las próximas 72 horas",
+        "impact": "Bajo",
+        "confidence": "Media",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-13T00:22:51.604Z",
+        "proposedAt": "2026-09-13T00:22:51.604Z",
+        "before": {
+          "url": "https://nicaraguainformate.com/noticias/coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+          "slug": "coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+          "impressions": 148,
+          "clicks": 0,
+          "ctr": 0,
+          "position": 7.8
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      },
+      {
+        "docId": "5h1S5txylnEtBqPhUq3t",
+        "id": "5h1S5txylnEtBqPhUq3t",
+        "actionId": "5h1S5txylnEtBqPhUq3t",
+        "opportunityId": "content-recirculation-ihqps6c7vxnqarir05lz-2026-09-09",
+        "articleId": null,
+        "target": "IhqPS6c7vxNQarIR05Lz",
+        "kind": "content-recirculation",
+        "title": "Recircular en Telegram: Motociclista muere tras ataque a balazos en Sébaco",
+        "evidence": "1244 vistas acumuladas.",
+        "proposal": "Preparar copias de redistribución para Telegram.",
+        "objective": "Recuperar tráfico de contenido probado.",
+        "metric": "Vistas, sesiones y alcance durante las próximas 72 horas",
+        "impact": "Alto",
+        "confidence": "Alta",
+        "status": "PENDING",
+        "source": "nios-growth-radar",
+        "createdAt": "2026-09-09T22:02:14.905Z",
+        "proposedAt": "2026-09-09T22:02:14.905Z",
+        "before": {
+          "slug": "IhqPS6c7vxNQarIR05Lz",
+          "titulo": "Motociclista muere tras ataque a balazos en Sébaco",
+          "vistas": 1244
+        },
+        "after": {},
+        "result": {},
+        "user": null,
+        "rejectionReason": null,
+        "error": null,
+        "learning": null
+      }
+    ],
+    "oldest": "2026-09-02T02:07:44.864Z",
+    "newest": "2026-09-20T13:47:50.001Z"
+  },
+  "nios_memory_pending": [
+    {
+      "docId": "ceo-crecer-publicar-nacionales",
+      "id": "ceo-crecer-publicar-nacionales",
+      "action": "Preparar pieza de Nacionales.",
+      "source": "Content War Room",
+      "status": "pending",
+      "createdAt": "2026-08-03T23:35:45.920Z"
+    },
+    {
+      "docId": "ceo-google-crear-gu-a-migraci-n-y-visas-",
+      "id": "ceo-google-crear-gu-a-migraci-n-y-visas-",
+      "action": "Crear guía evergreen sobre Migración y visas.",
+      "source": "Content Opportunity Hunter",
+      "status": "pending",
+      "createdAt": "2026-08-03T23:35:46.277Z"
+    },
+    {
+      "docId": "ceo-marca-distribuir-servicios-policiales-de-plaza-el-sol-tienen-nueva-ubicaci-n",
+      "id": "ceo-marca-distribuir-servicios-policiales-de-plaza-el-sol-tienen-nueva-ubicaci-n",
+      "action": "Abrir Distribution Command y publicar los textos por canal.",
+      "source": "Distribution Command",
+      "status": "pending",
+      "createdAt": "2026-08-08T01:45:37.721Z"
+    },
+    {
+      "docId": "ceo-negocio-crear-la-gu-a-ancla-de-tecnolog-a",
+      "id": "ceo-negocio-crear-la-gu-a-ancla-de-tecnolog-a",
+      "action": "Publicar \"Tecnología Nicaragua 2026\" como guía canónica patrocinable.",
+      "source": "Revenue Engine",
+      "status": "pending",
+      "createdAt": "2026-08-03T23:35:46.448Z"
+    },
+    {
+      "docId": "ceo-reparar-corregir-la-portada",
+      "id": "ceo-reparar-corregir-la-portada",
+      "action": "Abrir /admin/portada y reposicionar noticias de marca.",
+      "source": "Home Quality Control",
+      "status": "pending",
+      "createdAt": "2026-08-03T23:35:45.664Z"
+    },
+    {
+      "docId": "obs-dist-apple-presenta-el-iphone-duo-su-primer-modelo-plegable-2026-09-10",
+      "id": "obs-dist-apple-presenta-el-iphone-duo-su-primer-modelo-plegable-2026-09-10",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-10T08:49:51.596Z"
+    },
+    {
+      "docId": "obs-dist-asi-ocurrio-el-ataque-contra-un-padre-en-somotillo-segun-fiscalia-2026-09-17",
+      "id": "obs-dist-asi-ocurrio-el-ataque-contra-un-padre-en-somotillo-segun-fiscalia-2026-09-17",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-17T16:12:04.660Z"
+    },
+    {
+      "docId": "obs-dist-camilo-zapata-y-otto-de-la-rocha-dos-voces-de-nicaragua-2026-08-30",
+      "id": "obs-dist-camilo-zapata-y-otto-de-la-rocha-dos-voces-de-nicaragua-2026-08-30",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-08-30T17:30:06.975Z"
+    },
+    {
+      "docId": "obs-dist-dos-hermanos-nicaraguenses-mueren-en-tragedia-laboral-en-ee-uu-2026-09-12",
+      "id": "obs-dist-dos-hermanos-nicaraguenses-mueren-en-tragedia-laboral-en-ee-uu-2026-09-12",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-12T08:49:49.820Z"
+    },
+    {
+      "docId": "obs-dist-ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes-2026-09-06",
+      "id": "obs-dist-ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes-2026-09-06",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-06T00:06:57.635Z"
+    },
+    {
+      "docId": "obs-dist-el-nino-se-intensifica-las-senales-que-ya-esta-dejando-2026-09-18",
+      "id": "obs-dist-el-nino-se-intensifica-las-senales-que-ya-esta-dejando-2026-09-18",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-18T08:49:58.397Z"
+    },
+    {
+      "docId": "obs-dist-el-nino-se-intensifica-y-eleva-alerta-climatica-en-2026-2026-09-05",
+      "id": "obs-dist-el-nino-se-intensifica-y-eleva-alerta-climatica-en-2026-2026-09-05",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-05T17:27:20.437Z"
+    },
+    {
+      "docId": "obs-dist-hallan-sin-vida-a-dos-hombres-desaparecidos-en-masaya-y-carazo-2026-09-11",
+      "id": "obs-dist-hallan-sin-vida-a-dos-hombres-desaparecidos-en-masaya-y-carazo-2026-09-11",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-11T08:49:50.430Z"
+    },
+    {
+      "docId": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-14",
+      "id": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-14",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-14T21:47:17.475Z"
+    },
+    {
+      "docId": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-15",
+      "id": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-15",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-15T08:49:51.439Z"
+    },
+    {
+      "docId": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-16",
+      "id": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-16",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-16T08:49:53.880Z"
+    },
+    {
+      "docId": "obs-dist-laguna-de-apoyo-cuanto-cuesta-disfrutar-este-paraiso-natural-2026-09-14",
+      "id": "obs-dist-laguna-de-apoyo-cuanto-cuesta-disfrutar-este-paraiso-natural-2026-09-14",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-14T08:49:53.772Z"
+    },
+    {
+      "docId": "obs-dist-managua-se-llena-de-orgullo-en-el-tercer-desfile-patrio-2026-08-30",
+      "id": "obs-dist-managua-se-llena-de-orgullo-en-el-tercer-desfile-patrio-2026-08-30",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-08-30T13:14:45.413Z"
+    },
+    {
+      "docId": "obs-dist-masaya-queda-al-borde-y-esteli-toma-ventaja-en-el-pomares-2026-09-13",
+      "id": "obs-dist-masaya-queda-al-borde-y-esteli-toma-ventaja-en-el-pomares-2026-09-13",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-13T08:49:54.471Z"
+    },
+    {
+      "docId": "obs-dist-migracion-detalla-requisitos-para-residencia-por-vinculo-2026-09-03",
+      "id": "obs-dist-migracion-detalla-requisitos-para-residencia-por-vinculo-2026-09-03",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-03T08:03:46.081Z"
+    },
+    {
+      "docId": "obs-dist-motociclista-muere-tras-accidente-en-la-carretera-norte-2026-09-19",
+      "id": "obs-dist-motociclista-muere-tras-accidente-en-la-carretera-norte-2026-09-19",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-19T17:06:40.439Z"
+    },
+    {
+      "docId": "obs-dist-muere-conductor-de-bus-tras-emergencia-medica-en-nueva-guinea-2026-09-09",
+      "id": "obs-dist-muere-conductor-de-bus-tras-emergencia-medica-en-nueva-guinea-2026-09-09",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-09T08:49:50.372Z"
+    },
+    {
+      "docId": "obs-dist-nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias-2026-09-01",
+      "id": "obs-dist-nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias-2026-09-01",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-01T04:00:53.674Z"
+    },
+    {
+      "docId": "obs-dist-nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias-2026-09-02",
+      "id": "obs-dist-nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias-2026-09-02",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-02T08:04:04.787Z"
+    },
+    {
+      "docId": "obs-dist-perros-en-la-via-muertes-accidentes-y-que-dice-la-ley-2026-09-05",
+      "id": "obs-dist-perros-en-la-via-muertes-accidentes-y-que-dice-la-ley-2026-09-05",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-05T08:49:49.264Z"
+    },
+    {
+      "docId": "obs-dist-que-dejaron-las-fiestas-patrias-a-los-mercados-de-managua-2026-09-19",
+      "id": "obs-dist-que-dejaron-las-fiestas-patrias-a-los-mercados-de-managua-2026-09-19",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-19T02:02:38.698Z"
+    },
+    {
+      "docId": "obs-dist-rompe-sus-esposas-tras-ser-sentenciado-y-ataca-a-dos-agentes-2026-09-17",
+      "id": "obs-dist-rompe-sus-esposas-tras-ser-sentenciado-y-ataca-a-dos-agentes-2026-09-17",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-17T08:49:58.074Z"
+    },
+    {
+      "docId": "obs-dist-tres-ciclones-activan-el-pacifico-que-significa-para-nicaragua-2026-09-06",
+      "id": "obs-dist-tres-ciclones-activan-el-pacifico-que-significa-para-nicaragua-2026-09-06",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-06T23:10:51.641Z"
+    },
+    {
+      "docId": "obs-dist-tres-ciclones-activan-el-pacifico-que-significa-para-nicaragua-2026-09-07",
+      "id": "obs-dist-tres-ciclones-activan-el-pacifico-que-significa-para-nicaragua-2026-09-07",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-07T02:46:07.862Z"
+    },
+    {
+      "docId": "obs-dist-tres-ondas-tropicales-traeran-mas-lluvias-a-nicaragua-esta-semana-2026-09-08",
+      "id": "obs-dist-tres-ondas-tropicales-traeran-mas-lluvias-a-nicaragua-esta-semana-2026-09-08",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-08T08:49:47.781Z"
+    },
+    {
+      "docId": "obs-dist-tribunal-limita-deportaciones-tras-22-000-migrantes-enviados-2026-09-20",
+      "id": "obs-dist-tribunal-limita-deportaciones-tras-22-000-migrantes-enviados-2026-09-20",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-20T00:42:16.570Z"
+    },
+    {
+      "docId": "obs-dist-un-joven-muere-ahogado-y-cuatro-son-rescatados-en-nicaragua-2026-09-07",
+      "id": "obs-dist-un-joven-muere-ahogado-y-cuatro-son-rescatados-en-nicaragua-2026-09-07",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-07T08:49:42.033Z"
+    },
+    {
+      "docId": "obs-dist-vacaciones-patrias-dias-para-celebrar-viajar-y-compartir-2026-09-04",
+      "id": "obs-dist-vacaciones-patrias-dias-para-celebrar-viajar-y-compartir-2026-09-04",
+      "action": "Preparar copias de distribución",
+      "source": "distribution",
+      "status": "pending",
+      "createdAt": "2026-09-04T08:49:49.216Z"
+    },
+    {
+      "docId": "obs-home-2026-08-30",
+      "id": "obs-home-2026-08-30",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-08-30T13:14:46.038Z"
+    },
+    {
+      "docId": "obs-home-2026-09-01",
+      "id": "obs-home-2026-09-01",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-01T04:00:54.332Z"
+    },
+    {
+      "docId": "obs-home-2026-09-02",
+      "id": "obs-home-2026-09-02",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-02T08:04:05.192Z"
+    },
+    {
+      "docId": "obs-home-2026-09-03",
+      "id": "obs-home-2026-09-03",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-03T08:03:46.462Z"
+    },
+    {
+      "docId": "obs-home-2026-09-04",
+      "id": "obs-home-2026-09-04",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-04T08:49:49.716Z"
+    },
+    {
+      "docId": "obs-home-2026-09-05",
+      "id": "obs-home-2026-09-05",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-05T08:49:49.562Z"
+    },
+    {
+      "docId": "obs-home-2026-09-06",
+      "id": "obs-home-2026-09-06",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-06T00:06:58.069Z"
+    },
+    {
+      "docId": "obs-home-2026-09-07",
+      "id": "obs-home-2026-09-07",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-07T02:46:08.314Z"
+    },
+    {
+      "docId": "obs-home-2026-09-08",
+      "id": "obs-home-2026-09-08",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-08T08:49:48.113Z"
+    },
+    {
+      "docId": "obs-home-2026-09-09",
+      "id": "obs-home-2026-09-09",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-09T08:49:50.936Z"
+    },
+    {
+      "docId": "obs-home-2026-09-10",
+      "id": "obs-home-2026-09-10",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-10T08:49:52.128Z"
+    },
+    {
+      "docId": "obs-home-2026-09-11",
+      "id": "obs-home-2026-09-11",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-11T08:49:50.831Z"
+    },
+    {
+      "docId": "obs-home-2026-09-12",
+      "id": "obs-home-2026-09-12",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-12T08:49:50.099Z"
+    },
+    {
+      "docId": "obs-home-2026-09-13",
+      "id": "obs-home-2026-09-13",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-13T08:49:54.974Z"
+    },
+    {
+      "docId": "obs-home-2026-09-14",
+      "id": "obs-home-2026-09-14",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-14T08:49:54.073Z"
+    },
+    {
+      "docId": "obs-home-2026-09-15",
+      "id": "obs-home-2026-09-15",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-15T08:49:51.737Z"
+    },
+    {
+      "docId": "obs-home-2026-09-16",
+      "id": "obs-home-2026-09-16",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-16T08:49:54.221Z"
+    },
+    {
+      "docId": "obs-home-2026-09-17",
+      "id": "obs-home-2026-09-17",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-17T08:49:58.604Z"
+    },
+    {
+      "docId": "obs-home-2026-09-18",
+      "id": "obs-home-2026-09-18",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-18T08:49:58.884Z"
+    },
+    {
+      "docId": "obs-home-2026-09-19",
+      "id": "obs-home-2026-09-19",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-19T02:02:39.025Z"
+    },
+    {
+      "docId": "obs-home-2026-09-20",
+      "id": "obs-home-2026-09-20",
+      "action": "Colocar artículo sugerido en portada",
+      "source": "content",
+      "status": "pending",
+      "createdAt": "2026-09-20T00:42:16.985Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-08-30",
+      "id": "obs-opp-Migración y visas-2026-08-30",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-08-30T13:14:45.720Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-01",
+      "id": "obs-opp-Migración y visas-2026-09-01",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-01T04:00:53.994Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-02",
+      "id": "obs-opp-Migración y visas-2026-09-02",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-02T08:04:05.023Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-03",
+      "id": "obs-opp-Migración y visas-2026-09-03",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-03T08:03:46.269Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-04",
+      "id": "obs-opp-Migración y visas-2026-09-04",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-04T08:49:49.539Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-05",
+      "id": "obs-opp-Migración y visas-2026-09-05",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-05T08:49:49.414Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-06",
+      "id": "obs-opp-Migración y visas-2026-09-06",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-06T00:06:57.856Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-07",
+      "id": "obs-opp-Migración y visas-2026-09-07",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-07T02:46:08.087Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-08",
+      "id": "obs-opp-Migración y visas-2026-09-08",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-08T08:49:47.965Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-09",
+      "id": "obs-opp-Migración y visas-2026-09-09",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-09T08:49:50.728Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-10",
+      "id": "obs-opp-Migración y visas-2026-09-10",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-10T08:49:51.911Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-11",
+      "id": "obs-opp-Migración y visas-2026-09-11",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-11T08:49:50.636Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-12",
+      "id": "obs-opp-Migración y visas-2026-09-12",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-12T08:49:49.956Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-13",
+      "id": "obs-opp-Migración y visas-2026-09-13",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-13T08:49:54.725Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-14",
+      "id": "obs-opp-Migración y visas-2026-09-14",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-14T08:49:53.923Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-15",
+      "id": "obs-opp-Migración y visas-2026-09-15",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-15T08:49:51.588Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-16",
+      "id": "obs-opp-Migración y visas-2026-09-16",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-16T08:49:54.060Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-17",
+      "id": "obs-opp-Migración y visas-2026-09-17",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-17T08:49:58.380Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-18",
+      "id": "obs-opp-Migración y visas-2026-09-18",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-18T08:49:58.593Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-19",
+      "id": "obs-opp-Migración y visas-2026-09-19",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-19T02:02:38.863Z"
+    },
+    {
+      "docId": "obs-opp-Migración y visas-2026-09-20",
+      "id": "obs-opp-Migración y visas-2026-09-20",
+      "action": "Crear guía evergreen desde nota identificada",
+      "source": "growth",
+      "status": "pending",
+      "createdAt": "2026-09-20T00:42:16.769Z"
+    }
+  ],
+  "ceo_loop_last": {
+    "timestamp": "2026-09-20T08:49:54.525Z",
+    "startedAt": "2026-09-20T08:49:48.616Z",
+    "finishedAt": "2026-09-20T08:49:54.525Z",
+    "mode": "VERIFIED",
+    "trigger": "cron/nios-collect",
+    "observations": [
+      {
+        "source": "GSC",
+        "status": "REAL",
+        "note": "La cuenta de servicio tiene permisos y la propiedad devuelve datos.",
+        "dataAgeHours": 0
+      },
+      {
+        "source": "GA4",
+        "status": "REAL",
+        "note": "La propiedad y credenciales son correctas.",
+        "dataAgeHours": 0
+      },
+      {
+        "source": "AdSense",
+        "status": "DISABLED_BY_SCOPE",
+        "note": "GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+        "dataAgeHours": 0
+      },
+      {
+        "source": "NIOS",
+        "status": "STALE",
+        "note": "Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.",
+        "dataAgeHours": null
+      },
+      {
+        "source": "distribution",
+        "status": "ACTION_REQUIRED",
+        "note": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+        "dataAgeHours": 0
+      },
+      {
+        "source": "growth",
+        "status": "ACTION_REQUIRED",
+        "note": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+        "dataAgeHours": 0
+      },
+      {
+        "source": "content",
+        "status": "ACTION_REQUIRED",
+        "note": "La portada no comunica correctamente la identidad editorial.",
+        "dataAgeHours": 0
+      },
+      {
+        "source": "traffic",
+        "status": "ACTION_REQUIRED",
+        "note": "Este artículo supera significativamente el promedio de tráfico.",
+        "dataAgeHours": 0
+      }
+    ],
+    "diagnoses": [
+      {
+        "id": "gsc-real",
+        "source": "GSC",
+        "severity": "info",
+        "status": "REAL",
+        "problem": "Google Search Console está disponible.",
+        "expectedResult": "gscStatus continúa en REAL."
+      },
+      {
+        "id": "ga4-real",
+        "source": "GA4",
+        "severity": "info",
+        "status": "REAL",
+        "problem": "Google Analytics 4 está disponible.",
+        "expectedResult": "ga4Status continúa en REAL."
+      },
+      {
+        "id": "adsense-disabled-by-scope",
+        "source": "AdSense",
+        "severity": "info",
+        "status": "DISABLED_BY_SCOPE",
+        "problem": "AdSense no está configurado ni habilitado en el alcance operativo actual.",
+        "expectedResult": "AdSense permanece como fuente opcional hasta que se configure."
+      },
+      {
+        "id": "nios-cache-refresh",
+        "source": "NIOS",
+        "severity": "low",
+        "status": "STALE",
+        "problem": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+        "expectedResult": "Caché de dashboards admin invalidada; la siguiente petición recalculará desde Firestore."
+      },
+      {
+        "id": "obs-dist-tribunal-limita-deportaciones-tras-22-000-migrantes-enviados-2026-09-20",
+        "source": "distribution",
+        "severity": "medium",
+        "status": "ACTION_REQUIRED",
+        "problem": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+        "expectedResult": "Aumentar alcance de la pieza con mayor retorno hoy."
+      },
+      {
+        "id": "obs-opp-Migración y visas-2026-09-20",
+        "source": "growth",
+        "severity": "high",
+        "status": "ACTION_REQUIRED",
+        "problem": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+        "expectedResult": "Cubrir una demanda de búsqueda permanente sin competencia propia."
+      },
+      {
+        "id": "obs-home-2026-09-20",
+        "source": "content",
+        "severity": "critical",
+        "status": "ACTION_REQUIRED",
+        "problem": "La portada no comunica correctamente la identidad editorial.",
+        "expectedResult": "Mejorar primera impresión de lector nuevo y señal de marca para Google."
+      },
+      {
+        "id": "obs-breakout-mujer-muere-tras-ataque-de-su-conyuge-en-comunidad-de-matagalpa-2026-09-20",
+        "source": "traffic",
+        "severity": "medium",
+        "status": "ACTION_REQUIRED",
+        "problem": "Este artículo supera significativamente el promedio de tráfico.",
+        "expectedResult": "Investigar el patrón para replicarlo en próximas piezas."
+      }
+    ],
+    "decisions": [
+      {
+        "id": "gsc-real",
+        "source": "GSC",
+        "problem": "Google Search Console está disponible.",
+        "decision": "NO_ACTION",
+        "priority": 0,
+        "factors": {
+          "impact": 0.1,
+          "confidence": 1,
+          "effort": 0.1,
+          "risk": 0,
+          "urgency": 0.1
+        },
+        "reason": "No hay acción automática segura: La cuenta de servicio tiene permisos y la propiedad devuelve datos.",
+        "expectedResult": "gscStatus continúa en REAL."
+      },
+      {
+        "id": "ga4-real",
+        "source": "GA4",
+        "problem": "Google Analytics 4 está disponible.",
+        "decision": "NO_ACTION",
+        "priority": 0,
+        "factors": {
+          "impact": 0.1,
+          "confidence": 1,
+          "effort": 0.1,
+          "risk": 0,
+          "urgency": 0.1
+        },
+        "reason": "No hay acción automática segura: La propiedad y credenciales son correctas.",
+        "expectedResult": "ga4Status continúa en REAL."
+      },
+      {
+        "id": "adsense-disabled-by-scope",
+        "source": "AdSense",
+        "problem": "AdSense no está configurado ni habilitado en el alcance operativo actual.",
+        "decision": "NO_ACTION",
+        "priority": 0,
+        "factors": {
+          "impact": 0.1,
+          "confidence": 0,
+          "effort": 0.1,
+          "risk": 0,
+          "urgency": 0.1
+        },
+        "reason": "No hay acción automática segura: GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+        "expectedResult": "AdSense permanece como fuente opcional hasta que se configure."
+      },
+      {
+        "id": "nios-cache-refresh",
+        "source": "NIOS",
+        "problem": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+        "decision": "AUTO_EXECUTE",
+        "priority": 0.0385,
+        "factors": {
+          "impact": 0.3,
+          "confidence": 0.9,
+          "effort": 1,
+          "risk": 0.05,
+          "urgency": 0.3
+        },
+        "reason": "Acción segura y verificable: Invalidar etiquetas de caché del dashboard-calidad y métricas.",
+        "expectedResult": "Caché de dashboards admin invalidada; la siguiente petición recalculará desde Firestore."
+      },
+      {
+        "id": "obs-dist-tribunal-limita-deportaciones-tras-22-000-migrantes-enviados-2026-09-20",
+        "source": "distribution",
+        "problem": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+        "decision": "QUEUE_FOR_HUMAN",
+        "priority": 0.2637,
+        "factors": {
+          "impact": 0.2637,
+          "confidence": 0.5,
+          "effort": 4,
+          "risk": 0.5,
+          "urgency": 0.2637
+        },
+        "reason": "Aumentar alcance de la pieza con mayor retorno hoy.",
+        "expectedResult": "nios_memory contiene la tarea de distribución pendiente."
+      },
+      {
+        "id": "obs-opp-Migración y visas-2026-09-20",
+        "source": "growth",
+        "problem": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+        "decision": "QUEUE_FOR_HUMAN",
+        "priority": 0.5139,
+        "factors": {
+          "impact": 0.5139,
+          "confidence": 0.6,
+          "effort": 3,
+          "risk": 0.4,
+          "urgency": 0.5139
+        },
+        "reason": "Cubrir una demanda de búsqueda permanente sin competencia propia.",
+        "expectedResult": "Tarea en nios_memory con noticia origen y tema."
+      },
+      {
+        "id": "obs-home-2026-09-20",
+        "source": "content",
+        "problem": "La portada no comunica correctamente la identidad editorial.",
+        "decision": "QUEUE_FOR_HUMAN",
+        "priority": 0.4,
+        "factors": {
+          "impact": 0.4,
+          "confidence": 0.4,
+          "effort": 4,
+          "risk": 0.6,
+          "urgency": 0.4
+        },
+        "reason": "Mejorar primera impresión de lector nuevo y señal de marca para Google.",
+        "expectedResult": "Tarea pendiente en nios_memory con referencia al slug propuesto."
+      },
+      {
+        "id": "obs-breakout-mujer-muere-tras-ataque-de-su-conyuge-en-comunidad-de-matagalpa-2026-09-20",
+        "source": "traffic",
+        "problem": "Este artículo supera significativamente el promedio de tráfico.",
+        "decision": "AUTO_EXECUTE",
+        "priority": 0.4838,
+        "factors": {
+          "impact": 0.4838,
+          "confidence": 0.9,
+          "effort": 0,
+          "risk": 0.1,
+          "urgency": 0.4838
+        },
+        "reason": "Investigar el patrón para replicarlo en próximas piezas.",
+        "expectedResult": "Evidencia registrada en nios_memory para próxima revisión."
+      }
+    ],
+    "actions": [
+      {
+        "id": "nios-cache-refresh",
+        "status": "VERIFIED",
+        "verification": "Caché de administración invalidada: dashboard-calidad, nios-daily-snapshot, nios-snapshot, noticias, nios-telemetry, traffic-data."
+      }
+    ],
+    "executions": [
+      {
+        "id": "nios-cache-refresh",
+        "status": "VERIFIED",
+        "verification": "Caché de administración invalidada: dashboard-calidad, nios-daily-snapshot, nios-snapshot, noticias, nios-telemetry, traffic-data."
+      }
+    ],
+    "verifications": [
+      {
+        "id": "nios-cache-refresh",
+        "before": {
+          "tags": [
+            "dashboard-calidad",
+            "nios-daily-snapshot",
+            "nios-snapshot",
+            "noticias",
+            "nios-telemetry",
+            "traffic-data"
+          ]
+        },
+        "after": {
+          "tags": [
+            "dashboard-calidad",
+            "nios-daily-snapshot",
+            "nios-snapshot",
+            "noticias",
+            "nios-telemetry",
+            "traffic-data"
+          ],
+          "invalidatedAt": "2026-09-20T08:49:52.629Z"
+        },
+        "verified": true,
+        "message": "Caché de administración invalidada: dashboard-calidad, nios-daily-snapshot, nios-snapshot, noticias, nios-telemetry, traffic-data."
+      }
+    ],
+    "failures": [],
+    "learnings": [
+      {
+        "decisionId": "gsc-real",
+        "problem": "Google Search Console está disponible.",
+        "decision": "NO_ACTION",
+        "before": {},
+        "after": {},
+        "impact": "NO_ACTION: No hay acción automática segura: La cuenta de servicio tiene permisos y la propiedad devuelve datos.",
+        "confidence": 1,
+        "timestamp": "2026-09-20T08:49:54.525Z"
+      },
+      {
+        "decisionId": "ga4-real",
+        "problem": "Google Analytics 4 está disponible.",
+        "decision": "NO_ACTION",
+        "before": {},
+        "after": {},
+        "impact": "NO_ACTION: No hay acción automática segura: La propiedad y credenciales son correctas.",
+        "confidence": 1,
+        "timestamp": "2026-09-20T08:49:54.525Z"
+      },
+      {
+        "decisionId": "adsense-disabled-by-scope",
+        "problem": "AdSense no está configurado ni habilitado en el alcance operativo actual.",
+        "decision": "NO_ACTION",
+        "before": {},
+        "after": {},
+        "impact": "NO_ACTION: No hay acción automática segura: GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+        "confidence": 0,
+        "timestamp": "2026-09-20T08:49:54.525Z"
+      },
+      {
+        "decisionId": "nios-cache-refresh",
+        "problem": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+        "decision": "AUTO_EXECUTE",
+        "before": {
+          "tags": [
+            "dashboard-calidad",
+            "nios-daily-snapshot",
+            "nios-snapshot",
+            "noticias",
+            "nios-telemetry",
+            "traffic-data"
+          ]
+        },
+        "after": {
+          "tags": [
+            "dashboard-calidad",
+            "nios-daily-snapshot",
+            "nios-snapshot",
+            "noticias",
+            "nios-telemetry",
+            "traffic-data"
+          ],
+          "invalidatedAt": "2026-09-20T08:49:52.629Z"
+        },
+        "impact": "cache invalidated at 2026-09-20T08:49:52.629Z — Caché de administración invalidada: dashboard-calidad, nios-daily-snapshot, nios-snapshot, noticias, nios-telemetry, traffic-data.",
+        "confidence": 0.9,
+        "timestamp": "2026-09-20T08:49:52.809Z"
+      },
+      {
+        "decisionId": "obs-dist-tribunal-limita-deportaciones-tras-22-000-migrantes-enviados-2026-09-20",
+        "problem": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+        "decision": "QUEUE_FOR_HUMAN",
+        "before": {
+          "input": {
+            "id": "obs-dist-tribunal-limita-deportaciones-tras-22-000-migrantes-enviados-2026-09-20",
+            "domain": "distribution",
+            "priority": 0.2637,
+            "evidence": [
+              "Título: Tribunal limita deportaciones tras 22,000 migrantes enviados",
+              "Categoría: Internacionales",
+              "Prioridad: baja"
+            ],
+            "reason": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+            "expectedImpact": "Aumentar alcance de la pieza con mayor retorno hoy.",
+            "suggestedActionId": "queue-distribution-copy",
+            "risk": 0.5,
+            "metadata": {
+              "slug": "tribunal-limita-deportaciones-tras-22-000-migrantes-enviados",
+              "title": "Tribunal limita deportaciones tras 22,000 migrantes enviados",
+              "channel": [
+                "Facebook",
+                "Telegram",
+                "WhatsApp",
+                "Newsletter",
+                "Google Discover"
+              ]
+            },
+            "priorityLabel": "P2",
+            "action": {
+              "id": "queue-distribution-copy",
+              "domain": "distribution",
+              "level": 4,
+              "title": "Preparar copias de distribución",
+              "risk": 0.5,
+              "reversible": true,
+              "requiresHuman": true,
+              "executor": "nios-queue",
+              "verification": "nios_memory contiene la tarea de distribución pendiente.",
+              "sideEffect": "Encola copias para Telegram/Facebook/WhatsApp/Newsletter.",
+              "description": "Sugiere al equipo de canal los textos de distribución."
+            },
+            "executionMode": "QUEUE_FOR_HUMAN"
+          }
+        },
+        "after": {
+          "action": "queue-distribution-copy",
+          "mode": "QUEUE_FOR_HUMAN"
+        },
+        "impact": "Queued for human: Preparar copias de distribución",
+        "confidence": 0.5,
+        "timestamp": "2026-09-20T08:49:54.525Z"
+      },
+      {
+        "decisionId": "obs-opp-Migración y visas-2026-09-20",
+        "problem": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+        "decision": "QUEUE_FOR_HUMAN",
+        "before": {
+          "input": {
+            "id": "obs-opp-Migración y visas-2026-09-20",
+            "domain": "growth",
+            "priority": 0.5139,
+            "evidence": [
+              "Tema: Migración y visas",
+              "Intento: transaccional",
+              "Demanda: permanente"
+            ],
+            "reason": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+            "expectedImpact": "Cubrir una demanda de búsqueda permanente sin competencia propia.",
+            "suggestedActionId": "queue-evergreen-guide",
+            "risk": 0.4,
+            "metadata": {
+              "topic": "Migración y visas",
+              "intent": "transaccional",
+              "format": "guía"
+            },
+            "priorityLabel": "P1",
+            "action": {
+              "id": "queue-evergreen-guide",
+              "domain": "growth",
+              "level": 3,
+              "title": "Crear guía evergreen desde nota identificada",
+              "risk": 0.4,
+              "reversible": true,
+              "requiresHuman": true,
+              "executor": "nios-queue",
+              "verification": "Tarea en nios_memory con noticia origen y tema.",
+              "sideEffect": "Encola trabajo de transformación a guía, no modifica el artículo.",
+              "description": "Sugiere convertir una noticia recurrente en guía permanente."
+            },
+            "executionMode": "QUEUE_FOR_HUMAN"
+          }
+        },
+        "after": {
+          "action": "queue-evergreen-guide",
+          "mode": "QUEUE_FOR_HUMAN"
+        },
+        "impact": "Queued for human: Crear guía evergreen desde nota identificada",
+        "confidence": 0.6,
+        "timestamp": "2026-09-20T08:49:54.525Z"
+      },
+      {
+        "decisionId": "obs-home-2026-09-20",
+        "problem": "La portada no comunica correctamente la identidad editorial.",
+        "decision": "QUEUE_FOR_HUMAN",
+        "before": {
+          "input": {
+            "id": "obs-home-2026-09-20",
+            "domain": "content",
+            "priority": 0.4,
+            "evidence": [
+              "Home score: 39",
+              "Violación: Nacionales ocupa el 65% de la portada, por encima del máximo permitido de 30%.",
+              "Categoría dominante: Nacionales"
+            ],
+            "reason": "La portada no comunica correctamente la identidad editorial.",
+            "expectedImpact": "Mejorar primera impresión de lector nuevo y señal de marca para Google.",
+            "suggestedActionId": "queue-hero-article",
+            "risk": 0.6,
+            "metadata": {
+              "suggestedSlug": "tribunal-limita-deportaciones-tras-22-000-migrantes-enviados",
+              "violation": "Nacionales ocupa el 65% de la portada, por encima del máximo permitido de 30%."
+            },
+            "priorityLabel": "P2",
+            "action": {
+              "id": "queue-hero-article",
+              "domain": "content",
+              "level": 4,
+              "title": "Colocar artículo sugerido en portada",
+              "risk": 0.6,
+              "reversible": true,
+              "requiresHuman": true,
+              "executor": "nios-queue",
+              "verification": "Tarea pendiente en nios_memory con referencia al slug propuesto.",
+              "sideEffect": "Crea tarea para que un humano decida si lo pone en hero.",
+              "description": "Sugiere reposicionar una noticia en el hero de la portada."
+            },
+            "executionMode": "QUEUE_FOR_HUMAN"
+          }
+        },
+        "after": {
+          "action": "queue-hero-article",
+          "mode": "QUEUE_FOR_HUMAN"
+        },
+        "impact": "Queued for human: Colocar artículo sugerido en portada",
+        "confidence": 0.4,
+        "timestamp": "2026-09-20T08:49:54.525Z"
+      },
+      {
+        "decisionId": "obs-breakout-mujer-muere-tras-ataque-de-su-conyuge-en-comunidad-de-matagalpa-2026-09-20",
+        "problem": "Este artículo supera significativamente el promedio de tráfico.",
+        "decision": "AUTO_EXECUTE",
+        "before": {
+          "input": {
+            "id": "obs-breakout-mujer-muere-tras-ataque-de-su-conyuge-en-comunidad-de-matagalpa-2026-09-20",
+            "domain": "traffic",
+            "priority": 0.4838,
+            "evidence": [
+              "Slug: mujer-muere-tras-ataque-de-su-conyuge-en-comunidad-de-matagalpa",
+              "Views 24h: 808",
+              "Promedio: 245.05",
+              "Umbral 2σ: 641.969"
+            ],
+            "reason": "Este artículo supera significativamente el promedio de tráfico.",
+            "expectedImpact": "Investigar el patrón para replicarlo en próximas piezas.",
+            "suggestedActionId": "no-action-insufficient-evidence",
+            "risk": 0.1,
+            "metadata": {
+              "slug": "mujer-muere-tras-ataque-de-su-conyuge-en-comunidad-de-matagalpa",
+              "views24h": 808,
+              "mean": 245.05,
+              "threshold": 641.9688708035939
+            },
+            "priorityLabel": "P2",
+            "action": {
+              "id": "no-action-insufficient-evidence",
+              "domain": "system",
+              "level": 0,
+              "title": "Sin acción por evidencia insuficiente",
+              "risk": 0,
+              "reversible": true,
+              "requiresHuman": false,
+              "executor": "nios-noop",
+              "verification": "Evidencia registrada en nios_memory para próxima revisión.",
+              "sideEffect": "Ninguno.",
+              "description": "La señal no supera el umbral de acción concreta."
+            },
+            "executionMode": "AUTO_EXECUTE"
+          }
+        },
+        "after": {
+          "action": "no-action-insufficient-evidence",
+          "mode": "AUTO_EXECUTE"
+        },
+        "impact": "Auto-executed: Sin acción por evidencia insuficiente",
+        "confidence": 0.9,
+        "timestamp": "2026-09-20T08:49:54.525Z"
+      }
+    ],
+    "repaired": [
+      {
+        "repairId": "nios-cache-refresh",
+        "problem": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+        "action": "AUTO_REPAIR: Invalidar etiquetas de caché del dashboard-calidad y métricas.",
+        "status": "VERIFIED",
+        "verification": "Caché de administración invalidada: dashboard-calidad, nios-daily-snapshot, nios-snapshot, noticias, nios-telemetry, traffic-data."
+      }
+    ],
+    "pendingHuman": 3,
+    "failedRepairs": 0,
+    "skipped": 3,
+    "summary": "NIOS Repair Engine ejecutado en 2026-09-20T08:49:51.313Z.\nCiclos: 2/3.\nReparaciones verificadas: 1.\nPendientes humanos: 0.\nBloqueos externos: 0.\nFallidas: 0.\nOmitidas: 3.\nModo final: VERIFIED. | Reparaciones: nios-cache-refresh. Tareas para humano: 3.",
+    "report": {
+      "mode": "VERIFIED",
+      "generatedAt": "2026-09-20T08:49:54.192Z",
+      "summary": "NIOS modo VERIFIED: Plan de reparación NIOS: 0 críticas, 0 altas, 0 medias, 1 bajas, 3 informativas. Auto-fixes disponibles: 1. Acciones que requieren humano: 0.",
+      "top5Actions": [
+        {
+          "id": "nios-cache-refresh",
+          "priority": "P3",
+          "title": "[NIOS] La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+          "source": "NIOS",
+          "type": "AUTO_REPAIR",
+          "status": "PENDING",
+          "what": "INVALIDATE_CACHE",
+          "why": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.. Causa: Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL."
+        }
+      ],
+      "autoRepaired": [
+        {
+          "repairId": "nios-cache-refresh",
+          "problem": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+          "rootCause": "Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.",
+          "action": "AUTO_REPAIR: Invalidar etiquetas de caché del dashboard-calidad y métricas.",
+          "type": "AUTO_REPAIR",
+          "status": "VERIFIED",
+          "timestamp": "2026-09-20T08:49:52.809Z",
+          "verification": "Caché de administración invalidada: dashboard-calidad, nios-daily-snapshot, nios-snapshot, noticias, nios-telemetry, traffic-data.",
+          "rollbackAvailable": false
+        }
+      ],
+      "humanActions": [],
+      "working": [
+        {
+          "source": "GSC",
+          "status": "REAL",
+          "note": "Google Search Console está disponible."
+        },
+        {
+          "source": "GA4",
+          "status": "REAL",
+          "note": "Google Analytics 4 está disponible."
+        },
+        {
+          "source": "AdSense",
+          "status": "DISABLED_BY_SCOPE",
+          "note": "AdSense no está configurado ni habilitado en el alcance operativo actual."
+        },
+        {
+          "source": "NIOS",
+          "status": "STALE",
+          "note": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria."
+        }
+      ],
+      "blocked": [],
+      "whatToDoNow": [
+        "NIOS puede ejecutar: Invalidar etiquetas de caché del dashboard-calidad y métricas."
+      ],
+      "whatNiosWillDo": [
+        "Verificar estados de fuentes en cada corrida.",
+        "No propagar ceros cuando la fuente esté bloqueada o sin configurar.",
+        "Mantener la cola de reparación priorizada por severidad.",
+        "Ejecutar cuando sea seguro: La caché de los dashboards administrativos puede estar stale tras la recolección diaria. — Invalidar etiquetas de caché del dashboard-calidad y métricas."
+      ],
+      "snapshotConsistency": {
+        "snapshotCount": 424,
+        "dashboardCount": 424,
+        "consistent": true
+      },
+      "tests": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "status": "NOT_RUN"
+      },
+      "build": "NOT_RUN",
+      "finalState": "OPERATIONAL",
+      "niosAhoraPuede": [
+        "Detectar el estado real de GSC, GA4, AdSense y snapshots.",
+        "Distinguir REAL, ACCESS_BLOCKED, CONFIG_REQUIRED, INVALID_CONFIGURATION y NO_DATA sin confundirlos con ceros.",
+        "Generar exactamente 5 acciones priorizadas (P0–P3) para el editor.",
+        "Explicar qué NIOS puede reparar automáticamente y qué requiere aprobación humana.",
+        "Verificar consistencia entre dashboard y snapshot y reportarla como DATA_CONFLICT.",
+        "Responder en lenguaje humano: qué está mal, qué es importante, qué ya reparó y qué sigue.",
+        "No marcar artículos como RED solo por falta de datos de Google.",
+        "No presentar hipótesis de AdSense ni Trust como hechos de Google."
+      ],
+      "businessObservations": 4,
+      "businessDecisions": 4,
+      "businessQueues": 3,
+      "businessAuto": 1,
+      "businessBlocked": 0,
+      "trafficArticles": 20,
+      "totalViews24h": 4901,
+      "snapshotDate": "2026-09-20",
+      "learningPatterns": 436,
+      "operational": {
+        "incidents": [
+          {
+            "id": "ZsH8UVEsmJXM2dnN0FGt",
+            "kind": "operational_incident",
+            "conflictId": "approval-pending",
+            "title": "Decisiones pendientes de aprobación humana",
+            "description": "Hay 3 decisión(es) del CEO que requieren validación humana antes de ejecutarse. NIOS no actuará autónomamente sobre ellas.",
+            "severity": "warning",
+            "category": "human-approval",
+            "source": "nios-ceo-loop, nios-action-engine",
+            "team": "CEO",
+            "detectedAt": "2026-09-06T08:49:53.697Z",
+            "evidence": {
+              "pendingHuman": 3,
+              "decisions": [
+                {
+                  "id": "gsc-real",
+                  "source": "GSC",
+                  "problem": "Google Search Console está disponible.",
+                  "decision": "NO_ACTION",
+                  "priority": 0,
+                  "factors": {
+                    "impact": 0.1,
+                    "confidence": 1,
+                    "effort": 0.1,
+                    "risk": 0,
+                    "urgency": 0.1
+                  },
+                  "reason": "No hay acción automática segura: La cuenta de servicio tiene permisos y la propiedad devuelve datos.",
+                  "expectedResult": "gscStatus continúa en REAL."
+                },
+                {
+                  "id": "ga4-real",
+                  "source": "GA4",
+                  "problem": "Google Analytics 4 está disponible.",
+                  "decision": "NO_ACTION",
+                  "priority": 0,
+                  "factors": {
+                    "impact": 0.1,
+                    "confidence": 1,
+                    "effort": 0.1,
+                    "risk": 0,
+                    "urgency": 0.1
+                  },
+                  "reason": "No hay acción automática segura: La propiedad y credenciales son correctas.",
+                  "expectedResult": "ga4Status continúa en REAL."
+                },
+                {
+                  "id": "adsense-disabled-by-scope",
+                  "source": "AdSense",
+                  "problem": "AdSense no está habilitado en el alcance operativo actual.",
+                  "decision": "NO_ACTION",
+                  "priority": 0,
+                  "factors": {
+                    "impact": 0.1,
+                    "confidence": 0,
+                    "effort": 0.1,
+                    "risk": 0,
+                    "urgency": 0.1
+                  },
+                  "reason": "No hay acción automática segura: GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+                  "expectedResult": "AdSense permanece como fuente opcional hasta que se configure."
+                },
+                {
+                  "id": "nios-cache-refresh",
+                  "source": "NIOS",
+                  "problem": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+                  "decision": "AUTO_EXECUTE",
+                  "priority": 0.0385,
+                  "factors": {
+                    "impact": 0.3,
+                    "confidence": 0.9,
+                    "effort": 1,
+                    "risk": 0.05,
+                    "urgency": 0.3
+                  },
+                  "reason": "Acción segura y verificable: Invalidar etiquetas de caché del dashboard-calidad y métricas.",
+                  "expectedResult": "Caché de dashboards admin invalidada; la siguiente petición recalculará desde Firestore."
+                },
+                {
+                  "id": "obs-dist-ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes-2026-09-06",
+                  "source": "distribution",
+                  "problem": "Prioridad critica · 0 vistas actuales · categoría de marca. Score de distribución: 65.",
+                  "decision": "QUEUE_FOR_HUMAN",
+                  "priority": 0.5294,
+                  "factors": {
+                    "impact": 0.5294,
+                    "confidence": 0.5,
+                    "effort": 4,
+                    "risk": 0.5,
+                    "urgency": 0.5294
+                  },
+                  "reason": "Aumentar alcance de la pieza con mayor retorno hoy.",
+                  "expectedResult": "nios_memory contiene la tarea de distribución pendiente."
+                },
+                {
+                  "id": "obs-opp-Migración y visas-2026-09-06",
+                  "source": "growth",
+                  "problem": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+                  "decision": "QUEUE_FOR_HUMAN",
+                  "priority": 0.5139,
+                  "factors": {
+                    "impact": 0.5139,
+                    "confidence": 0.6,
+                    "effort": 3,
+                    "risk": 0.4,
+                    "urgency": 0.5139
+                  },
+                  "reason": "Cubrir una demanda de búsqueda permanente sin competencia propia.",
+                  "expectedResult": "Tarea en nios_memory con noticia origen y tema."
+                },
+                {
+                  "id": "obs-home-2026-09-06",
+                  "source": "content",
+                  "problem": "La portada no comunica correctamente la identidad editorial.",
+                  "decision": "QUEUE_FOR_HUMAN",
+                  "priority": 0.4,
+                  "factors": {
+                    "impact": 0.4,
+                    "confidence": 0.4,
+                    "effort": 4,
+                    "risk": 0.6,
+                    "urgency": 0.4
+                  },
+                  "reason": "Mejorar primera impresión de lector nuevo y señal de marca para Google.",
+                  "expectedResult": "Tarea pendiente en nios_memory con referencia al slug propuesto."
+                },
+                {
+                  "id": "obs-breakout-motociclista-muere-tras-ataque-a-balazos-en-sebaco-2026-09-06",
+                  "source": "traffic",
+                  "problem": "Este artículo supera significativamente el promedio de tráfico.",
+                  "decision": "AUTO_EXECUTE",
+                  "priority": 0.4838,
+                  "factors": {
+                    "impact": 0.4838,
+                    "confidence": 0.9,
+                    "effort": 0,
+                    "risk": 0.1,
+                    "urgency": 0.4838
+                  },
+                  "reason": "Investigar el patrón para replicarlo en próximas piezas.",
+                  "expectedResult": "Evidencia registrada en nios_memory para próxima revisión."
+                }
+              ]
+            },
+            "diagnosis": {
+              "what": "Decisiones pendientes de aprobación humana",
+              "system": "nios-ceo-loop, nios-action-engine",
+              "severity": "warning",
+              "impact": "Hay 3 decisión(es) del CEO que requieren validación humana antes de ejecutarse. NIOS no actuará autónomamente sobre ellas.",
+              "evidence": {
+                "pendingHuman": 3,
+                "decisions": [
+                  {
+                    "id": "gsc-real",
+                    "source": "GSC",
+                    "problem": "Google Search Console está disponible.",
+                    "decision": "NO_ACTION",
+                    "priority": 0,
+                    "factors": {
+                      "impact": 0.1,
+                      "confidence": 1,
+                      "effort": 0.1,
+                      "risk": 0,
+                      "urgency": 0.1
+                    },
+                    "reason": "No hay acción automática segura: La cuenta de servicio tiene permisos y la propiedad devuelve datos.",
+                    "expectedResult": "gscStatus continúa en REAL."
+                  },
+                  {
+                    "id": "ga4-real",
+                    "source": "GA4",
+                    "problem": "Google Analytics 4 está disponible.",
+                    "decision": "NO_ACTION",
+                    "priority": 0,
+                    "factors": {
+                      "impact": 0.1,
+                      "confidence": 1,
+                      "effort": 0.1,
+                      "risk": 0,
+                      "urgency": 0.1
+                    },
+                    "reason": "No hay acción automática segura: La propiedad y credenciales son correctas.",
+                    "expectedResult": "ga4Status continúa en REAL."
+                  },
+                  {
+                    "id": "adsense-disabled-by-scope",
+                    "source": "AdSense",
+                    "problem": "AdSense no está habilitado en el alcance operativo actual.",
+                    "decision": "NO_ACTION",
+                    "priority": 0,
+                    "factors": {
+                      "impact": 0.1,
+                      "confidence": 0,
+                      "effort": 0.1,
+                      "risk": 0,
+                      "urgency": 0.1
+                    },
+                    "reason": "No hay acción automática segura: GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+                    "expectedResult": "AdSense permanece como fuente opcional hasta que se configure."
+                  },
+                  {
+                    "id": "nios-cache-refresh",
+                    "source": "NIOS",
+                    "problem": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+                    "decision": "AUTO_EXECUTE",
+                    "priority": 0.0385,
+                    "factors": {
+                      "impact": 0.3,
+                      "confidence": 0.9,
+                      "effort": 1,
+                      "risk": 0.05,
+                      "urgency": 0.3
+                    },
+                    "reason": "Acción segura y verificable: Invalidar etiquetas de caché del dashboard-calidad y métricas.",
+                    "expectedResult": "Caché de dashboards admin invalidada; la siguiente petición recalculará desde Firestore."
+                  },
+                  {
+                    "id": "obs-dist-ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes-2026-09-06",
+                    "source": "distribution",
+                    "problem": "Prioridad critica · 0 vistas actuales · categoría de marca. Score de distribución: 65.",
+                    "decision": "QUEUE_FOR_HUMAN",
+                    "priority": 0.5294,
+                    "factors": {
+                      "impact": 0.5294,
+                      "confidence": 0.5,
+                      "effort": 4,
+                      "risk": 0.5,
+                      "urgency": 0.5294
+                    },
+                    "reason": "Aumentar alcance de la pieza con mayor retorno hoy.",
+                    "expectedResult": "nios_memory contiene la tarea de distribución pendiente."
+                  },
+                  {
+                    "id": "obs-opp-Migración y visas-2026-09-06",
+                    "source": "growth",
+                    "problem": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+                    "decision": "QUEUE_FOR_HUMAN",
+                    "priority": 0.5139,
+                    "factors": {
+                      "impact": 0.5139,
+                      "confidence": 0.6,
+                      "effort": 3,
+                      "risk": 0.4,
+                      "urgency": 0.5139
+                    },
+                    "reason": "Cubrir una demanda de búsqueda permanente sin competencia propia.",
+                    "expectedResult": "Tarea en nios_memory con noticia origen y tema."
+                  },
+                  {
+                    "id": "obs-home-2026-09-06",
+                    "source": "content",
+                    "problem": "La portada no comunica correctamente la identidad editorial.",
+                    "decision": "QUEUE_FOR_HUMAN",
+                    "priority": 0.4,
+                    "factors": {
+                      "impact": 0.4,
+                      "confidence": 0.4,
+                      "effort": 4,
+                      "risk": 0.6,
+                      "urgency": 0.4
+                    },
+                    "reason": "Mejorar primera impresión de lector nuevo y señal de marca para Google.",
+                    "expectedResult": "Tarea pendiente en nios_memory con referencia al slug propuesto."
+                  },
+                  {
+                    "id": "obs-breakout-motociclista-muere-tras-ataque-a-balazos-en-sebaco-2026-09-06",
+                    "source": "traffic",
+                    "problem": "Este artículo supera significativamente el promedio de tráfico.",
+                    "decision": "AUTO_EXECUTE",
+                    "priority": 0.4838,
+                    "factors": {
+                      "impact": 0.4838,
+                      "confidence": 0.9,
+                      "effort": 0,
+                      "risk": 0.1,
+                      "urgency": 0.4838
+                    },
+                    "reason": "Investigar el patrón para replicarlo en próximas piezas.",
+                    "expectedResult": "Evidencia registrada en nios_memory para próxima revisión."
+                  }
+                ]
+              },
+              "responsibleTeam": "CEO",
+              "autoRepairable": false,
+              "action": "human-approval"
+            },
+            "jobIds": [],
+            "attemptCount": 0,
+            "state": "ACTION_REQUIRED",
+            "transitions": [
+              {
+                "from": "DETECTED",
+                "to": "INVESTIGATING",
+                "at": "2026-09-06T08:49:54.662Z",
+                "cause": "Diagnóstico automático inicial",
+                "actor": "AUDITOR",
+                "evidence": {
+                  "conflict": {
+                    "id": "approval-pending",
+                    "severity": "warning",
+                    "category": "human-approval",
+                    "status": "HUMAN_APPROVAL_REQUIRED",
+                    "sources": [
+                      "nios-ceo-loop",
+                      "nios-action-engine"
+                    ],
+                    "title": "Decisiones pendientes de aprobación humana",
+                    "description": "Hay 3 decisión(es) del CEO que requieren validación humana antes de ejecutarse. NIOS no actuará autónomamente sobre ellas.",
+                    "evidence": {
+                      "pendingHuman": 3,
+                      "decisions": [
+                        {
+                          "id": "gsc-real",
+                          "source": "GSC",
+                          "problem": "Google Search Console está disponible.",
+                          "decision": "NO_ACTION",
+                          "priority": 0,
+                          "factors": {
+                            "impact": 0.1,
+                            "confidence": 1,
+                            "effort": 0.1,
+                            "risk": 0,
+                            "urgency": 0.1
+                          },
+                          "reason": "No hay acción automática segura: La cuenta de servicio tiene permisos y la propiedad devuelve datos.",
+                          "expectedResult": "gscStatus continúa en REAL."
+                        },
+                        {
+                          "id": "ga4-real",
+                          "source": "GA4",
+                          "problem": "Google Analytics 4 está disponible.",
+                          "decision": "NO_ACTION",
+                          "priority": 0,
+                          "factors": {
+                            "impact": 0.1,
+                            "confidence": 1,
+                            "effort": 0.1,
+                            "risk": 0,
+                            "urgency": 0.1
+                          },
+                          "reason": "No hay acción automática segura: La propiedad y credenciales son correctas.",
+                          "expectedResult": "ga4Status continúa en REAL."
+                        },
+                        {
+                          "id": "adsense-disabled-by-scope",
+                          "source": "AdSense",
+                          "problem": "AdSense no está habilitado en el alcance operativo actual.",
+                          "decision": "NO_ACTION",
+                          "priority": 0,
+                          "factors": {
+                            "impact": 0.1,
+                            "confidence": 0,
+                            "effort": 0.1,
+                            "risk": 0,
+                            "urgency": 0.1
+                          },
+                          "reason": "No hay acción automática segura: GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+                          "expectedResult": "AdSense permanece como fuente opcional hasta que se configure."
+                        },
+                        {
+                          "id": "nios-cache-refresh",
+                          "source": "NIOS",
+                          "problem": "La caché de los dashboards administrativos puede estar stale tras la recolección diaria.",
+                          "decision": "AUTO_EXECUTE",
+                          "priority": 0.0385,
+                          "factors": {
+                            "impact": 0.3,
+                            "confidence": 0.9,
+                            "effort": 1,
+                            "risk": 0.05,
+                            "urgency": 0.3
+                          },
+                          "reason": "Acción segura y verificable: Invalidar etiquetas de caché del dashboard-calidad y métricas.",
+                          "expectedResult": "Caché de dashboards admin invalidada; la siguiente petición recalculará desde Firestore."
+                        },
+                        {
+                          "id": "obs-dist-ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes-2026-09-06",
+                          "source": "distribution",
+                          "problem": "Prioridad critica · 0 vistas actuales · categoría de marca. Score de distribución: 65.",
+                          "decision": "QUEUE_FOR_HUMAN",
+                          "priority": 0.5294,
+                          "factors": {
+                            "impact": 0.5294,
+                            "confidence": 0.5,
+                            "effort": 4,
+                            "risk": 0.5,
+                            "urgency": 0.5294
+                          },
+                          "reason": "Aumentar alcance de la pieza con mayor retorno hoy.",
+                          "expectedResult": "nios_memory contiene la tarea de distribución pendiente."
+                        },
+                        {
+                          "id": "obs-opp-Migración y visas-2026-09-06",
+                          "source": "growth",
+                          "problem": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+                          "decision": "QUEUE_FOR_HUMAN",
+                          "priority": 0.5139,
+                          "factors": {
+                            "impact": 0.5139,
+                            "confidence": 0.6,
+                            "effort": 3,
+                            "risk": 0.4,
+                            "urgency": 0.5139
+                          },
+                          "reason": "Cubrir una demanda de búsqueda permanente sin competencia propia.",
+                          "expectedResult": "Tarea en nios_memory con noticia origen y tema."
+                        },
+                        {
+                          "id": "obs-home-2026-09-06",
+                          "source": "content",
+                          "problem": "La portada no comunica correctamente la identidad editorial.",
+                          "decision": "QUEUE_FOR_HUMAN",
+                          "priority": 0.4,
+                          "factors": {
+                            "impact": 0.4,
+                            "confidence": 0.4,
+                            "effort": 4,
+                            "risk": 0.6,
+                            "urgency": 0.4
+                          },
+                          "reason": "Mejorar primera impresión de lector nuevo y señal de marca para Google.",
+                          "expectedResult": "Tarea pendiente en nios_memory con referencia al slug propuesto."
+                        },
+                        {
+                          "id": "obs-breakout-motociclista-muere-tras-ataque-a-balazos-en-sebaco-2026-09-06",
+                          "source": "traffic",
+                          "problem": "Este artículo supera significativamente el promedio de tráfico.",
+                          "decision": "AUTO_EXECUTE",
+                          "priority": 0.4838,
+                          "factors": {
+                            "impact": 0.4838,
+                            "confidence": 0.9,
+                            "effort": 0,
+                            "risk": 0.1,
+                            "urgency": 0.4838
+                          },
+                          "reason": "Investigar el patrón para replicarlo en próximas piezas.",
+                          "expectedResult": "Evidencia registrada en nios_memory para próxima revisión."
+                        }
+                      ]
+                    },
+                    "detectedAt": "2026-09-06T08:49:53.697Z"
+                  }
+                }
+              },
+              {
+                "from": "INVESTIGATING",
+                "to": "ACTION_REQUIRED",
+                "at": "2026-09-06T08:49:54.843Z",
+                "cause": "Requiere aprobación humana o decisión del equipo responsable",
+                "actor": "CEO",
+                "evidence": {
+                  "requiresApproval": true
+                }
+              }
+            ],
+            "approvalId": "lwRkeJ0nJy8cUrshO019",
+            "updatedAt": "2026-09-06T08:49:55.052Z"
+          },
+          {
+            "id": "k9AI6qspTIUHw3TaLvLo",
+            "kind": "operational_incident",
+            "conflictId": "obs-AdSense-DISABLED_BY_SCOPE",
+            "title": "Fuente \"AdSense\" reporta estado DISABLED_BY_SCOPE",
+            "description": "GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+            "severity": "info",
+            "category": "source-failure",
+            "source": "AdSense",
+            "team": "REPARADOR",
+            "detectedAt": "2026-09-06T08:49:53.697Z",
+            "evidence": {
+              "source": "AdSense",
+              "status": "DISABLED_BY_SCOPE",
+              "note": "GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+              "dataAgeHours": 0
+            },
+            "diagnosis": {
+              "what": "Fuente \"AdSense\" reporta estado DISABLED_BY_SCOPE",
+              "system": "AdSense",
+              "severity": "info",
+              "impact": "GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+              "evidence": {
+                "source": "AdSense",
+                "status": "DISABLED_BY_SCOPE",
+                "note": "GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+                "dataAgeHours": 0
+              },
+              "responsibleTeam": "REPARADOR",
+              "autoRepairable": false,
+              "action": "configure-source"
+            },
+            "jobIds": [],
+            "attemptCount": 0,
+            "state": "ACTION_REQUIRED",
+            "transitions": [
+              {
+                "from": "DETECTED",
+                "to": "INVESTIGATING",
+                "at": "2026-09-06T08:49:55.286Z",
+                "cause": "Diagnóstico automático inicial",
+                "actor": "AUDITOR",
+                "evidence": {
+                  "conflict": {
+                    "id": "obs-AdSense-DISABLED_BY_SCOPE",
+                    "severity": "info",
+                    "category": "source-failure",
+                    "status": "SOURCE_FAILURE",
+                    "sources": [
+                      "AdSense"
+                    ],
+                    "title": "Fuente \"AdSense\" reporta estado DISABLED_BY_SCOPE",
+                    "description": "GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+                    "evidence": {
+                      "source": "AdSense",
+                      "status": "DISABLED_BY_SCOPE",
+                      "note": "GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.",
+                      "dataAgeHours": 0
+                    },
+                    "detectedAt": "2026-09-06T08:49:53.697Z"
+                  }
+                }
+              },
+              {
+                "from": "INVESTIGATING",
+                "to": "ACTION_REQUIRED",
+                "at": "2026-09-06T08:49:55.457Z",
+                "cause": "Requiere aprobación humana o decisión del equipo responsable",
+                "actor": "REPARADOR",
+                "evidence": {
+                  "requiresApproval": true
+                }
+              }
+            ],
+            "approvalId": "godFHHUaWyqvBLmq30x5",
+            "updatedAt": "2026-09-06T08:49:55.622Z"
+          },
+          {
+            "id": "SZc6w0Zaup5KnGzogYAQ",
+            "kind": "operational_incident",
+            "conflictId": "obs-NIOS-STALE",
+            "title": "Fuente \"NIOS\" reporta estado STALE",
+            "description": "Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.",
+            "severity": "info",
+            "category": "source-failure",
+            "source": "NIOS",
+            "team": "REPARADOR",
+            "detectedAt": "2026-09-06T08:49:53.697Z",
+            "evidence": {
+              "source": "NIOS",
+              "status": "STALE",
+              "note": "Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.",
+              "dataAgeHours": 0
+            },
+            "diagnosis": {
+              "what": "Fuente \"NIOS\" reporta estado STALE",
+              "system": "NIOS",
+              "severity": "info",
+              "impact": "Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.",
+              "evidence": {
+                "source": "NIOS",
+                "status": "STALE",
+                "note": "Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.",
+                "dataAgeHours": 0
+              },
+              "responsibleTeam": "REPARADOR",
+              "autoRepairable": false,
+              "action": "configure-source"
+            },
+            "jobIds": [],
+            "attemptCount": 0,
+            "state": "ACTION_REQUIRED",
+            "transitions": [
+              {
+                "from": "DETECTED",
+                "to": "INVESTIGATING",
+                "at": "2026-09-06T08:49:55.851Z",
+                "cause": "Diagnóstico automático inicial",
+                "actor": "AUDITOR",
+                "evidence": {
+                  "conflict": {
+                    "id": "obs-NIOS-STALE",
+                    "severity": "info",
+                    "category": "source-failure",
+                    "status": "SOURCE_FAILURE",
+                    "sources": [
+                      "NIOS"
+                    ],
+                    "title": "Fuente \"NIOS\" reporta estado STALE",
+                    "description": "Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.",
+                    "evidence": {
+                      "source": "NIOS",
+                      "status": "STALE",
+                      "note": "Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.",
+                      "dataAgeHours": 0
+                    },
+                    "detectedAt": "2026-09-06T08:49:53.697Z"
+                  }
+                }
+              },
+              {
+                "from": "INVESTIGATING",
+                "to": "ACTION_REQUIRED",
+                "at": "2026-09-06T08:49:56.043Z",
+                "cause": "Requiere aprobación humana o decisión del equipo responsable",
+                "actor": "REPARADOR",
+                "evidence": {
+                  "requiresApproval": true
+                }
+              }
+            ],
+            "approvalId": "pIkVKwbEKNTY8V7LBjY0",
+            "updatedAt": "2026-09-06T08:49:56.264Z"
+          },
+          {
+            "id": "H0odb9ZtOypDGoNr37O4",
+            "kind": "operational_incident",
+            "conflictId": "obs-distribution-ACTION_REQUIRED",
+            "title": "Fuente \"distribution\" reporta estado ACTION_REQUIRED",
+            "description": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+            "severity": "info",
+            "category": "source-failure",
+            "source": "distribution",
+            "team": "GOOGLE",
+            "detectedAt": "2026-09-08T08:49:48.201Z",
+            "evidence": {
+              "source": "distribution",
+              "status": "ACTION_REQUIRED",
+              "note": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+              "dataAgeHours": 0
+            },
+            "diagnosis": {
+              "what": "Fuente \"distribution\" reporta estado ACTION_REQUIRED",
+              "system": "distribution",
+              "severity": "info",
+              "impact": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+              "evidence": {
+                "source": "distribution",
+                "status": "ACTION_REQUIRED",
+                "note": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+                "dataAgeHours": 0
+              },
+              "responsibleTeam": "GOOGLE",
+              "autoRepairable": false,
+              "action": "configure-source"
+            },
+            "jobIds": [],
+            "attemptCount": 0,
+            "state": "ACTION_REQUIRED",
+            "transitions": [
+              {
+                "from": "DETECTED",
+                "to": "INVESTIGATING",
+                "at": "2026-09-08T08:49:51.631Z",
+                "cause": "Diagnóstico automático inicial",
+                "actor": "AUDITOR",
+                "evidence": {
+                  "conflict": {
+                    "id": "obs-distribution-ACTION_REQUIRED",
+                    "severity": "info",
+                    "category": "source-failure",
+                    "status": "NO_DATA",
+                    "sources": [
+                      "distribution"
+                    ],
+                    "title": "Fuente \"distribution\" reporta estado ACTION_REQUIRED",
+                    "description": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+                    "evidence": {
+                      "source": "distribution",
+                      "status": "ACTION_REQUIRED",
+                      "note": "Prioridad baja · 0 vistas actuales · categoría de marca. Score de distribución: 0.",
+                      "dataAgeHours": 0
+                    },
+                    "detectedAt": "2026-09-08T08:49:48.201Z"
+                  }
+                }
+              },
+              {
+                "from": "INVESTIGATING",
+                "to": "ACTION_REQUIRED",
+                "at": "2026-09-08T08:49:51.772Z",
+                "cause": "Dependencia externa: configure-source",
+                "actor": "GOOGLE",
+                "evidence": {
+                  "external": true,
+                  "action": "configure-source"
+                }
+              }
+            ],
+            "approvalId": "lFDN1DvUNEHKhaHVWrEY",
+            "updatedAt": "2026-09-08T08:49:51.996Z"
+          },
+          {
+            "id": "mdb99c0DSNpjpA04ErFe",
+            "kind": "operational_incident",
+            "conflictId": "obs-growth-ACTION_REQUIRED",
+            "title": "Fuente \"growth\" reporta estado ACTION_REQUIRED",
+            "description": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+            "severity": "info",
+            "category": "source-failure",
+            "source": "growth",
+            "team": "GOOGLE",
+            "detectedAt": "2026-09-08T08:49:48.201Z",
+            "evidence": {
+              "source": "growth",
+              "status": "ACTION_REQUIRED",
+              "note": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+              "dataAgeHours": 0
+            },
+            "diagnosis": {
+              "what": "Fuente \"growth\" reporta estado ACTION_REQUIRED",
+              "system": "growth",
+              "severity": "info",
+              "impact": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+              "evidence": {
+                "source": "growth",
+                "status": "ACTION_REQUIRED",
+                "note": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+                "dataAgeHours": 0
+              },
+              "responsibleTeam": "GOOGLE",
+              "autoRepairable": false,
+              "action": "configure-source"
+            },
+            "jobIds": [],
+            "attemptCount": 0,
+            "state": "ACTION_REQUIRED",
+            "transitions": [
+              {
+                "from": "DETECTED",
+                "to": "INVESTIGATING",
+                "at": "2026-09-08T08:49:52.306Z",
+                "cause": "Diagnóstico automático inicial",
+                "actor": "AUDITOR",
+                "evidence": {
+                  "conflict": {
+                    "id": "obs-growth-ACTION_REQUIRED",
+                    "severity": "info",
+                    "category": "source-failure",
+                    "status": "NO_DATA",
+                    "sources": [
+                      "growth"
+                    ],
+                    "title": "Fuente \"growth\" reporta estado ACTION_REQUIRED",
+                    "description": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+                    "evidence": {
+                      "source": "growth",
+                      "status": "ACTION_REQUIRED",
+                      "note": "Solo 3 de 4 señales cubiertas. La audiencia busca esto y el medio no responde.",
+                      "dataAgeHours": 0
+                    },
+                    "detectedAt": "2026-09-08T08:49:48.201Z"
+                  }
+                }
+              },
+              {
+                "from": "INVESTIGATING",
+                "to": "ACTION_REQUIRED",
+                "at": "2026-09-08T08:49:52.465Z",
+                "cause": "Dependencia externa: configure-source",
+                "actor": "GOOGLE",
+                "evidence": {
+                  "external": true,
+                  "action": "configure-source"
+                }
+              }
+            ],
+            "approvalId": "giOGZoZMVXXTCMn21Co5",
+            "updatedAt": "2026-09-08T08:49:52.713Z"
+          },
+          {
+            "id": "cTavTbkOL3xYEaHpckL7",
+            "kind": "operational_incident",
+            "conflictId": "obs-content-ACTION_REQUIRED",
+            "title": "Fuente \"content\" reporta estado ACTION_REQUIRED",
+            "description": "La portada no comunica correctamente la identidad editorial.",
+            "severity": "info",
+            "category": "source-failure",
+            "source": "content",
+            "team": "GOOGLE",
+            "detectedAt": "2026-09-08T08:49:48.201Z",
+            "evidence": {
+              "source": "content",
+              "status": "ACTION_REQUIRED",
+              "note": "La portada no comunica correctamente la identidad editorial.",
+              "dataAgeHours": 0
+            },
+            "diagnosis": {
+              "what": "Fuente \"content\" reporta estado ACTION_REQUIRED",
+              "system": "content",
+              "severity": "info",
+              "impact": "La portada no comunica correctamente la identidad editorial.",
+              "evidence": {
+                "source": "content",
+                "status": "ACTION_REQUIRED",
+                "note": "La portada no comunica correctamente la identidad editorial.",
+                "dataAgeHours": 0
+              },
+              "responsibleTeam": "GOOGLE",
+              "autoRepairable": false,
+              "action": "configure-source"
+            },
+            "jobIds": [],
+            "attemptCount": 0,
+            "state": "ACTION_REQUIRED",
+            "transitions": [
+              {
+                "from": "DETECTED",
+                "to": "INVESTIGATING",
+                "at": "2026-09-08T08:49:52.966Z",
+                "cause": "Diagnóstico automático inicial",
+                "actor": "AUDITOR",
+                "evidence": {
+                  "conflict": {
+                    "id": "obs-content-ACTION_REQUIRED",
+                    "severity": "info",
+                    "category": "source-failure",
+                    "status": "NO_DATA",
+                    "sources": [
+                      "content"
+                    ],
+                    "title": "Fuente \"content\" reporta estado ACTION_REQUIRED",
+                    "description": "La portada no comunica correctamente la identidad editorial.",
+                    "evidence": {
+                      "source": "content",
+                      "status": "ACTION_REQUIRED",
+                      "note": "La portada no comunica correctamente la identidad editorial.",
+                      "dataAgeHours": 0
+                    },
+                    "detectedAt": "2026-09-08T08:49:48.201Z"
+                  }
+                }
+              },
+              {
+                "from": "INVESTIGATING",
+                "to": "ACTION_REQUIRED",
+                "at": "2026-09-08T08:49:53.120Z",
+                "cause": "Dependencia externa: configure-source",
+                "actor": "GOOGLE",
+                "evidence": {
+                  "external": true,
+                  "action": "configure-source"
+                }
+              }
+            ],
+            "approvalId": "YZ23bgcVPjdMxjY2AL2B",
+            "updatedAt": "2026-09-08T08:49:53.344Z"
+          },
+          {
+            "id": "C1zfAkb6MJHvVk6JsWny",
+            "kind": "operational_incident",
+            "conflictId": "obs-traffic-ACTION_REQUIRED",
+            "title": "Fuente \"traffic\" reporta estado ACTION_REQUIRED",
+            "description": "Este artículo supera significativamente el promedio de tráfico.",
+            "severity": "info",
+            "category": "source-failure",
+            "source": "traffic",
+            "team": "GOOGLE",
+            "detectedAt": "2026-09-15T08:49:51.853Z",
+            "evidence": {
+              "source": "traffic",
+              "status": "ACTION_REQUIRED",
+              "note": "Este artículo supera significativamente el promedio de tráfico.",
+              "dataAgeHours": 0
+            },
+            "diagnosis": {
+              "what": "Fuente \"traffic\" reporta estado ACTION_REQUIRED",
+              "system": "traffic",
+              "severity": "info",
+              "impact": "Este artículo supera significativamente el promedio de tráfico.",
+              "evidence": {
+                "source": "traffic",
+                "status": "ACTION_REQUIRED",
+                "note": "Este artículo supera significativamente el promedio de tráfico.",
+                "dataAgeHours": 0
+              },
+              "responsibleTeam": "GOOGLE",
+              "autoRepairable": false,
+              "action": "configure-source"
+            },
+            "jobIds": [],
+            "attemptCount": 0,
+            "state": "ACTION_REQUIRED",
+            "transitions": [
+              {
+                "from": "DETECTED",
+                "to": "INVESTIGATING",
+                "at": "2026-09-15T08:49:53.431Z",
+                "cause": "Diagnóstico automático inicial",
+                "actor": "AUDITOR",
+                "evidence": {
+                  "conflict": {
+                    "id": "obs-traffic-ACTION_REQUIRED",
+                    "severity": "info",
+                    "category": "source-failure",
+                    "status": "NO_DATA",
+                    "sources": [
+                      "traffic"
+                    ],
+                    "title": "Fuente \"traffic\" reporta estado ACTION_REQUIRED",
+                    "description": "Este artículo supera significativamente el promedio de tráfico.",
+                    "evidence": {
+                      "source": "traffic",
+                      "status": "ACTION_REQUIRED",
+                      "note": "Este artículo supera significativamente el promedio de tráfico.",
+                      "dataAgeHours": 0
+                    },
+                    "detectedAt": "2026-09-15T08:49:51.853Z"
+                  }
+                }
+              },
+              {
+                "from": "INVESTIGATING",
+                "to": "ACTION_REQUIRED",
+                "at": "2026-09-15T08:49:53.723Z",
+                "cause": "Dependencia externa: configure-source",
+                "actor": "GOOGLE",
+                "evidence": {
+                  "external": true,
+                  "action": "configure-source"
+                }
+              }
+            ],
+            "approvalId": "8sfpMDySiSS5tCXipFS9",
+            "updatedAt": "2026-09-15T08:49:54.005Z"
+          },
+          {
+            "id": "O5kOcyFDqMFER2fKRhFj",
+            "kind": "operational_incident",
+            "conflictId": "meni-forense-10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "title": "Discrepancia forense en \"10 sitios para encontrar trabajo remoto desde Nicaragua en 2026\"",
+            "description": "MENI reporta \"Cita textual de una fuente\" como OK, pero Forense no logró verificar la evidencia.. Confianza: 0%.",
+            "severity": "info",
+            "category": "meni-forense",
+            "source": "MENI, Forense",
+            "team": "FORENSE",
+            "detectedAt": "2026-09-14T21:47:18.601Z",
+            "evidence": {
+              "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+              "perfil": "nacionales",
+              "tipo": "falso_positivo",
+              "meniEstado": "OK",
+              "forenseEncontrado": false,
+              "detalle": {
+                "tipoLabel": "Cita textual de una fuente",
+                "forenseSignal": "Evidencia no verificada por Forense",
+                "extractSignal": "ausente",
+                "sample": "<p>El trabajo remoto continúa ofreciendo oportunidades para profesionales que buscan empleos con empresas nacionales e i…"
+              },
+              "confianza": 0
+            },
+            "diagnosis": {
+              "what": "Discrepancia forense en \"10 sitios para encontrar trabajo remoto desde Nicaragua en 2026\"",
+              "system": "MENI, Forense",
+              "severity": "info",
+              "impact": "MENI reporta \"Cita textual de una fuente\" como OK, pero Forense no logró verificar la evidencia.. Confianza: 0%.",
+              "evidence": {
+                "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+                "perfil": "nacionales",
+                "tipo": "falso_positivo",
+                "meniEstado": "OK",
+                "forenseEncontrado": false,
+                "detalle": {
+                  "tipoLabel": "Cita textual de una fuente",
+                  "forenseSignal": "Evidencia no verificada por Forense",
+                  "extractSignal": "ausente",
+                  "sample": "<p>El trabajo remoto continúa ofreciendo oportunidades para profesionales que buscan empleos con empresas nacionales e i…"
+                },
+                "confianza": 0
+              },
+              "responsibleTeam": "FORENSE",
+              "autoRepairable": false,
+              "action": "editorial-review"
+            },
+            "jobIds": [],
+            "attemptCount": 0,
+            "state": "ACTION_REQUIRED",
+            "transitions": [
+              {
+                "from": "DETECTED",
+                "to": "INVESTIGATING",
+                "at": "2026-09-14T21:47:21.520Z",
+                "cause": "Diagnóstico automático inicial",
+                "actor": "AUDITOR",
+                "evidence": {
+                  "conflict": {
+                    "id": "meni-forense-10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+                    "severity": "info",
+                    "category": "meni-forense",
+                    "status": "MENI_FORENSE",
+                    "sources": [
+                      "MENI",
+                      "Forense"
+                    ],
+                    "title": "Discrepancia forense en \"10 sitios para encontrar trabajo remoto desde Nicaragua en 2026\"",
+                    "description": "MENI reporta \"Cita textual de una fuente\" como OK, pero Forense no logró verificar la evidencia.. Confianza: 0%.",
+                    "evidence": {
+                      "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+                      "perfil": "nacionales",
+                      "tipo": "falso_positivo",
+                      "meniEstado": "OK",
+                      "forenseEncontrado": false,
+                      "detalle": {
+                        "tipoLabel": "Cita textual de una fuente",
+                        "forenseSignal": "Evidencia no verificada por Forense",
+                        "extractSignal": "ausente",
+                        "sample": "<p>El trabajo remoto continúa ofreciendo oportunidades para profesionales que buscan empleos con empresas nacionales e i…"
+                      },
+                      "confianza": 0
+                    },
+                    "detectedAt": "2026-09-14T21:47:18.601Z"
+                  }
+                }
+              },
+              {
+                "from": "INVESTIGATING",
+                "to": "ACTION_REQUIRED",
+                "at": "2026-09-14T21:47:21.832Z",
+                "cause": "Bloqueo de equipo: editorial-review",
+                "actor": "FORENSE",
+                "evidence": {
+                  "external": true,
+                  "action": "editorial-review"
+                }
+              }
+            ],
+            "approvalId": "9asLAydFAYFELSeVROrp",
+            "updatedAt": "2026-09-14T21:47:22.298Z"
+          }
+        ],
+        "approvals": [],
+        "jobs": [],
+        "memory": [],
+        "patterns": [],
+        "summary": "Conflictos=8, Incidentes=8, Jobs=0, Aprobaciones=0, Memoria=0, Patrones=0"
+      }
+    },
+    "status": "COMPLETE",
+    "id": "n4orKd3mCaKtzoAc6HEO",
+    "kind": "ceo_loop",
+    "createdAt": "2026-09-20T08:49:54.525Z",
+    "autonomyScore": 8
+  },
+  "depto_jobs": [
+    {
+      "docId": "mtor66am-khoapc",
+      "jobId": "mtor66am-khoapc",
+      "type": "health-check",
+      "priority": "P0",
+      "source": "scheduler",
+      "createdAt": "2026-09-05T19:05:23.568Z",
+      "scheduledFor": "2026-09-05T19:05:23.568Z",
+      "correlationId": "mtor66am-i1x9nz",
+      "dedupKey": "health-check:scheduler:5min:default",
+      "startedAt": "2026-09-05T19:05:24.742Z",
+      "attempts": 1,
+      "result": {
+        "root": {
+          "url": "https://nicaraguainformate.com/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 3240
+        },
+        "noticias": {
+          "url": "https://nicaraguainformate.com/noticias/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 4085
+        },
+        "status": "ok",
+        "items": []
+      },
+      "completedAt": "2026-09-05T19:05:29.769Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtor66iz-g5cvef",
+      "jobId": "mtor66iz-g5cvef",
+      "type": "daily-report",
+      "priority": "P1",
+      "source": "scheduler",
+      "createdAt": "2026-09-05T19:05:24.032Z",
+      "correlationId": "mtor66iz-4lcjto",
+      "dedupKey": "daily-report:scheduler:2026-09-05:2026-09-05",
+      "scheduledFor": "2026-09-05T19:05:33.065Z",
+      "error": "9 FAILED_PRECONDITION: The query requires an index. You can create it here: https://console.firebase.google.com/v1/r/project/informate-instant-nicaragua/firestore/indexes?create_composite=Cl9wcm9qZWN0cy9pbmZvcm1hdGUtaW5zdGFudC1uaWNhcmFndWEvZGF0YWJhc2VzLyhkZWZhdWx0KS9jb2xsZWN0aW9uR3JvdXBzL25pb3NfbWVtb3J5L2luZGV4ZXMvXxABGggKBGtpbmQQARoNCgl0aW1lc3RhbXAQAhoMCghfX25hbWVfXxAC",
+      "startedAt": "2026-09-05T19:22:25.817Z",
+      "attempts": 2,
+      "result": {
+        "date": "2026-09-05",
+        "siteStatus": "ok"
+      },
+      "completedAt": "2026-09-05T19:22:27.797Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtor66qc-jntzar",
+      "jobId": "mtor66qc-jntzar",
+      "type": "growth-check",
+      "priority": "P2",
+      "source": "scheduler",
+      "createdAt": "2026-09-05T19:05:24.294Z",
+      "scheduledFor": "2026-09-05T19:05:24.294Z",
+      "correlationId": "mtor66qc-cycfag",
+      "dedupKey": "growth-check:scheduler:30min:default",
+      "startedAt": "2026-09-05T19:05:31.146Z",
+      "attempts": 1,
+      "result": {
+        "opportunities24h": 0
+      },
+      "completedAt": "2026-09-05T19:05:31.839Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtor66w9-5fjp35",
+      "jobId": "mtor66w9-5fjp35",
+      "type": "monetization-check",
+      "priority": "P2",
+      "source": "scheduler",
+      "createdAt": "2026-09-05T19:05:24.520Z",
+      "scheduledFor": "2026-09-05T19:05:24.520Z",
+      "correlationId": "mtor66w9-44v4ee",
+      "dedupKey": "monetization-check:scheduler:hourly:default",
+      "startedAt": "2026-09-05T19:05:31.932Z",
+      "attempts": 1,
+      "result": {
+        "trafficRecords24h": 0
+      },
+      "completedAt": "2026-09-05T19:05:32.699Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtors2ks-xn5rqq",
+      "jobId": "mtors2ks-xn5rqq",
+      "type": "daily-report",
+      "priority": "P1",
+      "source": "scheduler",
+      "createdAt": "2026-09-05T19:22:25.343Z",
+      "scheduledFor": "2026-09-05T19:22:25.343Z",
+      "correlationId": "mtors2ks-3b6hh3",
+      "dedupKey": "daily-report:scheduler:2026-09-05:2026-09-05",
+      "startedAt": "2026-09-05T19:22:27.907Z",
+      "attempts": 1,
+      "result": {
+        "date": "2026-09-05",
+        "siteStatus": "ok"
+      },
+      "completedAt": "2026-09-05T19:22:29.599Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtors66j-dcmds9",
+      "jobId": "mtors66j-dcmds9",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T19:22:30.091Z",
+      "scheduledFor": "2026-09-05T19:22:30.091Z",
+      "correlationId": "mtors66j-z9vg73",
+      "payload": {
+        "component": "health-check"
+      },
+      "startedAt": "2026-09-05T19:26:07.766Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T19:26:08.132Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtorwuqx-2a0he6",
+      "jobId": "mtorwuqx-2a0he6",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T19:26:08.553Z",
+      "scheduledFor": "2026-09-05T19:26:08.553Z",
+      "correlationId": "mtorwuqy-o1otj3",
+      "payload": {
+        "component": "health-check"
+      },
+      "startedAt": "2026-09-05T20:01:24.384Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T20:01:24.778Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtot67xe-6lv4h1",
+      "jobId": "mtot67xe-6lv4h1",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:01:25.153Z",
+      "scheduledFor": "2026-09-05T20:01:25.153Z",
+      "correlationId": "mtot67xe-hczy44",
+      "payload": {
+        "component": "growth"
+      },
+      "startedAt": "2026-09-05T20:12:36.072Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T20:12:36.484Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtot681o-xtfhl6",
+      "jobId": "mtot681o-xtfhl6",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:01:25.308Z",
+      "scheduledFor": "2026-09-05T20:01:25.308Z",
+      "correlationId": "mtot681o-8k28l3",
+      "payload": {
+        "component": "health-check"
+      },
+      "startedAt": "2026-09-05T20:12:36.576Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T20:12:36.985Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtotkmo3-bdl7oz",
+      "jobId": "mtotkmo3-bdl7oz",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:12:37.443Z",
+      "scheduledFor": "2026-09-05T20:12:37.443Z",
+      "correlationId": "mtotkmo4-w5tp2e",
+      "payload": {
+        "component": "growth"
+      },
+      "startedAt": "2026-09-05T20:18:31.607Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T20:18:31.875Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtotkmte-dkxfjn",
+      "jobId": "mtotkmte-dkxfjn",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:12:37.634Z",
+      "scheduledFor": "2026-09-05T20:12:37.634Z",
+      "correlationId": "mtotkmte-0751s3",
+      "payload": {
+        "component": "health-check"
+      },
+      "startedAt": "2026-09-05T20:18:31.946Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T20:18:32.208Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtotkn0f-yfic9b",
+      "jobId": "mtotkn0f-yfic9b",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:12:37.887Z",
+      "scheduledFor": "2026-09-05T20:12:37.887Z",
+      "correlationId": "mtotkn0f-vtenfi",
+      "payload": {
+        "component": "monetization-check"
+      },
+      "startedAt": "2026-09-05T20:18:32.289Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T20:18:32.561Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtotrs41-g62skk",
+      "jobId": "mtotrs41-g62skk",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:18:11.089Z",
+      "scheduledFor": "2026-09-05T20:18:11.089Z",
+      "correlationId": "mtotrs41-6gvxqt",
+      "payload": {
+        "component": "growth"
+      },
+      "startedAt": "2026-09-05T20:18:32.622Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T20:18:32.871Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtotrs9a-d5ubgk",
+      "jobId": "mtotrs9a-d5ubgk",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:18:11.278Z",
+      "scheduledFor": "2026-09-05T20:18:11.278Z",
+      "correlationId": "mtotrs9a-xzhy0k",
+      "payload": {
+        "component": "health-check"
+      },
+      "startedAt": "2026-09-05T20:18:32.949Z",
+      "attempts": 1,
+      "result": {
+        "action": "watchdog-recovery"
+      },
+      "completedAt": "2026-09-05T20:18:33.316Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtotrsg7-wpz3i5",
+      "jobId": "mtotrsg7-wpz3i5",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:18:11.527Z",
+      "scheduledFor": "2026-09-05T20:18:11.527Z",
+      "correlationId": "mtotrsg7-7f5z3e",
+      "payload": {
+        "component": "monetization-check"
+      },
+      "startedAt": "2026-09-05T20:29:16.042Z",
+      "attempts": 1,
+      "result": {
+        "trafficRecords24h": 0
+      },
+      "completedAt": "2026-09-05T20:29:16.530Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtots9e7-i9mpl2",
+      "jobId": "mtots9e7-i9mpl2",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:18:33.487Z",
+      "scheduledFor": "2026-09-05T20:18:33.487Z",
+      "correlationId": "mtots9e7-40gmpr",
+      "payload": {
+        "component": "growth"
+      },
+      "startedAt": "2026-09-05T20:29:16.760Z",
+      "attempts": 1,
+      "result": {
+        "opportunities24h": 0
+      },
+      "completedAt": "2026-09-05T20:29:17.246Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtots9hu-u9wkr8",
+      "jobId": "mtots9hu-u9wkr8",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:18:33.618Z",
+      "scheduledFor": "2026-09-05T20:18:33.618Z",
+      "correlationId": "mtots9hu-1va8kq",
+      "payload": {
+        "component": "health-check"
+      },
+      "startedAt": "2026-09-05T20:29:17.461Z",
+      "attempts": 1,
+      "result": {
+        "root": {
+          "url": "https://nicaraguainformate.com/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 95
+        },
+        "noticias": {
+          "url": "https://nicaraguainformate.com/noticias/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 180
+        },
+        "status": "ok",
+        "items": []
+      },
+      "completedAt": "2026-09-05T20:29:18.146Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtots9li-0c7nd3",
+      "jobId": "mtots9li-0c7nd3",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:18:33.750Z",
+      "scheduledFor": "2026-09-05T20:18:33.750Z",
+      "correlationId": "mtots9li-ky9fc0",
+      "payload": {
+        "component": "monetization-check"
+      },
+      "startedAt": "2026-09-05T20:29:18.432Z",
+      "attempts": 1,
+      "result": {
+        "trafficRecords24h": 0
+      },
+      "completedAt": "2026-09-05T20:29:18.889Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtou5nij-t0hf42",
+      "jobId": "mtou5nij-t0hf42",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:28:58.315Z",
+      "scheduledFor": "2026-09-05T20:28:58.315Z",
+      "correlationId": "mtou5nij-pl8fg2",
+      "payload": {
+        "component": "growth"
+      },
+      "startedAt": "2026-09-05T20:29:19.132Z",
+      "attempts": 1,
+      "result": {
+        "opportunities24h": 0
+      },
+      "completedAt": "2026-09-05T20:29:19.542Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtou5now-nmrfug",
+      "jobId": "mtou5now-nmrfug",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:28:58.544Z",
+      "scheduledFor": "2026-09-05T20:28:58.544Z",
+      "correlationId": "mtou5now-narn3m",
+      "payload": {
+        "component": "health-check"
+      },
+      "startedAt": "2026-09-18T20:22:37.311Z",
+      "attempts": 1,
+      "result": {
+        "root": {
+          "url": "https://nicaraguainformate.com/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 524
+        },
+        "noticias": {
+          "url": "https://nicaraguainformate.com/noticias/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 1244
+        },
+        "status": "ok",
+        "items": []
+      },
+      "completedAt": "2026-09-18T20:22:39.674Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtou5nuo-glcbnf",
+      "jobId": "mtou5nuo-glcbnf",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-05T20:28:58.752Z",
+      "scheduledFor": "2026-09-05T20:28:58.752Z",
+      "correlationId": "mtou5nuo-s4zabb",
+      "payload": {
+        "component": "monetization-check"
+      },
+      "startedAt": "2026-09-18T20:22:40.117Z",
+      "attempts": 1,
+      "result": {
+        "trafficRecords24h": 0
+      },
+      "completedAt": "2026-09-18T20:22:40.995Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mtp1y2ap-v73is1",
+      "jobId": "mtp1y2ap-v73is1",
+      "type": "operational-repair",
+      "priority": "P0",
+      "source": "nios-operational-loop",
+      "createdAt": "2026-09-06T00:07:01.048Z",
+      "correlationId": "mtp1y2ap-vzibt0",
+      "dedupKey": "operational-repair:obs-NIOS-DATA_CONFLICT-1788653218253-vc3i2n:EQUwGN2cwg8npENmNarD",
+      "payload": {
+        "incidentId": "EQUwGN2cwg8npENmNarD",
+        "conflictId": "obs-NIOS-DATA_CONFLICT-1788653218253-vc3i2n",
+        "action": "rebuild-snapshot",
+        "team": "REPARADOR"
+      },
+      "error": "Transición inválida de RESOLVED a RUNNING para incidente EQUwGN2cwg8npENmNarD",
+      "scheduledFor": "2026-09-19T00:58:45.153Z",
+      "startedAt": "2026-09-20T00:58:43.061Z",
+      "attempts": 3,
+      "completedAt": "2026-09-20T00:58:43.364Z",
+      "status": "dead-letter"
+    },
+    {
+      "docId": "mu1rx3mx-jyx4zi",
+      "jobId": "mu1rx3mx-jyx4zi",
+      "type": "operational-repair",
+      "priority": "P0",
+      "source": "nios-operational-loop",
+      "createdAt": "2026-09-14T21:47:20.269Z",
+      "correlationId": "mu1rx3mx-np0eiz",
+      "dedupKey": "operational-repair:obs-NIOS-DATA_CONFLICT:kBZqmdhiSjplLqHNJ9bH",
+      "payload": {
+        "incidentId": "kBZqmdhiSjplLqHNJ9bH",
+        "conflictId": "obs-NIOS-DATA_CONFLICT",
+        "action": "rebuild-snapshot",
+        "team": "REPARADOR"
+      },
+      "error": "Transición inválida de RESOLVED a RUNNING para incidente kBZqmdhiSjplLqHNJ9bH",
+      "scheduledFor": "2026-09-19T00:58:46.576Z",
+      "startedAt": "2026-09-20T00:58:43.443Z",
+      "attempts": 3,
+      "completedAt": "2026-09-20T00:58:43.826Z",
+      "status": "dead-letter"
+    },
+    {
+      "docId": "mu5q9jyp-zfgwve",
+      "jobId": "mu5q9jyp-zfgwve",
+      "type": "operational-repair",
+      "priority": "P0",
+      "source": "nios-operational-loop",
+      "createdAt": "2026-09-17T16:12:06.799Z",
+      "correlationId": "mu5q9jyp-6facfm",
+      "dedupKey": "operational-repair:obs-NIOS-DATA_CONFLICT:ViwVrNr9UpDvh9Qzq7gZ",
+      "payload": {
+        "incidentId": "ViwVrNr9UpDvh9Qzq7gZ",
+        "conflictId": "obs-NIOS-DATA_CONFLICT",
+        "action": "rebuild-snapshot",
+        "team": "REPARADOR"
+      },
+      "error": "Transición inválida de RESOLVED a RUNNING para incidente ViwVrNr9UpDvh9Qzq7gZ",
+      "scheduledFor": "2026-09-19T00:58:47.104Z",
+      "startedAt": "2026-09-20T00:58:43.919Z",
+      "attempts": 3,
+      "completedAt": "2026-09-20T00:58:44.312Z",
+      "status": "dead-letter"
+    },
+    {
+      "docId": "mu7eniji-k2knh6",
+      "jobId": "mu7eniji-k2knh6",
+      "type": "health-check",
+      "priority": "P0",
+      "source": "scheduler",
+      "createdAt": "2026-09-18T20:22:35.026Z",
+      "scheduledFor": "2026-09-18T20:22:35.026Z",
+      "correlationId": "mu7eniji-eoix1z",
+      "dedupKey": "health-check:scheduler:5965876:5965876",
+      "startedAt": "2026-09-19T00:58:38.333Z",
+      "attempts": 1,
+      "result": {
+        "root": {
+          "url": "https://nicaraguainformate.com/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 220
+        },
+        "noticias": {
+          "url": "https://nicaraguainformate.com/noticias/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 1580
+        },
+        "status": "ok",
+        "items": []
+      },
+      "completedAt": "2026-09-19T00:58:40.670Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mu7eniyk-v3o9n7",
+      "jobId": "mu7eniyk-v3o9n7",
+      "type": "daily-report",
+      "priority": "P1",
+      "source": "scheduler",
+      "createdAt": "2026-09-18T20:22:35.533Z",
+      "scheduledFor": "2026-09-18T20:22:35.533Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu7eniyk-2u9pjw",
+      "dedupKey": "daily-report:scheduler:2026-09-18:2026-09-18"
+    },
+    {
+      "docId": "mu7enjak-pq8ulo",
+      "jobId": "mu7enjak-pq8ulo",
+      "type": "growth-check",
+      "priority": "P2",
+      "source": "scheduler",
+      "createdAt": "2026-09-18T20:22:36.005Z",
+      "scheduledFor": "2026-09-18T20:22:36.005Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu7enjak-l7lywd",
+      "dedupKey": "growth-check:scheduler:994312:994312"
+    },
+    {
+      "docId": "mu7enjow-964a9u",
+      "jobId": "mu7enjow-964a9u",
+      "type": "monetization-check",
+      "priority": "P2",
+      "source": "scheduler",
+      "createdAt": "2026-09-18T20:22:36.475Z",
+      "scheduledFor": "2026-09-18T20:22:36.475Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu7enjow-q85eab",
+      "dedupKey": "monetization-check:scheduler:497156:497156"
+    },
+    {
+      "docId": "mu7enk29-ydfjdo",
+      "jobId": "mu7enk29-ydfjdo",
+      "type": "article-pipeline",
+      "priority": "P2",
+      "source": "firestore-noticia",
+      "createdAt": "2026-09-18T20:22:36.986Z",
+      "scheduledFor": "2026-09-18T20:22:36.986Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu7enk29-psjz65",
+      "dedupKey": "article-pipeline:gPe3e3k6GAmgPpBJzGkX:2026-09-18T19:06:00.373Z",
+      "payload": {
+        "articleId": "gPe3e3k6GAmgPpBJzGkX"
+      }
+    },
+    {
+      "docId": "mu7enpup-qzotk1",
+      "jobId": "mu7enpup-qzotk1",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-18T20:22:44.452Z",
+      "scheduledFor": "2026-09-18T20:22:44.452Z",
+      "correlationId": "mu7enpup-c3axdm",
+      "dedupKey": "watchdog:recovery:growth:2026-09-18T20",
+      "payload": {
+        "component": "growth"
+      },
+      "startedAt": "2026-09-19T00:58:41.270Z",
+      "attempts": 1,
+      "result": {
+        "opportunities24h": 0
+      },
+      "completedAt": "2026-09-19T00:58:41.874Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mu7oihuj-8kast8",
+      "jobId": "mu7oihuj-8kast8",
+      "type": "health-check",
+      "priority": "P0",
+      "source": "scheduler",
+      "createdAt": "2026-09-19T00:58:37.049Z",
+      "scheduledFor": "2026-09-19T00:58:37.049Z",
+      "correlationId": "mu7oihuj-bjlykq",
+      "dedupKey": "health-check:scheduler:5965931:5965931",
+      "startedAt": "2026-09-20T00:58:39.229Z",
+      "attempts": 1,
+      "result": {
+        "root": {
+          "url": "https://nicaraguainformate.com/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 3064
+        },
+        "noticias": {
+          "url": "https://nicaraguainformate.com/noticias/",
+          "status": 200,
+          "ok": true,
+          "responseMs": 1068
+        },
+        "status": "ok",
+        "items": []
+      },
+      "completedAt": "2026-09-20T00:58:42.988Z",
+      "status": "completed"
+    },
+    {
+      "docId": "mu7oii6m-w8ajyn",
+      "jobId": "mu7oii6m-w8ajyn",
+      "type": "growth-check",
+      "priority": "P2",
+      "source": "scheduler",
+      "createdAt": "2026-09-19T00:58:37.445Z",
+      "scheduledFor": "2026-09-19T00:58:37.445Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu7oii6m-3v9u88",
+      "dedupKey": "growth-check:scheduler:994321:994321"
+    },
+    {
+      "docId": "mu7oiiei-2jgrvw",
+      "jobId": "mu7oiiei-2jgrvw",
+      "type": "monetization-check",
+      "priority": "P2",
+      "source": "scheduler",
+      "createdAt": "2026-09-19T00:58:37.761Z",
+      "scheduledFor": "2026-09-19T00:58:37.761Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu7oiiei-vgizer",
+      "dedupKey": "monetization-check:scheduler:497160:497160"
+    },
+    {
+      "docId": "mu7oiioc-4o5gz2",
+      "jobId": "mu7oiioc-4o5gz2",
+      "type": "article-pipeline",
+      "priority": "P2",
+      "source": "firestore-noticia",
+      "createdAt": "2026-09-19T00:58:38.136Z",
+      "scheduledFor": "2026-09-19T00:58:38.136Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu7oiioc-fg520b",
+      "dedupKey": "article-pipeline:H0f4AKPLcwVqXieTNp26:2026-09-19T00:58:35.715Z",
+      "payload": {
+        "articleId": "H0f4AKPLcwVqXieTNp26"
+      }
+    },
+    {
+      "docId": "mu7qsvl5-66fct4",
+      "jobId": "mu7qsvl5-66fct4",
+      "type": "operational-repair",
+      "priority": "P0",
+      "source": "nios-operational-loop",
+      "createdAt": "2026-09-19T02:02:40.674Z",
+      "correlationId": "mu7qsvl5-6i3n8y",
+      "dedupKey": "operational-repair:obs-NIOS-DATA_CONFLICT:9DH9YjUMTSShRb3PFul1",
+      "payload": {
+        "incidentId": "9DH9YjUMTSShRb3PFul1",
+        "conflictId": "obs-NIOS-DATA_CONFLICT",
+        "action": "rebuild-snapshot",
+        "team": "REPARADOR"
+      },
+      "startedAt": "2026-09-20T00:58:44.420Z",
+      "attempts": 1,
+      "scheduledFor": "2026-09-20T00:58:46.752Z",
+      "error": "Transición inválida de RESOLVED a RUNNING para incidente 9DH9YjUMTSShRb3PFul1",
+      "status": "retry"
+    },
+    {
+      "docId": "mu8n3h24-zgobxl",
+      "jobId": "mu8n3h24-zgobxl",
+      "type": "operational-repair",
+      "priority": "P0",
+      "source": "nios-operational-loop",
+      "createdAt": "2026-09-19T17:06:42.752Z",
+      "scheduledFor": "2026-09-19T17:06:42.752Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu8n3h24-pg4fha",
+      "dedupKey": "operational-repair:obs-NIOS-DATA_CONFLICT:9TrUXAKvr7CX5xFCViHj",
+      "payload": {
+        "incidentId": "9TrUXAKvr7CX5xFCViHj",
+        "conflictId": "obs-NIOS-DATA_CONFLICT",
+        "action": "rebuild-snapshot",
+        "team": "REPARADOR"
+      }
+    },
+    {
+      "docId": "mu93yd6d-xlv48z",
+      "jobId": "mu93yd6d-xlv48z",
+      "type": "health-check",
+      "priority": "P0",
+      "source": "scheduler",
+      "createdAt": "2026-09-20T00:58:37.910Z",
+      "scheduledFor": "2026-09-20T00:58:37.910Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu93yd6d-0hq5vh",
+      "dedupKey": "health-check:scheduler:5966219:5966219"
+    },
+    {
+      "docId": "mu93ydg1-qc3lth",
+      "jobId": "mu93ydg1-qc3lth",
+      "type": "daily-report",
+      "priority": "P1",
+      "source": "scheduler",
+      "createdAt": "2026-09-20T00:58:38.233Z",
+      "scheduledFor": "2026-09-20T00:58:38.233Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu93ydg1-8kmur8",
+      "dedupKey": "daily-report:scheduler:2026-09-20:2026-09-20"
+    },
+    {
+      "docId": "mu93ydqd-x7d49d",
+      "jobId": "mu93ydqd-x7d49d",
+      "type": "growth-check",
+      "priority": "P2",
+      "source": "scheduler",
+      "createdAt": "2026-09-20T00:58:38.632Z",
+      "scheduledFor": "2026-09-20T00:58:38.632Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu93ydqd-dulz3a",
+      "dedupKey": "growth-check:scheduler:994369:994369"
+    },
+    {
+      "docId": "mu93ydxi-a4nnse",
+      "jobId": "mu93ydxi-a4nnse",
+      "type": "monetization-check",
+      "priority": "P2",
+      "source": "scheduler",
+      "createdAt": "2026-09-20T00:58:38.912Z",
+      "scheduledFor": "2026-09-20T00:58:38.912Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu93ydxi-q7himo",
+      "dedupKey": "monetization-check:scheduler:497184:497184"
+    },
+    {
+      "docId": "mu93yimm-3twocb",
+      "jobId": "mu93yimm-3twocb",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-20T00:58:45.008Z",
+      "scheduledFor": "2026-09-20T00:58:45.008Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu93yimm-e7zu8v",
+      "dedupKey": "watchdog:recovery:monetization-check:2026-09-20T00",
+      "payload": {
+        "component": "monetization-check"
+      }
+    },
+    {
+      "docId": "mu945w3a-rj0zrk",
+      "jobId": "mu945w3a-rj0zrk",
+      "type": "watchdog",
+      "priority": "P0",
+      "source": "watchdog",
+      "createdAt": "2026-09-20T01:04:28.930Z",
+      "scheduledFor": "2026-09-20T01:04:28.930Z",
+      "status": "pending",
+      "attempts": 0,
+      "correlationId": "mu945w3a-y8swvr",
+      "dedupKey": "watchdog:recovery:monetization-check:2026-09-20T01",
+      "payload": {
+        "component": "monetization-check"
+      }
+    }
+  ],
+  "depto_incidents": [
+    {
+      "docId": "OHsQyReEWTeE1U460mO3",
+      "type": "infrastructure",
+      "severity": "critical",
+      "title": "Heartbeat crítico: health-check",
+      "status": "active",
+      "detectedAt": "2026-09-05T19:22:29.776Z",
+      "slug": "heartbeat-cr-tico-health-check",
+      "createdAt": "2026-09-05T19:22:29.990Z"
+    },
+    {
+      "docId": "V6cnWDH8WIltQ4xPgu2G",
+      "type": "infrastructure",
+      "severity": "critical",
+      "title": "Heartbeat crítico: daily-report",
+      "status": "active",
+      "detectedAt": "2026-09-18T20:22:43.878Z",
+      "slug": "heartbeat-cr-tico-daily-report",
+      "createdAt": "2026-09-18T20:22:44.169Z"
+    },
+    {
+      "docId": "Xp879F0dZQ3X0xmbPxr7",
+      "type": "infrastructure",
+      "severity": "critical",
+      "title": "Heartbeat crítico: monetization-check",
+      "status": "active",
+      "detectedAt": "2026-09-05T20:12:37.168Z",
+      "slug": "heartbeat-cr-tico-monetization-check",
+      "createdAt": "2026-09-05T20:12:37.812Z"
+    },
+    {
+      "docId": "w7nFJs8WGiVj8FdBz09W",
+      "type": "infrastructure",
+      "severity": "critical",
+      "title": "Heartbeat crítico: growth",
+      "status": "active",
+      "detectedAt": "2026-09-05T20:01:24.927Z",
+      "slug": "heartbeat-cr-tico-growth",
+      "createdAt": "2026-09-05T20:01:25.072Z"
+    }
+  ]
+}

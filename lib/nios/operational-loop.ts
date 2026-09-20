@@ -725,6 +725,37 @@ export async function processOperationalConflicts(
   return result;
 }
 
+const TERMINAL_STATES: OperationalState[] = ['RESOLVED', 'ESCALATED'];
+
+/**
+ * Lleva el incidente a RUNNING caminando SOLO por transiciones válidas.
+ * Devuelve 'skipped' si el incidente ya está en estado terminal (RESOLVED /
+ * ESCALATED) o en VERIFICATION (la reparación ya corrió): en esos casos el
+ * job debe completarse como skipped en lugar de lanzar una transición
+ * inválida que lo mandaría a retry indefinidamente.
+ */
+async function ensureRunnableState(
+  db: Firestore,
+  incident: OperationalIncident,
+  jobId: string,
+  team: OperationalTeam | string,
+): Promise<'ready' | 'skipped'> {
+  if (TERMINAL_STATES.includes(incident.state) || incident.state === 'VERIFICATION') {
+    return 'skipped';
+  }
+
+  // Camino legal hacia RUNNING según el estado actual.
+  const path: OperationalState[] = [];
+  if (incident.state === 'DETECTED') path.push('INVESTIGATING', 'ACTION_REQUIRED');
+  else if (incident.state === 'INVESTIGATING' || incident.state === 'FAILED') path.push('ACTION_REQUIRED');
+  // ACTION_REQUIRED y RUNNING no necesitan pasos intermedios.
+
+  for (const step of path) {
+    await transitionIncident(db, incident, step, `Preparando ejecución del job ${jobId}`, team, { jobId });
+  }
+  return 'ready';
+}
+
 export interface OperationalRepairJobInput {
   jobId: string;
   type?: string;
@@ -749,6 +780,13 @@ export async function executeOperationalRepair(
   }
 
   const team = (job.payload?.team as OperationalTeam) || incident.team;
+
+  const runnable = await ensureRunnableState(db, incident, job.jobId, team);
+  if (runnable === 'skipped') {
+    const message = `Incidente ${incidentId} ya está en estado ${incident.state}; reparación omitida (idempotente)`;
+    logger.info('[operational-loop]', message);
+    return { skipped: true, reason: message, incidentId, state: incident.state };
+  }
 
   await transitionIncident(
     db,

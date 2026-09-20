@@ -1,0 +1,371 @@
+{
+  "depto_heartbeat": [
+    {
+      "component": "cron/api/cron/departamento-daily",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T06:10:21.138Z",
+      "nextExpectedAt": "2026-09-21T07:10:21.138Z",
+      "note": "Cron /api/cron/departamento-daily ejecutado"
+    },
+    {
+      "component": "daily-report",
+      "status": "healthy",
+      "lastRunAt": "2026-09-05T19:22:29.309Z",
+      "nextExpectedAt": "2026-09-06T21:22:29.309Z"
+    },
+    {
+      "component": "cron/api/cron/nios-collect",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T08:50:05.204Z",
+      "nextExpectedAt": "2026-09-21T09:50:05.204Z",
+      "note": "Cron /api/cron/nios-collect ejecutado"
+    },
+    {
+      "component": "cron/api/cron/resumen-diario",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T12:52:57.321Z",
+      "nextExpectedAt": "2026-09-21T13:52:57.321Z",
+      "note": "Cron /api/cron/resumen-diario ejecutado"
+    },
+    {
+      "component": "cron/api/cron/departamento-watchdog",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T01:04:30.047Z",
+      "nextExpectedAt": "2026-09-21T02:04:30.047Z",
+      "note": "Cron /api/cron/departamento-watchdog ejecutado"
+    },
+    {
+      "component": "growth",
+      "status": "healthy",
+      "lastRunAt": "2026-09-19T00:58:41.655Z",
+      "nextExpectedAt": "2026-09-20T01:58:41.655Z"
+    },
+    {
+      "component": "cron/api/cron/traffic-cleanup",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T03:39:01.086Z",
+      "nextExpectedAt": "2026-09-21T04:39:01.086Z",
+      "note": "Cron /api/cron/traffic-cleanup ejecutado"
+    },
+    {
+      "component": "cron/api/cron/supervisor-watch",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T04:00:15.784Z",
+      "nextExpectedAt": "2026-09-21T05:00:15.784Z",
+      "note": "Cron /api/cron/supervisor-watch ejecutado"
+    },
+    {
+      "component": "health-check",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T00:58:42.710Z",
+      "nextExpectedAt": "2026-09-21T01:58:42.710Z"
+    },
+    {
+      "component": "cron/api/cron/departamento-central",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T00:58:45.886Z",
+      "nextExpectedAt": "2026-09-21T01:58:45.886Z",
+      "note": "Cron /api/cron/departamento-central ejecutado"
+    },
+    {
+      "component": "monetization-check",
+      "status": "healthy",
+      "lastRunAt": "2026-09-18T20:22:40.694Z",
+      "nextExpectedAt": "2026-09-19T21:22:40.694Z"
+    },
+    {
+      "component": "scheduler",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T00:58:45.748Z",
+      "nextExpectedAt": "2026-09-21T01:58:45.748Z",
+      "note": "Enqueued 4, processed 5, workDone24h 1."
+    },
+    {
+      "component": "watchdog",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T01:04:29.856Z",
+      "nextExpectedAt": "2026-09-21T02:04:29.856Z"
+    },
+    {
+      "component": "cron/api/cron/nios-ceo-loop",
+      "status": "healthy",
+      "lastRunAt": "2026-09-20T02:02:37.823Z",
+      "nextExpectedAt": "2026-09-21T03:02:37.823Z",
+      "note": "Cron /api/cron/nios-ceo-loop ejecutado"
+    }
+  ],
+  "depto_jobs_completed": {
+    "completed": 24,
+    "failed": 0,
+    "recent10": [
+      {
+        "type": "watchdog",
+        "status": "pending",
+        "createdAt": "2026-09-20T01:04:28.930Z",
+        "error": ""
+      },
+      {
+        "type": "watchdog",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:45.008Z",
+        "error": ""
+      },
+      {
+        "type": "monetization-check",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:38.912Z",
+        "error": ""
+      },
+      {
+        "type": "growth-check",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:38.632Z",
+        "error": ""
+      },
+      {
+        "type": "daily-report",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:38.233Z",
+        "error": ""
+      },
+      {
+        "type": "health-check",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:37.910Z",
+        "error": ""
+      },
+      {
+        "type": "operational-repair",
+        "status": "pending",
+        "createdAt": "2026-09-19T17:06:42.752Z",
+        "error": ""
+      },
+      {
+        "type": "operational-repair",
+        "status": "retry",
+        "createdAt": "2026-09-19T02:02:40.674Z",
+        "error": "Transición inválida de RESOLVED a RUNNING para incidente 9DH9YjUMTSShRb3PFul1"
+      },
+      {
+        "type": "article-pipeline",
+        "status": "pending",
+        "createdAt": "2026-09-19T00:58:38.136Z",
+        "error": ""
+      },
+      {
+        "type": "monetization-check",
+        "status": "pending",
+        "createdAt": "2026-09-19T00:58:37.761Z",
+        "error": ""
+      }
+    ]
+  },
+  "depto_central": {
+    "latestExists": true,
+    "latestRunAt": "2026-09-20T06:10:18.380Z",
+    "dailyDocs": 5
+  },
+  "noticia_fields_sample": [
+    {
+      "slug": "investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense",
+      "keys": [
+        "aprobadoMeni",
+        "autor",
+        "autorFoto",
+        "calificacionMeni",
+        "categoria",
+        "contenido",
+        "contentHash",
+        "dateModified",
+        "departamento",
+        "diagnosticoMeni",
+        "distribuida",
+        "editorialReason",
+        "editorialState",
+        "editorialTier",
+        "estado",
+        "evaluationTimestamp",
+        "fecha",
+        "fechaActualizacion",
+        "fechaDistribucion",
+        "fuente",
+        "fuentesComplementarias",
+        "id",
+        "imagen",
+        "keywords",
+        "meniVersion",
+        "nivel",
+        "nivelFecha",
+        "nivelScore",
+        "palabras",
+        "palabrasClave",
+        "perfil",
+        "profileInternal",
+        "profile_confidence",
+        "publicCategory",
+        "publicado",
+        "publishedAt",
+        "puntosClave",
+        "recomendacionesMeni",
+        "related_links",
+        "resumen",
+        "scoreMeni",
+        "slug",
+        "supervisorApproved",
+        "supervisorDecision",
+        "tags",
+        "titulo",
+        "vistas"
+      ]
+    },
+    {
+      "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+      "keys": [
+        "aprobadoMeni",
+        "autor",
+        "autorFoto",
+        "calificacionMeni",
+        "categoria",
+        "contenido",
+        "contentHash",
+        "dateModified",
+        "departamento",
+        "diagnosticoMeni",
+        "distribuida",
+        "editorialReason",
+        "editorialState",
+        "editorialTier",
+        "estado",
+        "evaluationTimestamp",
+        "fecha",
+        "fechaActualizacion",
+        "fechaDistribucion",
+        "fuente",
+        "fuentesComplementarias",
+        "id",
+        "imagen",
+        "keywords",
+        "meniVersion",
+        "nivel",
+        "nivelFecha",
+        "nivelScore",
+        "palabras",
+        "palabrasClave",
+        "perfil",
+        "profileInternal",
+        "profile_confidence",
+        "publicCategory",
+        "publicado",
+        "publishedAt",
+        "puntosClave",
+        "recomendacionesMeni",
+        "related_links",
+        "resumen",
+        "scoreMeni",
+        "slug",
+        "supervisorApproved",
+        "supervisorDecision",
+        "tags",
+        "titulo",
+        "vistas"
+      ]
+    },
+    {
+      "slug": "nica-de-bonanza-muere-tras-ataque-con-arma-blanca-en-ee-uu",
+      "keys": [
+        "aprobadoMeni",
+        "autor",
+        "autorFoto",
+        "calificacionMeni",
+        "categoria",
+        "contenido",
+        "contentHash",
+        "dateModified",
+        "departamento",
+        "diagnosticoMeni",
+        "distribuida",
+        "editorialReason",
+        "editorialState",
+        "editorialTier",
+        "estado",
+        "evaluationTimestamp",
+        "fecha",
+        "fechaActualizacion",
+        "fechaDistribucion",
+        "fuente",
+        "fuentesComplementarias",
+        "id",
+        "imagen",
+        "keywords",
+        "meniVersion",
+        "nivel",
+        "nivelFecha",
+        "nivelScore",
+        "palabras",
+        "palabrasClave",
+        "perfil",
+        "profileInternal",
+        "profile_confidence",
+        "publicCategory",
+        "publicado",
+        "publishedAt",
+        "puntosClave",
+        "recomendacionesMeni",
+        "related_links",
+        "resumen",
+        "scoreMeni",
+        "slug",
+        "supervisorApproved",
+        "supervisorDecision",
+        "tags",
+        "titulo",
+        "vistas"
+      ]
+    }
+  ],
+  "noticias_meni_fields": "none found",
+  "google_learning_patterns": {
+    "nios_learning_patterns": 0,
+    "learning_patterns": 0
+  },
+  "collections": [
+    "analytics_traffic",
+    "article_lifecycles",
+    "config",
+    "configuracion",
+    "deletion_audit",
+    "depto_central_daily",
+    "depto_central_latest",
+    "depto_heartbeat",
+    "depto_incidents",
+    "depto_jobs",
+    "distribuciones",
+    "distribuciones_pendientes",
+    "estadisticas",
+    "google_learning_patterns",
+    "ia_cost_counters",
+    "kb_entities",
+    "links_cortos",
+    "meni_daily_score",
+    "meni_learning_feedback",
+    "meni_predictions",
+    "newsletter",
+    "nios_actions",
+    "nios_cache_invalidations",
+    "nios_daily_snapshots",
+    "nios_memory",
+    "nios_telemetry",
+    "noticias",
+    "reportes_crecimiento",
+    "resumenes_diarios",
+    "seguimiento_cases",
+    "seguimiento_updates",
+    "shortlinks",
+    "social_copies",
+    "supervisor_cycles",
+    "support_analytics",
+    "traffic_daily",
+    "traffic_log",
+    "views"
+  ]
+}

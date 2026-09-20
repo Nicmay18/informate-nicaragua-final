@@ -10,7 +10,7 @@ import { getNewsBySlug } from '@/lib/data';
 import { logger } from '@/lib/logger';
 import type { NiosGrowthOpportunity } from './nios-growth-radar';
 
-export type NiosActionStatus = 'PENDING' | 'APPROVED' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'REJECTED';
+export type NiosActionStatus = 'PENDING' | 'APPROVED' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'REJECTED' | 'EXPIRED';
 
 export interface NiosAction {
   id: string;
@@ -39,6 +39,8 @@ export interface NiosAction {
   user?: string | null;
   rejectionReason?: string | null;
   error?: string | null;
+  expiredAt?: string;
+  lifecycleNote?: string | null;
   before: Record<string, unknown>;
   after: Record<string, unknown>;
   result?: Record<string, unknown>;
@@ -129,16 +131,37 @@ export async function proposeRecirculationActions(articles: { slug: string; titu
   return proposeActionsFromOpportunities(opportunities);
 }
 
+const ACTIVE_STATUSES: NiosActionStatus[] = ['PENDING', 'APPROVED', 'RUNNING'];
+
 async function findExistingProposal(opportunityId: string): Promise<NiosAction | null> {
   try {
     const snap = await db().collection('nios_actions').where('opportunityId', '==', opportunityId).limit(5).get();
     const candidates = snap.docs
       .map((d) => d.data() as NiosAction)
-      .filter((a) => a.proposedAt >= todayStart() && a.status !== 'REJECTED')
+      .filter((a) => a.proposedAt >= todayStart() && a.status !== 'REJECTED' && a.status !== 'EXPIRED')
       .sort((a, b) => b.proposedAt.localeCompare(a.proposedAt));
     return candidates[0] || null;
   } catch (err) {
     logger.error('[action-engine] Error buscando acción existente:', err);
+    return null;
+  }
+}
+
+/**
+ * Dedup entre días: el opportunityId incluye la fecha, así que la misma
+ * oportunidad genera un id distinto cada día. Para no acumular propuestas
+ * idénticas, se reutiliza cualquier acción activa con el mismo kind+target.
+ */
+async function findActiveActionForTarget(kind: NiosGrowthOpportunity['kind'], target: string): Promise<NiosAction | null> {
+  try {
+    const snap = await db().collection('nios_actions').where('target', '==', target).limit(20).get();
+    const candidates = snap.docs
+      .map((d) => d.data() as NiosAction)
+      .filter((a) => a.kind === kind && ACTIVE_STATUSES.includes(a.status))
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    return candidates[0] || null;
+  } catch (err) {
+    logger.error('[action-engine] Error buscando acción activa por target:', err);
     return null;
   }
 }
@@ -148,7 +171,9 @@ export async function proposeActionsFromOpportunities(opportunities: NiosGrowthO
 
   for (const o of opportunities.slice(0, 5)) {
     const opportunityId = makeOpportunityId(o.kind, o.target);
-    const existing = await findExistingProposal(opportunityId);
+    const existing =
+      (await findExistingProposal(opportunityId)) ??
+      (await findActiveActionForTarget(o.kind, o.target));
 
     if (existing) {
       actions.push(existing);
@@ -189,6 +214,55 @@ export async function proposeActionsFromOpportunities(opportunities: NiosGrowthO
   }
 
   return actions;
+}
+
+/**
+ * Expira propuestas PENDING sin consumidor. No borra documentos:
+ * clasifica cada acción como EXPIRED con lifecycleNote que explica por qué
+ * (superseded = existe una propuesta más reciente para el mismo objetivo;
+ * expired = superó maxAgeDays pendiente sin aprobación).
+ * Pensado para correr una vez al día desde un proceso explícito (watchdog).
+ */
+export async function expireStaleActions(maxAgeDays = 7): Promise<{ expired: number; superseded: number; kept: number }> {
+  const snap = await db().collection('nios_actions').where('status', '==', 'PENDING').limit(300).get();
+  if (snap.empty) return { expired: 0, superseded: 0, kept: 0 };
+
+  const pending = snap.docs.map((d) => d.data() as NiosAction);
+  const cutoffMs = maxAgeDays * 24 * 60 * 60 * 1000;
+
+  const newestByKey = new Map<string, NiosAction>();
+  for (const a of pending) {
+    const key = `${a.kind}:${a.target}`;
+    const prev = newestByKey.get(key);
+    if (!prev || (a.createdAt || '') > (prev.createdAt || '')) newestByKey.set(key, a);
+  }
+
+  let expired = 0;
+  let superseded = 0;
+  let kept = 0;
+  const now = new Date().toISOString();
+
+  for (const doc of snap.docs) {
+    const a = doc.data() as NiosAction;
+    const createdMs = Date.parse(a.createdAt || a.proposedAt || '');
+    const ageMs = Number.isNaN(createdMs) ? Number.MAX_SAFE_INTEGER : Date.now() - createdMs;
+    const isNewestForTarget = newestByKey.get(`${a.kind}:${a.target}`)?.id === a.id;
+
+    if (isNewestForTarget && ageMs < cutoffMs) {
+      kept++;
+      continue;
+    }
+
+    const lifecycleNote = !isNewestForTarget
+      ? 'superseded: existe una propuesta más reciente para el mismo objetivo'
+      : `expired: PENDING > ${maxAgeDays} días sin aprobación`;
+    await doc.ref.update({ status: 'EXPIRED', expiredAt: now, lifecycleNote });
+    if (isNewestForTarget) expired++;
+    else superseded++;
+  }
+
+  logger.info('[action-engine] Expiración de acciones', { expired, superseded, kept });
+  return { expired, superseded, kept };
 }
 
 export async function getAction(id: string): Promise<NiosAction | null> {

@@ -79,7 +79,7 @@ export interface CentroDeComandoData {
     record: CEOLoopRecord | null;
     autonomyScore: number;
     autonomyMax: number;
-    autonomyReport: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'>;
+    autonomyReport: Record<string, 'VERIFIED' | 'PARCIAL' | 'SIN_EVIDENCIA'>;
   } | null;
   conflicts: NiosConflict[];
   operationalSummary: OperationalSummary | null;
@@ -108,21 +108,26 @@ async function getLatestHeartbeatTime(): Promise<string | null> {
   }
 }
 
-function buildAutonomyReport(record: CEOLoopRecord): Record<string, 'REAL' | 'PARTIAL' | 'DEAD'> {
-  const report: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'> = {
-    OBSERVE: record.observations.length > 0 ? 'REAL' : 'DEAD',
-    DIAGNOSE: record.diagnoses.length > 0 ? 'REAL' : 'DEAD',
-    DECIDE: record.decisions.length > 0 ? 'REAL' : 'DEAD',
-    EXECUTE: (record.executions.length + record.repaired.length) > 0 ? 'REAL' : 'DEAD',
+function buildAutonomyReport(record: CEOLoopRecord): Record<string, 'VERIFIED' | 'PARCIAL' | 'SIN_EVIDENCIA'> {
+  // Preferir el reporte verificado por evidencia persistido por el loop
+  // (post Fase 0). Fallback: derivar del registro para corridas históricas.
+  if (record.autonomyReport && Object.keys(record.autonomyReport).length > 0) {
+    return record.autonomyReport;
+  }
+  const report: Record<string, 'VERIFIED' | 'PARCIAL' | 'SIN_EVIDENCIA'> = {
+    OBSERVE: record.observations.length > 0 ? 'VERIFIED' : 'SIN_EVIDENCIA',
+    DIAGNOSE: record.diagnoses.length > 0 ? 'VERIFIED' : 'SIN_EVIDENCIA',
+    DECIDE: record.decisions.length > 0 ? 'VERIFIED' : 'SIN_EVIDENCIA',
+    EXECUTE: (record.executions.length + record.repaired.length) > 0 ? 'VERIFIED' : 'SIN_EVIDENCIA',
     VERIFY:
       record.verifications.length > 0
         ? record.verifications.some((v) => v.verified)
-          ? 'REAL'
-          : 'PARTIAL'
-        : 'DEAD',
-    LEARN: record.learnings.length > 0 ? 'REAL' : 'DEAD',
-    MEMORY: record.id ? 'REAL' : 'DEAD',
-    CRON: record.trigger?.startsWith('cron/') ? 'REAL' : 'DEAD',
+          ? 'VERIFIED'
+          : 'PARCIAL'
+        : 'SIN_EVIDENCIA',
+    LEARN: record.learnings.length > 0 ? 'VERIFIED' : 'SIN_EVIDENCIA',
+    MEMORY: record.id ? 'VERIFIED' : 'SIN_EVIDENCIA',
+    CRON: record.trigger?.startsWith('cron/') ? 'VERIFIED' : 'SIN_EVIDENCIA',
   };
   return report;
 }

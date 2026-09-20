@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
         mode: ceo?.record.mode ?? 'UNKNOWN',
         autonomyScore: ceo?.autonomy.score ?? 0,
         autonomyMax: ceo?.autonomy.max ?? 8,
-        autonomyReport: ceo?.autonomy.report ?? { OBSERVE: 'DEAD' },
+        autonomyReport: ceo?.autonomy.report ?? { OBSERVE: 'SIN_EVIDENCIA' },
         repaired: ceo?.record.repaired.length ?? 0,
         pendingHuman: ceo?.record.pendingHuman ?? 0,
         failedRepairs: ceo?.record.failedRepairs ?? 0,

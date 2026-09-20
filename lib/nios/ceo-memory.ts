@@ -8,13 +8,19 @@ import { type Firestore } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import type { CeoDecision } from './ceo-decision-engine';
 
+export type CeoTaskStatus = 'pending' | 'done' | 'blocked' | 'expired';
+
 export interface CeoMemoryTask {
   id: string;
   action: string;
   source: string;
   createdAt: string;
   completedAt?: string;
-  status: 'pending' | 'done';
+  status: CeoTaskStatus;
+  blockedAt?: string;
+  expiredAt?: string;
+  blockReason?: string;
+  lifecycleNote?: string;
 }
 
 export interface CeoMemory {
@@ -72,6 +78,8 @@ export interface CEOLoopRecord {
   mode: string;
   trigger: string;
   autonomyScore: number;
+  autonomyReport?: Record<string, 'VERIFIED' | 'PARCIAL' | 'SIN_EVIDENCIA'>;
+  autonomyEvidence?: Record<string, string>;
   observations: CEOObservationRecord[];
   diagnoses: CEODiagnosisRecord[];
   decisions: CeoDecision[];
@@ -133,6 +141,59 @@ export async function completeTask(id: string): Promise<void> {
     status: 'done',
     completedAt: new Date().toISOString(),
   });
+}
+
+export async function blockTask(id: string, reason: string): Promise<void> {
+  const ref = db().collection('nios_memory').doc(id);
+  await ref.update({
+    status: 'blocked',
+    blockedAt: new Date().toISOString(),
+    blockReason: reason,
+  });
+}
+
+/**
+ * Reconcilia el ciclo de vida de las tareas pendientes del CEO.
+ * Semántica:
+ *   pending → la recomendación sigue vigente y espera consumo humano.
+ *   done    → cerrada (completeTask o ya no aparece en syncRecommendations).
+ *   blocked → impedimento externo documentado en blockReason.
+ *   expired → superó maxAgeDays pendiente sin consumidor; se conserva el
+ *             documento como evidencia histórica con lifecycleNote.
+ * No borra documentos. Pensado para correr una vez al día (watchdog).
+ */
+export async function reconcileCeoTasks(maxAgeDays = 30): Promise<{ expired: number; kept: number }> {
+  const snap = await db().collection('nios_memory').where('status', '==', 'pending').limit(500).get();
+  if (snap.empty) return { expired: 0, kept: 0 };
+
+  const cutoffMs = maxAgeDays * 24 * 60 * 60 * 1000;
+  const now = new Date().toISOString();
+  let expired = 0;
+  let kept = 0;
+
+  for (const doc of snap.docs) {
+    const data = doc.data() as Record<string, unknown>;
+    // Solo tareas de recomendación: tienen action+source y NO son registros
+    // de otro kind (ceo_loop, operational_incident, rejected_action, etc.).
+    if (data.kind !== undefined || typeof data.action !== 'string') {
+      kept++;
+      continue;
+    }
+    const createdMs = Date.parse(String(data.createdAt || ''));
+    const ageMs = Number.isNaN(createdMs) ? Number.MAX_SAFE_INTEGER : Date.now() - createdMs;
+    if (ageMs < cutoffMs) {
+      kept++;
+      continue;
+    }
+    await doc.ref.update({
+      status: 'expired',
+      expiredAt: now,
+      lifecycleNote: `expired: pending > ${maxAgeDays} días sin consumidor`,
+    });
+    expired++;
+  }
+
+  return { expired, kept };
 }
 
 export async function syncRecommendations(recommendations: Array<{ id: string; action: string; source: string }>): Promise<void> {

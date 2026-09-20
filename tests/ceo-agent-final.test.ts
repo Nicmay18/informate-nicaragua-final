@@ -124,20 +124,58 @@ describe('CEO AGENT FINAL MISSION — fire tests', () => {
     setCalls = [];
     mockedRevalidate.mockImplementation(() => undefined);
 
-    const setMock = vi.fn().mockImplementation(async (payload: any) => {
-      setCalls.push(payload);
-      if (Array.isArray(payload.articlesFused)) {
-        latestSnapshot.articlesFused = payload.articlesFused;
-      }
-      if (typeof payload.articlesCount === 'number') {
-        (latestSnapshot as any).articlesCount = payload.articlesCount;
-      }
-      return undefined;
+    // Fake Firestore con persistencia en memoria: permite read-back real
+    // para la verificación de autonomía basada en evidencia (Fase 0).
+    const docStore = new Map<string, Record<string, unknown>>();
+    let idCounter = 0;
+
+    const emptyQuery = (): any => {
+      const q: any = {
+        where: () => q,
+        orderBy: () => q,
+        limit: () => q,
+        get: async () => ({ docs: [], empty: true, size: 0 }),
+        count: () => ({ get: async () => ({ data: () => ({ count: 0 }) }) }),
+      };
+      return q;
+    };
+
+    const makeDocRef = (colName: string, id?: string): any => {
+      const docId = id || `auto-${++idCounter}`;
+      const key = `${colName}/${docId}`;
+      return {
+        id: docId,
+        set: async (payload: any) => {
+          docStore.set(key, { id: docId, ...payload });
+          setCalls.push(payload);
+          if (Array.isArray(payload.articlesFused)) {
+            latestSnapshot.articlesFused = payload.articlesFused;
+          }
+          if (typeof payload.articlesCount === 'number') {
+            (latestSnapshot as any).articlesCount = payload.articlesCount;
+          }
+        },
+        update: async (payload: any) => {
+          docStore.set(key, { ...(docStore.get(key) || {}), ...payload });
+        },
+        get: async () => ({
+          exists: docStore.has(key),
+          id: docId,
+          data: () => docStore.get(key),
+        }),
+        collection: (sub: string) => makeCol(`${colName}/${docId}/${sub}`),
+      };
+    };
+
+    const makeCol = (name: string): any => ({
+      doc: (id?: string) => makeDocRef(name, id),
+      where: () => emptyQuery(),
+      orderBy: () => emptyQuery(),
+      limit: () => emptyQuery(),
+      get: async () => ({ docs: [], empty: true, size: 0 }),
     });
 
-    const docMock = { id: 'test-loop-1', set: setMock };
-    const colMock = { doc: () => docMock };
-    const db = { collection: () => colMock } as unknown as Firestore;
+    const db = { collection: (name: string) => makeCol(name) } as unknown as Firestore;
 
     (global as any).__TEST_DB__ = db;
 
@@ -156,8 +194,9 @@ describe('CEO AGENT FINAL MISSION — fire tests', () => {
     expect(result.record.repaired.some((r) => r.repairId === 'nios-snapshot-inconsistent')).toBe(true);
     expect(result.record.status).toBe('COMPLETE');
     expect(result.record.verifications.some((v) => v.id === 'nios-snapshot-inconsistent' && v.verified)).toBe(true);
-    expect(result.autonomy.report.EXECUTE).toBe('REAL');
-    expect(result.autonomy.report.VERIFY).toBe('REAL');
+    expect(result.autonomy.report.EXECUTE).toBe('VERIFIED');
+    expect(result.autonomy.report.VERIFY).toBe('VERIFIED');
+    expect(result.autonomy.evidence.EXECUTE).toBeTruthy();
     expect(result.record.learnings.some((l) => l.decisionId === 'nios-snapshot-inconsistent')).toBe(true);
     expect(setCalls.some((c: any) => c.kind === 'ceo_loop')).toBe(true);
   });
@@ -181,7 +220,7 @@ describe('CEO AGENT FINAL MISSION — fire tests', () => {
 
     expect(result.record.repaired.some((r) => r.repairId === 'nios-cache-refresh')).toBe(true);
     expect(result.record.verifications.some((v) => v.id === 'nios-cache-refresh' && v.verified)).toBe(true);
-    expect(result.autonomy.report.VERIFY).toBe('REAL');
+    expect(result.autonomy.report.VERIFY).toBe('VERIFIED');
   });
 
   it('TEST D — REAL data produces NO_ACTION', () => {

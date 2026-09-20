@@ -1,0 +1,330 @@
+{
+  "nios_daily_snapshots": {
+    "total": 35,
+    "last5": [
+      {
+        "date": "2026-09-20",
+        "collectedAt": "2026-09-20T08:49:17.674Z",
+        "articlesCount": 424,
+        "gscStatus": "REAL",
+        "gscImpressions": 6638,
+        "gscClicks": 74,
+        "ga4Status": "REAL",
+        "ga4Users": 5636,
+        "ga4Sessions": 6212,
+        "recos": 319,
+        "version": "2.1",
+        "hasArticlesFused": false
+      },
+      {
+        "date": "2026-09-19",
+        "collectedAt": "2026-09-19T08:49:18.475Z",
+        "articlesCount": 424,
+        "gscStatus": "REAL",
+        "gscImpressions": 6633,
+        "gscClicks": 71,
+        "ga4Status": "REAL",
+        "ga4Users": 5302,
+        "ga4Sessions": 5839,
+        "recos": 291,
+        "version": "2.1-repaired",
+        "hasArticlesFused": false
+      },
+      {
+        "date": "2026-09-18",
+        "collectedAt": "2026-09-18T08:49:18.479Z",
+        "articlesCount": 419,
+        "gscStatus": "REAL",
+        "gscImpressions": 6511,
+        "gscClicks": 71,
+        "ga4Status": "REAL",
+        "ga4Users": 5328,
+        "ga4Sessions": 5897,
+        "recos": 289,
+        "version": "2.1-repaired",
+        "hasArticlesFused": false
+      },
+      {
+        "date": "2026-09-17",
+        "collectedAt": "2026-09-17T08:49:17.443Z",
+        "articlesCount": 409,
+        "gscStatus": "REAL",
+        "gscImpressions": 6642,
+        "gscClicks": 76,
+        "ga4Status": "REAL",
+        "ga4Users": 5901,
+        "ga4Sessions": 6544,
+        "recos": 290,
+        "version": "2.1-repaired",
+        "hasArticlesFused": false
+      },
+      {
+        "date": "2026-09-16",
+        "collectedAt": "2026-09-16T08:49:17.555Z",
+        "articlesCount": 404,
+        "gscStatus": "REAL",
+        "gscImpressions": 6697,
+        "gscClicks": 64,
+        "ga4Status": "REAL",
+        "ga4Users": 5633,
+        "ga4Sessions": 6279,
+        "recos": 284,
+        "version": "2.1",
+        "hasArticlesFused": false
+      }
+    ]
+  },
+  "nios_memory": {
+    "ceoLoopCount": 52,
+    "lastLoop": {
+      "timestamp": "2026-09-20T08:49:54.525Z",
+      "trigger": "cron/nios-collect",
+      "mode": "VERIFIED",
+      "status": "COMPLETE",
+      "autonomyScore": 8,
+      "observations": 8,
+      "decisions": 8,
+      "repaired": 1,
+      "pendingHuman": 3,
+      "summary": "NIOS Repair Engine ejecutado en 2026-09-20T08:49:51.313Z.\nCiclos: 2/3.\nReparaciones verificadas: 1.\nPendientes humanos: 0.\nBloqueos externos: 0.\nFallidas: 0.\nOmitidas: 3.\nModo final: VERIFIED. | Reparaciones: nios-cache-refresh. Tareas para humano: 3."
+    },
+    "last5Timestamps": [
+      "2026-09-20T08:49:54.525Z",
+      "2026-09-20T02:02:35.072Z",
+      "2026-09-20T01:37:51.039Z",
+      "2026-09-20T00:42:17.125Z",
+      "2026-09-19T17:06:40.793Z"
+    ],
+    "pendingTasks": 75,
+    "pendingSample": [
+      {
+        "id": "ceo-crecer-publicar-nacionales",
+        "action": "Preparar pieza de Nacionales.",
+        "createdAt": "2026-08-03T23:35:45.920Z"
+      },
+      {
+        "id": "ceo-google-crear-gu-a-migraci-n-y-visas-",
+        "action": "Crear guía evergreen sobre Migración y visas.",
+        "createdAt": "2026-08-03T23:35:46.277Z"
+      },
+      {
+        "id": "ceo-marca-distribuir-servicios-policiales-de-plaza-el-sol-tienen-nueva-ubicaci-n",
+        "action": "Abrir Distribution Command y publicar los textos por canal.",
+        "createdAt": "2026-08-08T01:45:37.721Z"
+      },
+      {
+        "id": "ceo-negocio-crear-la-gu-a-ancla-de-tecnolog-a",
+        "action": "Publicar \"Tecnología Nicaragua 2026\" como guía canónica patrocinable.",
+        "createdAt": "2026-08-03T23:35:46.448Z"
+      },
+      {
+        "id": "ceo-reparar-corregir-la-portada",
+        "action": "Abrir /admin/portada y reposicionar noticias de marca.",
+        "createdAt": "2026-08-03T23:35:45.664Z"
+      }
+    ]
+  },
+  "depto_heartbeats": [],
+  "supervisor_cycles": {
+    "total": 3,
+    "last": [
+      {
+        "runAt": "2026-09-20T04:00:15.658Z",
+        "checked": 1,
+        "updates": 0,
+        "conflicts": 0,
+        "health": {
+          "critical": 0,
+          "important": 1,
+          "warning": 1,
+          "optimization": 1
+        }
+      },
+      {
+        "runAt": "2026-09-19T04:00:17.732Z",
+        "checked": 2,
+        "updates": 0,
+        "conflicts": 0,
+        "health": {
+          "critical": 0,
+          "important": 1,
+          "warning": 1,
+          "optimization": 1
+        }
+      },
+      {
+        "runAt": "2026-09-05T20:17:54.919Z",
+        "checked": 0,
+        "updates": 0,
+        "conflicts": 0,
+        "health": {
+          "critical": 0,
+          "important": 0,
+          "warning": 2,
+          "optimization": 1
+        }
+      }
+    ]
+  },
+  "resumenes_diarios": [
+    {
+      "fecha": "2026-09-20",
+      "enviadoEn": "2026-09-20T12:52:57.162Z",
+      "cantidad": 3
+    },
+    {
+      "fecha": "2026-09-19",
+      "enviadoEn": "2026-09-19T12:52:57.251Z",
+      "cantidad": 4
+    },
+    {
+      "fecha": "2026-09-18",
+      "enviadoEn": "2026-09-18T12:52:58.283Z",
+      "cantidad": 3
+    },
+    {
+      "fecha": "2026-09-16",
+      "enviadoEn": "2026-09-16T12:52:58.305Z",
+      "cantidad": 2
+    },
+    {
+      "fecha": "2026-09-15",
+      "enviadoEn": "2026-09-15T12:52:57.588Z",
+      "cantidad": 1
+    }
+  ],
+  "nios_telemetry": [
+    {
+      "date": "2026-09-20"
+    },
+    {
+      "date": "2026-09-19"
+    },
+    {
+      "date": "2026-09-18"
+    }
+  ],
+  "nios_alerts": {
+    "total": 0,
+    "last": []
+  },
+  "depto_jobs": {
+    "total": 42,
+    "byStatus": {
+      "pending": 14,
+      "running": 0,
+      "done": 0,
+      "retry": 1,
+      "dead": 0
+    },
+    "recent": [
+      {
+        "type": "watchdog",
+        "status": "pending",
+        "createdAt": "2026-09-20T01:04:28.930Z"
+      },
+      {
+        "type": "watchdog",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:45.008Z"
+      },
+      {
+        "type": "monetization-check",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:38.912Z"
+      },
+      {
+        "type": "growth-check",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:38.632Z"
+      },
+      {
+        "type": "daily-report",
+        "status": "pending",
+        "createdAt": "2026-09-20T00:58:38.233Z"
+      }
+    ]
+  },
+  "departamento_daily": "missing",
+  "nios_growth_opportunities": {
+    "total": 0,
+    "last": []
+  },
+  "col_meni_learning": {
+    "total": 0,
+    "lastActivity": null
+  },
+  "col_meni_feedback": {
+    "total": 0,
+    "lastActivity": null
+  },
+  "col_meni_diagnosis": {
+    "total": 0,
+    "lastActivity": null
+  },
+  "col_meni_ratings": {
+    "total": 0,
+    "lastActivity": null
+  },
+  "col_nios_cache_invalidations": {
+    "total": 1,
+    "lastActivity": "2026-09-20T08:49:52.629Z"
+  },
+  "col_nios_actions": {
+    "total": 110,
+    "lastActivity": "2026-09-20T13:47:50.001Z"
+  },
+  "col_depto_incidents": {
+    "total": 4,
+    "lastActivity": "2026-09-18T20:22:44.169Z"
+  },
+  "col_depto_learning": {
+    "total": 0,
+    "lastActivity": null
+  },
+  "col_nios_traffic": {
+    "total": 0,
+    "lastActivity": null
+  },
+  "col_traffic_log": {
+    "total": 24931,
+    "lastActivity": {
+      "_seconds": 1789931357,
+      "_nanoseconds": 912000000
+    }
+  },
+  "col_distribuciones": {
+    "total": 642,
+    "lastActivity": "2026-09-20T17:43:24.417Z"
+  },
+  "col_editorial_queue": {
+    "total": 0,
+    "lastActivity": null
+  },
+  "col_nios_google_learning": {
+    "total": 0,
+    "lastActivity": null
+  },
+  "noticias": {
+    "total": 459,
+    "publicadas": 426,
+    "conMeniScore": 0,
+    "recent": [
+      {
+        "slug": "investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense",
+        "fecha": "2026-09-14T21:05:10.079Z",
+        "estado": "publicado"
+      },
+      {
+        "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+        "fecha": "2026-09-14T20:05:35.921Z",
+        "estado": "publicado"
+      },
+      {
+        "slug": "nica-de-bonanza-muere-tras-ataque-con-arma-blanca-en-ee-uu",
+        "fecha": "2026-09-14T19:34:11.321Z",
+        "estado": "publicado"
+      }
+    ]
+  }
+}

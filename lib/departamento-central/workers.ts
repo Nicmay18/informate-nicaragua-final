@@ -217,6 +217,14 @@ export async function executeJob(job: DeptoJob): Promise<void> {
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     logger.error('[depto-workers] Trabajo falló', { jobId: job.jobId, type: job.type, error: message });
+    // Una transición de estado inválida es un error permanente, no transitorio:
+    // reintentar produciría el mismo fallo y dejaría el job en retry
+    // indefinidamente. Se completa como skipped conservando el error.
+    if (message.includes('Transición inválida')) {
+      await completeJob(job.jobId, { skipped: true, invalidTransition: true, error: message });
+      job.status = 'completed';
+      return;
+    }
     await failJob(job.jobId, message);
     job.status = 'failed';
   }

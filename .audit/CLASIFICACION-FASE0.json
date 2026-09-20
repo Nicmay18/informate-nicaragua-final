@@ -1,0 +1,1159 @@
+{
+  "generatedAt": "2026-09-20T21:56:52.767Z",
+  "nios_actions": {
+    "total": 110,
+    "expired": 11,
+    "superseded": 80,
+    "pending_valid": 13,
+    "failed": 5,
+    "running_stale": 1,
+    "other": 0,
+    "detail": {
+      "expired": [
+        {
+          "id": "5CAlW0lQ6JInOiJ9skQ4",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+          "createdAt": "2026-09-13T00:22:51.604Z",
+          "ageDays": 8
+        },
+        {
+          "id": "6A41VUgiUo56ZqLSgdJ3",
+          "kind": "seo-query",
+          "target": "coyote vs acme nicaragua",
+          "createdAt": "2026-09-05T01:57:29.718Z",
+          "ageDays": 16
+        },
+        {
+          "id": "DnFaZqIOSG9B2Ycj36EM",
+          "kind": "seo-query",
+          "target": "citas para apostillar en nicaragua",
+          "createdAt": "2026-09-13T00:22:51.096Z",
+          "ageDays": 8
+        },
+        {
+          "id": "Fe9uAHLRHK4tzDb0o2Fb",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/cosa-de-horno-el-sabor-de-nicaragua-que-guarda-la-tradicion",
+          "createdAt": "2026-09-08T19:08:26.805Z",
+          "ageDays": 12
+        },
+        {
+          "id": "PXPQF2OHGlZmH01LDY38",
+          "kind": "content-recirculation",
+          "target": "bNTteIqTORrl2X7opjvG",
+          "createdAt": "2026-09-03T01:20:10.188Z",
+          "ageDays": 18
+        },
+        {
+          "id": "R9c3jdLBFcnHsB8Duq6C",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/netflix-revive-la-captura-de-el-chapo-con-nueva-pelicula",
+          "createdAt": "2026-09-02T02:07:45.444Z",
+          "ageDays": 19
+        },
+        {
+          "id": "SlXrZDTWZN7gdzzsWf5L",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/guia-de-senalizacion-vial-en-nicaragua-lineas-y-multas-ley-431",
+          "createdAt": "2026-09-02T02:07:45.636Z",
+          "ageDays": 19
+        },
+        {
+          "id": "WADaXFlaBzJ8sC8S7P0V",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/guia/salario-minimo-nicaragua-2026",
+          "createdAt": "2026-09-02T02:07:45.221Z",
+          "ageDays": 19
+        },
+        {
+          "id": "Xdybu4jA8j7gSjVAXSNU",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/servicios-policiales-de-plaza-el-sol-tienen-nueva-ubicacion",
+          "createdAt": "2026-09-08T19:08:26.987Z",
+          "ageDays": 12
+        },
+        {
+          "id": "a3fs3vumS02nGtJWSmY3",
+          "kind": "seo-query",
+          "target": "menu kfc nicaragua",
+          "createdAt": "2026-09-08T19:08:26.455Z",
+          "ageDays": 12
+        },
+        {
+          "id": "xU7qVvpQGq1QGcgaGwx3",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/eclipse-lunar-parcial-sera-visible-en-nicaragua-este-27-de-agosto",
+          "createdAt": "2026-09-04T02:26:08.907Z",
+          "ageDays": 17
+        }
+      ],
+      "superseded": [
+        {
+          "id": "0RgER3OfyVXXSeFQFM62",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias",
+          "createdAt": "2026-09-16T14:03:01.397Z"
+        },
+        {
+          "id": "1l4LIL5QSFFxogencb83",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+          "createdAt": "2026-09-12T12:40:38.541Z"
+        },
+        {
+          "id": "2DYdF7YRy2ggr4mUdh7K",
+          "kind": "content-recirculation",
+          "target": "bNTteIqTORrl2X7opjvG",
+          "createdAt": "2026-09-02T20:53:15.153Z"
+        },
+        {
+          "id": "3MYxgOMZRhknWS1x8UTI",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-16T01:01:09.442Z"
+        },
+        {
+          "id": "47pJytKNkGEQhDXJlsis",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-17T14:02:04.169Z"
+        },
+        {
+          "id": "48ni3O2NVRShfHshssoq",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-13T00:22:52.201Z"
+        },
+        {
+          "id": "4NjnB4Qg7EQN1rVezEbu",
+          "kind": "content-recirculation",
+          "target": "qkurWkzG1J2bG01EVVru",
+          "createdAt": "2026-09-04T02:26:09.797Z"
+        },
+        {
+          "id": "4gb0oushHAzDfxiF7UAx",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/antorcha-centroamericana-recorrera-nicaragua-del-10-al-13",
+          "createdAt": "2026-09-18T18:53:20.303Z"
+        },
+        {
+          "id": "5h1S5txylnEtBqPhUq3t",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-09T22:02:14.905Z"
+        },
+        {
+          "id": "5vCIwCbZ5Q2GWHv2GUyG",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-10T02:19:01.254Z"
+        },
+        {
+          "id": "7iuWjmfwAYzt8CtmO31Y",
+          "kind": "seo-query",
+          "target": "citas para apostillar en nicaragua",
+          "createdAt": "2026-09-12T12:40:38.077Z"
+        },
+        {
+          "id": "8lC6FBIW1xOUWfbIACKz",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-10T02:19:00.726Z"
+        },
+        {
+          "id": "8sdc2Q44mbvsf1DEmLBV",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-04T02:26:09.175Z"
+        },
+        {
+          "id": "9zPFOqWw6XUc2WHi2gPr",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+          "createdAt": "2026-09-09T22:02:14.038Z"
+        },
+        {
+          "id": "AYihmjmlfmKxVBqP1X7Z",
+          "kind": "content-recirculation",
+          "target": "uX9Pk8h7rAECIyy8FhrC",
+          "createdAt": "2026-09-05T01:57:31.040Z"
+        },
+        {
+          "id": "AwoKzsWtMZd98QDuJ8pa",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-09T22:02:14.431Z"
+        },
+        {
+          "id": "AyhWiyX2ske7cmWAxIZx",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-10T02:19:01.016Z"
+        },
+        {
+          "id": "B3D8pkmRTyEn0lAXPCWg",
+          "kind": "content-recirculation",
+          "target": "qkurWkzG1J2bG01EVVru",
+          "createdAt": "2026-09-03T01:20:09.809Z"
+        },
+        {
+          "id": "Dpnf3guiYPKGfNbFKonl",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-14T17:24:52.931Z"
+        },
+        {
+          "id": "FHcwSXqe1AAFkA6h6ARn",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-16T01:01:09.318Z"
+        },
+        {
+          "id": "GDkLW18GT2lOKV0rjS3m",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-07T01:32:36.695Z"
+        },
+        {
+          "id": "Gka4IL9caeftoiuZFjV8",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-02T20:53:14.491Z"
+        },
+        {
+          "id": "HBk2NfVvLCRMEx2NVwg3",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-04T02:26:09.484Z"
+        },
+        {
+          "id": "IEhoDFUhPq7hS1MwCDgZ",
+          "kind": "seo-query",
+          "target": "yoltamal",
+          "createdAt": "2026-09-15T10:56:20.970Z"
+        },
+        {
+          "id": "IG5UmIaoB5oicgYPdW0l",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias",
+          "createdAt": "2026-09-17T14:02:03.946Z"
+        },
+        {
+          "id": "IJucbIari3sBpQDqJi3l",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/vacaciones-patrias-dias-para-celebrar-viajar-y-compartir",
+          "createdAt": "2026-09-13T00:22:51.935Z"
+        },
+        {
+          "id": "IlUKYbqLaDwPqJyIogKQ",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-03T01:20:09.461Z"
+        },
+        {
+          "id": "Iq5rdc4VKaIgqjTXmyTo",
+          "kind": "content-recirculation",
+          "target": "uX9Pk8h7rAECIyy8FhrC",
+          "createdAt": "2026-09-02T20:53:14.920Z"
+        },
+        {
+          "id": "JXCMFzY0UNpe4PhbwfTf",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-13T00:22:51.360Z"
+        },
+        {
+          "id": "Jrvph31ouvUdTF5dd39s",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-15T00:43:31.394Z"
+        },
+        {
+          "id": "KauoV8z76hTdC8oyE3Sn",
+          "kind": "content-recirculation",
+          "target": "uX9Pk8h7rAECIyy8FhrC",
+          "createdAt": "2026-09-03T01:20:10.034Z"
+        },
+        {
+          "id": "KwVtlE1q6jihNhZ8ckNH",
+          "kind": "seo-query",
+          "target": "coyote vs acme nicaragua",
+          "createdAt": "2026-09-04T02:26:08.596Z"
+        },
+        {
+          "id": "MRoabFvAtAYElQP5TgPL",
+          "kind": "content-recirculation",
+          "target": "uX9Pk8h7rAECIyy8FhrC",
+          "createdAt": "2026-09-04T15:12:56.535Z"
+        },
+        {
+          "id": "MhbRWKgENsIHB8bcYwp6",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/coyote-vs-acme-llega-a-nicaragua-el-coyote-va-contra-acme",
+          "createdAt": "2026-09-10T02:19:00.495Z"
+        },
+        {
+          "id": "NuxsYSJ5XCC9MzF2M3oM",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-07T01:32:36.245Z"
+        },
+        {
+          "id": "O38mctUuZb5x4nPg8uQ6",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/servicios-policiales-de-plaza-el-sol-tienen-nueva-ubicacion",
+          "createdAt": "2026-09-07T01:32:35.876Z"
+        },
+        {
+          "id": "Op2uZvHC93hRBiB5JsYU",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/cosa-de-horno-el-sabor-de-nicaragua-que-guarda-la-tradicion",
+          "createdAt": "2026-09-07T01:32:36.030Z"
+        },
+        {
+          "id": "P6jxWukMnb6bIxW6zWs8",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-09T22:02:14.261Z"
+        },
+        {
+          "id": "QtYHdjrckBQ3aKrBmjIz",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/vacaciones-patrias-dias-para-celebrar-viajar-y-compartir",
+          "createdAt": "2026-09-15T00:43:30.842Z"
+        },
+        {
+          "id": "RhGzr9HFz9f1rKpqXsdc",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-14T17:24:51.842Z"
+        },
+        {
+          "id": "Ru2bxcuO6DaBtDG6f5iJ",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/cosa-de-horno-el-sabor-de-nicaragua-que-guarda-la-tradicion",
+          "createdAt": "2026-09-06T14:24:45.488Z"
+        },
+        {
+          "id": "S8blcZjqnR7ByH7sVpwM",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-08T19:08:27.251Z"
+        },
+        {
+          "id": "TnXxfWMvbLLS1varf9Rv",
+          "kind": "content-recirculation",
+          "target": "qkurWkzG1J2bG01EVVru",
+          "createdAt": "2026-09-02T20:53:14.669Z"
+        },
+        {
+          "id": "Vjhzq9nX20EEiTwVrHOi",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-03T01:20:09.637Z"
+        },
+        {
+          "id": "XaL4NrdSQW5rdkPfhnEP",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-14T17:24:52.673Z"
+        },
+        {
+          "id": "XtTURty4vNDDiR6EREnW",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-05T01:57:30.364Z"
+        },
+        {
+          "id": "Z59Bp7UFWE76Z57V9ot9",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/vacaciones-patrias-dias-para-celebrar-viajar-y-compartir",
+          "createdAt": "2026-09-14T17:24:52.020Z"
+        },
+        {
+          "id": "ZqdZzTLDMiK9YeO5Gekw",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-02T02:07:45.814Z"
+        },
+        {
+          "id": "aHJjAorGdEzTYMMSsIZd",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-14T17:24:52.305Z"
+        },
+        {
+          "id": "b0uz76lLTxMPueVmR81o",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-08T19:08:27.443Z"
+        },
+        {
+          "id": "bKIQJ6MWUFQXSPwXQL5i",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-19T11:58:54.548Z"
+        },
+        {
+          "id": "c9qYomAWOHaWta8SjGfU",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/antorcha-centroamericana-recorrera-nicaragua-del-10-al-13",
+          "createdAt": "2026-09-19T01:08:19.636Z"
+        },
+        {
+          "id": "dgPxk11zWTsQwtSwUC2Z",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-16T01:01:09.049Z"
+        },
+        {
+          "id": "fyf0OXCLhIXe5GcHc9Qn",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/guia/anular-recurso-policial-nicaragua-2026",
+          "createdAt": "2026-09-19T11:58:54.286Z"
+        },
+        {
+          "id": "gMBarRmBz5SWYrbVgqnv",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/servicios-policiales-de-plaza-el-sol-tienen-nueva-ubicacion",
+          "createdAt": "2026-09-06T14:24:45.256Z"
+        },
+        {
+          "id": "gjyDtm9JEiUchzunBC6p",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-19T11:58:54.411Z"
+        },
+        {
+          "id": "gtOB8IaMyh1mYxZL0D6B",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-07T01:32:36.462Z"
+        },
+        {
+          "id": "gyXw3quyvM7yLej4yAYO",
+          "kind": "content-recirculation",
+          "target": "qkurWkzG1J2bG01EVVru",
+          "createdAt": "2026-09-05T01:57:30.696Z"
+        },
+        {
+          "id": "hLKpuMUqipBXUqwF54dg",
+          "kind": "seo-query",
+          "target": "coyote vs acme nicaragua",
+          "createdAt": "2026-09-03T19:30:15.302Z"
+        },
+        {
+          "id": "hiD6dekUkCg2nyNOIBb1",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/como-sacar-y-apostillar-record-policial-de",
+          "createdAt": "2026-09-16T14:03:01.173Z"
+        },
+        {
+          "id": "in0kxGxtw5P0F6J40zhR",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-18T18:53:20.638Z"
+        },
+        {
+          "id": "iwUnU4NrULpxdzqwzPY9",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-13T14:11:22.051Z"
+        },
+        {
+          "id": "kdBhrAnRZCC4QE4upboX",
+          "kind": "seo-query",
+          "target": "yoltamal",
+          "createdAt": "2026-09-18T18:53:19.824Z"
+        },
+        {
+          "id": "lQcEpPF4CSKlfKL8rAaa",
+          "kind": "seo-query",
+          "target": "salario minimo nicaragua 2026",
+          "createdAt": "2026-09-18T18:53:20.069Z"
+        },
+        {
+          "id": "mnDYpn4RpQluYyHVh47H",
+          "kind": "seo-query",
+          "target": "yoltamal",
+          "createdAt": "2026-09-16T01:01:08.831Z"
+        },
+        {
+          "id": "nKlqiKcNg2S8ywIR8yZ9",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/eclipse-lunar-parcial-sera-visible-en-nicaragua-este-27-de-agosto",
+          "createdAt": "2026-09-03T19:30:15.622Z"
+        },
+        {
+          "id": "o8YnnJavHA23jqRi3uaT",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-09T22:02:14.751Z"
+        },
+        {
+          "id": "sqLLyfy0LGBWT3KSMz4h",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-10T02:19:00.872Z"
+        },
+        {
+          "id": "tLTrbOP4svY5LPt7jC5r",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-05T11:36:10.415Z"
+        },
+        {
+          "id": "tstmbmXkA3jL7iYkrJob",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-17T14:02:03.693Z"
+        },
+        {
+          "id": "tzGsOZR76JH9ak6CnjXf",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-12T12:40:38.358Z"
+        },
+        {
+          "id": "u6MxH2eb9ehM7COdAWcW",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-05T01:57:30.050Z"
+        },
+        {
+          "id": "ugzP1ZHHuKagpcYEongo",
+          "kind": "seo-query",
+          "target": "yoltamal",
+          "createdAt": "2026-09-17T14:02:02.966Z"
+        },
+        {
+          "id": "uvD43akyEZjsgjtZHMP2",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/vacaciones-patrias-dias-para-celebrar-viajar-y-compartir",
+          "createdAt": "2026-09-12T12:40:38.684Z"
+        },
+        {
+          "id": "vQJJ6TQ4fhyatdobcctr",
+          "kind": "seo-query",
+          "target": "coyote vs acme nicaragua",
+          "createdAt": "2026-09-02T02:07:44.864Z"
+        },
+        {
+          "id": "wfDiRgvhNwvXI7RDgP7x",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/campo-de-girasoles-en-catarina-precios-horario-y-como-llegar",
+          "createdAt": "2026-09-19T11:58:54.155Z"
+        },
+        {
+          "id": "y4E67CGarwc7C420qSXX",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-15T00:43:31.125Z"
+        },
+        {
+          "id": "yRuIQimtTSVt6I4IqUDx",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-12T12:40:38.930Z"
+        },
+        {
+          "id": "z5De7XRene9Ms7fJHZcP",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias",
+          "createdAt": "2026-09-18T18:53:20.894Z"
+        },
+        {
+          "id": "zuPwMLJxyfKrgJ2zV2a8",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-15T00:43:30.586Z"
+        }
+      ],
+      "pending_valid": [
+        {
+          "id": "8vAGcbXApLBumEG1jPxD",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "createdAt": "2026-09-20T00:29:37.540Z"
+        },
+        {
+          "id": "Dm54RV57ZFC0yeO8MHwH",
+          "kind": "seo-query",
+          "target": "salario minimo nicaragua 2026",
+          "createdAt": "2026-09-19T01:08:19.519Z"
+        },
+        {
+          "id": "M03vyCL0Ijv7VSVQOTmk",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias",
+          "createdAt": "2026-09-19T01:08:19.879Z"
+        },
+        {
+          "id": "OGk9rMlo2dbDDliA13af",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/yoltamal-el-tamal-de-maiz-tierno-que-identifica-a-nicaragua",
+          "createdAt": "2026-09-19T01:08:19.766Z"
+        },
+        {
+          "id": "TNwyoPHqMoBncKcNXbrE",
+          "kind": "seo-query",
+          "target": "yoltamal",
+          "createdAt": "2026-09-19T01:08:19.401Z"
+        },
+        {
+          "id": "ZzrnUhzkb70nyNMLv7BH",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/campo-de-girasoles-en-catarina-precios-horario-y-como-llegar",
+          "createdAt": "2026-09-20T00:29:37.117Z"
+        },
+        {
+          "id": "jCwxcK9AN7s4x1UyZLhB",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/guia/anular-recurso-policial-nicaragua-2026",
+          "createdAt": "2026-09-20T00:29:37.241Z"
+        },
+        {
+          "id": "k7ErkvGpEiCxrQBjwZv6",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/vacaciones-patrias-dias-para-celebrar-viajar-y-compartir",
+          "createdAt": "2026-09-16T01:01:09.193Z"
+        },
+        {
+          "id": "lguERmNEszhficWrKwaw",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/muere-harold-gutierrez-voz-historica-y-fundador-de-macolla",
+          "createdAt": "2026-09-20T13:47:50.001Z"
+        },
+        {
+          "id": "m1NAdHYjJZfyK5lhlxSB",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/como-sacar-y-apostillar-record-policial-de",
+          "createdAt": "2026-09-17T14:02:03.404Z"
+        },
+        {
+          "id": "sbaDbKmhxfPnbA7JEh3e",
+          "kind": "seo-page",
+          "target": "https://nicaraguainformate.com/noticias/antorcha-centroamericana-recorrera-nicaragua-del-10-al-13",
+          "createdAt": "2026-09-20T00:29:36.956Z"
+        },
+        {
+          "id": "x30btThwTSdPqayvcAxt",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "createdAt": "2026-09-20T00:29:37.357Z"
+        },
+        {
+          "id": "xtZTQlyI3nkBPOAkmdx3",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "createdAt": "2026-09-15T00:43:31.558Z"
+        }
+      ],
+      "failed": [
+        {
+          "id": "AwHCGxf5CR45hgRX9saF",
+          "kind": "content-recirculation",
+          "target": "uX9Pk8h7rAECIyy8FhrC",
+          "error": "No se encontró el artículo uX9Pk8h7rAECIyy8FhrC"
+        },
+        {
+          "id": "iIm8czLhvW6YVIMyg1sf",
+          "kind": "content-recirculation",
+          "target": "COhLEROaJUFN8MvQEqZp",
+          "error": "No se encontró el artículo COhLEROaJUFN8MvQEqZp"
+        },
+        {
+          "id": "ksCbJkX7xsuxHExN0fPZ",
+          "kind": "content-recirculation",
+          "target": "IhqPS6c7vxNQarIR05Lz",
+          "error": "No se encontró el artículo IhqPS6c7vxNQarIR05Lz"
+        },
+        {
+          "id": "xrPtwfaLeUQqDW62SNor",
+          "kind": "content-recirculation",
+          "target": "qkurWkzG1J2bG01EVVru",
+          "error": "No se encontró el artículo qkurWkzG1J2bG01EVVru"
+        },
+        {
+          "id": "yp0jGVQUZGg1e4pusV8O",
+          "kind": "content-recirculation",
+          "target": "J8gE2zjed6yeHqvtBSRv",
+          "error": "No se encontró el artículo J8gE2zjed6yeHqvtBSRv"
+        }
+      ],
+      "running_stale": [
+        {
+          "id": "xPwj1OMCl163qtO4BVyS",
+          "kind": "distribution-recirculation",
+          "since": "2026-09-02T16:45:02.815Z",
+          "ageDays": 18
+        }
+      ],
+      "other": []
+    }
+  },
+  "nios_memory_tasks": {
+    "total_pending": 75,
+    "expired_30d": 5,
+    "pending_recent": 70,
+    "not_tasks": 0,
+    "detail": {
+      "expired_30d": [
+        {
+          "id": "ceo-crecer-publicar-nacionales",
+          "action": "Preparar pieza de Nacionales.",
+          "source": "Content War Room",
+          "createdAt": "2026-08-03T23:35:45.920Z"
+        },
+        {
+          "id": "ceo-google-crear-gu-a-migraci-n-y-visas-",
+          "action": "Crear guía evergreen sobre Migración y visas.",
+          "source": "Content Opportunity Hunter",
+          "createdAt": "2026-08-03T23:35:46.277Z"
+        },
+        {
+          "id": "ceo-marca-distribuir-servicios-policiales-de-plaza-el-sol-tienen-nueva-ubicaci-n",
+          "action": "Abrir Distribution Command y publicar los textos por canal.",
+          "source": "Distribution Command",
+          "createdAt": "2026-08-08T01:45:37.721Z"
+        },
+        {
+          "id": "ceo-negocio-crear-la-gu-a-ancla-de-tecnolog-a",
+          "action": "Publicar \"Tecnología Nicaragua 2026\" como guía canónica patrocinable.",
+          "source": "Revenue Engine",
+          "createdAt": "2026-08-03T23:35:46.448Z"
+        },
+        {
+          "id": "ceo-reparar-corregir-la-portada",
+          "action": "Abrir /admin/portada y reposicionar noticias de marca.",
+          "source": "Home Quality Control",
+          "createdAt": "2026-08-03T23:35:45.664Z"
+        }
+      ],
+      "pending_recent": [
+        {
+          "id": "obs-dist-apple-presenta-el-iphone-duo-su-primer-modelo-plegable-2026-09-10",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-10T08:49:51.596Z"
+        },
+        {
+          "id": "obs-dist-asi-ocurrio-el-ataque-contra-un-padre-en-somotillo-segun-fiscalia-2026-09-17",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-17T16:12:04.660Z"
+        },
+        {
+          "id": "obs-dist-camilo-zapata-y-otto-de-la-rocha-dos-voces-de-nicaragua-2026-08-30",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-08-30T17:30:06.975Z"
+        },
+        {
+          "id": "obs-dist-dos-hermanos-nicaraguenses-mueren-en-tragedia-laboral-en-ee-uu-2026-09-12",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-12T08:49:49.820Z"
+        },
+        {
+          "id": "obs-dist-ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes-2026-09-06",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-06T00:06:57.635Z"
+        },
+        {
+          "id": "obs-dist-el-nino-se-intensifica-las-senales-que-ya-esta-dejando-2026-09-18",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-18T08:49:58.397Z"
+        },
+        {
+          "id": "obs-dist-el-nino-se-intensifica-y-eleva-alerta-climatica-en-2026-2026-09-05",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-05T17:27:20.437Z"
+        },
+        {
+          "id": "obs-dist-hallan-sin-vida-a-dos-hombres-desaparecidos-en-masaya-y-carazo-2026-09-11",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-11T08:49:50.430Z"
+        },
+        {
+          "id": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-14",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-14T21:47:17.475Z"
+        },
+        {
+          "id": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-15",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-15T08:49:51.439Z"
+        },
+        {
+          "id": "obs-dist-investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense-2026-09-16",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-16T08:49:53.880Z"
+        },
+        {
+          "id": "obs-dist-laguna-de-apoyo-cuanto-cuesta-disfrutar-este-paraiso-natural-2026-09-14",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-14T08:49:53.772Z"
+        },
+        {
+          "id": "obs-dist-managua-se-llena-de-orgullo-en-el-tercer-desfile-patrio-2026-08-30",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-08-30T13:14:45.413Z"
+        },
+        {
+          "id": "obs-dist-masaya-queda-al-borde-y-esteli-toma-ventaja-en-el-pomares-2026-09-13",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-13T08:49:54.471Z"
+        },
+        {
+          "id": "obs-dist-migracion-detalla-requisitos-para-residencia-por-vinculo-2026-09-03",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-03T08:03:46.081Z"
+        },
+        {
+          "id": "obs-dist-motociclista-muere-tras-accidente-en-la-carretera-norte-2026-09-19",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-19T17:06:40.439Z"
+        },
+        {
+          "id": "obs-dist-muere-conductor-de-bus-tras-emergencia-medica-en-nueva-guinea-2026-09-09",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-09T08:49:50.372Z"
+        },
+        {
+          "id": "obs-dist-nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias-2026-09-01",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-01T04:00:53.674Z"
+        },
+        {
+          "id": "obs-dist-nicaragua-inicia-septiembre-con-amplio-calendario-de-fiestas-patrias-2026-09-02",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-02T08:04:04.787Z"
+        },
+        {
+          "id": "obs-dist-perros-en-la-via-muertes-accidentes-y-que-dice-la-ley-2026-09-05",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-05T08:49:49.264Z"
+        },
+        {
+          "id": "obs-dist-que-dejaron-las-fiestas-patrias-a-los-mercados-de-managua-2026-09-19",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-19T02:02:38.698Z"
+        },
+        {
+          "id": "obs-dist-rompe-sus-esposas-tras-ser-sentenciado-y-ataca-a-dos-agentes-2026-09-17",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-17T08:49:58.074Z"
+        },
+        {
+          "id": "obs-dist-tres-ciclones-activan-el-pacifico-que-significa-para-nicaragua-2026-09-06",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-06T23:10:51.641Z"
+        },
+        {
+          "id": "obs-dist-tres-ciclones-activan-el-pacifico-que-significa-para-nicaragua-2026-09-07",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-07T02:46:07.862Z"
+        },
+        {
+          "id": "obs-dist-tres-ondas-tropicales-traeran-mas-lluvias-a-nicaragua-esta-semana-2026-09-08",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-08T08:49:47.781Z"
+        },
+        {
+          "id": "obs-dist-tribunal-limita-deportaciones-tras-22-000-migrantes-enviados-2026-09-20",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-20T00:42:16.570Z"
+        },
+        {
+          "id": "obs-dist-un-joven-muere-ahogado-y-cuatro-son-rescatados-en-nicaragua-2026-09-07",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-07T08:49:42.033Z"
+        },
+        {
+          "id": "obs-dist-vacaciones-patrias-dias-para-celebrar-viajar-y-compartir-2026-09-04",
+          "action": "Preparar copias de distribución",
+          "source": "distribution",
+          "createdAt": "2026-09-04T08:49:49.216Z"
+        },
+        {
+          "id": "obs-home-2026-08-30",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-08-30T13:14:46.038Z"
+        },
+        {
+          "id": "obs-home-2026-09-01",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-01T04:00:54.332Z"
+        },
+        {
+          "id": "obs-home-2026-09-02",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-02T08:04:05.192Z"
+        },
+        {
+          "id": "obs-home-2026-09-03",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-03T08:03:46.462Z"
+        },
+        {
+          "id": "obs-home-2026-09-04",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-04T08:49:49.716Z"
+        },
+        {
+          "id": "obs-home-2026-09-05",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-05T08:49:49.562Z"
+        },
+        {
+          "id": "obs-home-2026-09-06",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-06T00:06:58.069Z"
+        },
+        {
+          "id": "obs-home-2026-09-07",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-07T02:46:08.314Z"
+        },
+        {
+          "id": "obs-home-2026-09-08",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-08T08:49:48.113Z"
+        },
+        {
+          "id": "obs-home-2026-09-09",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-09T08:49:50.936Z"
+        },
+        {
+          "id": "obs-home-2026-09-10",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-10T08:49:52.128Z"
+        },
+        {
+          "id": "obs-home-2026-09-11",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-11T08:49:50.831Z"
+        },
+        {
+          "id": "obs-home-2026-09-12",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-12T08:49:50.099Z"
+        },
+        {
+          "id": "obs-home-2026-09-13",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-13T08:49:54.974Z"
+        },
+        {
+          "id": "obs-home-2026-09-14",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-14T08:49:54.073Z"
+        },
+        {
+          "id": "obs-home-2026-09-15",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-15T08:49:51.737Z"
+        },
+        {
+          "id": "obs-home-2026-09-16",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-16T08:49:54.221Z"
+        },
+        {
+          "id": "obs-home-2026-09-17",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-17T08:49:58.604Z"
+        },
+        {
+          "id": "obs-home-2026-09-18",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-18T08:49:58.884Z"
+        },
+        {
+          "id": "obs-home-2026-09-19",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-19T02:02:39.025Z"
+        },
+        {
+          "id": "obs-home-2026-09-20",
+          "action": "Colocar artículo sugerido en portada",
+          "source": "content",
+          "createdAt": "2026-09-20T00:42:16.985Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-08-30",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-08-30T13:14:45.720Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-01",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-01T04:00:53.994Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-02",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-02T08:04:05.023Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-03",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-03T08:03:46.269Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-04",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-04T08:49:49.539Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-05",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-05T08:49:49.414Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-06",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-06T00:06:57.856Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-07",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-07T02:46:08.087Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-08",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-08T08:49:47.965Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-09",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-09T08:49:50.728Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-10",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-10T08:49:51.911Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-11",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-11T08:49:50.636Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-12",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-12T08:49:49.956Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-13",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-13T08:49:54.725Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-14",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-14T08:49:53.923Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-15",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-15T08:49:51.588Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-16",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-16T08:49:54.060Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-17",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-17T08:49:58.380Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-18",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-18T08:49:58.593Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-19",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-19T02:02:38.863Z"
+        },
+        {
+          "id": "obs-opp-Migración y visas-2026-09-20",
+          "action": "Crear guía evergreen desde nota identificada",
+          "source": "growth",
+          "createdAt": "2026-09-20T00:42:16.769Z"
+        }
+      ],
+      "not_tasks": []
+    }
+  }
+}

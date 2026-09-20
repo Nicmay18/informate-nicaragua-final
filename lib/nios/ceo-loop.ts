@@ -24,12 +24,15 @@ import { processOperationalConflicts, loadNoticiasAsInputs } from './operational
 import type { NiosExecutiveData } from './executive-center';
 import { logger } from '@/lib/logger';
 
+export type AutonomyStageStatus = 'VERIFIED' | 'PARCIAL' | 'SIN_EVIDENCIA';
+
 export interface CEOLoopResult {
   record: CEOLoopRecord;
   autonomy: {
     score: number;
     max: number;
-    report: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'>;
+    report: Record<string, AutonomyStageStatus>;
+    evidence: Record<string, string>;
   };
 }
 
@@ -46,37 +49,127 @@ function formatImpact(record: NiosRepairRecord): string {
   return `${record.status}: ${record.verification}`;
 }
 
-interface AutonomyInput {
-  observations: CEOLoopRecord['observations'];
-  diagnoses: CEOLoopRecord['diagnoses'];
-  decisions: CeoDecision[];
-  executions: CEOLoopRecord['executions'];
-  failedRepairs: number;
-  verifications: CEOLoopRecord['verifications'];
-  learnings: CEOLoopRecord['learnings'];
-  memoryRecorded: boolean;
-  trigger: string;
+interface AutonomyVerification {
+  score: number;
+  max: number;
+  report: Record<string, AutonomyStageStatus>;
+  evidence: Record<string, string>;
 }
 
-function calculateAutonomy(input: AutonomyInput) {
-  const report: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'> = {
-    OBSERVE: input.observations.length > 0 ? 'REAL' : 'DEAD',
-    DIAGNOSE: input.diagnoses.length > 0 ? 'REAL' : 'DEAD',
-    DECIDE: input.decisions.length > 0 ? 'REAL' : 'DEAD',
-    EXECUTE: input.executions.length + input.failedRepairs > 0 ? 'REAL' : 'DEAD',
-    VERIFY:
-      input.verifications.length > 0
-        ? input.verifications.some((v) => v.verified)
-          ? 'REAL'
-          : 'PARTIAL'
-        : 'DEAD',
-    LEARN: input.learnings.length > 0 ? 'REAL' : 'DEAD',
-    MEMORY: input.memoryRecorded ? 'REAL' : 'DEAD',
-    CRON: ['cron/nios-collect', 'cron/supervisor-watch'].includes(input.trigger) ? 'REAL' : 'DEAD',
+function cronComponentForTrigger(trigger: string): string | null {
+  const map: Record<string, string> = {
+    'cron/nios-collect': 'cron/api/cron/nios-collect',
+    'cron/nios-ceo-loop': 'cron/api/cron/nios-ceo-loop',
+    'cron/supervisor-watch': 'cron/api/cron/supervisor-watch',
+  };
+  if (map[trigger]) return map[trigger];
+  if (trigger.startsWith('/api/cron/')) return `cron${trigger}`;
+  return null;
+}
+
+/**
+ * Verificación independiente de autonomía.
+ * Un estado VERIFIED depende de evidencia observable desde fuera del
+ * componente evaluado: el registro persistido se relee (read-back), el
+ * snapshot lo escribió el pipeline y el heartbeat lo escribe la ruta cron.
+ * Si la evidencia no existe, el estado es SIN_EVIDENCIA — nunca se infiere
+ * del auto-reporte del propio loop.
+ */
+async function verifyAutonomyEvidence(
+  db: Firestore,
+  ctx: { recordId: string | null; observatory: CeoObservatoryResult; trigger: string },
+): Promise<AutonomyVerification> {
+  const report: Record<string, AutonomyStageStatus> = {};
+  const evidence: Record<string, string> = {};
+  const set = (stage: string, status: AutonomyStageStatus, why: string) => {
+    report[stage] = status;
+    evidence[stage] = why;
   };
 
-  const score = Object.values(report).filter((v) => v === 'REAL').length;
-  return { score, max: 8, report };
+  // Persistencia: read-back del registro (fuente externa de verdad)
+  let persisted: CEOLoopRecord | null = null;
+  if (ctx.recordId) {
+    try {
+      const doc = await db.collection('nios_memory').doc(ctx.recordId).get();
+      if (doc.exists) persisted = doc.data() as CEOLoopRecord;
+    } catch (err) {
+      logger.error('[ceo-loop] verifyAutonomy: read-back de memoria falló:', err);
+    }
+  }
+  set(
+    'MEMORY',
+    persisted ? 'VERIFIED' : 'SIN_EVIDENCIA',
+    persisted
+      ? `registro ${ctx.recordId} legible en nios_memory`
+      : 'registro del ciclo no encontrado al releer nios_memory',
+  );
+
+  // OBSERVE: snapshot persistido por el pipeline (no por este loop)
+  const snapDate = ctx.observatory.snapshotDate;
+  if (!snapDate) {
+    set('OBSERVE', 'SIN_EVIDENCIA', 'observatory no produjo snapshotDate');
+  } else {
+    try {
+      const doc = await db.collection('nios_daily_snapshots').doc(snapDate).get();
+      set(
+        'OBSERVE',
+        doc.exists ? 'VERIFIED' : 'SIN_EVIDENCIA',
+        doc.exists
+          ? `snapshot ${snapDate} existe en nios_daily_snapshots`
+          : `snapshot ${snapDate} no existe en nios_daily_snapshots`,
+      );
+    } catch (err) {
+      logger.error('[ceo-loop] verifyAutonomy: lectura de snapshot falló:', err);
+      set('OBSERVE', 'SIN_EVIDENCIA', 'error leyendo nios_daily_snapshots');
+    }
+  }
+
+  // DIAGNOSE / DECIDE / EXECUTE / VERIFY / LEARN: leídos del documento
+  // persistido, no de los arrays en memoria del propio loop.
+  if (persisted) {
+    set('DIAGNOSE', persisted.diagnoses.length > 0 ? 'VERIFIED' : 'SIN_EVIDENCIA',
+      `${persisted.diagnoses.length} diagnósticos persistidos`);
+    set('DECIDE', persisted.decisions.length > 0 ? 'VERIFIED' : 'SIN_EVIDENCIA',
+      `${persisted.decisions.length} decisiones persistidas`);
+    const verifiedExec = persisted.executions.filter((e) => e.status === 'VERIFIED').length;
+    set('EXECUTE',
+      persisted.executions.length === 0 ? 'SIN_EVIDENCIA' : verifiedExec > 0 ? 'VERIFIED' : 'PARCIAL',
+      `${persisted.executions.length} ejecuciones persistidas, ${verifiedExec} con estado VERIFIED`);
+    const confirmed = persisted.verifications.filter((v) => v.verified).length;
+    set('VERIFY',
+      persisted.verifications.length === 0 ? 'SIN_EVIDENCIA' : confirmed > 0 ? 'VERIFIED' : 'PARCIAL',
+      `${persisted.verifications.length} verificaciones persistidas, ${confirmed} confirmadas`);
+    set('LEARN', persisted.learnings.length > 0 ? 'VERIFIED' : 'SIN_EVIDENCIA',
+      `${persisted.learnings.length} aprendizajes persistidos`);
+  } else {
+    for (const stage of ['DIAGNOSE', 'DECIDE', 'EXECUTE', 'VERIFY', 'LEARN']) {
+      set(stage, 'SIN_EVIDENCIA', 'registro del ciclo no persistido');
+    }
+  }
+
+  // CRON: heartbeat escrito por la ruta cron (artefacto externo al loop)
+  const component = cronComponentForTrigger(ctx.trigger);
+  if (!component) {
+    set('CRON', 'SIN_EVIDENCIA', `trigger "${ctx.trigger}" sin heartbeat asociado`);
+  } else {
+    try {
+      const snap = await db.collection('depto_heartbeat').where('component', '==', component).limit(1).get();
+      const hb = snap.empty ? null : (snap.docs[0].data() as { lastRunAt?: string });
+      if (!hb?.lastRunAt) {
+        set('CRON', 'SIN_EVIDENCIA', `sin heartbeat para ${component}`);
+      } else {
+        const ageH = (Date.now() - Date.parse(hb.lastRunAt)) / 36e5;
+        set('CRON', ageH <= 30 ? 'VERIFIED' : 'PARCIAL',
+          `heartbeat ${component} lastRunAt=${hb.lastRunAt} (~${Math.round(ageH)}h)`);
+      }
+    } catch (err) {
+      logger.error('[ceo-loop] verifyAutonomy: lectura de heartbeat falló:', err);
+      set('CRON', 'SIN_EVIDENCIA', 'error leyendo depto_heartbeat');
+    }
+  }
+
+  const score = Object.values(report).filter((v) => v === 'VERIFIED').length;
+  return { score, max: 8, report, evidence };
 }
 
 export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): Promise<CEOLoopResult> {
@@ -383,41 +476,32 @@ export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): 
     };
   }
 
-  // MEMORY
+  // Persistir → read-back → verificación independiente de autonomía.
+  // El score ya no se auto-declara: cada etapa se verifica leyendo
+  // evidencia persistida fuera del propio componente.
   let id = '';
-  let memoryRecorded = false;
-  let autonomy = calculateAutonomy({
-    observations,
-    diagnoses,
-    decisions,
-    executions,
-    failedRepairs: loopRecord.failedRepairs,
-    verifications,
-    learnings,
-    memoryRecorded,
+  try {
+    id = await recordCeoLoopRun({ ...loopRecord, autonomyScore: 0 });
+  } catch (err) {
+    logger.error('[ceo-loop] recordCeoLoopRun failed:', err);
+  }
+
+  const autonomy = await verifyAutonomyEvidence(db, {
+    recordId: id || null,
+    observatory,
     trigger,
   });
 
-  try {
-    id = await recordCeoLoopRun({ ...loopRecord, autonomyScore: autonomy.score });
-    memoryRecorded = true;
-    // Re-calcular con memoria real y persistir el score final.
-    autonomy = calculateAutonomy({
-      observations,
-      diagnoses,
-      decisions,
-      executions,
-      failedRepairs: loopRecord.failedRepairs,
-      verifications,
-      learnings,
-      memoryRecorded,
-      trigger,
-    });
-    if (id) {
-      await db.collection('nios_memory').doc(id).update({ autonomyScore: autonomy.score });
+  if (id) {
+    try {
+      await db.collection('nios_memory').doc(id).update({
+        autonomyScore: autonomy.score,
+        autonomyReport: autonomy.report,
+        autonomyEvidence: autonomy.evidence,
+      });
+    } catch (err) {
+      logger.error('[ceo-loop] persist autonomy evidence failed:', err);
     }
-  } catch (err) {
-    logger.error('[ceo-loop] recordCeoLoopRun failed:', err);
   }
 
   const record: CEOLoopRecord = {

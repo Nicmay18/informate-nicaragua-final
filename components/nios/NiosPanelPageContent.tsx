@@ -2,7 +2,7 @@ import { getNiosReport, type NiosModuleReport, type NiosRecommendation } from '@
 import { getDailyEditorReport } from '@/lib/nios/daily-editor';
 import { getNiosExecutiveData } from '@/lib/nios/executive-center';
 import { buildNiosBrief } from '@/lib/nios/nios-speaks';
-import { proposeActionsFromOpportunities } from '@/lib/nios/action-engine';
+import { getActions } from '@/lib/nios/action-engine';
 import { NiosTeHabla } from '@/components/nios/NiosTeHabla';
 import { NiosPlanOfToday } from '@/components/nios/NiosPlanOfToday';
 import { NiosExecutiveDashboard } from '@/components/nios/NiosExecutiveDashboard';
@@ -33,7 +33,10 @@ export default async function NiosPanelPageContent() {
     getNiosExecutiveData().catch(() => null),
   ]);
   const brief = rawData ? buildNiosBrief(rawData) : null;
-  const initialActions = brief ? await proposeActionsFromOpportunities(brief.opportunities) : [];
+  // Read-only: el render jamás crea acciones. Las propuestas las genera el
+  // proceso explícito del cron nios-ceo-loop (con dedup); aquí solo se lee
+  // la cola existente para mostrarla y permitir aprobar/rechazar.
+  const initialActions = await getActions(50).catch(() => []);
 
   return (
     <main className="nios">

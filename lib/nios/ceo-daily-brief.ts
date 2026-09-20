@@ -24,7 +24,7 @@ export interface CEODailyBrief {
   period: { from: string; to: string };
   overallStatus: 'ok' | 'warning' | 'alert';
   autonomyScore: string;
-  autonomyReport: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'>;
+  autonomyReport: Record<string, 'VERIFIED' | 'PARCIAL' | 'SIN_EVIDENCIA'>;
   points: CEOBriefPoint[];
   /** V2: resumen ejecutivo de 'HOY' con acciones priorizadas. */
   hoy: CEOBriefPoint[];
@@ -46,18 +46,18 @@ export function generateCEODailyBrief(ceo: CEOLoopResult, date = new Date().toIS
         : 'ok';
 
   // 1. Autonomy pulse
-  const allReal = Object.values(ceo.autonomy.report).every((v) => v === 'REAL');
+  const allReal = Object.values(ceo.autonomy.report).every((v) => v === 'VERIFIED');
   points.push({
     area: 'Autonomía',
     status: allReal ? 'ok' : 'warning',
-    headline: allReal ? 'Ciclo CEO autónomo completo' : 'Algunas fases del CEO no son REAL',
+    headline: allReal ? 'Ciclo CEO autónomo completo' : 'Algunas fases del CEO no están VERIFIED',
     diagnosis: allReal
       ? 'Todas las fases del ciclo (OBSERVE → MEMORY) están operativas.'
-      : 'Una o más fases del ciclo CEO están parciales o muertas.',
+      : 'Una o más fases del ciclo CEO están parciales o sin evidencia verificable.',
     evidence: `Score: ${ceo.autonomy.score}/${ceo.autonomy.max}. ${Object.entries(ceo.autonomy.report)
       .map(([k, v]) => `${k}=${v}`)
       .join(', ')}`,
-    action: allReal ? 'Mantener y monitorear.' : 'Revisar la fase con estado no REAL.',
+    action: allReal ? 'Mantener y monitorear.' : 'Revisar la fase sin evidencia verificable.',
     expectedImpact: 'Asegurar continuidad operativa.',
     dataStatus: 'DATA_AVAILABLE',
   });

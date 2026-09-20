@@ -152,7 +152,7 @@ type NiosLoop = {
   } | null;
   autonomyScore: number;
   autonomyMax: number;
-  autonomyReport: Record<string, 'REAL' | 'PARTIAL' | 'DEAD'>;
+  autonomyReport: Record<string, 'VERIFIED' | 'PARCIAL' | 'SIN_EVIDENCIA'>;
 };
 
 type Data = {
@@ -400,8 +400,8 @@ export default function CentroDeComandoPage() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(data.niosLoop.autonomyReport).map(([stage, status]) => (
-                  <span key={stage} className={`text-xs px-2 py-1 rounded-full border font-medium ${status === 'REAL' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : status === 'PARTIAL' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-slate-100 text-slate-500 border-slate-200'}`}>
-                    {stage}: {status === 'REAL' ? '✅' : status === 'PARTIAL' ? '⚠️' : '—'}
+                  <span key={stage} className={`text-xs px-2 py-1 rounded-full border font-medium ${status === 'VERIFIED' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : status === 'PARCIAL' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-slate-100 text-slate-500 border-slate-200'}`}>
+                    {stage}: {status === 'VERIFIED' ? '✅' : status === 'PARCIAL' ? '⚠️' : '—'}
                   </span>
                 ))}
               </div>

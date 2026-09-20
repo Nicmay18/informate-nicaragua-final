@@ -22,6 +22,8 @@ function statusLabel(status: NiosAction['status']): string {
       return 'Falló';
     case 'REJECTED':
       return 'Rechazada';
+    case 'EXPIRED':
+      return 'Expirada';
     default:
       return status;
   }
@@ -41,6 +43,8 @@ function statusColor(status: NiosAction['status']): string {
       return '#dc2626';
     case 'REJECTED':
       return '#64748b';
+    case 'EXPIRED':
+      return '#94a3b8';
     default:
       return '#64748b';
   }
@@ -67,6 +71,7 @@ export function NiosPlanOfToday({ actions: initialActions }: Props) {
   const completed = actions.filter((a) => a.status === 'COMPLETED');
   const failed = actions.filter((a) => a.status === 'FAILED');
   const rejected = actions.filter((a) => a.status === 'REJECTED');
+  const expired = actions.filter((a) => a.status === 'EXPIRED');
 
   function showToast(message: string) {
     setToast(message);
@@ -336,8 +341,9 @@ export function NiosPlanOfToday({ actions: initialActions }: Props) {
         <HistorySection title="COMPLETADO" emoji="🟢" items={completed} />
         <HistorySection title="FALLÓ" emoji="🔴" items={failed} />
         <HistorySection title="RECHAZADO" emoji="⏹️" items={rejected} />
+        <HistorySection title="EXPIRADO" emoji="🕓" items={expired} />
 
-        {running.length === 0 && completed.length === 0 && failed.length === 0 && rejected.length === 0 && (
+        {running.length === 0 && completed.length === 0 && failed.length === 0 && rejected.length === 0 && expired.length === 0 && (
           <p style={{ color: 'var(--text-secondary)' }}>Aún no hay acciones en el historial.</p>
         )}
       </div>

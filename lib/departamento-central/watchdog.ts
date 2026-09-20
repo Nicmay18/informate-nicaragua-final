@@ -4,6 +4,9 @@ import { openIncident } from './incidents';
 import { recordLearning } from './learning';
 import { getDepartmentHealth, writeHeartbeat } from './heartbeat';
 import { enqueueJob } from './queue';
+import { emitOperationalAlerts } from './ops-alerts';
+import { expireStaleActions } from '@/lib/nios/action-engine';
+import { reconcileCeoTasks } from '@/lib/nios/ceo-memory';
 
 const MAX_JOB_RUNTIME_MS = 30 * 60 * 1000;
 const PENDING_QUEUE_LIMIT = 100;
@@ -87,6 +90,29 @@ export async function runWatchdog(): Promise<{
       detectedAt: now.toISOString(),
     });
     actions.push('queue-backlog-warning');
+  }
+
+  // Alertas operativas reales → nios_alerts (dedup + cooldown internos).
+  try {
+    const alerts = await emitOperationalAlerts(db, stale);
+    if (alerts.emitted > 0) actions.push(`alerts-emitted-${alerts.emitted}`);
+  } catch (err) {
+    logger.error('[depto-watchdog] emitOperationalAlerts falló:', err);
+  }
+
+  // Reconciliación de ciclo de vida: acciones PENDING viejas → EXPIRED;
+  // tareas CEO pending >30d → expired. Nunca borra documentos.
+  try {
+    const act = await expireStaleActions(7);
+    if (act.expired + act.superseded > 0) actions.push(`actions-expired-${act.expired + act.superseded}`);
+  } catch (err) {
+    logger.error('[depto-watchdog] expireStaleActions falló:', err);
+  }
+  try {
+    const tasks = await reconcileCeoTasks(30);
+    if (tasks.expired > 0) actions.push(`ceo-tasks-expired-${tasks.expired}`);
+  } catch (err) {
+    logger.error('[depto-watchdog] reconcileCeoTasks falló:', err);
   }
 
   await recordLearning({

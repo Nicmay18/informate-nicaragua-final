@@ -1,0 +1,2628 @@
+[
+  {
+    "module": "action-engine",
+    "total": 6,
+    "external": [
+      "components/nios/NiosPanelPageContent.tsx",
+      "components/nios/NiosPlanOfToday.tsx",
+      "lib/admin/centro-de-comando.ts",
+      "scripts/nios-n4-real-test-fast.ts",
+      "scripts/nios-n4-real-test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/NiosPanelPageContent.tsx",
+      "components/nios/NiosPlanOfToday.tsx"
+    ],
+    "byTest": [
+      "scripts/nios-n4-real-test-fast.ts",
+      "scripts/nios-n4-real-test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/actions-server.ts"
+    ]
+  },
+  {
+    "module": "actions-server",
+    "total": 1,
+    "external": [
+      "components/nios/NiosPlanOfToday.tsx"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/NiosPlanOfToday.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": []
+  },
+  {
+    "module": "audience",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "business-brain/index",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/ceo-observatory.ts",
+      "lib/nios/v4-report.ts"
+    ]
+  },
+  {
+    "module": "business-signals",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/daily-editor.ts",
+      "lib/nios/executive-report.ts"
+    ]
+  },
+  {
+    "module": "business/index",
+    "total": 4,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/business-brain/index.ts",
+      "lib/nios/copilot/index.ts",
+      "lib/nios/daily-automation/index.ts",
+      "lib/nios/v3-report.ts"
+    ]
+  },
+  {
+    "module": "category-health",
+    "total": 6,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/copilot/index.ts",
+      "lib/nios/daily-editor.ts",
+      "lib/nios/executive-report.ts",
+      "lib/nios/mission-center/index.ts",
+      "lib/nios/mission-engine/index.ts",
+      "lib/nios/watcher/index.ts"
+    ]
+  },
+  {
+    "module": "ceo-action-registry",
+    "total": 4,
+    "external": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-learning.ts",
+      "lib/nios/ceo-loop.ts",
+      "lib/nios/ceo-observatory.ts"
+    ]
+  },
+  {
+    "module": "ceo-daily-brief",
+    "total": 2,
+    "external": [
+      "app/api/cron/nios-collect/route.ts",
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "byCron": [
+      "app/api/cron/nios-collect/route.ts"
+    ],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "internalOnly": []
+  },
+  {
+    "module": "ceo-decision-engine",
+    "total": 3,
+    "external": [
+      "tests/ceo-agent-final.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/ceo-agent-final.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-loop.ts",
+      "lib/nios/ceo-memory.ts"
+    ]
+  },
+  {
+    "module": "ceo-learning",
+    "total": 2,
+    "external": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-loop.ts"
+    ]
+  },
+  {
+    "module": "ceo-loop",
+    "total": 6,
+    "external": [
+      "app/api/admin/nios/loop/route.ts",
+      "app/api/cron/nios-ceo-loop/route.ts",
+      "app/api/cron/nios-collect/route.ts",
+      "scripts/nios-ceo-r4-runner.ts",
+      "tests/ceo-agent-final.test.ts"
+    ],
+    "byCron": [
+      "app/api/cron/nios-ceo-loop/route.ts",
+      "app/api/cron/nios-collect/route.ts"
+    ],
+    "byRoute": [
+      "app/api/admin/nios/loop/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts",
+      "tests/ceo-agent-final.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-daily-brief.ts"
+    ]
+  },
+  {
+    "module": "ceo-memory",
+    "total": 7,
+    "external": [
+      "app/api/admin/nios/loop/route.ts",
+      "lib/admin/centro-de-comando.ts",
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios/loop/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-loop.ts",
+      "lib/nios/command-center/index.ts",
+      "lib/nios/command-center/intelligence-graph.ts",
+      "lib/nios/conflict-detector.ts"
+    ]
+  },
+  {
+    "module": "ceo-observatory",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/ceo-loop.ts"
+    ]
+  },
+  {
+    "module": "ceo-verdict",
+    "total": 5,
+    "external": [
+      "tests/mission10-integrity.test.ts",
+      "tests/mission14-readiness.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission10-integrity.test.ts",
+      "tests/mission14-readiness.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts"
+    ]
+  },
+  {
+    "module": "ceoReport",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "collectors/ga4",
+    "total": 2,
+    "external": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/swiss-watch/probes.ts"
+    ]
+  },
+  {
+    "module": "collectors/gsc",
+    "total": 2,
+    "external": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/swiss-watch/probes.ts"
+    ]
+  },
+  {
+    "module": "collectors/internal",
+    "total": 0,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": []
+  },
+  {
+    "module": "command-center/authority-health",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/brand-guardian",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/business-health",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/business-intelligence",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/ceo-decisions",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/ceo-view",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/constants",
+    "total": 7,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/brand-guardian.ts",
+      "lib/nios/command-center/business-intelligence.ts",
+      "lib/nios/command-center/distribution-command.ts",
+      "lib/nios/command-center/editorial-balance.ts",
+      "lib/nios/command-center/home-quality.ts",
+      "lib/nios/command-center/opportunity-hunter.ts",
+      "lib/nios/command-center/revenue-engine.ts"
+    ]
+  },
+  {
+    "module": "command-center/distribution-command",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/editorial-balance",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/eeat-engine",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/google-trust",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/home-quality",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/index",
+    "total": 7,
+    "external": [
+      "components/nios/command-center/AuthorityPanel.tsx",
+      "components/nios/command-center/CommandCenterShell.tsx",
+      "components/nios/command-center/OperationsPanels.tsx",
+      "components/nios/command-center/StrategyPanels.tsx",
+      "components/nios/NiosCeoShell.tsx",
+      "tests/nios-command-center.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/command-center/AuthorityPanel.tsx",
+      "components/nios/command-center/CommandCenterShell.tsx",
+      "components/nios/command-center/OperationsPanels.tsx",
+      "components/nios/command-center/StrategyPanels.tsx",
+      "components/nios/NiosCeoShell.tsx"
+    ],
+    "byTest": [
+      "tests/nios-command-center.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-observatory.ts"
+    ]
+  },
+  {
+    "module": "command-center/intelligence-graph",
+    "total": 1,
+    "external": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": []
+  },
+  {
+    "module": "command-center/opportunity-hunter",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/revenue-engine",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "command-center/types",
+    "total": 14,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/brand-guardian.ts",
+      "lib/nios/command-center/business-health.ts",
+      "lib/nios/command-center/business-intelligence.ts",
+      "lib/nios/command-center/ceo-decisions.ts",
+      "lib/nios/command-center/ceo-view.ts",
+      "lib/nios/command-center/distribution-command.ts",
+      "lib/nios/command-center/editorial-balance.ts",
+      "lib/nios/command-center/eeat-engine.ts",
+      "lib/nios/command-center/google-trust.ts",
+      "lib/nios/command-center/home-quality.ts",
+      "lib/nios/command-center/index.ts",
+      "lib/nios/command-center/opportunity-hunter.ts",
+      "lib/nios/command-center/revenue-engine.ts",
+      "lib/nios/command-center/war-room.ts"
+    ]
+  },
+  {
+    "module": "command-center/war-room",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/command-center/index.ts"
+    ]
+  },
+  {
+    "module": "competitors",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "conflict-detector",
+    "total": 6,
+    "external": [
+      "app/panel/centro-de-comando/page.tsx",
+      "lib/admin/centro-de-comando.ts",
+      "tests/nios-conflict-detector.test.ts",
+      "tests/nios-operational-loop.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "app/panel/centro-de-comando/page.tsx"
+    ],
+    "byTest": [
+      "tests/nios-conflict-detector.test.ts",
+      "tests/nios-operational-loop.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/meni-forense-judge.ts",
+      "lib/nios/operational-loop.ts"
+    ]
+  },
+  {
+    "module": "content-intelligence/index",
+    "total": 7,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/content-recycler/index.ts",
+      "lib/nios/copilot/index.ts",
+      "lib/nios/daily-automation/index.ts",
+      "lib/nios/mission-center/index.ts",
+      "lib/nios/mission-engine/index.ts",
+      "lib/nios/v3-report.ts",
+      "lib/nios/watcher/index.ts"
+    ]
+  },
+  {
+    "module": "content-mix",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/daily-editor.ts"
+    ]
+  },
+  {
+    "module": "content-recycler/index",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/morning-report/index.ts",
+      "lib/nios/v4-report.ts"
+    ]
+  },
+  {
+    "module": "contentLifecycle",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "copilot/index",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/v3-report.ts"
+    ]
+  },
+  {
+    "module": "daily-automation/index",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/morning-report/index.ts",
+      "lib/nios/v4-report.ts"
+    ]
+  },
+  {
+    "module": "daily-editor",
+    "total": 3,
+    "external": [
+      "components/nios/DailyEditorPanel.tsx",
+      "components/nios/NiosExecutiveDashboard.tsx",
+      "components/nios/NiosPanelPageContent.tsx"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/DailyEditorPanel.tsx",
+      "components/nios/NiosExecutiveDashboard.tsx",
+      "components/nios/NiosPanelPageContent.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": []
+  },
+  {
+    "module": "distribution",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "distribution-agent/index",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/v4-report.ts"
+    ]
+  },
+  {
+    "module": "editorial-diagnosis",
+    "total": 6,
+    "external": [
+      "app/admin/meni/page.tsx",
+      "app/api/admin/meni/evaluar/route.ts",
+      "lib/departamento-central/workers.ts",
+      "lib/meni/contextualiza.ts",
+      "tests/mission13-editor-ia.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/meni/evaluar/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/meni/page.tsx"
+    ],
+    "byTest": [
+      "tests/mission13-editor-ia.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "editorial-memory/index",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/copilot/index.ts",
+      "lib/nios/v3-report.ts"
+    ]
+  },
+  {
+    "module": "editorial-score/index",
+    "total": 3,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/copilot/index.ts",
+      "lib/nios/morning-report/index.ts",
+      "lib/nios/v3-report.ts"
+    ]
+  },
+  {
+    "module": "editorial-timeline/index",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/v3-report.ts"
+    ]
+  },
+  {
+    "module": "entity-brain/index",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/morning-report/index.ts",
+      "lib/nios/v4-report.ts"
+    ]
+  },
+  {
+    "module": "executive-center",
+    "total": 12,
+    "external": [
+      "app/admin/nios/page.tsx",
+      "components/nios/NiosExecutiveCenter.tsx",
+      "components/nios/NiosPanelPageContent.tsx",
+      "lib/admin/centro-de-comando.ts",
+      "m18-probe.ts",
+      "scripts/nios-command-center-probe.ts",
+      "scripts/nios-n4-real-test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "app/admin/nios/page.tsx",
+      "components/nios/NiosExecutiveCenter.tsx",
+      "components/nios/NiosPanelPageContent.tsx"
+    ],
+    "byTest": [
+      "scripts/nios-command-center-probe.ts",
+      "scripts/nios-n4-real-test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-loop.ts",
+      "lib/nios/ceo-verdict.ts",
+      "lib/nios/conflict-detector.ts",
+      "lib/nios/nios-growth-radar.ts",
+      "lib/nios/nios-speaks.ts"
+    ]
+  },
+  {
+    "module": "executive-report",
+    "total": 2,
+    "external": [
+      "components/nios/NiosExecutiveDashboard.tsx"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/NiosExecutiveDashboard.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/daily-editor.ts"
+    ]
+  },
+  {
+    "module": "executive/morning-brief",
+    "total": 1,
+    "external": [
+      "tests/nios-executive.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-executive.test.ts"
+    ],
+    "internalOnly": []
+  },
+  {
+    "module": "executive/weekly-report",
+    "total": 1,
+    "external": [
+      "tests/nios-executive.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-executive.test.ts"
+    ],
+    "internalOnly": []
+  },
+  {
+    "module": "growth",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "growth/engine",
+    "total": 3,
+    "external": [
+      "app/api/admin/nios/growth/route.ts",
+      "scripts/nios-growth-e2e.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios/growth/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-growth-e2e.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts"
+    ]
+  },
+  {
+    "module": "growth/opportunities",
+    "total": 4,
+    "external": [
+      "tests/nios-executive.test.ts",
+      "tests/nios-v2-core.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-executive.test.ts",
+      "tests/nios-v2-core.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive/morning-brief.ts",
+      "lib/nios/executive/weekly-report.ts"
+    ]
+  },
+  {
+    "module": "growth/store",
+    "total": 2,
+    "external": [
+      "app/api/admin/nios/growth/route.ts",
+      "scripts/nios-growth-e2e.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios/growth/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-growth-e2e.ts"
+    ],
+    "internalOnly": []
+  },
+  {
+    "module": "growth/types",
+    "total": 3,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/executive-center.ts",
+      "lib/nios/growth/engine.ts",
+      "lib/nios/growth/store.ts"
+    ]
+  },
+  {
+    "module": "index",
+    "total": 1,
+    "external": [
+      "components/nios/NiosPanelPageContent.tsx"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/NiosPanelPageContent.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": []
+  },
+  {
+    "module": "intelligence/absurd-recommendation-guard",
+    "total": 4,
+    "external": [
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/audience.ts",
+      "lib/nios/intelligence/content-improvement.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/adsense-recovery",
+    "total": 5,
+    "external": [
+      "app/admin/nios/adsense-recovery/page.tsx",
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/nios-fase2.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/nios/adsense-recovery/page.tsx"
+    ],
+    "byTest": [
+      "tests/nios-fase2.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/adsense-recovery-report",
+    "total": 5,
+    "external": [
+      "app/admin/nios/adsense-report/page.tsx",
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/nios-fase25.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/nios/adsense-report/page.tsx"
+    ],
+    "byTest": [
+      "tests/nios-fase25.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/adsense-trust-check",
+    "total": 3,
+    "external": [
+      "tests/nios-fase25.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-fase25.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/adsense-recovery-report.ts",
+      "lib/nios/intelligence/index.ts"
+    ]
+  },
+  {
+    "module": "intelligence/alert-engine",
+    "total": 5,
+    "external": [
+      "tests/mission13-trend-alerts.test.ts",
+      "tests/mission15-anti-spam.test.ts",
+      "tests/mission16-closure.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission13-trend-alerts.test.ts",
+      "tests/mission15-anti-spam.test.ts",
+      "tests/mission16-closure.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/alerts.ts"
+    ]
+  },
+  {
+    "module": "intelligence/alerts",
+    "total": 8,
+    "external": [
+      "app/panel/nios/performance/page.tsx",
+      "tests/mission13-trend-alerts.test.ts",
+      "tests/mission16-closure.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/reliability-monitor.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "app/panel/nios/performance/page.tsx"
+    ],
+    "byTest": [
+      "tests/mission13-trend-alerts.test.ts",
+      "tests/mission16-closure.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/reliability-monitor.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts",
+      "lib/nios/intelligence/alert-engine.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/article-momentum",
+    "total": 6,
+    "external": [
+      "tests/mission15-anti-spam.test.ts",
+      "tests/mission16-closure.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission15-anti-spam.test.ts",
+      "tests/mission16-closure.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/command-center/intelligence-graph.ts",
+      "lib/nios/executive-center.ts",
+      "lib/nios/intelligence/alerts.ts"
+    ]
+  },
+  {
+    "module": "intelligence/category-intelligence",
+    "total": 6,
+    "external": [
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/nios-fase3.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-fase3.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/content-mix-intelligence.ts",
+      "lib/nios/intelligence/editor-ceo-report.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/ceo-status",
+    "total": 2,
+    "external": [
+      "tests/mission10-diagnostics.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission10-diagnostics.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts"
+    ]
+  },
+  {
+    "module": "intelligence/compliance",
+    "total": 4,
+    "external": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/content-improvement",
+    "total": 5,
+    "external": [
+      "tests/nios-fase25.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-fase25.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/adsense-recovery-report.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/content-mix-intelligence",
+    "total": 5,
+    "external": [
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/nios-fase3.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-fase3.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/editor-ceo-report.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/content-recovery",
+    "total": 8,
+    "external": [
+      "app/admin/nios/recovery/page.tsx",
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/mission8-integration.test.ts",
+      "tests/nios-fase25.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/nios/recovery/page.tsx"
+    ],
+    "byTest": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-fase25.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/adsense-recovery-report.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/dashboard",
+    "total": 7,
+    "external": [
+      "app/admin/nios/google-intelligence/page.tsx",
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/mission8-integration.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/nios/google-intelligence/page.tsx"
+    ],
+    "byTest": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/data-merger",
+    "total": 11,
+    "external": [
+      "tests/ceo-agent-final.test.ts",
+      "tests/mission10-diagnostics.test.ts",
+      "tests/mission7-data-status.test.ts",
+      "tests/nios-intelligence.test.ts",
+      "tests/nios-repair-engine.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/ceo-agent-final.test.ts",
+      "tests/mission10-diagnostics.test.ts",
+      "tests/mission7-data-status.test.ts",
+      "tests/nios-intelligence.test.ts",
+      "tests/nios-repair-engine.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-observatory.ts",
+      "lib/nios/command-center/intelligence-graph.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts",
+      "lib/nios/operational-loop.ts",
+      "lib/nios/repair-engine.ts"
+    ]
+  },
+  {
+    "module": "intelligence/diagnostics",
+    "total": 12,
+    "external": [
+      "scripts/nios-ceo-r4-runner.ts",
+      "tests/ceo-agent-final.test.ts",
+      "tests/mission10-diagnostics.test.ts",
+      "tests/mission14-readiness.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts",
+      "tests/ceo-agent-final.test.ts",
+      "tests/mission10-diagnostics.test.ts",
+      "tests/mission14-readiness.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-decision-engine.ts",
+      "lib/nios/executive-center.ts",
+      "lib/nios/intelligence/ceo-status.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/repair-plan.ts",
+      "lib/nios/operating-mode.ts",
+      "lib/nios/repair-engine.ts"
+    ]
+  },
+  {
+    "module": "intelligence/editor-ceo-report",
+    "total": 6,
+    "external": [
+      "app/api/admin/nios-intelligence/route.ts",
+      "app/panel/nios/editorial-strategy/page.tsx",
+      "tests/mission8-integration.test.ts",
+      "tests/nios-fase3.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [
+      "app/panel/nios/editorial-strategy/page.tsx"
+    ],
+    "byTest": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-fase3.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/editorial-rules",
+    "total": 3,
+    "external": [
+      "tests/nios-intelligence.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-intelligence.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/firebase-health",
+    "total": 5,
+    "external": [
+      "m18-probe.ts",
+      "scripts/nios-ceo-r4-runner.ts",
+      "tests/mission14-readiness.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts",
+      "tests/mission14-readiness.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts"
+    ]
+  },
+  {
+    "module": "intelligence/ga4-collector",
+    "total": 7,
+    "external": [
+      "m18-probe.ts",
+      "scripts/nios-pipeline-probe.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/mission9-real-sources.test.ts",
+      "tests/nios-operating-mode.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-pipeline-probe.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/mission9-real-sources.test.ts",
+      "tests/nios-operating-mode.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/google-feedback",
+    "total": 4,
+    "external": [
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/nios-fase2.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-fase2.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/google-trust",
+    "total": 12,
+    "external": [
+      "app/admin/nios/adsense-recovery/page.tsx",
+      "app/admin/nios/recovery/page.tsx",
+      "app/admin/nios/weekly/page.tsx",
+      "app/api/admin/nios-intelligence/route.ts",
+      "app/panel/nios/editorial-strategy/page.tsx",
+      "tests/mission7-data-status.test.ts",
+      "tests/mission8-integration.test.ts",
+      "tests/nios-fase2.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/nios/adsense-recovery/page.tsx",
+      "app/admin/nios/recovery/page.tsx",
+      "app/admin/nios/weekly/page.tsx",
+      "app/panel/nios/editorial-strategy/page.tsx"
+    ],
+    "byTest": [
+      "tests/mission7-data-status.test.ts",
+      "tests/mission8-integration.test.ts",
+      "tests/nios-fase2.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/adsense-recovery-report.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/gsc-collector",
+    "total": 7,
+    "external": [
+      "m18-probe.ts",
+      "scripts/nios-pipeline-probe.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/mission9-real-sources.test.ts",
+      "tests/nios-operating-mode.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-pipeline-probe.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/mission9-real-sources.test.ts",
+      "tests/nios-operating-mode.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/health-score",
+    "total": 5,
+    "external": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/alerts.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts",
+      "lib/nios/intelligence/telemetry.ts"
+    ]
+  },
+  {
+    "module": "intelligence/index",
+    "total": 0,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": []
+  },
+  {
+    "module": "intelligence/meni-learning",
+    "total": 4,
+    "external": [
+      "app/api/admin/nios-intelligence/route.ts",
+      "app/panel/nios/editorial-strategy/page.tsx"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [
+      "app/panel/nios/editorial-strategy/page.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/metric-truth",
+    "total": 9,
+    "external": [
+      "app/api/admin/auditor-dashboard/route.ts",
+      "app/api/top-noticias/route.ts",
+      "lib/canonical-article-metrics.ts",
+      "lib/growth.ts",
+      "tests/mission10-integrity.test.ts",
+      "tests/mission12-social-conversion.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/auditor-dashboard/route.ts",
+      "app/api/top-noticias/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission10-integrity.test.ts",
+      "tests/mission12-social-conversion.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/social-conversion.ts"
+    ]
+  },
+  {
+    "module": "intelligence/notification-forensics",
+    "total": 2,
+    "external": [
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts"
+    ]
+  },
+  {
+    "module": "intelligence/opportunity-engine",
+    "total": 5,
+    "external": [
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/nios-fase3.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-fase3.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/editor-ceo-report.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/orchestrator",
+    "total": 4,
+    "external": [
+      "app/api/admin/nios-collect/route.ts",
+      "app/api/cron/nios-collect/route.ts",
+      "scripts/nios-pipeline-probe.ts"
+    ],
+    "byCron": [
+      "app/api/cron/nios-collect/route.ts"
+    ],
+    "byRoute": [
+      "app/api/admin/nios-collect/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-pipeline-probe.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts"
+    ]
+  },
+  {
+    "module": "intelligence/performance-report",
+    "total": 5,
+    "external": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/health-score.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts",
+      "lib/nios/intelligence/telemetry.ts"
+    ]
+  },
+  {
+    "module": "intelligence/readiness",
+    "total": 4,
+    "external": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-intelligence.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/reliability-monitor",
+    "total": 5,
+    "external": [
+      "app/panel/nios/performance/page.tsx",
+      "tests/reliability-monitor.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "app/panel/nios/performance/page.tsx"
+    ],
+    "byTest": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts",
+      "lib/nios/intelligence/alerts.ts",
+      "lib/nios/intelligence/weekly-reliability-report.ts"
+    ]
+  },
+  {
+    "module": "intelligence/repair-plan",
+    "total": 4,
+    "external": [
+      "tests/mission10-diagnostics.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission10-diagnostics.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/ceo-status.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/operating-mode.ts"
+    ]
+  },
+  {
+    "module": "intelligence/social-conversion",
+    "total": 4,
+    "external": [
+      "app/api/admin/social-conversion/route.ts",
+      "m18-probe.ts",
+      "tests/mission12-social-conversion.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/social-conversion/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission12-social-conversion.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts"
+    ]
+  },
+  {
+    "module": "intelligence/store",
+    "total": 21,
+    "external": [
+      "app/admin/nios/adsense-recovery/page.tsx",
+      "app/admin/nios/adsense-report/page.tsx",
+      "app/admin/nios/google-intelligence/page.tsx",
+      "app/admin/nios/recovery/page.tsx",
+      "app/admin/nios/weekly/page.tsx",
+      "app/api/admin/nios/growth/route.ts",
+      "app/api/admin/nios-collect/route.ts",
+      "app/api/admin/nios-intelligence/route.ts",
+      "app/api/admin/social-conversion/route.ts",
+      "app/panel/nios/editorial-strategy/page.tsx",
+      "scripts/nios-growth-e2e.ts",
+      "scripts/nios-pipeline-probe.ts",
+      "tests/ceo-agent-final.test.ts",
+      "tests/nios-repair-engine.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios/growth/route.ts",
+      "app/api/admin/nios-collect/route.ts",
+      "app/api/admin/nios-intelligence/route.ts",
+      "app/api/admin/social-conversion/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/nios/adsense-recovery/page.tsx",
+      "app/admin/nios/adsense-report/page.tsx",
+      "app/admin/nios/google-intelligence/page.tsx",
+      "app/admin/nios/recovery/page.tsx",
+      "app/admin/nios/weekly/page.tsx",
+      "app/panel/nios/editorial-strategy/page.tsx"
+    ],
+    "byTest": [
+      "scripts/nios-growth-e2e.ts",
+      "scripts/nios-pipeline-probe.ts",
+      "tests/ceo-agent-final.test.ts",
+      "tests/nios-repair-engine.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-observatory.ts",
+      "lib/nios/command-center/intelligence-graph.ts",
+      "lib/nios/executive-center.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/meni-learning.ts",
+      "lib/nios/intelligence/orchestrator.ts",
+      "lib/nios/repair-engine.ts"
+    ]
+  },
+  {
+    "module": "intelligence/telemetry",
+    "total": 7,
+    "external": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts",
+      "lib/nios/intelligence/performance-report.ts",
+      "lib/nios/intelligence/reliability-monitor.ts",
+      "lib/nios/intelligence/weekly-reliability-report.ts"
+    ]
+  },
+  {
+    "module": "intelligence/traffic-reconciler",
+    "total": 5,
+    "external": [
+      "tests/mission10-integrity.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/nios-intelligence.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission10-integrity.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/nios-intelligence.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts"
+    ]
+  },
+  {
+    "module": "intelligence/trend-engine",
+    "total": 3,
+    "external": [
+      "tests/mission13-trend-alerts.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission13-trend-alerts.test.ts",
+      "tests/mission17-production-observability.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts"
+    ]
+  },
+  {
+    "module": "intelligence/types",
+    "total": 60,
+    "external": [
+      "components/nios/AdSenseRecoveryClient.tsx",
+      "components/nios/AdSenseReportClient.tsx",
+      "components/nios/EditorialStrategyClient.tsx",
+      "components/nios/GoogleIntelligenceClient.tsx",
+      "components/nios/RecoveryQueueClient.tsx",
+      "components/nios/WeeklyClient.tsx",
+      "lib/contracts/index.ts",
+      "tests/ceo-agent-final.test.ts",
+      "tests/mission10-diagnostics.test.ts",
+      "tests/mission14-readiness.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/mission7-data-status.test.ts",
+      "tests/mission8-integration.test.ts",
+      "tests/nios-fase2.test.ts",
+      "tests/nios-fase25.test.ts",
+      "tests/nios-fase3.test.ts",
+      "tests/nios-intelligence.test.ts",
+      "tests/nios-operating-mode.test.ts",
+      "tests/nios-repair-engine.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/AdSenseRecoveryClient.tsx",
+      "components/nios/AdSenseReportClient.tsx",
+      "components/nios/EditorialStrategyClient.tsx",
+      "components/nios/GoogleIntelligenceClient.tsx",
+      "components/nios/RecoveryQueueClient.tsx",
+      "components/nios/WeeklyClient.tsx"
+    ],
+    "byTest": [
+      "tests/ceo-agent-final.test.ts",
+      "tests/mission10-diagnostics.test.ts",
+      "tests/mission14-readiness.test.ts",
+      "tests/mission17-production-observability.test.ts",
+      "tests/mission7-data-status.test.ts",
+      "tests/mission8-integration.test.ts",
+      "tests/nios-fase2.test.ts",
+      "tests/nios-fase25.test.ts",
+      "tests/nios-fase3.test.ts",
+      "tests/nios-intelligence.test.ts",
+      "tests/nios-operating-mode.test.ts",
+      "tests/nios-repair-engine.test.ts",
+      "tests/verification/integration-gate.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-decision-engine.ts",
+      "lib/nios/ceo-observatory.ts",
+      "lib/nios/command-center/intelligence-graph.ts",
+      "lib/nios/conflict-detector.ts",
+      "lib/nios/executive-center.ts",
+      "lib/nios/growth/engine.ts",
+      "lib/nios/growth/store.ts",
+      "lib/nios/intelligence/absurd-recommendation-guard.ts",
+      "lib/nios/intelligence/adsense-recovery-report.ts",
+      "lib/nios/intelligence/adsense-recovery.ts",
+      "lib/nios/intelligence/adsense-trust-check.ts",
+      "lib/nios/intelligence/category-intelligence.ts",
+      "lib/nios/intelligence/ceo-status.ts",
+      "lib/nios/intelligence/compliance.ts",
+      "lib/nios/intelligence/content-improvement.ts",
+      "lib/nios/intelligence/content-mix-intelligence.ts",
+      "lib/nios/intelligence/content-recovery.ts",
+      "lib/nios/intelligence/dashboard.ts",
+      "lib/nios/intelligence/data-merger.ts",
+      "lib/nios/intelligence/diagnostics.ts",
+      "lib/nios/intelligence/editor-ceo-report.ts",
+      "lib/nios/intelligence/editorial-rules.ts",
+      "lib/nios/intelligence/ga4-collector.ts",
+      "lib/nios/intelligence/google-feedback.ts",
+      "lib/nios/intelligence/google-trust.ts",
+      "lib/nios/intelligence/gsc-collector.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/meni-learning.ts",
+      "lib/nios/intelligence/opportunity-engine.ts",
+      "lib/nios/intelligence/orchestrator.ts",
+      "lib/nios/intelligence/readiness.ts",
+      "lib/nios/intelligence/social-conversion.ts",
+      "lib/nios/intelligence/store.ts",
+      "lib/nios/intelligence/traffic-reconciler.ts",
+      "lib/nios/intelligence/update-engine.ts",
+      "lib/nios/intelligence/weekly-report.ts",
+      "lib/nios/lifecycle/tracker.ts",
+      "lib/nios/nios-growth-radar.ts",
+      "lib/nios/operating-mode.ts",
+      "lib/nios/repair-engine.ts"
+    ]
+  },
+  {
+    "module": "intelligence/update-engine",
+    "total": 5,
+    "external": [
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/nios-fase3.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-fase3.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/editor-ceo-report.ts",
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "intelligence/weekly-reliability-report",
+    "total": 2,
+    "external": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/reliability-monitor.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive-center.ts"
+    ]
+  },
+  {
+    "module": "intelligence/weekly-report",
+    "total": 5,
+    "external": [
+      "app/admin/nios/weekly/page.tsx",
+      "app/api/admin/nios-intelligence/route.ts",
+      "tests/nios-fase2.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/admin/nios-intelligence/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/nios/weekly/page.tsx"
+    ],
+    "byTest": [
+      "tests/nios-fase2.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/intelligence/index.ts",
+      "lib/nios/intelligence/orchestrator.ts"
+    ]
+  },
+  {
+    "module": "knowledge-graph/index",
+    "total": 11,
+    "external": [
+      "components/nios/EntitiesClient.tsx",
+      "components/nios/EntitiesPageContent.tsx",
+      "components/nios/NiosV3Dashboard.tsx"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/EntitiesClient.tsx",
+      "components/nios/EntitiesPageContent.tsx",
+      "components/nios/NiosV3Dashboard.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/content-recycler/index.ts",
+      "lib/nios/daily-automation/index.ts",
+      "lib/nios/editorial-memory/index.ts",
+      "lib/nios/editorial-timeline/index.ts",
+      "lib/nios/entity-brain/index.ts",
+      "lib/nios/smart-links/index.ts",
+      "lib/nios/v3-report.ts",
+      "lib/nios/watcher/index.ts"
+    ]
+  },
+  {
+    "module": "learning-system/index",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/v4-report.ts"
+    ]
+  },
+  {
+    "module": "lifecycle/tracker",
+    "total": 5,
+    "external": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-executive.test.ts",
+      "tests/nios-v2-core.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/mission8-integration.test.ts",
+      "tests/nios-executive.test.ts",
+      "tests/nios-v2-core.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive/morning-brief.ts",
+      "lib/nios/revenue/adsense.ts"
+    ]
+  },
+  {
+    "module": "meni-forense-judge",
+    "total": 3,
+    "external": [
+      "tests/nios-meni-forense.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-meni-forense.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/conflict-detector.ts",
+      "lib/nios/operational-loop.ts"
+    ]
+  },
+  {
+    "module": "mission-center/index",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/v3-report.ts"
+    ]
+  },
+  {
+    "module": "mission-engine/index",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/morning-report/index.ts",
+      "lib/nios/v4-report.ts"
+    ]
+  },
+  {
+    "module": "morning-report/index",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/v4-report.ts"
+    ]
+  },
+  {
+    "module": "nios-growth-radar",
+    "total": 3,
+    "external": [
+      "scripts/nios-n4-real-test-fast.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "scripts/nios-n4-real-test-fast.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/action-engine.ts",
+      "lib/nios/nios-speaks.ts"
+    ]
+  },
+  {
+    "module": "nios-speaks",
+    "total": 3,
+    "external": [
+      "components/nios/NiosPanelPageContent.tsx",
+      "components/nios/NiosTeHabla.tsx",
+      "scripts/nios-n4-real-test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/NiosPanelPageContent.tsx",
+      "components/nios/NiosTeHabla.tsx"
+    ],
+    "byTest": [
+      "scripts/nios-n4-real-test.ts"
+    ],
+    "internalOnly": []
+  },
+  {
+    "module": "operating-mode",
+    "total": 2,
+    "external": [
+      "tests/nios-operating-mode.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-operating-mode.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/repair-engine.ts"
+    ]
+  },
+  {
+    "module": "operational-loop",
+    "total": 5,
+    "external": [
+      "lib/admin/centro-de-comando.ts",
+      "lib/departamento-central/summary.ts",
+      "lib/departamento-central/workers.ts",
+      "tests/nios-operational-loop.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-operational-loop.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-loop.ts"
+    ]
+  },
+  {
+    "module": "opportunity-radar",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/daily-editor.ts",
+      "lib/nios/executive-report.ts"
+    ]
+  },
+  {
+    "module": "opportunityHunter",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "reader-experience/index",
+    "total": 2,
+    "external": [
+      "tests/nios/reader-experience/reader-experience.adversarial.test.ts",
+      "tests/nios/reader-experience/reader-experience.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios/reader-experience/reader-experience.adversarial.test.ts",
+      "tests/nios/reader-experience/reader-experience.test.ts"
+    ],
+    "internalOnly": []
+  },
+  {
+    "module": "reader-experience/types",
+    "total": 3,
+    "external": [
+      "tests/nios/reader-experience/reader-experience.adversarial.test.ts",
+      "tests/nios/reader-experience/reader-experience.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios/reader-experience/reader-experience.adversarial.test.ts",
+      "tests/nios/reader-experience/reader-experience.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/reader-experience/index.ts"
+    ]
+  },
+  {
+    "module": "repair-engine",
+    "total": 10,
+    "external": [
+      "app/admin/nios/reparaciones/actions.ts",
+      "app/admin/nios/reparaciones/page.tsx",
+      "app/api/admin/nios/repair/route.ts",
+      "app/api/admin/nios-collect/route.ts",
+      "app/api/cron/nios-collect/route.ts",
+      "scripts/nios-ceo-r4-runner.ts",
+      "tests/nios-operational-loop.test.ts",
+      "tests/nios-repair-engine.test.ts"
+    ],
+    "byCron": [
+      "app/api/cron/nios-collect/route.ts"
+    ],
+    "byRoute": [
+      "app/api/admin/nios/repair/route.ts",
+      "app/api/admin/nios-collect/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/nios/reparaciones/actions.ts",
+      "app/admin/nios/reparaciones/page.tsx"
+    ],
+    "byTest": [
+      "scripts/nios-ceo-r4-runner.ts",
+      "tests/nios-operational-loop.test.ts",
+      "tests/nios-repair-engine.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/ceo-loop.ts",
+      "lib/nios/operational-loop.ts"
+    ]
+  },
+  {
+    "module": "revenue",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "revenue/adsense",
+    "total": 3,
+    "external": [
+      "tests/nios-executive.test.ts",
+      "tests/nios-revenue.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-executive.test.ts",
+      "tests/nios-revenue.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive/morning-brief.ts"
+    ]
+  },
+  {
+    "module": "revenue/sustainability",
+    "total": 3,
+    "external": [
+      "tests/nios-executive.test.ts",
+      "tests/nios-revenue.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios-executive.test.ts",
+      "tests/nios-revenue.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/executive/weekly-report.ts"
+    ]
+  },
+  {
+    "module": "seo",
+    "total": 1,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/index.ts"
+    ]
+  },
+  {
+    "module": "seo-cleanup",
+    "total": 5,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/daily-editor.ts",
+      "lib/nios/executive-report.ts",
+      "lib/nios/mission-center/index.ts",
+      "lib/nios/mission-engine/index.ts",
+      "lib/nios/watcher/index.ts"
+    ]
+  },
+  {
+    "module": "smart-links/index",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/copilot/index.ts",
+      "lib/nios/v3-report.ts"
+    ]
+  },
+  {
+    "module": "swiss-watch/adsense-readiness",
+    "total": 3,
+    "external": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/swiss-watch/board.ts",
+      "lib/nios/swiss-watch/index.ts"
+    ]
+  },
+  {
+    "module": "swiss-watch/board",
+    "total": 2,
+    "external": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/swiss-watch/index.ts"
+    ]
+  },
+  {
+    "module": "swiss-watch/experts",
+    "total": 3,
+    "external": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/swiss-watch/board.ts",
+      "lib/nios/swiss-watch/index.ts"
+    ]
+  },
+  {
+    "module": "swiss-watch/index",
+    "total": 2,
+    "external": [
+      "app/admin/command-center/page.tsx",
+      "app/api/nios/swiss-watch/route.ts"
+    ],
+    "byCron": [],
+    "byRoute": [
+      "app/api/nios/swiss-watch/route.ts"
+    ],
+    "byPanel": [
+      "app/admin/command-center/page.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": []
+  },
+  {
+    "module": "swiss-watch/probes",
+    "total": 3,
+    "external": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/swiss-watch/board.ts",
+      "lib/nios/swiss-watch/index.ts"
+    ]
+  },
+  {
+    "module": "swiss-watch/types",
+    "total": 7,
+    "external": [
+      "components/nios/SwissWatchBoard.tsx",
+      "tests/swiss-watch.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/SwissWatchBoard.tsx"
+    ],
+    "byTest": [
+      "tests/swiss-watch.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/swiss-watch/adsense-readiness.ts",
+      "lib/nios/swiss-watch/board.ts",
+      "lib/nios/swiss-watch/experts.ts",
+      "lib/nios/swiss-watch/index.ts",
+      "lib/nios/swiss-watch/probes.ts"
+    ]
+  },
+  {
+    "module": "types",
+    "total": 11,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/audience.ts",
+      "lib/nios/ceoReport.ts",
+      "lib/nios/competitors.ts",
+      "lib/nios/contentLifecycle.ts",
+      "lib/nios/distribution.ts",
+      "lib/nios/growth.ts",
+      "lib/nios/index.ts",
+      "lib/nios/opportunityHunter.ts",
+      "lib/nios/revenue.ts",
+      "lib/nios/seo.ts",
+      "lib/nios/utils.ts"
+    ]
+  },
+  {
+    "module": "utils",
+    "total": 9,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/audience.ts",
+      "lib/nios/competitors.ts",
+      "lib/nios/contentLifecycle.ts",
+      "lib/nios/distribution.ts",
+      "lib/nios/growth.ts",
+      "lib/nios/index.ts",
+      "lib/nios/opportunityHunter.ts",
+      "lib/nios/revenue.ts",
+      "lib/nios/seo.ts"
+    ]
+  },
+  {
+    "module": "v3-report",
+    "total": 2,
+    "external": [
+      "components/nios/NiosV3Dashboard.tsx"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/NiosV3Dashboard.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/daily-editor.ts"
+    ]
+  },
+  {
+    "module": "v4-report",
+    "total": 2,
+    "external": [
+      "components/nios/NiosV4Dashboard.tsx"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [
+      "components/nios/NiosV4Dashboard.tsx"
+    ],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/daily-editor.ts"
+    ]
+  },
+  {
+    "module": "validators/consts",
+    "total": 3,
+    "external": [
+      "tests/nios/validators/adversarial-helpers.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios/validators/adversarial-helpers.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/validators/index.ts",
+      "lib/nios/validators/text.ts"
+    ]
+  },
+  {
+    "module": "validators/index",
+    "total": 3,
+    "external": [
+      "tests/nios/validators/validators.adversarial.test.ts",
+      "tests/nios/validators/validators.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios/validators/validators.adversarial.test.ts",
+      "tests/nios/validators/validators.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/reader-experience/index.ts"
+    ]
+  },
+  {
+    "module": "validators/text",
+    "total": 2,
+    "external": [
+      "tests/nios/validators/validators.adversarial.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios/validators/validators.adversarial.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/validators/index.ts"
+    ]
+  },
+  {
+    "module": "validators/types",
+    "total": 4,
+    "external": [
+      "tests/nios/validators/validators.adversarial.test.ts"
+    ],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [
+      "tests/nios/validators/validators.adversarial.test.ts"
+    ],
+    "internalOnly": [
+      "lib/nios/reader-experience/index.ts",
+      "lib/nios/reader-experience/types.ts",
+      "lib/nios/validators/index.ts"
+    ]
+  },
+  {
+    "module": "watcher/index",
+    "total": 2,
+    "external": [],
+    "byCron": [],
+    "byRoute": [],
+    "byPanel": [],
+    "byTest": [],
+    "internalOnly": [
+      "lib/nios/morning-report/index.ts",
+      "lib/nios/v4-report.ts"
+    ]
+  }
+]

@@ -23,7 +23,7 @@ export type AlertSeverity = 'critical' | 'warning' | 'info';
 export interface NiosAlert {
   date: string;
   severity: AlertSeverity;
-  category: 'pipeline' | 'traffic' | 'performance' | 'health';
+  category: 'pipeline' | 'traffic' | 'performance' | 'health' | 'ops';
   message: string;
   metadata?: Record<string, unknown>;
   resolved: boolean;

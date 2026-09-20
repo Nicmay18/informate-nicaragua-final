@@ -1,0 +1,224 @@
+{
+  "noticias_con_meni": {
+    "conScoreMeni": 459,
+    "conCalificacion": 459,
+    "aprobados": 429,
+    "meniVersionDist60": {
+      "2.1.1-prod": 60
+    },
+    "sample": [
+      {
+        "slug": "investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense",
+        "score": 91,
+        "calif": "PUBLICABLE",
+        "aprobado": true,
+        "ts": "2026-09-14T21:05:12.338Z",
+        "ver": "2.1.1-prod"
+      },
+      {
+        "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+        "score": 92,
+        "calif": "PUBLICABLE",
+        "aprobado": true,
+        "ts": "2026-09-14T20:05:40.227Z",
+        "ver": "2.1.1-prod"
+      },
+      {
+        "slug": "nica-de-bonanza-muere-tras-ataque-con-arma-blanca-en-ee-uu",
+        "score": 91,
+        "calif": "PUBLICABLE",
+        "aprobado": true,
+        "ts": "2026-09-14T19:34:13.385Z",
+        "ver": "2.1.1-prod"
+      },
+      {
+        "slug": "mujer-muere-tras-ataque-de-su-conyuge-en-comunidad-de-matagalpa",
+        "score": 92,
+        "calif": "PUBLICABLE",
+        "aprobado": true,
+        "ts": "2026-09-14T18:51:25.943Z",
+        "ver": "2.1.1-prod"
+      },
+      {
+        "slug": "bluefields-desfila-bajo-la-lluvia-con-amor-por-nicaragua",
+        "score": 93,
+        "calif": "PUBLICABLE",
+        "aprobado": true,
+        "ts": "2026-09-14T17:40:54.008Z",
+        "ver": "2.1.1-prod"
+      },
+      {
+        "slug": "laguna-de-apoyo-cuanto-cuesta-disfrutar-este-paraiso-natural",
+        "score": 91,
+        "calif": "PUBLICABLE",
+        "aprobado": true,
+        "ts": "2026-09-13T21:38:18.371Z",
+        "ver": "2.1.1-prod"
+      },
+      {
+        "slug": "de-honduras-a-costa-rica-asi-recorrio-nicaragua-la-antorcha",
+        "score": 92,
+        "calif": "PUBLICABLE",
+        "aprobado": true,
+        "ts": "2026-09-13T17:01:29.325Z",
+        "ver": "2.1.1-prod"
+      },
+      {
+        "slug": "los-karnavaleros-de-jaguar-regresan-a-escenarios-tras-accidente",
+        "score": 91,
+        "calif": "PUBLICABLE",
+        "aprobado": true,
+        "ts": "2026-09-13T16:18:07.335Z",
+        "ver": "2.1.1-prod"
+      }
+    ]
+  },
+  "col_meni_daily_score": {
+    "total": 286,
+    "last": {
+      "field": "fecha",
+      "value": "2026-09-20T17:43:18.445Z"
+    }
+  },
+  "col_meni_learning_feedback": {
+    "total": 6,
+    "last": null
+  },
+  "col_meni_predictions": {
+    "total": 286,
+    "last": {
+      "field": "fecha",
+      "value": "2026-09-20T17:43:18.350Z"
+    }
+  },
+  "col_google_learning_patterns": {
+    "total": 11559,
+    "last": null
+  },
+  "col_article_lifecycles": {
+    "total": 175,
+    "last": null
+  },
+  "col_traffic_daily": {
+    "total": 0,
+    "last": null
+  },
+  "col_analytics_traffic": {
+    "total": 926,
+    "last": {
+      "field": "timestamp",
+      "value": {
+        "_seconds": 1783183010,
+        "_nanoseconds": 820000000
+      }
+    }
+  },
+  "col_seguimiento_cases": {
+    "total": 84,
+    "last": null
+  },
+  "col_seguimiento_updates": {
+    "total": 55,
+    "last": {
+      "field": "timestamp",
+      "value": "2026-09-20T17:43:18.877Z"
+    }
+  },
+  "col_distribuciones_pendientes": {
+    "total": 11,
+    "last": {
+      "field": "fecha",
+      "value": "2026-09-19T17:53:54.002Z"
+    }
+  },
+  "col_reportes_crecimiento": {
+    "total": 70,
+    "last": {
+      "field": "fecha",
+      "value": "2026-08-02T04:40:08.632Z"
+    }
+  },
+  "col_ia_cost_counters": {
+    "total": 1,
+    "last": null
+  },
+  "col_kb_entities": {
+    "total": 17,
+    "last": null
+  },
+  "col_views": {
+    "total": 117,
+    "last": {
+      "field": "createdAt",
+      "value": {
+        "_seconds": 1783145407,
+        "_nanoseconds": 156000000
+      }
+    }
+  },
+  "col_estadisticas": {
+    "total": 1,
+    "last": null
+  },
+  "nios_actions_detail": {
+    "byStatus": {
+      "PENDING": 104,
+      "APPROVED": 0,
+      "EXECUTED": 0,
+      "REJECTED": 0,
+      "FAILED": 5
+    },
+    "recent": [
+      {
+        "status": "PENDING",
+        "title": "Optimizar título de muere-harold-gutierrez-voz-historica-y-fundador-de",
+        "createdAt": "2026-09-20T13:47:50.001Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Recircular en Telegram: Motociclista muere tras ataque a balazos en Sé",
+        "createdAt": "2026-09-20T00:29:37.540Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Recircular en Telegram: INSS: ¿Qué familiares tienen cobertura por fal",
+        "createdAt": "2026-09-20T00:29:37.357Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Optimizar título de anular-recurso-policial-nicaragua-2026",
+        "createdAt": "2026-09-20T00:29:37.241Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Optimizar título de campo-de-girasoles-en-catarina-precios-horario-y-c",
+        "createdAt": "2026-09-20T00:29:37.117Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Optimizar título de antorcha-centroamericana-recorrera-nicaragua-del-1",
+        "createdAt": "2026-09-20T00:29:36.956Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Recircular en Telegram: Motociclista muere tras ataque a balazos en Sé",
+        "createdAt": "2026-09-19T11:58:54.548Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Recircular en Telegram: INSS: ¿Qué familiares tienen cobertura por fal",
+        "createdAt": "2026-09-19T11:58:54.411Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Optimizar título de anular-recurso-policial-nicaragua-2026",
+        "createdAt": "2026-09-19T11:58:54.286Z"
+      },
+      {
+        "status": "PENDING",
+        "title": "Optimizar título de campo-de-girasoles-en-catarina-precios-horario-y-c",
+        "createdAt": "2026-09-19T11:58:54.155Z"
+      }
+    ]
+  }
+}

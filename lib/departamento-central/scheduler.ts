@@ -6,7 +6,42 @@ import { writeHeartbeat } from './heartbeat';
 import { runWatchdog } from './watchdog';
 import type { DeptoJobType, DeptoPriority } from './types';
 
-const MAX_JOBS_PER_RUN = 5;
+const MAX_JOBS_PER_RUN = 15;
+const WATCHDOG_DRAIN_LIMIT = 10;
+
+/**
+ * Drena la cola ejecutando jobs pending/retry ya vencidos.
+ * Reutilizable por el scheduler y por el watchdog (segunda pasada diaria)
+ * para que los jobs encolados fuera de la ventana del scheduler no
+ * permanezcan pending hasta el día siguiente.
+ */
+export async function processJobQueue(maxJobs = MAX_JOBS_PER_RUN): Promise<{
+  processed: number;
+  completed: number;
+  failed: number;
+}> {
+  let processed = 0;
+  let completed = 0;
+  let failed = 0;
+
+  while (processed < maxJobs) {
+    const job = await claimNextJob();
+    if (!job) break;
+    await executeJob(job);
+    processed++;
+    if (job.status === 'completed') {
+      completed++;
+    } else {
+      failed++;
+    }
+  }
+
+  return { processed, completed, failed };
+}
+
+export function watchdogDrainLimit(): number {
+  return WATCHDOG_DRAIN_LIMIT;
+}
 
 function dedup(type: DeptoJobType, key: string, period = 'default'): string {
   return generateDedupKey(type, 'scheduler', key, period);
@@ -147,21 +182,7 @@ export async function runScheduler(): Promise<{
   const articles = await enqueueNewArticles();
   enqueued += articles;
 
-  let processed = 0;
-  let completed = 0;
-  let failed = 0;
-
-  while (processed < MAX_JOBS_PER_RUN) {
-    const job = await claimNextJob();
-    if (!job) break;
-    await executeJob(job);
-    processed++;
-    if (job.status === 'completed') {
-      completed++;
-    } else {
-      failed++;
-    }
-  }
+  const { processed, completed, failed } = await processJobQueue(MAX_JOBS_PER_RUN);
 
   await runWatchdog();
 
