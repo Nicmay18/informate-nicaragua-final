@@ -44,19 +44,33 @@ function preguntaAplicaATipo(pregunta: string, tipo: StoryType): boolean {
   return true;
 }
 
-function detectarRespuestasFaltantes(texto: string, preguntas: ReaderQuestionsDecision, tipo: StoryType): string[] {
-  const t = texto.toLowerCase();
+function detectarRespuestasFaltantes(contenidoHtml: string, texto: string, preguntas: ReaderQuestionsDecision, tipo: StoryType): string[] {
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const t = norm(texto);
+  // Estructura real del artículo: H2 en formato pregunta y listas de servicio
+  // también responden preguntas del lector (ej. "¿Qué llevar?" + <ul>).
+  const h2s = Array.from(contenidoHtml.matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/gi))
+    .map(m => norm(stripHtml(m[1])));
+  const tieneListas = /<(ul|ol)\b[^>]*>/i.test(contenidoHtml);
+  const h2Servicio = h2s.some(h => /(llevar|hacer|consejos?|recomendaciones?|disfrutar|actividades|visitar|preparar)/.test(h));
+  const h2Costo = h2s.some(h => /(cuanto|cuesta|costo|precio|tarifa|presupuesto|gasta)/.test(h));
+  const h2Acceso = h2s.some(h => /(donde|ubicad|llegar|acceder|distancia|direccion)/.test(h));
+
   const faltantes: string[] = [];
   for (const p of preguntas.preguntasObligatorias) {
     if (!preguntaAplicaATipo(p, tipo)) continue;
-    const palabrasClave = p.toLowerCase()
+    const pn = norm(p);
+    const palabrasClave = pn
       .replace(/[¿?]/g, '')
       .split(/\s+/)
       .filter(w => w.length > 4);
     const encontradas = palabrasClave.filter(w => t.includes(w)).length;
-    if (encontradas < Math.ceil(palabrasClave.length * 0.3)) {
-      faltantes.push(p);
-    }
+    if (encontradas >= Math.ceil(palabrasClave.length * 0.3)) continue;
+    // Equivalencia estructural: la pregunta se responde con lista/sección.
+    if (/(recomendaciones?|consejos?|practicas?|llevar|documentos?|requisitos?|que\s+hacer|preparar|visitante)/.test(pn) && (tieneListas || h2Servicio)) continue;
+    if (/(cuanto|cuesta|costo|precio|tarifa|presupuesto|pagar)/.test(pn) && h2Costo) continue;
+    if (/(donde|ubicad|llegar|acceder|distancia|direccion)/.test(pn) && h2Acceso) continue;
+    faltantes.push(p);
   }
   return faltantes;
 }
@@ -123,7 +137,7 @@ export function runStoryCompletenessEngine(
   const tipo = detectarTipoNoticia(texto);
 
   const respuestasFaltantes = readerQuestions
-    ? detectarRespuestasFaltantes(texto, readerQuestions, tipo)
+    ? detectarRespuestasFaltantes(input.contenido || '', texto, readerQuestions, tipo)
     : [];
   const contextoFaltante = detectarContextoFaltante(texto, tipo, input.perfil || input.categoria);
   const dudasPendientes = detectarDudasPendientes(texto);

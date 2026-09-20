@@ -77,8 +77,30 @@ function extraerEdadesPorPersona(texto: string): Map<string, Set<string>> {
   return map;
 }
 
+// Heurística multi-evento: notas que consolidan varios sucesos/lugares.
+// En ellas, los mismos patrones pueden pertenecer a entidades distintas y
+// las reglas de contradicción deben bajar de severidad para no bloquear
+// coberturas legítimas de varios casos.
+function esNotaMultiEvento(entidades: EntityMap, textoPlano: string): boolean {
+  const incidentes = (textoPlano.match(/\b(?:accidente|choque|colisi[oó]n|atropell\w*|volcadura|incidente|siniestro)\b/gi) || []).length;
+  return incidentes >= 3 || entidades.lugares.length >= 3;
+}
+
+// Si entre el desenlace mortal y la acción posterior aparece un nombre propio
+// nuevo, probablemente son personas distintas (falso positivo típico en notas
+// multi-caso: "Juan falleció... luego María fue trasladada").
+function posiblePersonaDistinta(span: string): boolean {
+  const delim = /\b(?:luego|posteriormente|despu[eé]s|m[aá]s\s+tarde|al\s+d[ií]a\s+siguiente|d[ií]as?\s+despu[eé]s)\b/i.exec(span)
+    || /\bel\s+\d{1,2}\s+de\s+[a-záéíóúñ]+\b/i.exec(span);
+  const accion = /\b(?:fue\s+trasladad\w*|fueron\s+trasladad\w*|trasladaron|ingresad\w*|hospitalizad\w*|atendid[oa]s?|intervenid[oa]s?)\b/i.exec(span);
+  if (!delim || !accion || accion.index <= delim.index) return false;
+  const entre = span.slice(delim.index + delim[0].length, accion.index);
+  return /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{3,}\b/.test(entre);
+}
+
 export function detectInternalContradictions(entidades: EntityMap, textoPlano: string): QualityGateIssue[] {
   const issues: QualityGateIssue[] = [];
+  const multiEvento = esNotaMultiEvento(entidades, textoPlano);
 
   const edadesPorPersona = extraerEdadesPorPersona(textoPlano);
   for (const [nombre, edades] of edadesPorPersona) {
@@ -86,8 +108,10 @@ export function detectInternalContradictions(entidades: EntityMap, textoPlano: s
       const lista = Array.from(edades).join(' / ');
       issues.push({
         categoria: 'contradiccion',
-        severidad: 'blocking',
-        mensaje: `La persona "${nombre}" aparece con edades distintas: ${lista}`,
+        severidad: multiEvento ? 'warning' : 'blocking',
+        mensaje: multiEvento
+          ? `La persona "${nombre}" aparece con edades distintas: ${lista}. Nota multi-evento: verificar si son personas distintas con el mismo nombre.`
+          : `La persona "${nombre}" aparece con edades distintas: ${lista}`,
         evidencia: lista,
         corregible: false,
       });
@@ -97,7 +121,7 @@ export function detectInternalContradictions(entidades: EntityMap, textoPlano: s
   if (entidades.horas.length > 2) {
     issues.push({
       categoria: 'contradiccion',
-      severidad: 'warning',
+      severidad: multiEvento ? 'info' : 'warning',
       mensaje: `Se mencionan varias horas distintas, verificar consistencia: ${entidades.horas.join(' / ')}`,
       evidencia: entidades.horas.join(', '),
       corregible: false,
@@ -131,12 +155,28 @@ export function detectCrossContradictions(
     entidadesGeneradas.cantidades.length > 0 &&
     entidadesFuente.cantidades.join('|') !== entidadesGeneradas.cantidades.join('|')
   ) {
-    const soloEnFuente = entidadesFuente.cantidades.filter((c) => !entidadesGeneradas.cantidades.includes(c));
-    if (soloEnFuente.length > 0) {
+    // Agregación válida: "3 heridos" + "2 heridos" en la fuente puede aparecer
+    // como "5 heridos" en la nota. Se comparan sumas por unidad, no literales.
+    const sumar = (lista: string[]) => {
+      const map = new Map<string, number>();
+      for (const c of lista) {
+        const m = c.match(/^(\d+)\s+(.+)$/);
+        if (m) map.set(m[2].toLowerCase(), (map.get(m[2].toLowerCase()) || 0) + parseInt(m[1], 10));
+      }
+      return map;
+    };
+    const sumaFuente = sumar(entidadesFuente.cantidades);
+    const sumaGenerada = sumar(entidadesGeneradas.cantidades);
+    const discrepantes: string[] = [];
+    for (const [unidad, totalFuente] of sumaFuente) {
+      const totalGen = sumaGenerada.get(unidad) || 0;
+      if (totalGen !== totalFuente) discrepantes.push(`${unidad}: fuente=${totalFuente}, nota=${totalGen}`);
+    }
+    if (discrepantes.length > 0) {
       issues.push({
         categoria: 'contradiccion',
         severidad: 'warning',
-        mensaje: `Cantidades mencionadas en la fuente no coinciden con el artículo generado: ${soloEnFuente.join(', ')}`,
+        mensaje: `Cantidades de la fuente no coinciden con la nota: ${discrepantes.join(', ')}`,
         corregible: false,
       });
     }
@@ -166,10 +206,13 @@ export function detectChronologyIssues(textoPlano: string): QualityGateIssue[] {
       monthDeath === monthTransfer
     ) {
       if (dayTransfer > dayDeath) {
+        const otraPersona = posiblePersonaDistinta(match[0]);
         issues.push({
           categoria: 'cronologia',
-          severidad: 'blocking',
-          mensaje: `Cronología imposible: se reporta el fallecimiento el ${dayDeath} de ${monthDeath} y la atención médica el ${dayTransfer} de ${monthTransfer}.`,
+          severidad: otraPersona ? 'warning' : 'blocking',
+          mensaje: otraPersona
+            ? `Posible cronología entre personas distintas: fallecimiento el ${dayDeath} de ${monthDeath} y atención médica el ${dayTransfer} de ${monthTransfer}. Verificar que sean el mismo caso.`
+            : `Cronología imposible: se reporta el fallecimiento el ${dayDeath} de ${monthDeath} y la atención médica el ${dayTransfer} de ${monthTransfer}.`,
           corregible: false,
         });
         break;
@@ -179,10 +222,13 @@ export function detectChronologyIssues(textoPlano: string): QualityGateIssue[] {
     }
 
     // Contradicción con conector temporal pero sin fechas explícitas.
+    const otraPersona = posiblePersonaDistinta(match[0]);
     issues.push({
       categoria: 'cronologia',
-      severidad: 'blocking',
-      mensaje: 'Cronología incoherente: se describe un desenlace mortal y luego una acción posterior con vida.',
+      severidad: otraPersona ? 'warning' : 'blocking',
+      mensaje: otraPersona
+        ? 'Posible cronología entre personas distintas: un desenlace mortal seguido de atención médica puede referirse a otro caso. Verificar.'
+        : 'Cronología incoherente: se describe un desenlace mortal y luego una acción posterior con vida.',
       corregible: false,
     });
     break;

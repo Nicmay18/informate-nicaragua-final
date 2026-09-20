@@ -167,11 +167,30 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     !/\d/.test(p)
   );
 
-  const tieneMarcaPropia = /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano);
-  const tieneVerificacionPropia = /informaci[oó]n\s+verificada(?:\s+por\s+Nicaragua\s+Informate)?|confirmado\s+por\s+este\s+medio|en\s+el\s+lugar\s+del\s+hecho|equipo\s+de\s+Nicaragua\s+Informate|report[oó]\s+desde|verificaci[oó]n\s+propia|cobertura\s+propia|testigos\s+identificados|fotograf[íi]as\s+propias|datos\s+obtenidos\s+por\s+este\s+medio|verific[oó]|constat[oó]|consult[oó]/i.test(textoPlano);
+  // Aporte propio = señales estructurales de trabajo editorial real, no
+  // frases de autoafirmación ("este medio", "según pudo constatar").
+  // Trabajo de campo verificable: presencia en el lugar, testigos, fotos propias.
+  const tieneTrabajoCampo = /en\s+el\s+lugar\s+del\s+hecho|testigos?\s+identificados?|fotograf[íi]as\s+propias|datos\s+obtenidos\s+por|report[oó]\s+desde|entrevist\w+\s+(?:a|con)\s+/i.test(textoPlano);
+  // Estructura editorial propia: secciones, listas de servicio, múltiples
+  // fuentes/lugares y densidad de datos verificables.
+  const h2Total = (contenidoStr.match(/<h2[^>]*>/gi) || []).length;
+  const h2Pregunta = (contenidoStr.match(/<h2[^>]*>[^<]*[¿?]/gi) || []).length;
+  const tieneListasServicio = /<(ul|ol)\b[^>]*>/i.test(contenidoStr);
+  const lugaresDetectados = (textoPlano.match(LUGARES_REGEX) || []).length;
+  const datosVerificablesCount = (textoPlano.match(CIFRAS_REGEX) || []).length + (textoPlano.match(FECHAS_REGEX) || []).length;
+  const senalesEstructurales = [
+    uniqueFuentes.length >= 2,
+    lugaresDetectados >= 2,
+    h2Total >= 2,
+    h2Pregunta >= 1,
+    datosVerificablesCount >= 3,
+    tieneListasServicio,
+  ].filter(Boolean).length;
+  const tieneEstructuraPropia = senalesEstructurales >= 2;
+  const tieneAportePropio = tieneTrabajoCampo || tieneEstructuraPropia;
 
   const valorEditorial: ValorEditorialEvidence = {
-    tieneFuentePropia: tieneMarcaPropia || tieneVerificacionPropia || /Nicaragua\s+Informate|este\s+medio|nuestra\s+redacci[oó]n|este\s+portal|seg[uú]n\s+pudo\s+constatar/i.test(textoPlano) || ((textoPlano.match(LUGARES_REGEX) || []).length >= 3 && palabraCount >= 400 && uniqueFuentes.length >= 3) || (/\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano) && /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano)),
+    tieneFuentePropia: tieneTrabajoCampo || uniqueFuentes.length >= 2 || tieneEstructuraPropia,
     tieneCitaEspecifica: /\b(?:seg[uú]n|indic[oó]|manifest[oó]|se[nñ]al[oó]|inform[oó]|dijo|afirm[oó]|anunció|confirm[oó]|explic[oó]|precis[oó]|destac[oó]|subray[oó]|agreg[oó]|expres[oó]|reiter[oó]|puntualiz[oó]|sostuvo|asegur[oó])\b/i.test(textoPlano),
     tieneAtribucionVaga: tieneAtribucionesFalsas,
     nombresPropiosCount: nombresPropios.length,
@@ -267,21 +286,18 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   // Calibración V4.1: originalidad no es solo exclusiva.
   // Seleccionar, organizar, contextualizar y relacionar hechos también es aporte editorial.
 
-  // consolidado en tieneVerificacionPropia
-  const tieneCoberturaEditorial = (textoPlano.match(LUGARES_REGEX) || []).length >= 2 && palabraCount >= 250 && uniqueFuentes.length >= 2;
-  const tieneContextualizacion = /\b(?:contexto|antecedentes|marco|m[aá]s\s+amplio|relaci[oó]n\s+entre|hilo\s+conductor|en\s+conjunto|panorama|perspectiva)\b/i.test(textoPlano);
-  const tieneOrganizacion = /\b(?:recopilaci[oó]n|cobertura|resumen|s[ií]ntesis|recuento|d[ií]a\s+de|durante\s+el\s+d[ií]a|en\s+lo\s+que\s+va)\b/i.test(textoPlano);
-
   const originality: OriginalityEvidence = {
-    tieneAportePropio: tieneMarcaPropia || tieneVerificacionPropia || tieneCoberturaEditorial || (tieneContextualizacion && tieneOrganizacion),
+    tieneAportePropio,
     aportePropioItems: [
-      ...(tieneMarcaPropia ? ['marca propia'] : []),
-      ...(tieneVerificacionPropia ? ['verificación periodística propia'] : []),
-      ...(tieneCoberturaEditorial ? ['cobertura editorial múltiple'] : []),
-      ...(tieneContextualizacion ? ['contextualización'] : []),
-      ...(tieneOrganizacion ? ['organización editorial'] : []),
+      ...(tieneTrabajoCampo ? ['trabajo de campo / verificación en sitio'] : []),
+      ...(uniqueFuentes.length >= 2 ? [`${uniqueFuentes.length} fuentes identificadas`] : []),
+      ...(lugaresDetectados >= 2 ? [`${lugaresDetectados} lugares cubiertos`] : []),
+      ...(h2Total >= 2 ? [`${h2Total} secciones organizadas`] : []),
+      ...(h2Pregunta >= 1 ? [`${h2Pregunta} secciones en formato pregunta`] : []),
+      ...(datosVerificablesCount >= 3 ? [`${datosVerificablesCount} datos verificables (cifras/fechas)`] : []),
+      ...(tieneListasServicio ? ['listas de servicio al lector'] : []),
     ],
-    tieneReporteoPropio: tieneVerificacionPropia,
+    tieneReporteoPropio: tieneTrabajoCampo,
     esReformulacion: palabraCount < 100 && !uniqueFuentes.length,
   };
 

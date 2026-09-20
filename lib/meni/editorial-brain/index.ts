@@ -48,13 +48,19 @@ type HumanEditorCheck = {
 function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
   const title = (input.titulo || '').trim();
   const body = (input.contenido || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  const firstParagraph = (input.contenido || '')
+  // El lead periodístico en NI es la bajada (resumen) + primer párrafo real del
+  // cuerpo. Los encabezados <h1>-<h6> no son párrafos: se eliminan antes de
+  // partir para que un H2 inicial ("¿Dónde está X?") no se evalúe como lead.
+  const contenidoSinEncabezados = (input.contenido || '')
+    .replace(/<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/gi, '\n\n');
+  const firstParagraph = contenidoSinEncabezados
     .replace(/<[^>]+>/g, ' ')
     .split(/\n\s*\n|\r\n\r\n/)
     .map(p => p.replace(/\s+/g, ' ').trim())
     .find(Boolean) || body.slice(0, 450);
+  const leadText = [input.resumen, firstParagraph].filter(Boolean).join(' ');
 
-  const lowerLead = firstParagraph.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const lowerLead = leadText.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const hasWhat = /\b(murio|fallecio|resulto|resultaron|dejo|causo|ocurrio|sucedio|reporto|informo|anuncio|aprobo|detuvo|capturo|choco|colisiono|atropello|investiga|investigan|denuncio|presento|inicio|comenzo|gano|perdio|llego|regreso|fue encontrado|fue hallado|se registro|se produjo|esta ubicada|esta ubicado|se encuentra|se localiza|es uno de|es una de|guia|visitar|visita|visitando|conocer|descubrir|llegar|recorrer|recorrido|destino|destinos|playa|turismo|turistico|ofrece|ofrecen|cuenta con|incluye|incluyen|permite|permiten|alojamiento|hospedaje|transporte|costo|costos|precio|precios|actividad|actividades|disfrutar|nadar|surf|snorkel|parque|museo|restaurante|festival|feria|celebracion|ruta|sendero|cascada|volcan|laguna|reserva|mercado|artesania|gastronomia|camping|excursion|tour|paseo|horario|tarifa|entrada|boletos|servicio|servicios)\b/i.test(lowerLead);
   const hasWhere = /\b(en|desde|hacia|sobre|entre|cerca de|frente a|a la altura de|km\.?|kilometro|managua|nicaragua|municipio|barrio|comarca|comunidad|carretera|avenida|calle|departamento)\b/i.test(lowerLead);
   const hasWhen = /\b(hoy|ayer|anoche|esta manana|este martes|este miercoles|este jueves|este viernes|este sabado|este domingo|este lunes|martes|miercoles|jueves|viernes|sabado|domingo|lunes|enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|20\d{2}|temporada|fin de semana|feriado|vacaciones|verano|invierno|semana santa|navidad|ano nuevo|este ano|este mes|proxima semana|proximo mes|\d{1,2} de [a-z]+|\d{1,2}\/\d{1,2}\/\d{2,4}|\d{1,2}:\d{2}|madrugada|manana|tarde|noche|horas?)\b/i.test(lowerLead);
@@ -83,10 +89,10 @@ function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
     {
       id: 'lead_5w',
       ok: leadOk,
-      critical: true,
+      critical: false,
       message: leadOk
         ? 'CHECK LEAD 5W: OK (qué/dónde/cuándo presentes en el lead).'
-        : 'CHECK LEAD 5W: FALLA CRÍTICA — el lead no deja claros qué, dónde y cuándo. Mejorar antes de publicar.',
+        : 'CHECK LEAD 5W: MEJORAR — el lead podría dejar más claros qué, dónde y cuándo.',
     },
     {
       id: 'title_length',
@@ -208,7 +214,11 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // añaden una barrera editorial explícita antes del veredicto.
   const humanChecks = runHumanEditorChecks(input);
   const humanCriticalIssues = humanChecks.filter(c => c.critical && !c.ok);
-  const humanCheckActions = humanChecks.filter(c => !c.ok).map(c => c.message);
+  // Checks que sí pueden cambiar el veredicto a 'mejorar'. lead_5w NO está aquí:
+  // es solo un aviso editorial, nunca bloquea ni baja el veredicto.
+  const humanCheckActions = humanChecks.filter(c => !c.ok && c.id !== 'lead_5w').map(c => c.message);
+  // Avisos informativos (lead_5w): visibles en acciones/queFalta, sin efecto en veredicto.
+  const humanCheckNotices = humanChecks.filter(c => !c.ok && c.id === 'lead_5w').map(c => c.message);
 
   // Recomendación editorial — un lead 5W roto nunca publica.
   const recomendacionesCount =
@@ -319,9 +329,11 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     : [];
 
   const acciones = humanCheckActions.length > 0
-    ? [...humanCheckActions, ...accionesBase]
+    ? [...humanCheckActions, ...humanCheckNotices, ...accionesBase]
     : accionesBase.length > 0
-    ? accionesBase
+    ? [...humanCheckNotices, ...accionesBase]
+    : humanCheckNotices.length > 0
+    ? humanCheckNotices
     : ['Lista para publicar'];
 
   const readerLearning = computarReaderLearning(

@@ -369,8 +369,22 @@ export function runReaderJourney(input: ReaderJourneyInput): ReaderJourneyResult
   const queEntendera = journey.queEntendera;
   const queRecordara = journey.queRecordara;
 
+  // Filtrar la brecha contra lo que el artículo realmente cubre: si el tema ya
+  // aparece en el texto o en un H2 (las guías NI usan H2-pregunta), no es brecha.
+  const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const textoNorm = norm(textoPlano);
+  const h2s = Array.from((input.contenido || '').matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/gi))
+    .map(m => norm(stripHtml(m[1])));
+  const cubiertoPorArticulo = (item: string): boolean => {
+    const palabras = norm(item).replace(/[¿?]/g, '').split(/\s+/).filter(w => w.length > 4);
+    if (palabras.length === 0) return false;
+    const enTexto = palabras.filter(w => textoNorm.includes(w)).length;
+    const enH2 = palabras.filter(w => h2s.some(h => h.includes(w))).length;
+    return (enTexto + enH2) >= Math.ceil(palabras.length * 0.3);
+  };
   const brechaDeConocimiento = queNecesitaSaber.filter(
-    (n) => !queSabe.some((s) => n.toLowerCase().includes(s.toLowerCase().split(' ')[0])),
+    (n) => !queSabe.some((s) => n.toLowerCase().includes(s.toLowerCase().split(' ')[0]))
+      && !cubiertoPorArticulo(n),
   );
 
   const score = computeScore(queSabe, queNecesitaSaber, queEntendera, queRecordara);

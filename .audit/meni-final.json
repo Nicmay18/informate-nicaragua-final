@@ -1,0 +1,443 @@
+{
+  "marsella": {
+    "titulo": "Playa Marsella: qué hacer, cómo llegar y cuánto cuesta",
+    "scoreFinal": 94,
+    "estadoFinal": "APROBADO",
+    "aprobado": true,
+    "calificacion": "PUBLICABLE",
+    "score_status": "VALID",
+    "riesgoEditorial": "BAJO",
+    "confianza": 94,
+    "publicar": "SI",
+    "motivoPrincipal": "Esta nota está lista para publicar. Tiene valor noticioso, aporta conocimiento nuevo y se diferencia de la competencia.",
+    "recomendacionEditorial": "publicar",
+    "qualityGateIssues": [],
+    "recomendaciones": [],
+    "diagnostico": "Esta nota está lista para publicar. Tiene valor noticioso, aporta conocimiento nuevo y se diferencia de la competencia.",
+    "forenseScore": 100,
+    "contextScore": {
+      "antecedentes": {
+        "score": 20,
+        "encontrado": [
+          "desde",
+          "hasta",
+          "frente a"
+        ],
+        "faltante": [],
+        "maximo": 20
+      },
+      "marco_legal": {
+        "score": 0,
+        "encontrado": [],
+        "faltante": [
+          "No se detectó marco_legal"
+        ],
+        "maximo": 20
+      },
+      "datos_verificables": {
+        "score": 20,
+        "encontrado": [
+          "segun",
+          "según",
+          "numero de",
+          "número de",
+          "cantidad de",
+          "mas de",
+          "más de",
+          "visitantes",
+          "horarios",
+          "horario",
+          "precios",
+          "precio"
+        ],
+        "faltante": [],
+        "maximo": 20
+      },
+      "contexto_temporal": {
+        "score": 10,
+        "encontrado": [
+          "este",
+          "a las",
+          "desde",
+          "hasta",
+          "durante"
+        ],
+        "faltante": [],
+        "maximo": 10
+      },
+      "contexto_geografico": {
+        "score": 10,
+        "encontrado": [
+          "municipio",
+          "departamento",
+          "carretera",
+          "lugar",
+          "zona",
+          "sector",
+          "municipio de",
+          "departamento de",
+          "managua"
+        ],
+        "faltante": [],
+        "maximo": 10
+      },
+      "instituciones": {
+        "score": 0,
+        "encontrado": [],
+        "faltante": [
+          "No se detectó instituciones"
+        ],
+        "maximo": 15
+      },
+      "impacto_social": {
+        "score": 15,
+        "encontrado": [
+          "familia"
+        ],
+        "faltante": [],
+        "maximo": 15
+      },
+      "fuentes": {
+        "score": 20,
+        "encontrado": [
+          "fuentes",
+          "según",
+          "segun"
+        ],
+        "faltante": [],
+        "maximo": 20
+      }
+    },
+    "autoCorrected": false
+  },
+  "accidentes-varios": {
+    "titulo": "Carreteras del país dejan un fin de semana con varios accidentes",
+    "scoreFinal": 92,
+    "estadoFinal": "APROBADO",
+    "aprobado": true,
+    "calificacion": "PUBLICABLE",
+    "score_status": "VALID",
+    "riesgoEditorial": "BAJO",
+    "confianza": 92,
+    "publicar": "SI",
+    "motivoPrincipal": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 1 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+    "recomendacionEditorial": "publicar",
+    "qualityGateIssues": [],
+    "recomendaciones": [],
+    "diagnostico": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 1 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+    "forenseScore": 100,
+    "contextScore": {
+      "antecedentes": {
+        "score": 20,
+        "encontrado": [
+          "registrados en",
+          "desde",
+          "hasta"
+        ],
+        "faltante": [],
+        "maximo": 20
+      },
+      "marco_legal": {
+        "score": 0,
+        "encontrado": [],
+        "faltante": [
+          "No se detectó marco_legal"
+        ],
+        "maximo": 20
+      },
+      "datos_verificables": {
+        "score": 20,
+        "encontrado": [
+          "segun",
+          "según",
+          "reporto",
+          "reportó",
+          "años",
+          "numero de",
+          "número de",
+          "menos de"
+        ],
+        "faltante": [],
+        "maximo": 20
+      },
+      "contexto_temporal": {
+        "score": 10,
+        "encontrado": [
+          "horas",
+          "desde",
+          "hasta",
+          "durante"
+        ],
+        "faltante": [],
+        "maximo": 10
+      },
+      "contexto_geografico": {
+        "score": 10,
+        "encontrado": [
+          "municipio",
+          "barrio",
+          "comunidad",
+          "carretera",
+          "lugar",
+          "managua",
+          "granada",
+          "matagalpa",
+          "san jose"
+        ],
+        "faltante": [],
+        "maximo": 10
+      },
+      "instituciones": {
+        "score": 0,
+        "encontrado": [],
+        "faltante": [
+          "No se detectó instituciones"
+        ],
+        "maximo": 15
+      },
+      "impacto_social": {
+        "score": 15,
+        "encontrado": [
+          "impacto",
+          "comunidad",
+          "consecuencias",
+          "muerte"
+        ],
+        "faltante": [],
+        "maximo": 15
+      },
+      "fuentes": {
+        "score": 20,
+        "encontrado": [
+          "según",
+          "segun"
+        ],
+        "faltante": [],
+        "maximo": 20
+      }
+    },
+    "autoCorrected": false
+  },
+  "cuatro-obreros": {
+    "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
+    "scoreFinal": 91,
+    "estadoFinal": "APROBADO",
+    "aprobado": true,
+    "calificacion": "PUBLICABLE",
+    "score_status": "VALID",
+    "riesgoEditorial": "BAJO",
+    "confianza": 91,
+    "publicar": "SI",
+    "motivoPrincipal": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+    "recomendacionEditorial": "publicar",
+    "qualityGateIssues": [],
+    "recomendaciones": [],
+    "diagnostico": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+    "forenseScore": 100,
+    "contextScore": {
+      "antecedentes": {
+        "score": 20,
+        "encontrado": [
+          "registrados en",
+          "desde",
+          "hasta"
+        ],
+        "faltante": [],
+        "maximo": 20
+      },
+      "marco_legal": {
+        "score": 0,
+        "encontrado": [],
+        "faltante": [
+          "No se detectó marco_legal"
+        ],
+        "maximo": 20
+      },
+      "datos_verificables": {
+        "score": 20,
+        "encontrado": [
+          "segun",
+          "según",
+          "de acuerdo con",
+          "años",
+          "numero de",
+          "número de",
+          "menos de"
+        ],
+        "faltante": [],
+        "maximo": 20
+      },
+      "contexto_temporal": {
+        "score": 10,
+        "encontrado": [
+          "horas",
+          "desde",
+          "hasta"
+        ],
+        "faltante": [],
+        "maximo": 10
+      },
+      "contexto_geografico": {
+        "score": 10,
+        "encontrado": [
+          "municipio",
+          "departamento",
+          "barrio",
+          "sector",
+          "municipio de",
+          "departamento de",
+          "managua",
+          "matagalpa"
+        ],
+        "faltante": [],
+        "maximo": 10
+      },
+      "instituciones": {
+        "score": 9,
+        "encontrado": [
+          "ministerio"
+        ],
+        "faltante": [
+          "instituciones presente pero insuficiente"
+        ],
+        "maximo": 15
+      },
+      "impacto_social": {
+        "score": 15,
+        "encontrado": [
+          "familiares",
+          "afectados",
+          "muerte"
+        ],
+        "faltante": [],
+        "maximo": 15
+      },
+      "fuentes": {
+        "score": 20,
+        "encontrado": [
+          "versiones preliminares",
+          "señalaron",
+          "información preliminar",
+          "según",
+          "segun",
+          "de acuerdo con"
+        ],
+        "faltante": [],
+        "maximo": 20
+      }
+    },
+    "autoCorrected": false
+  },
+  "seis-accidentes": {
+    "titulo": "Motos, alcohol y madrugada: 6 accidentes en Nicaragua",
+    "scoreFinal": 93,
+    "estadoFinal": "APROBADO",
+    "aprobado": true,
+    "calificacion": "PUBLICABLE",
+    "score_status": "VALID",
+    "riesgoEditorial": "MEDIO",
+    "confianza": 83,
+    "publicar": "MEJORAR",
+    "motivoPrincipal": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 1 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+    "recomendacionEditorial": "mejorar",
+    "qualityGateIssues": [],
+    "recomendaciones": [],
+    "diagnostico": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 1 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+    "forenseScore": 100,
+    "contextScore": {
+      "antecedentes": {
+        "score": 20,
+        "encontrado": [
+          "registrados en",
+          "comparación",
+          "comparacion"
+        ],
+        "faltante": [],
+        "maximo": 20
+      },
+      "marco_legal": {
+        "score": 12,
+        "encontrado": [
+          "regulación"
+        ],
+        "faltante": [
+          "marco_legal presente pero insuficiente"
+        ],
+        "maximo": 20
+      },
+      "datos_verificables": {
+        "score": 20,
+        "encontrado": [
+          "segun",
+          "según",
+          "de acuerdo con",
+          "años",
+          "mas de",
+          "más de",
+          "horarios"
+        ],
+        "faltante": [],
+        "maximo": 20
+      },
+      "contexto_temporal": {
+        "score": 10,
+        "encontrado": [
+          "este",
+          "a las",
+          "durante"
+        ],
+        "faltante": [],
+        "maximo": 10
+      },
+      "contexto_geografico": {
+        "score": 10,
+        "encontrado": [
+          "comunidad",
+          "carretera",
+          "sector",
+          "managua",
+          "leon"
+        ],
+        "faltante": [],
+        "maximo": 10
+      },
+      "instituciones": {
+        "score": 15,
+        "encontrado": [
+          "policia nacional",
+          "policía nacional",
+          "autoridades"
+        ],
+        "faltante": [],
+        "maximo": 15
+      },
+      "impacto_social": {
+        "score": 15,
+        "encontrado": [
+          "impacto",
+          "comunidad",
+          "familias",
+          "afectados",
+          "consecuencias"
+        ],
+        "faltante": [],
+        "maximo": 15
+      },
+      "fuentes": {
+        "score": 20,
+        "encontrado": [
+          "indicó",
+          "información preliminar",
+          "coinciden en que",
+          "especialistas",
+          "según",
+          "segun",
+          "de acuerdo con"
+        ],
+        "faltante": [],
+        "maximo": 20
+      }
+    },
+    "autoCorrected": false
+  }
+}

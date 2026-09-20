@@ -239,7 +239,15 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     && !tierQualityGateBloqueado
     && !adnTranscripcionBloquear;
 
-  const calificacion = scoreIsValid ? scoreToGrade(scoreFinal!) : 'ERROR DE EVALUACIÓN';
+  // Una sola verdad: si hay un bloqueo activo, la calificación no puede decir
+  // PUBLICABLE/ORO aunque el score supere el umbral. Se anota el motivo.
+  const motivoBloqueoPanel = editorialDecision.motivoBloqueo
+    || (tierQualityGateBloqueado ? tierBlockingIssues[0]?.mensaje : null)
+    || (adnTranscripcionBloquear ? `Transcripción supera el máximo del tier (${thresholds.maxTranscripcion}%)` : null);
+  const calificacionBase = scoreIsValid ? scoreToGrade(scoreFinal!) : 'ERROR DE EVALUACIÓN';
+  const calificacion = !aprobadoFinal && scoreIsValid && scoreFinal! >= MIN_APPROVED_SCORE
+    ? `${calificacionBase} — BLOQUEADO${motivoBloqueoPanel ? `: ${motivoBloqueoPanel}` : ''}`
+    : calificacionBase;
   const prioridad = computePriority(evaluacion.veredicto);
   const diagnostico = scoreIsValid ? editorialDecision.mensajeEditor : 'MENI no pudo calcular el score correctamente.';
 
