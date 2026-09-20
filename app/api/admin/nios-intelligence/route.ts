@@ -6,6 +6,15 @@ import { logger } from '@/lib/logger';
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
+const NO_STORE_HEADERS = { 'Cache-Control': 'no-store, must-revalidate' } as const;
+
+function respond(body: unknown, init?: ResponseInit) {
+  return NextResponse.json(body, {
+    ...init,
+    headers: { ...NO_STORE_HEADERS, ...(init?.headers ?? {}) },
+  });
+}
+
 function isAuthorized(request: NextRequest): boolean {
   return verifyAdminOrCleanupToken(request.headers.get('x-admin-token') || request.headers.get('x-admin-key'));
 }
@@ -32,7 +41,7 @@ function isAuthorized(request: NextRequest): boolean {
  */
 export async function GET(request: NextRequest) {
   if (!isAuthorized(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return respond({ error: 'No autorizado' }, { status: 401 });
   }
 
   try {
@@ -44,7 +53,7 @@ export async function GET(request: NextRequest) {
       const { getHistoricalSnapshots } = await import('@/lib/nios/intelligence/store');
       const days = parseInt(searchParams.get('days') || '30', 10);
       const snapshots = await getHistoricalSnapshots(db, days);
-      return NextResponse.json({
+      return respond({
         success: true,
         count: snapshots.length,
         snapshots: snapshots.map(s => ({
@@ -72,14 +81,14 @@ export async function GET(request: NextRequest) {
       const { buildIntelligenceGraph } = await import('@/lib/nios/command-center/intelligence-graph');
       const articleLimit = parseInt(searchParams.get('limit') || '50', 10);
       const graph = await buildIntelligenceGraph({ articleLimit });
-      return NextResponse.json({ success: true, date: graph.collectedAt, graph });
+      return respond({ success: true, date: graph.collectedAt, graph });
     }
 
     const { getLatestSnapshot } = await import('@/lib/nios/intelligence/store');
     const latest = await getLatestSnapshot(db);
 
     if (!latest) {
-      return NextResponse.json({
+      return respond({
         success: true,
         message: 'No hay snapshots disponibles. Ejecuta POST /api/admin/nios-collect primero.',
         data: null,
@@ -87,7 +96,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'compliance') {
-      return NextResponse.json({
+      return respond({
         success: true,
         date: latest.date,
         compliance: latest.compliance,
@@ -95,7 +104,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (action === 'readiness') {
-      return NextResponse.json({
+      return respond({
         success: true,
         date: latest.date,
         readiness: latest.readiness,
@@ -107,7 +116,7 @@ export async function GET(request: NextRequest) {
       const trust = latest.articlesFused
         ? generateGoogleTrustReport(latest.articlesFused)
         : null;
-      return NextResponse.json({
+      return respond({
         success: true,
         date: latest.date,
         trust,
@@ -125,7 +134,7 @@ export async function GET(request: NextRequest) {
       const recovery = trust && latest.articlesFused
         ? generateAdSenseRecoveryReport(latest.articlesFused, trust)
         : null;
-      return NextResponse.json({
+      return respond({
         success: true,
         date: latest.date,
         recovery,
@@ -143,7 +152,7 @@ export async function GET(request: NextRequest) {
       const weekly = trust && latest.articlesFused && latest.gsc
         ? generateWeeklyReport(latest.articlesFused, trust, latest.gsc)
         : null;
-      return NextResponse.json({
+      return respond({
         success: true,
         date: latest.date,
         weekly,
@@ -154,7 +163,7 @@ export async function GET(request: NextRequest) {
       const { getLearningPatterns, summarizeLearningPatterns } = await import('@/lib/nios/intelligence/google-feedback');
       const patterns = await getLearningPatterns(db);
       const summary = summarizeLearningPatterns(patterns);
-      return NextResponse.json({
+      return respond({
         success: true,
         date: latest.date,
         summary,
@@ -177,7 +186,7 @@ export async function GET(request: NextRequest) {
       const contentRecovery = latest.articlesFused && trust
         ? generateContentRecoveryReport(latest.articlesFused, trustMap)
         : null;
-      return NextResponse.json({
+      return respond({
         success: true,
         date: latest.date,
         recovery: contentRecovery,
@@ -192,7 +201,7 @@ export async function GET(request: NextRequest) {
             latest.ga4 ? { totalUsers: latest.ga4.totalUsers, averageEngagementTimeSec: latest.ga4.averageEngagementTimeSec, devices: latest.ga4.devices } : null,
           )
         : null;
-      return NextResponse.json({
+      return respond({
         success: true,
         date: latest.date,
         report,
@@ -204,7 +213,7 @@ export async function GET(request: NextRequest) {
       const report = latest.articlesFused && latest.gsc
         ? generateContentOpportunityReport(latest.articlesFused, latest.gsc)
         : null;
-      return NextResponse.json({ success: true, date: latest.date, report });
+      return respond({ success: true, date: latest.date, report });
     }
 
     if (action === 'category-intelligence') {
@@ -218,7 +227,7 @@ export async function GET(request: NextRequest) {
       const report = latest.articlesFused
         ? generateCategoryIntelligence(latest.articlesFused, latest.gsc, latest.ga4, trust)
         : null;
-      return NextResponse.json({ success: true, date: latest.date, report });
+      return respond({ success: true, date: latest.date, report });
     }
 
     if (action === 'content-mix') {
@@ -232,7 +241,7 @@ export async function GET(request: NextRequest) {
       const report = latest.articlesFused
         ? generateContentMixReport(latest.articlesFused, latest.gsc, latest.ga4, trust)
         : null;
-      return NextResponse.json({ success: true, date: latest.date, report });
+      return respond({ success: true, date: latest.date, report });
     }
 
     if (action === 'update-engine') {
@@ -240,7 +249,7 @@ export async function GET(request: NextRequest) {
       const report = latest.articlesFused
         ? generateArticleUpdateReport(latest.articlesFused)
         : null;
-      return NextResponse.json({ success: true, date: latest.date, report });
+      return respond({ success: true, date: latest.date, report });
     }
 
     if (action === 'meni-learning') {
@@ -248,7 +257,7 @@ export async function GET(request: NextRequest) {
       const report = latest.articlesFused
         ? await generateMeniLearningFeedback(db, latest.articlesFused)
         : null;
-      return NextResponse.json({ success: true, date: latest.date, report });
+      return respond({ success: true, date: latest.date, report });
     }
 
     if (action === 'editor-strategy') {
@@ -270,7 +279,7 @@ export async function GET(request: NextRequest) {
       const report = latest.articlesFused && trust
         ? generateEditorCEOReport(latest.articlesFused, latest.gsc, latest.ga4, trust, meniLearning)
         : null;
-      return NextResponse.json({ success: true, date: latest.date, report });
+      return respond({ success: true, date: latest.date, report });
     }
 
     // Dashboard completo
@@ -292,7 +301,7 @@ export async function GET(request: NextRequest) {
       ? generateGoogleTrustReport(latest.articlesFused)
       : null;
 
-    return NextResponse.json({
+    return respond({
       success: true,
       date: latest.date,
       dashboard,
@@ -308,6 +317,8 @@ export async function GET(request: NextRequest) {
             avgPosition: latest.gsc.avgPosition,
             collectedAt: latest.gsc.collectedAt,
             errorMessage: latest.gsc.errorMessage,
+            pagesReturned: latest.gsc.pages?.length ?? 0,
+            articlesMatched: (latest.articlesFused ?? []).filter((x) => x.hasGscData).length,
           }
         : null,
       ga4Summary: latest.ga4
@@ -320,12 +331,14 @@ export async function GET(request: NextRequest) {
             engagementRate: latest.ga4.engagementRate,
             collectedAt: latest.ga4.collectedAt,
             errorMessage: latest.ga4.errorMessage,
+            pagesReturned: latest.ga4.pages?.length ?? 0,
+            articlesMatched: (latest.articlesFused ?? []).filter((x) => x.hasGa4Data).length,
           }
         : null,
     });
   } catch (error) {
     logger.error('[nios-intelligence GET] Error:', error);
-    return NextResponse.json(
+    return respond(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },
     );

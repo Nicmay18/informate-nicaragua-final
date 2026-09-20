@@ -38,6 +38,16 @@ export async function POST(request: NextRequest) {
     const { runNIOSPipeline } = await import('@/lib/nios/intelligence/orchestrator');
     const result = await runNIOSPipeline(db, config);
 
+    // Invalidación directa: NIOS y el panel leen el snapshot nuevo sin esperar al CEO loop.
+    if (result.success) {
+      try {
+        const { invalidateNiosAdminCaches } = await import('@/lib/nios/repair-engine');
+        await invalidateNiosAdminCaches(db, 'nios-collect');
+      } catch (err) {
+        logger.warn('[nios-collect POST] Cache invalidation failed:', err);
+      }
+    }
+
     return NextResponse.json({
       success: result.success,
       result,

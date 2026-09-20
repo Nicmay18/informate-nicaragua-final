@@ -54,6 +54,7 @@ async function runReport(
   dimensions: string[],
   metrics: string[],
   limit = 100,
+  dimensionFilter?: Record<string, unknown>,
 ): Promise<GA4ReportRow[]> {
   try {
     const [response] = await client.runReport({
@@ -62,7 +63,8 @@ async function runReport(
       dimensions: dimensions.map((name) => ({ name })),
       metrics: metrics.map((name) => ({ name })),
       limit,
-    });
+      ...(dimensionFilter ? { dimensionFilter } : {}),
+    } as never);
 
     return (response.rows || []) as unknown as GA4ReportRow[];
   } catch (err) {
@@ -154,12 +156,18 @@ export async function collectGA4(
       const engagementRate = parseFloat(totals[4]?.value || '0');
       const averageEngagementTimeSec = totalUsers > 0 ? totalEngagement / totalUsers : 0;
 
-      // 2. Páginas (top 100)
+      // 2. Páginas de artículos (/noticias/, hasta 2000 para cobertura completa del corpus)
       const pageRows = await runReport(
         client, propertyId, startDate, endDate,
         ['pagePath'],
         ['screenPageViews', 'totalUsers', 'sessions', 'userEngagementDuration', 'engagementRate'],
-        100,
+        2000,
+        {
+          filter: {
+            fieldName: 'pagePath',
+            stringFilter: { matchType: 'CONTAINS', value: '/noticias/' },
+          },
+        },
       );
 
       const pages: GA4PageRow[] = pageRows.map((r) => {

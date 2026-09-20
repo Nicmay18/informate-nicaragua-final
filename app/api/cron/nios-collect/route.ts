@@ -36,6 +36,16 @@ export async function GET(request: NextRequest) {
     const { runNIOSPipeline, NIOS_CONFIG } = await import('@/lib/nios/intelligence/orchestrator');
     const result = await runNIOSPipeline(db, NIOS_CONFIG);
 
+    // Invalidación directa: NIOS y el panel leen el snapshot nuevo sin esperar al CEO loop.
+    if (result.success) {
+      try {
+        const { invalidateNiosAdminCaches } = await import('@/lib/nios/repair-engine');
+        await invalidateNiosAdminCaches(db, 'nios-collect');
+      } catch (err) {
+        logger.warn('[cron/nios-collect] Cache invalidation failed:', err);
+      }
+    }
+
     // CEO AUTONOMOUS LOOP: observe → diagnose → decide → plan → execute → verify → learn
     let ceo: CEOLoopResult | null = null;
     let ceoError: string | null = null;

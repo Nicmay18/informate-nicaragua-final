@@ -192,13 +192,19 @@ async function collectSystemState(state: NiosRepairEngineState): Promise<NiosSys
 
   // Diagnostic de consistencia snapshot vs dashboard
   if (dashboardCount !== snapshotCount) {
+    // Delta pequeño (<=3) = drift editorial normal tras el collect diario:
+    // se repara igual, pero no se reporta como conflicto crítico.
+    const articleDelta = Math.abs(dashboardCount - snapshotCount);
+    const conflictSeverity: NiosDiagnostic['severity'] = articleDelta <= 3 ? 'low' : 'high';
     diagnostics.push({
       id: 'nios-snapshot-inconsistent',
-      severity: 'high',
+      severity: conflictSeverity,
       source: 'NIOS',
       status: 'DATA_CONFLICT' as NiosDataStatus,
       problem: `Snapshot (${snapshotCount} artículos) no coincide con dashboard (${dashboardCount} artículos).`,
-      cause: 'El snapshot no refleja el conteo real de artículos publicados en Firestore.',
+      cause: articleDelta <= 3
+        ? 'Drift esperado: artículos publicados o retirados después del último snapshot.'
+        : 'El snapshot no refleja el conteo real de artículos publicados en Firestore.',
       impact: 'El Command Center y los reportes derivados trabajan con datos incompletos o distorsionados.',
       recommendedAction: 'Reconstruir el snapshot desde Firestore (noticias) y verificar el conteo.',
       action: 'AUTO_REPAIR',
@@ -290,18 +296,41 @@ async function repairSnapshotForDate(
   logger.info(`[repair-engine] Repaired snapshot ${date} with ${articles.length} articles`);
 }
 
+export const NIOS_ADMIN_CACHE_TAGS = [
+  'dashboard-calidad',
+  'nios-daily-snapshot',
+  'nios-snapshot',
+  'noticias',
+  'nios-telemetry',
+  'traffic-data',
+] as const;
+
+/**
+ * Invalida los tags de unstable_cache que sirven datos NIOS/admin
+ * y registra el evento para que los diagnósticos vean la caché fresca.
+ * Se llama directamente al finalizar nios-collect y desde el repair-engine.
+ */
+export async function invalidateNiosAdminCaches(
+  db: Firestore,
+  source: string = 'repair-engine',
+): Promise<{ tags: string[]; invalidatedAt: string }> {
+  const tags = [...NIOS_ADMIN_CACHE_TAGS];
+  tags.forEach((tag) => revalidateTag(tag));
+  const invalidatedAt = new Date().toISOString();
+  await db.collection('nios_cache_invalidations').doc('latest').set({
+    invalidatedAt,
+    tags,
+    source,
+    createdAt: invalidatedAt,
+  });
+  return { tags, invalidatedAt };
+}
+
 async function repairAdminCache(db: Firestore): Promise<NiosRepairVerification> {
-  const tags = ['dashboard-calidad', 'nios-daily-snapshot', 'nios-snapshot', 'noticias', 'nios-telemetry'];
+  const tags = [...NIOS_ADMIN_CACHE_TAGS];
   const before = { tags };
   try {
-    tags.forEach((tag) => revalidateTag(tag));
-    const invalidatedAt = new Date().toISOString();
-    await db.collection('nios_cache_invalidations').doc('latest').set({
-      invalidatedAt,
-      tags,
-      source: 'repair-engine',
-      createdAt: invalidatedAt,
-    });
+    const { invalidatedAt } = await invalidateNiosAdminCaches(db);
     return {
       before,
       after: { tags, invalidatedAt },
