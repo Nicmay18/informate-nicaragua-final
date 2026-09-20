@@ -299,6 +299,29 @@ export async function GET(request: NextRequest) {
       compliance: latest.compliance,
       readiness: latest.readiness,
       trust,
+      gscSummary: latest.gsc
+        ? {
+            status: latest.gsc.status ?? 'NO_DATA',
+            totalImpressions: latest.gsc.totalImpressions,
+            totalClicks: latest.gsc.totalClicks,
+            avgCtr: latest.gsc.avgCtr,
+            avgPosition: latest.gsc.avgPosition,
+            collectedAt: latest.gsc.collectedAt,
+            errorMessage: latest.gsc.errorMessage,
+          }
+        : null,
+      ga4Summary: latest.ga4
+        ? {
+            status: latest.ga4.status ?? 'NO_DATA',
+            totalUsers: latest.ga4.totalUsers,
+            totalSessions: latest.ga4.totalSessions,
+            totalPageviews: latest.ga4.totalPageviews,
+            averageEngagementTimeSec: latest.ga4.averageEngagementTimeSec,
+            engagementRate: latest.ga4.engagementRate,
+            collectedAt: latest.ga4.collectedAt,
+            errorMessage: latest.ga4.errorMessage,
+          }
+        : null,
     });
   } catch (error) {
     logger.error('[nios-intelligence GET] Error:', error);

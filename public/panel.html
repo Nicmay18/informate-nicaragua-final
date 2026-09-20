@@ -605,6 +605,20 @@
           </div>
         </div>
 
+        <!-- GOOGLE: Analytics 4 + Search Console (snapshot real de NIOS) -->
+        <div class="card" id="googleIntelCard" style="margin-bottom: 32px;">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-chart-line" style="color: var(--primary-600);"></i>Google: Analytics + Search Console</h3>
+            <span id="googleIntelBadge" style="font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--gray-100);color:var(--gray-600);">Cargando…</span>
+          </div>
+          <div class="card-body">
+            <div id="googleIntelBody" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;">
+              <div style="color:var(--gray-500);font-size:13px;">Consultando NIOS…</div>
+            </div>
+            <div id="googleIntelFecha" style="margin-top:12px;font-size:12px;color:var(--gray-400);"></div>
+          </div>
+        </div>
+
         <!-- VEREDICTO PROFESIONAL: ¿Vale la pena continuar? -->
         <div class="card" id="veredicto-card" style="margin-bottom: 32px; border-left: 4px solid var(--gray-300);">
           <div class="card-header"><h3 class="card-title"><i class="fas fa-award" style="color: var(--primary-600);"></i>Veredicto del proyecto</h3><span id="veredicto-badge" style="font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--gray-100);color:var(--gray-600);">Calculando…</span></div>
@@ -3644,7 +3658,7 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById(tabId).classList.add('active');
       if (navElement) navElement.classList.add('active');
       if (tabId === 'noticias-tab') { invalidatePanelCache(); cargarNoticias(window.categoriaActiva || 'todas'); }
-      if (tabId === 'dashboard-tab') cargarEstadisticas();
+      if (tabId === 'dashboard-tab') { cargarEstadisticas(); cargarGoogleIntel(); }
       if (tabId === 'categorias-tab') cargarResumenCategorias();
       if (tabId === 'analytics-tab') {
         cargarMetricas();
@@ -3665,6 +3679,72 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById(panelId).classList.add('active');
       if (tabElement) tabElement.classList.add('active');
     };
+
+    // Card "Google: Analytics + Search Console" — lee el snapshot real de NIOS
+    // via GET /api/admin/nios-intelligence?action=dashboard. Si el estado no es
+    // REAL, muestra el estado verdadero; nunca sustituye por 0.
+    async function cargarGoogleIntel() {
+      const body = document.getElementById('googleIntelBody');
+      const badge = document.getElementById('googleIntelBadge');
+      const fecha = document.getElementById('googleIntelFecha');
+      if (!body) return;
+      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const salt = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}`;
+      try {
+        const res = await fetch(`/api/admin/nios-intelligence?action=dashboard&_refresh=${salt}`, {
+          headers: { 'x-admin-token': adminToken },
+          cache: 'no-store',
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const g = data.gscSummary, a = data.ga4Summary, d = data.dashboard || {};
+        const gscStatus = (g && g.status) || d.gscStatus || 'NO_DATA';
+        const ga4Status = (a && a.status) || d.ga4Status || 'NO_DATA';
+        const gscReal = gscStatus === 'REAL';
+        const ga4Real = ga4Status === 'REAL';
+        const fmt = (n) => (n === null || n === undefined || n === '') ? '—' : Number(n).toLocaleString('es-NI');
+        const fila = (label, value) => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--gray-100);font-size:13px;"><span style="color:var(--gray-500);">${label}</span><span style="font-weight:700;color:var(--gray-800);">${value}</span></div>`;
+        const chip = (status, real) => `<span style="margin-left:6px;padding:2px 8px;border-radius:999px;font-size:11px;background:${real ? 'rgba(22,163,74,0.12)' : 'rgba(220,38,38,0.1)'};color:${real ? '#16a34a' : '#dc2626'};">${status}</span>`;
+        const bloqueEstado = (status, msg) => `<div style="font-size:13px;color:var(--gray-600);padding:8px 0;">Estado: <strong>${status}</strong>${msg ? ' — ' + msg : ''}</div>`;
+
+        badge.textContent = (gscReal && ga4Real) ? 'Fuentes Google: REAL' : `GSC: ${gscStatus} · GA4: ${ga4Status}`;
+        badge.style.background = (gscReal && ga4Real) ? 'rgba(22,163,74,0.12)' : 'rgba(234,88,12,0.12)';
+        badge.style.color = (gscReal && ga4Real) ? '#16a34a' : '#ea580c';
+
+        const gscHtml = `<div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500);margin-bottom:8px;">Search Console ${chip(gscStatus, gscReal)}</div>
+          ${gscReal
+            ? fila('Impresiones', fmt((g && g.totalImpressions) ?? d.totalImpressions))
+              + fila('Clics', fmt((g && g.totalClicks) ?? d.totalClicks))
+              + fila('CTR', ((((g && g.avgCtr) ?? d.avgCtr) || 0) * 100).toFixed(2) + '%')
+              + fila('Posición promedio', (((g && g.avgPosition) ?? d.avgPosition) || 0).toFixed(1))
+            : bloqueEstado(gscStatus, g && g.errorMessage)}
+        </div>`;
+
+        const engagement = (a && a.averageEngagementTimeSec != null)
+          ? Math.round(a.averageEngagementTimeSec) + 's promedio'
+          : (a && a.engagementRate != null ? (a.engagementRate * 100).toFixed(1) + '%' : '—');
+        const ga4Html = `<div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-500);margin-bottom:8px;">Analytics 4 ${chip(ga4Status, ga4Real)}</div>
+          ${ga4Real
+            ? fila('Usuarios', fmt(a && a.totalUsers))
+              + fila('Sesiones', fmt(a && a.totalSessions))
+              + fila('Pageviews', fmt(a && a.totalPageviews))
+              + fila('Engagement', engagement)
+            : bloqueEstado(ga4Status, a && a.errorMessage)}
+        </div>`;
+
+        body.innerHTML = gscHtml + ga4Html;
+        const collect = (g && g.collectedAt) || (a && a.collectedAt) || '';
+        fecha.textContent = `Snapshot NIOS: ${data.date || '—'}${collect ? ' · recolectado ' + new Date(collect).toLocaleString('es-NI') : ''}`;
+      } catch (err) {
+        badge.textContent = 'NIOS sin respuesta';
+        badge.style.background = 'rgba(220,38,38,0.1)';
+        badge.style.color = '#dc2626';
+        body.innerHTML = `<div style="font-size:13px;color:var(--gray-600);">No se pudo consultar /api/admin/nios-intelligence: ${err.message}</div>`;
+      }
+    }
+    window.cargarGoogleIntel = cargarGoogleIntel;
 
     async function cargarDatosIniciales() {
       await Promise.all([cargarEstadisticas(), cargarUltimasNoticias()]);
