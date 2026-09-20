@@ -3716,7 +3716,7 @@ sin texto ni marcas de agua, composición periodística"
           ${gscReal
             ? fila('Impresiones', fmt((g && g.totalImpressions) ?? d.totalImpressions))
               + fila('Clics', fmt((g && g.totalClicks) ?? d.totalClicks))
-              + fila('CTR', ((((g && g.avgCtr) ?? d.avgCtr) || 0) * 100).toFixed(2) + '%')
+              + fila('CTR', (((g && g.avgCtr) ?? d.avgCtr) || 0).toFixed(2) + '%')
               + fila('Posición promedio', (((g && g.avgPosition) ?? d.avgPosition) || 0).toFixed(1))
             : bloqueEstado(gscStatus, g && g.errorMessage)}
         </div>`;
