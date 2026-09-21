@@ -16,5 +16,11 @@ export function generarTituloSEO(titulo: string, categoria?: string, departament
   const parts = [titulo.trim()];
   if (departamento) parts.push(departamento.trim());
   if (categoria) parts.push(categoria.trim());
-  return parts.join(' - ').slice(0, 60).trim();
+  const full = parts.join(' - ');
+  if (full.length <= 60) return full;
+  return full
+    .slice(0, 60)
+    .replace(/\s+\S*$/, '')
+    .replace(/\s+(en|de|del|el|la|los|las|y|a|con|por|para|sin|sobre|tras|al)$/i, '')
+    .trim() + '…';
 }
