@@ -1,0 +1,240 @@
+{
+  "total": 460,
+  "byEstado": {
+    "publicado": 427,
+    "archivado": 33
+  },
+  "flags": {
+    "noindex": 30,
+    "archived": 33,
+    "sinSlug": 0,
+    "publicado": 427,
+    "aprobadoMeni": 430
+  },
+  "combos": {
+    "estado=publicado|pub=true|arch=false|noix=false|meni=true": 427,
+    "estado=archivado|pub=false|arch=true|noix=true|meni=false": 30,
+    "estado=archivado|pub=false|arch=true|noix=false|meni=true": 3
+  },
+  "publishedNoindex": [],
+  "publicables": 427,
+  "publicablesConNoindex": [],
+  "cruceSitemap": {
+    "sitemapNoticias": 358,
+    "noindexTotal": 30,
+    "noindexEnSitemap": 0,
+    "slugsNoindexEnSitemap": []
+  },
+  "noindexDocsSample": [
+    {
+      "slug": "puerto-corinto-lidera-llegada-de-11-buques-a-nicaragua",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Nacionales"
+    },
+    {
+      "slug": "economia-de-nicaragua-crece-6-y-alcanza-record-en-remesas",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Nacionales"
+    },
+    {
+      "slug": "dos-nicaraguenses-fallecen-en-el-extranjero-en-casos-distintos",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "dueno-de-semovientes-paga-c-769-mil-por-muerte-en-jalapa",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Sucesos"
+    },
+    {
+      "slug": "polemica-en-el-mundial-no-frena-reconocimiento-a-tatiana",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Deportes"
+    },
+    {
+      "slug": "costa-rica-detiene-a-palestino-con-vinculos-a-hamas",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "campeonato-de-1-4-de-milla-adrenalina-y-tecnica-en-managua",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Deportes"
+    },
+    {
+      "slug": "capturan-acusado-de-quemar-a-un-hombre-en-rivas-nicaragua",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Sucesos"
+    },
+    {
+      "slug": "colapsa-vivienda-ancestral-en-monimbo-masaya-familia-de-7-ilesa",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Sucesos"
+    },
+    {
+      "slug": "nicaragua-abastece-el-47-de-lacteos-que-consume-el-salvador",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Nacionales"
+    },
+    {
+      "slug": "capturan-a-senalado-por-robo-de-mas-de-us-30-mil-en-jalapa",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Sucesos"
+    },
+    {
+      "slug": "nicaragua-invertira-13-9-millones-en-49-camiones-de-bomberos",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Nacionales"
+    },
+    {
+      "slug": "despues-de-anos-profugo-captura-de-el-diablo-abre-interrogante",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "venezuela-164-fallecidos-y-30-mil-desaparecidos-tras-sismos",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "nicaragua-domina-el-ihf-trophy-de-balonmano-en-centroamerica",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Deportes"
+    },
+    {
+      "slug": "arranco-la-feria-ganadera-agostina-2026-en-managua",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Nacionales"
+    },
+    {
+      "slug": "chinandega-estrena-75-viviendas-con-servicios-completos",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Nacionales"
+    },
+    {
+      "slug": "venezuela-replicas-continuan-con-920-victimas-y-miles-sin-rastro",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "julieta-venegas-presenta-tierra-de-esperanza-rumbo-al-mundial-2026",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "nicaragua-gana-oro-en-relevos-mixtos-4x100-en-managua",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Deportes"
+    },
+    {
+      "slug": "capturan-a-pinolero-por-llevarse-a-nina-de-13-anos",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "agresion-a-mujer-en-nindiri-activa-investigacion-bajo-la-ley-779",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Sucesos"
+    },
+    {
+      "slug": "nueva-guinea-busca-respuestas-por-muerte-de-joven-de-18-anos",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Sucesos"
+    },
+    {
+      "slug": "fiscalia-acusa-a-madre-y-padrastro-por-muerte-de-nino",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Sucesos"
+    },
+    {
+      "slug": "nicaraguense-muere-en-ataque-en-canovanas-puerto-rico",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "beisbol-infantil-nicaragua-viaja-a-puerto-rico-y",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Deportes"
+    },
+    {
+      "slug": "nicaraguense-jose-salgado-muere-en-asalto-en-austin",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "streaming-en-nicaragua-jovenes-dominan-plataformas-digitales",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Tecnología"
+    },
+    {
+      "slug": "colapso-en-construccion-cobra-vida-de-nicaraguense-en-ee-uu",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Internacionales"
+    },
+    {
+      "slug": "nuevo-complejo-en-masaya-reune-bomberos-y-migracion",
+      "estado": "archivado",
+      "publicado": false,
+      "archived": true,
+      "cat": "Nacionales"
+    }
+  ]
+}

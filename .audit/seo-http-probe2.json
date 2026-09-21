@@ -1,0 +1,274 @@
+{
+  "googlebot_noticia": [
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "index, follow",
+      "canonical": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "bytes": 137683
+    }
+  ],
+  "googlebot_home": [
+    {
+      "url": "https://nicaraguainformate.com/",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "index, follow",
+      "canonical": "https://nicaraguainformate.com",
+      "bytes": 190039
+    }
+  ],
+  "archivada": [
+    {
+      "url": "https://nicaraguainformate.com/noticias/campeonato-de-1-4-de-milla-adrenalina-y-tecnica-en-managua",
+      "http": 404,
+      "loc": null,
+      "xrt": null
+    }
+  ],
+  "archivada2": [
+    {
+      "url": "https://nicaraguainformate.com/noticias/puerto-corinto-lidera-llegada-de-11-buques-a-nicaragua",
+      "http": 404,
+      "loc": null,
+      "xrt": null
+    }
+  ],
+  "old_noticia_html": [
+    {
+      "url": "https://nicaraguainformate.com/noticia.html?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    }
+  ],
+  "www_redirect": [
+    {
+      "url": "https://www.nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "index, follow",
+      "canonical": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "bytes": 137683
+    }
+  ],
+  "http_redirect": [
+    {
+      "url": "http://nicaraguainformate.com/noticias",
+      "http": 308,
+      "loc": "https://nicaraguainformate.com/noticias",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "index, follow",
+      "canonical": "https://nicaraguainformate.com/noticias",
+      "bytes": 119597
+    }
+  ],
+  "old_cat": [
+    {
+      "url": "https://nicaraguainformate.com/deportes",
+      "http": 308,
+      "loc": "/categoria/deportes",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/categoria/deportes",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "index, follow",
+      "canonical": "https://nicaraguainformate.com/categoria/deportes",
+      "bytes": 99671
+    }
+  ],
+  "cat_param": [
+    {
+      "url": "https://nicaraguainformate.com/?cat=deportes",
+      "http": 308,
+      "loc": "/categoria/deportes?cat=deportes",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/categoria/deportes?cat=deportes",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "index, follow",
+      "canonical": "https://nicaraguainformate.com/categoria/deportes",
+      "bytes": 99716
+    }
+  ],
+  "noticias_cat_param": [
+    {
+      "url": "https://nicaraguainformate.com/noticias?cat=deportes",
+      "http": 308,
+      "loc": "/categoria/deportes?cat=deportes",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/categoria/deportes?cat=deportes",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "index, follow",
+      "canonical": "https://nicaraguainformate.com/categoria/deportes",
+      "bytes": 99716
+    }
+  ],
+  "guia_sample": [
+    {
+      "url": "https://nicaraguainformate.com/guia",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "index, follow",
+      "canonical": "https://nicaraguainformate.com/guia",
+      "bytes": 83717
+    }
+  ],
+  "tema_sample": [
+    {
+      "url": "https://nicaraguainformate.com/tema",
+      "http": 404,
+      "loc": null,
+      "xrt": null
+    }
+  ],
+  "autor_sin_articulos": [
+    {
+      "url": "https://nicaraguainformate.com/autor/inexistente-xyz",
+      "http": 404,
+      "loc": null,
+      "xrt": null
+    }
+  ],
+  "api_bloqueada": [
+    {
+      "url": "https://nicaraguainformate.com/api/audio",
+      "http": 404,
+      "loc": null,
+      "xrt": null
+    }
+  ],
+  "api_admin": [
+    {
+      "url": "https://nicaraguainformate.com/api/admin/estado",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": null,
+      "canonical": null,
+      "bytes": 48
+    }
+  ],
+  "news_sitemap": [
+    {
+      "url": "https://nicaraguainformate.com/news-sitemap.xml",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": null,
+      "canonical": null,
+      "bytes": 6323
+    }
+  ],
+  "noticias_pagina_lejos": [
+    {
+      "url": "https://nicaraguainformate.com/noticias?page=99",
+      "http": 200,
+      "loc": null,
+      "xrt": null,
+      "metaRobots": "noindex, follow",
+      "canonical": "https://nicaraguainformate.com/noticias?page=99",
+      "bytes": 55798
+    }
+  ],
+  "noticia_param_slug": [
+    {
+      "url": "https://nicaraguainformate.com/noticias/x?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 308,
+      "loc": "/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo?slug=pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "xrt": null
+    }
+  ],
+  "_newsSitemap": {
+    "http": 200,
+    "urls": 10,
+    "head": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"\n        xmlns:news=\"http://www.google.com/schemas/sitemap-news/0.9\">\n  <url>\n    <loc>https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo</loc>\n    <lastmod>2026-09-20T15:17:20-06:00</lastmod>\n    <news:news>\n      <news:publication>\n        <news:name>"
+  }
+}

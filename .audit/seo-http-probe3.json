@@ -1,0 +1,86 @@
+{
+  "ua_Googlebot": {
+    "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+    "http": 200,
+    "loc": null,
+    "xrt": null
+  },
+  "ua_AdsBot": {
+    "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+    "http": 200,
+    "loc": null,
+    "xrt": null
+  },
+  "ua_InspectionTool": {
+    "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+    "http": 200,
+    "loc": null,
+    "xrt": null
+  },
+  "ua_GooglebotNews": {
+    "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+    "http": 200,
+    "loc": null,
+    "xrt": null
+  },
+  "ua_AhrefsBot": {
+    "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+    "http": 200,
+    "loc": null,
+    "xrt": null
+  },
+  "page99": {
+    "url": "https://nicaraguainformate.com/noticias?page=99",
+    "http": 200,
+    "bytes": 55798,
+    "metaRobots": "noindex, follow",
+    "sinContenido": true
+  },
+  "page2": {
+    "url": "https://nicaraguainformate.com/noticias?page=2",
+    "http": 200,
+    "bytes": 120116,
+    "metaRobots": "noindex, follow",
+    "sinContenido": false
+  },
+  "categoria_vacia": {
+    "url": "https://nicaraguainformate.com/categoria/inexistente-xyz",
+    "http": 404,
+    "bytes": 33367,
+    "metaRobots": "noindex",
+    "sinContenido": false
+  },
+  "guia_slug": {
+    "url": "https://nicaraguainformate.com/guia/inexistente-xyz",
+    "http": 404,
+    "bytes": 33526,
+    "metaRobots": "noindex",
+    "sinContenido": false
+  },
+  "entidad": {
+    "url": "https://nicaraguainformate.com/entidad/inexistente-xyz",
+    "http": 404,
+    "bytes": 33284,
+    "metaRobots": "noindex",
+    "sinContenido": false
+  },
+  "tema_slug": {
+    "url": "https://nicaraguainformate.com/tema/inexistente-xyz",
+    "http": 404,
+    "bytes": 33385,
+    "metaRobots": "noindex",
+    "sinContenido": false
+  },
+  "manifest": {
+    "url": "https://nicaraguainformate.com/manifest.json",
+    "http": 200,
+    "loc": null,
+    "xrt": null
+  },
+  "favicon": {
+    "url": "https://nicaraguainformate.com/favicon.ico",
+    "http": 200,
+    "loc": null,
+    "xrt": null
+  }
+}

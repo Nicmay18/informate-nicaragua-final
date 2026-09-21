@@ -1,0 +1,667 @@
+{
+  "samples": [
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "title": "Pomares 2026: ocho equipos sudarán la camiseta por el título",
+      "bytes": 137683
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/cuatro-personas-mueren-en-accidentes-de-transito-en-nicaragua",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/cuatro-personas-mueren-en-accidentes-de-transito-en-nicaragua",
+      "title": "Cuatro personas mueren deja afectados en Nicaragua Cuatro",
+      "bytes": 143595
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/panama-deporta-a-20-nicaraguenses-por",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/panama-deporta-a-20-nicaraguenses-por",
+      "title": "Panamá deporta a 20 nicaragüenses por infracciones…",
+      "bytes": 137838
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/mirador-san-francisco-de-asis-dinamiza-turismo-en-carretera-norte",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/mirador-san-francisco-de-asis-dinamiza-turismo-en-carretera-norte",
+      "title": "Mirador San Francisco en Nicaragua: La Alcaldía Municipal de",
+      "bytes": 151379
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/como-sacar-y-apostillar-record-policial-de",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/como-sacar-y-apostillar-record-policial-de",
+      "title": "Cómo sacar y apostillar récord policial de Nicaragua",
+      "bytes": 145571
+    },
+    {
+      "url": "https://nicaraguainformate.com/",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com",
+      "title": "Nicaragua Informate — Noticias de Nicaragua en tiempo real",
+      "bytes": 190039
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias",
+      "title": "Todas las Noticias | Nicaragua Informate",
+      "bytes": 119597
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias?page=2",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "noindex, follow",
+      "googlebot": null,
+      "canonical": "https://nicaraguainformate.com/noticias?page=2",
+      "title": "Todas las Noticias — Página 2 | Nicaragua Informate",
+      "bytes": 120116
+    },
+    {
+      "url": "https://nicaraguainformate.com/buscar?q=test",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "noindex, nofollow",
+      "googlebot": null,
+      "canonical": "https://nicaraguainformate.com",
+      "title": "Buscar noticias | Nicaragua Informate",
+      "bytes": 55559
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/slug-inexistente-xyz-999",
+      "http": 404,
+      "location": null,
+      "xRobotsTag": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/panel",
+      "http": 307,
+      "location": "/panel/centro-de-comando",
+      "xRobotsTag": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/panel.html",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": "noindex, nofollow",
+      "metaRobots": null,
+      "googlebot": null,
+      "canonical": null,
+      "title": "Panel Editorial | NicaraguaInformate.com",
+      "bytes": 570961
+    },
+    {
+      "url": "https://nicaraguainformate.com/admin",
+      "http": 404,
+      "location": null,
+      "xRobotsTag": null
+    },
+    {
+      "url": "https://nicaraguainformate.com/api/admin/estado",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": null,
+      "googlebot": null,
+      "canonical": null,
+      "title": null,
+      "bytes": 48
+    },
+    {
+      "url": "https://nicaraguainformate.com/categoria/deportes",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": null,
+      "canonical": "https://nicaraguainformate.com/categoria/deportes",
+      "title": "Deportes en Nicaragua | Fútbol, Béisbol y Atletismo | Nicaragua Informate",
+      "bytes": 99671
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/tragedia-en-ee-uu-joven-de-rio-san-juan-muere-en-accidente",
+      "http": 410,
+      "location": null,
+      "xRobotsTag": "noindex, nofollow"
+    }
+  ],
+  "broad": [
+    {
+      "url": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/pomares-2026-ocho-equipos-sudaran-la-camiseta-por-el-titulo",
+      "title": "Pomares 2026: ocho equipos sudarán la camiseta por el título",
+      "bytes": 137683
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/que-dejaron-las-fiestas-patrias-a-los-mercados-de-managua",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/que-dejaron-las-fiestas-patrias-a-los-mercados-de-managua",
+      "title": "¿Qué dejaron las Fiestas Patrias a los mercados de Managua?",
+      "bytes": 149103
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/cosecha-de-frijol-rojo-supera-99-mil-quintales-en-nicaragua",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/cosecha-de-frijol-rojo-supera-99-mil-quintales-en-nicaragua",
+      "title": "Cosecha de frijol rojo supera 99 mil quintales en Nicaragua",
+      "bytes": 134906
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/familia-busca-repatriar-a-nicaragua-a-jessica-asesinada-en-miami",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/familia-busca-repatriar-a-nicaragua-a-jessica-asesinada-en-miami",
+      "title": "Familia busca repatriar en el extranjero: La familia de",
+      "bytes": 140408
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+      "title": "10 sitios para encontrar trabajo remoto desde Nicaragua…",
+      "bytes": 148539
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/masaya-queda-al-borde-y-esteli-toma-ventaja-en-el-pomares",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/masaya-queda-al-borde-y-esteli-toma-ventaja-en-el-pomares",
+      "title": "Masaya queda al borde y Estelí toma ventaja en el Pomares",
+      "bytes": 139623
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/san-fernando-busca-hoy-el-octavo-puesto-del-pomares",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/san-fernando-busca-hoy-el-octavo-puesto-del-pomares",
+      "title": "San Fernando busca hoy el octavo puesto del Pomares",
+      "bytes": 135638
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/operativo-busca-a-sospechosos-de-matar-a-universitario-en-leon",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/operativo-busca-a-sospechosos-de-matar-a-universitario-en-leon",
+      "title": "Operativo busca a deja afectados en Nicaragua Un despliegue",
+      "bytes": 136692
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/tres-ondas-tropicales-traeran-mas-lluvias-a-nicaragua-esta-semana",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/tres-ondas-tropicales-traeran-mas-lluvias-a-nicaragua-esta-semana",
+      "title": "Tres ondas tropicales en Nicaragua: Nicaragua tendrá una",
+      "bytes": 137988
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/tres-ciclones-activan-el-pacifico-que-significa-para-nicaragua",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/tres-ciclones-activan-el-pacifico-que-significa-para-nicaragua",
+      "title": "Tres ciclones activan en Nicaragua: La actividad tropical",
+      "bytes": 140156
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/rinon-de-cerdo-supera-285-dias-en-una-paciente",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/rinon-de-cerdo-supera-285-dias-en-una-paciente",
+      "title": "Riñón de cerdo supera 285 días en una paciente.",
+      "bytes": 141860
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/condenan-a-8-anos-a-nicaraguense-por-evasion-fiscal",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/condenan-a-8-anos-a-nicaraguense-por-evasion-fiscal",
+      "title": "Condenan a 8 años a nicaragüense por evasión fiscal",
+      "bytes": 145895
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/messi-se-retira-de-argentina-que-hara-ahora-el-astro",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/messi-se-retira-de-argentina-que-hara-ahora-el-astro",
+      "title": "Messi se retira de Argentina: ¿qué hará ahora el astro?",
+      "bytes": 139306
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/tres-oros-y-19-medallas-nicaragua-brilla-en-guatemala",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/tres-oros-y-19-medallas-nicaragua-brilla-en-guatemala",
+      "title": "Tres oros y 19 medallas: Nicaragua brilla en Guatemala",
+      "bytes": 147532
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/investigan-presunto-femicidio-seguido-de-suicidio-en-nagarote",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/investigan-presunto-femicidio-seguido-de-suicidio-en-nagarote",
+      "title": "Investigan presunto femicidio deja afectados en Nicaragua La",
+      "bytes": 143480
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/hijo-es-senalado-por-muerte-violenta-de-su-padre-en-somotillo",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/hijo-es-senalado-por-muerte-violenta-de-su-padre-en-somotillo",
+      "title": "Hijo es señalado deja afectados en Nicaragua Andrés Escobar",
+      "bytes": 144582
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/aluvion-arrasa-frontera-de-nepal-y-el-tibet-y-deja-desaparecidos",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/aluvion-arrasa-frontera-de-nepal-y-el-tibet-y-deja-desaparecidos",
+      "title": "Aluvión arrasa frontera de Nepal y el Tíbet y deja…",
+      "bytes": 151766
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/distrito-5-estrenara-nueva-delegacion-policial-en-managua",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/distrito-5-estrenara-nueva-delegacion-policial-en-managua",
+      "title": "Distrito 5 estrenará nueva delegación policial en Managua",
+      "bytes": 139337
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/nicaraguense-habria-muerto-en-panama-y-familia-fue-localizada",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/nicaraguense-habria-muerto-en-panama-y-familia-fue-localizada",
+      "title": "Nicaragüense habría muerto en Nicaragua: Ana Iris García",
+      "bytes": 137061
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/feria-de-vivienda-en-managua-bonos-precios-y-requisitos",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/feria-de-vivienda-en-managua-bonos-precios-y-requisitos",
+      "title": "Feria de Vivienda en Managua: bonos, precios y requisitos",
+      "bytes": 158879
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/madre-investigada-por-muerte-de-su-hija-en-ticuantepe",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/madre-investigada-por-muerte-de-su-hija-en-ticuantepe",
+      "title": "Madre investigada por muerte de su hija en Ticuantepe",
+      "bytes": 136588
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/dengue-y-chikungunya-senales-que-no-debe-ignorar-en-nicaragua",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/dengue-y-chikungunya-senales-que-no-debe-ignorar-en-nicaragua",
+      "title": "Dengue y chikungunya: en Nicaragua: Una fiebre que aparece",
+      "bytes": 151251
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/el-indio-viejo-historia-del-plato-tipico-de",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/el-indio-viejo-historia-del-plato-tipico-de",
+      "title": "El Indio Viejo: historia del plato típico de Nicaragua",
+      "bytes": 145836
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/carreteras-dejan-dos-fallecidos-y-varios-accidentes",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/carreteras-dejan-dos-fallecidos-y-varios-accidentes",
+      "title": "Carreteras dejan dos fallecidos y varios accidentes",
+      "bytes": 137900
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/cafe-nicaraguense-alcanza-record-mundial-y-abre-nuevos-retos",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/cafe-nicaraguense-alcanza-record-mundial-y-abre-nuevos-retos",
+      "title": "Café nicaragüense alcanza récord mundial y abre nuevos retos",
+      "bytes": 134608
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/mas-alla-del-crater-los-senderos-del-volcan",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/mas-alla-del-crater-los-senderos-del-volcan",
+      "title": "Más allá del cráter: los senderos del Volcán Masaya",
+      "bytes": 132213
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/joven-de-masaya-fallece-en-la-laguna-de-apoyo-este-20-de-julio",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/joven-de-masaya-fallece-en-la-laguna-de-apoyo-este-20-de-julio",
+      "title": "Joven de Masaya fallece en la Laguna de Apoyo este 20 de…",
+      "bytes": 130960
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/capturan-en-esteli-a-nicaraguense-requerido-por-caso-en-ee-uu",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/capturan-en-esteli-a-nicaraguense-requerido-por-caso-en-ee-uu",
+      "title": "Inician capturan en Estelí deja afectados en Nicaragua Un",
+      "bytes": 141900
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/argentina-supera-a-suiza-y-va-contra-inglaterra-en-semis",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/argentina-supera-a-suiza-y-va-contra-inglaterra-en-semis",
+      "title": "Argentina supera a Suiza y va contra Inglaterra en semis",
+      "bytes": 131875
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/terremotos-en-venezuela-cifra-de-fallecidos-sube-a-2-954",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/terremotos-en-venezuela-cifra-de-fallecidos-sube-a-2-954",
+      "title": "Terremotos en Venezuela: cifra de fallecidos sube a 2,954",
+      "bytes": 132296
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/semaforos-solares-y-radares-modernizan-vias-de-nicaragua",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/semaforos-solares-y-radares-modernizan-vias-de-nicaragua",
+      "title": "Semáforos solares y radares modernizan vías de Nicaragua",
+      "bytes": 139109
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/costanera-agiliza-transporte-y-abre-playas-antes",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/costanera-agiliza-transporte-y-abre-playas-antes",
+      "title": "Costanera agiliza transporte y abre playas antes aisladas",
+      "bytes": 139783
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/robo-de-caja-fuerte-con-14-000-en-quilali-termina-con-un-detenido",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/robo-de-caja-fuerte-con-14-000-en-quilali-termina-con-un-detenido",
+      "title": "Robo de caja fuerte con $14,000 en Quilalí termina con un…",
+      "bytes": 132649
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/ia-medica-en-2026-diagnosticos-mas-certeros-que-medicos",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/ia-medica-en-2026-diagnosticos-mas-certeros-que-medicos",
+      "title": "IA médica en 2026: diagnósticos más certeros que médicos",
+      "bytes": 134407
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/lionel-messi-establece-record-de-18-goles-en-copas-del-mundo",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/lionel-messi-establece-record-de-18-goles-en-copas-del-mundo",
+      "title": "Lionel Messi establece récord de 18 goles en Copas del Mundo",
+      "bytes": 133391
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/accidentes-dejan-varios-lesionados-en-managua-leon-y-bilwi",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/accidentes-dejan-varios-lesionados-en-managua-leon-y-bilwi",
+      "title": "Accidentes dejan varios afectados en Managua, León y Bilwi",
+      "bytes": 136329
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/nicaragua-suma-165-mw-renovables-y-baterias-electricas",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/nicaragua-suma-165-mw-renovables-y-baterias-electricas",
+      "title": "Nicaragua suma 165 MW de energía renovable y baterías…",
+      "bytes": 137185
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/estudiante-de-13-anos-muere-tras-golpe-en-escuela-de-diriomo",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/estudiante-de-13-anos-muere-tras-golpe-en-escuela-de-diriomo",
+      "title": "Estudiante de 13 años resulta afectado tras golpe en…",
+      "bytes": 145584
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/nicaraguense-fallece-en-accidente-laboral-en-wisconsin",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/nicaraguense-fallece-en-accidente-laboral-en-wisconsin",
+      "title": "Nicaraguense resulta afectado en el extranjero: Una",
+      "bytes": 145916
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/tres-leches-nicaraguense-gana-reconocimiento-internacional",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/tres-leches-nicaraguense-gana-reconocimiento-internacional",
+      "title": "Tres Leches nicaragüense gana reconocimiento internacional",
+      "bytes": 143415
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/residencial-las-madres-inaugura-575-viviendas-para-familias-en-managua",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/residencial-las-madres-inaugura-575-viviendas-para-familias-en-managua",
+      "title": "Residencial Las Madres entrega 575 viviendas en Managua",
+      "bytes": 134486
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/fuertes-lluvias-provocan-inundaciones-y-suspenden-trafico-en-rosita",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/fuertes-lluvias-provocan-inundaciones-y-suspenden-trafico-en-rosita",
+      "title": "Fuertes lluvias provocan en Nicaragua: Las intensas lluvias",
+      "bytes": 146591
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/tiktok-bajo-la-lupa-por-efectos-en-jovenes-nicaraguenses",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/tiktok-bajo-la-lupa-por-efectos-en-jovenes-nicaraguenses",
+      "title": "TikTok supera 1,44 millones de usuarios en Nicaragua",
+      "bytes": 142569
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/modernizan-aeropuerto-de-bluefields-con-inversion-de-us-10-millones",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/modernizan-aeropuerto-de-bluefields-con-inversion-de-us-10-millones",
+      "title": "Modernizan aeropuerto de Bluefields con inversión de US$10…",
+      "bytes": 145782
+    },
+    {
+      "url": "https://nicaraguainformate.com/noticias/inauguraran-hospital-pediatrico-las-segovias-en-esteli-este-18-de-mayo",
+      "http": 200,
+      "location": null,
+      "xRobotsTag": null,
+      "metaRobots": "index, follow",
+      "googlebot": "index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1",
+      "canonical": "https://nicaraguainformate.com/noticias/inauguraran-hospital-pediatrico-las-segovias-en-esteli-este-18-de-mayo",
+      "title": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí…",
+      "bytes": 146682
+    }
+  ],
+  "resumen": {
+    "muestraNoticias": 45,
+    "porHttp": {
+      "200": 45
+    },
+    "conNoindexMeta": 0,
+    "conXRobotsNoindex": 0,
+    "sinCanonical": 0,
+    "canonicalDistinto": 0
+  }
+}
