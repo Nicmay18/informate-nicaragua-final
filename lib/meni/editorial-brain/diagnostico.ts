@@ -102,7 +102,10 @@ export function buildDiagnostico(params: {
   if (readerJourney.brechaDeConocimiento.length > 0) {
     queLeFalta.push(`Explicar: ${readerJourney.brechaDeConocimiento.slice(0, 3).join('; ')}`);
   }
-  if (storyPlan.explicacionesServicio.length === 0) {
+  // Servicio genérico no es un faltante automático en todas las noticias.
+  // Sucesos, especialmente casos preliminares, pueden ser plenamente útiles
+  // con hechos verificables, estado de investigación y límites de lo conocido.
+  if (storyPlan.explicacionesServicio.length === 0 && publicValue.ayudaAlLector === false) {
     queLeFalta.push('Agregar explicaciones de servicio para el lector');
   }
   if (utilityGate.recomendacionesEditoriales.length > 0) {
@@ -189,7 +192,7 @@ export function buildDiagnostico(params: {
       ? ['No hay antecedentes históricos disponibles en la base de conocimiento.']
       : []),
   ];
-  const servicioFalta = storyPlan.explicacionesServicio.length === 0
+  const servicioFalta = storyPlan.explicacionesServicio.length === 0 && publicValue.ayudaAlLector === false
     ? ['No se identificaron explicaciones de servicio para esta categoría.']
     : [];
   const pareceBoletin = publicValue.soloInforma && storyPlan.explicacionesServicio.length === 0 && readerJourney.queEntendera.length === 0;
