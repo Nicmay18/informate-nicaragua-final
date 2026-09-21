@@ -214,11 +214,18 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // añaden una barrera editorial explícita antes del veredicto.
   const humanChecks = runHumanEditorChecks(input);
   const humanCriticalIssues = humanChecks.filter(c => c.critical && !c.ok);
-  // Checks que sí pueden cambiar el veredicto a 'mejorar'. lead_5w NO está aquí:
-  // es solo un aviso editorial, nunca bloquea ni baja el veredicto.
-  const humanCheckActions = humanChecks.filter(c => !c.ok && c.id !== 'lead_5w').map(c => c.message);
-  // Avisos informativos (lead_5w): visibles en acciones/queFalta, sin efecto en veredicto.
-  const humanCheckNotices = humanChecks.filter(c => !c.ok && c.id === 'lead_5w').map(c => c.message);
+  // Checks que sí pueden cambiar el veredicto a 'mejorar'.
+  // El lead 5W y los conectores de transición son avisos editoriales,
+  // no fallos de publicabilidad: "sin embargo", "además", etc. son
+  // construcciones periodísticas legítimas y su mera presencia no prueba
+  // escritura de IA.
+  const humanCheckActions = humanChecks
+    .filter(c => !c.ok && c.id !== 'lead_5w' && c.id !== 'ai_transitions')
+    .map(c => c.message);
+  // Avisos informativos: visibles en acciones/queFalta, sin efecto en veredicto.
+  const humanCheckNotices = humanChecks
+    .filter(c => !c.ok && (c.id === 'lead_5w' || c.id === 'ai_transitions'))
+    .map(c => c.message);
 
   // Recomendación editorial — un lead 5W roto nunca publica.
   const recomendacionesCount =
