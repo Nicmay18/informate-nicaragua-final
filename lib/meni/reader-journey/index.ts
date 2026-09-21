@@ -15,6 +15,7 @@
  */
 
 import type { ReaderJourneyInput, ReaderJourneyResult } from './types';
+import { classifySports, isIndividualSport, type SportsClassification } from '../sports-classifier';
 
 function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -350,6 +351,63 @@ const JOURNEYS: Record<TipoHecho, {
   },
 };
 
+/**
+ * JOURNEY DEPORTE adaptado por clasificación.
+ * La plantilla base era de fútbol: exigía 'El resultado' y 'Quiénes jugaron'
+ * a cualquier disciplina y en cualquier etapa. Ahora la brecha depende de
+ * disciplina (protagonista) y etapa (una previa no puede tener resultado).
+ */
+function journeyDeporte(clas: SportsClassification): (typeof JOURNEYS)['deporte'] {
+  const individual = isIndividualSport(clas.disciplina);
+  const protagonista = individual ? 'el atleta o los pilotos/participantes' : 'los equipos o participantes';
+  const esPrevia = clas.etapa === 'previa' || clas.etapa === 'en_desarrollo' || clas.etapa === 'general';
+
+  const queNecesitaSaber = esPrevia
+    ? [
+        'Cuándo y dónde es el evento',
+        'Qué está en disputa',
+        'Quiénes participan: ' + protagonista,
+        'Contexto del campeonato, torneo o competencia',
+        'Antecedentes disponibles',
+      ]
+    : [
+        'El resultado o desenlace',
+        'Quiénes participaron: ' + protagonista,
+        'Qué significa el resultado',
+        'Contexto del campeonato, torneo o competencia',
+        'Qué sigue: próxima fecha o compromiso',
+      ];
+
+  return {
+    queSabe: [
+      'Nicaragua tiene atletas y equipos en varias disciplinas',
+      'Los campeonatos tienen fechas, categorías o jornadas',
+    ],
+    queNecesitaSaber,
+    queEntendera: esPrevia
+      ? [
+          'Qué se disputa y por qué importa',
+          'Quiénes participan y en qué condiciones',
+          'Cómo se inserta el evento en el campeonato o calendario',
+        ]
+      : [
+          'El contexto deportivo del resultado',
+          'La posición o situación de los protagonistas',
+          'Qué viene para la competencia',
+        ],
+    queRecordara: esPrevia
+      ? [
+          'Cuándo y dónde es el evento',
+          'Qué está en disputa',
+        ]
+      : [
+          'El resultado o desenlace',
+          'La figura o protagonista destacado',
+          'Qué viene para la competencia',
+        ],
+    objetivoPedagogico: 'Que el lector entienda el contexto deportivo del evento, no solo el resultado.',
+  };
+}
 function computeScore(queSabe: string[], queNecesitaSaber: string[], queEntendera: string[], queRecordara: string[]): number {
   let score = 40;
   if (queSabe.length >= 2) score += 10;
@@ -362,7 +420,9 @@ function computeScore(queSabe: string[], queNecesitaSaber: string[], queEntender
 export function runReaderJourney(input: ReaderJourneyInput): ReaderJourneyResult {
   const textoPlano = stripHtml(`${input.titulo} ${input.contenido}`);
   const tipo = detectarTipo(textoPlano);
-  const journey = JOURNEYS[tipo];
+  const journey = tipo === 'deporte'
+    ? journeyDeporte(classifySports(input.titulo || '', input.contenido || ''))
+    : JOURNEYS[tipo];
 
   const queSabe = journey.queSabe;
   const queNecesitaSaber = journey.queNecesitaSaber;

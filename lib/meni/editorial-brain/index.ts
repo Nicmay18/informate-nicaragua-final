@@ -14,7 +14,7 @@
 import { CONTRATO_GLOBAL } from '../editorial-contract';
 import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
 import { MIN_APPROVED_SCORE } from '@/lib/meni/scoring';
-import { INDIVIDUAL_SPORTS_KEYWORDS } from '../editorial-profiles';
+import { classifySports, isIndividualSport } from '../sports-classifier';
 import { runNewsValueEngine } from './news-value-engine';
 import { runCompetitionEngine } from './competition-engine';
 import { runNicaraguaInformateEngine } from './nicaragua-informate-engine';
@@ -614,7 +614,7 @@ function calcularEvaluacionCategoria(
     const match = Object.keys(MATRICES_CATEGORIA).find((k) => k === matrizKey);
     matrizKey = match || 'general';
   }
-  if (matrizKey === 'deportes' && INDIVIDUAL_SPORTS_KEYWORDS.test(texto)) {
+  if (matrizKey === 'deportes' && isIndividualSport(classifySports(texto, '', '').disciplina)) {
     matrizKey = 'deportesindividuales';
   }
   const categoriaFinal = matrizKey;

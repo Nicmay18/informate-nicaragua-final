@@ -66,7 +66,7 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
   Deportes: {
     requiredEvidence: {
       'qué significa': /\b(?:significa|implica|representa|hist[oó]rico|primera\s+vez|r[eé]cord|marca|logro|clasificaci[oó]n|eliminatoria)\b/i,
-      'quién o qué equipo': /\b(?:selecci[oó]n|equipo|jugador[oa]?|atleta|[aá]rbitro|entrenador|FIFA|FIBA|FENIBAL|FENIFUT| Nicaragua)\b/i,
+      'quién o qué equipo': /\b(?:selecci[oó]n|equipo|jugador[oa]?|atleta|[aá]rbitro|entrenador|piloto|competidor|boxeador|FIFA|FIBA|FENIBAL|FENIFUT|Nicaragua)\b/i,
       'próximo rival o desafío': /\b(?:pr[oó]ximo|rival|siguiente|partido|encuentro|fecha|etapa|ronda|eliminatoria|torneo)\b/i,
       'consecuencias': /\b(?:consecuencia|clasificaci[oó]n|puntaje|tabla|posici[oó]n|semifinal|final|octavos|cuartos|mundial|olimp[ií]pic[oa])\b/i,
       'cifras o datos': /\b(?:\d+\s*(?:a\s+\d+|–\d+|:\d+)|marcador|goles?|puntos?|sets?|minutos?| kilometraje|medallas?)\b/i,

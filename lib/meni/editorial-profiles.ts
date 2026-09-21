@@ -216,6 +216,8 @@ function buildCategoriasEditoriales(): Record<string, EditorialCriterios> {
 
 export const CATEGORIAS_EDITORIALES: Record<string, EditorialCriterios> = buildCategoriasEditoriales();
 
+import { classifySports, isIndividualSport } from './sports-classifier';
+
 export const INDIVIDUAL_SPORTS_KEYWORDS =
   /\b(?:artes\s+marciales|sanda|wushu|lucha|luchador|mma|muay\s+thai|kickboxing|cinturon|cintur[oó]n|boxeo|boxeador|atletismo|atleta|nadador|nataci[oó]n|ciclismo|ciclista|gimnasia|gimnasta|halterofilia|halter[oó]filo|esgrima|esgrimista|judo|judoka|karate|karateca|taekwondo|taekwondista|surf|skate|patinaje|patinador|patinadora|tenis|tenista|golf|golfista|yudo|yudoka|taekwondin)\b/i;
 
@@ -243,7 +245,7 @@ export function getPerfilEditorial(categoria: string, textoPlano?: string): Edit
     else key = 'general';
   }
 
-  if (key === 'deportes' && textoPlano && INDIVIDUAL_SPORTS_KEYWORDS.test(textoPlano)) {
+  if (key === 'deportes' && textoPlano && isIndividualSport(classifySports(textoPlano, '', '').disciplina)) {
     return CATEGORIAS_EDITORIALES['deportesindividuales'];
   }
   return CATEGORIAS_EDITORIALES[key] || CATEGORIAS_EDITORIALES['general'];

@@ -95,16 +95,21 @@ export interface NicaraguaInformateDecision {
 // 4. Reader Questions Engine
 // ═══════════════════════════════════════════════════════════
 
+export type QuestionAplicabilidad = 'aplicable' | 'no_aplicable' | 'no_disponible' | 'opcional';
+
 export interface ReaderQuestion {
   pregunta: string;
   obligatoria: boolean;
   respondida: boolean;
+  aplicabilidad?: QuestionAplicabilidad;
 }
 
 export interface ReaderQuestionsDecision {
   preguntas: ReaderQuestion[];
   preguntasObligatorias: string[];
   preguntasOpcionales: string[];
+  preguntasNoAplicables?: string[];
+  clasificacionDeporte?: import('../sports-classifier').SportsClassification;
   score: number;
 }
 
