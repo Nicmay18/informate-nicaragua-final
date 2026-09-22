@@ -292,8 +292,10 @@ export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): 
       executionMode: mode,
     });
 
-    // EXECUTE solo acciones autorizadas y seguras; el resto se encola para humano
-    if (mode === 'QUEUE_FOR_HUMAN') {
+    // EXECUTE solo acciones autorizadas y seguras; el resto se encola para humano.
+    // AUTO_EXECUTE de negocio no tiene dispatcher real: sin ejecutor, la única
+    // vía honesta es la cola humana — registrarlo como auto-ejecutado sería falso.
+    if (mode === 'QUEUE_FOR_HUMAN' || mode === 'AUTO_EXECUTE') {
       try {
         await trackRecommendation(input.id, action.title, input.domain);
       } catch (err) {
@@ -380,7 +382,7 @@ export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): 
         after: { action: business.action.id, mode: business.executionMode },
         impact:
           business.executionMode === 'AUTO_EXECUTE'
-            ? `Auto-executed: ${business.action.title}`
+            ? `Queued for human (no auto dispatcher): ${business.action.title}`
             : business.executionMode === 'QUEUE_FOR_HUMAN'
               ? `Queued for human: ${business.action.title}`
               : business.executionMode,
@@ -400,7 +402,9 @@ export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): 
     };
   });
 
-  const businessQueues = businessEnriched.filter((b) => b.executionMode === 'QUEUE_FOR_HUMAN');
+  const businessQueues = businessEnriched.filter(
+    (b) => b.executionMode === 'QUEUE_FOR_HUMAN' || b.executionMode === 'AUTO_EXECUTE',
+  );
   const businessActions = businessQueues.map((b) => `${b.action.title} (${b.id})`);
   const autoActions = repair?.repaired.map((r) => r.repairId) ?? [];
   const summaryParts: string[] = [];

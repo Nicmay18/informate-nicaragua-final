@@ -94,13 +94,24 @@ export async function claimNextJob(): Promise<DeptoJob | null> {
   const next = candidates[0];
   if (!next) return null;
 
-  await db.collection(JOBS).doc(next.id ?? next.jobId).update({
-    status: 'running',
-    startedAt: now,
-    attempts: (next.attempts || 0) + 1,
+  // Claim atómico: dos schedulers concurrentes no pueden ejecutar el mismo job.
+  // Sin transacción, ambos leían 'pending', ambos marcaban 'running' y el
+  // trabajo se ejecutaba dos veces.
+  const ref = db.collection(JOBS).doc(next.id ?? next.jobId);
+  const claimed = await db.runTransaction(async (tx) => {
+    const doc = await tx.get(ref);
+    if (!doc.exists) return false;
+    const cur = doc.data() as DeptoJob;
+    if (!['pending', 'retry'].includes(cur.status || '')) return false;
+    tx.update(ref, {
+      status: 'running',
+      startedAt: now,
+      attempts: (cur.attempts || 0) + 1,
+    });
+    return true;
   });
 
-  return next;
+  return claimed ? next : null;
 }
 
 export async function completeJob(

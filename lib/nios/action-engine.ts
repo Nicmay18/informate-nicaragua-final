@@ -224,15 +224,21 @@ export async function proposeActionsFromOpportunities(opportunities: NiosGrowthO
  * Pensado para correr una vez al día desde un proceso explícito (watchdog).
  */
 export async function expireStaleActions(maxAgeDays = 7): Promise<{ expired: number; superseded: number; kept: number }> {
-  const snap = await db().collection('nios_actions').where('status', '==', 'PENDING').limit(300).get();
+  // PENDING (propuestas sin aprobar), PREPARED y QUEUED (GrowthAction /
+  // acciones solo preparadas en colas sin consumidor) también acumulan
+  // ciclo de vida pendiente: deben expirar igual.
+  const snap = await db().collection('nios_actions').where('status', 'in', ['PENDING', 'PREPARED', 'QUEUED']).limit(300).get();
   if (snap.empty) return { expired: 0, superseded: 0, kept: 0 };
 
   const pending = snap.docs.map((d) => d.data() as NiosAction);
   const cutoffMs = maxAgeDays * 24 * 60 * 60 * 1000;
 
+  const targetOf = (a: NiosAction): string =>
+    a.target || (a as unknown as { articleSlug?: string; articleUrl?: string }).articleSlug
+      || (a as unknown as { articleUrl?: string }).articleUrl || '';
   const newestByKey = new Map<string, NiosAction>();
   for (const a of pending) {
-    const key = `${a.kind}:${a.target}`;
+    const key = `${a.kind}:${targetOf(a)}`;
     const prev = newestByKey.get(key);
     if (!prev || (a.createdAt || '') > (prev.createdAt || '')) newestByKey.set(key, a);
   }
@@ -246,7 +252,7 @@ export async function expireStaleActions(maxAgeDays = 7): Promise<{ expired: num
     const a = doc.data() as NiosAction;
     const createdMs = Date.parse(a.createdAt || a.proposedAt || '');
     const ageMs = Number.isNaN(createdMs) ? Number.MAX_SAFE_INTEGER : Date.now() - createdMs;
-    const isNewestForTarget = newestByKey.get(`${a.kind}:${a.target}`)?.id === a.id;
+    const isNewestForTarget = newestByKey.get(`${a.kind}:${targetOf(a)}`)?.id === a.id;
 
     if (isNewestForTarget && ageMs < cutoffMs) {
       kept++;
@@ -255,7 +261,7 @@ export async function expireStaleActions(maxAgeDays = 7): Promise<{ expired: num
 
     const lifecycleNote = !isNewestForTarget
       ? 'superseded: existe una propuesta más reciente para el mismo objetivo'
-      : `expired: PENDING > ${maxAgeDays} días sin aprobación`;
+      : `expired: ${a.status} > ${maxAgeDays} días sin aprobación/ejecución`;
     await doc.ref.update({ status: 'EXPIRED', expiredAt: now, lifecycleNote });
     if (isNewestForTarget) expired++;
     else superseded++;
@@ -272,8 +278,15 @@ export async function getAction(id: string): Promise<NiosAction | null> {
 }
 
 export async function getActions(limit = 50): Promise<NiosAction[]> {
-  const snap = await db().collection('nios_actions').orderBy('createdAt', 'desc').limit(limit).get();
-  return snap.docs.map((d) => d.data() as NiosAction);
+  const snap = await db().collection('nios_actions').orderBy('createdAt', 'desc').limit(limit * 3).get();
+  // La colección mezcla dos esquemas: NiosAction (title/evidence/proposal) y
+  // GrowthAction (growth/store.ts — tiene actionTaken/baseline/articleSlug).
+  // El panel solo sabe renderizar NiosAction: excluir por el campo único del
+  // esquema B, no por source (los docs legacy pueden no tenerlo).
+  return snap.docs
+    .map((d) => d.data() as NiosAction)
+    .filter((a) => (a as unknown as { actionTaken?: unknown }).actionTaken === undefined)
+    .slice(0, limit);
 }
 
 export async function approveAndExecuteAction(actionId: string, user?: string): Promise<NiosAction> {
@@ -288,7 +301,11 @@ export async function approveAndExecuteAction(actionId: string, user?: string): 
     const { after, result } = await executeActionInFirestore(action);
     const completedAt = new Date().toISOString();
     const measureAt = new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString();
-    await ref.update({ status: 'COMPLETED', completedAt, measureAt, after, result });
+    // Si el resultado solo preparó material para revisión humana (PREPARED /
+    // pending_review en colas sin consumidor automático), la acción NO está
+    // completada: queda QUEUED hasta que un humano ejecute la cola.
+    const staged = result.status === 'PREPARED' || result.status === 'pending_review';
+    await ref.update({ status: staged ? 'QUEUED' : 'COMPLETED', completedAt, measureAt, after, result });
     return (await ref.get()).data() as NiosAction;
   } catch (err) {
     const failedAt = new Date().toISOString();

@@ -69,7 +69,10 @@ async function hasRecentJob(
     });
   } catch (err) {
     logger.error('[depto-scheduler] Error consultando trabajos recientes:', err);
-    return true;
+    // Fail-loud: devolver false permite encolar (el dedupKey único por ventana
+    // sigue evitando duplicados reales). Devolver true silenciaba TODOS los
+    // encolados ante cualquier error de Firestore, sin dejar rastro.
+    return false;
   }
 }
 

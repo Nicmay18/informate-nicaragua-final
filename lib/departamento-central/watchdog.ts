@@ -93,10 +93,12 @@ export async function runWatchdog(): Promise<{
   }
 
   // Alertas operativas reales → nios_alerts (dedup + cooldown internos).
+  let stepFailures = 0;
   try {
     const alerts = await emitOperationalAlerts(db, stale);
     if (alerts.emitted > 0) actions.push(`alerts-emitted-${alerts.emitted}`);
   } catch (err) {
+    stepFailures++;
     logger.error('[depto-watchdog] emitOperationalAlerts falló:', err);
   }
 
@@ -106,23 +108,27 @@ export async function runWatchdog(): Promise<{
     const act = await expireStaleActions(7);
     if (act.expired + act.superseded > 0) actions.push(`actions-expired-${act.expired + act.superseded}`);
   } catch (err) {
+    stepFailures++;
     logger.error('[depto-watchdog] expireStaleActions falló:', err);
   }
   try {
     const tasks = await reconcileCeoTasks(30);
     if (tasks.expired > 0) actions.push(`ceo-tasks-expired-${tasks.expired}`);
   } catch (err) {
+    stepFailures++;
     logger.error('[depto-watchdog] reconcileCeoTasks falló:', err);
   }
 
   await recordLearning({
     source: 'departamento-central',
     kind: 'learning',
-    note: `Watchdog ejecutado: salud=${overall}, componentes críticos=${stale.length}, trabajos atascados=${stuckSnap.size}, cola=${pendingCount}.`,
+    note: `Watchdog ejecutado: salud=${overall}, componentes críticos=${stale.length}, trabajos atascados=${stuckSnap.size}, cola=${pendingCount}, fallos=${stepFailures}.`,
     tags: ['watchdog', 'infraestructura', '24x7'],
   });
 
-  await writeHeartbeat('watchdog', 'healthy');
+  // El heartbeat reporta el resultado real del ciclo: 'healthy' solo si
+  // todos los pasos corrieron y el sistema está sano; nunca incondicional.
+  await writeHeartbeat('watchdog', stepFailures === 0 && overall !== 'CRITICAL' ? 'healthy' : 'degraded');
 
   return { health: overall, stale, actions };
 }

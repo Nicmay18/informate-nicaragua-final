@@ -119,6 +119,39 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       updateData.fechaActualizacion = Timestamp.now();
 
       await ref.update(updateData);
+
+      // Editor Jefe — Fase 1: la edición humana de una nota existente ES la
+      // corrección del editor. Se captura del diff real (antes en Firestore vs
+      // después enviado) en vez de depender de que el panel envíe `correcciones`,
+      // que nadie enviaba: la cadena editor_corrections → editor_patterns
+      // quedaba vacía y el aprendizaje del Editor Jefe nunca se alimentaba.
+      try {
+        const { registerCorrection } = await import('@/lib/meni/editor-jefe/correction-tracker');
+        const campos: { campo: 'titulo' | 'cuerpo' | 'entrada'; antes: string; despues: string }[] = [];
+        if (body.titulo !== undefined && body.titulo !== existingData.titulo) {
+          campos.push({ campo: 'titulo', antes: String(existingData.titulo || ''), despues: String(body.titulo) });
+        }
+        if (body.resumen !== undefined && body.resumen !== existingData.resumen) {
+          campos.push({ campo: 'entrada', antes: String(existingData.resumen || ''), despues: String(body.resumen) });
+        }
+        if (body.contenido !== undefined && body.contenido !== existingData.contenido) {
+          campos.push({ campo: 'cuerpo', antes: String(existingData.contenido || ''), despues: String(body.contenido) });
+        }
+        for (const c of campos) {
+          await registerCorrection(db, {
+            articleId: id,
+            campo: c.campo,
+            antes: c.antes,
+            despues: c.despues,
+            categoria: String(updateData.categoria || existingData.categoria || 'General'),
+          });
+        }
+        if (campos.length > 0) {
+          logger.info('[admin/news PUT] Editor Jefe: correcciones registradas', { id, campos: campos.map((c) => c.campo) });
+        }
+      } catch (corrErr) {
+        logger.warn('[admin/news PUT] Correction tracking falló (no bloqueante):', corrErr);
+      }
     } else {
       // Solo metadata cambios — permitir sin MENI, pero bloquear publicar si no aprobado
       if (tryingToPublish && !alreadyApproved) {

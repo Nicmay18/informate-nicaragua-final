@@ -129,6 +129,11 @@ function detectarDudasPendientes(texto: string): string[] {
   return dudas;
 }
 
+// Una duda pendiente declarada por el texto es información NO_DISPONIBLE
+// reportada honestamente (p.ej. "se investiga", "autoridades no se han
+// pronunciado"), NO una falta del periodista. Se expone como metadata
+// informativa pero no reduce la completitud ni el score.
+
 export function runStoryCompletenessEngine(
   input: EditorialBrainInput,
   readerQuestions?: ReaderQuestionsDecision,
@@ -142,13 +147,12 @@ export function runStoryCompletenessEngine(
   const contextoFaltante = detectarContextoFaltante(texto, tipo, input.perfil || input.categoria);
   const dudasPendientes = detectarDudasPendientes(texto);
 
-  const totalFaltantes = respuestasFaltantes.length + contextoFaltante.length + dudasPendientes.length;
+  const totalFaltantes = respuestasFaltantes.length + contextoFaltante.length;
   const cerrada = totalFaltantes === 0;
 
   let score = 100;
   score -= respuestasFaltantes.length * 5;
   score -= contextoFaltante.length * 4;
-  score -= dudasPendientes.length * 3;
   score = Math.max(0, Math.min(score, 100));
 
   return { cerrada, respuestasFaltantes, contextoFaltante, dudasPendientes, score };

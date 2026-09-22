@@ -136,7 +136,10 @@ function aggregateRules(entries: MeniLearningEntry[]): {
       }
     }
 
-    if (entry.verdict === 'meni_sobreestima') {
+    // classifyMeniVerdict emite 'meni_sobreestima_hipotesis' (verificado con
+    // GSC REAL, pero hipótesis pendiente de verificación manual). Contarla
+    // como incorrecta era imposible antes: el literal nunca coincidía.
+    if (entry.verdict === 'meni_sobreestima' || entry.verdict === 'meni_sobreestima_hipotesis') {
       const rules = ['contenido_util', 'profundidad', 'originalidad', 'eeat', 'seo'];
       for (const rule of rules) {
         const curr = incorrectByRule.get(rule) || { count: 0, examples: [] };

@@ -241,7 +241,7 @@ describe('PATCH: scoreMeni null vs 0 — Thin Content', () => {
     })];
     const report = generateGoogleTrustReport(articles);
     const thinFlags = report.articles[0].thinContentFlags;
-    expect(thinFlags).toContain('Poca información nueva: score MENI bajo y 0 impresiones');
+    expect(thinFlags).toContain('Baja visibilidad orgánica con GSC REAL: score MENI bajo y 0 impresiones');
   });
 
   it('scoreMeni=40 (real bajo): SÍ debe activar flag "score MENI bajo" en thin content', () => {
@@ -256,7 +256,7 @@ describe('PATCH: scoreMeni null vs 0 — Thin Content', () => {
     })];
     const report = generateGoogleTrustReport(articles);
     const thinFlags = report.articles[0].thinContentFlags;
-    expect(thinFlags).toContain('Poca información nueva: score MENI bajo y 0 impresiones');
+    expect(thinFlags).toContain('Baja visibilidad orgánica con GSC REAL: score MENI bajo y 0 impresiones');
   });
 
   it('scoreMeni=95 (real alto): NO debe activar flag "score MENI bajo"', () => {

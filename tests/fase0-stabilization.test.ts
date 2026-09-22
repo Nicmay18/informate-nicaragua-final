@@ -111,6 +111,15 @@ const fakeDb = {
       },
     };
   },
+  // Transacción simulada: el store en memoria es single-threaded, así que
+  // ejecutar el callback sobre los refs reales reproduce la semántica.
+  runTransaction: async (fn: (tx: any) => Promise<any>) =>
+    fn({
+      get: (ref: any) => ref.get(),
+      set: (ref: any, data: any) => ref.set(data),
+      update: (ref: any, data: any) => ref.update(data),
+      delete: (ref: any) => ref.delete?.(),
+    }),
 } as unknown as Firestore;
 
 function seed(col: string, id: string, data: Record<string, any>) {

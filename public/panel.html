@@ -6103,12 +6103,13 @@ window.batchRestore = async function() {
         const estado = await estadoRes.json();
         const serverHasKey = estado.servidor?.adminApiKeyConfigurada;
 
-        // 3. Probar autenticación real contra una ruta protegida
+        // 3. Probar autenticación real contra una ruta protegida de solo lectura
         let authWorks = false;
         if (hasLocal) {
-          const testRes = await fetch('/api/admin/limpiar-noindex', {
+          const testRes = await fetch('/api/admin/config', {
             method: 'POST',
-            headers: { 'x-admin-token': localKey, 'Content-Type': 'application/json' }
+            headers: { 'x-admin-token': localKey, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'read' })
           });
           authWorks = testRes.status !== 401;
         }
