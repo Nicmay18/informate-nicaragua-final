@@ -10,6 +10,7 @@
 
 import type { Firestore } from 'firebase-admin/firestore';
 import type { EditorPattern, CorreccionRegistrada, CampoCorreccion } from '@/lib/meni/editorial-brain/types';
+import { transitionLearning, isCandidateEligible } from '@/lib/meni/learning-engine/lifecycle';
 
 const COLLECTION = 'editor_corrections';
 const PATTERNS_COLLECTION = 'editor_patterns';
@@ -128,21 +129,45 @@ async function detectAndPersistPattern(
   };
 
   const patternId = `${campo}_${categoria}_${maxType}`;
-  await db.collection(PATTERNS_COLLECTION).doc(patternId).set({
+  const ref = db.collection(PATTERNS_COLLECTION).doc(patternId);
+  const existing = await ref.get();
+
+  // Aprendizaje gobernado: un patrón nuevo nace OBSERVED. Con evidencia
+  // suficiente (>=3 correcciones del mismo tipo, confianza >=0.6) se promueve
+  // a CANDIDATE — pero NO afecta diagnósticos hasta pasar VALIDATING →
+  // APPROVED → ACTIVE. La fuente de verdad del estado es este documento.
+  await ref.set({
     ...pattern,
+    learningState: existing.exists ? (existing.data()?.learningState ?? 'OBSERVED') : 'OBSERVED',
+    version: existing.exists ? (existing.data()?.version ?? 0) : 0,
+    stateHistory: existing.exists ? (existing.data()?.stateHistory ?? []) : [],
+    evidence: { correctionsCount: maxCount, confidence, campo, categoria, tipo: maxType },
     updatedAt: new Date().toISOString(),
-  });
+  }, { merge: true });
+
+  const currentState: string = existing.exists ? (existing.data()?.learningState ?? 'OBSERVED') : 'OBSERVED';
+  if (currentState === 'OBSERVED' && isCandidateEligible(maxCount, confidence)) {
+    await transitionLearning(db, patternId, 'CANDIDATE', {
+      by: 'correction-tracker',
+      note: `${maxCount} correcciones tipo ${maxType} en ${campo}/${categoria}`,
+      evidence: { correctionsCount: maxCount, confidence },
+    });
+  }
 
   return pattern;
 }
 
 /**
- * Carga todos los patrones aprendidos desde Firestore.
+ * Carga SOLO los patrones en estado ACTIVE desde Firestore.
+ * Un patrón OBSERVED/CANDIDATE/VALIDATING/APPROVED nunca modifica el
+ * diagnóstico: la activación requiere aprobación explícita tras regresión.
  * Se llama al inicio de runEditorialBrain para aplicarlos.
  */
 export async function loadEditorPatterns(db: Firestore): Promise<EditorPattern[]> {
   try {
-    const snap = await db.collection(PATTERNS_COLLECTION).get();
+    const snap = await db.collection(PATTERNS_COLLECTION)
+      .where('learningState', '==', 'ACTIVE')
+      .get();
     if (snap.empty) return [];
     return snap.docs.map(d => d.data() as unknown as EditorPattern);
   } catch {

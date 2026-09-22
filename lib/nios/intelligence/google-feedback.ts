@@ -113,6 +113,9 @@ export function generateLearningPatterns(
 
 /**
  * Persiste patrones de aprendizaje en Firestore.
+ * Clasificación explícita: HISTORICAL_MEMORY — esta colección almacena
+ * observaciones diarias por artículo; ningún consumidor modifica
+ * comportamiento con ellas (solo lectura de display).
  */
 export async function saveLearningPatterns(
   db: Firestore,
@@ -124,11 +127,32 @@ export async function saveLearningPatterns(
 
   for (const pattern of patterns) {
     const ref = db.collection(COLLECTION).doc(pattern.id);
-    batch.set(ref, pattern, { merge: true });
+    batch.set(ref, { ...pattern, storageClass: 'HISTORICAL_MEMORY' }, { merge: true });
   }
 
   await batch.commit();
   logger.info(`[google-feedback] Saved ${patterns.length} learning patterns to Firestore`);
+}
+
+/**
+ * Poda patrones más viejos que `retentionDays`. Acotado: máx 500 borrados
+ * por corrida; corre diario desde el orchestrator.
+ */
+export async function pruneLearningPatterns(
+  db: Firestore,
+  retentionDays = 90,
+): Promise<{ deleted: number }> {
+  const cutoff = new Date(Date.now() - retentionDays * 86400000).toISOString();
+  const snap = await db.collection(COLLECTION)
+    .where('generatedAt', '<', cutoff)
+    .limit(500)
+    .get();
+  if (snap.empty) return { deleted: 0 };
+  const batch = db.batch();
+  for (const d of snap.docs) batch.delete(d.ref);
+  await batch.commit();
+  logger.info(`[google-feedback] Pruned ${snap.size} learning patterns older than ${retentionDays}d`);
+  return { deleted: snap.size };
 }
 
 /**

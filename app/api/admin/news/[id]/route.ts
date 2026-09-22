@@ -152,6 +152,29 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       } catch (corrErr) {
         logger.warn('[admin/news PUT] Correction tracking falló (no bloqueante):', corrErr);
       }
+
+      // Trust layer: la edición puede cambiar la evidencia de confianza.
+      try {
+        const { analyzeTrust } = await import('@/lib/editorial/trust');
+        const trust = analyzeTrust({
+          titulo: String(updateData.titulo ?? existingData.titulo ?? ''),
+          cuerpo: String(updateData.contenido ?? existingData.contenido ?? ''),
+          categoria: String(updateData.categoria ?? existingData.categoria ?? 'General'),
+        });
+        await ref.update({
+          confianza: {
+            nivel: trust.nivel,
+            resumen: trust.resumen,
+            requiereRevisionHumana: trust.requiereRevisionHumana,
+            riesgos: trust.riesgos.map(r => r.detail ?? r.text).slice(0, 10),
+            noDisponible: trust.noDisponible.length,
+            fuentes: trust.fuentes,
+            at: new Date().toISOString(),
+          },
+        });
+      } catch (trustErr) {
+        logger.warn('[admin/news PUT] Trust layer falló (no bloqueante):', trustErr);
+      }
     } else {
       // Solo metadata cambios — permitir sin MENI, pero bloquear publicar si no aprobado
       if (tryingToPublish && !alreadyApproved) {

@@ -260,6 +260,12 @@ export async function GET(request: NextRequest) {
       return respond({ success: true, date: latest.date, report });
     }
 
+    if (action === 'calibration') {
+      const { computeCalibrationReport } = await import('@/lib/meni/calibration');
+      const report = await computeCalibrationReport(db);
+      return respond({ success: true, report });
+    }
+
     if (action === 'editor-strategy') {
       const [
         { generateGoogleTrustReport },

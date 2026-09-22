@@ -1,0 +1,313 @@
+{
+  "generatedAt": "2026-09-21T20:15:00.264Z",
+  "noticias": {
+    "total": 465,
+    "publicadas": 432,
+    "borradores": 0,
+    "archivadas": 33,
+    "conScoreMeni": 465,
+    "sinScoreMeni": 0,
+    "aprobadoMeni": 435,
+    "conCategoria": 465,
+    "sinCategoria": 0,
+    "conRecomendaciones": 0,
+    "conDiagnostico": 465,
+    "conPreguntas": 0,
+    "reevaluadas": 0,
+    "editadasPostPublicacion": 261,
+    "scoreDist": {
+      "90-100": 435,
+      "80-89": 19,
+      "70-79": 10,
+      "60-69": 1
+    },
+    "categorias": {
+      "Deportes": 60,
+      "Sucesos": 137,
+      "Nacionales": 153,
+      "Internacionales": 72,
+      "Tecnología": 19,
+      "Espectáculos": 24
+    },
+    "porVersionMeni": {
+      "2.1.1-prod": 168
+    },
+    "palabrasBuckets": {
+      "<200": 0,
+      "200-400": 18,
+      "400-700": 242,
+      "700-1200": 163,
+      ">1200": 42
+    },
+    "sinImagen": 0,
+    "sinAutor": 0,
+    "sinResumen": 0,
+    "noindex": 30,
+    "scorePromedioPorCategoria": {
+      "Deportes": {
+        "n": 60,
+        "avg": 93
+      },
+      "Sucesos": {
+        "n": 137,
+        "avg": 96
+      },
+      "Nacionales": {
+        "n": 153,
+        "avg": 94
+      },
+      "Internacionales": {
+        "n": 72,
+        "avg": 92
+      },
+      "Tecnología": {
+        "n": 19,
+        "avg": 94
+      },
+      "Espectáculos": {
+        "n": 24,
+        "avg": 95
+      }
+    }
+  },
+  "colecciones": {
+    "nios_actions": {
+      "docs": 110,
+      "ultimoWrite": {
+        "campo": "createdAt",
+        "valor": 1789912070001,
+        "diasAtras": 1
+      }
+    },
+    "nios_memory": {
+      "docs": 267,
+      "ultimoWrite": {
+        "campo": "createdAt",
+        "valor": 1790000280586,
+        "diasAtras": 0
+      }
+    },
+    "nios_growth_opportunities": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "nios_traffic": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "nios_distribution_queue": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "nios_seo_experiments": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "nios_alerts": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "nios_telemetry": {
+      "docs": 36,
+      "ultimoWrite": {
+        "campo": "date",
+        "valor": 1789948800000,
+        "diasAtras": 1
+      }
+    },
+    "nios_daily_snapshots": {
+      "docs": 36,
+      "ultimoWrite": {
+        "campo": "date",
+        "valor": 1789948800000,
+        "diasAtras": 1
+      }
+    },
+    "nios_cache_invalidations": {
+      "docs": 1,
+      "ultimoWrite": {
+        "campo": "createdAt",
+        "valor": 1790000278701,
+        "diasAtras": 0
+      }
+    },
+    "nios_audit_trail": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "depto_jobs": {
+      "docs": 49,
+      "ultimoWrite": {
+        "campo": "createdAt",
+        "valor": 1789956160702,
+        "diasAtras": 1
+      }
+    },
+    "depto_incidents": {
+      "docs": 4,
+      "ultimoWrite": {
+        "campo": "createdAt",
+        "valor": 1789762964169,
+        "diasAtras": 3
+      }
+    },
+    "depto_heartbeat": {
+      "docs": 14,
+      "ultimoWrite": {
+        "campo": "updatedAt",
+        "valor": 1789995178162,
+        "diasAtras": 0
+      }
+    },
+    "supervisor_cycles": {
+      "docs": 4,
+      "ultimoWrite": null
+    },
+    "supervisor_updates": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "meni_diagnosis": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "meni_predictions": {
+      "docs": 292,
+      "ultimoWrite": {
+        "campo": "fecha",
+        "valor": 1790021519922,
+        "diasAtras": 0
+      }
+    },
+    "meni_daily_score": {
+      "docs": 292,
+      "ultimoWrite": {
+        "campo": "fecha",
+        "valor": 1790021520031,
+        "diasAtras": 0
+      }
+    },
+    "meni_learning_feedback": {
+      "docs": 7,
+      "ultimoWrite": null
+    },
+    "meni_ratings": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "meni_quality_history": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "google_learning_patterns": {
+      "docs": 11986,
+      "ultimoWrite": null
+    },
+    "editor_corrections": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "editor_patterns": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "learning_cycles": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "learning_config": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "article_lifecycles": {
+      "docs": 181,
+      "ultimoWrite": null
+    },
+    "kb_entities": {
+      "docs": 17,
+      "ultimoWrite": null
+    },
+    "kb_timeline": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "ceo_decisions": {
+      "docs": 0,
+      "ultimoWrite": null
+    },
+    "resumenes_diarios": {
+      "docs": 61,
+      "ultimoWrite": {
+        "campo": "fecha",
+        "valor": 1789948800000,
+        "diasAtras": 1
+      }
+    }
+  },
+  "nios_actions_detalle": {
+    "total": 110,
+    "porEstado": {
+      "PENDING": 104,
+      "FAILED": 5,
+      "RUNNING": 1
+    },
+    "porKind": {
+      "seo-page": 44,
+      "content-recirculation": 51,
+      "seo-query": 14,
+      "distribution-recirculation": 1
+    },
+    "esquema": {
+      "A_niosAction": 109,
+      "B_growthAction": 1
+    },
+    "conMeasureAt": 0,
+    "medidas": 0,
+    "vencidasSinMedir": 0
+  },
+  "nios_memory_kinds": {
+    "total": 267,
+    "porKind": {
+      "operational_incident": 59,
+      "ceo_loop": 55,
+      "learning": 18,
+      "operational_approval": 34,
+      "operational_memory": 19,
+      "SIN_KIND": 82
+    },
+    "ceoLoops": 55,
+    "verified": 0,
+    "verifiedSinEvidencia": 0
+  },
+  "depto_jobs_detalle": {
+    "total": 49,
+    "porEstado": {
+      "completed": 27,
+      "dead-letter": 3,
+      "pending": 17,
+      "retry": 2
+    },
+    "porTipo": {
+      "health-check": 5,
+      "daily-report": 5,
+      "growth-check": 5,
+      "monetization-check": 5,
+      "watchdog": 21,
+      "operational-repair": 6,
+      "article-pipeline": 2
+    },
+    "completadosComoSkipped": {},
+    "runningAtascados": 0
+  },
+  "meni_predictions_ciclo": {
+    "total": 292,
+    "conMetricaReal": 0,
+    "nuncaValidadas": 292
+  },
+  "nios_alerts_detalle": {
+    "total": 0,
+    "resueltas": 0,
+    "abiertas": 0,
+    "porTipo": {}
+  }
+}

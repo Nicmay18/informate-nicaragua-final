@@ -18,7 +18,8 @@ export async function getDepartamentoWorkSummary(): Promise<DepartamentoWorkSumm
     countJobsByStatus('failed'),
     countJobsByStatus('dead-letter'),
     getRecentJobs(8),
-    db.collection('nios_growth_opportunities').where('createdAt', '>=', since).count().get(),
+    // nios_growth_opportunities retirada (sin productor): conteo fijo en 0.
+    Promise.resolve({ data: () => ({ count: 0 }) }),
     db.collection('supervisor_cycles').where('runAt', '>=', since).count().get(),
   ]);
 

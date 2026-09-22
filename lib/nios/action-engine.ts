@@ -10,7 +10,7 @@ import { getNewsBySlug } from '@/lib/data';
 import { logger } from '@/lib/logger';
 import type { NiosGrowthOpportunity } from './nios-growth-radar';
 
-export type NiosActionStatus = 'PENDING' | 'APPROVED' | 'RUNNING' | 'COMPLETED' | 'FAILED' | 'REJECTED' | 'EXPIRED';
+export type NiosActionStatus = 'PENDING' | 'APPROVED' | 'RUNNING' | 'QUEUED' | 'COMPLETED' | 'FAILED' | 'REJECTED' | 'EXPIRED';
 
 export interface NiosAction {
   id: string;

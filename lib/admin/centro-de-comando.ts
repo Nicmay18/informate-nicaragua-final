@@ -213,17 +213,16 @@ async function getRecentLearnings(): Promise<LearningItem[]> {
 async function getContentHealth(): Promise<ContentHealth | null> {
   try {
     const db = getAdminDb();
-    const [totalSnap, approvedSnap, pendingSnap, problemSnap] = await Promise.all([
+    const [totalSnap, approvedSnap, pendingSnap] = await Promise.all([
       db.collection('noticias').count().get(),
       db.collection('noticias').where('aprobadoMeni', '==', true).count().get().catch(() => null),
       db.collection('noticias').where('aprobadoMeni', '==', false).count().get().catch(() => null),
-      db.collection('nios_growth_opportunities').where('status', '==', 'PENDING').count().get().catch(() => null),
     ]);
 
     const total = totalSnap.data().count || 0;
     const approved = approvedSnap?.data().count ?? 0;
     const pendingReview = pendingSnap?.data().count ?? 0;
-    const withOpportunities = problemSnap?.data().count ?? 0;
+    const withOpportunities = 0;
 
     return {
       total,

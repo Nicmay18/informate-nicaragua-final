@@ -43,17 +43,10 @@ async function loadIncidents(): Promise<{ active: number; resolved: number; item
   return { active: summary.active, resolved: summary.resolved24h, items, activeItems };
 }
 
-async function loadGrowthOpportunities(): Promise<{ count: number; note: string }> {
-  const db = getAdminDb();
-  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const snap = await db.collection('nios_growth_opportunities').where('createdAt', '>=', since).count().get();
-  const count = snap.data().count;
-
-  if (count === 0) {
-    return { count: 0, note: 'No se generaron nuevas oportunidades de crecimiento en las últimas 24h.' };
-  }
-
-  return { count, note: `${count} oportunidades de crecimiento detectadas.` };
+// nios_growth_opportunities no tiene productor (colección retirada).
+// Se reporta 0 explícito en vez de hacer una lectura muerta diaria.
+function loadGrowthOpportunities(): { count: number; note: string } {
+  return { count: 0, note: 'Pipeline de oportunidades de crecimiento retirado (colección sin productor).' };
 }
 
 async function loadEditorialNotes(): Promise<{ count: number; note: string }> {

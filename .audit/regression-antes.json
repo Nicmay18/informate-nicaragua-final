@@ -1,0 +1,4691 @@
+{
+  "modo": "antes",
+  "generatedAt": "2026-09-21T23:00:02.484Z",
+  "resumen": {
+    "evaluadas": 467,
+    "errores": 0,
+    "aprobadas": 415,
+    "tasaAprobacion": 88.9,
+    "scorePromedio": 91.3,
+    "distribucion": {
+      "80-89": 50,
+      "90-100": 415,
+      "70-79": 2
+    },
+    "notasConDudasPendientes": 0,
+    "scorePromedioConDudas": 0,
+    "scorePromedioSinDudas": 91.3
+  },
+  "notas": [
+    {
+      "id": "023LnrGSslRkXP9djUAW",
+      "titulo": "Mundial 2030: por qué habrá partidos en Sudamérica y Europa",
+      "categoria": "Deportes",
+      "score": 87,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 613,
+      "dudas": 0
+    },
+    {
+      "id": "02DsJjI62kA1rFKe0nWS",
+      "titulo": "Luchó diez días por su vida y falleció tras ataque de expareja",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 506,
+      "dudas": 0
+    },
+    {
+      "id": "096760aFi8gk8aUBtkFR",
+      "titulo": "Carreteras del país dejan un fin de semana con varios accidentes",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 562,
+      "dudas": 0
+    },
+    {
+      "id": "0Cf8O7fK6djImEYZbhXJ",
+      "titulo": "Maltrato animal en Nicaragua: qué dice la ley y qué debe saber",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 3326,
+      "dudas": 0
+    },
+    {
+      "id": "0JXhMbgZEm2fMAG62GyY",
+      "titulo": "Nicaragua remonta ante México y hace historia en Williamsport",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 888,
+      "dudas": 0
+    },
+    {
+      "id": "0gGqzH1RBUeVTGHWkuvl",
+      "titulo": "Cinco afectados en accidentes viales en Managua y regiones",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 439,
+      "dudas": 0
+    },
+    {
+      "id": "0mg4c9FMOLxKeNMD9pKf",
+      "titulo": "Peñas Blancas: un tesoro natural entre neblina y montañas",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 847,
+      "dudas": 0
+    },
+    {
+      "id": "0s9rnylrsRqwYjjUqUfk",
+      "titulo": "Managua inicia sus fiestas 2026 con programa y asuetos",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 636,
+      "dudas": 0
+    },
+    {
+      "id": "0tmiH8fXJTVXNmiM0W5U",
+      "titulo": "Cuatro nicaragüenses resultan afectados en Costa Rica, El…",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 642,
+      "dudas": 0
+    },
+    {
+      "id": "12vpZYJonwqLUyW1rlpl",
+      "titulo": "Capturan en Estelí a nicaragüense requerido por caso en EE. UU",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 558,
+      "dudas": 0
+    },
+    {
+      "id": "19NRSSTtv9xlGQ31x9gV",
+      "titulo": "Baile de los Chinegros mantiene vivo un ritual de 400 años",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 578,
+      "dudas": 0
+    },
+    {
+      "id": "1HmobwfngxeXoUofqosD",
+      "titulo": "Primeros bebés del Día de las Madres nacen en hospitales de Managua",
+      "categoria": "Nacionales",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 572,
+      "dudas": 0
+    },
+    {
+      "id": "1K4jCiU5mT9xr4pyE0vr",
+      "titulo": "Adolescente muere atropellado por taxi frente a COTRAN Norte",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 527,
+      "dudas": 0
+    },
+    {
+      "id": "1WR5b1S9GpDUFkrOtrX1",
+      "titulo": "Kilauea sorprende con lava de 150 metros en Hawái.",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1186,
+      "dudas": 0
+    },
+    {
+      "id": "1jSOkvgStSVlfu9ENBdi",
+      "titulo": "Cosecha de frijol rojo supera 99 mil quintales en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 578,
+      "dudas": 0
+    },
+    {
+      "id": "1ta7RFiWRtgUz2oI9fUV",
+      "titulo": "¿Por qué Nicaragua celebra el Día Nacional de la Biblia?",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 882,
+      "dudas": 0
+    },
+    {
+      "id": "22ZHhDUSpI6CrpwIYkZ9",
+      "titulo": "Samsung lanza One UI 9 y Android 17: lista de dispositivos",
+      "categoria": "Tecnología",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 655,
+      "dudas": 0
+    },
+    {
+      "id": "28a2yKj9NN9k4au0xJ6q",
+      "titulo": "Nicaraguense resulta afectado en accidente laboral en Wisconsin",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 721,
+      "dudas": 0
+    },
+    {
+      "id": "2CG5EYW3URKVAqzAVxs5",
+      "titulo": "Coyote vs. Acme llega a Nicaragua: el Coyote va contra ACME",
+      "categoria": "Espectáculos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 808,
+      "dudas": 0
+    },
+    {
+      "id": "2GBQwgf7i4i2LJsvIhhP",
+      "titulo": "Santo Domingo de Guzmán inicia sus fiestas con tradición y fe",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1007,
+      "dudas": 0
+    },
+    {
+      "id": "2JtGQ8X981oq4giKYxQo",
+      "titulo": "Nicaragua debuta en súper ronda con la mira en Lima 2027",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 406,
+      "dudas": 0
+    },
+    {
+      "id": "2LRMqTFV3a6XPkdfoEjh",
+      "titulo": "Dos hombres pierden la vida en incidentes nocturnos en el norte",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 507,
+      "dudas": 0
+    },
+    {
+      "id": "2OEHQvyYeyqTAHDNgC9h",
+      "titulo": "Medicina Legal descarta alteraciones mentales en acusada",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 590,
+      "dudas": 0
+    },
+    {
+      "id": "2Oe4alGdzbFRKBmcXFBV",
+      "titulo": "Lluvias continuarán en Nicaragua mientras Polo y Odalys avanzan",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 781,
+      "dudas": 0
+    },
+    {
+      "id": "2Q0a43Iew8sHrDTzGngV",
+      "titulo": "NASA lanza Roman, el telescopio que mirará más cielo que Hubble",
+      "categoria": "Tecnología",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1293,
+      "dudas": 0
+    },
+    {
+      "id": "2Ufakm1AGqtU7ZBAoERn",
+      "titulo": "Nicaragua destaca en el café: DELAFINCA conquista Latinoamérica",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 824,
+      "dudas": 0
+    },
+    {
+      "id": "2rM20SDlcas77huhJYiV",
+      "titulo": "Café nicaragüense alcanza récord mundial y abre nuevos retos",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 483,
+      "dudas": 0
+    },
+    {
+      "id": "2rTzZC3s9XcIoprwznu2",
+      "titulo": "Sismo de 7.2 sacude Perú y deja daños en zonas de Ayacucho",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 737,
+      "dudas": 0
+    },
+    {
+      "id": "2vlc0y6ycO5UkGph7AL7",
+      "titulo": "Triple empate en la cima del Germán Pomares 2026",
+      "categoria": "Deportes",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 958,
+      "dudas": 0
+    },
+    {
+      "id": "31SEaK51gcnkXWCB6Qf8",
+      "titulo": "Estudiantes destacan en Olimpiada Nacional de Ajedrez 2026",
+      "categoria": "Deportes",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 503,
+      "dudas": 0
+    },
+    {
+      "id": "35rFlnRUEtOhSPYJQzNC",
+      "titulo": "Laguna de Apoyo: cuánto cuesta disfrutar este paraíso natural",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1186,
+      "dudas": 0
+    },
+    {
+      "id": "36WzKkoqnN6ITtamp2BY",
+      "titulo": "Documentos para tramitar el récord policial en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 612,
+      "dudas": 0
+    },
+    {
+      "id": "3A0WKJhlDKATpXuyEIPq",
+      "titulo": "Noruega vuelve a octavos del Mundial tras 28 años de ausencia",
+      "categoria": "Deportes",
+      "score": 80,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 398,
+      "dudas": 0
+    },
+    {
+      "id": "3QOwSPvAOLwPxqFV532h",
+      "titulo": "Prueba de IA obliga a OpenAI a reforzar su seguridad digital",
+      "categoria": "Tecnología",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 431,
+      "dudas": 0
+    },
+    {
+      "id": "3U1BP06qwqJhclrHYYSK",
+      "titulo": "Cinco accidentes dejan dos muertos y varios lesionados",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 942,
+      "dudas": 0
+    },
+    {
+      "id": "3YLvxaAGi5bhcSjJ2XsP",
+      "titulo": "Nicaragua celebra a la Virgen de la Asunción este 14 de agosto",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1166,
+      "dudas": 0
+    },
+    {
+      "id": "3Zg8Q6OaaXEut0fA81CH",
+      "titulo": "Cuatro víctimas deja accidentalidad vial entre sábado y domingo",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 674,
+      "dudas": 0
+    },
+    {
+      "id": "3mtmQdQuP5M8aJ3bpqev",
+      "titulo": "Motociclistas marcan las tragedias viales del fin de semana.",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1287,
+      "dudas": 0
+    },
+    {
+      "id": "3p9PHUH5WeJIGlMFVrLn",
+      "titulo": "Chile declara Estado de Catástrofe en Coquimbo y Huasco",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 532,
+      "dudas": 0
+    },
+    {
+      "id": "3qYRcThYdkrzWJRDSfhy",
+      "titulo": "Fallece la actriz venezolana Gabriela Fleritt tras sismo",
+      "categoria": "Espectáculos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 361,
+      "dudas": 0
+    },
+    {
+      "id": "4G7Uq0yDZgiHpGyB5GSS",
+      "titulo": "La Resurrección de Cristo se estrena en el Día de la Ascensión",
+      "categoria": "Espectáculos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 883,
+      "dudas": 0
+    },
+    {
+      "id": "4IajfR4J2XXUMtKjnjzh",
+      "titulo": "Fin de semana deja 2 muertos y 7 heridos en accidentes",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 838,
+      "dudas": 0
+    },
+    {
+      "id": "4hJCEKuehsOUZtAdJ8YM",
+      "titulo": "205 años de Independencia: la historia que une a Centroamérica",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1415,
+      "dudas": 0
+    },
+    {
+      "id": "4vepN2M1s9i3SEtBo0Cv",
+      "titulo": "Accidente deja lesionados a integrantes de Carnavaleros de Jaguar",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 488,
+      "dudas": 0
+    },
+    {
+      "id": "4w1IbR6A8jfQu0cdwpdg",
+      "titulo": "Al menos 32 personas han muerto electrocutadas en 2026",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 852,
+      "dudas": 0
+    },
+    {
+      "id": "4z2aqS0fe5H5GCDtuA3o",
+      "titulo": "Nicaragua tendrá nueve días sin IVA para turismo y gastronomía",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 609,
+      "dudas": 0
+    },
+    {
+      "id": "4zlbpigw8h8hj83ygzkj",
+      "titulo": "Los Karnavaleros de Jaguar regresan a escenarios tras accidente",
+      "categoria": "Espectáculos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 590,
+      "dudas": 0
+    },
+    {
+      "id": "51OIyVo7HhoY8dcsmoto",
+      "titulo": "Tribunal limita deportaciones tras 22,000 migrantes enviados",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1955,
+      "dudas": 0
+    },
+    {
+      "id": "5HSmUlumizpYLj25IZBi",
+      "titulo": "Nicaragua se mete entre los mejores de la Serie Mundial",
+      "categoria": "Deportes",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 634,
+      "dudas": 0
+    },
+    {
+      "id": "5JyYmiQUFmH29eqxGFuC",
+      "titulo": "NASA registra bola de fuego que cruzó seis estados de EE.UU",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 944,
+      "dudas": 0
+    },
+    {
+      "id": "5aeMHRh7eRI8LBlr40nq",
+      "titulo": "Tres nicaragüenses fueron deportados de EE. UU. a África",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1543,
+      "dudas": 0
+    },
+    {
+      "id": "5ygMPBWB8ukF4W5m7uoG",
+      "titulo": "Investigaciones por afectación en barrio Old Bank Bluefields",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 2039,
+      "dudas": 0
+    },
+    {
+      "id": "6AlDD9oc1OCs6UPPvhbD",
+      "titulo": "Policía recupera a recién nacida sustraída en Ayapal",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 618,
+      "dudas": 0
+    },
+    {
+      "id": "6G4rPNMwq7InAlhlpTCH",
+      "titulo": "Nicaragüense muere en Costa Rica tras choque y fuga vial",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 597,
+      "dudas": 0
+    },
+    {
+      "id": "6MEKO8mlRDoRFqmnh2oC",
+      "titulo": "Muere maestra jubilada tras ser atropellada en Ocotal",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 495,
+      "dudas": 0
+    },
+    {
+      "id": "6MlyKI1pvd5zmaQ7oILa",
+      "titulo": "Víctima de golpiza en Chichigalpa enfrenta otro proceso judicial",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 466,
+      "dudas": 0
+    },
+    {
+      "id": "6tjnOAncIhmj2sxcEwwR",
+      "titulo": "Dos hermanos nicaragüenses mueren en tragedia laboral en EE.UU.",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1040,
+      "dudas": 0
+    },
+    {
+      "id": "6xI9r7hy6zyjbUr4RPsG",
+      "titulo": "Migración vuelve a descentralizar el permiso de salida de menores",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1631,
+      "dudas": 0
+    },
+    {
+      "id": "72TQAb5XUFKupHb3hiPW",
+      "titulo": "Dengue y chikungunya: señales que no debe ignorar en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1264,
+      "dudas": 0
+    },
+    {
+      "id": "7QlrTPaRkcaFte7dOBb0",
+      "titulo": "El eclipse lunar tuvo dos escenarios volcánicos en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 568,
+      "dudas": 0
+    },
+    {
+      "id": "7QoTq3ApRh7XNZLIfm43",
+      "titulo": "Los 60 flecheros de Matagalpa, héroes de Nicaragua.",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1092,
+      "dudas": 0
+    },
+    {
+      "id": "7X15yaqKOah8lCE6MTtG",
+      "titulo": "TELCOR: Es ilegal cobrar la “cajita” al cancelar el servicio",
+      "categoria": "Nacionales",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 892,
+      "dudas": 0
+    },
+    {
+      "id": "7XzL7aTqVYBpTNKgSPxQ",
+      "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 500,
+      "dudas": 0
+    },
+    {
+      "id": "7aOBbeIDRKR06tnYfklr",
+      "titulo": "Accidente con rastra deja una joven fallecida en Managua",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 557,
+      "dudas": 0
+    },
+    {
+      "id": "7h9NNZjCshVbyytxVXBP",
+      "titulo": "Pronóstico semanal: Temperaturas y lluvias en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 617,
+      "dudas": 0
+    },
+    {
+      "id": "7k2ncDzIhlS00WN4ktzR",
+      "titulo": "Carreteras dejan dos fallecidos y varios accidentes",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 530,
+      "dudas": 0
+    },
+    {
+      "id": "7on7GdpIMHEV4f90OHoX",
+      "titulo": "Reservas de Nicaragua suman US$98.5 millones en agosto",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 875,
+      "dudas": 0
+    },
+    {
+      "id": "81UQk1YkWPpF7BzIdaDo",
+      "titulo": "Dos nicaragüenses resultan afectados en accidentes ocurridos en…",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 641,
+      "dudas": 0
+    },
+    {
+      "id": "8DPnNJNClx3kn4oJi2me",
+      "titulo": "Identifican a lesionados en choque frente al Hospital del Niño",
+      "categoria": "Sucesos",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 510,
+      "dudas": 0
+    },
+    {
+      "id": "8NaG866DTKEaUCHkivrd",
+      "titulo": "Tres afectados en hechos viales este viernes en Managua y Granada",
+      "categoria": "Sucesos",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 418,
+      "dudas": 0
+    },
+    {
+      "id": "8SAp0uyby4UGkrqwcNtV",
+      "titulo": "¿Qué dejaron las Fiestas Patrias a los mercados de Managua?",
+      "categoria": "Nacionales",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1185,
+      "dudas": 0
+    },
+    {
+      "id": "8dMcsIcw7T7tuT8NLGEP",
+      "titulo": "Bus accidentado en Boaco deja 42 lesionados bajo atención médica",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 427,
+      "dudas": 0
+    },
+    {
+      "id": "8eSX6XxOPVJbh9ILZ5ZS",
+      "titulo": "Arquitectura C++ y Direct3D para diagnóstico de sistemas PC",
+      "categoria": "Tecnología",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 666,
+      "dudas": 0
+    },
+    {
+      "id": "8lCQv9HxMDNLyDh2zAuw",
+      "titulo": "Cuatro personas mueren en accidentes de tránsito en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 871,
+      "dudas": 0
+    },
+    {
+      "id": "8mQmm7YZXwUAnICl6tnv",
+      "titulo": "Robo de caja fuerte con $14,000 en Quilalí termina con un…",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 427,
+      "dudas": 0
+    },
+    {
+      "id": "8p1gDsWo0i41nsJH4QTo",
+      "titulo": "Soldador de Casa Blanca sufrió descarga eléctrica durante trabajo",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 535,
+      "dudas": 0
+    },
+    {
+      "id": "8rgPZMc8nFJWiAbW7pgj",
+      "titulo": "Joven de Masaya fallece en la Laguna de Apoyo este 20 de julio",
+      "categoria": "Sucesos",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 388,
+      "dudas": 0
+    },
+    {
+      "id": "8sTBWTNIOJGIYfDN062O",
+      "titulo": "Mirador de Catarina: precios, horarios y qué hacer",
+      "categoria": "Nacionales",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 963,
+      "dudas": 0
+    },
+    {
+      "id": "9FIr4GZXnyXqJ6M1Hnw6",
+      "titulo": "Volcán Telica expulsa gases y ceniza con columnas de 200 metros",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 654,
+      "dudas": 0
+    },
+    {
+      "id": "9H1rZRbtLdgqjC1g5rzP",
+      "titulo": "Cinco muertos tras accidente de avión de Amazon en Miami",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 741,
+      "dudas": 0
+    },
+    {
+      "id": "9UhT9UklV99nNtAyC0Sp",
+      "titulo": "Palillonas a caballo llenan de tradición el desfile de Santo Tomás",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1084,
+      "dudas": 0
+    },
+    {
+      "id": "9Z7Wj11H7SVHXDm3VAsc",
+      "titulo": "Muere conductor de bus tras emergencia médica en Nueva Guinea",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 599,
+      "dudas": 0
+    },
+    {
+      "id": "9bOstbZ0xJWu92Z1FqBX",
+      "titulo": "Servicios policiales de Plaza El Sol tienen nueva ubicación",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 696,
+      "dudas": 0
+    },
+    {
+      "id": "9c0bOgvhw4oxPOgy3gvl",
+      "titulo": "Madrid gestiona logística masiva durante encuentro religioso",
+      "categoria": "Internacionales",
+      "score": 87,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 659,
+      "dudas": 0
+    },
+    {
+      "id": "9gLUPHxK05lGgwNE1URy",
+      "titulo": "KFC Nicaragua 2026: Apertura en Managua, menú confirmado",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 705,
+      "dudas": 0
+    },
+    {
+      "id": "9hFZclCKhOMERU7CrEnq",
+      "titulo": "Taxista muere tres días después de una caída tras discusión",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 514,
+      "dudas": 0
+    },
+    {
+      "id": "9hRZxXUYMcVM3Ctwbr5V",
+      "titulo": "KFC abre su tercera sucursal en Nicaragua y anuncia otra",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 851,
+      "dudas": 0
+    },
+    {
+      "id": "9nXtgYzBoPmhc0i5BHJs",
+      "titulo": "Dos ataques contra mujeres sacuden Matagalpa en 48 horas",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 646,
+      "dudas": 0
+    },
+    {
+      "id": "9wive8PnhtfBjV4qr7nt",
+      "titulo": "Bluefields desfila bajo la lluvia con amor por Nicaragua",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 575,
+      "dudas": 0
+    },
+    {
+      "id": "9xCHaZO7JEwhyRpdHHJY",
+      "titulo": "Dos hombres resultan afectados por descargas eléctricas en…",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 734,
+      "dudas": 0
+    },
+    {
+      "id": "ARAUJUxrrMpL72r2zr3b",
+      "titulo": "Así ocurrió el ataque contra un padre en Somotillo, según Fiscalía",
+      "categoria": "Sucesos",
+      "score": 96,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 676,
+      "dudas": 0
+    },
+    {
+      "id": "ASk1oDEiDQXOAlP3JYAT",
+      "titulo": "Sandboarding en Cerro Negro conquista redes y atrae turistas a…",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 798,
+      "dudas": 0
+    },
+    {
+      "id": "AWqrtVA03l9qMReNApx6",
+      "titulo": "Nicaragua impulsa talento digital, IA y expansión del 5G",
+      "categoria": "Tecnología",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 562,
+      "dudas": 0
+    },
+    {
+      "id": "AnlD4hQhJdAwroEaMvlx",
+      "titulo": "Panamá deporta a 20 nicaragüenses por infracciones migratoria",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 564,
+      "dudas": 0
+    },
+    {
+      "id": "AoP9lWscit6xRvpPwJ6N",
+      "titulo": "De Arjona a Aventura: conciertos anunciados para Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 699,
+      "dudas": 0
+    },
+    {
+      "id": "AsS8nr5I1Sn8F0H27O2n",
+      "titulo": "Metal Sonic se integra oficialmente a la película Sonic 4",
+      "categoria": "Espectáculos",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 1266,
+      "dudas": 0
+    },
+    {
+      "id": "BAcOCY6ZJ7XpDdzfRUZ1",
+      "titulo": "Accidentes dejan un fallecido y varios lesionados en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 476,
+      "dudas": 0
+    },
+    {
+      "id": "BHZSnICqau6L6hv7eFiw",
+      "titulo": "Alexa salió de Tipitapa por oportunidades y murió en España.",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 469,
+      "dudas": 0
+    },
+    {
+      "id": "BU0PX0EqHO5ewLCH7Coo",
+      "titulo": "Un afectado y un personas afectado en accidente laboral en…",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 364,
+      "dudas": 0
+    },
+    {
+      "id": "BePJJLPiVx3As5mUS2m4",
+      "titulo": "Hallan sin vida a dos hombres desaparecidos en Masaya y Carazo",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 845,
+      "dudas": 0
+    },
+    {
+      "id": "BthZmiHrAOsU61f6cowu",
+      "titulo": "Mar de fondo anega viviendas y negocios en La Boquita",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 597,
+      "dudas": 0
+    },
+    {
+      "id": "C1UJ83ospxOXOtNGLwgr",
+      "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 447,
+      "dudas": 0
+    },
+    {
+      "id": "C4AHevj8Y9WKSw6UlMqA",
+      "titulo": "Evento de IA buscan revolucionar innovación en Nicaragua y…",
+      "categoria": "Tecnología",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 632,
+      "dudas": 0
+    },
+    {
+      "id": "C5ygeEIQwpMLLlU747up",
+      "titulo": "Seis miembros de una familia mueren en incendio en Honduras",
+      "categoria": "Internacionales",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 441,
+      "dudas": 0
+    },
+    {
+      "id": "C6Q405XAouocDIs02qKy",
+      "titulo": "Cinco equipos dominan la lucha por el liderato del Pomares",
+      "categoria": "Deportes",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 738,
+      "dudas": 0
+    },
+    {
+      "id": "CMo0EIdKF9E5CYTJj8H9",
+      "titulo": "Economía de Nicaragua: crece 6% en remesas",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 582,
+      "dudas": 0
+    },
+    {
+      "id": "CO2y0PHkMT6rYOueWLf9",
+      "titulo": "Mueren dos hombres tras accidente de tránsito en Rivas",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 687,
+      "dudas": 0
+    },
+    {
+      "id": "COhLEROaJUFN8MvQEqZp",
+      "titulo": "INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 2566,
+      "dudas": 0
+    },
+    {
+      "id": "CaWgYAduswmwk6mj0zW2",
+      "titulo": "Más de 470 muertos por inundaciones entre Nepal y China",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 648,
+      "dudas": 0
+    },
+    {
+      "id": "ChMaA45HX30zyROKJtO9",
+      "titulo": "Campo de girasoles en Catarina: precios, horario y cómo llegar",
+      "categoria": "Nacionales",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1124,
+      "dudas": 0
+    },
+    {
+      "id": "CnHlW2RyUcpwlJBKeFug",
+      "titulo": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 501,
+      "dudas": 0
+    },
+    {
+      "id": "CyV2dxk6PD7dXEUneJfi",
+      "titulo": "Nicaragua tendrá presencia en la final del Mundial gracias a FIFA",
+      "categoria": "Deportes",
+      "score": 82,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 711,
+      "dudas": 0
+    },
+    {
+      "id": "D1zFRk4lVbrT4DqK7luU",
+      "titulo": "Mundial U23: ya se conocen precios y ruta de Nicaragua",
+      "categoria": "Deportes",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 863,
+      "dudas": 0
+    },
+    {
+      "id": "D310EXZbS4v6j8rsMCRB",
+      "titulo": "Nicaragua y Costa Rica refuerzan lucha contra la malaria",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 469,
+      "dudas": 0
+    },
+    {
+      "id": "D7y1TWAyXq7SaNMirIjB",
+      "titulo": "Dos nicaragüenses fallecen en el extranjero en casos distintos",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 388,
+      "dudas": 0
+    },
+    {
+      "id": "DabSeh90gN6BreMLkDow",
+      "titulo": "Una falla cambió el rumbo de un viaje familiar en Chontales",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 600,
+      "dudas": 0
+    },
+    {
+      "id": "DcdphHFlKeRZdpMKwAhq",
+      "titulo": "Motociclista muere tras accidente en la Carretera Norte",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 595,
+      "dudas": 0
+    },
+    {
+      "id": "Dll52HugAZbEwPfOA9SL",
+      "titulo": "Semáforos solares y radares modernizan vías de Nicaragua",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 569,
+      "dudas": 0
+    },
+    {
+      "id": "DtjilYkxrQsi9s1tBP6L",
+      "titulo": "Repatriar a un nicaragüense fallecido en el extranjero: guía",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1005,
+      "dudas": 0
+    },
+    {
+      "id": "E99X70aDGGPss0UWqc8w",
+      "titulo": "Bus se incendia tras colisión con camión volquete en Tipitapa",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 469,
+      "dudas": 0
+    },
+    {
+      "id": "EDvI8A7DAwrDFuBf3f18",
+      "titulo": "Capturan a dos por crimen de doctora nicaragüense en Guatemala",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 427,
+      "dudas": 0
+    },
+    {
+      "id": "EFBlqTZDTyDbFC4PRZ0c",
+      "titulo": "Tres ataques de pitbull en Nicaragua dejan tres afectados",
+      "categoria": "Sucesos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 2313,
+      "dudas": 0
+    },
+    {
+      "id": "EK8pDgblNpScPCoGCgab",
+      "titulo": "Bebé de un año sufre quemaduras en Diriá, Granada",
+      "categoria": "Sucesos",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 520,
+      "dudas": 0
+    },
+    {
+      "id": "EcKTeqT7kLcFElUX3DM2",
+      "titulo": "Dueño de semovientes paga C$769 mil por muerte en Jalapa",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 377,
+      "dudas": 0
+    },
+    {
+      "id": "EcLQLpYgrYiA33I90tAX",
+      "titulo": "Dolly Parton muere a los 80 años y deja un legado mundial",
+      "categoria": "Espectáculos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1438,
+      "dudas": 0
+    },
+    {
+      "id": "EnQeMjUfvgWY5xmRSfy5",
+      "titulo": "Motos, alcohol y madrugada: 6 accidentes en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1130,
+      "dudas": 0
+    },
+    {
+      "id": "EqaEkqXVKDy9VyPoPuIQ",
+      "titulo": "Cosa de horno: el sabor de Nicaragua que guarda la tradición",
+      "categoria": "Nacionales",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 861,
+      "dudas": 0
+    },
+    {
+      "id": "EyR39NNAk2XXXTSjhA9g",
+      "titulo": "8 motociclistas fallecen en accidentes este fin de semana",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 428,
+      "dudas": 0
+    },
+    {
+      "id": "EzMFBmEbwymm9YYvvcW5",
+      "titulo": "Muere Pedro Dixon, “La Pajarita Chinandegana”, a los 28 años",
+      "categoria": "Espectáculos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 779,
+      "dudas": 0
+    },
+    {
+      "id": "F3NEXLYVw2yPlzpD1bH7",
+      "titulo": "Hijo es señalado por muerte de su padre tras discusión en Siuna",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 589,
+      "dudas": 0
+    },
+    {
+      "id": "FF8yCcM33HysEtaG3ehp",
+      "titulo": "Tres accidentes en Nicaragua dejan un motociclista muerto",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 850,
+      "dudas": 0
+    },
+    {
+      "id": "FLbXd6XRrTl5TCdTkNYT",
+      "titulo": "Nicaragua en Santo Domingo 2026: medallas, béisbol y retos",
+      "categoria": "Deportes",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 865,
+      "dudas": 0
+    },
+    {
+      "id": "FpUdWXERRhgbU6ZD7bKI",
+      "titulo": "Fuertes lluvias provocan inundaciones y suspenden tráfico en…",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 764,
+      "dudas": 0
+    },
+    {
+      "id": "FsMXE1Jn8Qw9HNNYGgqF",
+      "titulo": "IA agéntica lidera cambios tecnológicos globales en 2026",
+      "categoria": "Tecnología",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1025,
+      "dudas": 0
+    },
+    {
+      "id": "G02JSO1Ai9QORHggxk0O",
+      "titulo": "Un joven muere ahogado y cuatro son rescatados en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 788,
+      "dudas": 0
+    },
+    {
+      "id": "G0nSddM3s26nwFRUz69y",
+      "titulo": "MINSA activa mega ferias de salud en Jinotega, Rivas y Tola",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1057,
+      "dudas": 0
+    },
+    {
+      "id": "GDIEammzYioBq5JrRsLd",
+      "titulo": "Tatiana Guzmán hace historia en Mundial FIFA 2026 con VAR",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 573,
+      "dudas": 0
+    },
+    {
+      "id": "GHbdyeiCzH7Jk0i5RVPA",
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+      "categoria": "Deportes",
+      "score": 77,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 385,
+      "dudas": 0
+    },
+    {
+      "id": "GTIo3ejON6rCJr229erN",
+      "titulo": "Playa Marsella: qué hacer, cómo llegar y cuánto cuesta",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1680,
+      "dudas": 0
+    },
+    {
+      "id": "Gz9i5AK2d0UtqcXUUYlN",
+      "titulo": "Netflix revive la captura de “El Chapo” con nueva película",
+      "categoria": "Espectáculos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 900,
+      "dudas": 0
+    },
+    {
+      "id": "HBaAK77yqswYn3uCf7al",
+      "titulo": "Toy Story 5 llega a Nicaragua con Woody y Buzz en la era digital",
+      "categoria": "Espectáculos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 948,
+      "dudas": 0
+    },
+    {
+      "id": "HDs899RFlczkxeNhhaez",
+      "titulo": "Adiós a la voz mexicana detrás de Toy Story y Harry Potter",
+      "categoria": "Espectáculos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 617,
+      "dudas": 0
+    },
+    {
+      "id": "HOr2RLJb6pWN03jZvoYD",
+      "titulo": "Padre muere tras rescatar a su hijo del mar en Poneloya",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 446,
+      "dudas": 0
+    },
+    {
+      "id": "HP0tDwYqgDHSfvXcWXWk",
+      "titulo": "China duplica exportaciones de chips impulsada por la IA",
+      "categoria": "Internacionales",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 889,
+      "dudas": 0
+    },
+    {
+      "id": "HkFDfASrIABYiC6PEihb",
+      "titulo": "Rompe sus esposas tras ser sentenciado y ataca a dos agentes",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 650,
+      "dudas": 0
+    },
+    {
+      "id": "HxsDqbeHSSO2MRyl1Cpu",
+      "titulo": "Accidente grave en Masaya en Villa Bosco — Nicaragua Informate",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 728,
+      "dudas": 0
+    },
+    {
+      "id": "HyUcJbnUzefWCcape0UQ",
+      "titulo": "Siete nicaragüenses fallecen en el extranjero en julio 2026",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 534,
+      "dudas": 0
+    },
+    {
+      "id": "I21toAA3GMcxniSc27nD",
+      "titulo": "Nicaragua inicia septiembre con amplio calendario de Fiestas Patrias",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1687,
+      "dudas": 0
+    },
+    {
+      "id": "I80vbkGlXOekMfUr0XFR",
+      "titulo": "Familia de joven somoteña busca repatriar su cuerpo",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 549,
+      "dudas": 0
+    },
+    {
+      "id": "I8JtiJqCugne39Q0GrZk",
+      "titulo": "Nicaragua produce 10.3 millones de aguacates en 2026",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1055,
+      "dudas": 0
+    },
+    {
+      "id": "IFFjvOi1HTG0oeiIuIBo",
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 455,
+      "dudas": 0
+    },
+    {
+      "id": "IFvH1F0YUbgz55E853jj",
+      "titulo": "Comercios esperan alta actividad por Día de las Madres en…",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 806,
+      "dudas": 0
+    },
+    {
+      "id": "IYS7dABZahKOHwdnjfJr",
+      "titulo": "Residencial Las Madres entrega 575 viviendas en Managua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 449,
+      "dudas": 0
+    },
+    {
+      "id": "IhqPS6c7vxNQarIR05Lz",
+      "titulo": "Motociclista muere tras ataque a balazos en Sébaco",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 553,
+      "dudas": 0
+    },
+    {
+      "id": "Ilzcy77tyF8oFNPytokN",
+      "titulo": "Campeonato de 1/4 de Milla: Adrenalina y técnica en Managua",
+      "categoria": "Deportes",
+      "score": 80,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 412,
+      "dudas": 0
+    },
+    {
+      "id": "J1ZUf7ZxMxaUjb64rkXj",
+      "titulo": "Cinco accidentes de tránsito dejan tres fallecido y varios herido",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 799,
+      "dudas": 0
+    },
+    {
+      "id": "J8gE2zjed6yeHqvtBSRv",
+      "titulo": "Investigan presunto femicidio seguido de suicidio en Nagarote",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 788,
+      "dudas": 0
+    },
+    {
+      "id": "JIRE98QbwrecUId3edcA",
+      "titulo": "Muere trabajador tras ataque de un perro en Managua",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 567,
+      "dudas": 0
+    },
+    {
+      "id": "JOfOW7uTxkgDSIezo7Wn",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 626,
+      "dudas": 0
+    },
+    {
+      "id": "JcB6a4mamtg6yjtcXp9c",
+      "titulo": "Nicaragüense resulta afectado tras incidente armado en Guanacaste",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 486,
+      "dudas": 0
+    },
+    {
+      "id": "Jjk9syTstGMlEeQerkQ6",
+      "titulo": "Varios accidentes de tránsito dejan fallecidos en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 728,
+      "dudas": 0
+    },
+    {
+      "id": "JtTY1tfzHmkOVNJjCZJX",
+      "titulo": "Comerciante resulta afectado tras altercado en terminal de Rosita",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 831,
+      "dudas": 0
+    },
+    {
+      "id": "JvTqSDHGA4EEZnlE6BPi",
+      "titulo": "Messi iguala récord histórico de 16 goles en Mundiales",
+      "categoria": "Deportes",
+      "score": 85,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 731,
+      "dudas": 0
+    },
+    {
+      "id": "JyiBCf438iHQhSn1rkpO",
+      "titulo": "Migrante de Madriz muere en EE.UU.; familia pide ayuda",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 730,
+      "dudas": 0
+    },
+    {
+      "id": "K6mRDaXQfBTfzuoKKccp",
+      "titulo": "Centro Oncológico Nacional amplía diagnóstico y atención en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1300,
+      "dudas": 0
+    },
+    {
+      "id": "K7IuhDsETCHWq8BaltgK",
+      "titulo": "Agenda cultural: Eventos en Managua del 20 al 30 de junio",
+      "categoria": "Espectáculos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 778,
+      "dudas": 0
+    },
+    {
+      "id": "KAe7bOjRVf1k4w7It5q4",
+      "titulo": "Volcán Telica expulsa ceniza y mantiene vigilancia activa",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 395,
+      "dudas": 0
+    },
+    {
+      "id": "KBgpWiMLA16LMS39HpSw",
+      "titulo": "Día del Folklore: las tradiciones que cuentan la historia de Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1365,
+      "dudas": 0
+    },
+    {
+      "id": "KDsFrw5UitY7JGQ9uOPq",
+      "titulo": "Ataque armado en Costa Rica deja sin vida a migrante rivense",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 357,
+      "dudas": 0
+    },
+    {
+      "id": "KUFG7eNdWCXewwtj7XWy",
+      "titulo": "Dos motociclistas pierden la vida en Managua y Wiwilí",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 796,
+      "dudas": 0
+    },
+    {
+      "id": "KXMHQ85cLbSZpXMx3eQm",
+      "titulo": "Turismo en Nicaragua crece 11% en primer trimestre de 2026",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 625,
+      "dudas": 0
+    },
+    {
+      "id": "KqbSciGsztV7VDFB7XFC",
+      "titulo": "Stanling Orozco conserva triple corona del Pomares 2026",
+      "categoria": "Deportes",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1005,
+      "dudas": 0
+    },
+    {
+      "id": "Ky78Go3uJKJQMFmC6Lbb",
+      "titulo": "El Niño se intensifica y eleva alerta climática en 2026",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 537,
+      "dudas": 0
+    },
+    {
+      "id": "LB8i3UMsfWIltfkFlfap",
+      "titulo": "Descubren en Tailandia un nuevo “dragón” llamado Syrax",
+      "categoria": "Tecnología",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 791,
+      "dudas": 0
+    },
+    {
+      "id": "LFKxOjl36CtcbkmTiQuA",
+      "titulo": "Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1088,
+      "dudas": 0
+    },
+    {
+      "id": "LKEnWDu6J1N4TG0iKD4z",
+      "titulo": "Trump exige a estados reportar a migrantes sin estatus",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 844,
+      "dudas": 0
+    },
+    {
+      "id": "LUVEqXqrenjIVJ8POfRE",
+      "titulo": "San Fernando busca hoy el octavo puesto del Pomares",
+      "categoria": "Deportes",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 639,
+      "dudas": 0
+    },
+    {
+      "id": "M5Ivl0fqvyOivSZMuNLY",
+      "titulo": "Nicaragua tendrá dos árbitros en el Mundial 2026",
+      "categoria": "Deportes",
+      "score": 80,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 610,
+      "dudas": 0
+    },
+    {
+      "id": "M9tek6rwIxTjSEbbI71k",
+      "titulo": "NASA cuestiona límite de tormentas solares con estudio en Nature",
+      "categoria": "Tecnología",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 672,
+      "dudas": 0
+    },
+    {
+      "id": "M9vj4XiOdmMrLwreHlff",
+      "titulo": "Depresión tropical Three-E se forma frente a Nicaragua",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 673,
+      "dudas": 0
+    },
+    {
+      "id": "MCNOy6IGQfsOIqhkh5OF",
+      "titulo": "San Marcos estrena Rincón Patrio para celebrar septiembre",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 647,
+      "dudas": 0
+    },
+    {
+      "id": "MKCnC4GlK5ceDJUfLtMD",
+      "titulo": "Yeimi Carias muere en accidente cuando iba hacia su trabajo",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 579,
+      "dudas": 0
+    },
+    {
+      "id": "MManBihjmOSeXC5FZBfg",
+      "titulo": "Centro Momotombo: la nueva tecnología para alertar ante desastres",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 2278,
+      "dudas": 0
+    },
+    {
+      "id": "Melwl8nD8pxRjGNBkjm5",
+      "titulo": "El Niño se intensifica: las señales que ya está dejando",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1511,
+      "dudas": 0
+    },
+    {
+      "id": "MkbCQPde18VTVKlSgHLn",
+      "titulo": "Nicaragua reporta menos casos de dengue, malaria e influenza",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 413,
+      "dudas": 0
+    },
+    {
+      "id": "MqB4pXUB9QlxmSlHsKG2",
+      "titulo": "INETER alerta por calor de hasta 40 °C y lluvias esta semana",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 808,
+      "dudas": 0
+    },
+    {
+      "id": "NA6PqCReq06PdIMSICEe",
+      "titulo": "Colapsa vivienda ancestral en Monimbó, Masaya: familia de 7 ilesa",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 2196,
+      "dudas": 0
+    },
+    {
+      "id": "NTa3Gb797l9FINZ2E7RU",
+      "titulo": "Fin de semana deja ocho afectados en accidentes viales",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 737,
+      "dudas": 0
+    },
+    {
+      "id": "NZkwSINrmCZO4rKOetqz",
+      "titulo": "Investigan ataque en El Riguero que hirió a niño de 10 año",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1014,
+      "dudas": 0
+    },
+    {
+      "id": "NbYNNfBGD7X4LVVMjzYo",
+      "titulo": "Vientos intensos prolongan corte de energía en Corn Island",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1145,
+      "dudas": 0
+    },
+    {
+      "id": "Neue7Ft2XeQybdX7xKTk",
+      "titulo": "El ritual que parte la piel y mueve a miles en Masaya",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 639,
+      "dudas": 0
+    },
+    {
+      "id": "Ng7C24qqQcb5s0ZIueVm",
+      "titulo": "Tres fallecidos y un lesionado dejan accidentes en el país",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 538,
+      "dudas": 0
+    },
+    {
+      "id": "NgEysmaqCnykHx2uFm1L",
+      "titulo": "Toro embiste a hombre durante Tope de Toros en Granada",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 708,
+      "dudas": 0
+    },
+    {
+      "id": "Nj2Hxm6OM7YpZEl5oVRQ",
+      "titulo": "Sismo de 5.8 sacude Japón y se siente en Tokio: esto se sabe",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1321,
+      "dudas": 0
+    },
+    {
+      "id": "NsHuiNgmIpEWcaQM37pj",
+      "titulo": "Dos muertos y tres heridos dejan accidentes en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 821,
+      "dudas": 0
+    },
+    {
+      "id": "OHxRgTKEk9dkN9k2Hvvn",
+      "titulo": "Rivas: siete muertos en cuatro accidentes en una semana",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1211,
+      "dudas": 0
+    },
+    {
+      "id": "OLSXzRL0uxEegVBmUwSA",
+      "titulo": "Taxista admite culpabilidad por muerte de adolescente en Estelí",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 523,
+      "dudas": 0
+    },
+    {
+      "id": "OYZgpG1z1Arb5HacLNnp",
+      "titulo": "Muere joven baleado en barrio México; investigan el ataque",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 447,
+      "dudas": 0
+    },
+    {
+      "id": "P4KRYKddOPHB2Nu0uya5",
+      "titulo": "Familia afectada tras volcamiento de camión en Matagalpa",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 572,
+      "dudas": 0
+    },
+    {
+      "id": "PAMrJttL66Oxg1eavIXS",
+      "titulo": "Lionel Messi establece récord de 18 goles en Copas del Mundo",
+      "categoria": "Deportes",
+      "score": 82,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 472,
+      "dudas": 0
+    },
+    {
+      "id": "PDYIbuv1snYYNDK54EBN",
+      "titulo": "Sismo de 7.4 sacude Colombia y deja daños y heridos",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 815,
+      "dudas": 0
+    },
+    {
+      "id": "PNJr8KWo2Gy1TCjuF9jq",
+      "titulo": "Oleaje daña embarcaciones y afecta turismo en Rivas",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 590,
+      "dudas": 0
+    },
+    {
+      "id": "PNrdJy4gdgDquyX8NdXz",
+      "titulo": "Tres ondas tropicales traerán más lluvias a Nicaragua esta semana",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 643,
+      "dudas": 0
+    },
+    {
+      "id": "PaUNyoHJ6rvNucj2Yqs0",
+      "titulo": "Selección de béisbol es recibida con honores en Managua",
+      "categoria": "Deportes",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 660,
+      "dudas": 0
+    },
+    {
+      "id": "Pf0VvjOfwZNm7BnQpncl",
+      "titulo": "Agosto comienza con tres accidentes y 4 fallecidos",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 958,
+      "dudas": 0
+    },
+    {
+      "id": "PftBP5OeZDSJ16PpiQFE",
+      "titulo": "Condenan a 8 años a nicaragüense por evasión fiscal",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 898,
+      "dudas": 0
+    },
+    {
+      "id": "PiXjB5ugRBQxjWXIvyuF",
+      "titulo": "Portugal elimina a Croacia y el Mundial se despide de Modrić",
+      "categoria": "Deportes",
+      "score": 82,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 373,
+      "dudas": 0
+    },
+    {
+      "id": "PqBn6yC96dcdi6XNsjUJ",
+      "titulo": "Nicaragüense enfrenta cargo por muerte de su prima en Texas",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 647,
+      "dudas": 0
+    },
+    {
+      "id": "Q19zidw5UoSjUlR1r9JP",
+      "titulo": "Nicaragua abastece el 47% de lácteos que consume El Salvador",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 484,
+      "dudas": 0
+    },
+    {
+      "id": "Q1weOBlHl2VHYu2VNq0s",
+      "titulo": "Nicaragua estrenará centro de monitoreo de emergencias",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 952,
+      "dudas": 0
+    },
+    {
+      "id": "Q68hNJlI4sFTt0Lu2rCv",
+      "titulo": "Migración detalla requisitos para residencia por vínculo",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 601,
+      "dudas": 0
+    },
+    {
+      "id": "QLag77jsgkxXY0RXpZcx",
+      "titulo": "Aluvión arrasa frontera de Nepal y el Tíbet y deja desaparecidos",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1304,
+      "dudas": 0
+    },
+    {
+      "id": "Qebgbb5JgCvDYvqPTphY",
+      "titulo": "Caso Nagarote da un giro: investigan doble asesinato",
+      "categoria": "Sucesos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1409,
+      "dudas": 0
+    },
+    {
+      "id": "QiOIqxhjT67BS2D4saW5",
+      "titulo": "Mundial 2026: sorpresas, favoritos y cómo se vive en Nicaragua",
+      "categoria": "Deportes",
+      "score": 85,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 460,
+      "dudas": 0
+    },
+    {
+      "id": "Qjl3rW0Cuo9CfNEslxgp",
+      "titulo": "Managua se llena de orgullo en el tercer desfile patrio",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 814,
+      "dudas": 0
+    },
+    {
+      "id": "QqQzUkztp81QAcSfXvS8",
+      "titulo": "Panamá retorna a 24 nicaragüenses; 8 fueron expulsados",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 644,
+      "dudas": 0
+    },
+    {
+      "id": "Qr7TPGrmSrGjV8pznbZe",
+      "titulo": "Fin de semana deja al menos seis muertos en accidentes de tránsito",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 796,
+      "dudas": 0
+    },
+    {
+      "id": "R2zQFsmjsu0NvFRU7tDa",
+      "titulo": "Tres Leches nicaragüense gana reconocimiento internacional",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 630,
+      "dudas": 0
+    },
+    {
+      "id": "RCjqgw3ea2K6cZHXmbRV",
+      "titulo": "Tres personas resultan afectados en accidentes de motocicleta…",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 796,
+      "dudas": 0
+    },
+    {
+      "id": "RJU7TDSHj4mI4IP0Pgn8",
+      "titulo": "Galaxy Z Flip8 ya está en Nicaragua: qué cambia y cuánto cuesta.",
+      "categoria": "Tecnología",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1187,
+      "dudas": 0
+    },
+    {
+      "id": "RO3v0IJsUeRBunlMT6ab",
+      "titulo": "El Pomares entra en zona de fuego: 12 equipos buscan ocho boletos",
+      "categoria": "Deportes",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1323,
+      "dudas": 0
+    },
+    {
+      "id": "RRo9U6gI1hRINap3egQS",
+      "titulo": "Condenan a 25 años al asesino de “La Reina Mengueña” en Chontales",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 453,
+      "dudas": 0
+    },
+    {
+      "id": "RbCTjiEE7RrHLN80j7K9",
+      "titulo": "Festival internacional en Managua: horario, países y actividades",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 358,
+      "dudas": 0
+    },
+    {
+      "id": "S8jrH6rYwBEuwzpBDw82",
+      "titulo": "Inicia construcción del Hospital Oriental Lesbia Carrasquilla",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 662,
+      "dudas": 0
+    },
+    {
+      "id": "SD09P4KU8vq4Mq1Vidzz",
+      "titulo": "Capturan a sujeto por robo de US$30 mil en Jalapa",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 744,
+      "dudas": 0
+    },
+    {
+      "id": "SG87LjFIgCWnd6g8EKDq",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 545,
+      "dudas": 0
+    },
+    {
+      "id": "SLaA2dG2wyI5Ajxnfh5q",
+      "titulo": "Mujer muere tras ataque de su cónyuge en comunidad de Matagalpa",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 559,
+      "dudas": 0
+    },
+    {
+      "id": "Sef2LpxsEcnjg7sf0f3U",
+      "titulo": "Nicaragua vence a Cuba y jugará la final por el oro ante Panamá",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 724,
+      "dudas": 0
+    },
+    {
+      "id": "T1beggQC5fYRGjEo1Szn",
+      "titulo": "Nicaragua inicia este fin de semana sus desfiles patrios 2026",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1113,
+      "dudas": 0
+    },
+    {
+      "id": "T7wtIyq18iGmHPYtwIqh",
+      "titulo": "Intervino para defender a su madre y terminó muerto en Managua",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 477,
+      "dudas": 0
+    },
+    {
+      "id": "TRHCYkWGgyK1Vvnauy2N",
+      "titulo": "Andrea Traña gana tres oros para Nicaragua en CODICADER",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 766,
+      "dudas": 0
+    },
+    {
+      "id": "TYBT2pcviA6IH8AsoE4P",
+      "titulo": "Dos motociclistas mueren en menos de 12 horas en la Nueva a León",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 725,
+      "dudas": 0
+    },
+    {
+      "id": "TwKzSdGWnzIYeAW801nD",
+      "titulo": "Juez deja libre a nicaragüense investigada por muerte de su…",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 623,
+      "dudas": 0
+    },
+    {
+      "id": "U3K2REamwdCUoxFRermC",
+      "titulo": "Bluefields celebra el Palo de Mayo con música y tradición…",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 735,
+      "dudas": 0
+    },
+    {
+      "id": "U3vQGIxNwtVfS8aR0mAT",
+      "titulo": "Incendio arrasa negocio de plásticos en el Mercado Oriental",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1341,
+      "dudas": 0
+    },
+    {
+      "id": "UiinOjqv6YthMpczAFj9",
+      "titulo": "Nica de Bonanza muere tras ataque con arma blanca en EE. UU.",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 402,
+      "dudas": 0
+    },
+    {
+      "id": "UjwpQz0jzzIVeVwI581C",
+      "titulo": "Nicaragüense habría muerto en Panamá y familia fue localizada",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 571,
+      "dudas": 0
+    },
+    {
+      "id": "Urfp4nwfKtnSM5Nxe3ZD",
+      "titulo": "Hospital Bertha Calderón ejecuta con éxito cirugía fetal",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1014,
+      "dudas": 0
+    },
+    {
+      "id": "V1GsdHFZ0SdE2KAimfzx",
+      "titulo": "Béisbol internacional: Nicaragua se alista para retos de 2026",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 671,
+      "dudas": 0
+    },
+    {
+      "id": "VAQWaSecbeFlCuK8KCgG",
+      "titulo": "Bus de Jalapa colisiona con cisterna en Tipitapa",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 725,
+      "dudas": 0
+    },
+    {
+      "id": "VKUvmaY59Ocy4gB9dkIN",
+      "titulo": "Investigan muerte de mujer hallada en hotel de Nueva Guinea",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 810,
+      "dudas": 0
+    },
+    {
+      "id": "VNv9HkHBHuf6TEhpRydz",
+      "titulo": "Natalia Jiménez hace vibrar Managua con sus grandes éxitos",
+      "categoria": "Espectáculos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 606,
+      "dudas": 0
+    },
+    {
+      "id": "W3gM5Px7gNxIjHc5tk3A",
+      "titulo": "INATEC ofrece 79 carreras técnicas gratuitas en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 966,
+      "dudas": 0
+    },
+    {
+      "id": "W9E5MwLZvezRaSi3meqX",
+      "titulo": "Accidente en Potosí deja dos vidas perdidas en una colisión vial",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 553,
+      "dudas": 0
+    },
+    {
+      "id": "WNZ8XRJLMOhR4ilO7Jfp",
+      "titulo": "Nicaragua: primera autopista de peaje de su historia",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 640,
+      "dudas": 0
+    },
+    {
+      "id": "WR9ixdDXutGgVpZ9awuQ",
+      "titulo": "Terremotos en Venezuela: cifra de fallecidos sube a 2,954",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 436,
+      "dudas": 0
+    },
+    {
+      "id": "WT8kWgsAuYm7VnymG07L",
+      "titulo": "Wilfrido Vargas llega a Nicaragua para su concierto en Managua",
+      "categoria": "Espectáculos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 644,
+      "dudas": 0
+    },
+    {
+      "id": "WhbQWO9vsos3rFNiD8mT",
+      "titulo": "Messi se retira de Argentina: ¿qué hará ahora el astro?",
+      "categoria": "Deportes",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 778,
+      "dudas": 0
+    },
+    {
+      "id": "WthoTeyDQn3v3a0vBrQA",
+      "titulo": "Muere Jorge Messi, padre y representante de Lionel Messi",
+      "categoria": "Espectáculos",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 702,
+      "dudas": 0
+    },
+    {
+      "id": "XHZ0GqPFuSUO5fbcQIbv",
+      "titulo": "Paso a desnivel Nejapa acelera obras y apunta a diciembre",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 845,
+      "dudas": 0
+    },
+    {
+      "id": "XK3mXDYi2mYHqzUMCvCl",
+      "titulo": "MAG presenta semillas de frijol resistentes a la sequía",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 663,
+      "dudas": 0
+    },
+    {
+      "id": "XOOu7RVJ1wezxa8hCu2w",
+      "titulo": "Motociclista muere tras colisión con camión en Rivas",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 658,
+      "dudas": 0
+    },
+    {
+      "id": "XaXsXFU5EYamkZAi3zDX",
+      "titulo": "Masaya celebra 187 años como ciudad con las marchantas",
+      "categoria": "Espectáculos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 706,
+      "dudas": 0
+    },
+    {
+      "id": "XcU17o0g0dxgLBpK4WuU",
+      "titulo": "3,321 tortugas paslama llegan a desovar en Chacocente",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1173,
+      "dudas": 0
+    },
+    {
+      "id": "Xt18bdt10Mt6CIloPKSu",
+      "titulo": "Hallan sin vida a dos personas en distintos puntos de Rivas",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 369,
+      "dudas": 0
+    },
+    {
+      "id": "Y873UqCKBaQjd5Y9yXm2",
+      "titulo": "Tres ciclones activan el Pacífico: ¿qué significa para Nicaragua?",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 712,
+      "dudas": 0
+    },
+    {
+      "id": "YKNIRyzSf0MNbf6wsdDh",
+      "titulo": "Nicaragüense muere ahogado en lago de Carolina del Norte",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 928,
+      "dudas": 0
+    },
+    {
+      "id": "YL1gXYMW4zHEo42cJzbY",
+      "titulo": "Nicaragüenses acumulan C$291 mil millones en depósitos",
+      "categoria": "Nacionales",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 551,
+      "dudas": 0
+    },
+    {
+      "id": "YYGaHNpnnqqu9Fe7ENK8",
+      "titulo": "Camilo Zapata y Otto de la Rocha, dos voces de Nicaragua",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1415,
+      "dudas": 0
+    },
+    {
+      "id": "Yf7Njww3czR9w7xMsrUo",
+      "titulo": "Resumen Mundial 2026: Resultados en Atlanta y victoria alemana",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 596,
+      "dudas": 0
+    },
+    {
+      "id": "ZJpLrlTrusn5Jex8WQgQ",
+      "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 435,
+      "dudas": 0
+    },
+    {
+      "id": "ZK1mbMdVBgdisJq1mn9u",
+      "titulo": "IA médica en 2026: diagnósticos más certeros que médicos",
+      "categoria": "Tecnología",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 481,
+      "dudas": 0
+    },
+    {
+      "id": "ZiR5FQUj0dIlO8bZBfQ0",
+      "titulo": "San Fernando se juega hoy el pase a cuartos ante Matagalpa",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 588,
+      "dudas": 0
+    },
+    {
+      "id": "Zu389gS3tQxY0EYfXrE9",
+      "titulo": "España gana Mundial 2026 y es recibida con honores en Madrid",
+      "categoria": "Deportes",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 488,
+      "dudas": 0
+    },
+    {
+      "id": "ZvMD6TcBmXDFWHQxEykD",
+      "titulo": "Copa 2026: Alemania y Países Bajos fuera; Brasil y Canadá avanzan",
+      "categoria": "Deportes",
+      "score": 86,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 402,
+      "dudas": 0
+    },
+    {
+      "id": "a43EAAR543PNuVXni2v3",
+      "titulo": "Bertha Calderón estrena equipos de diagnóstico avanzado",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 493,
+      "dudas": 0
+    },
+    {
+      "id": "aDUNDXKB5AaqwW6SfyaG",
+      "titulo": "COMUPRED monitorea crecida del río Tuma en Mulukukú",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 703,
+      "dudas": 0
+    },
+    {
+      "id": "aII0C6kduAshiZAk16Wc",
+      "titulo": "Amanda Miguel ofrece concierto internacional en Managua",
+      "categoria": "Espectáculos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 610,
+      "dudas": 0
+    },
+    {
+      "id": "aXtBaU598FRn27J0X2nD",
+      "titulo": "Nueva terminal de buses en Managua reemplaza a Casimiro Sotelo",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 631,
+      "dudas": 0
+    },
+    {
+      "id": "adwrkcVzPJ1CdcdwdTno",
+      "titulo": "Nicaragua conmemora 46 años de la Cruzada de Alfabetización",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1322,
+      "dudas": 0
+    },
+    {
+      "id": "alp8j7Y2UGGLK10hA47o",
+      "titulo": "Brigada médica realiza cirugía cardíacas gratuitas en hospital…",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 767,
+      "dudas": 0
+    },
+    {
+      "id": "aqdQcINPIEIM0Gxmsxm4",
+      "titulo": "Dos personas mueren en accidentes de tránsito en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1014,
+      "dudas": 0
+    },
+    {
+      "id": "b3hBxRnUrftHjFulYE3L",
+      "titulo": "El Indio Viejo: historia del plato típico de Nicaragua",
+      "categoria": "Nacionales",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 983,
+      "dudas": 0
+    },
+    {
+      "id": "bD9GUFuN0CtcVXZHpFgC",
+      "titulo": "EE. UU. amplía deportaciones a terceros países: ¿qué cambia?",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1014,
+      "dudas": 0
+    },
+    {
+      "id": "bNTteIqTORrl2X7opjvG",
+      "titulo": "Madrugada trágica en Matagalpa tras presunto robo de ganado",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 599,
+      "dudas": 0
+    },
+    {
+      "id": "bvn855wV64yVeIeRq12s",
+      "titulo": "Accidentes viales dejan dos muertos y tres heridos en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 504,
+      "dudas": 0
+    },
+    {
+      "id": "cIBrfo4r0oesTQCSH85x",
+      "titulo": "Parque de la Familia en Estelí reabre tras millonaria inversión",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 494,
+      "dudas": 0
+    },
+    {
+      "id": "cOyMgJYlyoAG0yXxVpYy",
+      "titulo": "Producción de queso y cuajada alcanza 149 millones de libras",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 604,
+      "dudas": 0
+    },
+    {
+      "id": "caTDwZUGxZmjwicrEukK",
+      "titulo": "Basura en cauces de Managua eleva riesgo de inundaciones",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 416,
+      "dudas": 0
+    },
+    {
+      "id": "cevHmanaz8L4WPEogcr7",
+      "titulo": "Riñón de cerdo supera 285 días en una paciente.",
+      "categoria": "Tecnología",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 813,
+      "dudas": 0
+    },
+    {
+      "id": "ckgtTyw5JZx2lMhWYdiL",
+      "titulo": "Rayo McQueen y 19 personajes llegan con exhibición a Managua",
+      "categoria": "Espectáculos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 972,
+      "dudas": 0
+    },
+    {
+      "id": "cr3ixiMYdzUXKAO6kzqD",
+      "titulo": "Yoltamal: el tamal de maíz tierno que identifica a Nicaragua",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 810,
+      "dudas": 0
+    },
+    {
+      "id": "crfHI8URk6T6oE8y0cer",
+      "titulo": "Masaya ya tiene nuevas reinas de sus fiestas tradicionales",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 471,
+      "dudas": 0
+    },
+    {
+      "id": "dJXd3qsmEK8AY4p0ctko",
+      "titulo": "Elisha Hodgson hace historia en el arbitraje FIBA por Nicaragua",
+      "categoria": "Deportes",
+      "score": 81,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 453,
+      "dudas": 0
+    },
+    {
+      "id": "dPkDD0dcGtcngpCjk7W0",
+      "titulo": "Muere a los 17 años joven estudiante de La Trinidad",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 566,
+      "dudas": 0
+    },
+    {
+      "id": "dcr6j4wJetnGNY80e6sZ",
+      "titulo": "Así Nicaragua conectó por tierra el Caribe con el Pacífico",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1298,
+      "dudas": 0
+    },
+    {
+      "id": "ddWDYaYKFz87sn6KZmwz",
+      "titulo": "Fin de semana deja muertos y lesionados en varios accidentes",
+      "categoria": "Sucesos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1529,
+      "dudas": 0
+    },
+    {
+      "id": "djn1DLmztxyOXwfSQsbx",
+      "titulo": "ICE detiene a dos nicaragüenses en operativos en EE. UU",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 460,
+      "dudas": 0
+    },
+    {
+      "id": "e0QJyxs1azyZahzs8VuN",
+      "titulo": "Venezuela: 164 afectados y 30 mil desaparecidos tras sismos",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 448,
+      "dudas": 0
+    },
+    {
+      "id": "e2xuC463KZm7pAubu9Rl",
+      "titulo": "Nicaragua conquista el IHF Trophy de Balonmano en C.A",
+      "categoria": "Deportes",
+      "score": 83,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 602,
+      "dudas": 0
+    },
+    {
+      "id": "eEDnfXxBxAHyLNFW53ws",
+      "titulo": "Regresó de Estados Unidos y murió en accidente en Ometepe",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 430,
+      "dudas": 0
+    },
+    {
+      "id": "eG8fwCL2Y0O6yEF1O29A",
+      "titulo": "Nicaragua vence 2-1 a Dominicana en debut de Pequeñas Ligas",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 429,
+      "dudas": 0
+    },
+    {
+      "id": "eHwPppvuoey1DpRCh7cc",
+      "titulo": "México, EE. UU. y Países Bajos clasifican al Mundial 2026",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 692,
+      "dudas": 0
+    },
+    {
+      "id": "eigKQMFdjSfB8N7Fypgk",
+      "titulo": "Mbappé, a un gol de igualar el récord mundialista de Messi",
+      "categoria": "Deportes",
+      "score": 80,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 370,
+      "dudas": 0
+    },
+    {
+      "id": "eqJl4klf5xo4SzMBmBDS",
+      "titulo": "Nicaragua sigue viva en Williamsport: juega el jueves",
+      "categoria": "Deportes",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 668,
+      "dudas": 0
+    },
+    {
+      "id": "esccFviANcjLiHp4UnsQ",
+      "titulo": "Mineros avanza de ronda y deja en disputa el último boleto",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 601,
+      "dudas": 0
+    },
+    {
+      "id": "fBzmMNWyqUTrffFr49g6",
+      "titulo": "Accidentes dejan varios afectados en Managua, León y Bilwi",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 496,
+      "dudas": 0
+    },
+    {
+      "id": "fIgt55qqhg6ysMQHEsl4",
+      "titulo": "Joao Fonseca elimina a Djokovic y avanza a octavos en Roland…",
+      "categoria": "Deportes",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 747,
+      "dudas": 0
+    },
+    {
+      "id": "fO5Xwap5b2F1zefVhs47",
+      "titulo": "Ercilia Arellano gana festival gastronómico en San Carlos",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 755,
+      "dudas": 0
+    },
+    {
+      "id": "fQuSHECJ9t5OWLOMbYzj",
+      "titulo": "Masaya recibe la Antorcha Centroamericana con orgullo patrio",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 874,
+      "dudas": 0
+    },
+    {
+      "id": "frMqGyWixqrpbtB6D2tu",
+      "titulo": "MINSA intensifica lucha contra dengue y chikungunya en Managua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 927,
+      "dudas": 0
+    },
+    {
+      "id": "gAp6N4fO4sAjnssvaROp",
+      "titulo": "Nicaragua anuncia 8va Feria Nacional de la Vivienda",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1206,
+      "dudas": 0
+    },
+    {
+      "id": "gIEhBi4fFkzZSoldHdUF",
+      "titulo": "Muere Prichard Colón, boxeador que enfrentó años de secuelas",
+      "categoria": "Deportes",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 660,
+      "dudas": 0
+    },
+    {
+      "id": "gLBnYSWw4h3LTMrRTA1O",
+      "titulo": "Terremoto de 7.7 en Indonesia deja 38 muertos y graves daños.",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 861,
+      "dudas": 0
+    },
+    {
+      "id": "gPe3e3k6GAmgPpBJzGkX",
+      "titulo": "Tres nicaragüenses enfrentan procesos distintos en EE. UU.",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1050,
+      "dudas": 0
+    },
+    {
+      "id": "gPkIsIZoh7pYHLSmQMe5",
+      "titulo": "Nicaragüense de León buscada por Interpol es entregada a Honduras",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 693,
+      "dudas": 0
+    },
+    {
+      "id": "gQKFK5z94pfaHGi2J1Wc",
+      "titulo": "Cinco motociclistas mueren en distintos puntos de Nicaragua",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1287,
+      "dudas": 0
+    },
+    {
+      "id": "gVgLc9atzHi1DWrk5co2",
+      "titulo": "Nicaragua produce 253.3 millones de libras de carne de pollo",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 761,
+      "dudas": 0
+    },
+    {
+      "id": "gXTkMry6uueR9BxXcTdF",
+      "titulo": "Dos afectados tras naufragio de panga en Krukira",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 719,
+      "dudas": 0
+    },
+    {
+      "id": "gYezxCEUx17WQHH3SCqI",
+      "titulo": "Producción de leche alcanza 146.4 millones en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 457,
+      "dudas": 0
+    },
+    {
+      "id": "gaCpaA49whA70rqyWBow",
+      "titulo": "Modernizan aeropuerto de Bluefields con inversión de US$10…",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 771,
+      "dudas": 0
+    },
+    {
+      "id": "gaulkDyabrFLhKCVdmaa",
+      "titulo": "Hospital Bertha Calderón alcanza 347 cirugías fetales en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1018,
+      "dudas": 0
+    },
+    {
+      "id": "giMTl1u8PF6fOQ5kBwSA",
+      "titulo": "Venden chocolates para alimentar a perros y gatos abandonados",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 704,
+      "dudas": 0
+    },
+    {
+      "id": "glOmX2RSOpciUxHR0y3n",
+      "titulo": "Nicaragüense de Jinotepe se corona campeón de España en Sanda",
+      "categoria": "Deportes",
+      "score": 84,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 775,
+      "dudas": 0
+    },
+    {
+      "id": "h12a1BuHFk4hNO1MP0xQ",
+      "titulo": "Volcán de Fuego: evacuaciones y alerta roja en Guatemala",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 653,
+      "dudas": 0
+    },
+    {
+      "id": "h6jcqzPLhz8UrpaGP7xq",
+      "titulo": "Mundial 2026: Cabo Verde sorprende España y empata Portugal",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 460,
+      "dudas": 0
+    },
+    {
+      "id": "hD0W8NnvJ2aLN2F2O44R",
+      "titulo": "Hallan sin vida a adulto mayor desaparecido en Madriz",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 648,
+      "dudas": 0
+    },
+    {
+      "id": "hKDN5gVZ8mn6nkgHQtjB",
+      "titulo": "Sepultan a niña de 4 años; investigan muerte en Ticuantepe",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 542,
+      "dudas": 0
+    },
+    {
+      "id": "hRxkEYbG8tOislbLn2gF",
+      "titulo": "Lluvias socavan cauce en Managua y ponen viviendas en riesgo",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 819,
+      "dudas": 0
+    },
+    {
+      "id": "hSohwt9sC0cfwiXEITLg",
+      "titulo": "Arrancó la Feria Ganadera Agostina 2026 en Managua",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 563,
+      "dudas": 0
+    },
+    {
+      "id": "hqg5C3kyCql4FZl3OWfB",
+      "titulo": "Rosita, Nicaragua: lagunas, cultura Mayangna y turismo de…",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 881,
+      "dudas": 0
+    },
+    {
+      "id": "i0JkTiB3zHfyUIre06ls",
+      "titulo": "Dos hombres mueren en accidentes de tránsito en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 539,
+      "dudas": 0
+    },
+    {
+      "id": "i88RK0Ulgkkzyq6YV4Um",
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "categoria": "Nacionales",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 350,
+      "dudas": 0
+    },
+    {
+      "id": "i99hsgYJ84uB0JvjZhWa",
+      "titulo": "¿Tenés problemas con telefonía, internet o cable? Así reclamás",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1320,
+      "dudas": 0
+    },
+    {
+      "id": "i9duvDflEon1d6yAhT0W",
+      "titulo": "Joven fallece en accidente de tránsito en carretera a Masaya",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 475,
+      "dudas": 0
+    },
+    {
+      "id": "ic2YGP8NQAc6r3VMvy9K",
+      "titulo": "Venezuela: 920 víctimas y miles sin rastro tras sismos",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 463,
+      "dudas": 0
+    },
+    {
+      "id": "ii6aCymgfcyPAKaAjaPg",
+      "titulo": "Nicaragua gana plata tras caer ante Panamá en la final de béisbol",
+      "categoria": "Deportes",
+      "score": 87,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 543,
+      "dudas": 0
+    },
+    {
+      "id": "ilK17d83xx25heRxhKAZ",
+      "titulo": "Vacaciones Patrias: días para celebrar, viajar y compartir",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1516,
+      "dudas": 0
+    },
+    {
+      "id": "iowQzBgiwSPPXCC4EsJD",
+      "titulo": "Cómo sacar y apostillar récord policial de Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 685,
+      "dudas": 0
+    },
+    {
+      "id": "ioylw52HAMCLqp5NlLBb",
+      "titulo": "Apple presenta el iPhone Duo, su primer modelo plegable",
+      "categoria": "Tecnología",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 806,
+      "dudas": 0
+    },
+    {
+      "id": "j1ia8jehVS0NtKgsV1GS",
+      "titulo": "Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 559,
+      "dudas": 0
+    },
+    {
+      "id": "jD6WppRVoR20CuzBeJbq",
+      "titulo": "NASA usará avión científico para analizar eclipse solar de 2026",
+      "categoria": "Tecnología",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 662,
+      "dudas": 0
+    },
+    {
+      "id": "jIPhozTQrWC0dkqVykK4",
+      "titulo": "Déficit de lluvias por El Niño afecta al Corredor Seco",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 636,
+      "dudas": 0
+    },
+    {
+      "id": "jYenFFPiEXMMhsvKeTL3",
+      "titulo": "España regulariza a más de un millón de extranjeros",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 536,
+      "dudas": 0
+    },
+    {
+      "id": "k0rKm6LTyvuuTbPTDS8a",
+      "titulo": "Muere Harold Gutiérrez, voz histórica y fundador de Macolla",
+      "categoria": "Espectáculos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 760,
+      "dudas": 0
+    },
+    {
+      "id": "kDIcgG5qs3ZgQCUeSapZ",
+      "titulo": "Una fiesta de cumpleaños terminó con dos muertos en Wiwilí",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 508,
+      "dudas": 0
+    },
+    {
+      "id": "kJZTSfqmUGHJKA8SFaE8",
+      "titulo": "Julieta Venegas interpreta himno cultural del Mundial 2026",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 378,
+      "dudas": 0
+    },
+    {
+      "id": "kR3waCnxVDfMfVCV8sAH",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "categoria": "Deportes",
+      "score": 84,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 618,
+      "dudas": 0
+    },
+    {
+      "id": "ksmI7JomnHgJB6NKcA71",
+      "titulo": "Yadel reúne a más de 30 mil personas en Managua",
+      "categoria": "Espectáculos",
+      "score": 87,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 503,
+      "dudas": 0
+    },
+    {
+      "id": "ku8tzMdLM3030JgD5B8K",
+      "titulo": "Mirador San Francisco de Asís dinamiza turismo en Carretera Norte",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1296,
+      "dudas": 0
+    },
+    {
+      "id": "l9sGpdiU3xbEDxDXYBWb",
+      "titulo": "Inaugurarán segunda etapa del Centro Oncológico Nacional",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 433,
+      "dudas": 0
+    },
+    {
+      "id": "lsje2mVQfNa0RXIdB2on",
+      "titulo": "Operativo busca a sospechosos de matar a universitario en León",
+      "categoria": "Sucesos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 578,
+      "dudas": 0
+    },
+    {
+      "id": "luO7wBDZRPcM1442Oxta",
+      "titulo": "Nicaragua conquista dos oros y dos platas en boxeo del CODICADER",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 356,
+      "dudas": 0
+    },
+    {
+      "id": "lzsto5T2q85IgrVkqlA2",
+      "titulo": "Pokémon dona 100 millones de yenes tras terremoto en Japón",
+      "categoria": "Espectáculos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 676,
+      "dudas": 0
+    },
+    {
+      "id": "m9tFCwmKN6OPR5tY2Kgk",
+      "titulo": "Hospital Vélez Paiz realiza 32 procedimientos cardíacos",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 698,
+      "dudas": 0
+    },
+    {
+      "id": "mEy2ueESYxJq3pH6hQJf",
+      "titulo": "Miles de familias disfrutan el Tope de Toros en Granada",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 712,
+      "dudas": 0
+    },
+    {
+      "id": "mUmM0T4FtUa1bLWPMhpD",
+      "titulo": "Distrito 5 estrenará nueva delegación policial en Managua",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 685,
+      "dudas": 0
+    },
+    {
+      "id": "mYqMLgVaUGrAhGSA1ftW",
+      "titulo": "Hijo es señalado por muerte violenta de su padre en Somotillo",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 863,
+      "dudas": 0
+    },
+    {
+      "id": "mkGayEhQqVRB6M8IQssp",
+      "titulo": "Nueva caravana de hondureños avanza rumbo a Estados Unidos",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 667,
+      "dudas": 0
+    },
+    {
+      "id": "mnOKSoFSHJBxuosmF3Tw",
+      "titulo": "Nicaragua abre ante Colombia en Santo Domingo 2026",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 505,
+      "dudas": 0
+    },
+    {
+      "id": "mpU9oJImLDYi8lWhziII",
+      "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 975,
+      "dudas": 0
+    },
+    {
+      "id": "n0qOx4zq7JyVP4gFwEwW",
+      "titulo": "Conductor ebrio invade carril y motociclista pierde la vida",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 458,
+      "dudas": 0
+    },
+    {
+      "id": "n2Buq4aBhvnrXUcTlwuD",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 360,
+      "dudas": 0
+    },
+    {
+      "id": "n64la9Hnrkp0sENv0z5U",
+      "titulo": "Dos pérdidas reabren llamado a cuidar la salud emocional",
+      "categoria": "Sucesos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 545,
+      "dudas": 0
+    },
+    {
+      "id": "nDiTklfg2RHYI4M3jWXB",
+      "titulo": "Dos motorizados mueren en la bajada de Laguna de Apoyo",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 601,
+      "dudas": 0
+    },
+    {
+      "id": "nHdlNT1s7XRkdkYIEDKO",
+      "titulo": "Madrugada termina en tragedia para motociclista en La Paz Centro",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 437,
+      "dudas": 0
+    },
+    {
+      "id": "ndySfHYuipYrG7olWLH6",
+      "titulo": "Nicaragüense queda hospitalizado tras operativo de ICE en Georgia",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 730,
+      "dudas": 0
+    },
+    {
+      "id": "ngAKEUkSVkZ6OlfQCQtb",
+      "titulo": "Desaparecen cuatro marinos tras zarpar de Corn Island",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 939,
+      "dudas": 0
+    },
+    {
+      "id": "nyF9rfm2AkQACTQPzFAn",
+      "titulo": "Con 204 representantes, Nicaragua va por nuevas medallas",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 592,
+      "dudas": 0
+    },
+    {
+      "id": "o0Hd8UJZe7IhZN2zwj2g",
+      "titulo": "Ébola avanza en Congo mientras violencia frena respuesta médica",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 780,
+      "dudas": 0
+    },
+    {
+      "id": "o6W17EHiyx17VgcpbB5N",
+      "titulo": "Doctora nicaragüense resulta afectado en ataque armado en…",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 776,
+      "dudas": 0
+    },
+    {
+      "id": "o9Q6D0tRNWJ3cDs3nYLm",
+      "titulo": "En 48 horas, agosto ya suma 8 fallecidos en accidentes",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1222,
+      "dudas": 0
+    },
+    {
+      "id": "oL7pW4MrP0K7y9osmIIJ",
+      "titulo": "Diésel en EE. UU. rompe récord y encarece el transporte",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1162,
+      "dudas": 0
+    },
+    {
+      "id": "oYEEbXYme88Sfg1hxDjb",
+      "titulo": "Detenido tras 8 días prófugo por atropellar a mujer",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 974,
+      "dudas": 0
+    },
+    {
+      "id": "obRveGZnIsuYoIPu5hwH",
+      "titulo": "Madre investigada por muerte de su hija en Ticuantepe",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 531,
+      "dudas": 0
+    },
+    {
+      "id": "odPH8kyPelb1S1TjnuPX",
+      "titulo": "Costanera agiliza transporte y abre playas antes aisladas",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 625,
+      "dudas": 0
+    },
+    {
+      "id": "ofPopYZtZAK0eb0L5rPB",
+      "titulo": "TikTok supera 1,44 millones de usuarios en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 647,
+      "dudas": 0
+    },
+    {
+      "id": "ohoiZLGVaBsfDPWORfUx",
+      "titulo": "Eclipse lunar parcial será visible en Nicaragua este 27 de agosto",
+      "categoria": "Espectáculos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 818,
+      "dudas": 0
+    },
+    {
+      "id": "or9rexaKKGbR8NfnoDju",
+      "titulo": "Perros en la vía: muertes, accidentes y qué dice la ley",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 801,
+      "dudas": 0
+    },
+    {
+      "id": "ow2keC5R8XdLGzu5xKZa",
+      "titulo": "Cuba sufre séptimo apagón nacional en menos de 24 horas",
+      "categoria": "Internacionales",
+      "score": 87,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 886,
+      "dudas": 0
+    },
+    {
+      "id": "p9HqVWGCq6WbcUnPBwrn",
+      "titulo": "Multiestadio Stanley Cayasso: así avanzan sus bases en Managua",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 595,
+      "dudas": 0
+    },
+    {
+      "id": "p9YSf3lXdbJITSQClziV",
+      "titulo": "Spider-Man: Un Nuevo Día rompe récords en su estreno mundial",
+      "categoria": "Espectáculos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1177,
+      "dudas": 0
+    },
+    {
+      "id": "pMXu8KvKsz9gJzg0U9bf",
+      "titulo": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+      "categoria": "Deportes",
+      "score": 87,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 862,
+      "dudas": 0
+    },
+    {
+      "id": "pRl00sqTLlHu9MDCkgDq",
+      "titulo": "Muere Félix Guadamuz, una de las primeras voces DJ de Nicaragua",
+      "categoria": "Espectáculos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 497,
+      "dudas": 0
+    },
+    {
+      "id": "pVqVbFDgxmZAPOwoE5NM",
+      "titulo": "Santo Domingo se despide de Managua y regresa a Las Sierritas",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 938,
+      "dudas": 0
+    },
+    {
+      "id": "pfeJ8II72gXqjriz7alv",
+      "titulo": "Dos incendios dejan viviendas destruidas en Jinotega y Estelí",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 567,
+      "dudas": 0
+    },
+    {
+      "id": "phUuAtrQ4H3qV4heuZlH",
+      "titulo": "Dos afectados en accidentes de motocicleta en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 880,
+      "dudas": 0
+    },
+    {
+      "id": "pmRNzGHrkOSSpSMWYg5J",
+      "titulo": "Buscan a hombre acusado de herir de bala a niña en Rivas",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 496,
+      "dudas": 0
+    },
+    {
+      "id": "q1oKbFBcN6pDvh75JY4F",
+      "titulo": "Así quedaron los grandes duelos de la Champions 2026-27",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 1033,
+      "dudas": 0
+    },
+    {
+      "id": "q3QgspnxFL9buTcqe9Pm",
+      "titulo": "85 familias de Nagarote recibirán viviendas este 22 de mayo",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 780,
+      "dudas": 0
+    },
+    {
+      "id": "qAcmF4MWTiLsTACCG8v5",
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "categoria": "Sucesos",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 527,
+      "dudas": 0
+    },
+    {
+      "id": "qOaZxIIf0OdtlZewkwKj",
+      "titulo": "Pomares 2026: ocho equipos sudarán la camiseta por el título",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 712,
+      "dudas": 0
+    },
+    {
+      "id": "qT9tAbCyVpicX7HmoaD0",
+      "titulo": "Nueva Guinea busca respuestas por muerte de joven de 18 años",
+      "categoria": "Sucesos",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 473,
+      "dudas": 0
+    },
+    {
+      "id": "qhlHd01R4IC9TDdMx0re",
+      "titulo": "Gobierno declara feriado nacional el 30 de mayo en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 659,
+      "dudas": 0
+    },
+    {
+      "id": "qkurWkzG1J2bG01EVVru",
+      "titulo": "Camioneta impacta dos motos en Managua y deja tres lesionados",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 475,
+      "dudas": 0
+    },
+    {
+      "id": "r4pQXL7KBWy0DqqwBQVw",
+      "titulo": "Ejército retiene a cinco personas y ocupa 11 semovientes",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 592,
+      "dudas": 0
+    },
+    {
+      "id": "rFGNmTRKwi9QSc1VCddH",
+      "titulo": "Santo Domingo de Guzmán llega a Managua: recorrido y detalles",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1154,
+      "dudas": 0
+    },
+    {
+      "id": "rS6iSulzgQxJxDmpBG2b",
+      "titulo": "Accidentes dejan nuevas muertes y heridos en Nicaragua.",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1282,
+      "dudas": 0
+    },
+    {
+      "id": "rpCDcQ8KMAzB8nzZfNfM",
+      "titulo": "Dos sismos en 39 segundos sacuden Venezuela y Caracas",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 494,
+      "dudas": 0
+    },
+    {
+      "id": "rqFwODFrM33STTastGnc",
+      "titulo": "Asesinan a pedradas a hombre durante un robo en Managua",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 973,
+      "dudas": 0
+    },
+    {
+      "id": "rxFIWutXiVTCtns3BKfO",
+      "titulo": "Marol: el sabor de Matagalpa que acompaña fiestas y velas",
+      "categoria": "Nacionales",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 684,
+      "dudas": 0
+    },
+    {
+      "id": "s3JrANBvskSO61lPqPrv",
+      "titulo": "KFC busca a 50 fans para inaugurar su primer local en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 406,
+      "dudas": 0
+    },
+    {
+      "id": "s63hd29g5KZ42Zlhqsls",
+      "titulo": "Nicaragua gana dos platas y rompe récord en Santo Domingo 2026",
+      "categoria": "Deportes",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 1090,
+      "dudas": 0
+    },
+    {
+      "id": "s9ERxCh1sMwJtlbrPPMJ",
+      "titulo": "Kimi AI acelera la carrera mundial por la inteligencia artificial",
+      "categoria": "Tecnología",
+      "score": 95,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 565,
+      "dudas": 0
+    },
+    {
+      "id": "sFyQDOaNijJrYQg1eTMA",
+      "titulo": "Recapturan a nicaragüense que se fugó de cárcel en Costa Rica",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 619,
+      "dudas": 0
+    },
+    {
+      "id": "sULCr0Y90B43ZpuoK2pJ",
+      "titulo": "Hombre muere tras resultar herido en el barrio 18 de Mayo",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 521,
+      "dudas": 0
+    },
+    {
+      "id": "sgysqhqcvwAMBJZSxNVL",
+      "titulo": "Dos trabajadores fallecen tras descargas eléctricas en Nicaragua",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 410,
+      "dudas": 0
+    },
+    {
+      "id": "slZp2GH5RHNd5hKNtZb4",
+      "titulo": "De Bluefields a Managua: 3 fallecidos en accidentes viales",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 659,
+      "dudas": 0
+    },
+    {
+      "id": "spoz8oqZQ8Wer7c1GSXp",
+      "titulo": "Estudiante de 13 años resulta afectado tras golpe en escuela de…",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 753,
+      "dudas": 0
+    },
+    {
+      "id": "srI2iGZGGPnMizcglbxS",
+      "titulo": "Juez ordena facilitar regreso a EE. UU. de nicaragüense deportada",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 844,
+      "dudas": 0
+    },
+    {
+      "id": "t6oFNMA4EGC4hOS3IqvE",
+      "titulo": "Güegüense y Agüizotes preservan tradición de Nicaragua",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 641,
+      "dudas": 0
+    },
+    {
+      "id": "tCjQc4IihpyxTDWnMZUC",
+      "titulo": "Condenan a prisión perpetua a femicida de María Celeste en Masaya",
+      "categoria": "Sucesos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 688,
+      "dudas": 0
+    },
+    {
+      "id": "tYX2ZtXwUXg07CHI0ONj",
+      "titulo": "Fiscalía acusa a madre y padrastro por muerte de niño",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 467,
+      "dudas": 0
+    },
+    {
+      "id": "tZWxicQopFTzzkfLvaP3",
+      "titulo": "Huye de la Policía y termina atrapado en una letrina en Masaya",
+      "categoria": "Sucesos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 553,
+      "dudas": 0
+    },
+    {
+      "id": "tlIXmTYnv4hIajXOQiup",
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 470,
+      "dudas": 0
+    },
+    {
+      "id": "tnX05ykqVT6WiYVflSii",
+      "titulo": "Beisbol infantil: Nicaragua viaja a Puerto Rico y Ecuador",
+      "categoria": "Deportes",
+      "score": 79,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 629,
+      "dudas": 0
+    },
+    {
+      "id": "tuK9ZveBwJom7dhByyNx",
+      "titulo": "El \"Oro Verde\": cómo la palma africana transforma el Caribe",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 966,
+      "dudas": 0
+    },
+    {
+      "id": "u0Lgb7PgJ9XVT67Za5Ov",
+      "titulo": "KFC abre operaciones en Carretera a Masaya, Managua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 559,
+      "dudas": 0
+    },
+    {
+      "id": "u61mgNNEpC2vKvMa1fqZ",
+      "titulo": "Nicaragua reduce mortalidad materna e infantil en 2025",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1125,
+      "dudas": 0
+    },
+    {
+      "id": "uGw77z0gVCHmBW0gcQLd",
+      "titulo": "Nicaragüense muere en accidente laboral en España durante poda",
+      "categoria": "Internacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 610,
+      "dudas": 0
+    },
+    {
+      "id": "uJ076MyMZhQIJYTa1qOW",
+      "titulo": "Nicaragüense José Salgado resulta afectado en asalto en Austin",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 402,
+      "dudas": 0
+    },
+    {
+      "id": "uPjLwgsghbgVfRVtelh4",
+      "titulo": "Hallan sin vida a profesor desaparecido en cementerio de Boaco",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 486,
+      "dudas": 0
+    },
+    {
+      "id": "uX9Pk8h7rAECIyy8FhrC",
+      "titulo": "Feria de Vivienda en Managua: bonos, precios y requisitos",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1651,
+      "dudas": 0
+    },
+    {
+      "id": "v0gwsceiaZQeNSLPHmee",
+      "titulo": "Nicaragüenses resultan afectados en hechos graves registrados…",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 632,
+      "dudas": 0
+    },
+    {
+      "id": "v6CAoeoIGpCRNQhBanXz",
+      "titulo": "MINSA vacuna contra la rabia a 1.75 millones de perros",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 529,
+      "dudas": 0
+    },
+    {
+      "id": "vDDkaxmQZVTtxhFi2Cy9",
+      "titulo": "Juzgado de Masaya dicta prision preventiva por caso penal",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 772,
+      "dudas": 0
+    },
+    {
+      "id": "vLWtlVmQT8cPGtUDsirF",
+      "titulo": "Muere nicaragüense en Virginia y su familia busca repatriarlo",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 577,
+      "dudas": 0
+    },
+    {
+      "id": "vXJ22LObIbnd5WKA3VDE",
+      "titulo": "Cabo Verde recibe como héroes a sus \"Tiburones Azules\"",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 498,
+      "dudas": 0
+    },
+    {
+      "id": "vsqhr6Av9BKI6sqFIxP8",
+      "titulo": "Orgullo patrio: jóvenes destacados portarán la Antorcha",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 946,
+      "dudas": 0
+    },
+    {
+      "id": "vvWJAwyV8adECw3IGqdy",
+      "titulo": "Netflix, Max y Disney+ dominan streaming en Nicaragua",
+      "categoria": "Tecnología",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 649,
+      "dudas": 0
+    },
+    {
+      "id": "vwicYAbPjzEAPyVrubQF",
+      "titulo": "Juan Gabriel revive en Managua: Camerata Bach prepara homenaje",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 716,
+      "dudas": 0
+    },
+    {
+      "id": "w5XzTjYCWTJRDX9NIPng",
+      "titulo": "Dos personas fallecen en accidentes en Matagalpa y Wiwilí",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 2139,
+      "dudas": 0
+    },
+    {
+      "id": "wEp7yZu7N154jf3CcWrk",
+      "titulo": "Dos hermanos fallecen por sumersión en río de Acoyapa, Chontales",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 515,
+      "dudas": 0
+    },
+    {
+      "id": "wHns5emAL4hwdbrodLGT",
+      "titulo": "Céline Dion vuelve a los escenarios y ya está en París",
+      "categoria": "Espectáculos",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 866,
+      "dudas": 0
+    },
+    {
+      "id": "wTDwZthQfki6ud80OBVk",
+      "titulo": "Acusan a cuatro por doble asesinato en Nagarote; dos prófugos",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 586,
+      "dudas": 0
+    },
+    {
+      "id": "whZtPKLBjDEcFUzZrkXv",
+      "titulo": "Inaugurarán Hospital Pediátrico Las Segovias en Estelí este 18",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 709,
+      "dudas": 0
+    },
+    {
+      "id": "wiHS5gvNy7U6tORXAhEU",
+      "titulo": "Colapso en construcción cobra vida de nicaragüense en EE. UU",
+      "categoria": "Internacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 404,
+      "dudas": 0
+    },
+    {
+      "id": "wjXUjGNw3hVreNQPoByu",
+      "titulo": "Sismos en Venezuela: cifra de afectados sube a 589",
+      "categoria": "Internacionales",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 368,
+      "dudas": 0
+    },
+    {
+      "id": "wq1Ovg1EiAYObmCYkY9Z",
+      "titulo": "De Honduras a Costa Rica: así recorrió Nicaragua la Antorcha",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 985,
+      "dudas": 0
+    },
+    {
+      "id": "wswMCYqU9CesTAhSQlaT",
+      "titulo": "Tres oros y 19 medallas: Nicaragua brilla en Guatemala",
+      "categoria": "Deportes",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 1120,
+      "dudas": 0
+    },
+    {
+      "id": "wxr5VjHx23bZpd620Xzp",
+      "titulo": "Accidente en Wapi deja un fallecido y un herido tras vuelco",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 791,
+      "dudas": 0
+    },
+    {
+      "id": "x207BvkW6lGHef3FGaWM",
+      "titulo": "Ébola en Congo deja 3,510 muertos y sigue bajo alerta",
+      "categoria": "Internacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 538,
+      "dudas": 0
+    },
+    {
+      "id": "xQPCJelRULHFWey1KUH6",
+      "titulo": "Más allá del cráter: los senderos del Volcán Masaya",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 476,
+      "dudas": 0
+    },
+    {
+      "id": "xaEUqIpn5aFqjar7b4nv",
+      "titulo": "Mundial 2026 rompe récord de expulsiones en fase inicial",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 822,
+      "dudas": 0
+    },
+    {
+      "id": "xaz8jsiDneXX3tR7NaV9",
+      "titulo": "¿Qué pasará con los viajes a Costa Rica tras el caso Transnica?",
+      "categoria": "Nacionales",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1566,
+      "dudas": 0
+    },
+    {
+      "id": "xnZ6TgAAZtQTrvLaaXni",
+      "titulo": "Masaya inicia las fiestas patronales más largas de Nicaragua",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 923,
+      "dudas": 0
+    },
+    {
+      "id": "xouoeO5xgVw1RHBehL9H",
+      "titulo": "Investigan a funcionaria por trámite irregular para nicaragüense",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 474,
+      "dudas": 0
+    },
+    {
+      "id": "xpVY9kQlBKSmeLpHwswz",
+      "titulo": "Revista británica destaca cirugías fetales en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 577,
+      "dudas": 0
+    },
+    {
+      "id": "xt6mgZboSGau4YvHFM5M",
+      "titulo": "Antorcha Centroamericana recorrerá Nicaragua del 10 al 13",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 568,
+      "dudas": 0
+    },
+    {
+      "id": "xvHoGjUZLhgZ7kQq969I",
+      "titulo": "Acusado de disparar a policías queda en prisión en Estelí",
+      "categoria": "Sucesos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 685,
+      "dudas": 0
+    },
+    {
+      "id": "xzM9EBJ23nmNlC9m08q7",
+      "titulo": "Familia busca repatriar a Nicaragua a Jessica, asesinada en Miami",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 769,
+      "dudas": 0
+    },
+    {
+      "id": "y251TlGDTa5BVIM18QGE",
+      "titulo": "Turistas extranjeros comparten sus viajes en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 678,
+      "dudas": 0
+    },
+    {
+      "id": "y5k6UDnNuUmDRlBhGL2l",
+      "titulo": "Seis estudiantes destacan en el certamen nacional de matemáticas",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1336,
+      "dudas": 0
+    },
+    {
+      "id": "y8gWejnBZDoLhgYaRWlP",
+      "titulo": "Perros robóticos reforzarán seguridad en centro FIFA",
+      "categoria": "Tecnología",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 633,
+      "dudas": 0
+    },
+    {
+      "id": "yAxGbreJ4sa3sd2iT6XI",
+      "titulo": "Megahospitales transformarán la atención médica en Nicaragua",
+      "categoria": "Nacionales",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 773,
+      "dudas": 0
+    },
+    {
+      "id": "yBv7VNBe546PGd0a0glv",
+      "titulo": "El caso que estremeció Tipitapa entra a una nueva etapa judicial",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 462,
+      "dudas": 0
+    },
+    {
+      "id": "yIQQ7B9b2Wy6uhv5UOLo",
+      "titulo": "Masaya queda al borde y Estelí toma ventaja en el Pomares",
+      "categoria": "Deportes",
+      "score": 89,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 813,
+      "dudas": 0
+    },
+    {
+      "id": "yJUWd9Sy8L6qck3mNZ0O",
+      "titulo": "Fallo judicial reabre debate sobre la defensa de una madre",
+      "categoria": "Sucesos",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 581,
+      "dudas": 0
+    },
+    {
+      "id": "yP1IkivhMPeNsq1oXh8F",
+      "titulo": "Condenan a seis años a hombre por envenenar baho en Managua",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 591,
+      "dudas": 0
+    },
+    {
+      "id": "yVuoBkFOUU3OTJTMgv5l",
+      "titulo": "Puente Wawa Boom: 255 metros que unieron el Caribe Norte",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 508,
+      "dudas": 0
+    },
+    {
+      "id": "yY2Vj9FYmwxbsHznVzPw",
+      "titulo": "Fin de semana deja muertos y heridos en varios accidentes viales",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1088,
+      "dudas": 0
+    },
+    {
+      "id": "ye0lMTaRlB1eXJibvfoO",
+      "titulo": "Vías bloqueadas en Siuna y Mulukukú ante Onda Tropical 10",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 505,
+      "dudas": 0
+    },
+    {
+      "id": "yenGmBgaTElLEVjXyIY3",
+      "titulo": "10 sitios para encontrar trabajo remoto desde Nicaragua en 2026",
+      "categoria": "Tecnología",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1063,
+      "dudas": 0
+    },
+    {
+      "id": "ynJTnxFm5fa6LL8CSGk0",
+      "titulo": "Tope de Toros 2026 en Granada: fecha, ruta y qué esperar",
+      "categoria": "Nacionales",
+      "score": 94,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 864,
+      "dudas": 0
+    },
+    {
+      "id": "yo3uA9Pd7mf7k44dTLOX",
+      "titulo": "Argentina supera a Suiza y va contra Inglaterra en semis",
+      "categoria": "Deportes",
+      "score": 88,
+      "aprobado": false,
+      "recomendacion": "",
+      "palabras": 436,
+      "dudas": 0
+    },
+    {
+      "id": "ytIeJhnKNvTrFfuDChBg",
+      "titulo": "Muere Roberto \"El Bobby\" Espino, leyenda del béisbol nicaragüense",
+      "categoria": "Deportes",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 1265,
+      "dudas": 0
+    },
+    {
+      "id": "yuResjlVGzNzgH5L6SOn",
+      "titulo": "Nicaragua suma 165 MW de energía renovable y baterías eléctricas",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 469,
+      "dudas": 0
+    },
+    {
+      "id": "yv0VPARoIc5axq0rWC3f",
+      "titulo": "Ambulancia MINSA, arrastrada por río en Ayapal, Jinotega",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 673,
+      "dudas": 0
+    },
+    {
+      "id": "yys8SiF01IpoXTkoaqXo",
+      "titulo": "Esteliana resulta afectado afectada en playa de San Sebastián,…",
+      "categoria": "Internacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 476,
+      "dudas": 0
+    },
+    {
+      "id": "zDcmowDI8lVo6Is7n2ad",
+      "titulo": "Investigan hallazgo de dos cuerpos y desaparición por lluvias",
+      "categoria": "Sucesos",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 464,
+      "dudas": 0
+    },
+    {
+      "id": "zLt9Pxu2BPivxT6PIYTY",
+      "titulo": "Falcon 9 de SpaceX impactará la Luna este miércole",
+      "categoria": "Tecnología",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 975,
+      "dudas": 0
+    },
+    {
+      "id": "zVIEgSt4aPiLKlUzenvv",
+      "titulo": "Mujer muere tras colisión entre bus de la Ruta 165 y moto",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 445,
+      "dudas": 0
+    },
+    {
+      "id": "ze5xnENnt58ZDNDBet3c",
+      "titulo": "Niña de 7 años resulta lesionada tras ataque de cocodrilo",
+      "categoria": "Sucesos",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 520,
+      "dudas": 0
+    },
+    {
+      "id": "zgQhR5M02MI5v8nZ2T90",
+      "titulo": "Nicaragua brilla en CODICADER con nuevas medallas",
+      "categoria": "Deportes",
+      "score": 90,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 986,
+      "dudas": 0
+    },
+    {
+      "id": "ziYWYRi5TOLyNu645cTY",
+      "titulo": "Tragedia en Estelí: madre de una niña muere en accidente",
+      "categoria": "Sucesos",
+      "score": 93,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 953,
+      "dudas": 0
+    },
+    {
+      "id": "zkdDsejAb5hLCpCaEbMR",
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "categoria": "Nacionales",
+      "score": 92,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 403,
+      "dudas": 0
+    },
+    {
+      "id": "zvtl853c7EgGqBCOkbZN",
+      "titulo": "Tramos 2 y 3 de Pista Héroes avanzan 60% en drenaje",
+      "categoria": "Nacionales",
+      "score": 91,
+      "aprobado": true,
+      "recomendacion": "",
+      "palabras": 546,
+      "dudas": 0
+    }
+  ]
+}

@@ -28,6 +28,10 @@ export async function recordLearning(input: {
 
   await db.collection(MEMORY_COLLECTION).add({
     ...input,
+    // Clasificación honesta: estas notas son observaciones operativas que
+    // ningún consumidor traduce en cambio de comportamiento. Son memoria,
+    // no aprendizaje (aprendizaje real = editor_patterns ACTIVE).
+    storageClass: 'HISTORICAL_MEMORY',
     noteHash,
     timestamp: new Date().toISOString(),
     origin: 'departamento-central',

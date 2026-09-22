@@ -9,10 +9,8 @@ const CRON_DEFAULT_INTERVAL_MS = 25 * 60 * 60 * 1000; // 25h cubre crons diarios
 const EXPECTED_INTERVALS: Record<string, number> = {
   scheduler: CRON_DEFAULT_INTERVAL_MS,
   'health-check': CRON_DEFAULT_INTERVAL_MS,
-  growth: CRON_DEFAULT_INTERVAL_MS,
   watchdog: CRON_DEFAULT_INTERVAL_MS,
   'daily-report': 26 * 60 * 60 * 1000,
-  'monetization-check': CRON_DEFAULT_INTERVAL_MS,
   'article-pipeline': CRON_DEFAULT_INTERVAL_MS,
 };
 

@@ -1,0 +1,1736 @@
+{
+  "fecha": "2026-09-22T20:21:21.729Z",
+  "notasAnalizadas": "470 / 470",
+  "publicadas": 437,
+  "noindexPublicadas": 0,
+  "conCampoConfianza": 0,
+  "confianza": {
+    "ALTA": 224,
+    "MEDIA": 16,
+    "BAJA": 230
+  },
+  "porCategoria": {
+    "Deportes": 60,
+    "Sucesos": 138,
+    "Nacionales": 155,
+    "Internacionales": 73,
+    "Tecnología": 19,
+    "Espectáculos": 25
+  },
+  "issues": {
+    "factual": 0,
+    "estructural": 0,
+    "editorial": 176,
+    "seo": 0,
+    "duplicacion": 0,
+    "insuficiente": 0,
+    "atribucion": 103,
+    "titulo": 0,
+    "metadata": 0,
+    "clasificacion": 0,
+    "contradiccion": 1,
+    "riesgoEditorial": 262
+  },
+  "titulosDuplicados": 0,
+  "notasConProblemas": 177,
+  "detalle": [
+    {
+      "slug": "lucho-diez-dias-por-su-vida-y-fallecio-tras-ataque-de-expareja",
+      "titulo": "Luchó diez días por su vida y falleció tras ataque de expareja",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "carreteras-del-pais-dejan-un-fin-de-semana-con-varios-accidentes",
+      "titulo": "Carreteras del país dejan un fin de semana con varios accidentes",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+      "titulo": "Cinco afectados en accidentes viales en Managua y regiones",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "penas-blancas-un-tesoro-natural-entre-neblina-y-montanas",
+      "titulo": "Peñas Blancas: un tesoro natural entre neblina y montañas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "capturan-en-esteli-a-nicaraguense-requerido-por-caso-en-ee-uu",
+      "titulo": "Capturan en Estelí a nicaragüense requerido por caso en EE. UU",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "adolescente-muere-atropellado-por-taxi-frente-a-cotran-norte",
+      "titulo": "Adolescente muere atropellado por taxi frente a COTRAN Norte",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-hombres-pierden-la-vida-en-incidentes-nocturnos-en-el-norte",
+      "titulo": "Dos hombres pierden la vida en incidentes nocturnos en el norte",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "medicina-legal-descarta-alteraciones-mentales-en-acusada",
+      "titulo": "Medicina Legal descarta alteraciones mentales en acusada",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "prueba-de-ia-obliga-a-openai-a-reforzar-su-seguridad-digital",
+      "titulo": "Prueba de IA obliga a OpenAI a reforzar su seguridad digital",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "cinco-accidentes-dejan-dos-muertos-y-varios-lesionados",
+      "titulo": "Cinco accidentes dejan dos muertos y varios lesionados",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "cuatro-victimas-deja-accidentalidad-vial-entre-sabado-y-domingo",
+      "titulo": "Cuatro víctimas deja accidentalidad vial entre sábado y domingo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "motociclistas-marcan-las-tragedias-viales-del-fin-de-semana",
+      "titulo": "Motociclistas marcan las tragedias viales del fin de semana.",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "fallece-la-actriz-venezolana-gabriela-fleritt-tras-sismo",
+      "titulo": "Fallece la actriz venezolana Gabriela Fleritt tras sismo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "la-resurreccion-de-cristo-se-estrena-en-el-dia-de-la-ascension",
+      "titulo": "La Resurrección de Cristo se estrena en el Día de la Ascensión",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidente-deja-lesionados-a-integrantes-de-carnavaleros-de-jaguar",
+      "titulo": "Accidente deja lesionados a integrantes de Carnavaleros de Jaguar",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "al-menos-32-personas-han-muerto-electrocutadas-en-2026",
+      "titulo": "Al menos 32 personas han muerto electrocutadas en 2026",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "tribunal-limita-deportaciones-tras-22-000-migrantes-enviados",
+      "titulo": "Tribunal limita deportaciones tras 22,000 migrantes enviados",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "investigaciones-por-fallecimiento-en-barrio-old-bank-bluefields",
+      "titulo": "Investigaciones por afectación en barrio Old Bank Bluefields",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaraguense-muere-en-costa-rica-tras-choque-y-fuga-vial",
+      "titulo": "Nicaragüense muere en Costa Rica tras choque y fuga vial",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-maestra-jubilada-tras-ser-atropellada-en-ocotal",
+      "titulo": "Muere maestra jubilada tras ser atropellada en Ocotal",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "victima-de-golpiza-en-chichigalpa-enfrenta-otro-proceso-judicial",
+      "titulo": "Víctima de golpiza en Chichigalpa enfrenta otro proceso judicial",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dengue-y-chikungunya-senales-que-no-debe-ignorar-en-nicaragua",
+      "titulo": "Dengue y chikungunya: señales que no debe ignorar en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "el-eclipse-lunar-tuvo-dos-escenarios-volcanicos-en-nicaragua",
+      "titulo": "El eclipse lunar tuvo dos escenarios volcánicos en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidente-con-rastra-deja-una-joven-fallecida-en-managua",
+      "titulo": "Accidente con rastra deja una joven fallecida en Managua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "carreteras-dejan-dos-fallecidos-y-varios-accidentes",
+      "titulo": "Carreteras dejan dos fallecidos y varios accidentes",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-nicaraguenses-fallecen-en-accidentes-ocurridos-en-honduras-y-miami",
+      "titulo": "Dos nicaragüenses resultan afectados en accidentes ocurridos en…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "bus-accidentado-en-boaco-deja-42-lesionados-bajo-atencion-medica",
+      "titulo": "Bus accidentado en Boaco deja 42 lesionados bajo atención médica",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "robo-de-caja-fuerte-con-14-000-en-quilali-termina-con-un-detenido",
+      "titulo": "Robo de caja fuerte con $14,000 en Quilalí termina con un…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "soldador-de-casa-blanca-sufrio-descarga-electrica-durante-trabajo",
+      "titulo": "Soldador de Casa Blanca sufrió descarga eléctrica durante trabajo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "joven-de-masaya-fallece-en-la-laguna-de-apoyo-este-20-de-julio",
+      "titulo": "Joven de Masaya fallece en la Laguna de Apoyo este 20 de julio",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "mirador-de-catarina-precios-horarios-y-que-hacer",
+      "titulo": "Mirador de Catarina: precios, horarios y qué hacer",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "volcan-telica-expulsa-gases-y-ceniza-con-columnas-de-200-metros",
+      "titulo": "Volcán Telica expulsa gases y ceniza con columnas de 200 metros",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-conductor-de-bus-tras-emergencia-medica-en-nueva-guinea",
+      "titulo": "Muere conductor de bus tras emergencia médica en Nueva Guinea",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "medio-millon-participa-en-vigilia-del-papa-en-madrid",
+      "titulo": "Madrid gestiona logística masiva durante encuentro religioso",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "taxista-muere-tres-dias-despues-de-una-caida-tras-discusion",
+      "titulo": "Taxista muere tres días después de una caída tras discusión",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-ataques-contra-mujeres-sacuden-matagalpa-en-48-horas",
+      "titulo": "Dos ataques contra mujeres sacuden Matagalpa en 48 horas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "bluefields-desfila-bajo-la-lluvia-con-amor-por-nicaragua",
+      "titulo": "Bluefields desfila bajo la lluvia con amor por Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-hombres-mueren-por-descargas-electricas-en-managua",
+      "titulo": "Dos hombres resultan afectados por descargas eléctricas en…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "asi-ocurrio-el-ataque-contra-un-padre-en-somotillo-segun-fiscalia",
+      "titulo": "Así ocurrió el ataque contra un padre en Somotillo, según Fiscalía",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidentes-dejan-un-fallecido-y-varios-lesionados-en-nicaragua",
+      "titulo": "Accidentes dejan un fallecido y varios lesionados en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel",
+      "titulo": "Un afectado y un personas afectado en accidente laboral en…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "hallan-sin-vida-a-dos-hombres-desaparecidos-en-masaya-y-carazo",
+      "titulo": "Hallan sin vida a dos hombres desaparecidos en Masaya y Carazo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-muertos-y-dos-heridos-en-accidentes-laborales-en-nicaragua",
+      "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "seis-miembros-de-una-familia-mueren-en-incendio-en-honduras",
+      "titulo": "Seis miembros de una familia mueren en incendio en Honduras",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "mueren-dos-hombres-tras-accidente-de-transito-en-rivas",
+      "titulo": "Mueren dos hombres tras accidente de tránsito en Rivas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "inss-que-familiares-tienen-cobertura-por-fallecimiento",
+      "titulo": "INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "mas-de-470-muertos-por-inundaciones-entre-nepal-y-china",
+      "titulo": "Más de 470 muertos por inundaciones entre Nepal y China",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "guia-de-senalizacion-vial-en-nicaragua-lineas-y-multas-ley-431",
+      "titulo": "Guía de señalización vial en Nicaragua: Líneas y multas Ley 431",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "una-falla-cambio-el-rumbo-de-un-viaje-familiar-en",
+      "titulo": "Una falla cambió el rumbo de un viaje familiar en Chontales",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "motociclista-muere-tras-accidente-en-la-carretera-norte",
+      "titulo": "Motociclista muere tras accidente en la Carretera Norte",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "semaforos-solares-y-radares-modernizan-vias-de-nicaragua",
+      "titulo": "Semáforos solares y radares modernizan vías de Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "repatriar-a-un-nicaraguense-fallecido-en-el-extranjero-guia",
+      "titulo": "Repatriar a un nicaragüense fallecido en el extranjero: guía",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "bus-se-incendia-tras-colision-con-camion-volquete-en-tipitapa",
+      "titulo": "Bus se incendia tras colisión con camión volquete en Tipitapa",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "capturan-a-dos-por-crimen-de-doctora-nicaraguense-en-guatemala",
+      "titulo": "Capturan a dos por crimen de doctora nicaragüense en Guatemala",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "tres-ataques-de-pitbull-en-nicaragua-dejan-tres-lesionados",
+      "titulo": "Tres ataques de pitbull en Nicaragua dejan tres afectados",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "bebe-sufre-quemaduras-con-agua-caliente-en-diria",
+      "titulo": "Bebé de un año sufre quemaduras en Diriá, Granada",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "motos-alcohol-y-madrugada-6-accidentes-en-nicaragua",
+      "titulo": "Motos, alcohol y madrugada: 6 accidentes en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "cosa-de-horno-el-sabor-de-nicaragua-que-guarda-la-tradicion",
+      "titulo": "Cosa de horno: el sabor de Nicaragua que guarda la tradición",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "8-motociclistas-fallecen-en-accidentes-este-fin-de-semana",
+      "titulo": "8 motociclistas fallecen en accidentes este fin de semana",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-pedro-dixon-la-pajarita-chinandegana-a-los-28-anos",
+      "titulo": "Muere Pedro Dixon, “La Pajarita Chinandegana”, a los 28 años",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "hijo-es-senalado-por-muerte-de-su-padre-tras-discusion-en-siuna",
+      "titulo": "Hijo es señalado por muerte de su padre tras discusión en Siuna",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "polemica-en-el-mundial-no-frena-reconocimiento-a-tatiana",
+      "titulo": "Polémica en el Mundial no frena reconocimiento a Tatiana Guzmán",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "costa-rica-detiene-a-palestino-con-vinculos-a-hamas",
+      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "cinco-accidentes-de-transito-dejan-tres-fallecido-y-varios-herido",
+      "titulo": "Cinco accidentes de tránsito dejan tres fallecido y varios herido",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "investigan-presunto-femicidio-seguido-de-suicidio-en-nagarote",
+      "titulo": "Investigan presunto femicidio seguido de suicidio en Nagarote",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-trabajador-tras-ataque-de-un-perro-en-managua",
+      "titulo": "Muere trabajador tras ataque de un perro en Managua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "capturan-acusado-de-quemar-a-un-hombre-en-rivas-nicaragua",
+      "titulo": "Capturan acusado de agredir a un hombre en Rivas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaraguense-fallece-tras-incidente-armado-en-guanacaste",
+      "titulo": "Nicaragüense resulta afectado tras incidente armado en Guanacaste",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "varios-accidentes-de-transito-dejan-fallecidos-en-nicaragua",
+      "titulo": "Varios accidentes de tránsito dejan fallecidos en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "ataque-armado-en-costa-rica-deja-sin-vida-a-migrante-rivense",
+      "titulo": "Ataque armado en Costa Rica deja sin vida a migrante rivense",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-motociclistas-pierden-la-vida-en-managua-y-wiwili",
+      "titulo": "Dos motociclistas pierden la vida en Managua y Wiwilí",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "costa-rica-tiembla-otra-vez-ya-suman-80-replicas-en-coronado",
+      "titulo": "Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "yeimi-carias-muere-en-accidente-cuando-iba-hacia-su-trabajo",
+      "titulo": "Yeimi Carias muere en accidente cuando iba hacia su trabajo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "centro-momotombo-la-nueva-tecnologia-para-alertar-ante-desastres",
+      "titulo": "Centro Momotombo: la nueva tecnología para alertar ante desastres",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:delito afirmado sin atribución ni víctima/atribución clara"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "fin-de-semana-deja-ocho-fallecidos-en-accidentes-viales",
+      "titulo": "Fin de semana deja ocho afectados en accidentes viales",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "investigan-ataque-en-el-riguero-que-hirio-a-nino-de-10-ano",
+      "titulo": "Investigan ataque en El Riguero que hirió a niño de 10 año",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "el-ritual-que-parte-la-piel-y-mueve-a-miles-en-masaya",
+      "titulo": "El ritual que parte la piel y mueve a miles en Masaya",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "tres-fallecidos-y-un-lesionado-dejan-accidentes-en-el-pais",
+      "titulo": "Tres fallecidos y un lesionado dejan accidentes en el país",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "toro-embiste-a-hombre-durante-tope-de-toros-en-granada",
+      "titulo": "Toro embiste a hombre durante Tope de Toros en Granada",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "sismo-de-5-8-sacude-japon-y-se-siente-en-tokio-esto-se-sabe",
+      "titulo": "Sismo de 5.8 sacude Japón y se siente en Tokio: esto se sabe",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "rivas-siete-muertos-en-cuatro-accidentes-en-una-semana",
+      "titulo": "Rivas: siete muertos en cuatro accidentes en una semana",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-joven-baleado-en-barrio-mexico-investigan-el-ataque",
+      "titulo": "Muere joven baleado en barrio México; investigan el ataque",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "agosto-comienza-con-tres-accidentes-y-4-fallecidos",
+      "titulo": "Agosto comienza con tres accidentes y 4 fallecidos",
+      "problemas": [
+        "editorial:requiere_revision",
+        "contradiccion:misma oración mezcla confirmación e investigación abierta"
+      ],
+      "nivel": "ALTA"
+    },
+    {
+      "slug": "nicaraguense-enfrenta-cargo-por-muerte-de-su-prima-en-texas",
+      "titulo": "Nicaragüense enfrenta cargo por muerte de su prima en Texas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "aluvion-arrasa-frontera-de-nepal-y-el-tibet-y-deja-desaparecidos",
+      "titulo": "Aluvión arrasa frontera de Nepal y el Tíbet y deja desaparecidos",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "caso-nagarote-da-un-giro-investigan-doble-asesinato",
+      "titulo": "Caso Nagarote da un giro: investigan doble asesinato",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "fin-de-semana-deja-al-menos-seis-muertos-en-accidentes-de-transito",
+      "titulo": "Fin de semana deja al menos seis muertos en accidentes de tránsito",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "tres-motociclistas-mueren-en-accidentes-de-transito-en-nicaragua",
+      "titulo": "Tres personas resultan afectados en accidentes de motocicleta…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaragua-invertira-13-9-millones-en-49-camiones-de-bomberos",
+      "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "mujer-muere-tras-ataque-de-su-conyuge-en-comunidad-de-matagalpa",
+      "titulo": "Mujer muere tras ataque de su cónyuge en comunidad de Matagalpa",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "intervino-para-defender-a-su-madre-y-termino-muerto-en-managua",
+      "titulo": "Intervino para defender a su madre y terminó muerto en Managua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-motociclistas-mueren-en-menos-de-12-horas-en-la-nueva-a-leon",
+      "titulo": "Dos motociclistas mueren en menos de 12 horas en la Nueva a León",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "juez-deja-libre-a-nicaraguense-investigada-por-muerte-de-su-hermana",
+      "titulo": "Juez deja libre a nicaragüense investigada por muerte de su…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nica-de-bonanza-muere-tras-ataque-con-arma-blanca-en-ee-uu",
+      "titulo": "Nica de Bonanza muere tras ataque con arma blanca en EE. UU.",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaraguense-habria-muerto-en-panama-y-familia-fue-localizada",
+      "titulo": "Nicaragüense habría muerto en Panamá y familia fue localizada",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "hospital-bertha-calderon-ejecuta-con-exito-cirugia-fetal",
+      "titulo": "Hospital Bertha Calderón ejecuta con éxito cirugía fetal",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "bus-de-jalapa-colisiona-con-cisterna-en-tipitapa",
+      "titulo": "Bus de Jalapa colisiona con cisterna en Tipitapa",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "investigan-muerte-de-mujer-hallada-en-hotel-de-nueva-guinea",
+      "titulo": "Investigan muerte de mujer hallada en hotel de Nueva Guinea",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "terremotos-en-venezuela-cifra-de-fallecidos-sube-a-2-954",
+      "titulo": "Terremotos en Venezuela: cifra de fallecidos sube a 2,954",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-jorge-messi-padre-y-representante-de-lionel-messi",
+      "titulo": "Muere Jorge Messi, padre y representante de Lionel Messi",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "motociclista-muere-tras-colision-con-camion-en-rivas",
+      "titulo": "Motociclista muere tras colisión con camión en Rivas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "hallan-sin-vida-a-dos-personas-en-distintos-puntos-de-rivas",
+      "titulo": "Hallan sin vida a dos personas en distintos puntos de Rivas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "camilo-zapata-y-otto-de-la-rocha-dos-voces-de-nicaragua",
+      "titulo": "Camilo Zapata y Otto de la Rocha, dos voces de Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "despues-de-anos-profugo-captura-de-el-diablo-abre-interrogante",
+      "titulo": "Después de años prófugo, captura de El Diablo abre interrogante",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "el-indio-viejo-historia-del-plato-tipico-de",
+      "titulo": "El Indio Viejo: historia del plato típico de Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "madrugada-tragica-en-matagalpa-tras-presunto-robo-de",
+      "titulo": "Madrugada trágica en Matagalpa tras presunto robo de ganado",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidentes-viales-dejan-dos-muertos-y-tres-heridos-en-nicaragua",
+      "titulo": "Accidentes viales dejan dos muertos y tres heridos en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-a-los-17-anos-joven-estudiante-de-la-trinidad",
+      "titulo": "Muere a los 17 años joven estudiante de La Trinidad",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "fin-de-semana-deja-muertos-y-lesionados-en-varios-accidentes",
+      "titulo": "Fin de semana deja muertos y lesionados en varios accidentes",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "regreso-de-estados-unidos-y-murio-en-accidente-en-ometepe",
+      "titulo": "Regresó de Estados Unidos y murió en accidente en Ometepe",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "mbappe-a-un-gol-de-igualar-el-record-mundialista-de-messi",
+      "titulo": "Mbappé, a un gol de igualar el récord mundialista de Messi",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaragua-sigue-viva-en-williamsport-juega-el-jueves",
+      "titulo": "Nicaragua sigue viva en Williamsport: juega el jueves",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "mineros-avanza-de-ronda-y-deja-en-disputa-el-ultimo-boleto",
+      "titulo": "Mineros avanza de ronda y deja en disputa el último boleto",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidentes-dejan-varios-lesionados-en-managua-leon-y-bilwi",
+      "titulo": "Accidentes dejan varios afectados en Managua, León y Bilwi",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-prichard-colon-boxeador-que-enfrento-anos-de-secuelas",
+      "titulo": "Muere Prichard Colón, boxeador que enfrentó años de secuelas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "tres-nicaraguenses-enfrentan-procesos-distintos-en-ee-uu",
+      "titulo": "Tres nicaragüenses enfrentan procesos distintos en EE. UU.",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "cinco-motociclistas-mueren-en-distintos-puntos-de-nicaragua",
+      "titulo": "Cinco motociclistas mueren en distintos puntos de Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "naufragio-en-caribe-norte-deja-mujer-muerta-y-dos-ninos-desaparecidos",
+      "titulo": "Dos afectados tras naufragio de panga en Krukira",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "venden-chocolates-para-alimentar-a-perros-y-gatos-abandonados",
+      "titulo": "Venden chocolates para alimentar a perros y gatos abandonados",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaraguense-de-jinotepe-se-corona-campeon-de-espana-en-sanda",
+      "titulo": "Nicaragüense de Jinotepe se corona campeón de España en Sanda",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "sepultan-a-nina-de-4-anos-investigan-muerte-en",
+      "titulo": "Sepultan a niña de 4 años; investigan muerte en Ticuantepe",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "oye-sebas-le-canta-a-juan-luis-guerra-desde-colombia-y-la-paz",
+      "titulo": "Oye Sebas le canta a Juan Luis Guerra desde Colombia y la paz",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "lluvias-socavan-cauce-en-managua-y-ponen-viviendas-en-riesgo",
+      "titulo": "Lluvias socavan cauce en Managua y ponen viviendas en riesgo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "rosita-nicaragua-lagunas-turismo-cultura",
+      "titulo": "Rosita, Nicaragua: lagunas, cultura Mayangna y turismo de…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "chinandega-estrena-75-viviendas-con-servicios-completos",
+      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "terremoto-de-7-1-deja-muertos-desaparecidos-y-caos-en-japon",
+      "titulo": "Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "espana-regulariza-a-mas-de-un-millon-de",
+      "titulo": "España regulariza a más de un millón de extranjeros",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaragua-gana-oro-en-relevos-mixtos-4x100-en-managua",
+      "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "operativo-busca-a-sospechosos-de-matar-a-universitario-en-leon",
+      "titulo": "Operativo busca a sospechosos de matar a universitario en León",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "hijo-es-senalado-por-muerte-violenta-de-su-padre-en-somotillo",
+      "titulo": "Hijo es señalado por muerte violenta de su padre en Somotillo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nueva-caravana-de-hondurenos-avanza-rumbo-a-estados-unidos",
+      "titulo": "Nueva caravana de hondureños avanza rumbo a Estados Unidos",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "las-enfermedades-mas-comunes-en-nicaragua-y-como-prevenirlas",
+      "titulo": "Neumonía, enfermedades cardíacas y dengue figuran en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "capturan-a-pinolero-por-llevarse-a-nina-de-13-anos",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-perdidas-reabren-llamado-a-cuidar-la-salud-emocional",
+      "titulo": "Dos pérdidas reabren llamado a cuidar la salud emocional",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "madrugada-termina-en-tragedia-para-motociclista-en-la-paz-centro",
+      "titulo": "Madrugada termina en tragedia para motociclista en La Paz Centro",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaraguense-queda-hospitalizado-tras-operativo-de-ice-en-georgia",
+      "titulo": "Nicaragüense queda hospitalizado tras operativo de ICE en Georgia",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "doctora-nicaraguense-muere-en-ataque-armado-en-poptun-peten",
+      "titulo": "Doctora nicaragüense resulta afectado en ataque armado en…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "detenido-tras-8-dias-profugo-por-atropellar-a-mujer",
+      "titulo": "Detenido tras 8 días prófugo por atropellar a mujer",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "madre-investigada-por-muerte-de-su-hija-en-ticuantepe",
+      "titulo": "Madre investigada por muerte de su hija en Ticuantepe",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "perros-en-la-via-muertes-accidentes-y-que-dice-la-ley",
+      "titulo": "Perros en la vía: muertes, accidentes y qué dice la ley",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-felix-guadamuz-una-de-las-primeras-voces-dj-de-nicaragua",
+      "titulo": "Muere Félix Guadamuz, una de las primeras voces DJ de Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-incendios-dejan-viviendas-destruidas-en-jinotega-y-esteli",
+      "titulo": "Dos incendios dejan viviendas destruidas en Jinotega y Estelí",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-fallecidos-en-accidentes-de-motocicleta-en-nicaragua",
+      "titulo": "Dos afectados en accidentes de motocicleta en Nicaragua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "buscan-a-hombre-acusado-de-herir-de-bala-a-nina-en-rivas",
+      "titulo": "Buscan a hombre acusado de herir de bala a niña en Rivas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "agresion-a-mujer-en-nindiri-activa-investigacion-bajo-la-ley-779",
+      "titulo": "Agresión a mujer en Nindirí activa investigación bajo la Ley 779",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "camioneta-impacta-dos-motos-en-managua-y-deja-tres-lesionados",
+      "titulo": "Camioneta impacta dos motos en Managua y deja tres lesionados",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes",
+      "titulo": "Ejército retiene a cinco personas y ocupa 11 semovientes",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidentes-dejan-nuevas-muertes-y-heridos-en-nicaragua",
+      "titulo": "Accidentes dejan nuevas muertes y heridos en Nicaragua.",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-sismos-en-39-segundos-sacuden-venezuela-y-caracas",
+      "titulo": "Dos sismos en 39 segundos sacuden Venezuela y Caracas",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "asesinan-a-pedradas-a-hombre-durante-un-robo-en-managua",
+      "titulo": "Asesinan a pedradas a hombre durante un robo en Managua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "recapturan-a-nicaraguense-que-se-fugo-de-carcel-en-costa-rica",
+      "titulo": "Recapturan a nicaragüense que se fugó de cárcel en Costa Rica",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "hombre-muere-tras-resultar-herido-en-el-barrio-18-de-mayo",
+      "titulo": "Hombre muere tras resultar herido en el barrio 18 de Mayo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "estudiante-de-13-anos-muere-tras-golpe-en-escuela-de-diriomo",
+      "titulo": "Estudiante de 13 años resulta afectado tras golpe en escuela de…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "discusion-entre-hombres-termina-con-un-muerto-en-managua",
+      "titulo": "Discusión entre hombres termina con un muerto en Managua",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "huye-de-la-policia-y-termina-atrapado-en-una-letrina-en-masaya",
+      "titulo": "Huye de la Policía y termina atrapado en una letrina en Masaya",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaraguense-muere-en-ataque-en-canovanas-puerto-rico",
+      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "hallan-sin-vida-a-profesor-desaparecido-en-cementerio-de-boaco",
+      "titulo": "Hallan sin vida a profesor desaparecido en cementerio de Boaco",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nicaraguenses-mueren-en-hechos-violentos-registrados-en-costa-rica",
+      "titulo": "Nicaragüenses resultan afectados en hechos graves registrados…",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "dos-fallecidos-en-accidentes-ocurridos-en-matagalpa-y-wiwili",
+      "titulo": "Dos personas fallecen en accidentes en Matagalpa y Wiwilí",
+      "problemas": [
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "MEDIA"
+    },
+    {
+      "slug": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+      "titulo": "Acusan a cuatro por doble asesinato en Nagarote; dos prófugos",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "accidente-en-wapi-deja-un-fallecido-y-un-herido-tras-vuelco",
+      "titulo": "Accidente en Wapi deja un fallecido y un herido tras vuelco",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "ebola-en-congo-deja-3-510-muertos-y-sigue-bajo-alerta",
+      "titulo": "Ébola en Congo deja 3,510 muertos y sigue bajo alerta",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "investigan-a-funcionaria-por-tramite-irregular-para-nicaraguense",
+      "titulo": "Investigan a funcionaria por trámite irregular para nicaragüense",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "acusado-de-disparar-a-policias-queda-en-prision-en-esteli",
+      "titulo": "Acusado de disparar a policías queda en prisión en Estelí",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "familia-busca-repatriar-a-nicaragua-a-jessica-asesinada-en-miami",
+      "titulo": "Familia busca repatriar a Nicaragua a Jessica, asesinada en Miami",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "perros-roboticos-reforzaran-seguridad-en-centro-fifa",
+      "titulo": "Perros robóticos reforzarán seguridad en centro FIFA",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:delito afirmado sin atribución ni víctima/atribución clara",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "el-caso-que-estremecio-tipitapa-entra-a-una-nueva-etapa-judicial",
+      "titulo": "El caso que estremeció Tipitapa entra a una nueva etapa judicial",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "masaya-queda-al-borde-y-esteli-toma-ventaja-en-el-pomares",
+      "titulo": "Masaya queda al borde y Estelí toma ventaja en el Pomares",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "fin-de-semana-deja-muertos-y-heridos-en-varios-accidentes-viales",
+      "titulo": "Fin de semana deja muertos y heridos en varios accidentes viales",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+      "titulo": "10 sitios para encontrar trabajo remoto desde Nicaragua en 2026",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "muere-roberto-el-bobby-espino-leyenda-del-beisbol-nicaraguense",
+      "titulo": "Muere Roberto \"El Bobby\" Espino, leyenda del béisbol nicaragüense",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "investigan-hallazgo-de-dos-cuerpos-y-desaparicion-por-lluvias",
+      "titulo": "Investigan hallazgo de dos cuerpos y desaparición por lluvias",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "mujer-muere-tras-colision-entre-bus-de-la-ruta-165-y-moto",
+      "titulo": "Mujer muere tras colisión entre bus de la Ruta 165 y moto",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:nota de sucesos sin ninguna atribución de fuente",
+        "riesgo:sin referencia temporal detectable",
+        "atribucion:suceso_sin_fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nina-de-7-anos-resulta-lesionada-tras-ataque-de-cocodrilo",
+      "titulo": "Niña de 7 años resulta lesionada tras ataque de cocodrilo",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "tragedia-en-esteli-madre-de-una-nina-muere-en-accidente",
+      "titulo": "Tragedia en Estelí: madre de una niña muere en accidente",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:afirmación provisional sin fuente"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "nuevo-complejo-en-masaya-reune-bomberos-y-migracion",
+      "titulo": "Nuevo complejo en Masaya reúne Bomberos y Migración",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    },
+    {
+      "slug": "tramos-2-y-3-de-pista-heroes-avanzan-60-en-drenaje",
+      "titulo": "Tramos 2 y 3 de Pista Héroes avanzan 60% en drenaje",
+      "problemas": [
+        "editorial:requiere_revision",
+        "riesgo:sin referencia temporal detectable"
+      ],
+      "nivel": "BAJA"
+    }
+  ]
+}

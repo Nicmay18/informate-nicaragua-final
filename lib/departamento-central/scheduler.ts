@@ -102,27 +102,10 @@ async function maybeEnqueueDailyReport(): Promise<string | null> {
   });
 }
 
-async function maybeEnqueueGrowth(): Promise<string | null> {
-  if (await hasRecentJob('growth-check', 29 * 60 * 1000)) return null;
-  const bucket = timeBucket(30 * 60 * 1000);
-  return enqueueJob({
-    type: 'growth-check',
-    priority: 'P2',
-    source: 'scheduler',
-    dedupKey: dedup('growth-check', bucket, bucket),
-  });
-}
-
-async function maybeEnqueueMonetization(): Promise<string | null> {
-  if (await hasRecentJob('monetization-check', 59 * 60 * 1000)) return null;
-  const bucket = timeBucket(60 * 60 * 1000);
-  return enqueueJob({
-    type: 'monetization-check',
-    priority: 'P2',
-    source: 'scheduler',
-    dedupKey: dedup('monetization-check', bucket, bucket),
-  });
-}
+// growth-check y monetization-check fueron retirados conscientemente: contaban
+// documentos en colecciones sin productor (nios_growth_opportunities=0,
+// nios_traffic=0) y registraban "learnings" sin consumidor. Los workers
+// quedan para drenar jobs históricos encolados, pero no se encolan más.
 
 async function enqueueNewArticles(): Promise<number> {
   const db = getAdminDb();
@@ -175,12 +158,6 @@ export async function runScheduler(): Promise<{
 
   const dailyJob = await maybeEnqueueDailyReport();
   if (dailyJob) enqueued++;
-
-  const growthJob = await maybeEnqueueGrowth();
-  if (growthJob) enqueued++;
-
-  const moneyJob = await maybeEnqueueMonetization();
-  if (moneyJob) enqueued++;
 
   const articles = await enqueueNewArticles();
   enqueued += articles;

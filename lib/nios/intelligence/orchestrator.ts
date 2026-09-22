@@ -106,7 +106,7 @@ export async function runNIOSPipeline(
     { buildGoogleIntelligenceDashboard },
     { generateGoogleTrustReport },
     { generateAdSenseRecoveryReport },
-    { generateLearningPatterns, saveLearningPatterns },
+    { generateLearningPatterns, saveLearningPatterns, pruneLearningPatterns },
     { generateWeeklyReport },
     { generateContentRecoveryReport },
     { generateAdSenseRecoveryFullReport },
@@ -321,6 +321,11 @@ export async function runNIOSPipeline(
 
     await measureAsync('feedback-save', () => saveLearningPatterns(db, learningPatterns));
     collectMetric('feedback-save', 'success', 0, undefined, undefined);
+
+    // Retención: los patrones se guardan 1 doc/artículo/día; sin poda la
+    // colección crece ~465 docs/día indefinidamente (memoria, no aprendizaje).
+    await measureAsync('feedback-prune', () => pruneLearningPatterns(db, 90));
+    collectMetric('feedback-prune', 'success', 0, undefined, undefined);
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
     const metric = (err as { metric?: { durationMs: number; memoryMB?: number; module?: string } }).metric;
@@ -328,6 +333,23 @@ export async function runNIOSPipeline(
     collectMetric(moduleName, 'error', metric?.durationMs ?? 0, error, metric?.memoryMB);
     errors.push(`LearningPatterns: ${error}`);
     logger.error('[nios-orchestrator] Learning patterns failed:', err);
+  }
+
+  // 10b. Validación de predicciones MENI: predicción → observación → realidad
+  // medida → comparación. Cierra el ciclo que quedó abierto con los campos
+  // real* en null. Solo escribe resultados medidos; lo no medible queda
+  // INSUFFICIENT_DATA.
+  try {
+    const { validateMeniPredictions } = await import('@/lib/meni/prediction-validator');
+    const valResult = await measureAsync('meni-prediction-validation', () =>
+      validateMeniPredictions(db, { minAgeDays: 7, limit: 100 }),
+    );
+    collectMetric('meni-prediction-validation', 'success', valResult.metric.durationMs, undefined, valResult.metric.memoryMB);
+  } catch (err) {
+    const error = err instanceof Error ? err.message : String(err);
+    collectMetric('meni-prediction-validation', 'error', 0, error, undefined);
+    errors.push(`PredictionValidation: ${error}`);
+    logger.error('[nios-orchestrator] Prediction validation failed:', err);
   }
 
   // 11. FASE 2.4: Weekly CEO Report

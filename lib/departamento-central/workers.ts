@@ -113,38 +113,15 @@ async function articlePipelineWorker(job: DeptoJob): Promise<void> {
   });
 }
 
+// nios_growth_opportunities / nios_traffic no tienen productor (retiradas).
+// Los workers quedan solo para drenar jobs históricos ya encolados; no se
+// encolan nuevos ni se escriben "learnings" de colecciones vacías.
 async function growthCheckWorker(job: DeptoJob): Promise<void> {
-  const db = getAdminDb();
-  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const countSnap = await db.collection('nios_growth_opportunities').where('createdAt', '>=', since).count().get();
-  const count = countSnap.data().count || 0;
-
-  await recordLearning({
-    source: 'departamento-central',
-    kind: 'learning',
-    note: `Revisión de crecimiento: ${count} oportunidades detectadas en las últimas 24h.`,
-    tags: ['growth', 'seo', '24x7'],
-  });
-
-  await writeHeartbeat('growth', 'healthy');
-  await completeJob(job.jobId, { opportunities24h: count });
+  await completeJob(job.jobId, { retired: true, note: 'Pipeline de oportunidades retirado (colección sin productor).' });
 }
 
 async function monetizationCheckWorker(job: DeptoJob): Promise<void> {
-  const db = getAdminDb();
-  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  const trafficSnap = await db.collection('nios_traffic').where('collectedAt', '>=', since).count().get();
-  const count = trafficSnap.data().count || 0;
-
-  await recordLearning({
-    source: 'departamento-central',
-    kind: 'learning',
-    note: `Revisión de monetización: ${count} registros de tráfico en las últimas 24h.`,
-    tags: ['monetización', 'adsense', '24x7'],
-  });
-
-  await writeHeartbeat('monetization-check', 'healthy');
-  await completeJob(job.jobId, { trafficRecords24h: count });
+  await completeJob(job.jobId, { retired: true, note: 'Chequeo de monetización retirado (nios_traffic sin productor).' });
 }
 
 async function watchdogRecoveryWorker(job: DeptoJob): Promise<void> {

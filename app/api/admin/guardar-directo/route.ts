@@ -366,7 +366,8 @@ export async function POST(request: NextRequest) {
             predPublicar: veredicto.publicar || null,
             confianza: veredicto.confianza || 0,
             fecha: new Date().toISOString(),
-            // Campos que se llenarán después con métricas reales:
+            validationStatus: 'PENDING_VALIDATION',
+            // Campos que el validador llena solo con datos reales medidos:
             realFacebook: null,
             realDiscover: null,
             realPortada: null,
@@ -374,6 +375,32 @@ export async function POST(request: NextRequest) {
         } catch (predError) {
           logger.warn('[guardar-directo] Prediction tracking failed (non-blocking):', predError);
         }
+      }
+
+      // Trust layer editorial (independiente del score MENI):
+      // evidencia semántica de confiabilidad adjunta a la nota.
+      try {
+        const { analyzeTrust } = await import('@/lib/editorial/trust');
+        const trust = analyzeTrust({
+          titulo: String(titulo ?? ''),
+          cuerpo: String(contenido ?? ''),
+          categoria: categoria || 'General',
+        });
+        if (articleDocId) {
+          await db.collection('noticias').doc(articleDocId).update({
+            confianza: {
+              nivel: trust.nivel,
+              resumen: trust.resumen,
+              requiereRevisionHumana: trust.requiereRevisionHumana,
+              riesgos: trust.riesgos.map(r => r.detail ?? r.text).slice(0, 10),
+              noDisponible: trust.noDisponible.length,
+              fuentes: trust.fuentes,
+              at: new Date().toISOString(),
+            },
+          });
+        }
+      } catch (trustError) {
+        logger.warn('[guardar-directo] Trust layer failed (non-blocking):', trustError);
       }
 
       // Editor Jefe — Dashboard: registrar score diario de MENI
