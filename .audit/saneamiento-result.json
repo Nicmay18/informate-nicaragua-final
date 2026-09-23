@@ -1,19 +1,19 @@
 {
   "resumen": {
     "TOTAL_NOTAS": 474,
-    "CORRECTA": 332,
-    "REVISION": 142,
+    "CORRECTA": 348,
+    "REVISION": 126,
     "CORRECCION_NECESARIA": 0,
     "CRITICA": 0,
-    "ALTA": 89,
-    "MEDIA": 53,
+    "ALTA": 79,
+    "MEDIA": 47,
     "BAJA": 0,
     "SOURCE_MISSING_REAL": 61,
     "SOURCE_MISSING_NO_APLICA": 94,
     "TEMPORAL_REAL": 31,
     "TEMPORAL_NO_NECESARIO": 8,
-    "PROVISIONAL_SIN_RESPALDO_REAL": 81,
-    "PROVISIONAL_CORRECTA": 31,
+    "PROVISIONAL_SIN_RESPALDO_REAL": 78,
+    "PROVISIONAL_CORRECTA": 34,
     "CONTRADICTIONS": 0,
     "ENTITY_UNVERIFIED": 0
   },
@@ -32,7 +32,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El caso de Brenda Baltodano se enmarca en esta figura, ya que la agresión habría sido cometida por su expareja sentimental.",
       "fuente": "Policía Nacional, Fiscalía",
-      "atribucion": "11/35",
+      "atribucion": "13/35",
       "que_falta": [
         "fuente para las afirmaciones provisionales",
         "ubicación del hecho"
@@ -52,11 +52,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Carreteras del país dejan un fin de semana con varios accidentes — Carreteras del país dejan un fin de semana con varios accidentes",
-      "problema": "3 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "\"El motociclista presuntamente circulaba a exceso de velocidad\", relataron testigos del accidente ocurrido en La Cruz de Río Grande. || Videos compartidos por vecinos muestran parte del impacto, mientras que versiones recogidas en el lugar señalan que el vehículo involucrado presuntamente circul || Durante el mismo fin de semana también se reportó la muerte de un peatón identificado preliminarmente como Porfirio, en San Isidro, Matagalpa, tras ser atropell",
+      "evidencia_disponible": "Durante el mismo fin de semana también se reportó la muerte de un peatón identificado preliminarmente como Porfirio, en San Isidro, Matagalpa, tras ser atropell",
       "fuente": "NINGUNA",
-      "atribucion": "4/22",
+      "atribucion": "5/22",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -80,7 +80,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las publicaciones también señalaban que, tras recuperar su libertad bajo fianza, el procesado habría salido de territorio estadounidense antes de la conclusión ",
       "fuente": "Policía Nacional",
-      "atribucion": "4/25",
+      "atribucion": "6/25",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -103,7 +103,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Una de las versiones señala que el conductor habría realizado una maniobra hacia el costado derecho para evitar impactar contra otro vehículo que se encontraba  || Otra versión relacionada con el accidente indica que el taxi habría presentado una supuesta falla en el sistema de frenos y que el conductor habría intentado ev",
       "fuente": "NINGUNA",
-      "atribucion": "2/26",
+      "atribucion": "3/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales",
@@ -175,7 +175,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El vehículo involucrado es un microbús Toyota color blanco, placas MY 20703 , conducido preliminarmente por Adrián Chávez, de 35 años .",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "5/24",
+      "atribucion": "6/24",
       "que_falta": [
         "referencia temporal (fecha o día)",
         "fuente para las afirmaciones provisionales"
@@ -199,10 +199,9 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "No asumir que una línea está desenergizada solamente porque aparentemente no hay corriente.",
       "fuente": "NINGUNA",
-      "atribucion": "0/48",
+      "atribucion": "4/48",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "fuente para las afirmaciones provisionales"
       ],
       "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
@@ -224,7 +223,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las autoridades iniciaron las investigaciones para establecer las circunstancias en que ocurrió el hecho y localizar al conductor involucrado, quien presuntamen",
       "fuente": "NINGUNA",
-      "atribucion": "10/25",
+      "atribucion": "15/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -318,7 +317,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las versiones preliminares señalan que se sumergió en el cuerpo de agua y fue auxiliado de inmediato por las personas que se encontraban cerca.",
       "fuente": "NINGUNA",
-      "atribucion": "2/20",
+      "atribucion": "4/20",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -342,7 +341,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las primeras versiones indican que Arauz Morales habría sufrido un aparente ataque cardíaco .",
       "fuente": "NINGUNA",
-      "atribucion": "4/31",
+      "atribucion": "6/31",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -423,30 +422,6 @@
       "provisional": "SIN_RESPALDO_REAL"
     },
     {
-      "slug": "C1UJ83ospxOXOtNGLwgr",
-      "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
-      "categoria": "Sucesos",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Cuatro obreros afectados en accidentes laborales en Nicaragua — Cuatro obreros afectados en accidentes laborales en Nicaragua",
-      "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
-      "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Versiones preliminares indican que se encontraba sobre la estructura cuando una lámina de plástico pintada cedió bajo su peso.",
-      "fuente": "NINGUNA",
-      "atribucion": "10/22",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "fuente para las afirmaciones provisionales"
-      ],
-      "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
-      "sm_necesitaFuente": "SI",
-      "sm_problemaConfiabilidad": "REVISAR",
-      "temporal": null,
-      "provisional": "SIN_RESPALDO_REAL"
-    },
-    {
       "slug": "CO2y0PHkMT6rYOueWLf9",
       "titulo": "Mueren dos hombres tras accidente de tránsito en Rivas",
       "categoria": "Sucesos",
@@ -459,7 +434,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las versiones preliminares indican que el impacto fue de considerable fuerza y provocó que los dos ocupantes de la motocicleta salieran proyectados hacia la vía",
       "fuente": "Policía Nacional",
-      "atribucion": "5/33",
+      "atribucion": "10/33",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -467,31 +442,6 @@
       "sm_necesitaFuente": null,
       "sm_problemaConfiabilidad": null,
       "temporal": null,
-      "provisional": "SIN_RESPALDO_REAL"
-    },
-    {
-      "slug": "COhLEROaJUFN8MvQEqZp",
-      "titulo": "INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
-      "categoria": "Nacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "INSS: ¿Qué familiares tienen cobertura por fallecimiento? — INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
-      "problema": "2 afirmación(es) provisional(es) sin fuente en su párrafo",
-      "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "La pensión de viudez tiene como referencia el 50% de la pensión que recibía el causante o de la que habría recibido por invalidez total , sin incluir las asigna || La pensión tiene como referencia el 25% de la pensión que recibía el causante o de la que habría recibido por invalidez total, por cada hijo , sin incluir las a",
-      "fuente": "INSS",
-      "atribucion": "52/142",
-      "que_falta": [
-        "referencia temporal (fecha o día)",
-        "fuente para las afirmaciones provisionales",
-        "ubicación del hecho"
-      ],
-      "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
-      "sm_necesitaFuente": null,
-      "sm_problemaConfiabilidad": null,
-      "temporal": "REAL",
       "provisional": "SIN_RESPALDO_REAL"
     },
     {
@@ -602,7 +552,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Como resultado quedaron detenidos dos ciudadanos identificados preliminarmente como Carlos, de 34 años, y Osvin, de 19 , quienes pasaron a disposición de las au",
       "fuente": "Policía Nacional, Ministerio Público",
-      "atribucion": "6/24",
+      "atribucion": "9/24",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -625,7 +575,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "En las primeras horas circularon versiones sobre la forma en que habría ocurrido el fallecimiento.",
       "fuente": "NINGUNA",
-      "atribucion": "3/34",
+      "atribucion": "9/34",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -649,7 +599,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El hecho habría ocurrido alrededor de las 10:00 de la noche , cuando Cantarero se encontraba en su vivienda compartiendo bebidas alcohólicas junto a sus hijos. || Durante la reunión se produjo una discusión que posteriormente habría escalado a una confrontación física.",
       "fuente": "Policía Nacional, Ministerio Público",
-      "atribucion": "7/25",
+      "atribucion": "8/25",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -709,31 +659,6 @@
       "provisional": "SIN_RESPALDO_REAL"
     },
     {
-      "slug": "IFFjvOi1HTG0oeiIuIBo",
-      "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
-      "categoria": "Internacionales",
-      "publicado": false,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Costa Rica detiene a palestino con vínculos a Hamás — Costa Rica detiene a palestino con vínculos a Hamás",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Costa Rica detiene a palestino con vínculos a Hamás || SAN JOSÉ / COSTA RICA — La Dirección de Inteligencia y Seguridad Nacional de Costa Rica detuvo este lunes 22 de junio a un ciudadano palestino identificado con ",
-      "fuente": "NINGUNA",
-      "atribucion": "0/25",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-        "ubicación del hecho"
-      ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
-      "sm_necesitaFuente": "SI",
-      "sm_problemaConfiabilidad": "REVISAR",
-      "temporal": null,
-      "provisional": null
-    },
-    {
       "slug": "J1ZUf7ZxMxaUjb64rkXj",
       "titulo": "Cinco accidentes de tránsito dejan tres fallecido y varios herido",
       "categoria": "Sucesos",
@@ -789,34 +714,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Capturan acusado de agredir a un hombre en Rivas — Capturan acusado de agredir a un hombre en Rivas",
-      "problema": "2 afirmación(es) provisional(es) sin fuente en su párrafo",
-      "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Juan Carlos Aguilar Obando, 46, fue localizado y puesto a disposición de las autoridades nicaragüenses tras su captura en Costa Rica el 8 de junio; enfrenta inv || Qué señalan investigaciones y testigos Investigadores detallaron que Aguilar habría rociado gasolina sobre la persona afectada mientras dormía y luego le prendi",
-      "fuente": "Fiscalía, Policía Nacional, Bomberos",
-      "atribucion": "13/23",
-      "que_falta": [
-        "fuente para las afirmaciones provisionales"
-      ],
-      "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
-      "sm_necesitaFuente": null,
-      "sm_problemaConfiabilidad": null,
-      "temporal": null,
-      "provisional": "SIN_RESPALDO_REAL"
-    },
-    {
-      "slug": "Jjk9syTstGMlEeQerkQ6",
-      "titulo": "Varios accidentes de tránsito dejan fallecidos en Nicaragua",
-      "categoria": "Sucesos",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Varios accidentes de tránsito dejan fallecidos en Nicaragua — Varios accidentes de tránsito dejan fallecidos en Nicaragua",
       "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Testigos indicaron que presuntamente uno de los conductores circulaba a exceso de velocidad, aunque serán las autoridades correspondientes las encargadas de det",
-      "fuente": "Policía Nacional",
-      "atribucion": "7/39",
+      "evidencia_disponible": "Juan Carlos Aguilar Obando, 46, fue localizado y puesto a disposición de las autoridades nicaragüenses tras su captura en Costa Rica el 8 de junio; enfrenta inv",
+      "fuente": "Fiscalía, Policía Nacional, Bomberos",
+      "atribucion": "18/23",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -839,7 +741,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Los dos sucesos vuelven a dejar víctimas mortales vinculadas a la circulación de motocicletas, pero las circunstancias particulares de cada accidente deberán se",
       "fuente": "Policía Nacional",
-      "atribucion": "8/32",
+      "atribucion": "9/32",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -848,31 +750,6 @@
       "sm_problemaConfiabilidad": null,
       "temporal": null,
       "provisional": "SIN_RESPALDO_REAL"
-    },
-    {
-      "slug": "LFKxOjl36CtcbkmTiQuA",
-      "titulo": "Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado",
-      "categoria": "Internacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado — Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado || La tierra continuó moviéndose este lunes en Costa Rica después de los dos fuertes sismos que sacudieron la zona central durante la madrugada.",
-      "fuente": "NINGUNA",
-      "atribucion": "0/60",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-        "ubicación del hecho"
-      ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
-      "sm_necesitaFuente": "SI",
-      "sm_problemaConfiabilidad": "REVISAR",
-      "temporal": null,
-      "provisional": null
     },
     {
       "slug": "MKCnC4GlK5ceDJUfLtMD",
@@ -910,7 +787,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La investigación deberá determinar qué participación habría tenido cada involucrado y cuáles fueron las circunstancias exactas que llevaron al disparo que alcan",
       "fuente": "Policía Nacional",
-      "atribucion": "6/47",
+      "atribucion": "9/47",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -956,7 +833,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La información preliminar sobre el accidente señaló que la camioneta habría realizado una maniobra de adelantamiento antes de producirse la colisión.",
       "fuente": "Policía Nacional",
-      "atribucion": "7/67",
+      "atribucion": "11/67",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1025,7 +902,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Una mujer de 44 años murió este lunes 14 de septiembre después de ser atacada presuntamente por su cónyuge durante una discusión ocurrida en la comunidad Las Te || La información conocida hasta ahora señala que una discusión entre la pareja habría antecedido al ataque.",
       "fuente": "Policía Nacional",
-      "atribucion": "3/26",
+      "atribucion": "5/26",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1048,7 +925,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La situación pasó de la discusión a una confrontación en la que el joven sufrió una herida con arma blanca en el cuello, presuntamente provocada por su padre. || El hombre fue detenido cuando presuntamente se disponía a abordar un autobús con dirección hacia la Costa Caribe de Nicaragua, por lo que fue trasladado bajo cu",
       "fuente": "Policía Nacional",
-      "atribucion": "3/23",
+      "atribucion": "6/23",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1091,11 +968,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Nicaragüense habría muerto en Panamá y familia fue localizada — Nicaragüense habría muerto en Panamá y familia fue localizada",
-      "problema": "4 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "3 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Nicaragüense habría muerto en Panamá y familia fue localizada || La búsqueda de familiares de la joven nicaragüense Ana Iris García Carrión se convirtió en una de las primeras gestiones tras conocerse que habría sufrido un ac || Uno de los datos que posteriormente trascendió es que Ana Iris habría vivido antes de viajar a Panamá en el barrio Francisco Salazar, en el Reparto Schick, Mana",
+      "evidencia_disponible": "Nicaragüense habría muerto en Panamá y familia fue localizada || Uno de los datos que posteriormente trascendió es que Ana Iris habría vivido antes de viajar a Panamá en el barrio Francisco Salazar, en el Reparto Schick, Mana || Hasta ahora, la información disponible apunta a que la joven habría sufrido un accidente de tránsito en Panamá.",
       "fuente": "NINGUNA",
-      "atribucion": "1/26",
+      "atribucion": "9/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)",
@@ -1168,7 +1045,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Un ciudadano extranjero, identificado preliminarmente por el apellido Rule , fue encontrado sin vida dentro de la casa donde residía.",
       "fuente": "Policía Nacional",
-      "atribucion": "4/20",
+      "atribucion": "9/20",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1191,7 +1068,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Para evitar compartir su alimento, uno de ellos habría respondido que se trataba de un \"viejo indio\" que había muerto. || La historia habría provocado rechazo entre los españoles, quienes decidieron no probarlo.",
       "fuente": "NINGUNA",
-      "atribucion": "2/49",
+      "atribucion": "8/49",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales",
@@ -1251,31 +1128,6 @@
       "provisional": "SIN_RESPALDO_REAL"
     },
     {
-      "slug": "dPkDD0dcGtcngpCjk7W0",
-      "titulo": "Muere a los 17 años joven estudiante de La Trinidad",
-      "categoria": "Sucesos",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Muere a los 17 años joven estudiante de La Trinidad — Muere a los 17 años joven estudiante de La Trinidad",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Muere a los 17 años joven estudiante de La Trinidad || La comunidad de San Francisco, en La Trinidad, Estelí, se encuentra de luto por el fallecimiento de Marianyi Mageli Avilés Cardoza, de 17 años , ocurrido durant",
-      "fuente": "NINGUNA",
-      "atribucion": "0/25",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-        "ubicación del hecho"
-      ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
-      "sm_necesitaFuente": "SI",
-      "sm_problemaConfiabilidad": "REVISAR",
-      "temporal": null,
-      "provisional": null
-    },
-    {
       "slug": "ddWDYaYKFz87sn6KZmwz",
       "titulo": "Fin de semana deja muertos y lesionados en varios accidentes",
       "categoria": "Sucesos",
@@ -1288,7 +1140,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La información preliminar señala que el joven habría estado consumiendo licor antes del accidente. || También en este caso se manejó de manera preliminar que el conductor habría circulado en presunto estado de ebriedad. || El reporte preliminar señala que el motociclista habría estado consumiendo licor antes del accidente.",
       "fuente": "Policía Nacional",
-      "atribucion": "6/74",
+      "atribucion": "10/74",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1311,7 +1163,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La ausencia del equipo de seguridad habría dejado al conductor más expuesto a sufrir lesiones graves durante la caída.",
       "fuente": "NINGUNA",
-      "atribucion": "5/18",
+      "atribucion": "6/18",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -1354,11 +1206,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Cinco motociclistas mueren en distintos puntos de Nicaragua — Cinco motociclistas mueren en distintos puntos de Nicaragua",
-      "problema": "4 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "3 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "De manera preliminar también se informó que el conductor aparentemente se encontraba bajo los efectos del alcohol y no utilizaba casco de protección. || Personas cercanas al fallecido indicaron que presuntamente se dedicaba, junto con su hermano gemelo, a la venta de repuestos para motocicletas en Bluefields. || La información preliminar señala que el vehículo pesado habría invadido el carril por donde circulaba el motociclista.",
+      "evidencia_disponible": "De manera preliminar también se informó que el conductor aparentemente se encontraba bajo los efectos del alcohol y no utilizaba casco de protección. || La información preliminar señala que el vehículo pesado habría invadido el carril por donde circulaba el motociclista. || En al menos dos reportes se señala preliminarmente la ausencia de casco, aunque esa circunstancia también debe diferenciarse de los hechos que ya están confirma",
       "fuente": "NINGUNA",
-      "atribucion": "6/64",
+      "atribucion": "7/64",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -1382,7 +1234,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Tampoco se ha divulgado públicamente cuál habría sido el móvil definitivo del asesinato, por lo que distintas versiones que han circulado permanecen bajo invest",
       "fuente": "NINGUNA",
-      "atribucion": "3/29",
+      "atribucion": "5/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -1406,7 +1258,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El hombre señalado preliminarmente por la agresión es su hijo, Marlon Andrés Escobar Llanes, de 33 años , conocido como “Pito Loco”. || Hasta ahora no se ha informado oficialmente cuál habría sido el motivo del enfrentamiento. || También se mantiene como dato preliminar que la agresión habría sido cometida con un arma blanca .",
       "fuente": "Policía Nacional",
-      "atribucion": "6/45",
+      "atribucion": "8/45",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1415,56 +1267,6 @@
       "sm_problemaConfiabilidad": null,
       "temporal": null,
       "provisional": "SIN_RESPALDO_REAL"
-    },
-    {
-      "slug": "n2Buq4aBhvnrXUcTlwuD",
-      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
-      "categoria": "Internacionales",
-      "publicado": false,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Capturan a pinolero por llevarse a niña de 13 años — Capturan a pinolero por llevarse a niña de 13 años",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Capturan a pinolero por llevarse a niña de 13 años || La Fuerza Pública de Costa Rica capturó a Juan Carlos González Vallecillo , de 30 años y nacionalidad nicaragüense, tras cruzar ilegalmente a ese país con una a",
-      "fuente": "NINGUNA",
-      "atribucion": "0/17",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-        "referencia temporal (fecha o día)",
-        "ubicación del hecho"
-      ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
-      "sm_necesitaFuente": "SI",
-      "sm_problemaConfiabilidad": "REVISAR",
-      "temporal": "REAL",
-      "provisional": null
-    },
-    {
-      "slug": "n64la9Hnrkp0sENv0z5U",
-      "titulo": "Dos pérdidas reabren llamado a cuidar la salud emocional",
-      "categoria": "Sucesos",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Dos pérdidas reabren llamado a cuidar la salud emocional — Dos pérdidas reabren llamado a cuidar la salud emocional",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Dos pérdidas reabren llamado a cuidar la salud emocional || Dos familias nicaragüenses enfrentan el afectación por la pérdida de una adolescente de 16 años en Somoto, Madriz , y de un joven de 22 años en Villa El Carmen,",
-      "fuente": "NINGUNA",
-      "atribucion": "0/27",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
-      "sm_necesitaFuente": "SI",
-      "sm_problemaConfiabilidad": "REVISAR",
-      "temporal": null,
-      "provisional": null
     },
     {
       "slug": "nDiTklfg2RHYI4M3jWXB",
@@ -1479,7 +1281,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las víctimas fueron identificadas preliminarmente como Wilbert Antonio Raúdez Jarquin de 35 años, conocido popularmente como “Pulpo”, y Andrea Valentina Urroz ,",
       "fuente": "NINGUNA",
-      "atribucion": "5/31",
+      "atribucion": "7/31",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -1489,30 +1291,6 @@
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
       "provisional": "SIN_RESPALDO_REAL"
-    },
-    {
-      "slug": "nHdlNT1s7XRkdkYIEDKO",
-      "titulo": "Madrugada termina en tragedia para motociclista en La Paz Centro",
-      "categoria": "Sucesos",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Madrugada termina en tragedia para motociclista en La Paz Centro — Madrugada termina en tragedia para motociclista en La Paz Centro",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Madrugada termina en tragedia para motociclista en La Paz Centro || La madrugada de este martes terminó de forma trágica para Gilberth Iginio Urbina Téllez, de 25 años , quien perdió la vida luego de sufrir un accidente de tráns",
-      "fuente": "NINGUNA",
-      "atribucion": "0/17",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
-      "sm_necesitaFuente": "SI",
-      "sm_problemaConfiabilidad": "REVISAR",
-      "temporal": null,
-      "provisional": null
     },
     {
       "slug": "ndySfHYuipYrG7olWLH6",
@@ -1527,7 +1305,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Una de las fracturas habría requerido una intervención quirúrgica .",
       "fuente": "NINGUNA",
-      "atribucion": "8/32",
+      "atribucion": "12/32",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales",
@@ -1575,7 +1353,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las primeras versiones señalan que la niña habría sido sumergida en un recipiente con agua. || Aunque las versiones preliminares apuntan a una muerte por sumersión, corresponde al Instituto de Medicina Legal determinar la causa mediante la evaluación fore",
       "fuente": "Policía Nacional",
-      "atribucion": "6/34",
+      "atribucion": "7/34",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1598,10 +1376,9 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Uno de esos recuerdos también menciona a Frank García , quien habría estado a cargo de los controles y las grabaciones durante esas transmisiones.",
       "fuente": "NINGUNA",
-      "atribucion": "0/18",
+      "atribucion": "1/18",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "fuente para las afirmaciones provisionales"
       ],
       "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
@@ -1642,11 +1419,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Buscan a hombre acusado de herir de bala a niña en Rivas — Buscan a hombre acusado de herir de bala a niña en Rivas",
-      "problema": "2 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Luego del ataque, el sospechoso huyó del lugar en motocicleta, presuntamente con dirección hacia la zona fronteriza con Costa Rica. || Habitantes del sector relataron que el hombre aparentemente intentó llevarse a la menor y que, al no lograrlo, abrió fuego contra ella.",
+      "evidencia_disponible": "Luego del ataque, el sospechoso huyó del lugar en motocicleta, presuntamente con dirección hacia la zona fronteriza con Costa Rica.",
       "fuente": "Policía Nacional",
-      "atribucion": "6/27",
+      "atribucion": "9/27",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1669,7 +1446,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El reporte no establece a quién pertenecían los animales ni proporciona detalles sobre el origen o destino del ganado presuntamente trasladado de manera ilegal.",
       "fuente": "Policía Nacional, Ministerio Público",
-      "atribucion": "13/26",
+      "atribucion": "15/26",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1785,7 +1562,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Un hombre identificado preliminarmente como Gabriel Antonio Ríos , de 32 años, murió la madrugada de este domingo después de llegar gravemente herido a su vivie || Una de las versiones señala que Ríos habría sido atacado con un arma de fuego por otra persona. || Sin embargo, otra versión sostiene que habría recibido un fuerte golpe en la frente con una piedra.",
       "fuente": "Policía Nacional",
-      "atribucion": "3/25",
+      "atribucion": "4/25",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -1808,7 +1585,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Durante la riña, Mendoza habría tomado una piedra del suelo y golpeado a Molina en la cabeza .",
       "fuente": "Policía Nacional",
-      "atribucion": "3/17",
+      "atribucion": "5/17",
       "que_falta": [
         "referencia temporal (fecha o día)",
         "fuente para las afirmaciones provisionales"
@@ -1855,7 +1632,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las investigaciones preliminares manejan como hipótesis que el ataque iba dirigido contra el conductor del vehículo y que la joven nicaragüense habría sido pers",
       "fuente": "NINGUNA",
-      "atribucion": "8/29",
+      "atribucion": "15/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -1879,7 +1656,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Un accidente de tránsito ocurrido la tarde de este jueves 13 de agosto en el sector conocido como La Gran Bajada de Wapi , sobre la carretera que comunica El Ra || El joven se desempeñaba como ayudante del camión y habría quedado atrapado dentro de la cabina como consecuencia del impacto y el vuelco. || El conductor fue identificado preliminarmente como Melkin .",
       "fuente": "NINGUNA",
-      "atribucion": "3/40",
+      "atribucion": "6/40",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -1903,7 +1680,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las autoridades ven señales de descenso El ministro de Salud de la República Democrática del Congo, Samuel Roger Kamba, informó que la transmisión habría comenz",
       "fuente": "Gobierno, OMS",
-      "atribucion": "5/22",
+      "atribucion": "6/22",
       "que_falta": [
         "fuente para las afirmaciones provisionales",
         "ubicación del hecho"
@@ -1951,7 +1728,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Una de las frases que la familia recuerda es una amenaza que Jessica supuestamente habría recibido: “Si no eres mía, tampoco de él” .",
       "fuente": "NINGUNA",
-      "atribucion": "5/30",
+      "atribucion": "11/30",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales",
@@ -1962,31 +1739,6 @@
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
       "provisional": "SIN_RESPALDO_REAL"
-    },
-    {
-      "slug": "y8gWejnBZDoLhgYaRWlP",
-      "titulo": "Perros robóticos reforzarán seguridad en centro FIFA",
-      "categoria": "Tecnología",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
-      "principal_claim": "Perros robóticos reforzarán seguridad en centro FIFA — Perros robóticos reforzarán seguridad en centro FIFA",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Perros robóticos reforzarán seguridad en centro FIFA || Perros robóticos serán incorporados al Centro de Transmisiones de la FIFA durante la Copa del Mundo para realizar tareas de vigilancia y apoyo a la seguridad.",
-      "fuente": "NINGUNA",
-      "atribucion": "0/26",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-        "ubicación del hecho"
-      ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
-      "sm_necesitaFuente": "SI",
-      "sm_problemaConfiabilidad": "REVISAR",
-      "temporal": null,
-      "provisional": null
     },
     {
       "slug": "yBv7VNBe546PGd0a0glv",
@@ -2097,7 +1849,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "En abril de 2020, por ejemplo, fue localizado el cuerpo de un niño de 9 años que había sido reportado como presuntamente atacado por un cocodrilo mientras se ba",
       "fuente": "NINGUNA",
-      "atribucion": "2/26",
+      "atribucion": "5/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -2121,7 +1873,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "De manera preliminar, el conductor de la camioneta habría quedado bajo resguardo de las autoridades mientras avanzan las diligencias.",
       "fuente": "Policía Nacional",
-      "atribucion": "4/43",
+      "atribucion": "12/43",
       "que_falta": [
         "fuente para las afirmaciones provisionales",
         "ubicación del hecho"
@@ -2145,7 +1897,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/21",
+      "atribucion": "5/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -2193,7 +1945,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Fiscalía",
-      "atribucion": "5/32",
+      "atribucion": "7/32",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -2373,30 +2125,6 @@
       "provisional": null
     },
     {
-      "slug": "7XzL7aTqVYBpTNKgSPxQ",
-      "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
-      "categoria": "Nacionales",
-      "publicado": false,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
-      "principal_claim": "Puerto Corinto lidera llegada de 11 buques a Nicaragua — Puerto Corinto lidera llegada de 11 buques a Nicaragua",
-      "problema": "19 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
-      "evidencia_disponible": "NINGUNA",
-      "fuente": "NINGUNA",
-      "atribucion": "0/19",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
-      "sm_necesitaFuente": "NO_VERIFICABLE",
-      "sm_problemaConfiabilidad": "NO",
-      "temporal": null,
-      "provisional": null
-    },
-    {
       "slug": "81UQk1YkWPpF7BzIdaDo",
       "titulo": "Dos nicaragüenses resultan afectados en accidentes ocurridos en…",
       "categoria": "Internacionales",
@@ -2409,7 +2137,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/29",
+      "atribucion": "8/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -2481,7 +2209,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/24",
+      "atribucion": "7/24",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -2529,7 +2257,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "11/34",
+      "atribucion": "14/34",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -2561,6 +2289,30 @@
       "sm_problemaConfiabilidad": null,
       "temporal": "REAL",
       "provisional": null
+    },
+    {
+      "slug": "COhLEROaJUFN8MvQEqZp",
+      "titulo": "INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
+      "categoria": "Nacionales",
+      "publicado": true,
+      "veredicto": "REVISION",
+      "prioridad": "MEDIA",
+      "confianza": "BAJA",
+      "principal_claim": "INSS: ¿Qué familiares tienen cobertura por fallecimiento? — INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
+      "problema": "Noticia de evento sin referencia temporal que la ubique",
+      "tipo_problema": "temporal_ambigua",
+      "evidencia_disponible": "NINGUNA",
+      "fuente": "INSS",
+      "atribucion": "60/142",
+      "que_falta": [
+        "referencia temporal (fecha o día)",
+        "ubicación del hecho"
+      ],
+      "accion_recomendada": "AÑADIR_REFERENCIA_TEMPORAL_SOLO_SI_EXISTE_EN_MATERIAL_ORIGINAL",
+      "sm_necesitaFuente": null,
+      "sm_problemaConfiabilidad": null,
+      "temporal": "REAL",
+      "provisional": "CORRECTA"
     },
     {
       "slug": "DtjilYkxrQsi9s1tBP6L",
@@ -2600,7 +2352,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "70/98",
+      "atribucion": "72/98",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -2608,30 +2360,6 @@
       "sm_necesitaFuente": null,
       "sm_problemaConfiabilidad": null,
       "temporal": "REAL",
-      "provisional": null
-    },
-    {
-      "slug": "IFvH1F0YUbgz55E853jj",
-      "titulo": "Comercios esperan alta actividad por Día de las Madres en…",
-      "categoria": "Nacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
-      "principal_claim": "Comercios esperan alta actividad por Día de las Madres en… — Comercios esperan alta actividad por Día de las Madres en…",
-      "problema": "44 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
-      "evidencia_disponible": "NINGUNA",
-      "fuente": "NINGUNA",
-      "atribucion": "0/44",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
-      "sm_necesitaFuente": "NO_VERIFICABLE",
-      "sm_problemaConfiabilidad": "NO",
-      "temporal": null,
       "provisional": null
     },
     {
@@ -2647,7 +2375,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/24",
+      "atribucion": "5/24",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -2671,7 +2399,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/19",
+      "atribucion": "9/19",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -2719,7 +2447,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/71",
+      "atribucion": "4/71",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)",
@@ -2745,30 +2473,6 @@
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
       "atribucion": "0/38",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
-      "sm_necesitaFuente": "NO_VERIFICABLE",
-      "sm_problemaConfiabilidad": "NO",
-      "temporal": null,
-      "provisional": null
-    },
-    {
-      "slug": "R2zQFsmjsu0NvFRU7tDa",
-      "titulo": "Tres Leches nicaragüense gana reconocimiento internacional",
-      "categoria": "Nacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
-      "principal_claim": "Tres Leches nicaragüense gana reconocimiento internacional — Tres Leches nicaragüense gana reconocimiento internacional",
-      "problema": "27 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
-      "evidencia_disponible": "NINGUNA",
-      "fuente": "NINGUNA",
-      "atribucion": "0/27",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
@@ -2839,7 +2543,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Fiscalía, Ministerio Público, ONU",
-      "atribucion": "10/27",
+      "atribucion": "11/27",
       "que_falta": [
         "referencia temporal (fecha o día)",
         "ubicación del hecho"
@@ -2887,7 +2591,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "5/31",
+      "atribucion": "6/31",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -2910,7 +2614,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "6/21",
+      "atribucion": "9/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)",
@@ -2995,54 +2699,6 @@
       "provisional": null
     },
     {
-      "slug": "cr3ixiMYdzUXKAO6kzqD",
-      "titulo": "Yoltamal: el tamal de maíz tierno que identifica a Nicaragua",
-      "categoria": "Nacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
-      "principal_claim": "Yoltamal: el tamal de maíz tierno que identifica a Nicaragua — Yoltamal: el tamal de maíz tierno que identifica a Nicaragua",
-      "problema": "41 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
-      "evidencia_disponible": "NINGUNA",
-      "fuente": "NINGUNA",
-      "atribucion": "0/41",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
-      "sm_necesitaFuente": "NO_VERIFICABLE",
-      "sm_problemaConfiabilidad": "NO",
-      "temporal": null,
-      "provisional": null
-    },
-    {
-      "slug": "fQuSHECJ9t5OWLOMbYzj",
-      "titulo": "Masaya recibe la Antorcha Centroamericana con orgullo patrio",
-      "categoria": "Nacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
-      "principal_claim": "Masaya recibe la Antorcha Centroamericana con orgullo patrio — Masaya recibe la Antorcha Centroamericana con orgullo patrio",
-      "problema": "39 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
-      "evidencia_disponible": "NINGUNA",
-      "fuente": "NINGUNA",
-      "atribucion": "0/39",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
-      "sm_necesitaFuente": "NO_VERIFICABLE",
-      "sm_problemaConfiabilidad": "NO",
-      "temporal": null,
-      "provisional": null
-    },
-    {
       "slug": "gXTkMry6uueR9BxXcTdF",
       "titulo": "Dos afectados tras naufragio de panga en Krukira",
       "categoria": "Sucesos",
@@ -3055,7 +2711,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "6/32",
+      "atribucion": "7/32",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -3126,7 +2782,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/36",
+      "atribucion": "5/36",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -3198,7 +2854,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/25",
+      "atribucion": "2/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -3206,6 +2862,31 @@
       "accion_recomendada": "AÑADIR_REFERENCIA_TEMPORAL_SOLO_SI_EXISTE_EN_MATERIAL_ORIGINAL",
       "sm_necesitaFuente": "NO",
       "sm_problemaConfiabilidad": "NO",
+      "temporal": "REAL",
+      "provisional": null
+    },
+    {
+      "slug": "n2Buq4aBhvnrXUcTlwuD",
+      "titulo": "Capturan a pinolero por llevarse a niña de 13 años",
+      "categoria": "Internacionales",
+      "publicado": false,
+      "veredicto": "REVISION",
+      "prioridad": "MEDIA",
+      "confianza": "BAJA",
+      "principal_claim": "Capturan a pinolero por llevarse a niña de 13 años — Capturan a pinolero por llevarse a niña de 13 años",
+      "problema": "Noticia de evento sin referencia temporal que la ubique",
+      "tipo_problema": "temporal_ambigua",
+      "evidencia_disponible": "NINGUNA",
+      "fuente": "NINGUNA",
+      "atribucion": "2/17",
+      "que_falta": [
+        "nombrar la fuente institucional o periodística",
+        "referencia temporal (fecha o día)",
+        "ubicación del hecho"
+      ],
+      "accion_recomendada": "AÑADIR_REFERENCIA_TEMPORAL_SOLO_SI_EXISTE_EN_MATERIAL_ORIGINAL",
+      "sm_necesitaFuente": "SI",
+      "sm_problemaConfiabilidad": "REVISAR",
       "temporal": "REAL",
       "provisional": null
     },
@@ -3222,7 +2903,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "6/29",
+      "atribucion": "10/29",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -3245,7 +2926,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Ministerio Público",
-      "atribucion": "7/18",
+      "atribucion": "8/18",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -3254,54 +2935,6 @@
       "sm_problemaConfiabilidad": null,
       "temporal": "REAL",
       "provisional": "CORRECTA"
-    },
-    {
-      "slug": "t6oFNMA4EGC4hOS3IqvE",
-      "titulo": "Güegüense y Agüizotes preservan tradición de Nicaragua",
-      "categoria": "Nacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
-      "principal_claim": "Güegüense y Agüizotes preservan tradición de Nicaragua — Güegüense y Agüizotes preservan tradición de Nicaragua",
-      "problema": "39 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
-      "evidencia_disponible": "NINGUNA",
-      "fuente": "NINGUNA",
-      "atribucion": "0/39",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
-      "sm_necesitaFuente": "NO_VERIFICABLE",
-      "sm_problemaConfiabilidad": "NO",
-      "temporal": null,
-      "provisional": null
-    },
-    {
-      "slug": "vsqhr6Av9BKI6sqFIxP8",
-      "titulo": "Orgullo patrio: jóvenes destacados portarán la Antorcha",
-      "categoria": "Nacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
-      "principal_claim": "Orgullo patrio: jóvenes destacados portarán la Antorcha — Orgullo patrio: jóvenes destacados portarán la Antorcha",
-      "problema": "39 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
-      "evidencia_disponible": "NINGUNA",
-      "fuente": "NINGUNA",
-      "atribucion": "0/39",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
-      "sm_necesitaFuente": "NO_VERIFICABLE",
-      "sm_problemaConfiabilidad": "NO",
-      "temporal": null,
-      "provisional": null
     },
     {
       "slug": "wq1Ovg1EiAYObmCYkY9Z",
@@ -3317,30 +2950,6 @@
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
       "atribucion": "0/42",
-      "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-      ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
-      "sm_necesitaFuente": "NO_VERIFICABLE",
-      "sm_problemaConfiabilidad": "NO",
-      "temporal": null,
-      "provisional": null
-    },
-    {
-      "slug": "xnZ6TgAAZtQTrvLaaXni",
-      "titulo": "Masaya inicia las fiestas patronales más largas de Nicaragua",
-      "categoria": "Nacionales",
-      "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
-      "principal_claim": "Masaya inicia las fiestas patronales más largas de Nicaragua — Masaya inicia las fiestas patronales más largas de Nicaragua",
-      "problema": "45 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
-      "evidencia_disponible": "NINGUNA",
-      "fuente": "NINGUNA",
-      "atribucion": "0/45",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
@@ -3437,7 +3046,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El caso de Brenda Baltodano se enmarca en esta figura, ya que la agresión habría sido cometida por su expareja sentimental.",
       "fuente": "Policía Nacional, Fiscalía",
-      "atribucion": "11/35",
+      "atribucion": "13/35",
       "que_falta": [
         "fuente para las afirmaciones provisionales",
         "ubicación del hecho"
@@ -3457,11 +3066,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Carreteras del país dejan un fin de semana con varios accidentes — Carreteras del país dejan un fin de semana con varios accidentes",
-      "problema": "3 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "\"El motociclista presuntamente circulaba a exceso de velocidad\", relataron testigos del accidente ocurrido en La Cruz de Río Grande. || Videos compartidos por vecinos muestran parte del impacto, mientras que versiones recogidas en el lugar señalan que el vehículo involucrado presuntamente circul || Durante el mismo fin de semana también se reportó la muerte de un peatón identificado preliminarmente como Porfirio, en San Isidro, Matagalpa, tras ser atropell",
+      "evidencia_disponible": "Durante el mismo fin de semana también se reportó la muerte de un peatón identificado preliminarmente como Porfirio, en San Isidro, Matagalpa, tras ser atropell",
       "fuente": "NINGUNA",
-      "atribucion": "4/22",
+      "atribucion": "5/22",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -3485,7 +3094,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "OMS, MINSA, Policía Nacional",
-      "atribucion": "22/194",
+      "atribucion": "25/194",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -3530,7 +3139,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/21",
+      "atribucion": "5/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -3620,7 +3229,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las publicaciones también señalaban que, tras recuperar su libertad bajo fianza, el procesado habría salido de territorio estadounidense antes de la conclusión ",
       "fuente": "Policía Nacional",
-      "atribucion": "4/25",
+      "atribucion": "6/25",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -3690,7 +3299,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Una de las versiones señala que el conductor habría realizado una maniobra hacia el costado derecho para evitar impactar contra otro vehículo que se encontraba  || Otra versión relacionada con el accidente indica que el taxi habría presentado una supuesta falla en el sistema de frenos y que el conductor habría intentado ev",
       "fuente": "NINGUNA",
-      "atribucion": "2/26",
+      "atribucion": "3/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales",
@@ -3805,7 +3414,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "7/21",
+      "atribucion": "10/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -3851,7 +3460,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/39",
+      "atribucion": "2/39",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -3898,7 +3507,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "8/29",
+      "atribucion": "11/29",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -3919,7 +3528,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Fiscalía",
-      "atribucion": "5/32",
+      "atribucion": "7/32",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -4076,16 +3685,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Estudiantes destacan en Olimpiada Nacional de Ajedrez 2026 — Estudiantes destacan en Olimpiada Nacional de Ajedrez 2026",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/22",
+      "atribucion": "1/22",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO",
@@ -4218,7 +3826,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Alcaldía",
-      "atribucion": "5/54",
+      "atribucion": "7/54",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -4260,7 +3868,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Bomberos, Policía Nacional",
-      "atribucion": "9/60",
+      "atribucion": "11/60",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -4298,16 +3906,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Fallece la actriz venezolana Gabriela Fleritt tras sismo — Fallece la actriz venezolana Gabriela Fleritt tras sismo",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/16",
+      "atribucion": "5/16",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "ubicación del hecho"
       ],
       "accion_recomendada": "NINGUNA",
@@ -4400,7 +4007,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El vehículo involucrado es un microbús Toyota color blanco, placas MY 20703 , conducido preliminarmente por Adrián Chávez, de 35 años .",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "5/24",
+      "atribucion": "6/24",
       "que_falta": [
         "referencia temporal (fecha o día)",
         "fuente para las afirmaciones provisionales"
@@ -4424,10 +4031,9 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "No asumir que una línea está desenergizada solamente porque aparentemente no hay corriente.",
       "fuente": "NINGUNA",
-      "atribucion": "0/48",
+      "atribucion": "4/48",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "fuente para las afirmaciones provisionales"
       ],
       "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
@@ -4466,16 +4072,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Los Karnavaleros de Jaguar regresan a escenarios tras accidente — Los Karnavaleros de Jaguar regresan a escenarios tras accidente",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/25",
+      "atribucion": "1/25",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO",
@@ -4496,7 +4101,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Gobierno, Corte Suprema",
-      "atribucion": "12/72",
+      "atribucion": "13/72",
       "que_falta": [
         "ubicación del hecho"
       ],
@@ -4543,7 +4148,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/42",
+      "atribucion": "7/42",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -4566,7 +4171,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Gobierno, OIM",
-      "atribucion": "8/84",
+      "atribucion": "9/84",
       "que_falta": [
         "ubicación del hecho"
       ],
@@ -4613,7 +4218,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "48/90",
+      "atribucion": "57/90",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -4655,7 +4260,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las autoridades iniciaron las investigaciones para establecer las circunstancias en que ocurrió el hecho y localizar al conductor involucrado, quien presuntamen",
       "fuente": "NINGUNA",
-      "atribucion": "10/25",
+      "atribucion": "15/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -4726,7 +4331,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Bomberos",
-      "atribucion": "6/49",
+      "atribucion": "10/49",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -4747,7 +4352,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "4/79",
+      "atribucion": "11/79",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -4842,7 +4447,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/39",
+      "atribucion": "4/39",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -4858,20 +4463,19 @@
       "titulo": "Puerto Corinto lidera llegada de 11 buques a Nicaragua",
       "categoria": "Nacionales",
       "publicado": false,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Puerto Corinto lidera llegada de 11 buques a Nicaragua — Puerto Corinto lidera llegada de 11 buques a Nicaragua",
-      "problema": "19 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
+      "problema": "",
+      "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/19",
+      "atribucion": "1/19",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO_VERIFICABLE",
       "sm_problemaConfiabilidad": "NO",
       "temporal": null,
@@ -4890,7 +4494,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "10/30",
+      "atribucion": "11/30",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -4976,7 +4580,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/29",
+      "atribucion": "8/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -5086,7 +4690,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/37",
+      "atribucion": "3/37",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -5153,7 +4757,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, INSS",
-      "atribucion": "4/23",
+      "atribucion": "5/23",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -5174,7 +4778,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las versiones preliminares señalan que se sumergió en el cuerpo de agua y fue auxiliado de inmediato por las personas que se encontraban cerca.",
       "fuente": "NINGUNA",
-      "atribucion": "2/20",
+      "atribucion": "4/20",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -5243,7 +4847,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "4/41",
+      "atribucion": "6/41",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -5291,7 +4895,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las primeras versiones indican que Arauz Morales habría sufrido un aparente ataque cardíaco .",
       "fuente": "NINGUNA",
-      "atribucion": "4/31",
+      "atribucion": "6/31",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -5336,7 +4940,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/24",
+      "atribucion": "7/24",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -5360,7 +4964,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/21",
+      "atribucion": "5/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -5476,7 +5080,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "11/34",
+      "atribucion": "14/34",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -5568,7 +5172,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/25",
+      "atribucion": "5/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -5614,7 +5218,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/38",
+      "atribucion": "4/38",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -5660,7 +5264,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/20",
+      "atribucion": "12/20",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -5706,7 +5310,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Bomberos",
-      "atribucion": "4/42",
+      "atribucion": "15/42",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -5740,24 +5344,23 @@
       "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
       "categoria": "Sucesos",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Cuatro obreros afectados en accidentes laborales en Nicaragua — Cuatro obreros afectados en accidentes laborales en Nicaragua",
-      "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
-      "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Versiones preliminares indican que se encontraba sobre la estructura cuando una lámina de plástico pintada cedió bajo su peso.",
+      "problema": "",
+      "tipo_problema": "",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "10/22",
+      "atribucion": "15/22",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "fuente para las afirmaciones provisionales"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "SI",
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
-      "provisional": "SIN_RESPALDO_REAL"
+      "provisional": "CORRECTA"
     },
     {
       "slug": "C4AHevj8Y9WKSw6UlMqA",
@@ -5796,7 +5399,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Bomberos, Alcaldía",
-      "atribucion": "4/21",
+      "atribucion": "5/21",
       "que_falta": [
         "ubicación del hecho"
       ],
@@ -5842,7 +5445,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Banco Central, BCN",
-      "atribucion": "12/25",
+      "atribucion": "20/25",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -5863,7 +5466,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las versiones preliminares indican que el impacto fue de considerable fuerza y provocó que los dos ocupantes de la motocicleta salieran proyectados hacia la vía",
       "fuente": "Policía Nacional",
-      "atribucion": "5/33",
+      "atribucion": "10/33",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -5879,24 +5482,23 @@
       "categoria": "Nacionales",
       "publicado": true,
       "veredicto": "REVISION",
-      "prioridad": "ALTA",
+      "prioridad": "MEDIA",
       "confianza": "BAJA",
       "principal_claim": "INSS: ¿Qué familiares tienen cobertura por fallecimiento? — INSS: ¿Qué familiares tienen cobertura por fallecimiento?",
-      "problema": "2 afirmación(es) provisional(es) sin fuente en su párrafo",
-      "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "La pensión de viudez tiene como referencia el 50% de la pensión que recibía el causante o de la que habría recibido por invalidez total , sin incluir las asigna || La pensión tiene como referencia el 25% de la pensión que recibía el causante o de la que habría recibido por invalidez total, por cada hijo , sin incluir las a",
+      "problema": "Noticia de evento sin referencia temporal que la ubique",
+      "tipo_problema": "temporal_ambigua",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "INSS",
-      "atribucion": "52/142",
+      "atribucion": "60/142",
       "que_falta": [
         "referencia temporal (fecha o día)",
-        "fuente para las afirmaciones provisionales",
         "ubicación del hecho"
       ],
-      "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
+      "accion_recomendada": "AÑADIR_REFERENCIA_TEMPORAL_SOLO_SI_EXISTE_EN_MATERIAL_ORIGINAL",
       "sm_necesitaFuente": null,
       "sm_problemaConfiabilidad": null,
       "temporal": "REAL",
-      "provisional": "SIN_RESPALDO_REAL"
+      "provisional": "CORRECTA"
     },
     {
       "slug": "CaWgYAduswmwk6mj0zW2",
@@ -5935,7 +5537,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "15/61",
+      "atribucion": "19/61",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6031,7 +5633,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/17",
+      "atribucion": "5/17",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6054,7 +5656,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/20",
+      "atribucion": "6/20",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6194,7 +5796,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Como resultado quedaron detenidos dos ciudadanos identificados preliminarmente como Carlos, de 34 años, y Osvin, de 19 , quienes pasaron a disposición de las au",
       "fuente": "Policía Nacional, Ministerio Público",
-      "atribucion": "6/24",
+      "atribucion": "9/24",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -6217,7 +5819,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "70/98",
+      "atribucion": "72/98",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -6240,7 +5842,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/21",
+      "atribucion": "4/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6331,7 +5933,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/43",
+      "atribucion": "6/43",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -6376,7 +5978,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "En las primeras horas circularon versiones sobre la forma en que habría ocurrido el fallecimiento.",
       "fuente": "NINGUNA",
-      "atribucion": "3/34",
+      "atribucion": "9/34",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -6400,7 +6002,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El hecho habría ocurrido alrededor de las 10:00 de la noche , cuando Cantarero se encontraba en su vivienda compartiendo bebidas alcohólicas junto a sus hijos. || Durante la reunión se produjo una discusión que posteriormente habría escalado a una confrontación física.",
       "fuente": "Policía Nacional, Ministerio Público",
-      "atribucion": "7/25",
+      "atribucion": "8/25",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -6468,7 +6070,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "14/39",
+      "atribucion": "21/39",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6491,7 +6093,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/58",
+      "atribucion": "5/58",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -6515,7 +6117,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "4/37",
+      "atribucion": "9/37",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6559,7 +6161,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "4/22",
+      "atribucion": "6/22",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6654,7 +6256,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "6/43",
+      "atribucion": "8/43",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6677,7 +6279,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/29",
+      "atribucion": "8/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -6701,7 +6303,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "6/22",
+      "atribucion": "9/22",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -6745,7 +6347,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/30",
+      "atribucion": "4/30",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -6769,7 +6371,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Ministerio Público, Policía Nacional, Bomberos",
-      "atribucion": "11/34",
+      "atribucion": "15/34",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -6790,7 +6392,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "12/37",
+      "atribucion": "17/37",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6834,7 +6436,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/28",
+      "atribucion": "10/28",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6857,7 +6459,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/48",
+      "atribucion": "5/48",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -6893,21 +6495,20 @@
       "titulo": "Costa Rica detiene a palestino con vínculos a Hamás",
       "categoria": "Internacionales",
       "publicado": false,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Costa Rica detiene a palestino con vínculos a Hamás — Costa Rica detiene a palestino con vínculos a Hamás",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Costa Rica detiene a palestino con vínculos a Hamás || SAN JOSÉ / COSTA RICA — La Dirección de Inteligencia y Seguridad Nacional de Costa Rica detuvo este lunes 22 de junio a un ciudadano palestino identificado con ",
+      "problema": "",
+      "tipo_problema": "",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/25",
+      "atribucion": "4/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "ubicación del hecho"
       ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "SI",
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
@@ -6918,20 +6519,19 @@
       "titulo": "Comercios esperan alta actividad por Día de las Madres en…",
       "categoria": "Nacionales",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Comercios esperan alta actividad por Día de las Madres en… — Comercios esperan alta actividad por Día de las Madres en…",
-      "problema": "44 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
+      "problema": "",
+      "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/44",
+      "atribucion": "20/44",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO_VERIFICABLE",
       "sm_problemaConfiabilidad": "NO",
       "temporal": null,
@@ -6992,7 +6592,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/21",
+      "atribucion": "6/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -7081,11 +6681,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Capturan acusado de agredir a un hombre en Rivas — Capturan acusado de agredir a un hombre en Rivas",
-      "problema": "2 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Juan Carlos Aguilar Obando, 46, fue localizado y puesto a disposición de las autoridades nicaragüenses tras su captura en Costa Rica el 8 de junio; enfrenta inv || Qué señalan investigaciones y testigos Investigadores detallaron que Aguilar habría rociado gasolina sobre la persona afectada mientras dormía y luego le prendi",
+      "evidencia_disponible": "Juan Carlos Aguilar Obando, 46, fue localizado y puesto a disposición de las autoridades nicaragüenses tras su captura en Costa Rica el 8 de junio; enfrenta inv",
       "fuente": "Fiscalía, Policía Nacional, Bomberos",
-      "atribucion": "13/23",
+      "atribucion": "18/23",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -7108,7 +6708,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/24",
+      "atribucion": "5/24",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -7124,23 +6724,21 @@
       "titulo": "Varios accidentes de tránsito dejan fallecidos en Nicaragua",
       "categoria": "Sucesos",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Varios accidentes de tránsito dejan fallecidos en Nicaragua — Varios accidentes de tránsito dejan fallecidos en Nicaragua",
-      "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
-      "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Testigos indicaron que presuntamente uno de los conductores circulaba a exceso de velocidad, aunque serán las autoridades correspondientes las encargadas de det",
+      "problema": "",
+      "tipo_problema": "",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "7/39",
-      "que_falta": [
-        "fuente para las afirmaciones provisionales"
-      ],
-      "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
+      "atribucion": "8/39",
+      "que_falta": [],
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
       "sm_problemaConfiabilidad": null,
       "temporal": null,
-      "provisional": "SIN_RESPALDO_REAL"
+      "provisional": "CORRECTA"
     },
     {
       "slug": "JtTY1tfzHmkOVNJjCZJX",
@@ -7155,7 +6753,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Ministerio Público, Bomberos",
-      "atribucion": "11/25",
+      "atribucion": "15/25",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -7222,7 +6820,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "MINSA",
-      "atribucion": "5/62",
+      "atribucion": "8/62",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -7287,7 +6885,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/71",
+      "atribucion": "5/71",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -7310,7 +6908,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/19",
+      "atribucion": "9/19",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -7334,7 +6932,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Los dos sucesos vuelven a dejar víctimas mortales vinculadas a la circulación de motocicletas, pero las circunstancias particulares de cada accidente deberán se",
       "fuente": "Policía Nacional",
-      "atribucion": "8/32",
+      "atribucion": "9/32",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -7378,7 +6976,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "5/42",
+      "atribucion": "7/42",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -7438,21 +7036,20 @@
       "titulo": "Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado",
       "categoria": "Internacionales",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado — Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Costa Rica tiembla otra vez: ya suman 80 réplicas en Coronado || La tierra continuó moviéndose este lunes en Costa Rica después de los dos fuertes sismos que sacudieron la zona central durante la madrugada.",
+      "problema": "",
+      "tipo_problema": "",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/60",
+      "atribucion": "2/60",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "ubicación del hecho"
       ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "SI",
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
@@ -7510,16 +7107,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Nicaragua tendrá dos árbitros en el Mundial 2026 — Nicaragua tendrá dos árbitros en el Mundial 2026",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/29",
+      "atribucion": "2/29",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO",
@@ -7586,7 +7182,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/27",
+      "atribucion": "3/27",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -7677,7 +7273,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/20",
+      "atribucion": "3/20",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -7721,7 +7317,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Bomberos, Alcaldía, Policía Nacional",
-      "atribucion": "52/90",
+      "atribucion": "57/90",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -7742,7 +7338,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "11/32",
+      "atribucion": "12/32",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -7763,7 +7359,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La investigación deberá determinar qué participación habría tenido cada involucrado y cuáles fueron las circunstancias exactas que llevaron al disparo que alcan",
       "fuente": "Policía Nacional",
-      "atribucion": "6/47",
+      "atribucion": "9/47",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -7854,7 +7450,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/34",
+      "atribucion": "4/34",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -7900,7 +7496,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "10/39",
+      "atribucion": "11/39",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -7921,7 +7517,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La información preliminar sobre el accidente señaló que la camioneta habría realizado una maniobra de adelantamiento antes de producirse la colisión.",
       "fuente": "Policía Nacional",
-      "atribucion": "7/67",
+      "atribucion": "11/67",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -7944,7 +7540,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Fiscalía, Ministerio Público",
-      "atribucion": "6/26",
+      "atribucion": "8/26",
       "que_falta": [
         "ubicación del hecho"
       ],
@@ -7967,7 +7563,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "2/21",
+      "atribucion": "11/21",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -7988,7 +7584,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "12/29",
+      "atribucion": "13/29",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -8055,7 +7651,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "8/25",
+      "atribucion": "11/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -8141,7 +7737,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Fiscalía",
-      "atribucion": "4/41",
+      "atribucion": "8/41",
       "que_falta": [
         "ubicación del hecho"
       ],
@@ -8187,7 +7783,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/30",
+      "atribucion": "4/30",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -8252,7 +7848,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "4/24",
+      "atribucion": "6/24",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -8275,7 +7871,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/71",
+      "atribucion": "4/71",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)",
@@ -8370,7 +7966,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "7/32",
+      "atribucion": "12/32",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -8409,20 +8005,19 @@
       "titulo": "Tres Leches nicaragüense gana reconocimiento internacional",
       "categoria": "Nacionales",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Tres Leches nicaragüense gana reconocimiento internacional — Tres Leches nicaragüense gana reconocimiento internacional",
-      "problema": "27 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
+      "problema": "",
+      "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/27",
+      "atribucion": "3/27",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO_VERIFICABLE",
       "sm_problemaConfiabilidad": "NO",
       "temporal": null,
@@ -8441,7 +8036,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "10/35",
+      "atribucion": "11/35",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -8509,7 +8104,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Fiscalía",
-      "atribucion": "2/20",
+      "atribucion": "5/20",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -8621,7 +8216,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Una mujer de 44 años murió este lunes 14 de septiembre después de ser atacada presuntamente por su cónyuge durante una discusión ocurrida en la comunidad Las Te || La información conocida hasta ahora señala que una discusión entre la pareja habría antecedido al ataque.",
       "fuente": "Policía Nacional",
-      "atribucion": "3/26",
+      "atribucion": "5/26",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -8691,7 +8286,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La situación pasó de la discusión a una confrontación en la que el joven sufrió una herida con arma blanca en el cuello, presuntamente provocada por su padre. || El hombre fue detenido cuando presuntamente se disponía a abordar un autobús con dirección hacia la Costa Caribe de Nicaragua, por lo que fue trasladado bajo cu",
       "fuente": "Policía Nacional",
-      "atribucion": "3/23",
+      "atribucion": "6/23",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -8761,7 +8356,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Fiscalía, Ministerio Público, ONU",
-      "atribucion": "10/27",
+      "atribucion": "11/27",
       "que_falta": [
         "referencia temporal (fecha o día)",
         "ubicación del hecho"
@@ -8809,7 +8404,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Bomberos, Alcaldía",
-      "atribucion": "8/67",
+      "atribucion": "9/67",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -8850,11 +8445,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Nicaragüense habría muerto en Panamá y familia fue localizada — Nicaragüense habría muerto en Panamá y familia fue localizada",
-      "problema": "4 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "3 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Nicaragüense habría muerto en Panamá y familia fue localizada || La búsqueda de familiares de la joven nicaragüense Ana Iris García Carrión se convirtió en una de las primeras gestiones tras conocerse que habría sufrido un ac || Uno de los datos que posteriormente trascendió es que Ana Iris habría vivido antes de viajar a Panamá en el barrio Francisco Salazar, en el Reparto Schick, Mana",
+      "evidencia_disponible": "Nicaragüense habría muerto en Panamá y familia fue localizada || Uno de los datos que posteriormente trascendió es que Ana Iris habría vivido antes de viajar a Panamá en el barrio Francisco Salazar, en el Reparto Schick, Mana || Hasta ahora, la información disponible apunta a que la joven habría sufrido un accidente de tránsito en Panamá.",
       "fuente": "NINGUNA",
-      "atribucion": "1/26",
+      "atribucion": "9/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)",
@@ -8900,7 +8495,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "4/30",
+      "atribucion": "6/30",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -8923,7 +8518,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "5/31",
+      "atribucion": "6/31",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -9038,7 +8633,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "9/24",
+      "atribucion": "14/24",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -9080,7 +8675,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "6/21",
+      "atribucion": "9/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)",
@@ -9146,16 +8741,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Muere Jorge Messi, padre y representante de Lionel Messi — Muere Jorge Messi, padre y representante de Lionel Messi",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/35",
+      "atribucion": "1/35",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "ubicación del hecho"
       ],
       "accion_recomendada": "NINGUNA",
@@ -9292,7 +8886,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Un ciudadano extranjero, identificado preliminarmente por el apellido Rule , fue encontrado sin vida dentro de la casa donde residía.",
       "fuente": "Policía Nacional",
-      "atribucion": "4/20",
+      "atribucion": "9/20",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -9336,7 +8930,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "7/41",
+      "atribucion": "20/41",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -9451,7 +9045,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "OMS",
-      "atribucion": "3/24",
+      "atribucion": "4/24",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -9603,7 +9197,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/25",
+      "atribucion": "3/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -9649,7 +9243,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/35",
+      "atribucion": "4/35",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -9693,7 +9287,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Para evitar compartir su alimento, uno de ellos habría respondido que se trataba de un \"viejo indio\" que había muerto. || La historia habría provocado rechazo entre los españoles, quienes decidieron no probarlo.",
       "fuente": "NINGUNA",
-      "atribucion": "2/49",
+      "atribucion": "8/49",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales",
@@ -9718,7 +9312,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Gobierno, OIM",
-      "atribucion": "3/49",
+      "atribucion": "4/49",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -9875,7 +9469,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/40",
+      "atribucion": "4/40",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -9890,20 +9484,19 @@
       "titulo": "Yoltamal: el tamal de maíz tierno que identifica a Nicaragua",
       "categoria": "Nacionales",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Yoltamal: el tamal de maíz tierno que identifica a Nicaragua — Yoltamal: el tamal de maíz tierno que identifica a Nicaragua",
-      "problema": "41 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
+      "problema": "",
+      "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/41",
+      "atribucion": "3/41",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO_VERIFICABLE",
       "sm_problemaConfiabilidad": "NO",
       "temporal": null,
@@ -9958,21 +9551,20 @@
       "titulo": "Muere a los 17 años joven estudiante de La Trinidad",
       "categoria": "Sucesos",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Muere a los 17 años joven estudiante de La Trinidad — Muere a los 17 años joven estudiante de La Trinidad",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Muere a los 17 años joven estudiante de La Trinidad || La comunidad de San Francisco, en La Trinidad, Estelí, se encuentra de luto por el fallecimiento de Marianyi Mageli Avilés Cardoza, de 17 años , ocurrido durant",
+      "problema": "",
+      "tipo_problema": "",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/25",
+      "atribucion": "8/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "ubicación del hecho"
       ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "SI",
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
@@ -10012,7 +9604,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La información preliminar señala que el joven habría estado consumiendo licor antes del accidente. || También en este caso se manejó de manera preliminar que el conductor habría circulado en presunto estado de ebriedad. || El reporte preliminar señala que el motociclista habría estado consumiendo licor antes del accidente.",
       "fuente": "Policía Nacional",
-      "atribucion": "6/74",
+      "atribucion": "10/74",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -10104,7 +9696,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "La ausencia del equipo de seguridad habría dejado al conductor más expuesto a sufrir lesiones graves durante la caída.",
       "fuente": "NINGUNA",
-      "atribucion": "5/18",
+      "atribucion": "6/18",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -10151,7 +9743,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "4/34",
+      "atribucion": "7/34",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -10306,20 +9898,19 @@
       "titulo": "Masaya recibe la Antorcha Centroamericana con orgullo patrio",
       "categoria": "Nacionales",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Masaya recibe la Antorcha Centroamericana con orgullo patrio — Masaya recibe la Antorcha Centroamericana con orgullo patrio",
-      "problema": "39 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
+      "problema": "",
+      "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/39",
+      "atribucion": "2/39",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO_VERIFICABLE",
       "sm_problemaConfiabilidad": "NO",
       "temporal": null,
@@ -10359,7 +9950,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "INSS",
-      "atribucion": "16/61",
+      "atribucion": "21/61",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -10374,16 +9965,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Muere Prichard Colón, boxeador que enfrentó años de secuelas — Muere Prichard Colón, boxeador que enfrentó años de secuelas",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/32",
+      "atribucion": "3/32",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "ubicación del hecho"
       ],
       "accion_recomendada": "NINGUNA",
@@ -10470,11 +10060,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Cinco motociclistas mueren en distintos puntos de Nicaragua — Cinco motociclistas mueren en distintos puntos de Nicaragua",
-      "problema": "4 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "3 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "De manera preliminar también se informó que el conductor aparentemente se encontraba bajo los efectos del alcohol y no utilizaba casco de protección. || Personas cercanas al fallecido indicaron que presuntamente se dedicaba, junto con su hermano gemelo, a la venta de repuestos para motocicletas en Bluefields. || La información preliminar señala que el vehículo pesado habría invadido el carril por donde circulaba el motociclista.",
+      "evidencia_disponible": "De manera preliminar también se informó que el conductor aparentemente se encontraba bajo los efectos del alcohol y no utilizaba casco de protección. || La información preliminar señala que el vehículo pesado habría invadido el carril por donde circulaba el motociclista. || En al menos dos reportes se señala preliminarmente la ausencia de casco, aunque esa circunstancia también debe diferenciarse de los hechos que ya están confirma",
       "fuente": "NINGUNA",
-      "atribucion": "6/64",
+      "atribucion": "7/64",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -10521,7 +10111,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "6/32",
+      "atribucion": "7/32",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -10638,7 +10228,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/36",
+      "atribucion": "5/36",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -10686,7 +10276,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/21",
+      "atribucion": "2/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -10732,7 +10322,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "8/31",
+      "atribucion": "13/31",
       "que_falta": [
         "ubicación del hecho"
       ],
@@ -10755,7 +10345,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/27",
+      "atribucion": "5/27",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -10802,7 +10392,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "6/34",
+      "atribucion": "7/34",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -10870,7 +10460,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/29",
+      "atribucion": "8/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -10940,7 +10530,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos, MINSA",
-      "atribucion": "8/25",
+      "atribucion": "9/25",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -11028,7 +10618,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "20/45",
+      "atribucion": "26/45",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -11140,7 +10730,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Gobierno",
-      "atribucion": "4/28",
+      "atribucion": "5/28",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -11231,7 +10821,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/25",
+      "atribucion": "2/25",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "referencia temporal (fecha o día)"
@@ -11300,7 +10890,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/16",
+      "atribucion": "4/16",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -11323,7 +10913,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Tampoco se ha divulgado públicamente cuál habría sido el móvil definitivo del asesinato, por lo que distintas versiones que han circulado permanecen bajo invest",
       "fuente": "NINGUNA",
-      "atribucion": "3/29",
+      "atribucion": "5/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -11371,7 +10961,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Gobierno",
-      "atribucion": "1/26",
+      "atribucion": "3/26",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -11392,7 +10982,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "8/32",
+      "atribucion": "9/32",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -11457,7 +11047,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El hombre señalado preliminarmente por la agresión es su hijo, Marlon Andrés Escobar Llanes, de 33 años , conocido como “Pito Loco”. || Hasta ahora no se ha informado oficialmente cuál habría sido el motivo del enfrentamiento. || También se mantiene como dato preliminar que la agresión habría sido cometida con un arma blanca .",
       "fuente": "Policía Nacional",
-      "atribucion": "6/45",
+      "atribucion": "8/45",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -11480,7 +11070,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "1/27",
+      "atribucion": "2/27",
       "que_falta": [
         "ubicación del hecho"
       ],
@@ -11561,21 +11151,20 @@
       "categoria": "Internacionales",
       "publicado": false,
       "veredicto": "REVISION",
-      "prioridad": "ALTA",
+      "prioridad": "MEDIA",
       "confianza": "BAJA",
       "principal_claim": "Capturan a pinolero por llevarse a niña de 13 años — Capturan a pinolero por llevarse a niña de 13 años",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Capturan a pinolero por llevarse a niña de 13 años || La Fuerza Pública de Costa Rica capturó a Juan Carlos González Vallecillo , de 30 años y nacionalidad nicaragüense, tras cruzar ilegalmente a ese país con una a",
+      "problema": "Noticia de evento sin referencia temporal que la ubique",
+      "tipo_problema": "temporal_ambigua",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/17",
+      "atribucion": "2/17",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "referencia temporal (fecha o día)",
         "ubicación del hecho"
       ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
+      "accion_recomendada": "AÑADIR_REFERENCIA_TEMPORAL_SOLO_SI_EXISTE_EN_MATERIAL_ORIGINAL",
       "sm_necesitaFuente": "SI",
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": "REAL",
@@ -11586,20 +11175,19 @@
       "titulo": "Dos pérdidas reabren llamado a cuidar la salud emocional",
       "categoria": "Sucesos",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Dos pérdidas reabren llamado a cuidar la salud emocional — Dos pérdidas reabren llamado a cuidar la salud emocional",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Dos pérdidas reabren llamado a cuidar la salud emocional || Dos familias nicaragüenses enfrentan el afectación por la pérdida de una adolescente de 16 años en Somoto, Madriz , y de un joven de 22 años en Villa El Carmen,",
+      "problema": "",
+      "tipo_problema": "",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/27",
+      "atribucion": "7/27",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "SI",
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
@@ -11618,7 +11206,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las víctimas fueron identificadas preliminarmente como Wilbert Antonio Raúdez Jarquin de 35 años, conocido popularmente como “Pulpo”, y Andrea Valentina Urroz ,",
       "fuente": "NINGUNA",
-      "atribucion": "5/31",
+      "atribucion": "7/31",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -11634,20 +11222,19 @@
       "titulo": "Madrugada termina en tragedia para motociclista en La Paz Centro",
       "categoria": "Sucesos",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Madrugada termina en tragedia para motociclista en La Paz Centro — Madrugada termina en tragedia para motociclista en La Paz Centro",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Madrugada termina en tragedia para motociclista en La Paz Centro || La madrugada de este martes terminó de forma trágica para Gilberth Iginio Urbina Téllez, de 25 años , quien perdió la vida luego de sufrir un accidente de tráns",
+      "problema": "",
+      "tipo_problema": "",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/17",
+      "atribucion": "1/17",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "SI",
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
@@ -11666,7 +11253,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Una de las fracturas habría requerido una intervención quirúrgica .",
       "fuente": "NINGUNA",
-      "atribucion": "8/32",
+      "atribucion": "12/32",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales",
@@ -11691,7 +11278,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "7/36",
+      "atribucion": "13/36",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -11761,7 +11348,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Ministerio Público",
-      "atribucion": "1/38",
+      "atribucion": "5/38",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -11782,7 +11369,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Bomberos, Policía Nacional, Alcaldía, Ministerio Público",
-      "atribucion": "22/40",
+      "atribucion": "24/40",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -11847,7 +11434,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las primeras versiones señalan que la niña habría sido sumergida en un recipiente con agua. || Aunque las versiones preliminares apuntan a una muerte por sumersión, corresponde al Instituto de Medicina Legal determinar la causa mediante la evaluación fore",
       "fuente": "Policía Nacional",
-      "atribucion": "6/34",
+      "atribucion": "7/34",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -11956,7 +11543,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/30",
+      "atribucion": "5/30",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -12047,7 +11634,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "8/53",
+      "atribucion": "10/53",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -12070,10 +11657,9 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Uno de esos recuerdos también menciona a Frank García , quien habría estado a cargo de los controles y las grabaciones durante esas transmisiones.",
       "fuente": "NINGUNA",
-      "atribucion": "0/18",
+      "atribucion": "1/18",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "fuente para las afirmaciones provisionales"
       ],
       "accion_recomendada": "VERIFICAR_FUENTE_O_MARCAR_EXPLICITAMENTE_COMO_NO_CONFIRMADO",
@@ -12095,7 +11681,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Alcaldía",
-      "atribucion": "3/42",
+      "atribucion": "7/42",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12139,7 +11725,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "6/29",
+      "atribucion": "10/29",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -12158,11 +11744,11 @@
       "prioridad": "ALTA",
       "confianza": "BAJA",
       "principal_claim": "Buscan a hombre acusado de herir de bala a niña en Rivas — Buscan a hombre acusado de herir de bala a niña en Rivas",
-      "problema": "2 afirmación(es) provisional(es) sin fuente en su párrafo",
+      "problema": "1 afirmación(es) provisional(es) sin fuente en su párrafo",
       "tipo_problema": "provisional_sin_respaldo",
-      "evidencia_disponible": "Luego del ataque, el sospechoso huyó del lugar en motocicleta, presuntamente con dirección hacia la zona fronteriza con Costa Rica. || Habitantes del sector relataron que el hombre aparentemente intentó llevarse a la menor y que, al no lograrlo, abrió fuego contra ella.",
+      "evidencia_disponible": "Luego del ataque, el sospechoso huyó del lugar en motocicleta, presuntamente con dirección hacia la zona fronteriza con Costa Rica.",
       "fuente": "Policía Nacional",
-      "atribucion": "6/27",
+      "atribucion": "9/27",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -12209,7 +11795,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Gobierno",
-      "atribucion": "8/35",
+      "atribucion": "13/35",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12230,7 +11816,7 @@
       "tipo_problema": "temporal_ambigua",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Ministerio Público",
-      "atribucion": "7/18",
+      "atribucion": "8/18",
       "que_falta": [
         "referencia temporal (fecha o día)"
       ],
@@ -12277,7 +11863,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "10/21",
+      "atribucion": "11/21",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12298,7 +11884,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Gobierno",
-      "atribucion": "4/32",
+      "atribucion": "14/32",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12319,7 +11905,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "6/26",
+      "atribucion": "13/26",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12340,7 +11926,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "El reporte no establece a quién pertenecían los animales ni proporciona detalles sobre el origen o destino del ganado presuntamente trasladado de manera ilegal.",
       "fuente": "Policía Nacional, Ministerio Público",
-      "atribucion": "13/26",
+      "atribucion": "15/26",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -12363,7 +11949,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Alcaldía, Policía Nacional, Bomberos, MINSA",
-      "atribucion": "10/37",
+      "atribucion": "12/37",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12453,7 +12039,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/30",
+      "atribucion": "11/30",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -12569,7 +12155,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Un hombre identificado preliminarmente como Gabriel Antonio Ríos , de 32 años, murió la madrugada de este domingo después de llegar gravemente herido a su vivie || Una de las versiones señala que Ríos habría sido atacado con un arma de fuego por otra persona. || Sin embargo, otra versión sostiene que habría recibido un fuerte golpe en la frente con una piedra.",
       "fuente": "Policía Nacional",
-      "atribucion": "3/25",
+      "atribucion": "4/25",
       "que_falta": [
         "fuente para las afirmaciones provisionales"
       ],
@@ -12634,7 +12220,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional, Bomberos",
-      "atribucion": "9/43",
+      "atribucion": "14/43",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12676,7 +12262,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Durante la riña, Mendoza habría tomado una piedra del suelo y golpeado a Molina en la cabeza .",
       "fuente": "Policía Nacional",
-      "atribucion": "3/17",
+      "atribucion": "5/17",
       "que_falta": [
         "referencia temporal (fecha o día)",
         "fuente para las afirmaciones provisionales"
@@ -12692,20 +12278,19 @@
       "titulo": "Güegüense y Agüizotes preservan tradición de Nicaragua",
       "categoria": "Nacionales",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Güegüense y Agüizotes preservan tradición de Nicaragua — Güegüense y Agüizotes preservan tradición de Nicaragua",
-      "problema": "39 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
+      "problema": "",
+      "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/39",
+      "atribucion": "1/39",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO_VERIFICABLE",
       "sm_problemaConfiabilidad": "NO",
       "temporal": null,
@@ -12724,7 +12309,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/36",
+      "atribucion": "5/36",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -12747,7 +12332,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Fiscalía, Ministerio Público, UNICEF, Policía Nacional",
-      "atribucion": "17/24",
+      "atribucion": "18/24",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12791,7 +12376,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "5/21",
+      "atribucion": "11/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -12814,7 +12399,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "1/29",
+      "atribucion": "6/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -12902,7 +12487,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/26",
+      "atribucion": "3/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -12926,7 +12511,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/16",
+      "atribucion": "3/16",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -12949,7 +12534,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "4/20",
+      "atribucion": "12/20",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -12991,7 +12576,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las investigaciones preliminares manejan como hipótesis que el ataque iba dirigido contra el conductor del vehículo y que la joven nicaragüense habría sido pers",
       "fuente": "NINGUNA",
-      "atribucion": "8/29",
+      "atribucion": "15/29",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -13057,7 +12642,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/26",
+      "atribucion": "16/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -13074,16 +12659,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Cabo Verde recibe como héroes a sus \"Tiburones Azules\" — Cabo Verde recibe como héroes a sus \"Tiburones Azules\"",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/19",
+      "atribucion": "3/19",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO",
@@ -13096,20 +12680,19 @@
       "titulo": "Orgullo patrio: jóvenes destacados portarán la Antorcha",
       "categoria": "Nacionales",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Orgullo patrio: jóvenes destacados portarán la Antorcha — Orgullo patrio: jóvenes destacados portarán la Antorcha",
-      "problema": "39 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
+      "problema": "",
+      "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/39",
+      "atribucion": "1/39",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO_VERIFICABLE",
       "sm_problemaConfiabilidad": "NO",
       "temporal": null,
@@ -13195,7 +12778,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Bomberos, Policía Nacional",
-      "atribucion": "8/25",
+      "atribucion": "11/25",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -13261,7 +12844,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "3/21",
+      "atribucion": "5/21",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -13284,7 +12867,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/20",
+      "atribucion": "5/20",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "ubicación del hecho"
@@ -13349,16 +12932,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Tres oros y 19 medallas: Nicaragua brilla en Guatemala — Tres oros y 19 medallas: Nicaragua brilla en Guatemala",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/53",
+      "atribucion": "2/53",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO",
@@ -13379,7 +12961,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Un accidente de tránsito ocurrido la tarde de este jueves 13 de agosto en el sector conocido como La Gran Bajada de Wapi , sobre la carretera que comunica El Ra || El joven se desempeñaba como ayudante del camión y habría quedado atrapado dentro de la cabina como consecuencia del impacto y el vuelco. || El conductor fue identificado preliminarmente como Melkin .",
       "fuente": "NINGUNA",
-      "atribucion": "3/40",
+      "atribucion": "6/40",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -13403,7 +12985,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Las autoridades ven señales de descenso El ministro de Salud de la República Democrática del Congo, Samuel Roger Kamba, informó que la transmisión habría comenz",
       "fuente": "Gobierno, OMS",
-      "atribucion": "5/22",
+      "atribucion": "6/22",
       "que_falta": [
         "fuente para las afirmaciones provisionales",
         "ubicación del hecho"
@@ -13473,7 +13055,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "5/79",
+      "atribucion": "7/79",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -13488,20 +13070,19 @@
       "titulo": "Masaya inicia las fiestas patronales más largas de Nicaragua",
       "categoria": "Nacionales",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "MEDIA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Masaya inicia las fiestas patronales más largas de Nicaragua — Masaya inicia las fiestas patronales más largas de Nicaragua",
-      "problema": "45 afirmaciones sin ninguna atribución identificable",
-      "tipo_problema": "atribucion_insuficiente",
+      "problema": "",
+      "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/45",
+      "atribucion": "1/45",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
-      "accion_recomendada": "REVISAR_SI_LA_FUENTE_DEBERIA_IDENTIFICARSE",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO_VERIFICABLE",
       "sm_problemaConfiabilidad": "NO",
       "temporal": null,
@@ -13612,7 +13193,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "Una de las frases que la familia recuerda es una amenaza que Jessica supuestamente habría recibido: “Si no eres mía, tampoco de él” .",
       "fuente": "NINGUNA",
-      "atribucion": "5/30",
+      "atribucion": "11/30",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales",
@@ -13658,7 +13239,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "5/66",
+      "atribucion": "7/66",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -13673,21 +13254,20 @@
       "titulo": "Perros robóticos reforzarán seguridad en centro FIFA",
       "categoria": "Tecnología",
       "publicado": true,
-      "veredicto": "REVISION",
-      "prioridad": "ALTA",
-      "confianza": "BAJA",
+      "veredicto": "CORRECTA",
+      "prioridad": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Perros robóticos reforzarán seguridad en centro FIFA — Perros robóticos reforzarán seguridad en centro FIFA",
-      "problema": "Nota de sucesos sin ninguna atribución ni fuente nombrada",
-      "tipo_problema": "suceso_sin_atribucion",
-      "evidencia_disponible": "Perros robóticos reforzarán seguridad en centro FIFA || Perros robóticos serán incorporados al Centro de Transmisiones de la FIFA durante la Copa del Mundo para realizar tareas de vigilancia y apoyo a la seguridad.",
+      "problema": "",
+      "tipo_problema": "",
+      "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/26",
+      "atribucion": "3/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
         "ubicación del hecho"
       ],
-      "accion_recomendada": "IDENTIFICAR_FUENTE_ORIGINAL_DEL_MATERIAL",
+      "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "SI",
       "sm_problemaConfiabilidad": "REVISAR",
       "temporal": null,
@@ -13746,16 +13326,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Masaya queda al borde y Estelí toma ventaja en el Pomares — Masaya queda al borde y Estelí toma ventaja en el Pomares",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/42",
+      "atribucion": "1/42",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO",
@@ -14008,7 +13587,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "MINSA, Policía Nacional, Bomberos",
-      "atribucion": "21/29",
+      "atribucion": "22/29",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -14029,7 +13608,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Gobierno",
-      "atribucion": "10/27",
+      "atribucion": "14/27",
       "que_falta": [
         "ubicación del hecho"
       ],
@@ -14052,7 +13631,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "Policía Nacional",
-      "atribucion": "8/24",
+      "atribucion": "11/24",
       "que_falta": [],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": null,
@@ -14067,16 +13646,15 @@
       "publicado": true,
       "veredicto": "CORRECTA",
       "prioridad": "BAJA",
-      "confianza": "BAJA",
+      "confianza": "ALTA",
       "principal_claim": "Falcon 9 de SpaceX impactará la Luna este miércole — Falcon 9 de SpaceX impactará la Luna este miércole",
       "problema": "",
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "0/50",
+      "atribucion": "2/50",
       "que_falta": [
-        "nombrar la fuente institucional o periodística",
-        "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
+        "nombrar la fuente institucional o periodística"
       ],
       "accion_recomendada": "NINGUNA",
       "sm_necesitaFuente": "NO",
@@ -14121,7 +13699,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "En abril de 2020, por ejemplo, fue localizado el cuerpo de un niño de 9 años que había sido reportado como presuntamente atacado por un cocodrilo mientras se ba",
       "fuente": "NINGUNA",
-      "atribucion": "2/26",
+      "atribucion": "5/26",
       "que_falta": [
         "nombrar la fuente institucional o periodística",
         "fuente para las afirmaciones provisionales"
@@ -14145,7 +13723,7 @@
       "tipo_problema": "",
       "evidencia_disponible": "NINGUNA",
       "fuente": "NINGUNA",
-      "atribucion": "2/50",
+      "atribucion": "5/50",
       "que_falta": [
         "nombrar la fuente institucional o periodística"
       ],
@@ -14168,7 +13746,7 @@
       "tipo_problema": "provisional_sin_respaldo",
       "evidencia_disponible": "De manera preliminar, el conductor de la camioneta habría quedado bajo resguardo de las autoridades mientras avanzan las diligencias.",
       "fuente": "Policía Nacional",
-      "atribucion": "4/43",
+      "atribucion": "12/43",
       "que_falta": [
         "fuente para las afirmaciones provisionales",
         "ubicación del hecho"

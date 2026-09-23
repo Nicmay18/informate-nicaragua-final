@@ -1,0 +1,1033 @@
+{
+  "resumen": {
+    "RESUELTA_SIN_CAMBIO": 131,
+    "CORREGIDA": 6,
+    "NO_VERIFICABLE_REFORMULADA": 6
+  },
+  "porTipo": {
+    "provisional_sin_respaldo": {
+      "RESUELTA_SIN_CAMBIO": 79,
+      "CORREGIDA": 1
+    },
+    "temporal_ambigua": {
+      "RESUELTA_SIN_CAMBIO": 18,
+      "NO_VERIFICABLE_REFORMULADA": 3,
+      "CORREGIDA": 4
+    },
+    "atribucion_insuficiente": {
+      "RESUELTA_SIN_CAMBIO": 28,
+      "NO_VERIFICABLE_REFORMULADA": 2
+    },
+    "suceso_sin_atribucion": {
+      "RESUELTA_SIN_CAMBIO": 5,
+      "CORREGIDA": 1,
+      "NO_VERIFICABLE_REFORMULADA": 1
+    },
+    "contradiccion_factual": {
+      "RESUELTA_SIN_CAMBIO": 1
+    }
+  },
+  "results": [
+    {
+      "slug": "02DsJjI62kA1rFKe0nWS",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "096760aFi8gk8aUBtkFR",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "0gGqzH1RBUeVTGHWkuvl",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "12vpZYJonwqLUyW1rlpl",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "19NRSSTtv9xlGQ31x9gV",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "1K4jCiU5mT9xr4pyE0vr",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "2OEHQvyYeyqTAHDNgC9h",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "2Ufakm1AGqtU7ZBAoERn",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "2rM20SDlcas77huhJYiV",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "3QOwSPvAOLwPxqFV532h",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "4G7Uq0yDZgiHpGyB5GSS",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "4IajfR4J2XXUMtKjnjzh",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "4hJCEKuehsOUZtAdJ8YM",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "4vepN2M1s9i3SEtBo0Cv",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "4w1IbR6A8jfQu0cdwpdg",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "5wDjmDHf17qdGvsc6K52",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "6G4rPNMwq7InAlhlpTCH",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "6MEKO8mlRDoRFqmnh2oC",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "6MlyKI1pvd5zmaQ7oILa",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "7QlrTPaRkcaFte7dOBb0",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "7QoTq3ApRh7XNZLIfm43",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Fuente/institución identificada en el cuerpo (Ejército); la atribución contextual existe."
+    },
+    {
+      "slug": "7XzL7aTqVYBpTNKgSPxQ",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Fuente/institución identificada en el cuerpo (Empresa Portuaria); la atribución contextual existe."
+    },
+    {
+      "slug": "7k2ncDzIhlS00WN4ktzR",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "81UQk1YkWPpF7BzIdaDo",
+      "tipo": "temporal_ambigua",
+      "estado": "NO_VERIFICABLE_REFORMULADA",
+      "cambios": 2,
+      "reason": "Cita/testimonio genérico no verificable eliminado (plantilla del pipeline); el resto del contenido se conserva."
+    },
+    {
+      "slug": "8rgPZMc8nFJWiAbW7pgj",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "8sTBWTNIOJGIYfDN062O",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "9UhT9UklV99nNtAyC0Sp",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "9Z7Wj11H7SVHXDm3VAsc",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "9c0bOgvhw4oxPOgy3gvl",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "9hFZclCKhOMERU7CrEnq",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "9nXtgYzBoPmhc0i5BHJs",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "9wive8PnhtfBjV4qr7nt",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Fuente/institución identificada en el cuerpo (bomberos); la atribución contextual existe."
+    },
+    {
+      "slug": "9xCHaZO7JEwhyRpdHHJY",
+      "tipo": "temporal_ambigua",
+      "estado": "NO_VERIFICABLE_REFORMULADA",
+      "cambios": 2,
+      "reason": "Cita/testimonio genérico no verificable eliminado (plantilla del pipeline); el resto del contenido se conserva."
+    },
+    {
+      "slug": "ARAUJUxrrMpL72r2zr3b",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "BU0PX0EqHO5ewLCH7Coo",
+      "tipo": "temporal_ambigua",
+      "estado": "CORREGIDA",
+      "cambios": 2,
+      "reason": "Corrección mínima con evidencia: titular, html_roto."
+    },
+    {
+      "slug": "C1UJ83ospxOXOtNGLwgr",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "CO2y0PHkMT6rYOueWLf9",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "COhLEROaJUFN8MvQEqZp",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "CnHlW2RyUcpwlJBKeFug",
+      "tipo": "suceso_sin_atribucion",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/de servicio o nota comunitaria sin necesidad editorial de fuente institucional nombrada; no se detectó afirmación falsa ni culpabilidad sin respaldo."
+    },
+    {
+      "slug": "DabSeh90gN6BreMLkDow",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "DcdphHFlKeRZdpMKwAhq",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "DtjilYkxrQsi9s1tBP6L",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "E99X70aDGGPss0UWqc8w",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "EDvI8A7DAwrDFuBf3f18",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "EFBlqTZDTyDbFC4PRZ0c",
+      "tipo": "temporal_ambigua",
+      "estado": "CORREGIDA",
+      "cambios": 1,
+      "reason": "Corrección mínima con evidencia: html_roto."
+    },
+    {
+      "slug": "EzMFBmEbwymm9YYvvcW5",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "F3NEXLYVw2yPlzpD1bH7",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "GHbdyeiCzH7Jk0i5RVPA",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "Gz9i5AK2d0UtqcXUUYlN",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "IFFjvOi1HTG0oeiIuIBo",
+      "tipo": "suceso_sin_atribucion",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La fuente institucional está presente en el cuerpo (DIS); la atribución contextual es suficiente."
+    },
+    {
+      "slug": "IFvH1F0YUbgz55E853jj",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "J1ZUf7ZxMxaUjb64rkXj",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "J8gE2zjed6yeHqvtBSRv",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "JOfOW7uTxkgDSIezo7Wn",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "JcB6a4mamtg6yjtcXp9c",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "Jjk9syTstGMlEeQerkQ6",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "KDsFrw5UitY7JGQ9uOPq",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "KUFG7eNdWCXewwtj7XWy",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "LFKxOjl36CtcbkmTiQuA",
+      "tipo": "suceso_sin_atribucion",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La fuente institucional está presente en el cuerpo (Universidad de Costa Rica); la atribución contextual es suficiente."
+    },
+    {
+      "slug": "MKCnC4GlK5ceDJUfLtMD",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "NZkwSINrmCZO4rKOetqz",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "Neue7Ft2XeQybdX7xKTk",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "Ng7C24qqQcb5s0ZIueVm",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "OHxRgTKEk9dkN9k2Hvvn",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "Pf0VvjOfwZNm7BnQpncl",
+      "tipo": "contradiccion_factual",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Falso positivo del detector corregido: la oración expresa incertidumbre honesta (\"corresponde confirmar a la investigación\"), no una contradicción factual."
+    },
+    {
+      "slug": "QLag77jsgkxXY0RXpZcx",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "Qebgbb5JgCvDYvqPTphY",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "Qjl3rW0Cuo9CfNEslxgp",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "Qr7TPGrmSrGjV8pznbZe",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "R2zQFsmjsu0NvFRU7tDa",
+      "tipo": "atribucion_insuficiente",
+      "estado": "NO_VERIFICABLE_REFORMULADA",
+      "cambios": 2,
+      "reason": "Cita/testimonio genérico no verificable eliminado (plantilla del pipeline); el resto del contenido se conserva."
+    },
+    {
+      "slug": "RbCTjiEE7RrHLN80j7K9",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "SG87LjFIgCWnd6g8EKDq",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "SLaA2dG2wyI5Ajxnfh5q",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "T7wtIyq18iGmHPYtwIqh",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "TwKzSdGWnzIYeAW801nD",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "U3K2REamwdCUoxFRermC",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "UiinOjqv6YthMpczAFj9",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "UjwpQz0jzzIVeVwI581C",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "VAQWaSecbeFlCuK8KCgG",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "VKUvmaY59Ocy4gB9dkIN",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "WR9ixdDXutGgVpZ9awuQ",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contexto temporal presente en el cuerpo (expresión relativa reconocida tras corrección del detector)."
+    },
+    {
+      "slug": "XOOu7RVJ1wezxa8hCu2w",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "XcU17o0g0dxgLBpK4WuU",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Fuente/institución identificada en el cuerpo (MARENA); la atribución contextual existe."
+    },
+    {
+      "slug": "Xt18bdt10Mt6CIloPKSu",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "YYGaHNpnnqqu9Fe7ENK8",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "ZJpLrlTrusn5Jex8WQgQ",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "b3hBxRnUrftHjFulYE3L",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "bNTteIqTORrl2X7opjvG",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "bvn855wV64yVeIeRq12s",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "cr3ixiMYdzUXKAO6kzqD",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "dPkDD0dcGtcngpCjk7W0",
+      "tipo": "suceso_sin_atribucion",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/de servicio o nota comunitaria sin necesidad editorial de fuente institucional nombrada; no se detectó afirmación falsa ni culpabilidad sin respaldo."
+    },
+    {
+      "slug": "ddWDYaYKFz87sn6KZmwz",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "eEDnfXxBxAHyLNFW53ws",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "fBzmMNWyqUTrffFr49g6",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "fQuSHECJ9t5OWLOMbYzj",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "gQKFK5z94pfaHGi2J1Wc",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "gXTkMry6uueR9BxXcTdF",
+      "tipo": "temporal_ambigua",
+      "estado": "CORREGIDA",
+      "cambios": 1,
+      "reason": "Corrección mínima con evidencia: html_roto."
+    },
+    {
+      "slug": "gaCpaA49whA70rqyWBow",
+      "tipo": "atribucion_insuficiente",
+      "estado": "NO_VERIFICABLE_REFORMULADA",
+      "cambios": 2,
+      "reason": "Cita/testimonio genérico no verificable eliminado (plantilla del pipeline); el resto del contenido se conserva."
+    },
+    {
+      "slug": "giMTl1u8PF6fOQ5kBwSA",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "glOmX2RSOpciUxHR0y3n",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "i88RK0Ulgkkzyq6YV4Um",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Fuente/institución identificada en el cuerpo (INVUR); la atribución contextual existe."
+    },
+    {
+      "slug": "kJZTSfqmUGHJKA8SFaE8",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Fuente/institución identificada en el cuerpo (FIFA); la atribución contextual existe."
+    },
+    {
+      "slug": "kR3waCnxVDfMfVCV8sAH",
+      "tipo": "temporal_ambigua",
+      "estado": "NO_VERIFICABLE_REFORMULADA",
+      "cambios": 2,
+      "reason": "Cita/testimonio genérico no verificable eliminado (plantilla del pipeline); el resto del contenido se conserva."
+    },
+    {
+      "slug": "lsje2mVQfNa0RXIdB2on",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "mYqMLgVaUGrAhGSA1ftW",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "n2Buq4aBhvnrXUcTlwuD",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "n64la9Hnrkp0sENv0z5U",
+      "tipo": "suceso_sin_atribucion",
+      "estado": "CORREGIDA",
+      "cambios": 3,
+      "reason": "Corrección mínima con evidencia: correccion_gramatical, correccion_gramatical, correccion_gramatical."
+    },
+    {
+      "slug": "nDiTklfg2RHYI4M3jWXB",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "nHdlNT1s7XRkdkYIEDKO",
+      "tipo": "suceso_sin_atribucion",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/de servicio o nota comunitaria sin necesidad editorial de fuente institucional nombrada; no se detectó afirmación falsa ni culpabilidad sin respaldo."
+    },
+    {
+      "slug": "ndySfHYuipYrG7olWLH6",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "oYEEbXYme88Sfg1hxDjb",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "obRveGZnIsuYoIPu5hwH",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "pRl00sqTLlHu9MDCkgDq",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "pfeJ8II72gXqjriz7alv",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "phUuAtrQ4H3qV4heuZlH",
+      "tipo": "temporal_ambigua",
+      "estado": "CORREGIDA",
+      "cambios": 2,
+      "reason": "Corrección mínima con evidencia: correccion_gramatical, html_roto."
+    },
+    {
+      "slug": "pmRNzGHrkOSSpSMWYg5J",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "qAcmF4MWTiLsTACCG8v5",
+      "tipo": "temporal_ambigua",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "El anclaje temporal lo provee la fecha de publicación del artículo; el cuerpo es comprensible sin fecha explícita. No se inventó una fecha."
+    },
+    {
+      "slug": "r4pQXL7KBWy0DqqwBQVw",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "rS6iSulzgQxJxDmpBG2b",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "rpCDcQ8KMAzB8nzZfNfM",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "rqFwODFrM33STTastGnc",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "sFyQDOaNijJrYQg1eTMA",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "sULCr0Y90B43ZpuoK2pJ",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "t2RxBwoeelCExkCgUrIv",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "t6oFNMA4EGC4hOS3IqvE",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "tZWxicQopFTzzkfLvaP3",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "v0gwsceiaZQeNSLPHmee",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "CORREGIDA",
+      "cambios": 1,
+      "reason": "Corrección mínima con evidencia: html_roto."
+    },
+    {
+      "slug": "vsqhr6Av9BKI6sqFIxP8",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "wq1Ovg1EiAYObmCYkY9Z",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "wxr5VjHx23bZpd620Xzp",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "x207BvkW6lGHef3FGaWM",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "xnZ6TgAAZtQTrvLaaXni",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "xouoeO5xgVw1RHBehL9H",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "xt6mgZboSGau4YvHFM5M",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "xzM9EBJ23nmNlC9m08q7",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "y8gWejnBZDoLhgYaRWlP",
+      "tipo": "suceso_sin_atribucion",
+      "estado": "NO_VERIFICABLE_REFORMULADA",
+      "cambios": 2,
+      "reason": "Cita/testimonio genérico no verificable eliminado (plantilla del pipeline); el resto del contenido se conserva."
+    },
+    {
+      "slug": "yBv7VNBe546PGd0a0glv",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "yVuoBkFOUU3OTJTMgv5l",
+      "tipo": "atribucion_insuficiente",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "Contenido descriptivo/cultural/de servicio donde la atribución explícita por frase no es editorialmente requerida; no se detectó afirmación demostrablemente falsa."
+    },
+    {
+      "slug": "yY2Vj9FYmwxbsHznVzPw",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "yenGmBgaTElLEVjXyIY3",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "zVIEgSt4aPiLKlUzenvv",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "ze5xnENnt58ZDNDBet3c",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    },
+    {
+      "slug": "ziYWYRi5TOLyNu645cTY",
+      "tipo": "provisional_sin_respaldo",
+      "estado": "RESUELTA_SIN_CAMBIO",
+      "cambios": 0,
+      "reason": "La(s) afirmación(es) flaggeada(s) ya usan formulación provisional explícita (habría/presuntamente/versiones preliminares): no se presentan como hecho confirmado. No se inventó fuente."
+    }
+  ]
+}

@@ -73,7 +73,10 @@ export interface TrustReport {
   resumen: string;
 }
 
-const RE_ATRIBUCION = /\b(según|de acuerdo con|informó|informaron|confirmó|confirmaron|dijo|dijeron|señaló|señalaron|reportó|reportaron|afirmó|declaró|explicó|indicó|precisó|detalló|anunció)\b/i;
+// Verbos/expresiones de atribución periodística. La lista anterior omitía
+// formas frecuentes ("relataron testigos", "aseguró", "manifestó",
+// "según vecinos") y producía falsos positivos de atribución faltante.
+const RE_ATRIBUCION = /\b(según|de acuerdo con|informó|informaron|confirmó|confirmaron|dijo|dijeron|señaló|señalaron|reportó|reportaron|afirmó|afirmaron|declaró|declararon|explicó|explicaron|indicó|indicaron|precisó|precisaron|detalló|detallaron|anunció|anunciaron|relató|relataron|contó|contaron|aseguró|aseguraron|manifestó|manifestaron|expresó|expresaron|admitió|admitieron|reveló|revelaron|difundió|difundieron|publicó|publicaron|destacó|destacaron|sostuvo|sostuvieron|denunció|denunciaron|testificó|testificaron|testigos|vecinos|familiares|residentes|pobladores|comunicado|boletín|informe)\b/i;
 const RE_NO_CONFIRMADA = /\b(presuntamente|al parecer|reportes no confirmados|trascendió|versiones preliminares|se rumora|habría|supuestamente|aparentemente|preliminarmente|según versiones)\b/i;
 const RE_NO_DISPONIBLE = /\b(se investiga|investigación en curso|se desconoce|no se sabe|no han informado|sin pronunciamiento|aún no se ha confirmado|pendiente de confirmar|no proporcionaron|no se ha revelado|hasta el momento no)\b/i;
 const RE_SUCESO = /\b(asesin|homicidio|falleci|muert|deten|arrest|acusad|señalad|sospech|víctima|delito|robo|violencia|balacera|apuñal|atropell)\w*/i;
@@ -87,7 +90,7 @@ const RE_FUENTE = /\b(Policía Nacional|Ministerio Público|Corte Suprema|INIFOM
 // ubica el hecho en el tiempo ("este miércoles", "durante la noche",
 // "el pasado fin de semana"). Un detector que no las reconoce produce
 // falsos positivos de TEMPORAL_CONTEXT_MISSING — corregido, no relajado.
-const RE_FECHA = /\b(\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|(este|el|la|pasad[oa]s?|próxim[oa]s?)?\s*(lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b|ayer|anteayer|hoy|esta (mañana|tarde|noche|madrugada|semana)|durante (la|el) (noche|madrugada|mañana|tarde|fin de semana|día)|(el|este|fin de) (fin de semana|año|mes)|recientemente|en horas de la (madrugada|mañana|tarde|noche)|últim[oa]s? (días|horas|semanas)|\d{4})\b/i;
+const RE_FECHA = /\b(\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|(este|el|la|pasad[oa]s?|próxim[oa]s?)?\s*(lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b|ayer|anteayer|hoy|esta (mañana|tarde|noche|madrugada|semana)|durante (la|el) (noche|madrugada|mañana|tarde|fin de semana|día)|(el|este|fin de) (fin de semana|año|mes)|recientemente|en horas de la (madrugada|mañana|tarde|noche)|últim[oa]s? (días|horas|semanas)|últimas \d+ horas|últimos \d+ (días|años)|hace \w+ (días|horas|semanas|meses|años)|\d{4})\b/i;
 const RE_LUGAR = /\b(Managua|León|Granada|Masaya|Chinandega|Matagalpa|Estelí|Jinotega|Nueva Segovia|Rivas|Chontales|Boaco|Carazo|Río San Juan|Siuna|Rosita|Bonanza|Bilwi|Puerto Cabezas|Waspán|Bluefields|Corn Island|Caribe (Norte|Sur)|RAAN|RAAS|Tipitapa|Jinotepe|Diriamba|Ocotal|Somoto|Juigalpa|San Carlos|Nindirí|Niquinohomo|Catarina|Ticuantepe|Ciudad Sandino)\b/g;
 
 function paragraphs(html: string): string[] {

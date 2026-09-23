@@ -1,0 +1,18 @@
+import { readFileSync } from 'fs';
+const env = Object.fromEntries(readFileSync('.env.local','utf8').split('\n').filter(l=>l.includes('=')&&!l.startsWith('#')).map(l=>{const i=l.indexOf('=');return[l.slice(0,i).trim(),l.slice(i+1).trim().replace(/^"|"$/g,'')];}));
+const { initializeApp, cert } = await import('firebase-admin/app');
+const { getFirestore } = await import('firebase-admin/firestore');
+const db = getFirestore(initializeApp({credential: cert(JSON.parse(Buffer.from(env.FIREBASE_SERVICE_ACCOUNT_BASE64,'base64').toString('utf8')))}));
+const d1 = (await db.collection('noticias').doc('kR3waCnxVDfMfVCV8sAH').get()).data();
+const html = String(d1.contenido);
+const i = html.indexOf('Un vecino');
+console.log('RAW QUOTE CTX:', JSON.stringify(html.slice(Math.max(0,i-120), i+300)));
+const d2 = (await db.collection('noticias').doc('BU0PX0EqHO5ewLCH7Coo').get()).data();
+console.log('\nTITULO BU0P:', d2.titulo);
+console.log('RESUMEN:', String(d2.resumen||'').slice(0,300));
+console.log('BODY:', String(d2.contenido).replace(/<[^>]+>/g,' ').slice(0,600));
+const d3 = (await db.collection('noticias').doc('n64la9Hnrkp0sENv0z5U').get()).data();
+const t3 = String(d3.contenido).replace(/<[^>]+>/g,' ');
+for (const m of t3.matchAll(/.{60}(afectación|expresaron su |causó )[^.]{0,90}/g)) console.log('\nN64:', m[0]);
+const d4 = (await db.collection('noticias').doc('RCjqgw3ea2K6cZHXmbRV').get()).data();
+console.log('\nRCjq TITULO:', d4.titulo);
