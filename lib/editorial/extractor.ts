@@ -54,6 +54,20 @@ const INSTITUCIONES_KNOWN = [
 const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const INSTITUCIONES = new RegExp('\\b(?:' + INSTITUCIONES_KNOWN.map(escape).join('|') + ')\\b', 'gi');
 
+// Fuentes oficiales internacionales que deben reconocerse aunque la nota trate
+// un hecho fuera de Nicaragua. Se mantienen separadas para que el catálogo sea
+// ampliable sin mezclarlo con instituciones nicaragüenses.
+const FUENTES_OFICIALES_INTERNACIONALES = [
+  'Organismo de Investigación Judicial', 'OIJ',
+  'Ministerio Público de Costa Rica', 'Fiscalía General de la República de Costa Rica',
+  'Poder Judicial de Costa Rica', 'Fuerza Pública de Costa Rica',
+  'Ministerio de Seguridad Pública de Costa Rica', 'Migración y Extranjería de Costa Rica',
+  'Policía de Fronteras de Costa Rica',
+  'Fiscalía General', 'Ministerio Público', 'Poder Judicial',
+  'Interpol', 'Europol', 'FBI', 'Department of Homeland Security',
+  'Departamento de Estado de Estados Unidos', 'Gobierno de Costa Rica',
+];
+
 const FUENTES_OFICIALES_KNOWN = [
   'Policía Nacional', 'Policía', 'Fiscalía', 'Ministerio de Salud', 'MINSA',
   'Poder Judicial', 'Corte Suprema', 'Bomberos', 'Cruz Roja', 'Medicina Legal',
@@ -66,7 +80,7 @@ const FUENTES_OFICIALES_KNOWN = [
   'INVUR', 'Ministerio de Educación', 'Ministerio de Gobernación',
   'Ministerio de Obras Públicas', 'Ministerio de Transporte', 'Ministerio de Agricultura',
 ];
-const FUENTES_OFICIALES = new RegExp('\\b(?:' + FUENTES_OFICIALES_KNOWN.map(escape).join('|') + ')\\b', 'gi');
+const FUENTES_OFICIALES = new RegExp('\\b(?:' + [...FUENTES_OFICIALES_KNOWN, ...FUENTES_OFICIALES_INTERNACIONALES].map(escape).join('|') + ')\\b', 'gi');
 
 const FECHAS_REGEX = /\b(?:\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|\d{4}|2025|2024)\b/gi;
 
