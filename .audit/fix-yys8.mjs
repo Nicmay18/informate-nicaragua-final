@@ -1,0 +1,10 @@
+import { readFileSync } from 'fs';
+const env = Object.fromEntries(readFileSync('.env.local','utf8').split('\n').filter(l=>l.includes('=')&&!l.startsWith('#')).map(l=>{const i=l.indexOf('=');return[l.slice(0,i).trim(),l.slice(i+1).trim().replace(/^"|"$/g,'')];}));
+const { initializeApp, cert } = await import('firebase-admin/app');
+const { getFirestore } = await import('firebase-admin/firestore');
+const db = getFirestore(initializeApp({credential: cert(JSON.parse(Buffer.from(env.FIREBASE_SERVICE_ACCOUNT_BASE64,'base64').toString('utf8')))}));
+const ref=db.collection('noticias').doc('yys8SiF01IpoXTkoaqXo');
+const d=(await ref.get()).data();
+const c=String(d.contenido).replace(/\bEl afectación\b/g,'La afectación');
+await ref.update({contenido:c,ultimaRevisionEditorial:{fecha:new Date().toISOString(),proceso:'saneamiento-editorial-fase-cierre',tipo:'concordancia_mecanica'}});
+console.log('residual:',/afectación\b.*\bEl afectación|El afectación/.test(c));
