@@ -137,6 +137,7 @@ import { transitionLearning, getLearningStateReport } from '@/lib/meni/learning-
 import { validateMeniPredictions } from '@/lib/meni/prediction-validator';
 import { approveAndExecuteAction } from '@/lib/nios/action-engine';
 import { runStoryCompletenessEngine } from '@/lib/meni/editorial-brain/story-completeness-engine';
+import { analyzeTrust } from '@/lib/editorial/trust';
 
 beforeEach(() => {
   store.clear();
@@ -306,5 +307,52 @@ describe('MENI — información no disponible no penaliza', () => {
     expect(conDuda.dudasPendientes.length).toBeGreaterThan(0); // se detecta
     expect(conDuda.score).toBe(sinDuda.score); // pero NO penaliza
     expect(conDuda.cerrada).toBe(sinDuda.cerrada);
+  });
+});
+
+// ─────────────── Trust layer — atribución por contexto ───────────────
+
+describe('Trust layer — provisionales y atribución de párrafo', () => {
+  it('PROVISIONAL + atribuida en el párrafo = correcto (no es riesgo)', () => {
+    const t = analyzeTrust({
+      titulo: 'Detenido sospechoso en Managua',
+      cuerpo: 'La Policía Nacional informó sobre la captura esta mañana en Managua. Presuntamente el detenido habría robado el vehículo.',
+      categoria: 'Sucesos',
+    });
+    expect(t.diagnostico.provisionales).toBe(1);
+    expect(t.diagnostico.provisionalesSinFuente).toBe(0);
+    expect(t.riesgos.filter(r => /provisional/.test(r.detail ?? ''))).toHaveLength(0);
+  });
+
+  it('PROVISIONAL sin fuente en todo el texto = riesgo real', () => {
+    const t = analyzeTrust({
+      titulo: 'Captura reportada en Estelí',
+      cuerpo: 'Presuntamente el hombre habría robado el vehículo durante la noche del lunes en Estelí.\n\nLos vecinos vieron movimientos extraños en la zona desde temprano.',
+      categoria: 'Sucesos',
+    });
+    expect(t.diagnostico.provisionalesSinFuente).toBeGreaterThan(0);
+    expect(t.factores).toContain('PROVISIONAL_CLAIM');
+  });
+
+  it('una nota BAJA expone los factores causales y qué falta', () => {
+    const t = analyzeTrust({
+      titulo: 'Nota sin fuentes',
+      cuerpo: 'El proyecto avanza según lo previsto. Los trabajos continúan en la zona. Las autoridades supervisan la obra.',
+      categoria: 'Nacionales',
+    });
+    // "según lo previsto" no es atribución con fuente real
+    expect(t.factores.length).toBeGreaterThan(0);
+    expect(t.diagnostico.queFalta.length).toBeGreaterThan(0);
+    expect(['BAJA', 'MEDIA', 'ALTA']).toContain(t.nivel);
+  });
+
+  it('"se investiga" es información no disponible, no provisional ni riesgo', () => {
+    const t = analyzeTrust({
+      titulo: 'Incendio en vivienda de Managua',
+      cuerpo: 'Bomberos controlaron un incendio en una vivienda de Managua la noche del lunes 15 de septiembre. Las causas se investiga por las autoridades.',
+      categoria: 'Sucesos',
+    });
+    expect(t.noDisponible.length).toBeGreaterThan(0);
+    expect(t.noConfirmada.filter(n => /investiga/.test(n.text))).toHaveLength(0);
   });
 });
