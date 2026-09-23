@@ -34,7 +34,7 @@ const TRANSICIONES_IA = /\b(?:en resumen|en conclusi[oó]n|cabe destacar|vale la
 
 const PALABRAS_SENSIBLES = /\b(?:violaci[oó]n|violada|tortura|genocidio)\b/gi;
 
-const ATRIBUCIONES_FALSAS = /\b(?:seg[uú]n fuentes (?:an[oó]nimas|confidenciales|no identificadas)|se pudo conocer|trascendi[oó]|al parecer|presuntamente|aparentemente|de acuerdo con informaciones)\b/gi;
+const ATRIBUCIONES_FALSAS = /\b(?:seg[uú]n fuentes (?:an[oó]nimas|confidenciales|no identificadas)|se pudo conocer|trascendi[oó]|al parecer|presuntamente|aparentemente|de acuerdo con informaciones)\b/i;
 
 const NOMBRES_PROPIOS = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3}\b/g;
 
