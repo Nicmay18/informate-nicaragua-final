@@ -77,10 +77,17 @@ const RE_ATRIBUCION = /\b(según|de acuerdo con|informó|informaron|confirmó|co
 const RE_NO_CONFIRMADA = /\b(presuntamente|al parecer|reportes no confirmados|trascendió|versiones preliminares|se rumora|habría|supuestamente|aparentemente|preliminarmente|según versiones)\b/i;
 const RE_NO_DISPONIBLE = /\b(se investiga|investigación en curso|se desconoce|no se sabe|no han informado|sin pronunciamiento|aún no se ha confirmado|pendiente de confirmar|no proporcionaron|no se ha revelado|hasta el momento no)\b/i;
 const RE_SUCESO = /\b(asesin|homicidio|falleci|muert|deten|arrest|acusad|señalad|sospech|víctima|delito|robo|violencia|balacera|apuñal|atropell)\w*/i;
-const RE_DELITO_AFIRMADO = /\b(asesinó|mató|robó|violó|estafó|secuestró|atropelló)\b/i;
+// Límites explícitos de letra (incl. acentos): \b falla con "robóticos"
+// porque "ó" no es \w — "robó" coincidía dentro de "robóticos" (falso
+// positivo). Con clases de letras explícitas "robó" solo casa como palabra.
+const RE_DELITO_AFIRMADO = /(^|[^a-záéíóúñü])(asesinó|mató|robó|violó|estafó|secuestró|atropelló)(?![a-záéíóúñü])/i;
 const RE_NOMBRE_PROPIO = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,2}\b/g;
 const RE_FUENTE = /\b(Policía Nacional|Ministerio Público|Corte Suprema|INIFOM|MINSA|Bomberos|INTA|INETER|MTI|Fiscalía|Conapred|CNU|INSS|CSE|SERENE|Alcaldía|Gobierno|CNN|Reuters|AP|EFE|AFP|BBC|ONU|OEA|OIM|UNICEF|OPS|OMS|Banco Central|BCN)\b/g;
-const RE_FECHA = /\b(\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|(lunes|martes|miércoles|jueves|viernes|sábado|domingo) \d{1,2}|ayer|hoy|esta (mañana|tarde|noche)|\d{4})\b/i;
+// Contexto temporal real: fecha numérica O expresión temporal relativa que
+// ubica el hecho en el tiempo ("este miércoles", "durante la noche",
+// "el pasado fin de semana"). Un detector que no las reconoce produce
+// falsos positivos de TEMPORAL_CONTEXT_MISSING — corregido, no relajado.
+const RE_FECHA = /\b(\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|(este|el|la|pasad[oa]s?|próxim[oa]s?)?\s*(lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b|ayer|anteayer|hoy|esta (mañana|tarde|noche|madrugada|semana)|durante (la|el) (noche|madrugada|mañana|tarde|fin de semana|día)|(el|este|fin de) (fin de semana|año|mes)|recientemente|en horas de la (madrugada|mañana|tarde|noche)|últim[oa]s? (días|horas|semanas)|\d{4})\b/i;
 const RE_LUGAR = /\b(Managua|León|Granada|Masaya|Chinandega|Matagalpa|Estelí|Jinotega|Nueva Segovia|Rivas|Chontales|Boaco|Carazo|Río San Juan|Siuna|Rosita|Bonanza|Bilwi|Puerto Cabezas|Waspán|Bluefields|Corn Island|Caribe (Norte|Sur)|RAAN|RAAS|Tipitapa|Jinotepe|Diriamba|Ocotal|Somoto|Juigalpa|San Carlos|Nindirí|Niquinohomo|Catarina|Ticuantepe|Ciudad Sandino)\b/g;
 
 function paragraphs(html: string): string[] {
@@ -166,9 +173,13 @@ export function analyzeTrust(input: {
       });
     }
 
-    // Contradicción básica: "confirmó" + "investiga" sobre el mismo hecho.
-    if (RE_ATRIBUCION.test(s) && /confirm/i.test(s) && /investig/i.test(s)) {
-      contradicciones.push({ text: s.slice(0, 160), detail: 'misma oración mezcla confirmación e investigación abierta' });
+    // Contradicción real: una afirmación YA confirmada por una fuente y la
+    // misma materia declarada bajo investigación abierta en la misma oración.
+    // "Corresponde confirmar a la investigación" NO es contradicción (es
+    // incertidumbre honesta) — por eso exigimos confirmación en pasado y
+    // una frase de investigación en curso, no la mera palabra "investigación".
+    if (/confirm(ó|aron)\b|ha(n)? confirmado/i.test(s) && /(se investiga|investigación en curso|continúa la investigación|sigue bajo investigación|aún se investiga)/i.test(s)) {
+      contradicciones.push({ text: s.slice(0, 160), detail: 'hecho confirmado y bajo investigación abierta en la misma oración' });
     }
   };
 

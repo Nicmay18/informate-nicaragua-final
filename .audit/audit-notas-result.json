@@ -1,22 +1,20 @@
 {
-  "fecha": "2026-09-23T16:15:22.420Z",
+  "fecha": "2026-09-23T19:13:57.483Z",
   "notasAnalizadas": "474 / 474",
   "publicadas": 441,
   "noindexPublicadas": 0,
-  "conCampoConfianza": 1,
+  "conCampoConfianza": 474,
   "confianzaEscritas": 474,
   "confianza": {
-    "ALTA": 255,
+    "ALTA": 284,
     "MEDIA": 0,
-    "BAJA": 219
+    "BAJA": 190
   },
   "factores": {
     "SOURCE_MISSING": 259,
     "PROVISIONAL_CLAIM": 81,
     "ATTRIBUTION_MISSING": 83,
-    "TEMPORAL_CONTEXT_MISSING": 92,
-    "CONTRADICTION": 1,
-    "ENTITY_UNVERIFIED": 1
+    "TEMPORAL_CONTEXT_MISSING": 39
   },
   "provisionales": {
     "total": 225,
@@ -34,7 +32,7 @@
   "issues": {
     "factual": 0,
     "estructural": 0,
-    "editorial": 165,
+    "editorial": 131,
     "seo": 0,
     "duplicacion": 0,
     "insuficiente": 0,
@@ -42,11 +40,11 @@
     "titulo": 0,
     "metadata": 0,
     "clasificacion": 0,
-    "contradiccion": 1,
-    "riesgoEditorial": 246
+    "contradiccion": 0,
+    "riesgoEditorial": 192
   },
   "titulosDuplicados": 0,
-  "notasConProblemas": 165,
+  "notasConProblemas": 131,
   "detalle": [
     {
       "slug": "lucho-diez-dias-por-su-vida-y-fallecio-tras-ataque-de-expareja",
@@ -106,15 +104,6 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "dos-hombres-pierden-la-vida-en-incidentes-nocturnos-en-el-norte",
-      "titulo": "Dos hombres pierden la vida en incidentes nocturnos en el norte",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "medicina-legal-descarta-alteraciones-mentales-en-acusada",
       "titulo": "Medicina Legal descarta alteraciones mentales en acusada",
       "problemas": [
@@ -126,15 +115,6 @@
     {
       "slug": "prueba-de-ia-obliga-a-openai-a-reforzar-su-seguridad-digital",
       "titulo": "Prueba de IA obliga a OpenAI a reforzar su seguridad digital",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "cinco-accidentes-dejan-dos-muertos-y-varios-lesionados",
-      "titulo": "Cinco accidentes dejan dos muertos y varios lesionados",
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:sin referencia temporal detectable"
@@ -199,21 +179,11 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "investigaciones-por-fallecimiento-en-barrio-old-bank-bluefields",
-      "titulo": "Investigaciones por afectación en barrio Old Bank Bluefields",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "nicaraguense-muere-en-costa-rica-tras-choque-y-fuga-vial",
       "titulo": "Nicaragüense muere en Costa Rica tras choque y fuga vial",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -222,8 +192,7 @@
       "titulo": "Muere maestra jubilada tras ser atropellada en Ocotal",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -246,36 +215,17 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "accidente-con-rastra-deja-una-joven-fallecida-en-managua",
-      "titulo": "Accidente con rastra deja una joven fallecida en Managua",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "carreteras-dejan-dos-fallecidos-y-varios-accidentes",
       "titulo": "Carreteras dejan dos fallecidos y varios accidentes",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
     {
       "slug": "dos-nicaraguenses-fallecen-en-accidentes-ocurridos-en-honduras-y-miami",
       "titulo": "Dos nicaragüenses resultan afectados en accidentes ocurridos en…",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "bus-accidentado-en-boaco-deja-42-lesionados-bajo-atencion-medica",
-      "titulo": "Bus accidentado en Boaco deja 42 lesionados bajo atención médica",
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:sin referencia temporal detectable"
@@ -292,30 +242,11 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "mirador-de-catarina-precios-horarios-y-que-hacer",
-      "titulo": "Mirador de Catarina: precios, horarios y qué hacer",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "volcan-telica-expulsa-gases-y-ceniza-con-columnas-de-200-metros",
-      "titulo": "Volcán Telica expulsa gases y ceniza con columnas de 200 metros",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "muere-conductor-de-bus-tras-emergencia-medica-en-nueva-guinea",
       "titulo": "Muere conductor de bus tras emergencia médica en Nueva Guinea",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -375,26 +306,8 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "accidentes-dejan-un-fallecido-y-varios-lesionados-en-nicaragua",
-      "titulo": "Accidentes dejan un fallecido y varios lesionados en Nicaragua",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel",
       "titulo": "Un afectado y un personas afectado en accidente laboral en…",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "hallan-sin-vida-a-dos-hombres-desaparecidos-en-masaya-y-carazo",
-      "titulo": "Hallan sin vida a dos hombres desaparecidos en Masaya y Carazo",
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:sin referencia temporal detectable"
@@ -406,17 +319,7 @@
       "titulo": "Cuatro obreros afectados en accidentes laborales en Nicaragua",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "seis-miembros-de-una-familia-mueren-en-incendio-en-honduras",
-      "titulo": "Seis miembros de una familia mueren en incendio en Honduras",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -436,15 +339,6 @@
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente",
         "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "mas-de-470-muertos-por-inundaciones-entre-nepal-y-china",
-      "titulo": "Más de 470 muertos por inundaciones entre Nepal y China",
-      "problemas": [
-        "editorial:requiere_revision",
         "riesgo:sin referencia temporal detectable"
       ],
       "nivel": "BAJA"
@@ -473,8 +367,7 @@
       "titulo": "Motociclista muere tras accidente en la Carretera Norte",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -524,35 +417,8 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "bebe-sufre-quemaduras-con-agua-caliente-en-diria",
-      "titulo": "Bebé de un año sufre quemaduras en Diriá, Granada",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "motos-alcohol-y-madrugada-6-accidentes-en-nicaragua",
-      "titulo": "Motos, alcohol y madrugada: 6 accidentes en Nicaragua",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "cosa-de-horno-el-sabor-de-nicaragua-que-guarda-la-tradicion",
       "titulo": "Cosa de horno: el sabor de Nicaragua que guarda la tradición",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "8-motociclistas-fallecen-en-accidentes-este-fin-de-semana",
-      "titulo": "8 motociclistas fallecen en accidentes este fin de semana",
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:sin referencia temporal detectable"
@@ -626,15 +492,6 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "muere-trabajador-tras-ataque-de-un-perro-en-managua",
-      "titulo": "Muere trabajador tras ataque de un perro en Managua",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "capturan-acusado-de-quemar-a-un-hombre-en-rivas-nicaragua",
       "titulo": "Capturan acusado de agredir a un hombre en Rivas",
       "problemas": [
@@ -695,17 +552,7 @@
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "fin-de-semana-deja-ocho-fallecidos-en-accidentes-viales",
-      "titulo": "Fin de semana deja ocho afectados en accidentes viales",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -732,26 +579,7 @@
       "titulo": "Tres fallecidos y un lesionado dejan accidentes en el país",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "toro-embiste-a-hombre-durante-tope-de-toros-en-granada",
-      "titulo": "Toro embiste a hombre durante Tope de Toros en Granada",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "sismo-de-5-8-sacude-japon-y-se-siente-en-tokio-esto-se-sabe",
-      "titulo": "Sismo de 5.8 sacude Japón y se siente en Tokio: esto se sabe",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -761,33 +589,6 @@
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "muere-joven-baleado-en-barrio-mexico-investigan-el-ataque",
-      "titulo": "Muere joven baleado en barrio México; investigan el ataque",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "agosto-comienza-con-tres-accidentes-y-4-fallecidos",
-      "titulo": "Agosto comienza con tres accidentes y 4 fallecidos",
-      "problemas": [
-        "editorial:requiere_revision",
-        "contradiccion:misma oración mezcla confirmación e investigación abierta"
-      ],
-      "nivel": "ALTA"
-    },
-    {
-      "slug": "nicaraguense-enfrenta-cargo-por-muerte-de-su-prima-en-texas",
-      "titulo": "Nicaragüense enfrenta cargo por muerte de su prima en Texas",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
       ],
       "nivel": "BAJA"
     },
@@ -821,15 +622,6 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "tres-motociclistas-mueren-en-accidentes-de-transito-en-nicaragua",
-      "titulo": "Tres personas resultan afectados en accidentes de motocicleta…",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "nicaragua-invertira-13-9-millones-en-49-camiones-de-bomberos",
       "titulo": "Nicaragua invertirá $13.9 millones en 49 camiones de bombero",
       "problemas": [
@@ -855,17 +647,7 @@
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "dos-motociclistas-mueren-en-menos-de-12-horas-en-la-nueva-a-leon",
-      "titulo": "Dos motociclistas mueren en menos de 12 horas en la Nueva a León",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -917,8 +699,7 @@
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -956,8 +737,7 @@
       "titulo": "Hallan sin vida a dos personas en distintos puntos de Rivas",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -995,8 +775,7 @@
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -1005,8 +784,7 @@
       "titulo": "Accidentes viales dejan dos muertos y tres heridos en Nicaragua",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -1027,8 +805,7 @@
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente",
         "riesgo:afirmación provisional sin fuente",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -1056,15 +833,6 @@
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:nota de sucesos sin ninguna atribución de fuente"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "mineros-avanza-de-ronda-y-deja-en-disputa-el-ultimo-boleto",
-      "titulo": "Mineros avanza de ronda y deja en disputa el último boleto",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
       ],
       "nivel": "BAJA"
     },
@@ -1112,23 +880,13 @@
       "titulo": "Venden chocolates para alimentar a perros y gatos abandonados",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:nota de sucesos sin ninguna atribución de fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:nota de sucesos sin ninguna atribución de fuente"
       ],
       "nivel": "BAJA"
     },
     {
       "slug": "nicaraguense-de-jinotepe-se-corona-campeon-de-espana-en-sanda",
       "titulo": "Nicaragüense de Jinotepe se corona campeón de España en Sanda",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "sepultan-a-nina-de-4-anos-investigan-muerte-en",
-      "titulo": "Sepultan a niña de 4 años; investigan muerte en Ticuantepe",
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:sin referencia temporal detectable"
@@ -1145,35 +903,8 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "lluvias-socavan-cauce-en-managua-y-ponen-viviendas-en-riesgo",
-      "titulo": "Lluvias socavan cauce en Managua y ponen viviendas en riesgo",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "rosita-nicaragua-lagunas-turismo-cultura",
       "titulo": "Rosita, Nicaragua: lagunas, cultura Mayangna y turismo de…",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "chinandega-estrena-75-viviendas-con-servicios-completos",
-      "titulo": "Chinandega estrena 75 viviendas con servicios completos",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "terremoto-de-7-1-deja-muertos-desaparecidos-y-caos-en-japon",
-      "titulo": "Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón",
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:sin referencia temporal detectable"
@@ -1214,8 +945,7 @@
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente",
         "riesgo:afirmación provisional sin fuente",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -1235,7 +965,6 @@
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:nota de sucesos sin ninguna atribución de fuente",
-        "riesgo:sin referencia temporal detectable",
         "atribucion:suceso_sin_fuente"
       ],
       "nivel": "BAJA"
@@ -1335,15 +1064,6 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "camioneta-impacta-dos-motos-en-managua-y-deja-tres-lesionados",
-      "titulo": "Camioneta impacta dos motos en Managua y deja tres lesionados",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes",
       "titulo": "Ejército retiene a cinco personas y ocupa 11 semovientes",
       "problemas": [
@@ -1366,8 +1086,7 @@
       "titulo": "Dos sismos en 39 segundos sacuden Venezuela y Caracas",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -1390,8 +1109,7 @@
       "titulo": "Recapturan a nicaragüense que se fugó de cárcel en Costa Rica",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -1405,15 +1123,6 @@
         "riesgo:afirmación provisional sin fuente",
         "riesgo:afirmación provisional sin fuente",
         "riesgo:afirmación provisional sin fuente"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "estudiante-de-13-anos-muere-tras-golpe-en-escuela-de-diriomo",
-      "titulo": "Estudiante de 13 años resulta afectado tras golpe en escuela de…",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
       ],
       "nivel": "BAJA"
     },
@@ -1438,30 +1147,11 @@
       "nivel": "BAJA"
     },
     {
-      "slug": "nicaraguense-muere-en-ataque-en-canovanas-puerto-rico",
-      "titulo": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "hallan-sin-vida-a-profesor-desaparecido-en-cementerio-de-boaco",
-      "titulo": "Hallan sin vida a profesor desaparecido en cementerio de Boaco",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
-      ],
-      "nivel": "BAJA"
-    },
-    {
       "slug": "nicaraguenses-mueren-en-hechos-violentos-registrados-en-costa-rica",
       "titulo": "Nicaragüenses resultan afectados en hechos graves registrados…",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:afirmación provisional sin fuente",
-        "riesgo:sin referencia temporal detectable"
+        "riesgo:afirmación provisional sin fuente"
       ],
       "nivel": "BAJA"
     },
@@ -1513,7 +1203,6 @@
       "titulo": "Perros robóticos reforzarán seguridad en centro FIFA",
       "problemas": [
         "editorial:requiere_revision",
-        "riesgo:delito afirmado sin atribución ni víctima/atribución clara",
         "riesgo:nota de sucesos sin ninguna atribución de fuente"
       ],
       "nivel": "BAJA"
@@ -1525,15 +1214,6 @@
         "editorial:requiere_revision",
         "riesgo:afirmación provisional sin fuente",
         "riesgo:afirmación provisional sin fuente"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "masaya-queda-al-borde-y-esteli-toma-ventaja-en-el-pomares",
-      "titulo": "Masaya queda al borde y Estelí toma ventaja en el Pomares",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
       ],
       "nivel": "BAJA"
     },
@@ -1562,15 +1242,6 @@
       "problemas": [
         "editorial:requiere_revision",
         "riesgo:nota de sucesos sin ninguna atribución de fuente"
-      ],
-      "nivel": "BAJA"
-    },
-    {
-      "slug": "investigan-hallazgo-de-dos-cuerpos-y-desaparicion-por-lluvias",
-      "titulo": "Investigan hallazgo de dos cuerpos y desaparición por lluvias",
-      "problemas": [
-        "editorial:requiere_revision",
-        "riesgo:sin referencia temporal detectable"
       ],
       "nivel": "BAJA"
     },
@@ -1958,49 +1629,6 @@
       }
     },
     {
-      "slug": "dos-hombres-pierden-la-vida-en-incidentes-nocturnos-en-el-norte",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Dos hombres pierden la vida en incidentes nocturnos en el norte — Dos hombres pierden la vida en incidentes nocturnos en el norte",
-        "afirmaciones": 30,
-        "atribuidas": 8,
-        "conFuenteNombrada": 2,
-        "provisionales": 2,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 1,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Santa Rosa",
-          "Eliezer José Pichardo",
-          "Salud René Pulido",
-          "Pichardo Castillo",
-          "Policía Nacional",
-          "Edwing David Martínez",
-          "En Sébaco",
-          "Guadalupe Ernesto Sequeira",
-          "Toyota Prado",
-          "La Policía Nacional",
-          "Hospital Oscar Danilo",
-          "Rosales Arg",
-          "Panamericana Norte",
-          "Hospital Cesar Amador",
-          "En Santa Rosa"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional",
-          "Bomberos"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "medicina-legal-descarta-alteraciones-mentales-en-acusada",
       "nivel": "BAJA",
       "factores": [
@@ -2247,48 +1875,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "cinco-accidentes-dejan-dos-muertos-y-varios-lesionados",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Cinco accidentes dejan dos muertos y varios lesionados — Cinco accidentes dejan dos muertos y varios lesionados",
-        "afirmaciones": 52,
-        "atribuidas": 5,
-        "conFuenteNombrada": 1,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "El Cu",
-          "Efraín Gutiérrez Ruiz",
-          "Los Olivas",
-          "Johan Humberto Avellán",
-          "José Dolores Estrada",
-          "Distrito Seis",
-          "Danilo Avellán",
-          "Hospital Carlos Marx",
-          "Jonathan González",
-          "Josué David Barboza",
-          "Funeraria La Católica",
-          "Carlos Hilarios Wilson",
-          "Barboza López",
-          "Franklin Antonio Padilla",
-          "Kenneth Yazire Palacio"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional"
-        ],
-        "queFalta": [
           "referencia temporal (fecha o día)"
         ]
       }
@@ -2637,52 +2223,10 @@
       }
     },
     {
-      "slug": "investigaciones-por-fallecimiento-en-barrio-old-bank-bluefields",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Investigaciones por afectación en barrio Old Bank Bluefields — Investigaciones por afectación en barrio Old Bank Bluefields",
-        "afirmaciones": 91,
-        "atribuidas": 49,
-        "conFuenteNombrada": 2,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Old Bank Bluefields",
-          "Terry Hall Joseph",
-          "Old Bank",
-          "Policía Nacional",
-          "Región Autónoma",
-          "Costa Caribe Sur",
-          "Delegación Policial Regional",
-          "Medicina Legal",
-          "Hospital Regional",
-          "Cruz Roja",
-          "Cruz Blanca",
-          "Bomberos Unidos",
-          "Nicaragua Informate"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional",
-          "Bomberos"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "nicaraguense-muere-en-costa-rica-tras-choque-y-fuga-vial",
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -2694,7 +2238,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 1,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Costa Rica",
@@ -2705,7 +2249,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -2715,7 +2258,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -2727,7 +2269,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Pastora Cornejo Rivera",
@@ -2740,7 +2282,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -2889,50 +2430,9 @@
       }
     },
     {
-      "slug": "accidente-con-rastra-deja-una-joven-fallecida-en-managua",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Accidente con rastra deja una joven fallecida en Managua — Accidente con rastra deja una joven fallecida en Managua",
-        "afirmaciones": 32,
-        "atribuidas": 12,
-        "conFuenteNombrada": 1,
-        "provisionales": 1,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Orfa Liliana García",
-          "Carretera Norte",
-          "La Policía Nacional",
-          "Nicaragua Informate",
-          "Jairo José Membreño",
-          "Hugo Chávez",
-          "Georgino Andrade",
-          "Policía Nacional",
-          "Julio César Chamorro",
-          "Anthony García",
-          "Beylis Ramírez",
-          "Medicina Legal",
-          "Distrito Seis"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "carreteras-dejan-dos-fallecidos-y-varios-accidentes",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -2944,7 +2444,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "La Reyna",
@@ -2966,7 +2466,6 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -3011,42 +2510,6 @@
       }
     },
     {
-      "slug": "bus-accidentado-en-boaco-deja-42-lesionados-bajo-atencion-medica",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Bus accidentado en Boaco deja 42 lesionados bajo atención médica — Bus accidentado en Boaco deja 42 lesionados bajo atención médica",
-        "afirmaciones": 25,
-        "atribuidas": 9,
-        "conFuenteNombrada": 3,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Santa Fe",
-          "Santa Elisa",
-          "Hospital José Nieborowski",
-          "Nelson Flores Palacios",
-          "La Especialidad",
-          "Policía Nacional",
-          "Cruz Blanca Nicarag"
-        ],
-        "fuentesDetectadas": [
-          "MINSA",
-          "Policía Nacional",
-          "Bomberos"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "joven-de-masaya-fallece-en-la-laguna-de-apoyo-este-20-de-julio",
       "nivel": "BAJA",
       "factores": [
@@ -3084,7 +2547,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "ATTRIBUTION_MISSING"
       ],
       "diagnostico": {
@@ -3096,7 +2558,7 @@
         "provisionalesSinFuente": 0,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "El Mirador",
@@ -3109,41 +2571,7 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "volcan-telica-expulsa-gases-y-ceniza-con-columnas-de-200-metros",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Volcán Telica expulsa gases y ceniza con columnas de 200 metros — Volcán Telica expulsa gases y ceniza con columnas de 200 metros",
-        "afirmaciones": 35,
-        "atribuidas": 10,
-        "conFuenteNombrada": 1,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 1,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Volcán Telica",
-          "El Comité Municipal",
-          "El Telica",
-          "Instituto Nicarag",
-          "Estudios Territoriales",
-          "José Armando Saballos"
-        ],
-        "fuentesDetectadas": [
-          "INETER"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
+          "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
         ]
       }
     },
@@ -3182,7 +2610,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -3194,7 +2621,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Nueva Guinea",
@@ -3206,7 +2633,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -3441,40 +2867,6 @@
       }
     },
     {
-      "slug": "accidentes-dejan-un-fallecido-y-varios-lesionados-en-nicaragua",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Accidentes dejan un fallecido y varios lesionados en Nicaragua — Accidentes dejan un fallecido y varios lesionados en Nicaragua",
-        "afirmaciones": 26,
-        "atribuidas": 3,
-        "conFuenteNombrada": 0,
-        "provisionales": 1,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Nicaragua Informate",
-          "José Demencio Cárdenas",
-          "El Gavilán",
-          "Alejandro Ernesto Flores",
-          "El Comején",
-          "En Juigalpa",
-          "Nuevo Amanecer"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel",
       "nivel": "BAJA",
       "factores": [
@@ -3517,53 +2909,10 @@
       }
     },
     {
-      "slug": "hallan-sin-vida-a-dos-hombres-desaparecidos-en-masaya-y-carazo",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Hallan sin vida a dos hombres desaparecidos en Masaya y Carazo — Hallan sin vida a dos hombres desaparecidos en Masaya y Carazo",
-        "afirmaciones": 43,
-        "atribuidas": 4,
-        "conFuenteNombrada": 1,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Víctor Manuel Aguirre",
-          "Jesús Torres Lezama",
-          "La Concepción",
-          "Hospital Regional Santiago",
-          "Teófilo Calero Pérez",
-          "Luis Alfonso Velásquez",
-          "San Juan",
-          "Los Hernández",
-          "Las Mariposas",
-          "Aguirre Calero",
-          "Medicina Legal",
-          "Armando Torres",
-          "Santa Teresa",
-          "Santa Margarita",
-          "Daniel José Chávez"
-        ],
-        "fuentesDetectadas": [
-          "Bomberos"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "dos-muertos-y-dos-heridos-en-accidentes-laborales-en-nicaragua",
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -3575,7 +2924,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Ciudad Sandino",
@@ -3589,7 +2938,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -3626,38 +2974,6 @@
         "queFalta": [
           "nombrar la fuente institucional o periodística",
           "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-        ]
-      }
-    },
-    {
-      "slug": "seis-miembros-de-una-familia-mueren-en-incendio-en-honduras",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Seis miembros de una familia mueren en incendio en Honduras — Seis miembros de una familia mueren en incendio en Honduras",
-        "afirmaciones": 23,
-        "atribuidas": 4,
-        "conFuenteNombrada": 2,
-        "provisionales": 1,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "NO",
-        "entidadesIdentificables": [
-          "San Pedro Sula",
-          "Martín Aguilar",
-          "Roberto Contreras"
-        ],
-        "fuentesDetectadas": [
-          "Bomberos",
-          "Alcaldía"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)",
-          "ubicación del hecho"
         ]
       }
     },
@@ -3734,36 +3050,6 @@
         "queFalta": [
           "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales",
-          "ubicación del hecho"
-        ]
-      }
-    },
-    {
-      "slug": "mas-de-470-muertos-por-inundaciones-entre-nepal-y-china",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Más de 470 muertos por inundaciones entre Nepal y China — Más de 470 muertos por inundaciones entre Nepal y China",
-        "afirmaciones": 33,
-        "atribuidas": 2,
-        "conFuenteNombrada": 0,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "NO",
-        "entidadesIdentificables": [
-          "En Nepal",
-          "El Ejército"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)",
           "ubicación del hecho"
         ]
       }
@@ -3891,7 +3177,6 @@
       "slug": "motociclista-muere-tras-accidente-en-la-carretera-norte",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -3903,7 +3188,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Carretera Norte",
@@ -3918,7 +3203,6 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -4104,76 +3388,6 @@
       }
     },
     {
-      "slug": "bebe-sufre-quemaduras-con-agua-caliente-en-diria",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Bebé de un año sufre quemaduras en Diriá, Granada — Bebé de un año sufre quemaduras en Diriá, Granada",
-        "afirmaciones": 23,
-        "atribuidas": 1,
-        "conFuenteNombrada": 0,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Hospital Amistad Japón"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "motos-alcohol-y-madrugada-6-accidentes-en-nicaragua",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Motos, alcohol y madrugada: 6 accidentes en Nicaragua — Motos, alcohol y madrugada: 6 accidentes en Nicaragua",
-        "afirmaciones": 58,
-        "atribuidas": 12,
-        "conFuenteNombrada": 1,
-        "provisionales": 2,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Nicaragua Informate",
-          "Río San Juan",
-          "El Rastro",
-          "Eyner José Mendiola",
-          "Policía Nacional",
-          "Moisés Antonio Mercado",
-          "Las Mercedes",
-          "La Policía Nacional",
-          "San Rafael",
-          "Kelvin Moisés Lara",
-          "La Poza Azul",
-          "Hospital Lenin Fonseca",
-          "San Carlos",
-          "Orlando Antonio Ramírez",
-          "El Consuelo"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "cosa-de-horno-el-sabor-de-nicaragua-que-guarda-la-tradicion",
       "nivel": "BAJA",
       "factores": [
@@ -4198,48 +3412,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "8-motociclistas-fallecen-en-accidentes-este-fin-de-semana",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "8 motociclistas fallecen en accidentes este fin de semana — 8 motociclistas fallecen en accidentes este fin de semana",
-        "afirmaciones": 21,
-        "atribuidas": 6,
-        "conFuenteNombrada": 1,
-        "provisionales": 2,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Nueva Segovia",
-          "Policía Nacional",
-          "San Rafael",
-          "Fausto Rafael Barahona",
-          "San Francisco Libre",
-          "Delvin Adrián Padilla",
-          "Santos Daniel Reyes",
-          "San Roque",
-          "Félix Guadamuz Guadamuz",
-          "Darwin Martín Huerta",
-          "El Chimborazo",
-          "Davies Augusto Centeno",
-          "Bismark José Chavarría",
-          "Leonel Alexander Cáceres",
-          "En San Nicolás"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional"
-        ],
-        "queFalta": [
           "referencia temporal (fecha o día)"
         ]
       }
@@ -4613,36 +3785,6 @@
       }
     },
     {
-      "slug": "muere-trabajador-tras-ataque-de-un-perro-en-managua",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Muere trabajador tras ataque de un perro en Managua — Muere trabajador tras ataque de un perro en Managua",
-        "afirmaciones": 24,
-        "atribuidas": 5,
-        "conFuenteNombrada": 0,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Bayardo José Morales",
-          "Julio Emilio Menocal",
-          "Distrito Dos"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "capturan-acusado-de-quemar-a-un-hombre-en-rivas-nicaragua",
       "nivel": "BAJA",
       "factores": [
@@ -4981,7 +4123,6 @@
       "slug": "yeimi-carias-muere-en-accidente-cuando-iba-hacia-su-trabajo",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -4993,7 +4134,7 @@
         "provisionalesSinFuente": 2,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Yeimi Carias",
@@ -5012,43 +4153,7 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
-        ]
-      }
-    },
-    {
-      "slug": "fin-de-semana-deja-ocho-fallecidos-en-accidentes-viales",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Fin de semana deja ocho afectados en accidentes viales — Fin de semana deja ocho afectados en accidentes viales",
-        "afirmaciones": 33,
-        "atribuidas": 12,
-        "conFuenteNombrada": 2,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Nicaragua Pareja",
-          "Ciudad Antigua",
-          "Policía Nacional",
-          "Cruz Roja",
-          "Cruz Blanca",
-          "Bomberos Unidos",
-          "Nicaragua Informate"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional",
-          "Bomberos"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
         ]
       }
     },
@@ -5132,7 +4237,6 @@
       "slug": "tres-fallecidos-y-un-lesionado-dejan-accidentes-en-el-pais",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -5144,7 +4248,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Policía Nacional",
@@ -5162,72 +4266,7 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
-        ]
-      }
-    },
-    {
-      "slug": "toro-embiste-a-hombre-durante-tope-de-toros-en-granada",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Toro embiste a hombre durante Tope de Toros en Granada — Toro embiste a hombre durante Tope de Toros en Granada",
-        "afirmaciones": 35,
-        "atribuidas": 2,
-        "conFuenteNombrada": 0,
-        "provisionales": 2,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 1,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Ruiz Martínez",
-          "Hospital Amistad Japón",
-          "El Tope"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "sismo-de-5-8-sacude-japon-y-se-siente-en-tokio-esto-se-sabe",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Sismo de 5.8 sacude Japón y se siente en Tokio: esto se sabe — Sismo de 5.8 sacude Japón y se siente en Tokio: esto se sabe",
-        "afirmaciones": 71,
-        "atribuidas": 8,
-        "conFuenteNombrada": 1,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "NO",
-        "entidadesIdentificables": [
-          "El Servicio Geológico",
-          "Estados Unidos",
-          "Agencia Meteorológica",
-          "En Tokio",
-          "En Japón",
-          "El Gobierno"
-        ],
-        "fuentesDetectadas": [
-          "Gobierno"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)",
-          "ubicación del hecho"
         ]
       }
     },
@@ -5270,79 +4309,6 @@
         ],
         "queFalta": [
           "fuente para las afirmaciones provisionales"
-        ]
-      }
-    },
-    {
-      "slug": "muere-joven-baleado-en-barrio-mexico-investigan-el-ataque",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Muere joven baleado en barrio México; investigan el ataque — Muere joven baleado en barrio México; investigan el ataque",
-        "afirmaciones": 23,
-        "atribuidas": 2,
-        "conFuenteNombrada": 1,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 1,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Abel Miguel Sevilla",
-          "Hospital Escuela Manolo",
-          "Morales Peralta",
-          "El Pollo",
-          "Policía Nacional",
-          "La Policía"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "nicaraguense-enfrenta-cargo-por-muerte-de-su-prima-en-texas",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Nicaragüense enfrenta cargo por muerte de su prima en Texas — Nicaragüense enfrenta cargo por muerte de su prima en Texas",
-        "afirmaciones": 31,
-        "atribuidas": 3,
-        "conFuenteNombrada": 0,
-        "provisionales": 2,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Sandy Bay Sirpi",
-          "Caribe Sur",
-          "Fort Worth",
-          "Marjuri Martin",
-          "Jaykel Vanegas Martínez",
-          "Estados Unidos",
-          "Río Grande",
-          "Oakland Hills Drive",
-          "Vanegas Martínez",
-          "La Policía",
-          "Costa Caribe",
-          "Para Nicaragua",
-          "Jaykel Vanegas"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
         ]
       }
     },
@@ -5525,49 +4491,6 @@
         "queFalta": [
           "nombrar la fuente institucional o periodística",
           "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-        ]
-      }
-    },
-    {
-      "slug": "tres-motociclistas-mueren-en-accidentes-de-transito-en-nicaragua",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Tres personas resultan afectados en accidentes de motocicleta… — Tres personas resultan afectados en accidentes de motocicleta…",
-        "afirmaciones": 36,
-        "atribuidas": 10,
-        "conFuenteNombrada": 2,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Nueva Guinea",
-          "Rivas En",
-          "Caribe Sur El",
-          "Caribe Sur",
-          "La Policía",
-          "Las Nicaragua Informate",
-          "Caribe Sur La",
-          "Costa Caribe Sur",
-          "Caribe Los",
-          "Nicaragua Pareja",
-          "Ciudad Antigua",
-          "Policía Nacional",
-          "Cruz Roja",
-          "Cruz Blanca",
-          "Bomberos Unidos"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional",
-          "Bomberos"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
         ]
       }
     },
@@ -5761,7 +4684,6 @@
       "slug": "intervino-para-defender-a-su-madre-y-termino-muerto-en-managua",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -5773,7 +4695,7 @@
         "provisionalesSinFuente": 2,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Villa Reconciliación Sur",
@@ -5793,7 +4715,6 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -5832,40 +4753,6 @@
         "queFalta": [
           "nombrar la fuente institucional o periodística",
           "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-        ]
-      }
-    },
-    {
-      "slug": "dos-motociclistas-mueren-en-menos-de-12-horas-en-la-nueva-a-leon",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Dos motociclistas mueren en menos de 12 horas en la Nueva a León — Dos motociclistas mueren en menos de 12 horas en la Nueva a León",
-        "afirmaciones": 31,
-        "atribuidas": 7,
-        "conFuenteNombrada": 0,
-        "provisionales": 1,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Ciudad Sandino",
-          "Luis Alberto Murillo",
-          "Murillo Barrera",
-          "Cruz Blanca",
-          "Rosario Murillo",
-          "Jimmy Antonio Domínguez",
-          "Domínguez Urbina"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
         ]
       }
     },
@@ -6053,7 +4940,6 @@
       "slug": "investigan-muerte-de-mujer-hallada-en-hotel-de-nueva-guinea",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -6065,7 +4951,7 @@
         "provisionalesSinFuente": 2,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 1,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Nueva Guinea",
@@ -6084,7 +4970,6 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -6293,7 +5178,6 @@
       "slug": "hallan-sin-vida-a-dos-personas-en-distintos-puntos-de-rivas",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -6305,7 +5189,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "La Policía Nacional",
@@ -6319,7 +5203,6 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -6479,7 +5362,6 @@
       "slug": "madrugada-tragica-en-matagalpa-tras-presunto-robo-de",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -6491,7 +5373,7 @@
         "provisionalesSinFuente": 2,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "San Ramón",
@@ -6509,7 +5391,6 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -6519,7 +5400,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -6531,7 +5411,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Los Ángeles Martínez",
@@ -6553,7 +5433,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -6624,7 +5503,6 @@
       "slug": "fin-de-semana-deja-muertos-y-lesionados-en-varios-accidentes",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -6636,7 +5514,7 @@
         "provisionalesSinFuente": 3,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Nueva Segovia",
@@ -6659,7 +5537,6 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -6808,7 +5685,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "ATTRIBUTION_MISSING"
       ],
       "diagnostico": {
@@ -6820,7 +5696,7 @@
         "provisionalesSinFuente": 0,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "NO",
         "entidadesIdentificables": [
           "Campeonato Nacional",
@@ -6830,8 +5706,7 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-          "referencia temporal (fecha o día)"
+          "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
         ]
       }
     },
@@ -7114,7 +5989,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "ATTRIBUTION_MISSING"
       ],
       "diagnostico": {
@@ -7126,7 +6000,7 @@
         "provisionalesSinFuente": 0,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Víctor Gutiérrez",
@@ -7139,8 +6013,7 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-          "referencia temporal (fecha o día)"
+          "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
         ]
       }
     },
@@ -7171,37 +6044,6 @@
           "Muay Thai",
           "Copa Fuenlabrada",
           "El Sanda",
-          "Nicaragua Informate"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "sepultan-a-nina-de-4-anos-investigan-muerte-en",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Sepultan a niña de 4 años; investigan muerte en Ticuantepe — Sepultan a niña de 4 años; investigan muerte en Ticuantepe",
-        "afirmaciones": 29,
-        "atribuidas": 1,
-        "conFuenteNombrada": 0,
-        "provisionales": 1,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Denis Larios",
-          "Medicina Legal",
-          "Angélica María Mairena",
           "Nicaragua Informate"
         ],
         "fuentesDetectadas": [],
@@ -7254,37 +6096,6 @@
       }
     },
     {
-      "slug": "lluvias-socavan-cauce-en-managua-y-ponen-viviendas-en-riesgo",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Lluvias socavan cauce en Managua y ponen viviendas en riesgo — Lluvias socavan cauce en Managua y ponen viviendas en riesgo",
-        "afirmaciones": 35,
-        "atribuidas": 6,
-        "conFuenteNombrada": 0,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 1,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "La Pista Héroes",
-          "Enrique Smith",
-          "Enel Central",
-          "La Pista Hér"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "rosita-nicaragua-lagunas-turismo-cultura",
       "nivel": "BAJA",
       "factores": [
@@ -7331,7 +6142,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "ATTRIBUTION_MISSING"
       ],
       "diagnostico": {
@@ -7343,7 +6153,7 @@
         "provisionalesSinFuente": 0,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Nuevas Victorias Germán"
@@ -7351,37 +6161,7 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "terremoto-de-7-1-deja-muertos-desaparecidos-y-caos-en-japon",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón — Terremoto de 7.1 deja muertos, desaparecidos y caos en Japón",
-        "afirmaciones": 25,
-        "atribuidas": 4,
-        "conFuenteNombrada": 1,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "NO",
-        "entidadesIdentificables": [
-          "Las Fuerzas"
-        ],
-        "fuentesDetectadas": [
-          "Gobierno"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)",
-          "ubicación del hecho"
+          "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
         ]
       }
     },
@@ -7626,7 +6406,6 @@
       "slug": "hijo-es-senalado-por-muerte-violenta-de-su-padre-en-somotillo",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -7638,7 +6417,7 @@
         "provisionalesSinFuente": 3,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 1,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Andrés Escobar Peralta",
@@ -7653,7 +6432,6 @@
           "Policía Nacional"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -7700,7 +6478,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "ATTRIBUTION_MISSING"
       ],
       "diagnostico": {
@@ -7712,7 +6489,7 @@
         "provisionalesSinFuente": 0,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Villa El Carmen",
@@ -7728,8 +6505,7 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-          "referencia temporal (fecha o día)"
+          "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
         ]
       }
     },
@@ -8219,44 +6995,6 @@
       }
     },
     {
-      "slug": "camioneta-impacta-dos-motos-en-managua-y-deja-tres-lesionados",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Camioneta impacta dos motos en Managua y deja tres lesionados — Camioneta impacta dos motos en Managua y deja tres lesionados",
-        "afirmaciones": 27,
-        "atribuidas": 6,
-        "conFuenteNombrada": 2,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Cruz Blanca Nicarag",
-          "Hospital Escuela Dr",
-          "Manolo Morales Peralta",
-          "Mercado Roberto Huembes",
-          "La Policía",
-          "Policía Nacional",
-          "Hospital Infantil Manuel",
-          "Jesús Rivera",
-          "La Mascota",
-          "Barrio Ariel Darce"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional",
-          "Bomberos"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "ejercito-retiene-a-cinco-personas-y-ocupa-11-semovientes",
       "nivel": "BAJA",
       "factores": [
@@ -8341,7 +7079,6 @@
       "slug": "dos-sismos-en-39-segundos-sacuden-venezuela-y-caracas",
       "nivel": "BAJA",
       "factores": [
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -8353,7 +7090,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "NO",
         "entidadesIdentificables": [
           "El Servicio Geológico",
@@ -8371,7 +7108,6 @@
           "AFP"
         ],
         "queFalta": [
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -8413,7 +7149,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -8425,7 +7160,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 1,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Costa Rica",
@@ -8442,7 +7177,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -8477,48 +7211,6 @@
         ],
         "queFalta": [
           "fuente para las afirmaciones provisionales"
-        ]
-      }
-    },
-    {
-      "slug": "estudiante-de-13-anos-muere-tras-golpe-en-escuela-de-diriomo",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Estudiante de 13 años resulta afectado tras golpe en escuela de… — Estudiante de 13 años resulta afectado tras golpe en escuela de…",
-        "afirmaciones": 45,
-        "atribuidas": 9,
-        "conFuenteNombrada": 2,
-        "provisionales": 1,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Santa Juana",
-          "Escuela Benito Juárez",
-          "San Antonio",
-          "Las Fuerzas Policiales",
-          "Medicina Legal",
-          "Hospital Primario Tepeyac",
-          "El Hospital Primario",
-          "Nicaragua Pareja",
-          "Ciudad Antigua",
-          "Policía Nacional",
-          "Cruz Roja",
-          "Cruz Blanca",
-          "Bomberos Unidos",
-          "Nicaragua Informate"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional",
-          "Bomberos"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
         ]
       }
     },
@@ -8632,79 +7324,10 @@
       }
     },
     {
-      "slug": "nicaraguense-muere-en-ataque-en-canovanas-puerto-rico",
-      "nivel": "BAJA",
-      "factores": [
-        "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico — Nicaragüense resulta afectado en ataque en Canóvanas, Puerto Rico",
-        "afirmaciones": 23,
-        "atribuidas": 5,
-        "conFuenteNombrada": 0,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 1,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Puerto Rico",
-          "Doneth Garth Durán",
-          "Caribe Sur",
-          "Monte Verde",
-          "San Isidro",
-          "Investigaciones Criminales",
-          "El Cuerpo",
-          "La Policía",
-          "Ciencias Forenses"
-        ],
-        "fuentesDetectadas": [],
-        "queFalta": [
-          "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
-      "slug": "hallan-sin-vida-a-profesor-desaparecido-en-cementerio-de-boaco",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Hallan sin vida a profesor desaparecido en cementerio de Boaco — Hallan sin vida a profesor desaparecido en cementerio de Boaco",
-        "afirmaciones": 22,
-        "atribuidas": 4,
-        "conFuenteNombrada": 1,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Luis Manuel Miranda",
-          "Villa Sacuanjoche",
-          "San Lorenzo",
-          "Policía Nacional",
-          "La Policía"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
-        ]
-      }
-    },
-    {
       "slug": "nicaraguenses-mueren-en-hechos-violentos-registrados-en-costa-rica",
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "PROVISIONAL_CLAIM"
       ],
       "diagnostico": {
@@ -8716,7 +7339,7 @@
         "provisionalesSinFuente": 1,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 1,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Costa Rica",
@@ -8738,7 +7361,6 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "referencia temporal (fecha o día)",
           "fuente para las afirmaciones provisionales"
         ]
       }
@@ -9166,8 +7788,7 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "ATTRIBUTION_MISSING",
-        "ENTITY_UNVERIFIED"
+        "ATTRIBUTION_MISSING"
       ],
       "diagnostico": {
         "afirmacionPrincipal": "Perros robóticos reforzarán seguridad en centro FIFA — Perros robóticos reforzarán seguridad en centro FIFA",
@@ -9236,7 +7857,6 @@
       "nivel": "BAJA",
       "factores": [
         "SOURCE_MISSING",
-        "TEMPORAL_CONTEXT_MISSING",
         "ATTRIBUTION_MISSING"
       ],
       "diagnostico": {
@@ -9248,7 +7868,7 @@
         "provisionalesSinFuente": 0,
         "provisionalesPresentadasComoHecho": 0,
         "noDisponibles": 0,
-        "tieneFecha": "NO",
+        "tieneFecha": "YES",
         "tieneUbicacion": "YES",
         "entidadesIdentificables": [
           "Campeonato Germán Pomares",
@@ -9264,8 +7884,7 @@
         "fuentesDetectadas": [],
         "queFalta": [
           "nombrar la fuente institucional o periodística",
-          "atribuir afirmaciones clave (según/informó/confirmó + fuente)",
-          "referencia temporal (fecha o día)"
+          "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
         ]
       }
     },
@@ -9459,42 +8078,6 @@
         "queFalta": [
           "nombrar la fuente institucional o periodística",
           "atribuir afirmaciones clave (según/informó/confirmó + fuente)"
-        ]
-      }
-    },
-    {
-      "slug": "investigan-hallazgo-de-dos-cuerpos-y-desaparicion-por-lluvias",
-      "nivel": "BAJA",
-      "factores": [
-        "TEMPORAL_CONTEXT_MISSING"
-      ],
-      "diagnostico": {
-        "afirmacionPrincipal": "Investigan hallazgo de dos cuerpos y desaparición por lluvias — Investigan hallazgo de dos cuerpos y desaparición por lluvias",
-        "afirmaciones": 26,
-        "atribuidas": 8,
-        "conFuenteNombrada": 1,
-        "provisionales": 0,
-        "provisionalesSinFuente": 0,
-        "provisionalesPresentadasComoHecho": 0,
-        "noDisponibles": 0,
-        "tieneFecha": "NO",
-        "tieneUbicacion": "YES",
-        "entidadesIdentificables": [
-          "Policía Nacional",
-          "Medicina Legal",
-          "Caribe Norte",
-          "El Salto",
-          "San Rafael",
-          "Pedro Joaquín Chamorro",
-          "Narciso Eusebio Tercero",
-          "Aguas Calientes",
-          "Nicaragua Infórmate"
-        ],
-        "fuentesDetectadas": [
-          "Policía Nacional"
-        ],
-        "queFalta": [
-          "referencia temporal (fecha o día)"
         ]
       }
     },
