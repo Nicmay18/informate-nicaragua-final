@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { unstable_cache } from 'next/cache';
 import { getAdminDb } from '@/lib/firebase-admin';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: { absolute: 'NIOS | Performance' },
 };
@@ -136,22 +138,22 @@ export default async function NiosPerformancePage() {
       <h1 className="text-2xl font-bold mb-6">Performance de NIOS</h1>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className={`rounded-lg p-4 border ${levelColor(data.health.level)}`}>
+        <div className={`rounded-lg p-4 border ${levelColor(data.health?.level ?? '')}`}>
           <div className="text-sm font-medium uppercase opacity-70">Health Score</div>
-          <div className="text-4xl font-bold">{data.health.score}</div>
-          <div className="text-sm font-semibold">{data.health.level}</div>
+          <div className="text-4xl font-bold">{data.health?.score ?? '—'}</div>
+          <div className="text-sm font-semibold">{data.health?.level ?? 'SIN DATOS'}</div>
         </div>
 
         <div className="rounded-lg p-4 border bg-white">
           <div className="text-sm font-medium uppercase text-gray-500">Duración pipeline</div>
-          <div className="text-4xl font-bold text-gray-900">{(data.totalDuration / 1000).toFixed(1)}s</div>
-          <div className="text-sm text-gray-600">{data.totalDuration} ms</div>
+          <div className="text-4xl font-bold text-gray-900">{((data.totalDuration ?? 0) / 1000).toFixed(1)}s</div>
+          <div className="text-sm text-gray-600">{data.totalDuration ?? 0} ms</div>
         </div>
 
         <div className="rounded-lg p-4 border bg-white">
           <div className="text-sm font-medium uppercase text-gray-500">Operaciones Firestore</div>
-          <div className="text-4xl font-bold text-gray-900">{data.firestore.reads + data.firestore.writes}</div>
-          <div className="text-sm text-gray-600">{data.firestore.reads} lecturas · {data.firestore.writes} escrituras</div>
+          <div className="text-4xl font-bold text-gray-900">{(data.firestore?.reads ?? 0) + (data.firestore?.writes ?? 0)}</div>
+          <div className="text-sm text-gray-600">{data.firestore?.reads ?? 0} lecturas · {data.firestore?.writes ?? 0} escrituras</div>
         </div>
       </section>
 
@@ -167,7 +169,7 @@ export default async function NiosPerformancePage() {
               </tr>
             </thead>
             <tbody>
-              {data.slowestModules.map((m) => (
+              {(data.slowestModules ?? []).map((m) => (
                 <tr key={m.name} className="border-t">
                   <td className="p-3 font-medium">{m.name}</td>
                   <td className="p-3 text-right">{m.durationMs}</td>
@@ -181,22 +183,22 @@ export default async function NiosPerformancePage() {
         </div>
       </section>
 
-      {data.failedModules.length > 0 && (
+      {(data.failedModules?.length ?? 0) > 0 && (
         <section className="mb-8">
           <h2 className="text-lg font-semibold mb-3 text-red-700">Módulos con error</h2>
           <ul className="list-disc pl-5 text-red-700">
-            {data.failedModules.map((m) => (
+            {(data.failedModules ?? []).map((m) => (
               <li key={m.name}>{m.name}</li>
             ))}
           </ul>
         </section>
       )}
 
-      {data.health.warnings.length > 0 && (
+      {(data.health?.warnings?.length ?? 0) > 0 && (
         <section className="mb-8">
           <h2 className="text-lg font-semibold mb-3">Alertas activas</h2>
           <ul className="list-disc pl-5 text-amber-700">
-            {data.health.warnings.map((w, i) => (
+            {(data.health?.warnings ?? []).map((w, i) => (
               <li key={i}>{w}</li>
             ))}
           </ul>
