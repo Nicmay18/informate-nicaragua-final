@@ -138,4 +138,26 @@ Cobertura nueva: cambio técnico permitido · sustantivo → reeval · bloqueado
 
 ## 8. Deploy / Smoke tests
 
-_Pendiente — se completa tras commit + deploy en esta misma fase._
+**Commit:** `b4ad0a67` → master (pusheado a GitHub)
+**Deploy:** Vercel production — `informate-nicaragua-nextjs-5tzrx7xo7` → aliased a `https://nicaraguainformate.com` (build remoto PASS)
+
+### Smoke tests (producción)
+
+| Verificación | Resultado |
+|---|---|
+| `GET /` | 200 |
+| `GET /noticias` | 200 |
+| `GET /feed.xml` | 200 |
+| `GET /sitemap.xml` | 200 |
+| `GET /noticias/[slug]` (artículo real) | 200 |
+| `POST /api/expandir-7` sin auth | **401** (antes: público) |
+| `POST /api/clean-seo` sin auth | **401** (antes: público) |
+| `POST /api/admin/enrich-links` sin auth | 401 |
+| `POST /api/admin/enrich-strong` sin auth | 401 |
+| `POST /api/admin/clean-backlog` sin auth | 401 |
+| `POST /api/admin/limpiar-sucesos` sin auth | 401 |
+| `POST /api/admin/guardar-directo` sin auth | 401 |
+| `POST /api/admin/news` sin auth | 401 |
+| `POST /api/articles` sin auth | 401 |
+
+La invariante queda garantizada: ningún mutador sustantivo puede escribir `contenido`/`titulo`/`resumen`/`categoria`/`autor` sin pasar por content-integrity → MENI → Supervisor, y ninguna vía técnica puede activar `publicado` sin aprobación vigente verificada por `contentHash`.
