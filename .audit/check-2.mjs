@@ -1,0 +1,11 @@
+import { readFileSync } from 'fs';
+const env = Object.fromEntries(readFileSync('.env.local','utf8').split('\n').filter(l=>l.includes('=')&&!l.startsWith('#')).map(l=>{const i=l.indexOf('=');return[l.slice(0,i).trim(),l.slice(i+1).trim().replace(/^"|"$/g,'')];}));
+const { initializeApp, cert } = await import('firebase-admin/app');
+const { getFirestore } = await import('firebase-admin/firestore');
+const db = getFirestore(initializeApp({credential: cert(JSON.parse(Buffer.from(env.FIREBASE_SERVICE_ACCOUNT_BASE64,'base64').toString('utf8')))}));
+const d1=(await db.collection('noticias').doc('9xCHaZO7JEwhyRpdHHJY').get()).data();
+const t1=String(d1.contenido);
+for(const m of t1.matchAll(/.{60}residente local.{120}/gis))console.log('9xCH: ...'+m[0]+'...\n---');
+const d2=(await db.collection('noticias').doc('AQiSAE7CeGLS9n5AvpzG').get()).data();
+console.log('AQiS: '+d2.titulo+' | publicado='+d2.publicado+' | creado='+JSON.stringify(d2.fechaPublicacion||d2.creadoEn||d2.fecha||''));
+for(const m of String(d2.contenido).matchAll(/.{50}motocicletaciclet\w*.{60}/gis))console.log('  ...'+m[0].replace(/<[^>]+>/g,' ')+'...');

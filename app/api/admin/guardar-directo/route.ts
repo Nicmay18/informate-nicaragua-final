@@ -7,6 +7,7 @@ import type { NoticiaInput } from '@/lib/meni';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { categoryToSlug } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { findGenerationDefects } from '@/lib/editorial/content-integrity';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 
@@ -88,6 +89,17 @@ export async function POST(request: NextRequest) {
       ? String(autoKeywordsDespues).split(',').map((k: string) => k.trim()).filter(Boolean)
       : (body.palabrasClave || []);
     const metaGenerada = finalResumen.length >= 120 ? finalResumen : meni.seo.metaDescripcion;
+
+    // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline
+    const contentDefects = findGenerationDefects([finalTitulo, finalResumen, finalContenido].join('\n'));
+    if (contentDefects.length > 0) {
+      logger.error('[guardar-directo] Contenido rechazado por defectos de generación:', { id, defects: contentDefects.map(d => d.code) });
+      return NextResponse.json({
+        error: 'Contenido rechazado: defectos mecánicos de generación detectados',
+        code: 'CONTENT_INTEGRITY_VIOLATION',
+        defects: contentDefects,
+      }, { status: 400 });
+    }
 
     // BLOQUEO si no pasa filtros criticos
     if (!meniOk) {

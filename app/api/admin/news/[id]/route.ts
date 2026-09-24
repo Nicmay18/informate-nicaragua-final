@@ -10,6 +10,7 @@ import { categoryToSlug } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { findGenerationDefects } from '@/lib/editorial/content-integrity';
 import { logger } from '@/lib/logger';
 
 function isAuthorized(request: NextRequest): boolean {
@@ -36,6 +37,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const alreadyApproved = snap.data()?.aprobadoMeni === true;
 
     if (contentChanged) {
+      // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline
+      const contentDefects = findGenerationDefects([body.titulo, body.resumen, body.contenido].filter(Boolean).join('\n'));
+      if (contentDefects.length > 0) {
+        logger.error('[admin/news PUT] Contenido rechazado por defectos de generación:', { id, defects: contentDefects.map(d => d.code) });
+        return NextResponse.json({
+          success: false,
+          error: 'Contenido rechazado: defectos mecánicos de generación detectados',
+          code: 'CONTENT_INTEGRITY_VIOLATION',
+          defects: contentDefects,
+        }, { status: 400 });
+      }
+
       // Re-evaluar con MENI canonico
       const existingData = snap.data()!;
       const noticiaInput: NoticiaInput = {

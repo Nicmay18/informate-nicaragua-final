@@ -7,6 +7,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
 import { categoryToSlug } from '@/lib/types';
+import { findGenerationDefects } from '@/lib/editorial/content-integrity';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -170,6 +171,18 @@ export async function POST(request: NextRequest) {
 
     if (!titulo || !resumen || !contenido || !categoria) {
       return NextResponse.json({ success: false, error: 'Faltan campos requeridos' }, { status: 400 });
+    }
+
+    // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline
+    const contentDefects = findGenerationDefects([titulo, resumen, contenido].join('\n'));
+    if (contentDefects.length > 0) {
+      logger.error('[admin/news POST] Contenido rechazado por defectos de generación:', { defects: contentDefects.map(d => d.code) });
+      return NextResponse.json({
+        success: false,
+        error: 'Contenido rechazado: defectos mecánicos de generación detectados',
+        code: 'CONTENT_INTEGRITY_VIOLATION',
+        defects: contentDefects,
+      }, { status: 400 });
     }
 
     const tituloLimpio = normalizarTitulo(titulo);

@@ -1,0 +1,75 @@
+[
+  {
+    "id": "81UQk1YkWPpF7BzIdaDo",
+    "titulo": "Dos nicaragüenses resultan afectados en accidentes ocurridos en…",
+    "changes": [
+      "quote_block x1"
+    ]
+  },
+  {
+    "id": "9xCHaZO7JEwhyRpdHHJY",
+    "titulo": "Dos hombres resultan afectados por descargas eléctricas en…",
+    "changes": [
+      "quote_block x1",
+      "li_fixed:accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte"
+    ]
+  },
+  {
+    "id": "eHwPppvuoey1DpRCh7cc",
+    "titulo": "México, EE. UU. y Países Bajos clasifican al Mundial 2026",
+    "changes": [
+      "quote_block x1"
+    ]
+  },
+  {
+    "id": "kR3waCnxVDfMfVCV8sAH",
+    "titulo": "Nicaragua gana oro en relevos mixtos 4x100 en Managua",
+    "changes": [
+      "quote_block x1"
+    ]
+  },
+  {
+    "id": "ku8tzMdLM3030JgD5B8K",
+    "titulo": "Mirador San Francisco de Asís dinamiza turismo en Carretera Norte",
+    "changes": [
+      "quote_block x1"
+    ]
+  },
+  {
+    "id": "pMXu8KvKsz9gJzg0U9bf",
+    "titulo": "Béisbol sigue siendo deporte favorito de nicaragüenses en 2026",
+    "changes": [
+      "quote_block x1"
+    ]
+  },
+  {
+    "id": "xaEUqIpn5aFqjar7b4nv",
+    "titulo": "Mundial 2026 rompe récord de expulsiones en fase inicial",
+    "changes": [
+      "quote_block x2",
+      "quote_block x2"
+    ]
+  },
+  {
+    "id": "EFBlqTZDTyDbFC4PRZ0c",
+    "titulo": "Tres ataques de pitbull en Nicaragua dejan tres afectados",
+    "changes": [
+      "li_fixed:accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte"
+    ]
+  },
+  {
+    "id": "gXTkMry6uueR9BxXcTdF",
+    "titulo": "Dos afectados tras naufragio de panga en Krukira",
+    "changes": [
+      "li_fixed:accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte"
+    ]
+  },
+  {
+    "id": "v0gwsceiaZQeNSLPHmee",
+    "titulo": "Nicaragüenses resultan afectados en hechos graves registrados…",
+    "changes": [
+      "li_fixed:cuatro-nicaraguenses-mueren-en-el-exterior-en-menos-de-una",
+      "trunc_uni->unidos"
+    ]
+  }
+]
