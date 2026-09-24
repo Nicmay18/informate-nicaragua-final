@@ -4,6 +4,7 @@ import CategoryPagePro from '@/components/CategoryPagePro';
 import PaginationWrapper from '@/components/PaginationWrapper';
 import { getCategoryPaginated, getCategoryCount, PAGE_SIZE } from '@/lib/data';
 import { slugToCategory, categoryToSlug } from '@/lib/types';
+import { resolvePage } from '@/lib/pagination';
 import type { Noticia } from '@/lib/types';
 import { logger } from '@/lib/logger';
 
@@ -96,7 +97,6 @@ export default async function CategoriaPage({
 }) {
   const { slug } = await params;
   const sp = await (searchParams ?? Promise.resolve({} as { page?: string }));
-  const page = Math.max(1, parseInt(sp.page ?? '1', 10) || 1);
   const slugLower = slug.toLowerCase();
   const slugNormalized = categoryToSlug(slug);
   const catName = slugToCategory(slugNormalized);
@@ -107,20 +107,27 @@ export default async function CategoriaPage({
     permanentRedirect(`/categoria/${canonicalSlug}`);
   }
 
-  let noticias: Noticia[] = [];
+  // Política única de paginación: página inválida o fuera de rango → 404.
   let totalCount = 0;
   try {
-    [noticias, totalCount] = await Promise.all([
-      getCategoryPaginated(catName, page, PAGE_SIZE),
-      getCategoryCount(catName),
-    ]);
+    totalCount = await getCategoryCount(catName);
+  } catch (error) {
+    logger.error('[CategoriaPage] getCategoryCount error:', error);
+    notFound();
+  }
+
+  const resolution = resolvePage(sp.page, totalCount, PAGE_SIZE);
+  if (resolution.status === 'not_found') notFound();
+  const currentPage = resolution.page;
+  const totalPages = resolution.totalPages;
+
+  let noticias: Noticia[] = [];
+  try {
+    noticias = await getCategoryPaginated(catName, currentPage, PAGE_SIZE);
   } catch (error) {
     logger.error('[CategoriaPage] Error:', error);
     notFound();
   }
-
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
 
   return (
     <PaginationWrapper

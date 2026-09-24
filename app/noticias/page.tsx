@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { getNewsPaginated, getNewsCount, PAGE_SIZE } from '@/lib/data';
 import { categoryToSlug, slugToCategory } from '@/lib/types';
+import { resolvePage } from '@/lib/pagination';
 import type { Noticia } from '@/lib/types';
 import PaginationWrapper from '@/components/PaginationWrapper';
 import NoticiasList from '@/components/NoticiasList';
@@ -73,21 +74,26 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
     notFound();
   }
 
-  const page = Math.max(1, parseInt(params.page || '1', 10) || 1);
-
-  let noticias: Noticia[] = [];
+  // Política única de paginación: página inválida o fuera de rango → 404
+  // (nunca servir otra página ni una lista vacía con 200).
   let totalCount = 0;
   try {
-    [noticias, totalCount] = await Promise.all([
-      getNewsPaginated(page, PAGE_SIZE),
-      getNewsCount(),
-    ]);
+    totalCount = await getNewsCount();
+  } catch (error) {
+    logger.error('[NoticiasPage] getNewsCount error:', error);
+  }
+
+  const resolution = resolvePage(params.page, totalCount, PAGE_SIZE);
+  if (resolution.status === 'not_found') notFound();
+  const currentPage = resolution.page;
+  const totalPages = resolution.totalPages;
+
+  let noticias: Noticia[] = [];
+  try {
+    noticias = await getNewsPaginated(currentPage, PAGE_SIZE);
   } catch (error) {
     logger.error('[NoticiasPage] Error:', error);
   }
-
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
 
   return (
     <>

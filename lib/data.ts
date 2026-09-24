@@ -7,6 +7,14 @@ import { getEditorialDecision, isPublicArticle, resolvePublicCategory, shouldInd
 import { cleanArticleBody } from './sanitize';
 import { isToxicSlug } from './seo-toxic';
 
+/** Todas las sub-queries de Firestore fallaron: es un apagón, no un corpus vacío. */
+export class FirestoreOutageError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'FirestoreOutageError';
+  }
+}
+
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
 const MAX_COUNT = 500;
@@ -221,10 +229,18 @@ async function fetchPublishedDocs(fields: string[], fetchLimit: number, categori
     return q;
   };
 
+  // ERROR ≠ EMPTY: un query que falla NO significa "no hay documentos".
+  // Se registra cada error y, si TODAS las sub-queries fallan, se lanza —
+  // el caller puede distinguir "corpus vacío" de "Firestore caído".
+  let queryErrors = 0;
+  let queriesRun = 0;
   const safeGet = async (label: string, q: any): Promise<QueryDocumentSnapshot[]> => {
+    queriesRun++;
     try {
       return (await q.get()).docs;
     } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
+      queryErrors++;
       logger.warn(`[data.ts] query ${label} falló:`, err instanceof Error ? err.message : String(err));
       return [];
     }
@@ -259,6 +275,11 @@ async function fetchPublishedDocs(fields: string[], fetchLimit: number, categori
 
   const merged = new Map<string, QueryDocumentSnapshot>();
   for (const d of [...tsDocs, ...stringDocs, ...publishedAtDocs]) merged.set(d.id, d);
+
+  // Si todas las queries fallaron, un resultado vacío es ERROR — no EMPTY.
+  if (merged.size === 0 && queryErrors > 0 && queryErrors >= queriesRun) {
+    throw new FirestoreOutageError(`[data.ts] fetchPublishedDocs: ${queryErrors}/${queriesRun} queries fallaron — Firestore no disponible, no corpus vacío`);
+  }
   // Reordenar por fecha canónica: el orden de Firestore por tipo mixto no es
   // cronológico, y los callers asumen el pool ordenado antes de hacer slice.
   return Array.from(merged.values()).sort(
@@ -289,6 +310,7 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
     );
     return sorted.slice(0, limit);
   } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
     logger.error('[data.ts] fetchNoticiasList error:', err instanceof Error ? err.message : String(err));
     return [];
   }
@@ -318,6 +340,7 @@ export async function getNewsByCategory(categoria: string, count: number = DEFAU
       new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
     ).slice(0, validatedCount);
   } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
     logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
     return [];
   }
@@ -354,6 +377,7 @@ const _cachedGetMasLeidas = unstable_cache(
       }
       return noticias.slice(0, count);
     } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
       logger.error('[data.ts] getMasLeidas error:', err instanceof Error ? err.message : String(err));
       return [];
     }
@@ -460,6 +484,7 @@ const _cachedGetBySlug = unstable_cache(
         return noticia;
       }
     } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
       logger.error('[data.ts] getNewsBySlug error:', err instanceof Error ? err.message : String(err));
     }
     return null;
@@ -501,6 +526,7 @@ export async function getAllSlugs(): Promise<string[]> {
       })
       .filter(Boolean) as string[];
   } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
     logger.error('[data.ts] getAllSlugs error:', err instanceof Error ? err.message : String(err));
     return [];
   }
@@ -546,6 +572,7 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(0, validatedCount);
   } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
     logger.error('[data.ts] getRelatedNews error:', err instanceof Error ? err.message : String(err));
     // Fallback al método anterior si el índice no existe
     try {
@@ -569,7 +596,7 @@ const _cachedGetNewsPaginated = unstable_cache(
   async (page: number, pageSize: number): Promise<Noticia[]> => {
     const offset = (page - 1) * pageSize;
     // Traer más para compensar el filtro isPublicNews
-    const fetchLimit = Math.min(offset + pageSize * 3, 300);
+    const fetchLimit = offset + pageSize * 4;
     const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit);
 
     return docs.map(mapDocToNoticia)
@@ -587,6 +614,7 @@ export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE
   try {
     return await _cachedGetNewsPaginated(validatedPage, validatedPageSize);
   } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
     logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
     return [];
   }
@@ -602,6 +630,7 @@ export async function getNewsCount(): Promise<number> {
       .get();
     return countSnap.data().count;
   } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
     logger.warn('[data.ts] getNewsCount count() falló, usando get():', err instanceof Error ? err.message : String(err));
     try {
       const { adminDb } = await import('./firebase-admin');
@@ -613,6 +642,7 @@ export async function getNewsCount(): Promise<number> {
         .get();
       return snap.size;
     } catch (err2) {
+      if (err2 instanceof FirestoreOutageError) throw err2;
       logger.error('[data.ts] getNewsCount error:', err2 instanceof Error ? err2.message : String(err2));
       return 0;
     }
@@ -622,7 +652,7 @@ export async function getNewsCount(): Promise<number> {
 const _cachedGetCategoryPaginated = unstable_cache(
   async (categoria: string, page: number, pageSize: number): Promise<Noticia[]> => {
     const offset = (page - 1) * pageSize;
-    const fetchLimit = Math.min(offset + pageSize * 3, 300);
+    const fetchLimit = offset + pageSize * 4;
     const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
 
     return docs.map(mapDocToNoticia)
@@ -640,6 +670,7 @@ export async function getCategoryPaginated(categoria: string, page: number = 1, 
   try {
     return await _cachedGetCategoryPaginated(categoria, validatedPage, validatedPageSize);
   } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
     logger.error(`[data.ts] getCategoryPaginated error ${categoria}:`, err instanceof Error ? err.message : String(err));
     return [];
   }
@@ -656,6 +687,7 @@ export async function getCategoryCount(categoria: string): Promise<number> {
       .get();
     return countSnap.data().count;
   } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
     logger.warn(`[data.ts] getCategoryCount count() falló para ${categoria}, usando get():`, err instanceof Error ? err.message : String(err));
     try {
       const { adminDb } = await import('./firebase-admin');
@@ -668,6 +700,7 @@ export async function getCategoryCount(categoria: string): Promise<number> {
         .get();
       return snap.size;
     } catch (err2) {
+      if (err2 instanceof FirestoreOutageError) throw err2;
       logger.error(`[data.ts] getCategoryCount error ${categoria}:`, err2 instanceof Error ? err2.message : String(err2));
       return 0;
     }
@@ -739,6 +772,7 @@ const _cachedGetSitemapNews = unstable_cache(
         })
         .filter(Boolean) as Noticia[];
     } catch (err) {
+    if (err instanceof FirestoreOutageError) throw err;
       logger.error('[data.ts] getSitemapNews error:', err instanceof Error ? err.message : String(err));
       return [];
     }
