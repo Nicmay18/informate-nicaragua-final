@@ -6,8 +6,8 @@ export const dynamic = 'force-dynamic';
 
 /**
  * POST /api/admin/session
- * Verifica el Firebase ID token del usuario y devuelve el ADMIN_API_KEY
- * para autenticación automática del panel sin pegar tokens manualmente.
+ * Verifica el Firebase ID token del usuario y fija una cookie HttpOnly
+ * para autenticación del panel. La clave nunca viaja al JS del navegador.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -63,7 +63,6 @@ export async function POST(request: NextRequest) {
 
     const response = NextResponse.json({
       success: true,
-      token: apiKey,
       email: decoded.email,
     });
     response.headers.set('Set-Cookie', cookieOptions);

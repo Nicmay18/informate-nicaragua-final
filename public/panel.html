@@ -3577,8 +3577,11 @@ sin texto ni marcas de agua, composición periodística"
           body: JSON.stringify({ idToken })
         });
         const data = await res.json();
-        if (res.ok && data.token) {
-          localStorage.setItem('admin_api_key', data.token);
+        if (res.ok && (data.success || data.token)) {
+          // La sesión usa cookie HttpOnly (no exponer la clave al JS).
+          // Marcador local para no repetir el fetch; los headers vacíos
+          // son ignorados por el middleware, que valida la cookie.
+          localStorage.setItem('admin_api_key', data.token || 'session-cookie');
           showToast('Autenticación admin activada automáticamente', 'success');
         } else if (res.status === 403) {
           showToast('Tu email (' + user.email + ') no está autorizado. Agregalo en ADMIN_EMAILS en Vercel.', 'error', 'Acceso denegado');

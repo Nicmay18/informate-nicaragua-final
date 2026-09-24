@@ -80,7 +80,11 @@ function isSensitiveApiPath(pathname: string): boolean {
 }
 
 function requireAdminAuth(request: NextRequest): NextResponse | null {
-  const adminToken = request.headers.get('x-admin-token') || request.headers.get('x-admin-key') || '';
+  const adminToken =
+    request.headers.get('x-admin-token') ||
+    request.headers.get('x-admin-key') ||
+    request.cookies.get('admin_session')?.value ||
+    '';
   const cronSecret = request.headers.get('x-cron-secret') || '';
   const validAdminKey = process.env.ADMIN_API_KEY || '';
   const validCronSecret = process.env.CRON_SECRET_TOKEN || process.env.CRON_SECRET || '';
