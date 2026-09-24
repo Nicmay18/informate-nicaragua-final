@@ -70,10 +70,16 @@ export async function loadEntityPage(
   const allRelations = [...relations, ...reverseRelations];
   const relatedEntityIdArr = Array.from(relatedEntityIds);
 
-  // Batch read all related entities in a single call (fixes N+1)
-  const relatedDocs = await db.getAll(
-    ...relatedEntityIdArr.map((id) => db.collection('kb_entities').doc(id))
-  );
+  // Batch read all related entities in a single call (fixes N+1).
+  // Firestore `getAll()` requires at least one document reference; entities
+  // without relations are valid public pages and must simply render with an
+  // empty related-entities section.
+  const relatedDocs =
+    relatedEntityIdArr.length > 0
+      ? await db.getAll(
+          ...relatedEntityIdArr.map((id) => db.collection('kb_entities').doc(id))
+        )
+      : [];
 
   const relatedEntities: Array<{
     entity: KnowledgeEntity;
