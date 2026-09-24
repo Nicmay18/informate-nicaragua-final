@@ -760,7 +760,16 @@ export async function applySafeAutoFixes(
           } as any);
 
           if (data.categoria !== canonical) {
-            await doc.ref.update({ categoria: canonical });
+            // INVARIANTE EDITORIAL: categoria es sustantiva (forma parte del
+            // contentHash). Reclasificación masiva en cron → marca
+            // REVIEW_REQUIRED con provenance, no queda "aparentemente aprobada".
+            const { flagSubstantiveMutation } = await import('@/lib/editorial/mutation-policy');
+            await flagSubstantiveMutation(
+              db,
+              doc.id,
+              { categoria: canonical },
+              { actor: 'supervisor-autofix', reason: `Reclasificación ${data.categoria} → ${canonical}` },
+            );
             fixed++;
             details.push(`Reclasificado "${data.titulo?.substring(0, 40)}" → ${canonical}`);
           }
@@ -781,7 +790,13 @@ export async function applySafeAutoFixes(
             const fechaTs = data.fecha?.toDate
               ? data.fecha
               : Timestamp.fromDate(new Date(data.fecha || Date.now()));
-            await doc.ref.update({ publishedAt: fechaTs });
+            const { applyTechnicalMutation } = await import('@/lib/editorial/mutation-policy');
+            await applyTechnicalMutation(
+              db,
+              doc.id,
+              { publishedAt: fechaTs },
+              { actor: 'supervisor-autofix', reason: 'Backfill publishedAt desde fecha' },
+            );
             fixed++;
             details.push(`publishedAt migrado para "${data.titulo?.substring(0, 40)}"`);
           }
@@ -801,7 +816,13 @@ export async function applySafeAutoFixes(
           const data = doc.data();
           const fecha = data.fecha?.toDate ? data.fecha.toDate() : new Date(data.fecha || 0);
           if (fecha < cutoff) {
-            await doc.ref.update({ estado: 'archivado', archived: true });
+            const { applyTechnicalMutation } = await import('@/lib/editorial/mutation-policy');
+            await applyTechnicalMutation(
+              db,
+              doc.id,
+              { estado: 'archivado', archived: true },
+              { actor: 'supervisor-autofix', reason: 'Borrador abandonado >7d' },
+            );
             fixed++;
             details.push(`Archivado borrador abandonado: "${data.titulo?.substring(0, 40)}"`);
           }

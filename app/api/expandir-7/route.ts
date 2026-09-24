@@ -1,7 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { revalidatePath } from 'next/cache';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { verifyAdminOrCronToken } from '@/lib/auth';
+import { applySubstantiveMutation } from '@/lib/editorial/mutation-policy';
 
 const expansiones: Record<string, string> = {
   'nicaraguense-muere-en-costa-rica-tras-choque-y-fuga-vial':
@@ -20,7 +22,13 @@ const expansiones: Record<string, string> = {
     '<p>Granada y León concentran la mayor oferta hotelera del país, según datos del sector turístico nicaragüense, con una amplia variedad de establecimientos que van desde hostales económicos hasta hoteles boutique y resorts de lujo que atienden tanto al turismo nacional como al extranjero. El crecimiento del sector turístico en Nicaragua responde a múltiples factores, entre ellos la promoción internacional del país como destino cultural, ecológico y de aventura, así como la mejora en la conectividad aérea y terrestre que facilita el desplazamiento de visitantes hacia los principales polos turísticos. El INTUR ha implementado estrategias de promoción en ferias internacionales, ruedas de negocios y campañas digitales que destacan los atractivos de Nicaragua, incluyendo sus colonias históricas, sus reservas naturales, sus playas del Pacífico y del Caribe, y su gastronomía tradicional. El turismo representa una de las fuentes de empleo más importantes para la economía nicaragüense, generando ingresos directos en sectores como hospedaje, alimentación, transporte, artesanías y servicios de guía turístico. Los departamentos de Granada, León, Rivas y la Región Autónoma de la Costa Caribe Sur son los que mayor crecimiento han registrado en términos de llegadas de visitantes y de inversión en infraestructura turística. Sin embargo, el sector enfrenta desafíos como la necesidad de capacitación de personal, la mejora de servicios básicos en zonas turísticas y la implementación de prácticas sostenibles que garanticen la conservación de los recursos naturales y culturales que constituyen el principal atractivo del país para los visitantes extranjeros y nacionales.</p>',
 };
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  // INVARIANTE EDITORIAL: esta ruta inyecta párrafos editoriales en notas
+  // existentes — requiere autenticación (antes era pública).
+  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
+  if (!verifyAdminOrCronToken(token)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
   try {
     const db = getAdminDb();
     const snap = await db.collection('noticias').orderBy('fecha', 'desc').limit(200).get();
@@ -41,8 +49,19 @@ export async function POST() {
         continue;
       }
 
-      const nuevoContenido = contenido + '\n' + parrafo;
-      await db.doc(`noticias/${docSnap.id}`).update({ contenido: sanitizeArticleHtml(nuevoContenido), scoreMeni: null, aprobadoMeni: false });
+      const nuevoContenido = sanitizeArticleHtml(contenido + '\n' + parrafo);
+      // INVARIANTE EDITORIAL: párrafo editorial nuevo = mutación sustantiva.
+      const mutation = await applySubstantiveMutation(
+        db,
+        docSnap.id,
+        { contenido: nuevoContenido },
+        { actor: 'expandir-7', reason: 'Párrafo de contexto editorial' },
+      );
+      if (!mutation.applied) {
+        skipped++;
+        results.push(`BLOCKED: ${slug} (${mutation.code || mutation.error})`);
+        continue;
+      }
       updated++;
       results.push(`OK: ${slug}`);
 

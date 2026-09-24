@@ -32,7 +32,7 @@ export function cleanArticleBody(content: string | undefined | null): string {
 
 const ALLOWED_TAGS = new Set([
   'p', 'br', 'strong', 'b', 'em', 'i', 'u', 's', 'h2', 'h3', 'h4',
-  'ul', 'ol', 'li', 'a', 'blockquote', 'figure', 'figcaption',
+  'ul', 'ol', 'li', 'a', 'blockquote', 'figure', 'figcaption', 'aside',
   'img', 'span', 'div', 'table', 'thead', 'tbody', 'tr', 'td', 'th',
   'video', 'audio', 'source', 'iframe',
 ]);
@@ -69,12 +69,19 @@ const HTML_ENTITY_MAP: Record<string, string> = {
 
 function decodeHtmlEntities(input: string): string {
   return input.replace(/&(?:amp|lt|gt|quot|#39|nbsp|#[0-9]+|#x[0-9a-fA-F]+);/g, (entity) => {
-    if (entity in HTML_ENTITY_MAP) return HTML_ENTITY_MAP[entity];
-    const numMatch = entity.match(/^&#(\d+);$/);
-    if (numMatch) return String.fromCharCode(parseInt(numMatch[1], 10));
-    const hexMatch = entity.match(/^#x([0-9a-fA-F]+);$/);
-    if (hexMatch) return String.fromCharCode(parseInt(hexMatch[1], 16));
-    return entity;
+    let decoded: string = entity;
+    if (entity in HTML_ENTITY_MAP) decoded = HTML_ENTITY_MAP[entity];
+    else {
+      const numMatch = entity.match(/^&#(\d+);$/);
+      if (numMatch) decoded = String.fromCharCode(parseInt(numMatch[1], 10));
+      const hexMatch = entity.match(/^#x([0-9a-fA-F]+);$/);
+      if (hexMatch) decoded = String.fromCharCode(parseInt(hexMatch[1], 16));
+    }
+    // Seguridad: NUNCA reintroducir `<`/`>` literales en nodos de texto —
+    // el output se inserta como HTML y un `<` decodificado se convierte en
+    // markup inyectado (causa de corrupciones tipo `<li>slug">`).
+    if (decoded === '<' || decoded === '>') return entity;
+    return decoded;
   });
 }
 

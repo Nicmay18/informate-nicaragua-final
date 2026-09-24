@@ -1,6 +1,7 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -41,10 +42,9 @@ export async function POST(request: NextRequest) {
 
     const archivadas: Array<{ id: string; titulo: string; fecha: string }> = [];
     const eliminadas: Array<{ id: string; titulo: string; fecha: string }> = [];
-    const batch = db.batch();
     const auditEntries: Array<Record<string, unknown>> = [];
 
-    snap.docs.forEach((doc) => {
+    for (const doc of snap.docs) {
       const data = doc.data();
       const estado = data.estado || (data.publicado ? 'publicado' : 'borrador');
       const wasPublished = data.publicado === true || estado === 'publicado';
@@ -55,17 +55,23 @@ export async function POST(request: NextRequest) {
       };
 
       if (wasPublished) {
-        // Soft-delete: archivar, no eliminar
-        batch.update(doc.ref, {
-          estado: 'archivado',
-          archived: true,
-          publicado: false,
-          noindex: true,
-          deletedAt: new Date(),
-          deletedBy: 'eliminar-viejas-cron',
-          deleteReason: 'Archivado automatico por antiguedad (soft-delete)',
-          dateModified: new Date(),
-        });
+        // Soft-delete: archivar, no eliminar. Campos lifecycle → política técnica
+        // (deja provenance en mutationLog además de deletion_audit).
+        await applyTechnicalMutation(
+          db,
+          doc.id,
+          {
+            estado: 'archivado',
+            archived: true,
+            publicado: false,
+            noindex: true,
+            deletedAt: new Date(),
+            deletedBy: 'eliminar-viejas-cron',
+            deleteReason: 'Archivado automatico por antiguedad (soft-delete)',
+            dateModified: new Date(),
+          },
+          { actor: 'eliminar-viejas', reason: 'Archivado automático por antigüedad' },
+        );
         archivadas.push(entry);
         auditEntries.push({
           articleId: doc.id,
@@ -85,7 +91,7 @@ export async function POST(request: NextRequest) {
         });
       } else {
         // Borrador: hard-delete permitido
-        batch.delete(doc.ref);
+        await doc.ref.delete();
         eliminadas.push(entry);
         auditEntries.push({
           articleId: doc.id,
@@ -104,9 +110,7 @@ export async function POST(request: NextRequest) {
           },
         });
       }
-    });
-
-    await batch.commit();
+    }
 
     // Registrar auditoria
     try {

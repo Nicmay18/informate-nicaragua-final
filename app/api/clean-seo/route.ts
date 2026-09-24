@@ -1,7 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { defaultRateLimiter } from '@/lib/rate-limit';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { verifyAdminOrCronToken } from '@/lib/auth';
+import { applySubstantiveMutation } from '@/lib/editorial/mutation-policy';
 
 function cleanContent(content: string): string {
   let cleaned = content;
@@ -31,7 +33,13 @@ function getClientIP(req: Request): string {
   return req.headers.get('x-real-ip') || 'unknown';
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  // INVARIANTE EDITORIAL: esta ruta muta contenido masivamente — requiere
+  // autenticación (antes solo tenía rate-limit).
+  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
+  if (!verifyAdminOrCronToken(token)) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  }
   const ip = getClientIP(request);
   const rate = defaultRateLimiter.check(ip);
   if (!rate.allowed) {
@@ -51,9 +59,17 @@ export async function POST(request: Request) {
       const cleanedContent = cleanContent(content);
 
       if (cleanedContent !== content) {
-        await db.doc(`noticias/${docSnap.id}`).update({ contenido: sanitizeArticleHtml(cleanedContent), scoreMeni: null, aprobadoMeni: false });
-        count++;
-        cleaned.push(data.titulo?.substring(0, 60) || docSnap.id);
+        // INVARIANTE EDITORIAL: remover texto visible = mutación sustantiva.
+        const mutation = await applySubstantiveMutation(
+          db,
+          docSnap.id,
+          { contenido: sanitizeArticleHtml(cleanedContent) },
+          { actor: 'clean-seo', reason: 'Limpieza de boilerplate SEO' },
+        );
+        if (mutation.applied) {
+          count++;
+          cleaned.push(data.titulo?.substring(0, 60) || docSnap.id);
+        }
       }
     }
 

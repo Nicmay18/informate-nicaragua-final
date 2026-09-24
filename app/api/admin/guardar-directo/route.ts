@@ -399,17 +399,23 @@ export async function POST(request: NextRequest) {
           categoria: categoria || 'General',
         });
         if (articleDocId) {
-          await db.collection('noticias').doc(articleDocId).update({
-            confianza: {
-              nivel: trust.nivel,
-              resumen: trust.resumen,
-              requiereRevisionHumana: trust.requiereRevisionHumana,
-              riesgos: trust.riesgos.map(r => r.detail ?? r.text).slice(0, 10),
-              noDisponible: trust.noDisponible.length,
-              fuentes: trust.fuentes,
-              at: new Date().toISOString(),
+          const { applyTechnicalMutation } = await import('@/lib/editorial/mutation-policy');
+          await applyTechnicalMutation(
+            db,
+            articleDocId,
+            {
+              confianza: {
+                nivel: trust.nivel,
+                resumen: trust.resumen,
+                requiereRevisionHumana: trust.requiereRevisionHumana,
+                riesgos: trust.riesgos.map(r => r.detail ?? r.text).slice(0, 10),
+                noDisponible: trust.noDisponible.length,
+                fuentes: trust.fuentes,
+                at: new Date().toISOString(),
+              },
             },
-          });
+            { actor: 'guardar-directo', reason: 'Trust layer post-guardado' },
+          );
         }
       } catch (trustError) {
         logger.warn('[guardar-directo] Trust layer failed (non-blocking):', trustError);

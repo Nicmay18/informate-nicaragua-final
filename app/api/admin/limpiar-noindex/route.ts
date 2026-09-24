@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 
@@ -21,7 +22,12 @@ export async function POST(request: NextRequest) {
     for (const doc of snapshot.docs) {
       const data = doc.data();
       if (data.noindex === true) {
-        await doc.ref.update({ noindex: false });
+        await applyTechnicalMutation(
+          db,
+          doc.id,
+          { noindex: false },
+          { actor: 'limpiar-noindex', reason: 'Remover flag noindex' },
+        );
         limpiadas++;
         afectadas.push({ id: doc.id, titulo: data.titulo || '(sin título)' });
       }

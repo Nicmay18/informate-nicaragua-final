@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
@@ -171,15 +172,17 @@ export async function POST(request: NextRequest) {
     const safeFixes = fixes.filter(isSafeFix);
     const skippedFixes = fixes.filter((f) => !isSafeFix(f));
 
-    const BATCH = 400;
+    // fecha/publishedAt son técnicos (metadata), pero pasan por la política
+    // para dejar provenance en mutationLog.
     let written = 0;
-    for (let i = 0; i < safeFixes.length; i += BATCH) {
-      const batch = db.batch();
-      for (const f of safeFixes.slice(i, i + BATCH)) {
-        batch.update(db.collection('noticias').doc(f.id), f.changes);
-      }
-      await batch.commit();
-      written += Math.min(BATCH, safeFixes.length - i);
+    for (const f of safeFixes) {
+      const r = await applyTechnicalMutation(
+        db,
+        f.id,
+        f.changes,
+        { actor: 'repair-fechas', reason: f.reason },
+      );
+      if (r.applied) written++;
     }
 
     return NextResponse.json({

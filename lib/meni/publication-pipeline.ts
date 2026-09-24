@@ -342,12 +342,15 @@ export async function runPublicationPipeline(input: PipelineInput): Promise<Pipe
     });
   } catch { /* non-blocking */ }
 
-  // 4. Marcar noticia como distribuida
+  // 4. Marcar noticia como distribuida (mutación técnica con provenance)
   try {
-    await db.collection('noticias').doc(input.articleId).update({
-      distribuida: true,
-      fechaDistribucion: new Date().toISOString(),
-    });
+    const { applyTechnicalMutation } = await import('@/lib/editorial/mutation-policy');
+    await applyTechnicalMutation(
+      db,
+      input.articleId,
+      { distribuida: true, fechaDistribucion: new Date().toISOString() },
+      { actor: 'publication-pipeline', reason: 'Distribución completada' },
+    );
   } catch { /* non-blocking */ }
 
   // 5. Analytics + Learning ya se registran en guardar-directo

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { applySubstantiveMutation } from '@/lib/editorial/mutation-policy';
 import { logger } from '@/lib/logger';
 
 export const revalidate = 0;
@@ -136,12 +137,22 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true, message: 'Ya tiene suficientes <strong>', skipped: true });
       }
 
-      await docRef.update({
-        contenido: sanitizeArticleHtml(nuevo),
-        scoreMeni: null,
-        aprobadoMeni: false,
-        fechaActualizacion: new Date(),
-      });
+      // INVARIANTE EDITORIAL: mutación de contenido requiere reevaluación.
+      const mutation = await applySubstantiveMutation(
+        db,
+        noticiaId,
+        { contenido: sanitizeArticleHtml(nuevo) },
+        { actor: 'enrich-strong', reason: `${agregados} negritas en keywords` },
+      );
+      if (!mutation.applied) {
+        return NextResponse.json({
+          success: false,
+          error: `Mutación rechazada por la autoridad editorial: ${mutation.error || mutation.code}`,
+          code: mutation.code || 'EDITORIAL_MUTATION_BLOCKED',
+          supervisorVerdict: mutation.supervisorVerdict,
+          meniScore: mutation.meniScore,
+        }, { status: 400 });
+      }
 
       return NextResponse.json({
         success: true,
@@ -177,12 +188,16 @@ export async function POST(request: NextRequest) {
             continue;
           }
 
-          await db.collection('noticias').doc(doc.id).update({
-            contenido: sanitizeArticleHtml(nuevo),
-            scoreMeni: null,
-            aprobadoMeni: false,
-            fechaActualizacion: new Date(),
-          });
+          const mutation = await applySubstantiveMutation(
+            db,
+            doc.id,
+            { contenido: sanitizeArticleHtml(nuevo) },
+            { actor: 'enrich-strong', reason: `${agregados} negritas en keywords (masivo)` },
+          );
+          if (!mutation.applied) {
+            saltadas++;
+            continue;
+          }
 
           procesadas++;
           totalAgregados += agregados;

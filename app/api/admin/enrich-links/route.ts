@@ -4,6 +4,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 import { buildRelatedContentBlock, type RelatedLink } from '@/lib/article-links';
+import { applySubstantiveMutation } from '@/lib/editorial/mutation-policy';
 
 export const revalidate = 0;
 export const maxDuration = 30;
@@ -73,14 +74,25 @@ export async function POST(request: NextRequest) {
       });
 
       const bloque = buildRelatedContentBlock(links);
-      const nuevoContenido = contenido + bloque;
+      const nuevoContenido = sanitizeArticleHtml(contenido + bloque);
 
-      await docRef.update({
-        contenido: sanitizeArticleHtml(nuevoContenido),
-        scoreMeni: null,
-        aprobadoMeni: false,
-        fechaActualizacion: new Date(),
-      });
+      // INVARIANTE EDITORIAL: mutación sustantiva post-publicación debe pasar
+      // por la autoridad (MENI + Supervisor). Si bloquea, no se persiste.
+      const mutation = await applySubstantiveMutation(
+        db,
+        noticiaId,
+        { contenido: nuevoContenido },
+        { actor: 'enrich-links', reason: 'Bloque "También te puede interesar"' },
+      );
+      if (!mutation.applied) {
+        return NextResponse.json({
+          success: false,
+          error: `Mutación rechazada por la autoridad editorial: ${mutation.error || mutation.code}`,
+          code: mutation.code || 'EDITORIAL_MUTATION_BLOCKED',
+          supervisorVerdict: mutation.supervisorVerdict,
+          meniScore: mutation.meniScore,
+        }, { status: 400 });
+      }
 
       return NextResponse.json({
         success: true,
@@ -134,12 +146,16 @@ export async function POST(request: NextRequest) {
 
           const bloque = buildRelatedContentBlock(links);
 
-          await db.collection('noticias').doc(doc.id).update({
-            contenido: sanitizeArticleHtml(contenido + bloque),
-            scoreMeni: null,
-            aprobadoMeni: false,
-            fechaActualizacion: new Date(),
-          });
+          const mutation = await applySubstantiveMutation(
+            db,
+            doc.id,
+            { contenido: sanitizeArticleHtml(contenido + bloque) },
+            { actor: 'enrich-links', reason: 'Bloque "También te puede interesar" (masivo)' },
+          );
+          if (!mutation.applied) {
+            saltadas++;
+            continue;
+          }
 
           procesadas++;
         } catch (e) {

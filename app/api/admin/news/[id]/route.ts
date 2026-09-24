@@ -11,6 +11,7 @@ import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { findGenerationDefects } from '@/lib/editorial/content-integrity';
+import { applyTechnicalMutation, isApprovalCurrent } from '@/lib/editorial/mutation-policy';
 import { logger } from '@/lib/logger';
 
 function isAuthorized(request: NextRequest): boolean {
@@ -32,9 +33,16 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     // Provenance gate: si se cambia contenido, titulo o resumen, requerir MENI + Supervisor.
     // `resumen` antes caía en el camino metadata-only donde NO estaba permitido y
     // se descartaba silenciosamente (Admin guardaba pero el cambio nunca llegaba a Firestore).
-    const contentChanged = body.contenido !== undefined || body.titulo !== undefined || body.resumen !== undefined;
+    const contentChanged =
+      body.contenido !== undefined ||
+      body.titulo !== undefined ||
+      body.resumen !== undefined ||
+      // `autor` forma parte del contentHash — un cambio real requiere reevaluación
+      (body.autor !== undefined && body.autor !== snap.data()?.autor);
     const tryingToPublish = body.publicado === true;
-    const alreadyApproved = snap.data()?.aprobadoMeni === true;
+    // Aprobación vigente = aprobadoMeni AND supervisorApproved AND contentHash
+    // coincide con el contenido actual (no basta el flag suelto).
+    const alreadyApproved = isApprovalCurrent(snap.data() || {});
 
     if (contentChanged) {
       // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline
@@ -174,17 +182,22 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
           cuerpo: String(updateData.contenido ?? existingData.contenido ?? ''),
           categoria: String(updateData.categoria ?? existingData.categoria ?? 'General'),
         });
-        await ref.update({
-          confianza: {
-            nivel: trust.nivel,
-            resumen: trust.resumen,
-            requiereRevisionHumana: trust.requiereRevisionHumana,
-            riesgos: trust.riesgos.map(r => r.detail ?? r.text).slice(0, 10),
-            noDisponible: trust.noDisponible.length,
-            fuentes: trust.fuentes,
-            at: new Date().toISOString(),
+        await applyTechnicalMutation(
+          db,
+          id,
+          {
+            confianza: {
+              nivel: trust.nivel,
+              resumen: trust.resumen,
+              requiereRevisionHumana: trust.requiereRevisionHumana,
+              riesgos: trust.riesgos.map(r => r.detail ?? r.text).slice(0, 10),
+              noDisponible: trust.noDisponible.length,
+              fuentes: trust.fuentes,
+              at: new Date().toISOString(),
+            },
           },
-        });
+          { actor: 'admin/news PUT', reason: 'Trust layer post-edición' },
+        );
       } catch (trustErr) {
         logger.warn('[admin/news PUT] Trust layer falló (no bloqueante):', trustErr);
       }
@@ -199,8 +212,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       }
 
       const updateData: Record<string, unknown> = {};
-      // Solo metadata que no altera la categoria canonica
-      const allowed = ['imagen', 'autor', 'destacada', 'publicado'];
+      // Solo metadata que no altera la categoria canonica ni el contenido.
+      // `autor` NO está permitido aquí: forma parte del contentHash — cambiarlo
+      // invalidaría la aprobación vigente sin reevaluación.
+      const allowed = ['imagen', 'destacada', 'publicado'];
       for (const key of allowed) {
         if (body[key] !== undefined) {
           if (key === 'destacada' || key === 'publicado') {
@@ -212,7 +227,19 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       }
       updateData.fechaActualizacion = Timestamp.now();
 
-      await ref.update(updateData);
+      // Política técnica: provenance + guard de publicación (publicado=true
+      // exige aprobación vigente, verificado arriba y re-verificado aquí).
+      const tech = await applyTechnicalMutation(db, id, updateData, {
+        actor: 'admin/news PUT',
+        reason: 'Metadata-only update',
+      });
+      if (!tech.applied) {
+        return NextResponse.json({
+          success: false,
+          error: 'No se puede publicar una noticia sin aprobación editorial vigente',
+          code: tech.rejected || 'MENI_NOT_APPROVED',
+        }, { status: 400 });
+      }
     }
 
     revalidateTag('noticias');
@@ -284,17 +311,22 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         supervisorDecision: beforeData.supervisorDecision || null,
       };
 
-      await ref.update({
-        estado: 'archivado',
-        archived: true,
-        publicado: false,
-        noindex: true,
-        deletedAt: new Date(),
-        deletedBy: request.headers.get('x-admin-token') ? 'admin' : 'system',
-        deleteReason: 'soft-delete por DELETE admin/news/[id]',
-        deleteSnapshot: snapshot,
-        dateModified: new Date(),
-      });
+      await applyTechnicalMutation(
+        db,
+        id,
+        {
+          estado: 'archivado',
+          archived: true,
+          publicado: false,
+          noindex: true,
+          deletedAt: new Date(),
+          deletedBy: request.headers.get('x-admin-token') ? 'admin' : 'system',
+          deleteReason: 'soft-delete por DELETE admin/news/[id]',
+          deleteSnapshot: snapshot,
+          dateModified: new Date(),
+        },
+        { actor: 'admin/news DELETE', reason: 'Soft-delete de nota publicada' },
+      );
 
       // Registrar en auditoria de eliminaciones
       try {

@@ -3,6 +3,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { calcularScoreEditorial } from '@/utils/scoring';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { verifyAdminToken } from '@/lib/auth';
+import { applySubstantiveMutation, applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { logger } from '@/lib/logger';
 
 // =============================================================================
@@ -126,8 +127,6 @@ export async function POST(request: NextRequest) {
     }> = [];
 
     let modificadasCount = 0;
-    let batchOps = 0;
-    const batch = db.batch();
 
     for (const doc of snapshot.docs) {
       const data = doc.data();
@@ -166,22 +165,26 @@ export async function POST(request: NextRequest) {
         });
 
         if (!dryRun) {
-          const docRef = db.collection('noticias').doc(doc.id);
-          batch.update(docRef, {
-            titulo: tituloSanitizado,
-            resumen: resumenSanitizado,
-            contenido: sanitizeArticleHtml(contenidoOptimizado),
-            scoreCalidad: nuevoScore,
-            scoreMeni: null,
-            aprobadoMeni: false,
-            ultimaActualizacionAutomatica: new Date(),
-          });
-          batchOps++;
-
-          // Firebase limita batch a 500 operaciones por commit
-          if (batchOps >= 450) {
-            await batch.commit();
-            batchOps = 0;
+          // INVARIANTE EDITORIAL: titulo/resumen/contenido son sustantivos —
+          // la mutación solo persiste si la autoridad reevalúa y aprueba.
+          const mutation = await applySubstantiveMutation(
+            db,
+            doc.id,
+            {
+              titulo: tituloSanitizado,
+              resumen: resumenSanitizado,
+              contenido: sanitizeArticleHtml(contenidoOptimizado),
+            },
+            { actor: 'clean-backlog', reason: `Saneamiento backlog (${camposModificados.join(', ')})` },
+          );
+          if (mutation.applied) {
+            // scoreCalidad es técnico — se actualiza tras la mutación aprobada.
+            await applyTechnicalMutation(
+              db,
+              doc.id,
+              { scoreCalidad: nuevoScore, ultimaActualizacionAutomatica: new Date() },
+              { actor: 'clean-backlog', reason: 'Recálculo scoreCalidad' },
+            );
           }
         }
 
@@ -189,9 +192,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    if (!dryRun && batchOps > 0) {
-      await batch.commit();
-    }
+
 
     return NextResponse.json({
       estado: dryRun ? 'DRY-RUN (sin cambios)' : 'Exito',

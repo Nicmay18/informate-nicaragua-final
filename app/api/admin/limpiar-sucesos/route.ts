@@ -2,6 +2,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { applySubstantiveMutation, applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -281,8 +282,34 @@ export async function POST(request: NextRequest) {
 
       // 1. Verificar si es irreparable
       if (esIrreparable(titulo, contenido)) {
-        await doc.ref.delete();
-        eliminadas.push({ id: doc.id, titulo, razon: 'Contenido de violencia extrema no aprobable' });
+        // Soft-delete auditado (nunca hard-delete de una nota del corpus).
+        await applyTechnicalMutation(
+          db,
+          doc.id,
+          {
+            estado: 'archivado',
+            archived: true,
+            publicado: false,
+            noindex: true,
+            deletedAt: new Date(),
+            deletedBy: 'limpiar-sucesos',
+            deleteReason: 'Contenido de violencia extrema no aprobable',
+            dateModified: new Date(),
+          },
+          { actor: 'limpiar-sucesos', reason: 'Contenido irreparable (violencia extrema)' },
+        );
+        try {
+          await db.collection('deletion_audit').add({
+            articleId: doc.id,
+            action: 'SOFT_DELETE',
+            titulo,
+            slug: data.slug || null,
+            deletedAt: new Date().toISOString(),
+            deletedBy: 'limpiar-sucesos',
+            reason: 'Contenido de violencia extrema no aprobable',
+          });
+        } catch (e) { /* noop */ }
+        eliminadas.push({ id: doc.id, titulo, razon: 'Contenido de violencia extrema no aprobable (archivada)' });
         continue;
       }
 
@@ -348,16 +375,29 @@ export async function POST(request: NextRequest) {
 
       // Solo actualizar si realmente hubo cambios
       if (cambios.length > 0) {
-        await doc.ref.update({
-          titulo: nuevoTitulo,
-          contenido: sanitizeArticleHtml(nuevoContenido),
-          resumen: nuevoResumen,
-          scoreMeni: null,
-          aprobadoMeni: false,
-          _mejorada: true,
-          _fechaMejora: new Date().toISOString(),
-        });
-        mejoradas.push({ id: doc.id, tituloOriginal: titulo, tituloNuevo: nuevoTitulo, cambios });
+        // INVARIANTE EDITORIAL: titulo/contenido/resumen son sustantivos —
+        // la mutación solo persiste si la autoridad reevalúa y aprueba.
+        const mutation = await applySubstantiveMutation(
+          db,
+          doc.id,
+          {
+            titulo: nuevoTitulo,
+            contenido: sanitizeArticleHtml(nuevoContenido),
+            resumen: nuevoResumen,
+          },
+          { actor: 'limpiar-sucesos', reason: cambios.join(' | ') },
+        );
+        if (mutation.applied) {
+          await applyTechnicalMutation(
+            db,
+            doc.id,
+            { _mejorada: true, _fechaMejora: new Date().toISOString() },
+            { actor: 'limpiar-sucesos', reason: 'Marca de procesamiento' },
+          );
+          mejoradas.push({ id: doc.id, tituloOriginal: titulo, tituloNuevo: nuevoTitulo, cambios });
+        } else {
+          saltadas.push({ id: doc.id, titulo, razon: `Rechazada por autoridad editorial: ${mutation.code || mutation.error}` });
+        }
       } else {
         saltadas.push({ id: doc.id, titulo, razon: 'Sin cambios necesarios (ya limpia)' });
       }

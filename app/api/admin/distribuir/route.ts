@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 
@@ -364,7 +365,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Marcar noticia como distribuida
-    await snap.docs[0].ref.update({ distribuida: true, fechaDistribucion: new Date().toISOString() });
+    await applyTechnicalMutation(
+      db,
+      snap.docs[0].id,
+      { distribuida: true, fechaDistribucion: new Date().toISOString() },
+      { actor: 'distribuir', reason: 'Distribución manual completada' },
+    );
 
     return NextResponse.json({
       success: true,
