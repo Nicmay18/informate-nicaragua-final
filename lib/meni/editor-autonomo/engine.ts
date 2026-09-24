@@ -9,6 +9,7 @@ import { runEditorBrain, type EditorBrainResult } from '@/lib/meni/editor-brain'
 import { limpiarSufijoLugar } from '@/lib/meni/intelligence/google-engine';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { validateQuotesAndAttributions } from '@/lib/editorial/quote-guard';
+import { computePublicationAllowed } from './decision';
 import type { MeniAutonomousInput, MeniAutonomousResult } from './types';
 
 /**
@@ -498,8 +499,14 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     generated.evaluacion = evaluacion;
     // Score derivado del EditorialDecision (ADN NI), no de cálculo paralelo
     generated.scoreMeni = decision.score;
-    // Aprobado = EditorialDecision.publicar y no hay issues técnicos críticos
-    generated.aprobado = decision.publicar && !qualityGatePost.bloqueado;
+    // DECISIÓN FINAL INMUTABLE — ninguna etapa posterior puede revertir un
+    // bloqueo anterior. publicationAllowed = decision AND qualityGate AND
+    // quoteGuard. No reasignar generated.aprobado después de esta línea.
+    generated.aprobado = computePublicationAllowed({
+      editorialPublicar: decision.publicar,
+      qualityGateBloqueado: qualityGatePost.bloqueado,
+      quoteGuardOk: quoteGuard.ok,
+    });
     // Si no pasa verificación editorial, bajar recomendación
     if (!verification.pasa && generated.recomendacionEditorial === 'publicar') {
       generated.recomendacionEditorial = 'mejorar';
