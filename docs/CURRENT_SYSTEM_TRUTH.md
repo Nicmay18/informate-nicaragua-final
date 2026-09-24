@@ -1,7 +1,7 @@
 # CURRENT_SYSTEM_TRUTH — Nicaragua Informate / NIOS / MENI
 
 > Fuente única de verdad del sistema. Todo aquí fue verificado contra código real.
-> **verifiedAgainst:** commit `95d3f5d0` · branch `master` · 2026-09-25
+> **verifiedAgainst:** commit `5060e699` · branch `master` · 2026-09-25
 
 ## Producción
 
@@ -49,7 +49,7 @@ editor/API → guardarConMeni() → runMeniAsync() → MENI score → supervisor
 
 ## Datos públicos (confiabilidad)
 
-- `lib/pagination.ts` + `resolvePage`: política única de paginación — `page` decimal o `> totalPages` → `notFound()` (404 real, no soft-404); corpus vacío solo permite página 1. Ya no hay cap de 300 docs en `fetchPublishedDocs`. Tests: `tests/pagination.test.ts` (13 casos).
+- `lib/pagination.ts` + `resolvePage`: política única de paginación — `page` decimal o `> totalPages` → `notFound()` (404 real, no soft-404); corpus vacío solo permite página 1. Ya no hay cap de 300 docs en `fetchPublishedDocs`. El `notFound()` corre también en `generateMetadata` para que el status 404 comprometa antes del streaming (verificado en prod: `/noticias?page=9999` → 404). Tests: `tests/pagination.test.ts` (13 casos).
 - **ERROR ≠ EMPTY** (`lib/data.ts`): `safeGet` contabiliza fallos; si TODAS las sub-queries fallan lanza `FirestoreOutageError` que propaga por encima de los catches genéricos — un apagón de Firestore ya no se renderiza como "no hay noticias". Tests: `tests/p1-dates-errors.test.ts`.
 - `entity-page` (`kb_entities`): no llama `db.getAll()` con array vacío. Tests: `tests/entity-page.test.ts`.
 
@@ -67,3 +67,4 @@ editor/API → guardarConMeni() → runMeniAsync() → MENI score → supervisor
 - `?secret=` query-string en crons (legacy, funciona pero el secreto queda en URLs/logs) — migrar a `x-cron-secret` header. **P2**.
 - SEO conocido sin aplicar: redirect-loop `/noticia.html?slug=` — patch en `.audit/patch-seo-redirects.cjs` (aplicar como tarea SEO separada). El soft-404 `?page=99` ya está corregido.
 - `runLearningCycle` sin caller en producción (dormido).
+- `/panel/nios/performance` ahora `force-dynamic` con acceso defensivo a telemetría (commit `5060e699`) — era lo que rompía los builds de Vercel (`undefined.reads` en prerender).
