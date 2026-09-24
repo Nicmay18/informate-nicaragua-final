@@ -34,7 +34,13 @@ function toCanonicalDate(v: unknown): number {
  * Solo incluye noticias publicadas (nunca borradores ni archivadas).
  */
 export async function fetchFeedArticles(limit = 50): Promise<FeedArticle[]> {
-  const snapshot = await adminDb.collection('noticias').get();
+  // Acotado: filtra en Firestore y lee una ventana acotada — el orden
+  // canónico se sigue resolviendo en memoria por el tipo mixto de `fecha`.
+  const snapshot = await adminDb.collection('noticias')
+    .where('publicado', '==', true)
+    .where('estado', '==', 'publicado')
+    .limit(Math.max(limit * 4, 200))
+    .get();
 
   const publicDocs = snapshot.docs
     .map((doc) => ({ doc, d: doc.data() }))

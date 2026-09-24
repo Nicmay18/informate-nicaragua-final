@@ -111,15 +111,21 @@ export async function saveDailySnapshot(
 
   await docRef.set(inlinePayload);
 
-  // Guardar articles en subcolección (siempre, para habilitar fallback)
+  // Guardar articles en subcolección (siempre, para habilitar fallback).
+  // Firestore batch tiene límite de 500 operaciones — con >500 artículos
+  // un único batch revienta el commit. Se divide en chunks secuenciales.
   if (articles.length > 0) {
-    const articlesBatch = db.batch();
-    for (const article of articles) {
-      const slug = article.slug || Math.random().toString(36).slice(2);
-      const articleRef = docRef.collection(ARTICLES_SUBCOLLECTION).doc(slug);
-      articlesBatch.set(articleRef, removeUndefined(article));
+    const BATCH_CHUNK = 450;
+    for (let start = 0; start < articles.length; start += BATCH_CHUNK) {
+      const chunk = articles.slice(start, start + BATCH_CHUNK);
+      const articlesBatch = db.batch();
+      for (const article of chunk) {
+        const slug = article.slug || Math.random().toString(36).slice(2);
+        const articleRef = docRef.collection(ARTICLES_SUBCOLLECTION).doc(slug);
+        articlesBatch.set(articleRef, removeUndefined(article));
+      }
+      await articlesBatch.commit();
     }
-    await articlesBatch.commit();
     logger.info(`[nios-store] Saved ${articles.length} articles to subcollection for ${date}`);
   }
 
