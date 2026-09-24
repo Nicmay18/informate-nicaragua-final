@@ -22,11 +22,12 @@ function toAbsoluteUrl(url?: string): string {
   return `${BASE}${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
-/** Evita Invalid Date en JSON-LD; siempre retorna ISO string válida */
-function safeIsoDate(value?: string | Date): string {
-  if (!value) return new Date().toISOString();
+/** Fecha editorial en JSON-LD: válida → ISO; inválida/ausente → undefined
+ *  (nunca fabricar "hoy" — una fecha inventada es peor que campo ausente). */
+function safeIsoDate(value?: string | Date): string | undefined {
+  if (!value) return undefined;
   const d = typeof value === 'string' ? new Date(value) : value;
-  return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+  return isNaN(d.getTime()) ? undefined : d.toISOString();
 }
 
 // ─── Interfaces ───

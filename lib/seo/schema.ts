@@ -15,11 +15,12 @@ function toAbsoluteUrl(url?: string): string {
   return `https://nicaraguainformate.com${url.startsWith('/') ? '' : '/'}${url}`;
 }
 
-/** Prevent Invalid Date in JSON-LD */
-function safeIsoDate(value?: string | Date): string {
-  if (!value) return new Date().toISOString();
+/** Fecha editorial en JSON-LD: válida → ISO; inválida/ausente → undefined
+ *  (nunca fabricar "hoy" — una fecha inventada es peor que campo ausente). */
+function safeIsoDate(value?: string | Date): string | undefined {
+  if (!value) return undefined;
   const d = typeof value === 'string' ? new Date(value) : value;
-  return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+  return isNaN(d.getTime()) ? undefined : d.toISOString();
 }
 
 export function buildNewsArticleJsonLdEnhanced(
@@ -74,8 +75,9 @@ export function buildNewsArticleJsonLdEnhanced(
         caption: `Imagen 4:3: ${article.titulo} — Nicaragua Informate`,
       },
     ],
-    datePublished: safeIsoDate(article.fecha),
-    dateModified: safeIsoDate(article.fechaActualizacion || article.fecha),
+    ...(safeIsoDate(article.fecha) ? { datePublished: safeIsoDate(article.fecha) } : {}),
+    ...(safeIsoDate(article.fechaActualizacion || article.fecha)
+      ? { dateModified: safeIsoDate(article.fechaActualizacion || article.fecha) } : {}),
     author: {
       '@type': 'Person',
       '@id': authorUrl,
