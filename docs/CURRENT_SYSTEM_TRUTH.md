@@ -1,7 +1,7 @@
 # CURRENT_SYSTEM_TRUTH — Nicaragua Informate / NIOS / MENI
 
 > Fuente única de verdad del sistema. Todo aquí fue verificado contra código real.
-> **verifiedAgainst:** commit `1c2c7c58` · branch `master` · 2026-09-24
+> **verifiedAgainst:** commit `95d3f5d0` · branch `master` · 2026-09-25
 
 ## Producción
 
@@ -19,6 +19,7 @@ editor/API → guardarConMeni() → runMeniAsync() → MENI score → supervisor
 - `guardarConMeni` (`lib/editorial/guardar-con-meni.ts`) es el **único escritor canónico**.
 - Callers verificados fail-closed: `guardar-directo`, `admin/news` (POST/PUT), `api/articles` → 400 si `!meniOk` o `!supervisorApproved`.
 - Flujo autónomo `generarArticuloAutonomo` (`lib/meni/editor-autonomo/engine.ts`): Editorial Brain decide → Groq redacta → Quality Gate POST → **Quote Guard** → verificación → `runMeni` final. Fallas: LLM error → throw; QG bloquea → `aprobado=false`; runMeni falla → `aprobado=false`; quote-guard falla → `aprobado=false` + `riesgo ROJO`.
+- **Decisión final inmutable**: `computePublicationAllowed` (`editor-autonomo/decision.ts`) exige `decision.publicar AND !qualityGate.bloqueado AND quoteGuard.ok` — ninguna etapa posterior puede reabrir un bloqueo. Tests: `tests/publication-gate.test.ts`.
 
 ## Integridad factual (anti-fabricación)
 
@@ -44,10 +45,25 @@ editor/API → guardarConMeni() → runMeniAsync() → MENI score → supervisor
 - `SENSITIVE_API_PATHS` ahora incluye `/api/indexnow` y `/api/nios/*` (commit `dbab83a1`).
 - `list-all` solo devuelve `estado=='publicado'` (commit `dbab83a1`).
 - Crons: todos `verifyAdminOrCronToken` (Bearer / x-cron-secret / `?secret=` legacy).
+- **Sesión admin por cookie HttpOnly** (commit `990ab5f9`): `/api/admin/session` verifica Firebase ID token + `ADMIN_EMAILS` y fija `admin_session` HttpOnly/SameSite=Strict/Secure. La `ADMIN_API_KEY` ya NO viaja al JS del navegador ni a `localStorage`; el middleware acepta la cookie además de los headers.
 
-## Deuda técnica real (P1, no bloqueante)
+## Datos públicos (confiabilidad)
 
-- `admin/news` fetchAdminDocs carga todo `noticias` en memoria (fecha tipo mixto impide orderBy). Paginación con cursor pendiente — a 5K notas reventará.
-- `.get()` completo en `stats`, `dashboard-calidad`, `auditor-dashboard`, `enrich-links`, `enrich-strong`, `limpiar-noindex`, `repair-fechas`, `metrics-collector`.
-- SEO conocido sin aplicar: redirect-loop `/noticia.html?slug=` y soft-404 `?page=99` — patch en `.audit/patch-seo-redirects.cjs` (aplicar como tarea SEO separada).
+- `lib/pagination.ts` + `resolvePage`: política única de paginación — `page` decimal o `> totalPages` → `notFound()` (404 real, no soft-404); corpus vacío solo permite página 1. Ya no hay cap de 300 docs en `fetchPublishedDocs`. Tests: `tests/pagination.test.ts` (13 casos).
+- **ERROR ≠ EMPTY** (`lib/data.ts`): `safeGet` contabiliza fallos; si TODAS las sub-queries fallan lanza `FirestoreOutageError` que propaga por encima de los catches genéricos — un apagón de Firestore ya no se renderiza como "no hay noticias". Tests: `tests/p1-dates-errors.test.ts`.
+- `entity-page` (`kb_entities`): no llama `db.getAll()` con array vacío. Tests: `tests/entity-page.test.ts`.
+
+## SEO / renderizado
+
+- `safeIsoDate` (`lib/seo/schema.ts`, `JsonLdSchema.tsx`) ya NO fabrica "ahora" — fecha inválida/ausente omite `datePublished`/`dateModified` del JSON-LD.
+- `lib/nonce.ts` dejó de llamar `headers()` — el CSP actual no usa nonce y el `headers()` forzaba render dinámico en todo el árbol. Si el CSP adopta `'nonce-…'`/'strict-dynamic' hay que reactivar la propagación junto con la política.
+- `firestore.rules`: `noticias` `allow get, list: if true` — la API key web de Firebase es pública por diseño; cualquiera puede leer los campos internos (`scoreMeni`, `diagnosticoMeni`) vía SDK cliente. Mitigación real = mover metadata editorial a colección privada. **P2 deuda**, no bloquea operación.
+
+## Deuda técnica real (P1/P2, no bloqueante)
+
+- `admin/news` fetchAdminDocs carga todo `noticias` en memoria (fecha tipo mixto impide orderBy). Paginación con cursor pendiente — a 5K notas reventará. **P1**.
+- `.get()` completo en `stats`, `dashboard-calidad`, `auditor-dashboard`, `enrich-links`, `enrich-strong`, `limpiar-noindex`, `repair-fechas`, `metrics-collector`. **P2**.
+- `public/validador.html` — herramienta forense pública que lee `noticias` con el SDK web. Dependiente de la regla `list: if true`; moverla fuera de `public/` o protegerla cuando se cierre la regla. **P2**.
+- `?secret=` query-string en crons (legacy, funciona pero el secreto queda en URLs/logs) — migrar a `x-cron-secret` header. **P2**.
+- SEO conocido sin aplicar: redirect-loop `/noticia.html?slug=` — patch en `.audit/patch-seo-redirects.cjs` (aplicar como tarea SEO separada). El soft-404 `?page=99` ya está corregido.
 - `runLearningCycle` sin caller en producción (dormido).
