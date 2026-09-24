@@ -71,6 +71,8 @@ const SENSITIVE_API_PATHS = [
   '/api/count-news',
   '/api/transform',
   '/api/revalidate',
+  '/api/indexnow',
+  '/api/nios',
 ];
 
 function isSensitiveApiPath(pathname: string): boolean {

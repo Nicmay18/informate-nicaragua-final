@@ -9,7 +9,11 @@ export async function GET(request: Request) {
     const limit = Math.min(Math.max(limitParam, 1), 200);
 
     const db = getAdminDb();
-    let query: FirebaseFirestore.Query = db.collection('noticias').orderBy('fecha', 'desc');
+    // Solo publicadas — este endpoint es público (lo consume Header.tsx);
+    // sin el filtro exponía borradores y archivadas.
+    let query: FirebaseFirestore.Query = db.collection('noticias')
+      .where('estado', '==', 'publicado')
+      .orderBy('fecha', 'desc');
     if (categoria) {
       query = query.where('categoria', '==', categoria);
     }
