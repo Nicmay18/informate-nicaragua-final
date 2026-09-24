@@ -8,6 +8,7 @@ import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
 import { runEditorBrain, type EditorBrainResult } from '@/lib/meni/editor-brain';
 import { limpiarSufijoLugar } from '@/lib/meni/intelligence/google-engine';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { validateQuotesAndAttributions } from '@/lib/editorial/quote-guard';
 import type { MeniAutonomousInput, MeniAutonomousResult } from './types';
 
 /**
@@ -30,7 +31,7 @@ REGLAS ABSOLUTAS:
 - Párrafos cortos (2-3 oraciones).
 - HTML con <p>, <h2>, <strong>, <blockquote>.
 - Mínimo 400 palabras.
-- No inventar datos. Si falta información, escribir "autoridades no proporcionaron detalles adicionales".
+- No inventar datos. Si un dato no está en la fuente: OMÍTELO, o indica que "la información disponible no lo precisa". NUNCA atribuyas declaraciones que la fuente no contiene (ni a autoridades, testigos, vecinos ni ninguna persona).
 - No usar adjetivos emocionales ni transiciones robóticas.
 - Pie de foto: "Foto cortesía de RR.SS / Redacción Keyling Rivera M. / INFORMATE NICARAGUA"
 
@@ -446,6 +447,27 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
     ...generated.correccionesAplicadas,
     ...qualityGatePost.corregidos.map((c) => c.descripcion),
   ];
+
+  // ═══════════════════════════════════════════════════════════
+  // QUOTE GUARD — defensa técnica anti citas/atribuciones fabricadas.
+  // Toda cita textual y toda atribución del texto generado debe existir
+  // en la fuente original. Si no existe → FABRICATED → NO PUBLICAR.
+  // El prompt dice "no inventar" — esto es la garantía técnica, no el prompt.
+  // ═══════════════════════════════════════════════════════════
+  const quoteGuard = validateQuotesAndAttributions(input.fuente, generated.articuloCompleto);
+  if (!quoteGuard.ok) {
+    generated.aprobado = false;
+    generated.riesgoEditorial = 'ROJO';
+    generated.estadoEditorial = 'no_aporta';
+    generated.recomendacionEditorial = 'revisar';
+    generated.diagnosticoTecnico = `Quote Guard: ${quoteGuard.reason}`;
+    generated.recomendaciones = [
+      `CITA FABRICADA — ${quoteGuard.reason}`,
+      ...quoteGuard.fabricatedQuotes.map(q => `Cita sin respaldo: "${q}"`),
+      ...quoteGuard.fabricatedAttributions.map(a => `Atribución sin respaldo: ${a}`),
+      ...generated.recomendaciones,
+    ];
+  }
 
   if (qualityGatePost.bloqueado) {
     generated.aprobado = false;
