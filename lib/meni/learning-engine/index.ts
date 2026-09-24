@@ -17,7 +17,6 @@ import { collectArticleMetrics, collectTrafficSources } from './metrics-collecto
 import { analyzeCategoryPerformance, analyzeTemporalPatterns, analyzeCorrelations } from './pattern-analyzer';
 import { tuneWeights } from './weight-tuner';
 import { generateInsights } from './insight-generator';
-import { persistActiveAdjustments } from './learning-adapter';
 import { logger } from '@/lib/logger';
 
 let cachedResult: LearningCycleResult | null = null;
