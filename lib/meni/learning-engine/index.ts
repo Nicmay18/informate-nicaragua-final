@@ -106,13 +106,13 @@ export async function runLearningCycle(
       updatedAt: new Date().toISOString(),
     });
 
-    // Aplicar ajustes de peso automáticamente si hay confianza suficiente
-    if (config.enableWeightTuning && weightAdjustments.length > 0) {
-      const highConfidence = weightAdjustments.filter((a) => a.confidence >= 0.6);
-      if (highConfidence.length > 0) {
-        await persistActiveAdjustments(db, highConfidence);
-      }
-    }
+    // GOBERNANZA: los ajustes de peso NUNCA se auto-activan.
+    // Quedan persistidos en el ciclo (result.weightAdjustments) como
+    // sugerencias para revisión humana. La activación de pesos solo puede
+    // ocurrir por decisión explícita vía /api/admin/meni-learning o
+    // persistActiveAdjustments invocado manualmente — nunca desde un cron
+    // ni desde este ciclo. Esto cierra el camino
+    // correlación → Firestore → MENI sin aprobación humana.
   } catch (err) {
     logger.warn('[learning-engine] Error persistiendo ciclo:', err);
   }
