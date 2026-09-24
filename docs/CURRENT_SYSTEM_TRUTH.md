@@ -1,7 +1,7 @@
 # CURRENT_SYSTEM_TRUTH — Nicaragua Informate / NIOS / MENI
 
 > Fuente única de verdad del sistema. Todo aquí fue verificado contra código real.
-> **verifiedAgainst:** commit `8d3bd262` · branch `master` · 2026-09-24
+> **verifiedAgainst:** commit `1c2c7c58` · branch `master` · 2026-09-24
 
 ## Producción
 
