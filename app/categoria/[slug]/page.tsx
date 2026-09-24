@@ -40,8 +40,15 @@ const CATEGORIA_META: Record<string, { titulo: string; description: string }> = 
 export const revalidate = 3600;
 export const dynamicParams = true;
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ page?: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
+  const sp = await (searchParams ?? Promise.resolve({} as { page?: string }));
   const slugLower = slug.toLowerCase();
   const slugNormalized = categoryToSlug(slug);
   const catName = slugToCategory(slugNormalized);
@@ -50,6 +57,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const canonicalSlug = categoryToSlug(catName);
   if (canonicalSlug !== slugLower) {
     permanentRedirect(`/categoria/${canonicalSlug}`);
+  }
+
+  // 404 REAL: página fuera de rango debe abortar en metadata, antes de que
+  // el streaming comprometa el status 200.
+  {
+    let totalCount = 0;
+    try {
+      totalCount = await getCategoryCount(catName);
+    } catch {
+      totalCount = 0;
+    }
+    if (resolvePage(sp.page, totalCount, PAGE_SIZE).status === 'not_found') {
+      notFound();
+    }
   }
 
   const meta = CATEGORIA_META[slugLower] || {

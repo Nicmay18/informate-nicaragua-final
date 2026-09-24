@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { cache } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import { getNewsPaginated, getNewsCount, PAGE_SIZE } from '@/lib/data';
 import { categoryToSlug, slugToCategory } from '@/lib/types';
@@ -14,6 +15,10 @@ export const revalidate = 300;
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
+// Dedup por request: generateMetadata y el componente consultan el mismo
+// conteo sin disparar dos lecturas a Firestore.
+const getNewsCountOnce = cache(getNewsCount);
+
 /** Trunca descripción respetando límites de palabras para SERPs */
 function smartTruncate(str: string, maxLen = 155): string {
   if (str.length <= maxLen) return str;
@@ -24,6 +29,21 @@ function smartTruncate(str: string, maxLen = 155): string {
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ cat?: string; page?: string }> }): Promise<Metadata> {
   const params = await searchParams;
+
+  // 404 REAL: validar el rango ANTES de que el streaming comprometa el
+  // status 200. notFound() aquí aborta el render con status 404.
+  if (!params.cat) {
+    let totalCount = 0;
+    try {
+      totalCount = await getNewsCountOnce();
+    } catch {
+      totalCount = 0;
+    }
+    if (resolvePage(params.page, totalCount, PAGE_SIZE).status === 'not_found') {
+      notFound();
+    }
+  }
+
   const pageNum = parseInt(params.page || '1', 10) || 1;
   const canonical = pageNum > 1
     ? `${SITE_URL}/noticias?page=${pageNum}`
@@ -78,7 +98,7 @@ export default async function NoticiasPage({ searchParams }: { searchParams: Pro
   // (nunca servir otra página ni una lista vacía con 200).
   let totalCount = 0;
   try {
-    totalCount = await getNewsCount();
+    totalCount = await getNewsCountOnce();
   } catch (error) {
     logger.error('[NoticiasPage] getNewsCount error:', error);
   }
