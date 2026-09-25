@@ -131,6 +131,13 @@ Después: artefacto AUTO_REMOVE + AI_PROVENANCE_ARTIFACT (CRITICAL)
 - `tsc --noEmit`: 0 errores.
 - `npm run build`: PASS.
 
+## 9b. Deploy + smoke
+
+- Commit `c0f5fd1b` → master → deploy Vercel prod → `nicaraguainformate.com`.
+- Smoke: `/`, `/noticias`, `/feed.xml`, `/sitemap.xml`, artículo real → **200**.
+- Sin auth: `expandir-7`, `clean-seo`, `guardar-directo`, `news`, `articles` → **401**.
+- No se realizaron escrituras de prueba sobre artículos reales.
+
 ## 10. Riesgos restantes
 
 - `INTERNAL_CONTRADICTION` puede marcar evolución legítima de cifras
