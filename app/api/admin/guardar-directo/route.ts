@@ -7,7 +7,7 @@ import type { NoticiaInput } from '@/lib/meni';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { categoryToSlug } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
-import { findGenerationDefects } from '@/lib/editorial/content-integrity';
+import { findBlockingDefects } from '@/lib/editorial/content-integrity';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 
@@ -77,11 +77,12 @@ export async function POST(request: NextRequest) {
     };
 
     // MENI canónico via guardarConMeni — única autoridad editorial
-    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical } = await guardarConMeni(noticiaInput, db);
 
     // Generar metadata si falta
     const finalTitulo = normalizeEditorialTitle(titulo.trim());
-    const finalContenido = meni.articulo?.contenido || contenido.trim();
+    // Versión editorial canónica — la única que puede persistirse.
+    const finalContenido = canonical.contenido;
     const finalResumen = meni.articulo?.resumen || resumen?.trim() || meni.seo.metaDescripcion;
     const finalSlug = body.slug || meni.articulo?.slug || '';
     const autoKeywordsDespues = meni.autoCorrections?.find((c: any) => c.campo === 'keywords')?.despues;
@@ -90,8 +91,9 @@ export async function POST(request: NextRequest) {
       : (body.palabrasClave || []);
     const metaGenerada = finalResumen.length >= 120 ? finalResumen : meni.seo.metaDescripcion;
 
-    // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline
-    const contentDefects = findGenerationDefects([finalTitulo, finalResumen, finalContenido].join('\n'));
+    // VALIDATE→REJECT→LOG: solo defectos BLOCK rechazan aquí — los artefactos
+    // AUTO_REMOVE ya fueron eliminados del input dentro de guardarConMeni.
+    const contentDefects = findBlockingDefects([finalTitulo, finalResumen, finalContenido].join('\n'));
     if (contentDefects.length > 0) {
       logger.error('[guardar-directo] Contenido rechazado por defectos de generación:', { id, defects: contentDefects.map(d => d.code) });
       return NextResponse.json({

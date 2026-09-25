@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
       slug: finalSlug,
     };
 
-    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, adminDb);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical } = await guardarConMeni(noticiaInput, adminDb);
 
     if (!meniOk) {
       const first = meni.blockingIssues?.[0];
@@ -118,8 +118,8 @@ export async function POST(request: NextRequest) {
       ...meniUpdateData,
       titulo,
       slug: finalSlug,
-      contenido,
-      resumen: resumen || '',
+      // resumen/contenido canónicos vienen de meniUpdateData (textoCorregido);
+      // nunca persistir el input crudo por encima de la versión evaluada.
       categoria: finalCategoria,
       imagen: imagen || '',
       autor: autor || 'Redacción Nicaragua Informate',
@@ -146,8 +146,8 @@ export async function POST(request: NextRequest) {
         articleId,
         slug: finalSlug,
         titulo,
-        resumen: resumen || '',
-        contenido,
+        resumen: canonical.resumen || '',
+        contenido: canonical.contenido,
         categoria: finalCategoria,
         imagen: imagen || undefined,
         autor: autor || 'Redacción Nicaragua Informate',
@@ -164,8 +164,8 @@ export async function POST(request: NextRequest) {
         {
           id: articleId,
           titulo,
-          contenido,
-          resumen: resumen || '',
+          contenido: canonical.contenido,
+          resumen: canonical.resumen || '',
           categoria: finalCategoria,
           fecha: now.toISOString(),
         },

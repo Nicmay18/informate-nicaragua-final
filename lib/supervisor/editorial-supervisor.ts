@@ -175,6 +175,29 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
     }
   }
 
+  // ── 2.1b Barrera factual mínima — señales del detector ──────
+  // El detector (lib/editorial/factuality-signals) NO decide: produce señales
+  // de riesgo. Aquí la autoridad las convierte en issues/decisión.
+  // CRITICAL → hasCriticalIssues → REVISION_HUMANA
+  // IMPORTANT → hasImportantIssues + domain FACTUALIDAD → INVESTIGAR_MAS
+  for (const signal of ctx.factualitySignals ?? []) {
+    issues.push({
+      severity: signal.severity,
+      domain: 'FACTUALIDAD',
+      problem: signal.desc,
+      impact:
+        signal.severity === 'CRITICAL'
+          ? 'Publicar podría difundir afirmaciones fabricadas o contradictorias'
+          : 'La afirmación factual carece de atribución o evidencia disponible',
+      cause: `Signal ${signal.code}: ${signal.evidence}`,
+      action:
+        signal.severity === 'CRITICAL'
+          ? 'Revisión humana obligatoria antes de publicar'
+          : 'Verificar la afirmación contra fuentes antes de publicar',
+      autoFixable: false,
+    });
+  }
+
   // ── 2.2 Investigación insuficiente o conflictos ──────────────
   if (ctx.research) {
     if (ctx.research.recommendedAction === 'DO_NOT_PUBLISH') {
@@ -375,7 +398,7 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
       resultingState = 'EDITORIAL_REVIEW';
     }
   } else if (hasImportantIssues) {
-    const needsResearch = issues.some(i => i.domain === 'TITULO' || i.domain === 'INVESTIGACION');
+    const needsResearch = issues.some(i => i.domain === 'TITULO' || i.domain === 'INVESTIGACION' || i.domain === 'FACTUALIDAD');
     if (needsResearch) {
       verdict = 'INVESTIGAR_MAS';
       resultingState = 'RESEARCHING';

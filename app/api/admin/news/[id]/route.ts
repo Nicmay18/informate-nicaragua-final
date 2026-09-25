@@ -10,7 +10,7 @@ import { categoryToSlug } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
-import { findGenerationDefects } from '@/lib/editorial/content-integrity';
+import { findBlockingDefects } from '@/lib/editorial/content-integrity';
 import { applyTechnicalMutation, isApprovalCurrent } from '@/lib/editorial/mutation-policy';
 import { logger } from '@/lib/logger';
 
@@ -46,7 +46,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     if (contentChanged) {
       // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline
-      const contentDefects = findGenerationDefects([body.titulo, body.resumen, body.contenido].filter(Boolean).join('\n'));
+      const contentDefects = findBlockingDefects([body.titulo, body.resumen, body.contenido].filter(Boolean).join('\n'));
       if (contentDefects.length > 0) {
         logger.error('[admin/news PUT] Contenido rechazado por defectos de generación:', { id, defects: contentDefects.map(d => d.code) });
         return NextResponse.json({
@@ -111,7 +111,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
       // Merge MENI update data with metadata-only fields
       // La categoria siempre viene del calculo canonico de MENI, no del body
-      const metadataAllowed = ['imagen', 'autor', 'destacada', 'publicado', 'resumen'];
+      const metadataAllowed = ['imagen', 'autor', 'destacada', 'publicado'];
       const updateData: Record<string, unknown> = { ...meniUpdateData };
       for (const key of metadataAllowed) {
         if (body[key] !== undefined) {
@@ -122,8 +122,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
           }
         }
       }
-      if (body.titulo) updateData.titulo = body.titulo;
-      if (body.contenido) updateData.contenido = sanitizeArticleHtml(body.contenido);
+      // resumen/contenido/titulo ya vienen canónicos en meniUpdateData
+      // (textoCorregido sobre el input del editor) — nunca pisar con el body crudo.
 
       // Helper: verifica si un slug ya existe en OTRA noticia (excluye la actual)
       const slugExists = async (candidate: string): Promise<boolean> => {

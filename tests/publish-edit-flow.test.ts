@@ -49,6 +49,22 @@ function meniOk(categoria = 'Sucesos') {
   };
 }
 
+// Contrato canónico (Fase 5): updateData lleva la versión evaluada
+// (textoCorregido) y `canonical` la expone a las rutas.
+function meniOkCanonical(categoria = 'Sucesos') {
+  return async (input: { titulo?: string; resumen?: string; contenido?: string }) => ({
+    ...meniOk(categoria),
+    updateData: {
+      categoria,
+      aprobadoMeni: true,
+      scoreMeni: 95,
+      contenido: input.contenido,
+      resumen: input.resumen,
+    },
+    canonical: { titulo: input.titulo, resumen: input.resumen, contenido: input.contenido },
+  });
+}
+
 beforeEach(() => {
   revalidatePathSpy.mockClear();
   revalidateTagSpy.mockClear();
@@ -107,7 +123,7 @@ describe('Editar nota publicada → el cambio llega a Firestore y se revalida to
     const { getAdminDb } = await import('@/lib/firebase-admin');
     const { db, update } = mockDocDb(existing);
     (getAdminDb as any).mockReturnValue(db);
-    guardarConMeniMock.mockResolvedValue(meniOk('Sucesos'));
+    guardarConMeniMock.mockImplementation(meniOkCanonical('Sucesos'));
 
     const { PUT } = await import('@/app/api/admin/news/[id]/route');
     const { NextRequest } = await import('next/server');
@@ -137,7 +153,7 @@ describe('Editar nota publicada → el cambio llega a Firestore y se revalida to
     const { getAdminDb } = await import('@/lib/firebase-admin');
     const { db, update } = mockDocDb(existing);
     (getAdminDb as any).mockReturnValue(db);
-    guardarConMeniMock.mockResolvedValue(meniOk('Sucesos'));
+    guardarConMeniMock.mockImplementation(meniOkCanonical('Sucesos'));
 
     const { PUT } = await import('@/app/api/admin/news/[id]/route');
     const { NextRequest } = await import('next/server');

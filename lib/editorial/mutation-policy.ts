@@ -21,7 +21,7 @@ import { computeInputHash } from '@/lib/meni/hash';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
-import { findGenerationDefects } from '@/lib/editorial/content-integrity';
+import { findBlockingDefects } from '@/lib/editorial/content-integrity';
 
 /** Campos cubiertos por computeInputHash + campos que renderizan contenido editorial. */
 export const SUBSTANTIVE_FIELDS = new Set([
@@ -214,8 +214,8 @@ export async function applySubstantiveMutation(
   );
   if (changed.length === 0) return { applied: false, error: 'NO_CHANGES' };
 
-  // Content-integrity: defectos mecánicos/fabricados conocidos.
-  const defects = findGenerationDefects(
+  // Content-integrity: defectos mecánicos/fabricados conocidos (solo BLOCK).
+  const defects = findBlockingDefects(
     [merged.titulo, merged.resumen, merged.contenido].filter(Boolean).join('\n'),
   );
   if (defects.length > 0) {
@@ -230,7 +230,7 @@ export async function applySubstantiveMutation(
     };
   }
 
-  const { ok: meniOk, meni, supervisor, supervisorApproved, updateData } =
+  const { ok: meniOk, meni, supervisor, supervisorApproved, updateData, canonical } =
     await guardarConMeni(merged, db);
 
   const reevalInfo = {
@@ -243,9 +243,10 @@ export async function applySubstantiveMutation(
   if (meniOk && supervisorApproved) {
     await ref.update({
       ...updateData,
-      titulo: merged.titulo,
-      contenido: merged.contenido,
-      resumen: merged.resumen,
+      // Versión canónica evaluada (textoCorregido) — nunca el merged crudo.
+      titulo: canonical?.titulo || merged.titulo,
+      contenido: canonical?.contenido || merged.contenido,
+      resumen: canonical?.resumen || merged.resumen,
       requiresReevaluation: false,
       fechaActualizacion: new Date(),
       mutationLog: appendLog(before.mutationLog, {

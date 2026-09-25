@@ -6,6 +6,9 @@ import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-help
 import { resolvePublicCategory, PUBLIC_CATEGORY_TO_PROFILE } from './canonical';
 import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
+import { stripAICitationMarkers } from '@/lib/sanitize';
+import { detectFactualitySignals } from './factuality-signals';
+import type { FactualitySignal } from './factuality-signals';
 
 /**
  * Elimina recursivamente valores `undefined` de cualquier estructura
@@ -50,6 +53,9 @@ export interface GuardarConMeniResult {
   supervisor: SupervisorDecision;
   supervisorApproved: boolean;
   updateData: Record<string, unknown>;
+  /** Versión editorial canónica — la ÚNICA que puede persistirse. */
+  canonical: { titulo: string; resumen: string; contenido: string };
+  factualitySignals: FactualitySignal[];
 }
 
 export async function guardarConMeni(
@@ -57,14 +63,48 @@ export async function guardarConMeni(
   db: Firestore,
   options?: { skipEditorBrain?: boolean }
 ): Promise<GuardarConMeniResult> {
-  const meni = await runMeniAsync(input, {
+  // AUTO_REMOVE (content-integrity): los marcadores de cita IA son residuo
+  // técnico inequívoco — se eliminan del input ANTES de evaluar, para que la
+  // versión evaluada y la persistida sean la misma. Queda constancia en
+  // `aiArtifactsRemoved` (provenance → signal de factualidad).
+  const cleanedTitulo = stripAICitationMarkers(input.titulo);
+  const cleanedResumen = stripAICitationMarkers(input.resumen);
+  const cleanedContenido = stripAICitationMarkers(input.contenido);
+  const aiArtifactsRemoved =
+    cleanedContenido !== (input.contenido || '') ||
+    cleanedTitulo !== (input.titulo || '') ||
+    cleanedResumen !== (input.resumen || '');
+  const cleanInput: NoticiaInput = {
+    ...input,
+    titulo: cleanedTitulo,
+    resumen: cleanedResumen,
+    contenido: cleanedContenido,
+  };
+
+  const meni = await runMeniAsync(cleanInput, {
     db,
     skipEditorBrain: options?.skipEditorBrain ?? true,
   });
 
-  const finalContenido = meni.articulo?.contenido || input.contenido || '';
+  // AUTO_REMOVE también sobre la salida de MENI: si el pipeline devolviera un
+  // artefacto en textoCorregido, la versión canónica nunca lo contiene.
+  const finalContenido = stripAICitationMarkers(meni.articulo?.contenido || cleanInput.contenido || '');
+  const finalResumen = stripAICitationMarkers(meni.articulo?.resumen || cleanInput.resumen || '');
+
   const palabras = stripHtml(finalContenido).split(/\s+/).filter(Boolean).length;
   const { fuente, fuentesComplementarias } = extractFuente(finalContenido, input.resumen || '');
+
+  // Barrera factual mínima: el detector produce señales; el Supervisor decide.
+  // Las fuentes extraídas del propio texto cuentan como evidencia.
+  const factualitySignals = detectFactualitySignals({
+    titulo: cleanInput.titulo,
+    resumen: finalResumen,
+    contenido: finalContenido,
+    fuentesComplementarias,
+    research: cleanInput.research,
+    story: cleanInput.story,
+    aiArtifactsRemoved,
+  });
   const puntosClave = extractPuntosClave(finalContenido);
   const autorFoto = getAutorFoto(input.autor || '');
 
@@ -99,6 +139,7 @@ export async function guardarConMeni(
     aportePropio: meni.valorEditorial?.aportePropio,
     research: input.research,
     story: input.story,
+    factualitySignals,
   });
 
   // ok = MENI approval (meni.aprobado). supervisorApproved remains the Supervisor verdict.
@@ -145,11 +186,29 @@ export async function guardarConMeni(
     profileInternal: canonicalPerfil,
     research: input.research,
     story: input.story,
+    // VERSIÓN EDITORIAL CANÓNICA — la única que puede llegar a publicación.
+    // Las rutas no deben persistir el contenido crudo por encima de estos campos.
+    contenido: finalContenido,
+    resumen: finalResumen,
+    // Señales de riesgo factual evaluadas (trazabilidad del gate).
+    factuality: {
+      signals: factualitySignals,
+      evaluatedAt: new Date().toISOString(),
+    },
+    ...(aiArtifactsRemoved ? { aiArtifactsRemoved: true } : {}),
   };
 
   // Sanitizar para Firestore: nunca enviar `undefined` (ni plano ni anidado).
   // Esto cubre fields como canonicalEditorialDecision.research, supervisorDecision.scoreOverrideReason, etc.
   const cleanUpdateData = sanitizeForFirestore(updateData) as Record<string, unknown>;
 
-  return { ok, meni, supervisor, supervisorApproved, updateData: cleanUpdateData };
+  return {
+    ok,
+    meni,
+    supervisor,
+    supervisorApproved,
+    updateData: cleanUpdateData,
+    canonical: { titulo: cleanedTitulo, resumen: finalResumen, contenido: finalContenido },
+    factualitySignals,
+  };
 }

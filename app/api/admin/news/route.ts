@@ -7,7 +7,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
 import { categoryToSlug } from '@/lib/types';
-import { findGenerationDefects } from '@/lib/editorial/content-integrity';
+import { findBlockingDefects } from '@/lib/editorial/content-integrity';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -173,8 +173,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Faltan campos requeridos' }, { status: 400 });
     }
 
-    // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline
-    const contentDefects = findGenerationDefects([titulo, resumen, contenido].join('\n'));
+    // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline.
+    // Solo BLOCK rechaza aquí; los artefactos AUTO_REMOVE se eliminan en
+    // guardarConMeni antes de evaluar y persistir la versión canónica.
+    const contentDefects = findBlockingDefects([titulo, resumen, contenido].join('\n'));
     if (contentDefects.length > 0) {
       logger.error('[admin/news POST] Contenido rechazado por defectos de generación:', { defects: contentDefects.map(d => d.code) });
       return NextResponse.json({
@@ -206,7 +208,7 @@ export async function POST(request: NextRequest) {
       slug,
     };
 
-    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical } = await guardarConMeni(noticiaInput, db);
 
     if (!meniOk) {
       const first = meni.blockingIssues?.[0];
@@ -252,8 +254,8 @@ export async function POST(request: NextRequest) {
       ...meniUpdateData,
       id: docRef.id,
       titulo: tituloLimpio,
-      resumen,
-      contenido,
+      // resumen/contenido canónicos vienen de meniUpdateData (textoCorregido);
+      // nunca persistir el input crudo por encima de la versión evaluada.
       imagen: imagen || '',
       slug,
       autor: autor || 'Nicaragua Informate',
@@ -277,8 +279,8 @@ export async function POST(request: NextRequest) {
           articleId: docRef.id,
           slug,
           titulo: tituloLimpio,
-          resumen: resumen || '',
-          contenido,
+          resumen: canonical.resumen || '',
+          contenido: canonical.contenido,
           categoria: finalCategoria,
           imagen: imagen || undefined,
           autor: autor || 'Nicaragua Informate',

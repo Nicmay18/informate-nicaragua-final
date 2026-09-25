@@ -103,6 +103,7 @@ export type IssueDomain =
   | 'COSTO'
   | 'SEGURIDAD'
   | 'INFRAESTRUCTURA'
+  | 'FACTUALIDAD'
   | 'INVARIANTE';
 
 export interface SupervisorIssue {
@@ -186,6 +187,14 @@ export interface ArticleContext {
   research?: ResearchResult;
   /** Propuesta del Story Editor si existe */
   story?: StoryProposal;
+  /** Señales de riesgo factual producidas por el detector (lib/editorial/factuality-signals).
+   *  El detector no decide; el Supervisor traduce cada señal a issue/decisión. */
+  factualitySignals?: Array<{
+    code: string;
+    severity: 'CRITICAL' | 'IMPORTANT';
+    evidence: string;
+    desc: string;
+  }>;
   /** Resultado del último watch cycle si existe */
   watch?: WatchResult;
   /** Actualizaciones detectadas pendientes */
