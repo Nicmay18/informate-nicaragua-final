@@ -50,12 +50,22 @@ export function verifyAdminOrCleanupToken(token: string | null | undefined): boo
   return verifyAgainstSecrets(token, [process.env.ADMIN_API_KEY, cleanup].filter(Boolean) as string[]);
 }
 
+function readAdminSessionCookie(request: Request): string {
+  const cookieHeader = request.headers.get('cookie') || '';
+  for (const part of cookieHeader.split(';')) {
+    const [name, ...rest] = part.trim().split('=');
+    if (name === 'admin_session') return decodeURIComponent(rest.join('='));
+  }
+  return '';
+}
+
 export function isAdminRequest(request: Request): boolean {
   const token =
     request.headers.get('x-admin-token') ||
     request.headers.get('x-admin-key') ||
     '';
-  return verifyAdminToken(token);
+  if (verifyAdminToken(token)) return true;
+  return verifyAdminToken(readAdminSessionCookie(request));
 }
 
 export function unauthorized(): NextResponse {

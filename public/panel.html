@@ -3666,7 +3666,16 @@ sin texto ni marcas de agua, composición periodística"
         // ─── VEREDICTO DEL PROYECTO ───
         calcularVeredicto({ totalNoticias, totalVistas, promVistas, promedio, publicadasSemana, calidadOk, conImagen });
 
-      } catch (error) { console.error("Error estadísticas:", error); }
+      } catch (error) {
+        console.error("Error estadísticas:", error);
+        ['statNoticias', 'statVistas', 'statSemana', 'statPromedio'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.textContent = '⚠'; el.title = 'No se pudieron cargar los datos (error del servidor)'; }
+        });
+        const sub = document.querySelector('#statNoticiasChange span');
+        if (sub) sub.textContent = 'No se pudieron cargar los datos — error del servidor, no ausencia de noticias';
+        showToast('Error cargando estadísticas: ' + (error.message || error), 'error');
+      }
     }
 
     function calcularVeredicto({ totalNoticias, totalVistas, promVistas, promedio, publicadasSemana, calidadOk, conImagen }) {

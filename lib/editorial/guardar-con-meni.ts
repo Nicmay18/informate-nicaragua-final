@@ -3,7 +3,7 @@ import { runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput, MeniResult } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
 import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-helpers';
-import { resolvePublicCategory, PUBLIC_CATEGORY_TO_PROFILE } from './canonical';
+import { resolveEditorialClassification, PUBLIC_CATEGORY_TO_PROFILE } from './canonical';
 import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
 import { stripAICitationMarkers } from '@/lib/sanitize';
@@ -109,13 +109,14 @@ export async function guardarConMeni(
   const autorFoto = getAutorFoto(input.autor || '');
 
   // Perfil y categoria publica canonica — una sola fuente de verdad
-  const canonicalCategoria = resolvePublicCategory({
+  const classification = resolveEditorialClassification({
     titulo: input.titulo,
     contenido: finalContenido,
     resumen: input.resumen,
     categoria: input.categoria,
     perfil: meni.profile_used,
   });
+  const canonicalCategoria = classification.finalCategory;
   const canonicalPerfil = PUBLIC_CATEGORY_TO_PROFILE[canonicalCategoria] ?? meni.profile_used;
 
   // Decisión del Agente Supervisor Editorial Permanente (REGLA DE CIERRE)
@@ -176,6 +177,11 @@ export async function guardarConMeni(
     editorialReason: meni.editorialReason,
     perfil: canonicalPerfil,
     profile_confidence: meni.profile_confidence,
+    classificationSource: classification.classificationSource,
+    suggestedCategory: classification.suggestedCategory ?? undefined,
+    classificationConflict: classification.classificationConflict,
+    classificationStatus: classification.classificationStatus,
+    classificationReason: classification.classificationReason,
     categoria: canonicalCategoria,
     palabras,
     puntosClave,
