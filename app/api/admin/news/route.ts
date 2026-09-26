@@ -7,7 +7,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
 import { categoryToSlug } from '@/lib/types';
-import { findBlockingDefects } from '@/lib/editorial/content-integrity';
+import { findBlockingDefects, repairMechanicalDefects } from '@/lib/editorial/content-integrity';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -176,9 +176,11 @@ export async function POST(request: NextRequest) {
     // VALIDATE→REJECT→LOG: defectos mecánicos/fabricados conocidos del pipeline.
     // Solo BLOCK rechaza aquí; los artefactos AUTO_REMOVE se eliminan en
     // guardarConMeni antes de evaluar y persistir la versión canónica.
-    const contentDefects = findBlockingDefects([titulo, resumen, contenido].join('\n'));
+    const rawContent = [titulo, resumen, contenido].join('\n');
+    const repairedContent = repairMechanicalDefects(rawContent);
+    const contentDefects = findBlockingDefects(repairedContent.text);
     if (contentDefects.length > 0) {
-      logger.error('[admin/news POST] Contenido rechazado por defectos de generación:', { defects: contentDefects.map(d => d.code) });
+      logger.error('[admin/news POST] Contenido rechazado por defectos de generación:', { defects: contentDefects.map(d => d.code), repaired: repairedContent.repaired });
       return NextResponse.json({
         success: false,
         error: 'Contenido rechazado: defectos mecánicos de generación detectados',
