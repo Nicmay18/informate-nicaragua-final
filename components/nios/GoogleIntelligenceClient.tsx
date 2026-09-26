@@ -162,7 +162,7 @@ function GoogleTab({ dashboard }: { dashboard: GoogleIntelligenceDashboard }) {
       </Section>
 
       {/* URLs que Google ignora */}
-      <Section title="URLs que Google ignora (0 impresiones en 28 días)">
+      <Section title="URLs con 0 impresiones en GSC (28 días)">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
           {dashboard.zeroImpressionUrls.length === 0 ? (
             <p style={{ color: '#16a34a', fontWeight: 600 }}>No hay URLs sin impresiones.</p>
@@ -240,15 +240,15 @@ function ComplianceTab({ compliance }: { compliance: ComplianceReport | null }) 
       {/* KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
         <KPI label="Total artículos" value={compliance.totalArticles} color="#3b82f6" />
-        <KPI label="Google ignora" value={compliance.articlesGoogleIgnores} color="#ef4444" />
+        <KPI label="0 impresiones GSC" value={compliance.articlesGoogleIgnores} color="#ef4444" />
         <KPI label="Google valora" value={compliance.articlesGoogleValues} color="#22c55e" />
-        <KPI label="MENI sobreestima" value={compliance.meniOverestimates} color="#f59e0b" />
+        <KPI label="MENI alto / 0 impresiones" value={compliance.meniOverestimates} color="#f59e0b" />
         <KPI label="MENI subestima" value={compliance.meniUnderestimates} color="#8b5cf6" />
         <KPI label="Alineados" value={compliance.alignedCount} color="#0f766e" />
       </div>
 
       {/* Top ignored: MENI alto pero Google ignora */}
-      <Section title="MENI alto pero Google ignora (contenido de poco valor)">
+      <Section title="MENI alto con 0 impresiones en GSC (señal interna — no concluye rechazo de Google)">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {compliance.topIgnored.length === 0 ? (
             <p style={{ color: '#16a34a', fontWeight: 600 }}>No hay artículos con MENI alto que Google ignore.</p>
@@ -344,7 +344,7 @@ function ReadinessTab({ readiness }: { readiness: AdSenseReadinessReport | null 
       </Section>
 
       {/* Google ignored with high MENI */}
-      <Section title="MENI ≥ 90 pero Google ignora (0 impresiones)">
+      <Section title="MENI ≥ 90 con 0 impresiones en GSC">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {readiness.googleIgnoredWithHighMeni.length === 0 ? (
             <p style={{ color: '#16a34a', fontWeight: 600 }}>No hay artículos con MENI alto que Google ignore.</p>
