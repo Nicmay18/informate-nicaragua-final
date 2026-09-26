@@ -4,16 +4,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const ADMIN_LINKS = [
-  { href: '/admin/nios', label: 'NIOS' },
-  { href: '/admin/meni', label: 'Criterio Editorial' },
-  { href: '/admin/meni-dashboard', label: 'Dashboard MENI' },
-  { href: '/admin/ceo-agent', label: 'CEO Agent' },
-  { href: '/admin/editor', label: 'Editor' },
-  { href: '/admin/correcciones', label: 'Correcciones' },
-  { href: '/admin/trafico', label: 'Tráfico' },
-  { href: '/admin/growth', label: 'Growth' },
-  { href: '/admin/entities', label: 'Entidades' },
-  { href: '/admin/portada', label: 'Portada' },
+  { href: '/panel/nios', label: 'NIOS' },
+  { href: '/panel/meni', label: 'Criterio Editorial' },
+  { href: '/panel/meni-dashboard', label: 'Dashboard MENI' },
+  { href: '/panel/centro-de-comando', label: 'CEO Agent' },
+  { href: '/panel.html', label: 'Editor' },
+  { href: '/panel.html', label: 'Correcciones' },
+  { href: '/panel.html', label: 'Tráfico' },
+  { href: '/panel/nios/performance', label: 'Growth' },
+  { href: '/panel/entities', label: 'Entidades' },
+  { href: '/panel/portada', label: 'Portada' },
 ];
 
 export default function AdminNav() {

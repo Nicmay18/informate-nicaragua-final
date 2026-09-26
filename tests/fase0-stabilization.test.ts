@@ -194,11 +194,11 @@ vi.mock('@/lib/nios/executive-center', () => ({
   getNiosExecutiveData: vi.fn(async () => null),
 }));
 vi.mock('@/lib/nios/nios-speaks', () => ({ buildNiosBrief: vi.fn(() => null) }));
-vi.mock('@/components/nios/NiosTeHabla', () => ({ NiosTeHabla: () => null }));
-vi.mock('@/components/nios/NiosPlanOfToday', () => ({ NiosPlanOfToday: () => null }));
-vi.mock('@/components/nios/NiosExecutiveDashboard', () => ({ NiosExecutiveDashboard: () => null }));
-vi.mock('@/components/nios/NiosV3Dashboard', () => ({ NiosV3Dashboard: () => null }));
-vi.mock('@/components/nios/NiosV4Dashboard', () => ({ NiosV4Dashboard: () => null }));
+vi.mock('@/lib/admin-auth', () => ({ isAuthenticatedAdmin: vi.fn(async () => true) }));
+vi.mock('@/lib/departamento-central/store', () => ({ getLatestDepartamentoReport: vi.fn(async () => null) }));
+vi.mock('@/lib/departamento-central/summary', () => ({ getDepartamentoWorkSummary: vi.fn(async () => null) }));
+vi.mock('@/components/nios/NiosExecutiveCenter', () => ({ default: () => null }));
+vi.mock('@/components/nios/DepartamentoCentralSummary', () => ({ default: () => null }));
 vi.mock('@/lib/data', () => ({ getNewsBySlug: vi.fn(async () => null) }));
 vi.mock('lucide-react', () => ({
   Brain: () => null,
@@ -215,12 +215,12 @@ vi.mock('lucide-react', () => ({
 
 describe('FASE 0 — panel render es de solo lectura', () => {
   it('renderizar /panel/nios NUNCA escribe en nios_actions', async () => {
-    const { default: NiosPanelPageContent } = await import('@/components/nios/NiosPanelPageContent');
+    const { default: PanelNiosPage } = await import('@/app/panel/nios/page');
     seed('nios_actions', 'a1', { id: 'a1', status: 'PENDING', createdAt: new Date().toISOString() });
 
     // Cinco renders consecutivos: la colección no crece.
     for (let i = 0; i < 5; i++) {
-      await NiosPanelPageContent();
+      await PanelNiosPage();
     }
     expect(colDocs('nios_actions')).toHaveLength(1);
   });

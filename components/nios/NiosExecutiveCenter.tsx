@@ -77,13 +77,13 @@ function EmptyData({ label }: { label: string }) {
 }
 
 const NAV_LINKS = [
-  { href: '/admin/nios', label: 'Overview', icon: '🧠' },
-  { href: '/admin/nios/reparaciones', label: 'Reparaciones', icon: '🛠️' },
-  { href: '/admin/nios/google-intelligence', label: 'Google Intelligence', icon: '🔎' },
-  { href: '/admin/nios/adsense-recovery', label: 'AdSense Recovery', icon: '💰' },
-  { href: '/admin/nios/adsense-report', label: 'AdSense Report', icon: '📊' },
-  { href: '/admin/nios/recovery', label: 'Recovery Queue', icon: '🔄' },
-  { href: '/admin/nios/weekly', label: 'Weekly Intelligence', icon: '📋' },
+  { href: '/panel/nios', label: 'Overview', icon: '🧠' },
+  { href: '/panel/nios/reparaciones', label: 'Reparaciones', icon: '🛠️' },
+  { href: '/panel/nios/google-intelligence', label: 'Google Intelligence', icon: '🔎' },
+  { href: '/panel/nios/adsense-recovery', label: 'AdSense Recovery', icon: '💰' },
+  { href: '/panel/nios/adsense-report', label: 'AdSense Report', icon: '📊' },
+  { href: '/panel/nios/recovery', label: 'Recovery Queue', icon: '🔄' },
+  { href: '/panel/nios/weekly', label: 'Weekly Intelligence', icon: '📋' },
   { href: '/panel/nios', label: 'NIOS Panel', icon: '📰' },
   { href: '/panel/nios/performance', label: 'Performance', icon: '⚙️' },
   { href: '/panel/nios/editorial-strategy', label: 'Editorial Strategy', icon: '✍️' },
@@ -152,7 +152,7 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
       <div className="flex">
         {/* Sidebar navigation */}
         <nav className="hidden md:flex flex-col w-56 min-h-screen bg-white border-r border-slate-200 p-4 sticky top-0 self-start">
-          <a href="/admin/nios" className="text-lg font-bold text-slate-900 mb-6">NIOS</a>
+          <a href="/panel/nios" className="text-lg font-bold text-slate-900 mb-6">NIOS</a>
           <div className="space-y-1">
             {NAV_LINKS.map((l) => (
               <a key={l.href} href={l.href} className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors">
@@ -340,7 +340,7 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
             )}
 
             {/* Google Intelligence */}
-            <Card title="Google Intelligence" icon="🔎" link="/admin/nios/google-intelligence" linkLabel="Ver análisis completo →">
+            <Card title="Google Intelligence" icon="🔎" link="/panel/nios/google-intelligence" linkLabel="Ver análisis completo →">
               <div className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   <Metric
@@ -410,7 +410,7 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
             </Card>
 
             {/* NIOS Trust Estimate */}
-            <Card title="NIOS Trust Estimate" icon="🛡️" link="/admin/nios/google-intelligence" linkLabel="Ver Trust completo →">
+            <Card title="NIOS Trust Estimate" icon="🛡️" link="/panel/nios/google-intelligence" linkLabel="Ver Trust completo →">
               {trust ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -427,7 +427,7 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
             </Card>
 
             {/* AdSense Recovery */}
-            <Card title="AdSense Recovery" icon="💰" link="/admin/nios/adsense-recovery" linkLabel="Ver recuperación →">
+            <Card title="AdSense Recovery" icon="💰" link="/panel/nios/adsense-recovery" linkLabel="Ver recuperación →">
               {adsense ? (
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -458,8 +458,8 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
                     </div>
                   )}
                   <div className="flex gap-3">
-                    <a href="/admin/nios/adsense-recovery" className="text-xs text-blue-600 hover:underline">Recuperación →</a>
-                    <a href="/admin/nios/adsense-report" className="text-xs text-blue-600 hover:underline">Reporte completo →</a>
+                    <a href="/panel/nios/adsense-recovery" className="text-xs text-blue-600 hover:underline">Recuperación →</a>
+                    <a href="/panel/nios/adsense-report" className="text-xs text-blue-600 hover:underline">Reporte completo →</a>
                   </div>
                 </div>
               ) : (
@@ -621,7 +621,7 @@ export default function NiosExecutiveCenter({ data }: { data: NiosExecutiveData 
             </Card>
 
             {/* Weekly Intelligence */}
-            <Card title="Weekly Intelligence" icon="📋" link="/admin/nios/weekly" linkLabel="Ver reporte semanal →">
+            <Card title="Weekly Intelligence" icon="📋" link="/panel/nios/weekly" linkLabel="Ver reporte semanal →">
               {weekly ? (
                 <div className="space-y-4 text-sm">
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
