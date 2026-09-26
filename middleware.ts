@@ -79,6 +79,26 @@ function isSensitiveApiPath(pathname: string): boolean {
   return SENSITIVE_API_PATHS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 }
 
+/** Devuelve los headers a reenviar; inyecta x-admin-token cuando la sesión
+ *  viene por cookie HttpOnly y el header no porta la clave válida. */
+function buildForwardedHeaders(request: NextRequest): Headers {
+  const key = process.env.ADMIN_API_KEY || '';
+  const cookieToken = request.cookies.get('admin_session')?.value || '';
+  const headerToken =
+    request.headers.get('x-admin-token') ||
+    request.headers.get('x-admin-key') ||
+    '';
+  const needsInjection =
+    !!cookieToken &&
+    !!key &&
+    timingSafeCompare(cookieToken, key) &&
+    !timingSafeCompare(headerToken, key);
+  if (!needsInjection) return request.headers;
+  const h = new Headers(request.headers);
+  h.set('x-admin-token', cookieToken);
+  return h;
+}
+
 function requireAdminAuth(request: NextRequest): NextResponse | null {
   // Header y cookie se evalúan por separado: un header inválido/stale
   // (p.ej. el marcador 'session-cookie' del panel) NO debe impedir que
@@ -122,7 +142,7 @@ export function middleware(request: NextRequest) {
     const unauthorized = requireAdminAuth(request);
     if (unauthorized) return unauthorized;
 
-    const response = NextResponse.next();
+    const response = NextResponse.next({ request: { headers: buildForwardedHeaders(request) } });
     response.headers.set('X-RateLimit-Limit', '60');
     response.headers.set('X-RateLimit-Remaining', '60');
     // Cloudflare tiene una regla "Cache Everything" que ignora el
@@ -199,7 +219,7 @@ export function middleware(request: NextRequest) {
     "frame-ancestors 'self'",
   ];
 
-  const response = NextResponse.next();
+  const response = NextResponse.next({ request: { headers: buildForwardedHeaders(request) } });
 
   response.headers.set('Content-Security-Policy', cspDirectives.join('; '));
   response.headers.set('X-Content-Type-Options', 'nosniff');
