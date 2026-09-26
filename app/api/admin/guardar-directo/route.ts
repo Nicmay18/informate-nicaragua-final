@@ -7,7 +7,7 @@ import type { NoticiaInput } from '@/lib/meni';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { categoryToSlug } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
-import { findBlockingDefects } from '@/lib/editorial/content-integrity';
+import { findBlockingDefects, repairMechanicalDefects } from '@/lib/editorial/content-integrity';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
 
@@ -93,13 +93,16 @@ export async function POST(request: NextRequest) {
 
     // VALIDATE→REJECT→LOG: solo defectos BLOCK rechazan aquí — los artefactos
     // AUTO_REMOVE ya fueron eliminados del input dentro de guardarConMeni.
-    const contentDefects = findBlockingDefects([finalTitulo, finalResumen, finalContenido].join('\n'));
+    const canonicalCombined = [finalTitulo, finalResumen, finalContenido].join('\n');
+    const repairedCanonical = repairMechanicalDefects(canonicalCombined);
+    const contentDefects = findBlockingDefects(repairedCanonical.text);
     if (contentDefects.length > 0) {
-      logger.error('[guardar-directo] Contenido rechazado por defectos de generación:', { id, defects: contentDefects.map(d => d.code) });
+      logger.error('[guardar-directo] Contenido rechazado por defectos de generación:', { id, defects: contentDefects.map(d => d.code), repaired: repairedCanonical.repaired });
       return NextResponse.json({
         error: 'Contenido rechazado: defectos mecánicos de generación detectados',
         code: 'CONTENT_INTEGRITY_VIOLATION',
         defects: contentDefects,
+        repaired: repairedCanonical.repaired,
       }, { status: 400 });
     }
 
