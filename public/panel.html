@@ -3568,8 +3568,8 @@ sin texto ni marcas de agua, composición periodística"
           showToast('No hay sesión de Firebase activa. Cerrá sesión y volvé a entrar.', 'error');
           return;
         }
-        // Si ya tenemos API key guardada, no hacemos nada
-        if (localStorage.getItem('admin_api_key')) return;
+        // La sesión usa cookie HttpOnly (Max-Age 24h): siempre renovarla.
+        // Un marcador viejo en localStorage no garantiza cookie viva.
         const idToken = await getIdToken(user, true);
         const res = await fetch('/api/admin/session', {
           method: 'POST',
