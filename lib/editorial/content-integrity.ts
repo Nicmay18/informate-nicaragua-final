@@ -49,3 +49,44 @@ export function findGenerationDefects(text: string): GenerationDefect[] {
 export function findBlockingDefects(text: string): GenerationDefect[] {
   return findGenerationDefects(text).filter(d => d.action === 'BLOCK');
 }
+
+/**
+ * Repara únicamente artefactos mecánicos inequívocos producidos por el
+ * generador. No corrige lenguaje editorial, citas ni hechos. Se ejecuta sobre
+ * la salida canónica de MENI antes del último gate para evitar que un bug de
+ * generación conocido convierta una nota válida en un falso rechazo.
+ */
+export function repairMechanicalDefects(text: string): {
+  text: string;
+  repaired: string[];
+} {
+  if (!text) return { text, repaired: [] };
+
+  let out = text;
+  const repaired: string[] = [];
+
+  const replacements: Array<[RegExp, string, string]> = [
+    [/motocicletacicleta/gi, 'motocicleta', 'CONCAT_MOTOCICLETA'],
+    [/motocicletaciclistas?/gi, 'motociclista', 'CONCAT_MOTOCICLETA'],
+    [/\bpersonas\s+personas\b/gi, 'personas', 'DUP_PERSONAS'],
+    [/\bel\s+afectación\b/gi, 'la afectación', 'CONCORDANCIA_AFECTACION'],
+    [/\bdel\s+afectación\b/gi, 'de la afectación', 'CONCORDANCIA_AFECTACION'],
+    [/afectado\s+afectada/gi, 'afectado', 'CONCORDANCIA_AFECTACION'],
+  ];
+
+  for (const [re, replacement, code] of replacements) {
+    if (re.test(out)) {
+      out = out.replace(re, replacement);
+      if (!repaired.includes(code)) repaired.push(code);
+    }
+  }
+
+  // LI_ROTO: elimina solo la forma inválida <li>slug"> y conserva el texto
+  // que le sigue; nunca modifica anchors HTML válidos.
+  if (/<li>[a-z0-9-]{6,}">/i.test(out)) {
+    out = out.replace(/<li>([a-z0-9-]{6,})">/gi, '<li>');
+    repaired.push('LI_ROTO');
+  }
+
+  return { text: out, repaired };
+}
