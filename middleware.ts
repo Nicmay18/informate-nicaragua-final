@@ -80,16 +80,20 @@ function isSensitiveApiPath(pathname: string): boolean {
 }
 
 function requireAdminAuth(request: NextRequest): NextResponse | null {
-  const adminToken =
+  // Header y cookie se evalúan por separado: un header inválido/stale
+  // (p.ej. el marcador 'session-cookie' del panel) NO debe impedir que
+  // la cookie HttpOnly válida autentique.
+  const headerToken =
     request.headers.get('x-admin-token') ||
     request.headers.get('x-admin-key') ||
-    request.cookies.get('admin_session')?.value ||
     '';
+  const cookieToken = request.cookies.get('admin_session')?.value || '';
   const cronSecret = request.headers.get('x-cron-secret') || '';
   const validAdminKey = process.env.ADMIN_API_KEY || '';
   const validCronSecret = process.env.CRON_SECRET_TOKEN || process.env.CRON_SECRET || '';
 
-  const isValidAdmin = validAdminKey.length > 0 && timingSafeCompare(adminToken, validAdminKey);
+  const isValidAdmin = validAdminKey.length > 0 &&
+    (timingSafeCompare(headerToken, validAdminKey) || timingSafeCompare(cookieToken, validAdminKey));
   const isValidCron = validCronSecret.length > 0 && timingSafeCompare(cronSecret, validCronSecret);
 
   if (!isValidAdmin && !isValidCron) {
