@@ -257,22 +257,22 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/admin/growth',
-        destination: '/panel/nios',
-        permanent: false,
-      },
-      {
-        source: '/admin/crecimiento',
         destination: '/panel/nios/performance',
         permanent: false,
       },
       {
+        source: '/admin/crecimiento',
+        destination: '/panel/crecimiento',
+        permanent: false,
+      },
+      {
         source: '/admin/meni-dashboard',
-        destination: '/panel/nios/editorial-strategy',
+        destination: '/panel/meni-dashboard',
         permanent: false,
       },
       {
         source: '/admin/knowledge-center',
-        destination: '/panel/nios',
+        destination: '/panel/knowledge-center',
         permanent: false,
       },
       {
