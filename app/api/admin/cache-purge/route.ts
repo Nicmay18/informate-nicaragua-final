@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
       'popular-news',
       'news-sitemap',
       'sitemap-news',
+      'sitemap-news-full',
       'nios-telemetry',
     ];
     const paths = [

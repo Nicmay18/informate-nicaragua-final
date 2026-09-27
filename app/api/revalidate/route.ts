@@ -77,6 +77,7 @@ export async function POST(request: NextRequest) {
     revalidateTag('feed-xml');
     revalidateTag('news-sitemap');
     revalidateTag('sitemap-news');
+    revalidateTag('sitemap-news-full');
 
     // CRITICO para indexacion rapida: invalidar sitemaps al instante
     // para que Google News vea la noticia nueva sin esperar 1h de revalidate.

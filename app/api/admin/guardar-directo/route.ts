@@ -308,6 +308,7 @@ export async function POST(request: NextRequest) {
     revalidateTag('popular-news');
     revalidateTag('news-sitemap');
     revalidateTag('sitemap-news');
+    revalidateTag('sitemap-news-full');
     revalidatePath('/');
     revalidatePath('/noticias');
     // CAUSA RAÍZ (edición de nota publicada): la URL del artículo y su categoría

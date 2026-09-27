@@ -317,6 +317,7 @@ export async function POST(request: NextRequest) {
     revalidateTag('trending-news');
     revalidateTag('news-sitemap');
     revalidateTag('sitemap-news');
+    revalidateTag('sitemap-news-full');
 
     // Invalidar cache en memoria de Firestore (CRITICO: evita esperar 5 min)
     try {

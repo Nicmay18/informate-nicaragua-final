@@ -247,6 +247,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     revalidateTag('trending-news');
     revalidateTag('news-sitemap');
     revalidateTag('sitemap-news');
+    revalidateTag('sitemap-news-full');
 
     // Revalidar pagina del articulo individual (ISR cache)
     const slug = snap.data()?.slug || id;
@@ -354,6 +355,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       revalidateTag('trending-news');
       revalidateTag('news-sitemap');
       revalidateTag('sitemap-news');
+      revalidateTag('sitemap-news-full');
       revalidatePath('/');
       revalidatePath('/noticias');
       if (slugBefore) revalidatePath(`/noticias/${slugBefore}`);
@@ -405,6 +407,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     revalidateTag('trending-news');
     revalidateTag('news-sitemap');
     revalidateTag('sitemap-news');
+      revalidateTag('sitemap-news-full');
     revalidatePath('/');
     revalidatePath('/noticias');
     if (slugBefore) revalidatePath(`/noticias/${slugBefore}`);

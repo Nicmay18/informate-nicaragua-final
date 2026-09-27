@@ -1,6 +1,7 @@
 import '@/app/home-redesign.css';
 import HomePagePro from '@/components/HomePagePro';
 import { getHomePageData } from '@/lib/db/homepage';
+import { FirestoreOutageError } from '@/lib/data';
 import { checkHomeDiversity } from '@/lib/home-balance';
 import { checkBrandHealth } from '@/lib/brand-health';
 import { getAdminDb } from '@/lib/firebase-admin';
@@ -125,6 +126,9 @@ export default async function HomePage() {
       logger.warn('[HomePage] No se pudo auditar homepage con el Supervisor:', auditErr);
     }
   } catch (error) {
+    // Apagón real de Firestore ≠ corpus vacío: relanzar para que ISR sirva
+    // la última versión buena cacheada en lugar de una portada falsa vacía.
+    if (error instanceof FirestoreOutageError) throw error;
     logger.error('[HomePage] Error:', error);
   }
 
