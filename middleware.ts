@@ -228,7 +228,9 @@ export function middleware(request: NextRequest) {
   response.headers.set('X-DNS-Prefetch-Control', 'on');
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), interest-cohort=()');
-  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin');
+  // same-origin-allow-popups: mantiene el aislamiento cross-origin pero permite
+  // que la pagina conserve la referencia al popup que abre (Firebase signInWithPopup).
+  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
   response.headers.delete('X-Powered-By');
 
   if (pathname.startsWith('/panel/') && pathname !== '/panel') {
