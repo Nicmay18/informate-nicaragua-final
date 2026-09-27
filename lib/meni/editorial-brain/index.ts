@@ -364,7 +364,6 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     evaluacionCategoria.puntosPerdidos,
     editorialDna.bloquear || tieneProblemasGraves,
     { readerLearning, editorialContribution },
-    evaluacionCategoria.bonusValorEditorial,
   );
 
   // El score final es el ADN NI, que integra métricas editoriales ponderadas.
@@ -586,28 +585,10 @@ function buildMatricesCategoria(): Record<string, { contexto: CriterioCategoria[
 
 const MATRICES_CATEGORIA = buildMatricesCategoria();
 
-function detectarMultiEventosSucesos(base: string): number {
-  const lugares = [
-    'sabana grande', 'rubenia', 'winston', 'carretera', 'km ', 'kilometro',
-    'barrio', 'reparto', 'sector', 'distrito', 'zona', 'comunidad',
-    'avenida', 'calle', 'interseccion', 'tramo', 'puente', 'rotonda',
-  ];
-  const incidentes = [
-    'fallecio', 'accidente', 'colision', 'choque', 'volco',
-    'estrello', 'atropello', 'incidente', 'caso', 'evento',
-    'se registro', 'se produjo', 'se reporto', 'ocurrio',
-  ];
-  const lugaresEncontrados = lugares.filter(l => base.includes(l));
-  const incidentesEncontrados = incidentes.filter(i => base.includes(i));
-  if (incidentesEncontrados.length >= 3 && lugaresEncontrados.length >= 3) return 30;
-  if (incidentesEncontrados.length >= 2 && lugaresEncontrados.length >= 2) return 20;
-  return 0;
-}
-
 function calcularEvaluacionCategoria(
   categoria: string,
   texto: string,
-): EvaluacionCategoria & { puntosPerdidos: PuntoPerdido[]; bonusValorEditorial: number } {
+): EvaluacionCategoria & { puntosPerdidos: PuntoPerdido[] } {
   const normalizar = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const base = normalizar(texto);
   const categoriaNormalizada = (categoria || 'General')
@@ -653,7 +634,6 @@ function calcularEvaluacionCategoria(
   let srvFaltantes = srv.faltantes;
   let srvCumplidos = srv.cumplidos;
   let srvPerdidos = srv.perdidos;
-  let bonusValorEditorial = 0;
 
   if (matrizKey === 'sucesos') {
     if (ctx.cumplidos.length === matriz.contexto.length) {
@@ -669,10 +649,6 @@ function calcularEvaluacionCategoria(
   const cumplidos = [...ctx.cumplidos, ...exp.cumplidos, ...srvCumplidos];
   const puntosPerdidos = [...ctx.perdidos, ...exp.perdidos, ...srvPerdidos];
 
-  if (bonusValorEditorial > 0) {
-    cumplidos.push(`Nota consolidada con múltiples sucesos (+${bonusValorEditorial} valor editorial)`);
-  }
-
   return {
     categoria: categoriaFinal,
     contexto: ctxScore,
@@ -681,7 +657,6 @@ function calcularEvaluacionCategoria(
     faltantes,
     cumplidos,
     puntosPerdidos,
-    bonusValorEditorial,
   };
 }
 
@@ -693,7 +668,6 @@ function calcularScoreEjecutivo(
   puntosCategoria: PuntoPerdido[],
   bloquear: boolean,
   respuestas: { readerLearning: string; editorialContribution: string },
-  bonusValorEditorial: number = 0,
 ): { score: number; puntosPerdidos: PuntoPerdido[] } {
   const puntosPerdidos: PuntoPerdido[] = [...puntosCategoria];
   for (const accion of acciones) {
@@ -726,8 +700,6 @@ function calcularScoreEjecutivo(
   }
 
   let score = 100 - puntosPerdidos.reduce((s, p) => s + p.puntos, 0);
-  // Bonus por valor editorial: notas consolidadas con múltiples sucesos
-  score += bonusValorEditorial;
   // Si el DNA o problemas graves bloquean, el score no puede fingir aprobación.
   if (bloquear) score = Math.min(score, 74);
   score = Math.max(0, Math.min(100, Math.round(score)));
