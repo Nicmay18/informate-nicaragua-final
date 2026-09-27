@@ -37,6 +37,23 @@ const DEFECTS: Array<{ code: string; re: RegExp; desc: string; action: DefectAct
   { code: 'AI_TRACKING_URL', re: /[?&]utm_source=chatgpt\.com/i, action: 'AUTO_REMOVE', desc: 'parámetro utm_source=chatgpt.com (residuo de IA)' },
   // Prompt leakage: instrucciones del sistema pegadas en el cuerpo.
   { code: 'AI_PROMPT_LEAK', re: /\b(?:como modelo de lenguaje|as an ai language model|no puedo navegar en internet|según mi base de conocimiento)\b/i, action: 'REVIEW', desc: 'posible fuga de prompt/disclaimer de IA en el texto' },
+
+  // ── Defectos mecánicos genéricos (barrera final anti-generación) ──
+  // Mojibake / caracteres de reemplazo: corrupción de codificación inequívoca.
+  { code: 'MOJIBAKE', re: /\uFFFD|Ã©|Ã±|Ã³|Ã¡|Ã­|â€|â€œ/i, action: 'BLOCK', desc: 'caracteres corruptos (mojibake) en el texto' },
+  // Duplicación mecánica genérica: misma palabra de 6+ letras repetida.
+  // Whitelist: reduplicaciones legítimas del español (ja ja, je je, etc. <6 letras).
+  { code: 'DUP_WORD_GENERIC', re: /\b([a-záéíóúñü]{6,})\s+\1\b/, action: 'BLOCK', desc: 'palabra duplicada mecánicamente (ej. "texto texto")' },
+  // Puntuación duplicada imposible: !! ?? ;; ,, :: (puntos suspensivos "..." son válidos).
+  { code: 'DUP_PUNCT', re: /[!?]{2,}|[;,:]{2,}/, action: 'BLOCK', desc: 'signos de puntuación duplicados (ej. "!!", ";;", ",,")' },
+  // Encabezado HTML duplicado de forma consecutiva e idéntica.
+  { code: 'DUP_HEADER', re: /(<h[2-4][^>]*>([^<]{4,120})<\/h[2-4]>)\s*<h[2-4][^>]*>\2<\/h[2-4]>/i, action: 'BLOCK', desc: 'encabezado duplicado consecutivo' },
+  // Token sospechosamente largo: en español casi ninguna palabra supera 23 letras;
+  // un token de 24+ suele ser concatenación defectuosa → REVIEW, no BLOCK.
+  { code: 'LONG_TOKEN', re: /\b[a-záéíóúñü]{24,}\b/i, action: 'REVIEW', desc: 'token inusualmente largo (posible concatenación)' },
+  // Espacio antes de puntuación: artefacto mecánico, pero puede ser intencional
+  // en casos tipográficos → REVIEW.
+  { code: 'SPACE_BEFORE_PUNCT', re: /\s[,;:!?]/, action: 'REVIEW', desc: 'espacio incorrecto antes de puntuación' },
 ];
 
 /** Devuelve los defectos encontrados en el texto (título/resumen/contenido). */

@@ -26,6 +26,7 @@ import {
   detectTitleRepetition,
 } from './validator';
 import { applyAutoFix } from './autoFix';
+import { findGenerationDefects } from '@/lib/editorial/content-integrity';
 import { computeExplanationIndex, computeOriginalityPercent, computeEditorScore } from './editorScore';
 import { detectParagraphTranscription } from './transcription-detector';
 import { logger } from '@/lib/logger';
@@ -90,24 +91,45 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
 
   // Re-validar sobre el texto corregido (solo lo corregible desaparece).
   const categoriasCorregidas = new Set(corregidos.map((c) => c.categoria));
-  const issuesRestantes = issues.filter((i) => !(i.corregible && categoriasCorregidas.has(i.categoria)));
+  let issuesRestantes = issues.filter((i) => !(i.corregible && categoriasCorregidas.has(i.categoria)));
+
+  // Barrera de defectos mecánicos de generación (content-integrity).
+  // Corre sobre el texto YA corregido + título: lo que realmente se publicaría.
+  // BLOCK → bloquea sin importar la fuente de verdad; REVIEW → issue warning.
+  const mechDefects = findGenerationDefects(`${input.titulo}\n${textoCorregido}`);
+  const mechBlocking = mechDefects.filter((d) => d.action === 'BLOCK');
+  issuesRestantes = [
+    ...issuesRestantes,
+    ...mechDefects.map((d): QualityGateIssue => ({
+      categoria: 'defecto_mecanico',
+      severidad: d.action === 'BLOCK' ? 'blocking' : 'warning',
+      mensaje: d.desc,
+      evidencia: d.code,
+      corregible: false,
+    })),
+  ];
 
   // Si Editorial Brain ya decidió, usamos su veredicto y no volvemos a calcular originalidad/score.
   let originalidadPorcentaje: number;
   let editorScore: number;
   let bloqueado: boolean;
   let motivosBloqueo: string[];
+  const mechMotivos = mechBlocking.map(
+    (d) => `Defecto mecánico de generación: ${d.desc} (${d.code})`,
+  );
   if (useSource) {
     originalidadPorcentaje = input.sourceOfTruth!.originalidad;
     editorScore = input.sourceOfTruth!.score;
-    bloqueado = input.sourceOfTruth!.bloqueado;
-    motivosBloqueo = [];
+    // La decisión editorial no puede desbloquear un defecto mecánico: si el
+    // texto final contiene un defecto BLOCK, la pieza queda bloqueada igual.
+    bloqueado = input.sourceOfTruth!.bloqueado || mechBlocking.length > 0;
+    motivosBloqueo = mechMotivos;
   } else {
     originalidadPorcentaje = computeOriginalityPercent(explanationIndex, input.contenido);
     const scoreResult = computeEditorScore(issuesRestantes, explanationIndex, originalidadPorcentaje);
     editorScore = scoreResult.score;
-    bloqueado = scoreResult.bloqueado;
-    motivosBloqueo = scoreResult.motivosBloqueo;
+    bloqueado = scoreResult.bloqueado || mechBlocking.length > 0;
+    motivosBloqueo = [...scoreResult.motivosBloqueo, ...mechMotivos];
   }
 
   return {

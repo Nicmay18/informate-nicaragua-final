@@ -417,8 +417,13 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
         </section>
 
-        {/* Fuentes declaradas — al final del artículo, no antes del cuerpo */}
-        {(noticia.fuente || (noticia.fuentesComplementarias && noticia.fuentesComplementarias.length > 0)) && (
+        {/* Fuentes declaradas — al final del artículo, no antes del cuerpo.
+            Si la "fuente" es el propio medio, se presenta como cobertura
+            propia, nunca como fuente externa. */}
+        {(() => {
+          const fuenteNorm = (noticia.fuente || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          const esPropia = fuenteNorm.includes('nicaragua informate') || fuenteNorm === 'redaccion' || fuenteNorm === 'redaccion ni';
+          return (noticia.fuente || (noticia.fuentesComplementarias && noticia.fuentesComplementarias.length > 0)) && (
           <div
             style={{
               margin: '28px 0',
@@ -433,7 +438,11 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             </h3>
             {noticia.fuente && (
               <p style={{ margin: '0 0 8px', fontSize: 14, color: '#475569' }}>
-                <strong>Fuente principal:</strong> {noticia.fuente}
+                {esPropia ? (
+                  <><strong>Cobertura:</strong> propia, por el equipo editorial de Nicaragua Informate</>
+                ) : (
+                  <><strong>Fuente principal:</strong> {noticia.fuente}</>
+                )}
               </p>
             )}
             {noticia.fuentesComplementarias && noticia.fuentesComplementarias.length > 0 && (
@@ -447,7 +456,8 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
               </div>
             )}
           </div>
-        )}
+        );
+        })()}
 
         {/* Tags */}
         {tags.length > 0 && (

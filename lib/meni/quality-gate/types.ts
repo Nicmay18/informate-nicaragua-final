@@ -33,7 +33,8 @@ export interface QualityGateIssue {
     | 'servicio'
     | 'valor_diferencial'
     | 'explicacion'
-    | 'originalidad';
+    | 'originalidad'
+    | 'defecto_mecanico';
   severidad: QualityGateSeverity;
   mensaje: string;
   evidencia?: string;
