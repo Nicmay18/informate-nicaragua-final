@@ -44,7 +44,7 @@ export default function PrivacidadPage() {
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#64748b', lineHeight: 1.8, fontSize: '0.92rem' }}>
         <li><strong>Mejorar el sitio:</strong> entender qué contenido es más relevante para nuestra audiencia y optimizar la experiencia de navegación.</li>
-        <li><strong>Responder consultas:</strong> atender tus mensajes enviados a través del formulario de contacto en un plazo de 24 a 48 horas hábiles.</li>
+        <li><strong>Responder consultas:</strong> atender tus mensajes enviados a través del formulario de contacto, procurando responder en el menor tiempo posible.</li>
         <li><strong>Enviar boletines:</strong> compartir las noticias más importantes con los suscriptores que han aceptado recibirlas.</li>
         <li><strong>Cumplir obligaciones legales:</strong> responder a requerimientos de autoridades competentes cuando sea necesario.</li>
       </ul>
@@ -80,7 +80,8 @@ export default function PrivacidadPage() {
         No vendemos ni alquilamos tus datos personales a terceros. Solo compartimos información en las siguientes circunstancias:
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#64748b', lineHeight: 1.8, fontSize: '0.92rem' }}>
-        <li><strong>Proveedores de servicios:</strong> empresas que nos ayudan a operar el sitio (alojamiento web, análisis, envío de correos).</li>
+        <li><strong>Proveedores de servicios:</strong> empresas que nos ayudan a operar el sitio (alojamiento web, analítica y procesamiento de formularios).</li>
+        <li><strong>Formulario de contacto:</strong> los mensajes enviados mediante el formulario son procesados por Formspree, proveedor externo que recibe nombre, correo electrónico y contenido del mensaje únicamente para transmitirnos tu consulta.</li>
         <li><strong>Cumplimiento legal:</strong> cuando la ley nos obliga a proporcionar información a autoridades competentes.</li>
         <li><strong>Protección de derechos:</strong> cuando sea necesario para defender nuestros derechos legales o los de nuestros usuarios.</li>
       </ul>

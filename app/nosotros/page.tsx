@@ -165,7 +165,7 @@ export default async function NosotrosPage() {
             {
               icon: <CheckCircle size={20} color="var(--accent)" />,
               title: 'Información verificada',
-              text: 'Contrastamos los datos con al menos dos fuentes antes de publicar y dejamos constancia cuando una información está en desarrollo.',
+              text: 'Contrastamos las afirmaciones relevantes con fuentes confiables y, cuando es posible, recurrimos a fuentes primarias o directas. Dejamos constancia cuando una información está en desarrollo.',
             },
             {
               icon: <Search size={20} color="var(--accent)" />,
@@ -208,7 +208,7 @@ export default async function NosotrosPage() {
             <strong>Revisión inicial.</strong> Verificamos que el tema tenga sustento, que las fuentes estén disponibles y que exista información suficiente para redactar con precisión.
           </li>
           <li style={{ marginBottom: 12 }}>
-            <strong>Contraste de información.</strong> Comparamos al menos dos fuentes independientes antes de publicar una afirmación como dato confirmado.
+            <strong>Contraste de información.</strong> Contrastamos las afirmaciones relevantes con fuentes confiables y, cuando es posible, recurrimos a fuentes primarias o directas.
           </li>
           <li style={{ marginBottom: 12 }}>
             <strong>Redacción.</strong> Escribimos con lenguaje claro, evitamos opiniones sin atribución y señalamos la fuente de cada dato central.

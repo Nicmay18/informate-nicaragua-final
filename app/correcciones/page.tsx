@@ -95,7 +95,7 @@ export default async function CorreccionesPage() {
         <li style={{ marginBottom: '0.5rem' }}>Correo directo: <a href="mailto:redaccion@nicaraguainformate.com" style={{ color: '#2563eb', textDecoration: 'none' }}>redaccion@nicaraguainformate.com</a></li>
       </ul>
       <p style={{ color: '#64748b', fontSize: '0.88rem', marginBottom: '2rem' }}>
-        Procesamos los reportes en un plazo de 24 a 48 horas hábiles. Si el error es confirmado, publicamos la corrección dentro de las siguientes 24 horas.
+        Procuramos procesar los reportes en el menor tiempo posible. Si el error es confirmado, publicamos la corrección de forma prioritaria.
       </p>
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
@@ -112,16 +112,16 @@ export default async function CorreccionesPage() {
       </ul>
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>
-        7. Plazos formales de respuesta
+        7. Cómo tratamos los reportes
       </h2>
       <p style={{ color: '#475569', marginBottom: '1rem', fontSize: '0.92rem', lineHeight: 1.7 }}>
-        Nuestro compromiso público con los lectores incluye los siguientes plazos:
+        Nuestro compromiso público con los lectores incluye:
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#475569', fontSize: '0.92rem', lineHeight: 1.8 }}>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Acuse de recibo:</strong> dentro de las 24 horas hábiles siguientes a la solicitud.</li>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Verificación:</strong> hasta 48 horas hábiles para evaluar el reporte, contrastar evidencia y consultar fuentes.</li>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Publicación de la corrección:</strong> dentro de las 24 horas siguientes a la confirmación del error.</li>
-        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Casos urgentes:</strong> si el error puede afectar la reputación de personas, derechos de menores o procesos judiciales en curso, el tratamiento es prioritario y la corrección se publica de forma inmediata.</li>
+        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Acuse de recibo:</strong> confirmamos que recibimos tu solicitud y procuramos hacerlo en el menor tiempo posible.</li>
+        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Verificación:</strong> evaluamos el reporte contrastando la evidencia y consultando las fuentes pertinentes.</li>
+        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Publicación de la corrección:</strong> una vez confirmado el error, la corrección se publica de forma prioritaria.</li>
+        <li style={{ marginBottom: '0.5rem' }}><strong style={{ color: '#0f172a' }}>Casos urgentes:</strong> si el error puede afectar la reputación de personas, derechos de menores o procesos judiciales en curso, el tratamiento es prioritario.</li>
       </ul>
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>

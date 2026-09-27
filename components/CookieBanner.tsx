@@ -12,8 +12,8 @@ const PREF_KEYS = ['ni_cookie_preferences', 'cookie_preferences_ni'] as const;
 export default function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [allowAnalytics, setAllowAnalytics] = useState(true);
-  const [allowAds, setAllowAds] = useState(true);
+  const [allowAnalytics, setAllowAnalytics] = useState(false);
+  const [allowAds, setAllowAds] = useState(false);
 
   useEffect(() => {
     const savedStatus = CONSENT_KEYS.map((key) => localStorage.getItem(key)).find(Boolean);
@@ -136,7 +136,7 @@ export default function CookieBanner() {
                 <input type="checkbox" checked={allowAds} onChange={(event) => setAllowAds(event.target.checked)} />
                 <div>
                   <strong>Publicidad personalizada</strong>
-                  <p>Autoriza anuncios relevantes (actualmente desactivados).</p>
+                  <p>Autoriza anuncios y medición publicitaria relevantes.</p>
                 </div>
               </label>
             </div>

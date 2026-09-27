@@ -29,18 +29,16 @@ export default function ConsentScript() {
       const consent = getConsent();
       const prefs = getPrefs();
 
-      // Default consent is already granted in DeferredAnalytics. Only downgrade if user explicitly rejected.
-      let analytics = true;
-      let ads = true;
+      // Sin decision del usuario no se concede analitica ni publicidad personalizada.
+      let analytics = false;
+      let ads = false;
 
-      if (consent === 'rejected') {
-        if (prefs) {
-          analytics = prefs.analytics !== false;
-          ads = prefs.ads !== false;
-        } else {
-          analytics = false;
-          ads = false;
-        }
+      if (prefs) {
+        analytics = prefs.analytics === true;
+        ads = prefs.ads === true;
+      } else if (consent === 'accepted') {
+        analytics = true;
+        ads = true;
       }
 
       window.gtag('consent', 'update', {

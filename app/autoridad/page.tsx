@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'Centro de Autoridad Editorial | Nicaragua Informate',
   description:
-    'Metodología, transparencia, autores verificados, política de correcciones y señales EEAT de Nicaragua Informate.',
+    'Metodología, transparencia, autores verificados, política de correcciones y compromisos de confianza de Nicaragua Informate.',
   alternates: { canonical: 'https://nicaraguainformate.com/autoridad' },
 };
 
@@ -306,7 +306,7 @@ export default async function AutoridadPage() {
           </div>
         </section>
 
-        {/* Correcciones y EEAT */}
+        {/* Correcciones y transparencia */}
         <section style={{ marginBottom: 40, padding: 28, borderRadius: 16, background: '#f8fafc' }}>
           <h2 style={sectionTitle}>Transparencia y señales de confianza</h2>
           <ul style={{ lineHeight: 1.7, color: '#475569', paddingLeft: 20 }}>

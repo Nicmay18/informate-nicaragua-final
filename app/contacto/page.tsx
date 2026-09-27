@@ -29,7 +29,7 @@ export default function ContactoPage() {
     <LegalPageShell title="Contacto">
       <p style={{ color: '#475569', marginBottom: '1.25rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
         ¿Tienes una noticia, sugerencia o consulta? Estamos aquí para escucharte.
-        En <strong style={{ color: '#0f172a' }}>Nicaragua Informate</strong> creemos que la conversación con nuestros lectores es la base de un periodismo útil y cercano. Contáctanos por el canal que más te convenga: correo electrónico, redes sociales, formulario web o llamando en nuestro horario de atención. Todos los mensajes son revisados por una persona del equipo y respondidos en un plazo de 24 a 48 horas hábiles.
+        En <strong style={{ color: '#0f172a' }}>Nicaragua Informate</strong> creemos que la conversación con nuestros lectores es la base de un periodismo útil y cercano. Contáctanos por el canal que más te convenga: correo electrónico, redes sociales, formulario web o llamando en nuestro horario de atención. Todos los mensajes son revisados por una persona del equipo. Procuramos responder las consultas en el menor tiempo posible.
       </p>
       <p style={{ color: '#475569', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
         Si tu mensaje involucra una situación urgente (riesgo a la vida, niñez en peligro, emergencias públicas), recomendamos además contactar a las autoridades competentes de Nicaragua: <strong style={{ color: '#0f172a' }}>Policía Nacional 118</strong>, <strong style={{ color: '#0f172a' }}>Bomberos 911/115</strong>, <strong style={{ color: '#0f172a' }}>Cruz Blanca 128</strong>. Nuestro equipo de redacción no sustituye a los servicios de emergencia.
@@ -115,7 +115,7 @@ export default function ContactoPage() {
       <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 14, padding: '1.5rem' }}>
         <h3 style={{ color: '#0f172a', margin: '0 0 0.5rem', fontSize: '1.1rem', fontWeight: 700 }}>Formulario de contacto</h3>
         <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1.25rem' }}>
-          Completa el formulario y te responderemos dentro de las próximas 24-48 horas hábiles.
+          Completa el formulario y procuraremos responderte en el menor tiempo posible.
         </p>
         <form action="https://formspree.io/f/mzzeepgv" method="POST" style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 16 }}>

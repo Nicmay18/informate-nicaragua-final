@@ -78,7 +78,7 @@ export default async function CentroConfianzaPage() {
 
         <h2 className="article-summary-title" style={{ marginBottom: 16 }}>Compromisos públicos</h2>
         <ul className="article-body" style={{ marginBottom: 32, paddingLeft: 24, listStyleType: 'disc' }}>
-          <li><strong>Verificación:</strong> contrastamos la información con al menos dos fuentes antes de publicar.</li>
+          <li><strong>Verificación:</strong> contrastamos las afirmaciones relevantes con fuentes confiables y, cuando es posible, recurrimos a fuentes primarias o directas.</li>
           <li><strong>Correcciones:</strong> corregimos errores y los publicamos visiblemente.</li>
           <li><strong>Independencia:</strong> editorial libre de presiones políticas y comerciales.</li>
           <li><strong>Autores identificados:</strong> cada noticia cuenta con un autor verificable.</li>

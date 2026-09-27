@@ -163,6 +163,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
+              var niA = 'denied', niAd = 'denied';
+              try {
+                var niP = JSON.parse(localStorage.getItem('ni_cookie_preferences') || localStorage.getItem('cookie_preferences_ni') || 'null');
+                if (niP) { niA = niP.analytics ? 'granted' : 'denied'; niAd = niP.ads ? 'granted' : 'denied'; }
+              } catch (e) {}
+              gtag('consent', 'default', {
+                analytics_storage: niA,
+                ad_storage: niAd,
+                ad_user_data: niAd,
+                ad_personalization: niAd
+              });
               gtag('js', new Date());
               gtag('config', 'G-W1B5J61WEP');
             `,

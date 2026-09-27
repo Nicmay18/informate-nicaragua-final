@@ -29,12 +29,12 @@ function initGA() {
   const win = window as any;
   win.dataLayer = win.dataLayer || [];
   win.gtag = function gtag(...args: any[]) { win.dataLayer.push(args); };
-  // Default granted for Nicaragua / non-EEA. ConsentScript downgrades to denied if user explicitly rejects.
+  // Default denied hasta que el usuario decida; ConsentScript aplica su eleccion.
   win.gtag('consent', 'default', {
-    analytics_storage: 'granted',
-    ad_storage: 'granted',
-    ad_user_data: 'granted',
-    ad_personalization: 'granted',
+    analytics_storage: 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
   });
   win.gtag('js', new Date());
   win.gtag('config', GA_ID, {

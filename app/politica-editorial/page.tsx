@@ -67,7 +67,8 @@ export default function PoliticaEditorialPage() {
         Antes de publicar una noticia hacemos lo siguiente:
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#64748b', lineHeight: 1.8, fontSize: '0.92rem' }}>
-        <li>Buscamos al menos dos fuentes independientes</li>
+        <li>Contrastamos las afirmaciones relevantes con fuentes confiables</li>
+        <li>Recurrimos a fuentes primarias o directas cuando es posible</li>
         <li>Verificamos que las fuentes sean confiables</li>
         <li>Cruzamos datos con fuentes oficiales cuando es posible</li>
         <li>Evaluamos el contexto completo para no caer en desinformación</li>
@@ -76,7 +77,7 @@ export default function PoliticaEditorialPage() {
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>4. Fuentes en el contexto nicaragüense</h2>
       <p style={{ color: '#64748b', marginBottom: '1.25rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
-        En Nicaragua, las instituciones gubernamentales no brindan declaraciones formales a medios independientes. Por ello, nuestra cobertura se basa en:
+        Obtener información institucional en Nicaragua puede presentar dificultades. Cuando no es posible acceder a una declaración formal, nuestra cobertura se apoya en:
       </p>
       <ul style={{ marginLeft: '1.5rem', marginBottom: '1.5rem', color: '#64748b', lineHeight: 1.8, fontSize: '0.92rem' }}>
         <li><strong>Testimonios de testigos</strong> en el lugar de los hechos</li>
@@ -86,7 +87,7 @@ export default function PoliticaEditorialPage() {
         <li><strong>Información de familiares</strong> de las víctimas o involucrados, cuando acceden a declarar</li>
       </ul>
       <p style={{ color: '#64748b', marginBottom: '1.5rem', lineHeight: 1.75, fontSize: '0.92rem' }}>
-        No exigimos nombres de funcionarios que no dieron entrevista, ni citamos "fuentes policiales" cuando estas no existen para medios independientes. Cada noticia indica claramente el origen de la información.
+        No citamos portavoces ni fuentes institucionales que no se hayan pronunciado. Cada noticia indica claramente el origen de la información.
       </p>
 
       <h2 style={{ fontSize: '1.2rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '0.75rem', fontWeight: 700 }}>5. Correcciones</h2>
