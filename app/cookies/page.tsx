@@ -24,7 +24,7 @@ const COOKIE_TYPES = [
   {
     name: 'Preferencias (almacenamiento local)',
     description: 'Guardadas en localStorage de tu navegador, no como cookies: tu elección de privacidad y el tema visual del sitio.',
-    examples: 'ni_cookie_consent, ni_cookie_preferences, ni_theme',
+    examples: 'ni_cookie_consent, ni_cookie_preferences, ni_theme, ni_weather_all_v1 (caché de clima, 5 min)',
     duration: 'Hasta que las elimines',
   },
   {

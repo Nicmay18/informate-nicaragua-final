@@ -46,13 +46,13 @@ export default function EconomicBar() {
     {
       label: 'USD → NIO',
       value: loading ? '—' : `C$ ${fmt(r?.['NIO-USD']?.buy)}`,
-      sub: loading ? '—' : `venta ${fmt(r?.['NIO-USD']?.sell)}`,
+      sub: loading ? '—' : `compra ${fmt(r?.['NIO-USD']?.buy)} · venta ${fmt(r?.['NIO-USD']?.sell)}`,
       trend: 'neutral' as const,
     },
     {
       label: 'EUR → NIO',
       value: loading ? '—' : `C$ ${fmt(r?.['NIO-EUR']?.buy)}`,
-      sub: loading ? '—' : `venta ${fmt(r?.['NIO-EUR']?.sell)}`,
+      sub: loading ? '—' : `compra ${fmt(r?.['NIO-EUR']?.buy)} · venta ${fmt(r?.['NIO-EUR']?.sell)}`,
       trend: 'neutral' as const,
     },
     {
@@ -86,7 +86,7 @@ export default function EconomicBar() {
         </div>
       ))}
       <div className="econ-card__source">
-        Fuente: {data?.source ?? 'BCN / ECB'}
+        Fuente: {data?.source ?? 'Referencia cambiaria / ECB'}
       </div>
     </div>
   );
