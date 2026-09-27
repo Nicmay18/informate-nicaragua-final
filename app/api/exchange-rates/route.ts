@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 
-// Tasa oficial BCN (córdoba/dólar — crawling peg, cambia ~5% al año)
-// Actualizar manualmente cuando el BCN lo ajuste significativamente
-const BCN_NIO_USD_BUY = 36.40;
-const BCN_NIO_USD_SELL = 37.18;
+// Tipo de cambio oficial publicado por el BCN.
+// El BCN publica un único tipo de cambio oficial, no una compra/venta bancaria.
+const BCN_NIO_USD_OFFICIAL = 36.6243;
 
 // Spread bancario adicional para EUR (los bancos nicaragüenses aplican mayor margen en EUR)
 const EUR_BANK_SPREAD = 0.08; // 8% spread para NIO/EUR
@@ -24,15 +23,16 @@ export async function GET() {
     const usdToEur: number = data.rates?.EUR ?? 0.882;
     const eurToUsd = 1 / usdToEur; // ej: 1.1343
 
-    // NIO/EUR = NIO/USD × EUR/USD (con spread bancario)
-    const nioEurMid = BCN_NIO_USD_BUY * eurToUsd;
+    // EUR/NIO = tipo oficial BCN × EUR/USD. Se presenta como referencia calculada,
+    // no como cotización bancaria de compra/venta.
+    const nioEurMid = BCN_NIO_USD_OFFICIAL * eurToUsd;
     const nioEurBuy = +(nioEurMid * (1 - EUR_BANK_SPREAD / 2)).toFixed(4);
     const nioEurSell = +(nioEurMid * (1 + EUR_BANK_SPREAD / 2)).toFixed(4);
 
     return NextResponse.json(
       {
         rates: {
-          'NIO-USD': { buy: BCN_NIO_USD_BUY, sell: BCN_NIO_USD_SELL, label: 'Córdoba / Dólar' },
+          'NIO-USD': { mid: BCN_NIO_USD_OFFICIAL, label: 'Córdoba / Dólar (oficial BCN)' },
           'NIO-EUR': { buy: nioEurBuy, sell: nioEurSell, label: 'Córdoba / Euro' },
           'EUR-USD': { mid: +eurToUsd.toFixed(4), label: 'Euro / Dólar' },
         },
@@ -50,7 +50,7 @@ export async function GET() {
     return NextResponse.json(
       {
         rates: {
-          'NIO-USD': { buy: 36.40, sell: 37.18, label: 'Córdoba / Dólar' },
+          'NIO-USD': { mid: BCN_NIO_USD_OFFICIAL, label: 'Córdoba / Dólar (oficial BCN)' },
           'NIO-EUR': { buy: 41.5429, sell: 45.5423, label: 'Córdoba / Euro' },
           'EUR-USD': { mid: 1.1343, label: 'Euro / Dólar' },
         },
