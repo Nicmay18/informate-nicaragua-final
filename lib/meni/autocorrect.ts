@@ -56,7 +56,7 @@ function countOccurrences(html: string, pattern: RegExp): number {
 
 export function ensureStrongTags(html: string, entidades: EntityMap | undefined): string {
   const strongCount = countOccurrences(html, /<strong\b/gi);
-  if (strongCount >= 2) return html;
+  if (strongCount >= 3) return html;
 
   const nombres = entidades?.nombres?.slice(0, 3) || [];
   const lugares = entidades?.lugares?.slice(0, 2) || [];
@@ -66,19 +66,15 @@ export function ensureStrongTags(html: string, entidades: EntityMap | undefined)
   let result = html;
   let wrapped = 0;
 
-  // First sentence of the first paragraph
-  result = result.replace(/(<p[^>]*>\s*)([^<.!?]{20,200}[.!?])/i, function (_match, open, sentence) {
-    wrapped++;
-    return `${open}<strong>${sentence}</strong>`;
-  });
-
+  // El énfasis automático se reserva para entidades/datos concretos.
+  // No envolvemos frases completas ni párrafos: evita sobreformatear el artículo.
   for (const target of targets) {
     const safe = target.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`(^|>|[\\s,;:])(${safe})(?=[\\s,;:.<])`, 'i');
     if (regex.test(result)) {
       result = result.replace(regex, '$1<strong>$2</strong>');
       wrapped++;
-      if (wrapped >= 4) break;
+      if (wrapped >= 3) break;
     }
   }
 
