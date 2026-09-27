@@ -4,7 +4,14 @@
 import { useState, useEffect } from 'react';
 import { ArrowUpRight, ArrowDownRight, Minus } from 'lucide-react';
 
-interface RateEntry { buy?: number; sell?: number; mid?: number; label: string }
+interface RateEntry {
+  official?: number | null;
+  buy?: number | null;
+  sell?: number | null;
+  mid?: number | null;
+  label: string;
+  source?: string;
+}
 interface RatesData {
   rates: Record<string, RateEntry>;
   updatedAt: string;
@@ -14,7 +21,7 @@ interface RatesData {
 
 const REFRESH_INTERVAL_MS = 30 * 60 * 1000;
 
-function fmt(n?: number) {
+function fmt(n?: number | null) {
   if (n === null || n === undefined) return '—';
   return n.toLocaleString('es-NI', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
 }
@@ -41,24 +48,29 @@ export default function EconomicBar() {
   }, []);
 
   const r = data?.rates;
+  const usd = r?.['NIO-USD'];
+  const compraVenta =
+    usd?.buy != null && usd?.sell != null
+      ? `compra ${fmt(usd.buy)} · venta ${fmt(usd.sell)}`
+      : 'compra — · venta —';
 
   const cards = [
     {
-      label: 'USD → NIO',
-      value: loading ? '—' : `C$ ${fmt(r?.['NIO-USD']?.buy)}`,
-      sub: loading ? '—' : `compra ${fmt(r?.['NIO-USD']?.buy)} · venta ${fmt(r?.['NIO-USD']?.sell)}`,
+      label: 'USD → NIO (oficial)',
+      value: loading ? '—' : `C$ ${fmt(usd?.official)}`,
+      sub: loading ? '—' : compraVenta,
       trend: 'neutral' as const,
     },
     {
-      label: 'EUR → NIO',
-      value: loading ? '—' : `C$ ${fmt(r?.['NIO-EUR']?.buy)}`,
-      sub: loading ? '—' : `compra ${fmt(r?.['NIO-EUR']?.buy)} · venta ${fmt(r?.['NIO-EUR']?.sell)}`,
+      label: 'EUR → NIO (referencia)',
+      value: loading ? '—' : `C$ ${fmt(r?.['NIO-EUR']?.mid)}`,
+      sub: 'calculada',
       trend: 'neutral' as const,
     },
     {
-      label: 'EUR / USD',
+      label: 'EUR / USD (referencia)',
       value: loading ? '—' : fmt(r?.['EUR-USD']?.mid),
-      sub: '',
+      sub: 'ECB',
       trend: 'neutral' as const,
     },
   ];
@@ -86,7 +98,7 @@ export default function EconomicBar() {
         </div>
       ))}
       <div className="econ-card__source">
-        Fuente: {data?.source ?? 'Referencia cambiaria / ECB'}
+        Fuente: {data?.source ?? 'Banco Central de Nicaragua (BCN)'}
       </div>
     </div>
   );

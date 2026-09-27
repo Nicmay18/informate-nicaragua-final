@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { TrendingUp, Fuel, ArrowUp, ArrowDown, Minus, Loader2 } from 'lucide-react';
 
 interface RatesData {
-  rates: Record<string, { buy?: number; sell?: number; mid?: number; label: string }>;
+  rates: Record<string, { official?: number | null; buy?: number | null; sell?: number | null; mid?: number | null; label: string; source?: string }>;
   updatedAt: string;
   source: string;
 }
@@ -30,9 +30,9 @@ function TrendPill({ trend, change }: { trend: string; change: string }) {
   );
 }
 
-function formatRate(n: number | undefined) {
-  if (n === undefined) return '—';
-  return n.toFixed(2);
+function formatRate(n: number | null | undefined, digits = 2) {
+  if (n === null || n === undefined) return '—';
+  return n.toFixed(digits);
 }
 
 export default function IndicadoresWidget() {
@@ -85,11 +85,11 @@ export default function IndicadoresWidget() {
 
       {/* Divisas */}
       <div className="econ-grid">
-        {/* USD → NIO */}
+        {/* USD → NIO (oficial BCN) */}
         <div className="econ-box">
-          <div className="econ-box-label">USD → NIO</div>
+          <div className="econ-box-label">USD → NIO (oficial)</div>
           <div className="econ-box-value">
-            C$ {formatRate(usd?.sell)}
+            C$ {formatRate(usd?.official, 4)}
           </div>
           <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
             Compra {formatRate(usd?.buy)} / Venta {formatRate(usd?.sell)}
@@ -97,14 +97,14 @@ export default function IndicadoresWidget() {
           <TrendPill trend="→" change="0.00%" />
         </div>
 
-        {/* EUR → NIO */}
+        {/* EUR → NIO (referencia calculada) */}
         <div className="econ-box">
-          <div className="econ-box-label">EUR → NIO</div>
+          <div className="econ-box-label">EUR → NIO (referencia)</div>
           <div className="econ-box-value">
-            C$ {formatRate(eur?.sell)}
+            C$ {formatRate(eur?.mid)}
           </div>
           <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
-            Compra {formatRate(eur?.buy)} / Venta {formatRate(eur?.sell)}
+            Referencia calculada
           </div>
           <TrendPill trend="→" change="0.00%" />
         </div>
@@ -112,7 +112,7 @@ export default function IndicadoresWidget() {
 
       {/* EUR/USD */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid #e2e8f0', marginBottom: 8 }}>
-        <span style={{ fontSize: 13, fontWeight: 600, color: '#334155' }}>EUR / USD</span>
+        <span style={{ fontSize: 13, fontWeight: 600, color: '#334155' }}>EUR / USD (referencia)</span>
         <span style={{ fontSize: 16, fontWeight: 700, color: '#0f172a' }}>{formatRate(eurUsd?.mid)}</span>
       </div>
 
