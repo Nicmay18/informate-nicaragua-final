@@ -18,15 +18,17 @@ Sistema operativo y coherente: un panel (`/panel/*`), un NIOS, una fuente de ver
 | 404 | correcto |
 | HTTPS | forzado (`x-forwarded-proto` redirect + www→apex) |
 
-## 3. Cloudflare
+## 3. Cloudflare — RESUELTO ✓
 
-| Ruta | Estado |
+Purga de caché + Cache Rule `bypass-admin-panel` (`/panel*`, `/admin*` → Bypass) aplicadas y **verificadas en producción**:
+
+| Ruta | Estado final |
 |---|---|
-| `/panel/nios`, `/panel/centro-de-comando` | **200 `cf:HIT` — aún cacheado** (age ~480s; se recachea porque CF ignora `private` bajo regla cache-everything y captura renders autenticados) |
-| `/panel/nios/reparaciones`, `google-intelligence`, `meni`, `portada`, `/panel/entities`, resto `/panel/*` | `307 /login` `cf:BYPASS` ✓ |
-| `/admin/*` | redirects / `307 /login` ✓ |
+| Todas las `/panel/*` (verificadas: nios, centro-de-comando, reparaciones, google-intelligence, meni, entities, resto) | `307 /login` `cf:DYNAMIC` — nunca cacheadas ✓ |
+| `/admin/*` | redirects/`307 /login` `cf:DYNAMIC` ✓ |
+| Públicas (`/`, `/noticias`, etc.) | cacheando normal `cf:MISS`/`HIT` ✓ |
 
-**Pendiente del propietario (fuera del repo)**: purgar URLs + cache rule `/panel*` y `/admin*` → Bypass. El origen ya responde correctamente (`private, no-cache, no-store` + redirect auth).
+El problema de caché privado expuesto públicamente quedó eliminado en producción.
 
 ## 4. Authentication
 
@@ -69,7 +71,7 @@ Preparación interna ≠ aprobación de Google. Lo verificable: contenido públi
 
 | Riesgo | Razón de no bloqueo |
 |---|---|
-| CF cache en 2 rutas panel (**P0 residual — acción del propietario**) | Fix = purga + cache rule; código ya correcto; purgable en minutos |
+| ~~CF cache en rutas panel~~ **RESUELTO** | Purga + rule bypass verificada en prod (`cf:DYNAMIC` en todas) |
 | Títulos históricos con defectos mecánicos (~16% muestra) | El gate ya evita nuevos; corrección masiva prohibida por mandato |
 | Endpoints `?secret=` legacy | Controlados/documentados; migración fuera de alcance |
 
