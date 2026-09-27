@@ -660,16 +660,9 @@ function calcularEvaluacionCategoria(
       ctxScore = 100;
     }
 
-    const tieneContinuacion = base.includes('continua') || base.includes('continuaran') || base.includes('continuara') || base.includes('sigue');
-    const tienePrudencia = base.includes('prudencia') || base.includes('precaucion') || base.includes('cuidado') || base.includes('conducir');
-    if (tieneContinuacion && tienePrudencia) {
-      srvScore = 100;
-      srvFaltantes = [];
-      srvCumplidos = matriz.servicio.map(s => s.concepto);
-      srvPerdidos = [];
-    }
-
-    bonusValorEditorial = detectarMultiEventosSucesos(base);
+    // No elevar artificialmente Servicio a 100 por incluir un llamado
+    // genérico a la prudencia. En Sucesos, el servicio se gana por hechos,
+    // estado, investigación y próximos pasos según el contrato.
   }
 
   const faltantes = [...ctx.faltantes, ...exp.faltantes, ...srvFaltantes];
