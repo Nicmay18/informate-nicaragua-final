@@ -630,10 +630,10 @@ function calcularEvaluacionCategoria(
   const srv = puntuar(matriz.servicio, 2);
 
   let ctxScore = ctx.score;
-  let srvScore = srv.score;
-  let srvFaltantes = srv.faltantes;
-  let srvCumplidos = srv.cumplidos;
-  let srvPerdidos = srv.perdidos;
+  const srvScore = srv.score;
+  const srvFaltantes = srv.faltantes;
+  const srvCumplidos = srv.cumplidos;
+  const srvPerdidos = srv.perdidos;
 
   if (matrizKey === 'sucesos') {
     if (ctx.cumplidos.length === matriz.contexto.length) {
