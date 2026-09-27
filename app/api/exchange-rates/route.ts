@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
-// Tipo de cambio oficial publicado por el BCN.
-// El BCN publica un único tipo de cambio oficial, no una compra/venta bancaria.
-const BCN_NIO_USD_OFFICIAL = 36.6243;
+// Valores de referencia mostrados en el widget de Nicaragua Informate.
+const NIO_USD_SELL = 36.62;
+const NIO_USD_BUY = 37.06;
 
 export const revalidate = 86400; // Revalidar cada 24h en el servidor
 export const maxDuration = 10;
@@ -20,19 +20,18 @@ export async function GET() {
     const usdToEur: number = data.rates?.EUR ?? 0.882;
     const eurToUsd = 1 / usdToEur; // ej: 1.1343
 
-    // EUR/NIO = tipo oficial BCN × EUR/USD. Se presenta como referencia calculada,
-    // no como cotización bancaria de compra/venta.
-    const nioEurMid = BCN_NIO_USD_OFFICIAL * eurToUsd;
+    const nioEurBuy = NIO_USD_SELL * eurToUsd;
+    const nioEurSell = NIO_USD_BUY * eurToUsd;
 
     return NextResponse.json(
       {
         rates: {
-          'NIO-USD': { mid: BCN_NIO_USD_OFFICIAL, label: 'Córdoba / Dólar (oficial BCN)' },
-          'NIO-EUR': { mid: +nioEurMid.toFixed(4), label: 'Córdoba / Euro (referencia)' },
+          'NIO-USD': { buy: NIO_USD_BUY, sell: NIO_USD_SELL, label: 'Córdoba / Dólar' },
+          'NIO-EUR': { buy: +nioEurBuy.toFixed(4), sell: +nioEurSell.toFixed(4), label: 'Córdoba / Euro' },
           'EUR-USD': { mid: +eurToUsd.toFixed(4), label: 'Euro / Dólar' },
         },
         updatedAt: new Date().toISOString(),
-        source: 'BCN / ECB (Frankfurter)',
+        source: 'Referencia cambiaria / ECB (Frankfurter)',
       },
       {
         headers: {
@@ -45,12 +44,12 @@ export async function GET() {
     return NextResponse.json(
       {
         rates: {
-          'NIO-USD': { mid: BCN_NIO_USD_OFFICIAL, label: 'Córdoba / Dólar (oficial BCN)' },
-          'NIO-EUR': { mid: 41.5429, label: 'Córdoba / Euro (referencia)' },
+          'NIO-USD': { buy: NIO_USD_BUY, sell: NIO_USD_SELL, label: 'Córdoba / Dólar' },
+          'NIO-EUR': { buy: 41.7627, sell: 42.2644, label: 'Córdoba / Euro' },
           'EUR-USD': { mid: 1.1343, label: 'Euro / Dólar' },
         },
         updatedAt: new Date().toISOString(),
-        source: 'BCN (caché local)',
+        source: 'Referencia cambiaria (caché local)',
         cached: true,
       },
       { status: 200 }
