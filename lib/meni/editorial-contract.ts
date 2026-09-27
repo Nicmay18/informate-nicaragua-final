@@ -146,7 +146,6 @@ const SUCESOS: CategoriaContract = {
     { concepto: 'Cómo continúa el proceso', sinonimos: ['cómo continúa el proceso', 'proceso continúa', 'sigue el proceso', 'seguirá el proceso', 'continuará el proceso', 'sigue la investigación'] },
     { concepto: 'Qué peritajes faltan', sinonimos: ['peritaje', 'peritajes', 'dictamen', 'examen médico legal', 'autopsia', 'valoración', 'médico legal', 'toxicológico', 'dictamen forense', 'determinar la causa'] },
     { concepto: 'Estado del caso', sinonimos: ['estado del caso', 'investigación abierta', 'continúan las diligencias', 'continúa la investigación', 'no hay personas detenidas', 'causa bajo investigación'] },
-    { concepto: 'Llamado a la prudencia', sinonimos: ['prudencia', 'precaución', 'conducir con prudencia', 'extremar precauciones', 'cuidado al volante', 'conducir con cuidado', 'recomendación', 'llamado', 'exhorta', 'insta', 'conductor debe', 'responsabilidad vial'] },
   ],
   preguntasEditorJefe: PREGUNTAS_EDITOR_JEFE,
   certificacionesForense: CERTIFICACIONES_FORENSE,
