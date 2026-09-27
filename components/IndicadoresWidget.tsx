@@ -96,7 +96,7 @@ export default function IndicadoresWidget() {
         <div className="econ-box">
           <div className="econ-box-label">EUR → NIO</div>
           <div className="econ-box-value">
-            C$ {formatRate(eur?.sell)}
+            C$ {formatRate(eur?.mid)}
           </div>
           <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
             Referencia calculada con EUR/USD
@@ -232,7 +232,7 @@ export default function IndicadoresWidget() {
             C$ {formatRate(eur?.sell)}
           </div>
           <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
-            Compra {formatRate(eur?.buy)} / Venta {formatRate(eur?.sell)}
+            Referencia {formatRate(eur?.mid)}
           </div>
           <TrendPill trend="→" change="0.00%" />
         </div>
@@ -403,8 +403,8 @@ export default function IndicadoresWidget() {
 , trend: '→', change: '0.00%' },
 ];
 
-// Precios vigentes del 20 al 26 de septiembre de 2026.
-const GAS_UPDATED = 'Vigentes del 20 al 26 sep. 2026';
+// Precios promedio de combustibles reportados por INE para la semana vigente.
+const GAS_UPDATED = 'Actualización: 21 sep. 2026';
 
 function TrendPill({ trend, change }: { trend: string; change: string }) {
   const up = trend === '↑';
