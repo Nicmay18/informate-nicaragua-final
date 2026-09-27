@@ -87,7 +87,7 @@ export default function IndicadoresWidget() {
             C$ {formatRate(usd?.sell)}
           </div>
           <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
-            Tipo oficial BCN
+            Compra {formatRate(usd?.buy)} / Venta {formatRate(usd?.sell)}
           </div>
           <TrendPill trend="→" change="0.00%" />
         </div>
@@ -96,10 +96,10 @@ export default function IndicadoresWidget() {
         <div className="econ-box">
           <div className="econ-box-label">EUR → NIO</div>
           <div className="econ-box-value">
-            C$ {formatRate(eur?.mid)}
+            C$ {formatRate(eur?.sell)}
           </div>
           <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>
-            Referencia calculada con EUR/USD
+            Compra {formatRate(eur?.buy)} / Venta {formatRate(eur?.sell)}
           </div>
           <TrendPill trend="→" change="0.00%" />
         </div>
