@@ -52,6 +52,10 @@ describe('Cirugía anti-bypass — Invariante PUBLICAR', () => {
   });
 
   it('verdict PUBLICAR requiere recomendacionMeni === publicar', () => {
+    // Contrato: 'mejorar' nunca produce un PUBLICAR limpio — degrada a
+    // PUBLICAR_CON_CAMBIOS (publicable y READY, con el aviso visible).
+    // Antes caía en REVISION_HUMANA → SUPERVISOR_BLOCKED sobre una nota
+    // que MENI ya había aprobado: la divergencia "aprobada → rechazada".
     const decision = makeEditorialDecision(
       ctx({
         titulo: 'Policía Nacional decomisa 120 armas en operativo en Managua este 15 de mayo',
@@ -65,8 +69,8 @@ describe('Cirugía anti-bypass — Invariante PUBLICAR', () => {
         aportePropio: true,
       }),
     );
-    expect(decision.verdict).not.toBe('PUBLICAR');
-    expect(decision.resultingState).not.toBe('READY');
+    expect(decision.verdict).toBe('PUBLICAR_CON_CAMBIOS');
+    expect(decision.resultingState).toBe('READY');
   });
 
   it('verdict PUBLICAR requiere scoreMeni >= 90', () => {

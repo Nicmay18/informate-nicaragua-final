@@ -27,6 +27,7 @@ import { canCallLLM, recordCall, detectWastefulCalls } from './cost-guard';
 import { logger } from '@/lib/logger';
 import { resolvePublicCategory } from '@/lib/editorial/canonical';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
+import { MIN_APPROVED_SCORE } from '@/lib/meni/scoring';
 import type { PublicCategory } from '@/lib/types';
 import type { MeniContentProfile } from '@/lib/meni/profile-detector';
 
@@ -133,12 +134,15 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   // asumimos NO aprobado. El Supervisor nunca debe abrir la puerta a una
   // publicación sin evidencia positiva de aprobación de MENI.
   const aprobadoMeni = ctx.aprobadoMeni === true
-    || (ctx.aprobadoMeni === undefined && ctx.scoreMeni !== undefined && ctx.scoreMeni >= 90);
+    || (ctx.aprobadoMeni === undefined && ctx.scoreMeni !== undefined && ctx.scoreMeni >= MIN_APPROVED_SCORE);
   const recomendacionMeni = ctx.recomendacionMeni ?? (aprobadoMeni ? 'publicar' : 'mejorar');
   // PUBLICATION GATE: separado de la recomendación editorial.
-  // Si MENI aprobó (score >= MIN_APPROVED_SCORE, sin bloqueos) y no hay bloqueantes del Supervisor,
-  // el artículo puede publicarse aunque la recomendación editorial sea MEJORAR.
-  const meniCleared = aprobadoMeni === true && (ctx.scoreMeni ?? 0) >= 90 && recomendacionMeni === 'publicar';
+  // meniCleared refleja el veredicto autoritativo de MENI: aprobadoMeni ya
+  // exige score >= MIN_APPROVED_SCORE y ausencia de bloqueos internos. La
+  // recomendación ('mejorar') es consejo, no veto — exigir 'publicar' aquí
+  // bloqueaba notas aprobadas con observaciones menores e invertía el
+  // criterio (mayor valor periodístico → REVISION_HUMANA, menor → pasaba).
+  const meniCleared = aprobadoMeni === true && (ctx.scoreMeni ?? 0) >= MIN_APPROVED_SCORE;
   const isPreDraft = !hasContent && !hasResearch && !hasStory && !meniCleared;
 
   if (titleEval.needsInvestigation) {
@@ -423,6 +427,17 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   } else {
     verdict = 'PUBLICAR_CON_CAMBIOS';
     resultingState = 'EDITORIAL_REVIEW';
+  }
+
+  // La recomendación 'mejorar' de MENI es consejo, no veto: degrada un
+  // PUBLICAR a PUBLICAR_CON_CAMBIOS (publicable, con los ajustes sugeridos
+  // visibles) — nunca a REVISION_HUMANA. Un aviso menor no puede bloquear
+  // una nota que MENI ya aprobó en su gate completo (antes esto producía
+  // SUPERVISOR_BLOCKED sobre artículos aprobados con valor periodístico
+  // alto, mientras los de menor valor pasaban — criterio invertido).
+  if (verdict === 'PUBLICAR' && recomendacionMeni === 'mejorar') {
+    verdict = 'PUBLICAR_CON_CAMBIOS';
+    resultingState = 'READY';
   }
 
   // PUBLICAR_CON_CAMBIOS también es publicable: marcamos READY para que

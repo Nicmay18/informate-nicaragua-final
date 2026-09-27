@@ -61,7 +61,7 @@ export interface GuardarConMeniResult {
 export async function guardarConMeni(
   input: NoticiaInput,
   db: Firestore,
-  options?: { skipEditorBrain?: boolean }
+  options?: { skipEditorBrain?: boolean; skipDuplicateCheck?: boolean }
 ): Promise<GuardarConMeniResult> {
   // AUTO_REMOVE (content-integrity): los marcadores de cita IA son residuo
   // técnico inequívoco — se eliminan del input ANTES de evaluar, para que la
@@ -84,6 +84,7 @@ export async function guardarConMeni(
   const meni = await runMeniAsync(cleanInput, {
     db,
     skipEditorBrain: options?.skipEditorBrain ?? true,
+    skipDuplicateCheck: options?.skipDuplicateCheck,
   });
 
   // AUTO_REMOVE también sobre la salida de MENI: si el pipeline devolviera un

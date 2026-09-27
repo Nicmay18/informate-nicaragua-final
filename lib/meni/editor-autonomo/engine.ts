@@ -497,13 +497,15 @@ export async function generarArticuloAutonomo(input: MeniAutonomousInput): Promi
   try {
     const evaluacion = runMeni(evalInput);
     generated.evaluacion = evaluacion;
-    // Score derivado del EditorialDecision (ADN NI), no de cálculo paralelo
-    generated.scoreMeni = decision.score;
+    // Score y veredicto derivan de la evaluación del texto GENERADO (la misma
+    // compuerta que corre en guardar/publicar), no del análisis PRE-LLM de la
+    // fuente. decision.score/publicar describían la fuente, no el artículo.
+    generated.scoreMeni = evaluacion.scoreFinal ?? decision.score;
     // DECISIÓN FINAL INMUTABLE — ninguna etapa posterior puede revertir un
-    // bloqueo anterior. publicationAllowed = decision AND qualityGate AND
-    // quoteGuard. No reasignar generated.aprobado después de esta línea.
+    // bloqueo anterior. publicationAllowed = evaluación post-texto AND
+    // qualityGate AND quoteGuard. No reasignar generated.aprobado después.
     generated.aprobado = computePublicationAllowed({
-      editorialPublicar: decision.publicar,
+      editorialPublicar: evaluacion.aprobado === true,
       qualityGateBloqueado: qualityGatePost.bloqueado,
       quoteGuardOk: quoteGuard.ok,
     });

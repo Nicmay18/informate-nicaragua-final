@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { runMeni, runMeniAsync } from '@/lib/meni';
+import { runMeni } from '@/lib/meni';
+import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { runEditorialDiagnosis, generateCEOResponse } from '@/lib/nios/editorial-diagnosis';
 import { logger } from '@/lib/logger';
@@ -39,9 +40,21 @@ export async function POST(request: NextRequest) {
     const tStart = Date.now();
     const checkDuplicates = body.checkDuplicates !== false;
     let resultado;
-    if (checkDuplicates) {
-      const db = getAdminDb();
-      resultado = await runMeniAsync(noticia, { db });
+    // El preview corre la MISMA cadena de autoridad que el guardado
+    // (guardarConMeni = MENI + Supervisor) para que lo que el editor ve
+    // coincida con lo que pasará al publicar. Sin eso, una nota podía
+    // mostrarse APROBADA y fallar con SUPERVISOR_BLOCKED al guardar.
+    let supervisor: { verdict: string; approved: boolean; reason: string } | undefined;
+    let db: ReturnType<typeof getAdminDb> | undefined;
+    try { db = getAdminDb(); } catch { db = undefined; }
+    if (db) {
+      const guard = await guardarConMeni(noticia, db, { skipDuplicateCheck: !checkDuplicates });
+      resultado = guard.meni;
+      supervisor = {
+        verdict: guard.supervisor.verdict,
+        approved: guard.supervisorApproved,
+        reason: guard.supervisor.reason,
+      };
     } else {
       resultado = runMeni(noticia);
     }
@@ -53,6 +66,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       result: resultado,
+      supervisor,
       diagnosis,
       ceo: ceoResponse,
       _timingMs: tMs,

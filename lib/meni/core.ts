@@ -251,6 +251,22 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   const prioridad = computePriority(evaluacion.veredicto);
   const diagnostico = scoreIsValid ? editorialDecision.mensajeEditor : 'MENI no pudo calcular el score correctamente.';
 
+  // COHERENCIA DE VEREDICTO: el Editorial Brain decide antes de conocer los
+  // bloqueos del Quality Gate, la transcripción por tier ni los duplicados
+  // (async). Si el gate final rechaza, el panel nunca puede mostrar "SI" ni
+  // publicar=true — se reconcilia aquí con el motivo real para que lo que se
+  // ve en evaluación sea exactamente lo que pasará el guardado.
+  if (!aprobadoFinal) {
+    editorialDecision.publicar = false;
+    if (editorialDecision.veredictoEjecutivo?.publicar === 'SI') {
+      editorialDecision.veredictoEjecutivo = {
+        ...editorialDecision.veredictoEjecutivo,
+        publicar: 'NO',
+        respuestaEjecutiva: `📢 Veredicto del Editor Jefe: No publicar. ${motivoBloqueoPanel ?? 'Existen bloqueantes técnicos (Quality Gate, transcripción o duplicado) que la evaluación editorial no vio.'}`,
+      };
+    }
+  }
+
   // Riesgo derivado del EditorialDecision, no de pipelineV4
   const riesgoEditorial: MeniRiesgoEditorial = scoreIsValid
     ? {
@@ -559,6 +575,16 @@ export async function runMeniAsync(
       ...recomendaciones,
     ];
     blockingIssues = [...blockingIssues, buildDuplicateBlockingIssue(duplicado.similitud)];
+    // Coherencia de veredicto: un duplicado detectado post-evaluación tampoco
+    // puede mostrar "Se publica" en el panel.
+    const ed = base.editorialDecision;
+    if (ed?.veredictoEjecutivo?.publicar === 'SI') {
+      ed.veredictoEjecutivo = {
+        ...ed.veredictoEjecutivo,
+        publicar: 'NO',
+        respuestaEjecutiva: `📢 Veredicto del Editor Jefe: No publicar. Duplicado detectado (${duplicado.similitud}% de similitud con una noticia ya publicada).`,
+      };
+    }
   }
 
   logMeni('=== runMeniAsync end ===', { aprobado, similitud: duplicado.similitud, blockingIssues: blockingIssues.length, warnings: warnings.length, tMs: Date.now() - t1 });
