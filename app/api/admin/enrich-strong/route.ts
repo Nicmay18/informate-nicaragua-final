@@ -70,11 +70,11 @@ function extraerKeywords(titulo: string, contenido: string): string[] {
 function enriquecerConStrong(contenido: string, keywords: string[]): { nuevo: string; agregados: number } {
   let nuevo = contenido;
   let agregados = 0;
-  const maxAgregados = 18;
+  const maxAgregados = 8;
 
   // Contar cuántos <strong> ya hay
   const strongsExistentes = (contenido.match(/<strong>/gi) || []).length;
-  if (strongsExistentes >= 15) {
+  if (strongsExistentes >= 3) {
     return { nuevo, agregados: 0 };
   }
 
