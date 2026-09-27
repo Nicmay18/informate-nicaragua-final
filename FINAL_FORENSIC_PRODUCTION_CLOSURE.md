@@ -87,10 +87,8 @@ Learning Engine · Reader Journey · distribución · clasificadores · NIOS int
 
 ## 15. Final Verdict
 
-> **EXISTE ESTE BLOQUEADOR INTERNO CONCRETO**: Cloudflare sirve 2 páginas administrativas autenticadas desde caché pública (`/panel/nios`, `/panel/centro-de-comando` → `200` + `cf:HIT` sin sesión). Reproducible, en producción, afecta seguridad.
+El bloqueador Cloudflare quedó **resuelto y verificado en producción** (purga + Cache Rule bypass — todas las rutas `/panel*`/`/admin*` devuelven `cf:DYNAMIC` + `307 /login` sin sesión).
+
+> **NO SE IDENTIFICA BLOQUEADOR INTERNO CONOCIDO PARA SOLICITAR ADSENSE NI PARA OPERAR EL SITIO.**
 >
-> **Corrección — fuera del repo, 2 minutos**: purgar `/panel*` + `/admin*` en CF y añadir Cache Rule → Bypass para ambos paths. Una vez hecho, el bloqueo desaparece y queda:
->
-> **NO SE IDENTIFICA OTRO BLOQUEADOR INTERNO CONOCIDO PARA SOLICITAR ADSENSE NI PARA OPERAR EL SITIO.**
->
-> Esto no garantiza aprobación de Google — la decisión final corresponde a Google.
+> Esto no constituye garantía de aprobación de Google — la decisión final corresponde a Google.
