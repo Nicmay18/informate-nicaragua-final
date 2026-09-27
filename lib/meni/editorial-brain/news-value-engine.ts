@@ -42,17 +42,27 @@ function calcularInteresPublico(tipo: string, texto: string): number {
   return score;
 }
 
+function normalizarCategoria(categoria: string): string {
+  return categoria
+    .trim()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
 function calcularCercania(texto: string, departamento: string, categoria: string): number {
-  const deptos = ['managua', 'matagalpa', 'león', 'chinandega', 'estelí', 'masaya', 'granada',
-    'carazo', 'raas', 'raan', 'rivas', 'jinotega', 'boaco', 'chontales', 'río san juan',
-    'nueva segovia', 'madriz', 'tipitapa', 'ciudad sandino'];
-  const t = texto.toLowerCase();
+  const deptos = ['managua', 'matagalpa', 'leon', 'chinandega', 'esteli', 'masaya', 'granada',
+    'carazo', 'raas', 'raan', 'rivas', 'jinotega', 'boaco', 'chontales', 'rio san juan',
+    'nueva segovia', 'madriz', 'tipitapa', 'ciudad sandino',
+    'caribe sur', 'raccs', 'bluefields', 'corn island', 'la cruz de rio grande'];
+  const t = texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const d = departamento.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   let score = 30;
-  if (departamento && deptos.some(d => t.includes(d))) score = 90;
-  else if (departamento) score = 75;
-  else if (deptos.some(d => t.includes(d))) score = 70;
-  if (/nicaragua|nicaragüense|managua/i.test(t)) score = Math.min(score + 10, 100);
-  if (categoria === 'Internacionales') score = Math.max(score - 20, 20);
+  if (d && deptos.some(x => d.includes(x) || t.includes(x))) score = 90;
+  else if (d) score = 75;
+  else if (deptos.some(x => t.includes(x))) score = 70;
+  if (/nicaragua|nicaraguense|managua/.test(t)) score = Math.min(score + 10, 100);
+  if (normalizarCategoria(categoria) === 'internacionales') score = Math.max(score - 20, 20);
   return score;
 }
 
