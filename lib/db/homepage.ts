@@ -176,10 +176,12 @@ export async function getHomePageData(): Promise<HomePageData> {
   const categoryNames = CATEGORIES.map(c => c.name);
   // La portada necesita un universo mayor que "las últimas 15": el ranking editorial
   // debe poder rescatar una noticia importante aunque no sea la más reciente.
+  // Consultamos más por categoría para que las secciones propias muestren lo
+  // reciente aunque el carril "Últimas" haya consumido algunas notas.
   const [latest, masLeidas, ...categoryResults] = await Promise.all([
-    getNews(60),
+    getNews(80),
     getMasLeidas(5),
-    ...categoryNames.map(name => getNewsByCategory(name, 8)),
+    ...categoryNames.map(name => getNewsByCategory(name, 12)),
   ]);
 
   const porCategoria: Record<string, Noticia[]> = {};
@@ -187,14 +189,23 @@ export async function getHomePageData(): Promise<HomePageData> {
 
   const used = new Set<string>();
 
-  // PRINCIPALES: decisión editorial. La recencia vive en "Última hora".
-  // El ranking ya combina frescura, interés público, MENI, categoría y SEO.
+  // HERO: la noticia más destacada del ranking editorial (no de luto).
   const ranked = rankNoticias(latest);
   const hero = selectDestacada(ranked.filter(n => !isLutoNews(n))) ?? ranked[0] ?? null;
   if (hero) used.add(hero.id);
 
-  // Principales: diversidad deliberada. Una nota recién publicada no desplaza
-  // automáticamente una noticia más importante.
+  // SECCIONES POR CATEGORÍA: prioridad de frescura. Cada categoría muestra
+  // sus propias noticias más recientes, sin depender de que el carril
+  // general las haya reservado. Solo evitamos repetir el hero.
+  categoryNames.forEach(name => {
+    const limit = SECTION_LIMITS[name] ?? 4;
+    porCategoria[name] = (porCategoria[name] || [])
+      .filter(n => !used.has(n.id))
+      .slice(0, limit);
+    porCategoria[name].forEach(n => used.add(n.id));
+  });
+
+  // PRINCIPALES: diversidad deliberada desde lo que no ya fue reservado.
   const principales: Noticia[] = [];
   const principalCounts: Record<string, number> = {};
   for (const n of ranked) {
@@ -209,29 +220,35 @@ export async function getHomePageData(): Promise<HomePageData> {
   }
   const enPortada = principales;
 
-  // ÚLTIMAS NOTICIAS: carril puramente cronológico.
-  const ultimas = latest.filter(n => !used.has(n.id)).slice(0, 10);
-  ultimas.forEach(n => used.add(n.id));
-
-  // ÚLTIMA HORA: carril de recencia, independiente del ranking editorial.
-  const breakingRaw = latest.filter(n => !used.has(n.id)).slice(0, 20);
-  const breaking: Noticia[] = [];
-  const catCounts: Record<string, number> = {};
-  for (const n of breakingRaw) {
-    if (breaking.length >= 4) break;
-    const count = catCounts[n.categoria] || 0;
-    if (n.categoria === 'Sucesos' && count >= 2) continue;
-    breaking.push(n);
-    catCounts[n.categoria] = count + 1;
+  // ÚLTIMAS NOTICIAS: carril cronológico, con tope por categoría para no
+  // vaciar las secciones propias de contenido reciente.
+  const ultimas: Noticia[] = [];
+  const ultimasCatCounts: Record<string, number> = {};
+  for (const n of latest) {
+    if (ultimas.length >= 8) break;
+    if (used.has(n.id)) continue;
+    const count = ultimasCatCounts[n.categoria] || 0;
+    if (count >= 2) continue;
+    ultimas.push(n);
+    ultimasCatCounts[n.categoria] = count + 1;
     used.add(n.id);
   }
 
-  // SECCIONES POR CATEGORÍA: tomar de consulta directa por categoría, excluyendo usados
-  categoryNames.forEach(name => {
-    const limit = SECTION_LIMITS[name] ?? 4;
-    porCategoria[name] = (porCategoria[name] || []).filter(n => !used.has(n.id)).slice(0, limit);
-    porCategoria[name].forEach(n => used.add(n.id));
-  });
+  // ÚLTIMA HORA: solo artículos publicados en las últimas 24h.
+  const breaking: Noticia[] = [];
+  const breakingCatCounts: Record<string, number> = {};
+  const now = Date.now();
+  for (const n of latest) {
+    if (breaking.length >= 4) break;
+    if (used.has(n.id)) continue;
+    const t = new Date(n.fecha).getTime();
+    if (Number.isNaN(t) || now - t > 24 * 60 * 60 * 1000) continue;
+    const count = breakingCatCounts[n.categoria] || 0;
+    if (n.categoria === 'Sucesos' && count >= 2) continue;
+    breaking.push(n);
+    breakingCatCounts[n.categoria] = count + 1;
+    used.add(n.id);
+  }
 
   return { hero, ultimas, enPortada, breaking, porCategoria, masLeidas };
 }

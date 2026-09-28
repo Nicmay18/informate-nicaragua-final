@@ -121,7 +121,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   // Procesar TOC para artículos largos y mejorar HTML (enlaces/imágenes)
   const { html: processedHtml, items: tocItems } = injectTocIds(noticia.contenido || '');
   const enhancedHtml = enhanceArticleHtml(processedHtml, SITE_CONFIG.url);
-  const showToc = tocItems.length >= 3;
+  const showToc = tocItems.length >= 4 && wordCount >= 500;
 
   // Limpieza editorial en render: dedup de oraciones exactas + muletillas.
   // La limpieza estructural (entrada=bajada) se omite en notas sensibles,
@@ -137,6 +137,19 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     inlineLinks.map((l) => l.url.split('/').filter(Boolean).pop() || ''),
   );
   const relatedShown = related.filter((r) => !inlineSlugs.has(r.slug)).slice(0, 3);
+
+  // Detectar si el resumen ya es el primer párrafo del cuerpo; en ese caso
+  // no lo mostramos dos veces (confunde al lector).
+  const firstParagraphText = useMemo(() => {
+    const match = cleanedHtml.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+    return (match?.[1] || '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }, [cleanedHtml]);
+  const leadIsDuplicated =
+    !!noticia.resumen &&
+    jaccardSimilarity(normalizeText(noticia.resumen), normalizeText(firstParagraphText)) >= 0.55;
 
   // Puntos clave: solo si hay datos reales y sustantivos (no duplican bajada/título)
   const keyPoints = useMemo(() => {
@@ -255,9 +268,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           {noticia.titulo}
         </h1>
 
-        {/* Resumen / Lead con acento editorial */}
-        {noticia.resumen && (
-          <p style={{ fontFamily: "'Merriweather', serif", fontSize: 20, color: '#334155', lineHeight: 1.6, marginBottom: 28, paddingLeft: 20, borderLeft: `4px solid ${category.color}`, fontWeight: 500 }} itemProp="description">
+        {/* Resumen / Lead: solo si aporta algo distinto al primer párrafo */}
+        {noticia.resumen && !leadIsDuplicated && (
+          <p style={{ fontFamily: "'Merriweather', serif", fontSize: 19, color: '#334155', lineHeight: 1.62, marginBottom: 28, paddingBottom: 20, borderBottom: '1px solid #e2e8f0', fontWeight: 500 }} itemProp="description">
             {noticia.resumen}
           </p>
         )}

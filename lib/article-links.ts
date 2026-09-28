@@ -55,10 +55,11 @@ export function injectInternalLinks(html: string, links: RelatedLink[] | undefin
     return html + buildSiTeInteresaLine(picked[0]);
   }
 
-  // Posiciones de inserción (índice de párrafo tras el cual insertar)
+  // Posiciones de inserción (índice de párrafo tras el cual insertar).
+  // El primer bloque no interrumpe la apertura: empieza tras el segundo párrafo.
   const positions = picked.length === 1
-    ? [Math.max(1, Math.floor(total / 2))]
-    : [Math.max(1, Math.floor(total / 3)), Math.max(2, Math.floor((2 * total) / 3))];
+    ? [Math.max(2, Math.floor(total / 2))]
+    : [Math.max(2, Math.floor(total / 3)), Math.max(3, Math.floor((2 * total) / 3))];
 
   const insertMap = new Map<number, string>();
   picked.forEach((link, i) => {

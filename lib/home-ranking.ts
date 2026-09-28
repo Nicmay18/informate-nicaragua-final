@@ -89,9 +89,12 @@ function interesPublico(noticia: Noticia): number {
 }
 
 function scoreNoticia(noticia: Noticia): number {
-  const h = hoursSince(noticia.fechaActualizacion || noticia.fechaPublicacion || noticia.fecha);
+  // La actualidad debe medirse desde la fecha de PUBLICACIÓN, no desde
+  // la última edición técnica; de lo contrario una corrección menor
+  // reaviva una noticia de hace días como si fuera recién salida.
+  const h = hoursSince(noticia.fechaPublicacion || noticia.fecha);
 
-  const actualidad = Math.max(0, 1 - h / 12);
+  const actualidad = Math.max(0, 1 - h / 24);
 
   // Sin fallback: si scoreMeni es null, la nota no fue evaluada por MENI
   // y no debe recibir puntaje de calidad. Score 0 = sin evaluación.
@@ -157,8 +160,8 @@ export function selectDestacada(noticias: Noticia[]): Noticia | null {
 
   const scored = candidates.map((n) => {
     let s = 0;
-    const h = hoursSince(n.fechaActualizacion || n.fechaPublicacion || n.fecha);
-    const actualidad = Math.max(0, 1 - h / 12);
+    const h = hoursSince(n.fechaPublicacion || n.fecha);
+    const actualidad = Math.max(0, 1 - h / 24);
 
     s += actualidad * 2;
     s += normalizeScore(n.scoreMeni ?? 0, 100) * 3;
