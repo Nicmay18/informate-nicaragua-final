@@ -44,6 +44,13 @@ const DEFECTS: Array<{ code: string; re: RegExp; desc: string; action: DefectAct
   // Duplicación mecánica genérica: misma palabra de 6+ letras repetida.
   // Whitelist: reduplicaciones legítimas del español (ja ja, je je, etc. <6 letras).
   { code: 'DUP_WORD_GENERIC', re: /\b([a-záéíóúñü]{6,})\s+\1\b/, action: 'BLOCK', desc: 'palabra duplicada mecánicamente (ej. "texto texto")' },
+  // Duplicación de palabras funcionales (<6 letras): "que que", "de de",
+  // "la la" son errores mecánicos inequívocos — no existen en prosa
+  // periodística como reduplicación legítima. Solo minúsculas: nombres
+  // propios (Cáceres Cáceres) nunca son funcionales en minúscula.
+  // "no"/"sí" llevan coma en diálogo legítimo ("No, no"), así que la
+  // forma con espacio simple sigue siendo defecto.
+  { code: 'DUP_FUNCTION_WORD', re: /\b(que|de|la|el|en|un|una|se|su|lo|al|del|con|por|para|pero|como|muy|sin|sobre|cuando|porque|mas|más|aunque|sino|también|tampoco|solo|sólo|ya|aún|aun|no|sí|es|fue|son|hay|así|me|te|le|les|nos|está|están|era|ser)\s+\1\b/, action: 'BLOCK', desc: 'palabra funcional duplicada (ej. "que que", "de de")' },
   // Puntuación duplicada imposible: !! ?? ;; ,, :: (puntos suspensivos "..." son válidos).
   { code: 'DUP_PUNCT', re: /[!?]{2,}|[;,:]{2,}/, action: 'BLOCK', desc: 'signos de puntuación duplicados (ej. "!!", ";;", ",,")' },
   // Encabezado HTML duplicado de forma consecutiva e idéntica.
