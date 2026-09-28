@@ -71,74 +71,31 @@ function stripHtml(html: string): string {
   return (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
-function extraerOraciones(texto: string, max: number = 4): string[] {
-  const limpio = texto.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  return limpio
-    .split(/[.!?]+/)
-    .map(s => s.trim())
-    .filter(s => s.length >= 15 && s.length <= 140)
-    .slice(0, max);
-}
-
 function buildUrl(slug: string, utm = ''): string {
   const base = `https://nicaraguainformate.com/noticias/${slug}`;
   return utm ? `${base}?utm_source=${utm}` : base;
 }
 
 // ── Telegram ────────────────────────────────────────────────
+// Sender único compartido (lib/distribution/telegram): escape HTML,
+// resumen con fallback, truncado seguro, timeout, idempotencia y 1 retry.
 async function sendTelegram(db: Firestore, input: PipelineInput): Promise<{ ok: boolean; error?: string; skipped?: boolean }> {
   try {
-    const snap = await db.collection('config').doc('admin').get();
-    const data = snap.data() || {};
-    const token = process.env.TG_TOKEN || data.telegram?.token || '';
-    const chatId = process.env.TG_CHAT_ID || process.env.TG_CHAT || data.telegram?.chatId || '';
-    if (!token || !chatId) return { ok: false, error: 'Faltan credenciales Telegram' };
-
-    const url = buildUrl(input.slug, 'telegram');
-    const emoji = EMOJI_CAT[input.categoria] || '📰';
-
-    let contexto = '';
-    const texto = (input.resumen || stripHtml(input.contenido)).replace(/\n+/g, ' ').trim();
-    const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [];
-    for (const o of oraciones) {
-      const limpia = o.trim();
-      if (contexto.length + limpia.length + 1 > 180 && contexto.length > 0) break;
-      contexto += (contexto ? ' ' : '') + limpia;
-    }
-    if (!contexto) contexto = texto.substring(0, 120);
-
-    const caption = `<b>${emoji} ${input.titulo}</b>\n\n${contexto}...\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n#NicaraguaInformate`;
-    const imagen = input.imagenRedes || input.imagen;
-    const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');
-
-    if (imagenValida) {
-      const photoRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          photo: imagen,
-          caption: caption.slice(0, 1024),
-          parse_mode: 'HTML',
-          reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] },
-        }),
-      });
-      const photoData = await photoRes.json();
-      if (photoData.ok) return { ok: true };
-    }
-
-    const msgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: caption.slice(0, 4096),
-        parse_mode: 'HTML',
-        reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] },
-      }),
-    });
-    const msgData = await msgRes.json();
-    return { ok: msgData.ok, error: msgData.ok ? undefined : msgData.description };
+    const { sendTelegramArticle } = await import('@/lib/distribution/telegram');
+    const r = await sendTelegramArticle(
+      {
+        slug: input.slug,
+        titulo: input.titulo,
+        resumen: input.resumen,
+        contenido: input.contenido,
+        categoria: input.categoria,
+        imagen: input.imagen,
+        imagenRedes: input.imagenRedes,
+        articleId: input.articleId,
+      },
+      { db },
+    );
+    return { ok: r.ok, error: r.error, skipped: r.skipped };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : 'Error' };
   }
@@ -242,6 +199,9 @@ async function sendPush(input: PipelineInput): Promise<{ ok: boolean; error?: st
 }
 
 // ── Social Copy (Facebook + WhatsApp) ───────────────────────
+// Determinista por defecto: la distribución normal NO depende de Groq/IA.
+// La IA es mejora opcional (GROQ_API_KEY + presupuesto); el fallback
+// determinista siempre produce copy completo sin ella.
 async function generateSocialCopy(input: PipelineInput): Promise<{ facebook: string | null; whatsapp: string | null; source: 'ia' | 'plantilla' | 'none' }> {
   const url = buildUrl(input.slug);
   const emoji = EMOJI_CAT[input.categoria] || '📰';
@@ -288,18 +248,17 @@ async function generateSocialCopy(input: PipelineInput): Promise<{ facebook: str
     } catch { /* fallback */ }
   }
 
-  // Plantilla de respaldo
-  const oraciones = extraerOraciones(texto, 4);
-  let cuerpo: string;
-  if (oraciones.length >= 2) {
-    cuerpo = [oraciones[0] + '.', oraciones.slice(1, 3).join('. ') + '.'].filter(Boolean).join('\n\n');
-  } else {
-    cuerpo = oraciones[0] ? oraciones[0] + '.' : texto.substring(0, 140) + '...';
-  }
-  const hashtag = `#${input.categoria.replace(/\s+/g, '')} #Nicaragua`;
-  const fbCopy = `${emoji} ${input.titulo}\n\n${cuerpo}\n\n👉 Nota completa:\n${url}\n\n${hashtag}`;
-  const waCopy = `${emoji} *${input.titulo}*\n\n${texto.substring(0, 120)}...\n\n🔗 ${url}\n\n#NicaraguaInformate`;
-  return { facebook: fbCopy, whatsapp: waCopy, source: 'plantilla' };
+  // Plantilla determinista (lib/distribution/social-copy): nunca depende de IA.
+  const { generateSocialCopy: genDeterminista } = await import('@/lib/distribution/social-copy');
+  const det = genDeterminista({
+    slug: input.slug,
+    titulo: input.titulo,
+    resumen: input.resumen,
+    contenido: input.contenido,
+    categoria: input.categoria,
+    departamento: input.departamento,
+  });
+  return { facebook: det.facebook.text, whatsapp: det.whatsapp.text, source: 'plantilla' };
 }
 
 // ── Pipeline principal ──────────────────────────────────────

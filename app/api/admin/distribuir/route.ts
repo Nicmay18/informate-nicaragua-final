@@ -22,23 +22,6 @@ interface Noticia {
   fecha?: any;
 }
 
-/** Lee config de Telegram desde Firestore (igual que /api/admin/config) */
-async function getTelegramConfig(db: FirebaseFirestore.Firestore) {
-  try {
-    const snap = await db.collection('config').doc('admin').get();
-    const data = snap.data() || {};
-    return {
-      token: process.env.TG_TOKEN || data.telegram?.token || '',
-      chatId: process.env.TG_CHAT_ID || process.env.TG_CHAT || data.telegram?.chatId || '',
-    };
-  } catch {
-    return {
-      token: process.env.TG_TOKEN || '',
-      chatId: process.env.TG_CHAT_ID || process.env.TG_CHAT || '',
-    };
-  }
-}
-
 /** Verifica si una noticia ya fue enviada a un canal en las ultimas N horas */
 async function yaDistribuido(
   db: FirebaseFirestore.Firestore,
@@ -60,71 +43,24 @@ async function yaDistribuido(
   }
 }
 
-/** Envía a Telegram */
+/** Envía a Telegram — sender único compartido (lib/distribution/telegram) */
 async function enviarTelegram(noticia: Noticia, db: FirebaseFirestore.Firestore): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
   try {
-    const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
-    if (!TG_TOKEN || !TG_CHAT_ID) return { ok: false, error: 'Faltan credenciales Telegram' };
-
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=telegram`;
-    const emoji: Record<string, string> = {
-      Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
-      Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍'
-    };
-    const catEmoji = emoji[noticia.categoria || ''] || '📰';
-
-    // Extraer 1-2 oraciones
-    let contexto = '';
-    const texto = (noticia.resumen || noticia.contenido || '').replace(/\n+/g, ' ').trim();
-    const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [];
-    for (const o of oraciones) {
-      const limpia = o.trim();
-      if (contexto.length + limpia.length + 1 > 180 && contexto.length > 0) break;
-      contexto += (contexto ? ' ' : '') + limpia;
-    }
-    if (!contexto) contexto = texto.substring(0, 120);
-
-    const caption = `<b>${catEmoji} ${noticia.titulo}</b>\n\n${contexto}...\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n#NicaraguaInformate`;
-
-    const imagen = noticia.imagenRedes || noticia.imagen;
-    const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');
-
-    // Intentar con foto primero; si falla, fallback a mensaje de texto
-    if (imagenValida) {
-      const photoRes = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TG_CHAT_ID,
-          photo: imagen,
-          caption: caption.slice(0, 1024),
-          parse_mode: 'HTML',
-          reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] }
-        })
-      });
-      const photoData = await photoRes.json();
-      if (photoData.ok) return { ok: true };
-
-      // Fallback si la imagen falla por tipo o URL
-      if (photoData.description?.includes('wrong type') || photoData.description?.includes('failed to get HTTP URL content')) {
-        logger.info('[Telegram] sendPhoto falló, fallback a sendMessage');
-      } else {
-        return { ok: false, error: photoData.description };
-      }
-    }
-
-    const msgRes = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TG_CHAT_ID,
-        text: caption.slice(0, 4096),
-        parse_mode: 'HTML',
-        reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] }
-      })
-    });
-    const msgData = await msgRes.json();
-    return { ok: msgData.ok, error: msgData.ok ? undefined : msgData.description };
+    const { sendTelegramArticle } = await import('@/lib/distribution/telegram');
+    const r = await sendTelegramArticle(
+      {
+        slug: noticia.slug,
+        titulo: noticia.titulo,
+        resumen: noticia.resumen,
+        metaDescription: (noticia as any).metaDescription,
+        contenido: noticia.contenido,
+        categoria: noticia.categoria,
+        imagen: noticia.imagen,
+        imagenRedes: noticia.imagenRedes,
+      },
+      { db },
+    );
+    return { ok: r.ok, skipped: r.skipped, error: r.error };
   } catch (e: any) {
     return { ok: false, error: e.message };
   }

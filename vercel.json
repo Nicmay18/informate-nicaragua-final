@@ -7,36 +7,76 @@
     {
       "source": "/sitemap.xml",
       "headers": [
-        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=3600, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/news-sitemap.xml",
       "headers": [
-        { "key": "Cache-Control", "value": "public, s-maxage=3600, stale-while-revalidate=86400" }
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=3600, stale-while-revalidate=86400"
+        }
       ]
     },
     {
       "source": "/feed.xml",
       "headers": [
-        { "key": "Cache-Control", "value": "public, s-maxage=1800, stale-while-revalidate=3600" }
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=1800, stale-while-revalidate=3600"
+        }
       ]
     },
     {
       "source": "/feed.json",
       "headers": [
-        { "key": "Cache-Control", "value": "public, s-maxage=1800, stale-while-revalidate=3600" }
+        {
+          "key": "Cache-Control",
+          "value": "public, s-maxage=1800, stale-while-revalidate=3600"
+        }
       ]
     }
   ],
   "crons": [
-    { "path": "/api/cron/nios-collect", "schedule": "0 8 * * *" },
-    { "path": "/api/cron/resumen-diario", "schedule": "0 12 * * *" },
-    { "path": "/api/cron/departamento-central", "schedule": "0 0 * * *" },
-    { "path": "/api/cron/departamento-daily", "schedule": "0 6 * * *" },
-    { "path": "/api/cron/departamento-watchdog", "schedule": "0 1 * * *" },
-    { "path": "/api/cron/nios-ceo-loop", "schedule": "0 2 * * *" },
-    { "path": "/api/cron/supervisor-watch", "schedule": "0 4 * * *" },
-    { "path": "/api/cron/traffic-cleanup", "schedule": "0 3 * * *" }
+    {
+      "path": "/api/cron/nios-collect",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/resumen-diario",
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/departamento-central",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/departamento-daily",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/departamento-watchdog",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron/nios-ceo-loop",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/supervisor-watch",
+      "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/cron/traffic-cleanup",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/distribuciones-retry",
+      "schedule": "*/30 * * * *"
+    }
   ]
 }

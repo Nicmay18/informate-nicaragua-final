@@ -51,6 +51,7 @@ export const DECLARED_CRONS = [
   { path: '/api/cron/nios-ceo-loop', schedule: '0 2 * * *' },
   { path: '/api/cron/supervisor-watch', schedule: '0 4 * * *' },
   { path: '/api/cron/traffic-cleanup', schedule: '0 3 * * *' },
+  { path: '/api/cron/distribuciones-retry', schedule: '*/30 * * * *' },
 ];
 
 /**
@@ -283,7 +284,7 @@ export function buildBoard(input: BoardInput, now = new Date()): SwissWatchBoard
       'Crons declarados en vercel.json',
       `${DECLARED_CRONS.length} cron(s) declarados con expresiones diarias`,
       'config',
-      DECLARED_CRONS.length === 8,
+      DECLARED_CRONS.length === 9,
     ),
     ...cronSecret.evidence,
   ];
