@@ -155,10 +155,11 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
 export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
-    const [{ normalizarTitulo }, { ensureUniqueSlug }, { guardarConMeni }] = await Promise.all([
+    const [{ normalizarTitulo }, { ensureUniqueSlug }, { guardarConMeni }, { updateDecisionLog }] = await Promise.all([
       import('@/lib/meni/titulo'),
       import('@/lib/slug'),
       import('@/lib/editorial/guardar-con-meni'),
+      import('@/lib/editorial/decision-log'),
     ]);
 
     const body = await request.json().catch(() => null);
@@ -210,10 +211,15 @@ export async function POST(request: NextRequest) {
       slug,
     };
 
-    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical } = await guardarConMeni(noticiaInput, db);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical, attemptId } = await guardarConMeni(noticiaInput, db);
 
     if (!meniOk) {
       const first = meni.blockingIssues?.[0];
+      await updateDecisionLog(db, attemptId, {
+        result: 'REJECTED',
+        blockingStage: 'MENI',
+        blockingReason: first ? `[${first.code}] ${first.title}` : `MENI no aprobó (score ${meni.scoreFinal})`,
+      });
       return NextResponse.json({
         success: false,
         error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI',
@@ -233,6 +239,11 @@ export async function POST(request: NextRequest) {
       const problem = first
         ? `[${first.severity || 'SUPERVISOR'}][${first.domain || 'GENERAL'}] ${first.problem || first.action || 'Bloqueo editorial'}`
         : (supervisor.reason || `Veredicto ${supervisor.verdict}. Confianza: ${supervisor.confidence}%`);
+      await updateDecisionLog(db, attemptId, {
+        result: 'REJECTED',
+        blockingStage: 'SUPERVISOR',
+        blockingReason: problem,
+      });
       return NextResponse.json({
         success: false,
         error: problem,
@@ -270,6 +281,7 @@ export async function POST(request: NextRequest) {
       estado: publicado !== false ? 'publicado' : 'borrador',
       related_links: relatedLinks,
     });
+    await updateDecisionLog(db, attemptId, { result: 'SAVED', savedArticleId: docRef.id });
 
     if (publicado !== false) {
       // REGLA: Usar el publication-pipeline canonico, no notifyTelegram inline.

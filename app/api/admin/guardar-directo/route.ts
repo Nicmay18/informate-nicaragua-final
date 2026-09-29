@@ -7,6 +7,7 @@ import type { NoticiaInput } from '@/lib/meni';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { categoryToSlug } from '@/lib/types';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import { findBlockingDefects, repairMechanicalDefects } from '@/lib/editorial/content-integrity';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
@@ -77,7 +78,7 @@ export async function POST(request: NextRequest) {
     };
 
     // MENI canónico via guardarConMeni — única autoridad editorial
-    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical } = await guardarConMeni(noticiaInput, db);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical, attemptId } = await guardarConMeni(noticiaInput, db);
 
     // Generar metadata si falta
     const finalTitulo = normalizeEditorialTitle(titulo.trim());
@@ -98,6 +99,11 @@ export async function POST(request: NextRequest) {
     const contentDefects = findBlockingDefects(repairedCanonical.text);
     if (contentDefects.length > 0) {
       logger.error('[guardar-directo] Contenido rechazado por defectos de generación:', { id, defects: contentDefects.map(d => d.code), repaired: repairedCanonical.repaired });
+      await updateDecisionLog(db, attemptId, {
+        result: 'REJECTED',
+        blockingStage: 'CONTENT_INTEGRITY',
+        blockingReason: `defectos mecánicos: ${contentDefects.map(d => d.code).join(', ')}`,
+      });
       return NextResponse.json({
         error: 'Contenido rechazado: defectos mecánicos de generación detectados',
         code: 'CONTENT_INTEGRITY_VIOLATION',
@@ -109,6 +115,11 @@ export async function POST(request: NextRequest) {
     // BLOQUEO si no pasa filtros criticos
     if (!meniOk) {
       const first = meni.blockingIssues?.[0];
+      await updateDecisionLog(db, attemptId, {
+        result: 'REJECTED',
+        blockingStage: 'MENI',
+        blockingReason: first ? `[${first.code}] ${first.title}` : `MENI no aprobó (score ${meni.scoreFinal})`,
+      });
       return NextResponse.json({
         error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI',
         code: first?.code || 'MENI_NOT_APPROVED',
@@ -140,6 +151,11 @@ export async function POST(request: NextRequest) {
       const problem = first
         ? `[${first.severity || 'SUPERVISOR'}][${first.domain || 'GENERAL'}] ${first.problem || first.action || 'Bloqueo editorial'}`
         : (supervisor.reason || `Veredicto ${supervisor.verdict}. Confianza: ${supervisor.confidence}%`);
+      await updateDecisionLog(db, attemptId, {
+        result: 'REJECTED',
+        blockingStage: 'SUPERVISOR',
+        blockingReason: problem,
+      });
       return NextResponse.json({
         error: problem,
         code: 'SUPERVISOR_BLOCKED',
@@ -278,6 +294,7 @@ export async function POST(request: NextRequest) {
         id: docRef.id,
       });
     }
+    await updateDecisionLog(db, attemptId, { result: 'SAVED', savedArticleId: articleDocId });
 
     // Invalidar cachés afectadas
     // WATCH automatico - noticia viva

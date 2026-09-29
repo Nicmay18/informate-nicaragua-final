@@ -8,8 +8,11 @@ service cloud.firestore {
 
     // ========== NOTICIAS ==========
     match /noticias/{noticiaId} {
-      // Lectura pública
-      allow get, list: if true;
+      // Lectura: el público solo puede obtener artículos PUBLICADOS por ID
+      // (mismo dato que ya sirve la web). Listar requiere sesión (panel).
+      // Antes: get,list público exponía borradores y notas internas.
+      allow get: if request.auth != null || resource.data.publicado == true;
+      allow list: if request.auth != null;
 
       // Solo administradores pueden crear/editar/eliminar
       // (El acceso está controlado por Firebase Auth + ADMIN_EMAILS en el servidor)

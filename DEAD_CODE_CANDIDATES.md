@@ -3,6 +3,29 @@
 **Generado:** 2026-09-28 · **Método:** `.audit/dead-code-scan.mjs` — 870 archivos fuente, resolución real de imports (`@/`, relativos, `index`).
 **Resultado:** 326 entrypoints (convención Next.js) · **66 archivos sin ninguna referencia · ~5 496 líneas**.
 
+## CLASIFICACIÓN FASE B
+
+**SAFE_TO_REMOVE** (librerías huérfanas, sin UI ni efectos laterales):
+- `lib/editorial/profiles/{turismo,clima,cultura,servicio,economia,politica,salud}.ts`
+- `lib/meni/modules/*` (7 archivos + index)
+- `lib/meni/editorial-brain/profiles/*` (15 archivos — tercer sistema de perfiles redundante)
+- `lib/meni/registry/*`, `lib/meni/{risk,seo,discover,auditor,editor-chief,adsense}.ts`, `lib/meni/utils/{entities,angles}.ts`, `lib/meni/{editor-autonomo,editor-brain}/types.ts`, `lib/meni/registry/index.ts`
+- `lib/editorial/{mapper-v3,pipeline}.ts` (stubs)
+- `lib/{editorial-intelligence,distribution-intelligence,audience-intelligence,revenue-intelligence,explainer,discover-score,internal-linking-engine,editorial-fix,dtos,image-loader,seo/meta,observability/cost-control,content-lifecycle}.ts`
+- `lib/editorial/{editorialEnhancerAction,category-detector,profile-loader}.ts`, `lib/editorial/story-editor/*`
+- `lib/db/cached-firestore.mjs`, `lib/nios/contentLifecycle.ts`
+- `hooks/{useTheme,useScrollProgress}.ts`
+
+**NEEDS_MANUAL_REVIEW** (hay que confirmar intención de producto antes de borrar):
+- `components/pro/*` — portada alternativa completa + `EmergencyWidget` (911): ¿diseño descartado o rollout pendiente?
+- `components/admin/{TipTapEditor,AnalizadorPanel,ImageAnalyzer,DashboardCalidad}` — ¿herramientas del panel viejo pendientes de migrar?
+- `components/nios/*` y `lib/nios/*` huérfanos (~30) — módulos NIOS sin cablear; decidir si es roadmap o abandono.
+- `public/panel.html`, `index-new.html`, `validador.html`, `editor-adsense.html`, `ads.txt.bak`, `nicaraguainformate.txt`, `panel-mobile.css` — servidos por URL directa; `panel.html` tiene herramientas únicas (correcciones masivas) y aún usa SDK cliente.
+- `app/panel/nios/reparaciones/actions.ts` (15 líneas, huérfano dentro de ruta activa).
+- `components/{JsonLdSchema,NewsGrid,IndicadoresWidget,ArticleDataCard,ArticleFaq,ContentWarning,TaboolaAds,PropellerAds,Analytics,DeferredAnalytics,ThirdPartyScripts,OneSignalProvider,PullQuote,ReadingProgress,OptimizedImage,AudioButton}` — verificar si son intencionales para futuras features.
+
+**KEEP** (falsos positivos ya descartados): `ShareBar`, `KeyPoints`, `editorial-contract.ts`, `quality-gate.ts`, `sanitize.ts`, `canonical.ts` — usados en el pipeline vivo.
+
 **CAVEAT:** el escáner no ve llamadas por string (rutas dinámicas, `fetch` a APIs, entrypoints de config). Cada archivo fue contrastado; los marcados ⚠️ requieren confirmación antes de borrar.
 
 ## LOTE 1 — seguro de eliminar (huérfanos verificados)

@@ -2,6 +2,7 @@
 import { adminDb } from '@/lib/firebase-admin';
 import { generateSlug } from '@/lib/slug';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import type { NoticiaInput } from '@/lib/meni';
 import { logger } from '@/lib/logger';
 import { countWords } from '@/lib/utils/word-count';
@@ -80,10 +81,15 @@ export async function POST(request: NextRequest) {
       slug: finalSlug,
     };
 
-    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical } = await guardarConMeni(noticiaInput, adminDb);
+    const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical, attemptId } = await guardarConMeni(noticiaInput, adminDb);
 
     if (!meniOk) {
       const first = meni.blockingIssues?.[0];
+      await updateDecisionLog(adminDb, attemptId, {
+        result: 'REJECTED',
+        blockingStage: 'MENI',
+        blockingReason: first ? `[${first.code}] ${first.title}` : `MENI no aprobó (score ${meni.scoreFinal})`,
+      });
       return NextResponse.json({
         error: first ? `[${first.code}] ${first.title}: ${first.description}` : 'Noticia no aprobada por MENI',
         code: first?.code || 'MENI_NOT_APPROVED',
@@ -96,6 +102,11 @@ export async function POST(request: NextRequest) {
     if (!supervisorApproved) {
       const criticalIssues = supervisor.issues.filter(i => i.severity === 'CRITICAL');
       const first = criticalIssues[0];
+      await updateDecisionLog(adminDb, attemptId, {
+        result: 'REJECTED',
+        blockingStage: 'SUPERVISOR',
+        blockingReason: first ? `[${first.domain}] ${first.problem}` : `Veredicto ${supervisor.verdict}`,
+      });
       return NextResponse.json({
         error: first ? `[${first.domain}] ${first.problem}` : 'Noticia bloqueada por el Supervisor Editorial',
         code: 'SUPERVISOR_BLOCKED',
@@ -133,6 +144,7 @@ export async function POST(request: NextRequest) {
       estado: 'publicado',
       premium: premium === true,
     });
+    await updateDecisionLog(adminDb, attemptId, { result: 'SAVED', savedArticleId: articleRef.id });
 
     const articleId = articleRef.id;
 

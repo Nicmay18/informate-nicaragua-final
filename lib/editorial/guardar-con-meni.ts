@@ -1,4 +1,5 @@
 import type { Firestore } from 'firebase-admin/firestore';
+import { FieldValue } from 'firebase-admin/firestore';
 import { runMeniAsync } from '@/lib/meni';
 import type { NoticiaInput, MeniResult } from '@/lib/meni';
 import { stripHtml } from '@/lib/meni/utils/helpers';
@@ -9,6 +10,7 @@ import type { SupervisorDecision } from '@/lib/supervisor/types';
 import { stripAICitationMarkers } from '@/lib/sanitize';
 import { detectFactualitySignals } from './factuality-signals';
 import type { FactualitySignal } from './factuality-signals';
+import { newAttemptId, writeDecisionLog } from './decision-log';
 
 /**
  * Elimina recursivamente valores `undefined` de cualquier estructura
@@ -26,6 +28,9 @@ export function sanitizeForFirestore<T = unknown>(value: T): T | undefined {
       .filter((v): v is NonNullable<typeof v> => v !== undefined) as unknown as T;
   }
   if (value instanceof Date) return value;
+  // Sentinelas de Firestore (serverTimestamp, increment, delete) no son
+  // serializables por claves — destruirlos los convertiría en {}.
+  if (value instanceof FieldValue) return value;
   if (typeof (value as { toDate?: unknown }).toDate === 'function') return value;
   const obj = value as Record<string, unknown>;
   const cleaned: Record<string, unknown> = {};
@@ -56,6 +61,8 @@ export interface GuardarConMeniResult {
   /** Versión editorial canónica — la ÚNICA que puede persistirse. */
   canonical: { titulo: string; resumen: string; contenido: string };
   factualitySignals: FactualitySignal[];
+  /** Correlaciona esta evaluación con meni_decision_log (observabilidad). */
+  attemptId: string;
 }
 
 export async function guardarConMeni(
@@ -208,6 +215,19 @@ export async function guardarConMeni(
   // Esto cubre fields como canonicalEditorialDecision.research, supervisorDecision.scoreOverrideReason, etc.
   const cleanUpdateData = sanitizeForFirestore(updateData) as Record<string, unknown>;
 
+  // BITÁCORA PERSISTENTE (P1-1): toda evaluación queda registrada en
+  // meni_decision_log — incluidas las que serán rechazadas y jamás llegarán
+  // a `noticias`. La ruta actualiza `result` con el desenlace final.
+  const attemptId = newAttemptId();
+  await writeDecisionLog(db, {
+    attemptId,
+    input,
+    meni,
+    supervisor,
+    factualitySignals,
+    aiArtifactsRemoved,
+  });
+
   return {
     ok,
     meni,
@@ -216,5 +236,6 @@ export async function guardarConMeni(
     updateData: cleanUpdateData,
     canonical: { titulo: cleanedTitulo, resumen: finalResumen, contenido: finalContenido },
     factualitySignals,
+    attemptId,
   };
 }
