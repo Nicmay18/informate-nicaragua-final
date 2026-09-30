@@ -295,14 +295,12 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
     signals.push(`${ev.valorEditorial.nombresPropiosCount} nombres propios detectados`);
   }
 
-  if (ev.valorEditorial.institucionesCount >= 2) {
+  if (ev.valorEditorial.institucionesCount >= 1) {
     signals.push(`${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
   } else if (esLargo) {
-    warnings.push(`Solo ${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
+    warnings.push('No se detectaron instituciones mencionadas');
     tracer.sub(2, warnings[warnings.length - 1], 'POCAS_INSTITUCIONES');
     recommendations.push('Mencionar instituciones relevantes');
-  } else if (ev.valorEditorial.institucionesCount >= 1) {
-    signals.push(`${ev.valorEditorial.institucionesCount} instituciones mencionadas`);
   }
 
   const ratioSinDato = ev.valorEditorial.parrafosTotal > 0

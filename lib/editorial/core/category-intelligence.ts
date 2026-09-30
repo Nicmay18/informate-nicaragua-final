@@ -163,7 +163,7 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
     requiredEvidence: {
       'qué es':        /\b(?:enfermedad|condici[oó]n|s[ií]ntomas?|diagn[oó]stico|tratamiento|vacuna|brote|casos?|pacientes?|MINSa|hospital)\b/i,
       'cifras':        /\b(?:\d+\s*(?:casos?|personas?|muertes?|dosis|por\s+ciento|%|m[eé]dicos?|camas?)|C?\$[\d.,]+)\b/i,
-      'dónde aplica':  /\b(?:Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|Matagalpa|Chinandega|Carazo|Rivas|Boaco|Chontales|Nueva\s+Segovia|Madriz|R[ií]o\s+San\s+Juan|RACCS|RACCN|departamento|municipio|centro\s+de\s+salud|hospital|cl[ií]nica)\b/i,
+      'dónde aplica':  /\b(?:Managua|Le[oó]n|Granada|Masaya|Estel[ií]|Jinotega|Matagalpa|Chinandega|Carazo|Rivas|Boaco|Chontales|Nueva\s+Segovia|Madriz|R[ií]o\s+San\s+Juan|RACCS|RACCN|departamento|municipio|centro\s+de\s+salud|hospital|cl[ií]nica|nacional|nacionalmente|pa[ií]s|Nicaragua|territorio)\b/i,
       'qué hacer':     /\b(?:qu[eé]\s+hacer|c[oó]mo\s+actuar|prevenci[oó]n|medidas?|recomendaciones?|consejos?|sintomatolog[ií]a|cu[aá]ndo\s+acudir)\b/i,
       'quién lo dijo': /\b(?:MINSa|ministerio\s+de\s+salud|m[eé]dic[oa]|epidemi[oó]log[oa]|OPS|OMS|especialista|director[oa]|autoridad)\b/i,
     },
@@ -211,14 +211,14 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
     requiredEvidence: {
       'qué anunció el gobierno o institución': /\b(?:gobierno|ministerio|programa|plan|inauguraci[oó]n|obra|infraestructura|carretera|vivienda|educaci[oó]n|MINED|energ[ií]a|ENATREL|agua\s+potable|ENACAL|reforestaci[oó]n|MARENA|producci[oó]n|agropecuario|MAG|cooperaci[oó]n|beca|censo|INEC)\b/i,
       'cifras':        /\b(?:\d+\s*(?:millones|mil|beneficiarios?|personas?|familias?|casas?|km|hect[aá]reas|escuelas?|hospitales?)|C?\$[\d.,]+)\b/i,
-      'dónde aplica':  /\b(?:Managua|departamento|municipio|comunidad|barrio|zona|rural|urbana|regi[oó]n|carretera|km\s+\d+)\b/i,
+      'dónde aplica':  /\b(?:Managua|departamento|municipio|comunidad|barrio|zona|rural|urbana|regi[oó]n|carretera|km\s+\d+|nacional|nacionalmente|pa[ií]s|Nicaragua|nicarag[uü]ense|territorio)\b/i,
       'quién lo dijo': /\b(?:ministro|viceministro|copresidente|alcald[ea]|director[oa]|autoridad|instituci[oó]n|oficial|gobierno)\b/i,
       'qué cambia':   /\b(?:cambia|entra\s+en\s+vigor|vigencia|aplica|modifica|nuevo|anterior|diferencia|implicaciones?|consecuencias?)\b/i,
     },
     requiredContext: {
       tipo: 'contexto nacional o histórico',
       patrones: [
-        /\b(?:antecedente|contexto\s+nacional|pol[ií]tica\s+p[uú]blica|plan\s+nacional|hist[oó]rico|comparaci[oó]n|anterior)\b/i,
+        /\b(?:antecedente|contexto\s+nacional|pol[ií]tica\s+p[uú]blica|plan\s+nacional|planificaci[oó]n|programa\s+nacional|hist[oó]rico|comparaci[oó]n|anterior|calendario|ciclo|a[nñ]o\s+lectivo|peri[oí]odo|transici[oó]n|etapa|fase|continuidad|a[nñ]o\s+pasado|respecto\s+a)\b/i,
       ],
     },
     requiredUtility: { preguntas: ['qué anunció el gobierno o institución', 'cifras', 'dónde aplica', 'quién lo dijo', 'qué cambia'] },
