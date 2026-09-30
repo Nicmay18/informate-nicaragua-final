@@ -104,9 +104,20 @@ Cruz Blanca 128 **se conserva** (correcto en Nicaragua). Backups locales creados
 | Cola reintentos muerta | Nunca se cableó consumidor | diagnóstico | — | decidir wirear o retirar |
 | Acumulación datos | Retención insuficiente | propuesta | — | activar TTL en consola |
 
+## Cierre de pendientes (Fase B1)
+
+| Pendiente | Estado | Evidencia |
+|---|---|---|
+| Teléfonos falsos (2 artículos) | **PHONE_FIX = VERIFIED** | Escritos y releídos: 0×`505-2228-XXXX` en toda la colección, 118/115/128 intactos, marker `editorialCorrecciones.emergenciaFix`, backups `.audit/emergency-backup-*.json` |
+| Firestore rules | **RULES_DEPLOY = PASS · FIRESTORE_RULES_TEST = PASS** | Deploy OK (`firestore.rules` compiló); test E2E real SDK anónimo: get publicado=ALLOW, get borrador=DENY, list=DENY. `panel.html` (email+password) conserva acceso por `request.auth != null` |
+| Cola `distribuciones_pendientes` | **CONSUMIDOR IMPLEMENTADO** | Senders extraídos a `lib/distribution/channels.ts` (1 sender/canal, sin duplicación — el sender unificado del branch `fix/social-distribution` existe pero no se portó entero); cron `app/api/cron/distribuciones-retry` cada 30 min, máx 1 reintento, idempotencia `yaDistribuido`. Los **11 históricos se marcan `estado:'legacy'`** (>7 días) — no se disparan |
+| VAGUE_ATTRIBUTION | **PROPUESTA (no implementada)** | `VAGUE_ATTRIBUTION_PROPOSAL.md`: definición concreta/vaga, matriz de opciones (recomendado REQUIERE_REVISION), falsos positivos a probar |
+| `confianza` huérfano | **RECOMENDACIÓN: INTEGRATE** | `analyzeTrust` corre post-guardado (`guardar-directo` l.418, `news/[id]` PUT); solo `nota-trust` lo lee. Propuesta: moverlo pre-Supervisor pasando `factores`/`requiereRevisionHumana` como señales |
+| 3 tests fallidos | **CLASIFICADOS — ninguno REAL_FAILURE** | `mission9` GSC y `ceo-agent` artículos reales = EXTERNAL_NETWORK (APIs Google/Firestore reales); `p1-dates-errors` = FLAKY (mock puro, timeout bajo carga; pasa aislado en 1.5s). Los 3 pasan en corrida aislada |
+
 ## Estado
 
-- **P0 = 0** · **P1 abiertos = 0 en código** (quedan pendientes acciones externas: desplegar reglas Firestore, aprobar escritura de los 2 artículos, decidir cola de reintentos)
-- **P2** = gap de atribución vaga + retención de datos + 5 ramas abandonadas
-- **Tests** = 10/10 nuevos · suite: **1045/1048** — 3 fallos = timeouts de red real preexistentes (`ceo-agent` artículos reales, `mission9` GSC, `p1-dates-errors` Firestore) — sin relación con los cambios
+- **P0 = 0** · **P1 abiertos = 0** · **P2 = 3** (VAGUE_ATTRIBUTION spec → decisión · retención de datos → activar TTL en consola · 5 ramas abandonadas)
+- **Tests** = 10/10 nuevos · suite: **1045/1048** (3 fallos clasificados: 2 EXTERNAL_NETWORK, 1 FLAKY — pasan aislados)
 - **TSC** = 0 errores · **Build** = PASS
+- **Resultado: `PHASE_B1_COMPLETE` · `SAFE_FOR_NEXT_PHASE = YES`**
