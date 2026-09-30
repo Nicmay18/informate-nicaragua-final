@@ -18,6 +18,8 @@ const eslintConfig = [
       'node_modules/**',
       '**/*.js',
       '**/*.cjs',
+      '**/*.mjs',
+      '.audit/**',
       'revisadas/**',
       'temp/**',
       'next-env.d.ts',

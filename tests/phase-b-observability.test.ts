@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { FieldValue } from 'firebase-admin/firestore';
+import { NextRequest } from 'next/server';
 
 // ─── Firestore mock ───
 const setCalls: Array<{ id: string; data: Record<string, unknown>; merge?: unknown }> = [];
@@ -100,7 +101,7 @@ describe('P1-2: /api/support/track — hardening', () => {
     const headers: Record<string, string> = { 'content-type': 'application/json', 'x-forwarded-for': ip };
     const json = typeof body === 'string' ? body : JSON.stringify(body);
     headers['content-length'] = String(json.length);
-    return new (require('next/server').NextRequest)('https://x/api/support/track', { method: 'POST', headers, body: json });
+    return new NextRequest('https://x/api/support/track', { method: 'POST', headers, body: json });
   };
 
   it('request legítimo → 200 y escribe evento', async () => {
