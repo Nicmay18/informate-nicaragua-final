@@ -51,7 +51,7 @@ export const DECLARED_CRONS = [
   { path: '/api/cron/nios-ceo-loop', schedule: '0 2 * * *' },
   { path: '/api/cron/supervisor-watch', schedule: '0 4 * * *' },
   { path: '/api/cron/traffic-cleanup', schedule: '0 3 * * *' },
-  { path: '/api/cron/distribuciones-retry', schedule: '*/30 * * * *' },
+  { path: '/api/cron/distribuciones-retry', schedule: '15 5 * * *' },
 ];
 
 /**
