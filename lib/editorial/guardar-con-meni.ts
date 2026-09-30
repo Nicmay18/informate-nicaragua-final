@@ -10,6 +10,7 @@ import type { SupervisorDecision } from '@/lib/supervisor/types';
 import { stripAICitationMarkers } from '@/lib/sanitize';
 import { detectFactualitySignals } from './factuality-signals';
 import type { FactualitySignal } from './factuality-signals';
+import { analyzeTrust } from './trust';
 import { newAttemptId, writeDecisionLog } from './decision-log';
 
 /**
@@ -126,6 +127,26 @@ export async function guardarConMeni(
   const canonicalCategoria = classification.finalCategory;
   const canonicalPerfil = PUBLIC_CATEGORY_TO_PROFILE[canonicalCategoria] ?? meni.profile_used;
 
+  // CAPA DE CONFIANZA PRE-DECISIÓN (P1-6/G): analyzeTrust ya no corre solo
+  // post-guardado — sus factores causales entran como señales al Supervisor.
+  // IMPORTANT → INVESTIGAR_MAS (revisión, nunca bloqueo duro).
+  // CONTRADICTION → CRITICAL (misma severidad que INTERNAL_CONTRADICTION).
+  const trust = analyzeTrust({
+    titulo: cleanedTitulo,
+    cuerpo: finalContenido,
+    categoria: canonicalCategoria,
+  });
+  const TRUST_SIGNAL_SEVERITY: Record<string, FactualitySignal['severity']> = {
+    CONTRADICTION: 'CRITICAL',
+  };
+  const trustSignals: FactualitySignal[] = trust.factores.map((f) => ({
+    code: `TRUST_${f}`,
+    severity: TRUST_SIGNAL_SEVERITY[f] ?? 'IMPORTANT',
+    evidence: trust.diagnostico.queFalta.join('; ').slice(0, 160) || f,
+    desc: `capa de confianza: ${f}`,
+  }));
+  const allSignals = [...factualitySignals, ...trustSignals];
+
   // Decisión del Agente Supervisor Editorial Permanente (REGLA DE CIERRE)
   // MENI evalúa. El Supervisor decide. El Supervisor puede decir NO aunque MENI diga sí,
   // y puede decir PUBLICAR_CON_CAMBIOS aunque MENI pida revisar, si el valor periodístico
@@ -147,7 +168,7 @@ export async function guardarConMeni(
     aportePropio: meni.valorEditorial?.aportePropio,
     research: input.research,
     story: input.story,
-    factualitySignals,
+    factualitySignals: allSignals,
   });
 
   // ok = MENI approval (meni.aprobado). supervisorApproved remains the Supervisor verdict.
@@ -203,10 +224,22 @@ export async function guardarConMeni(
     // Las rutas no deben persistir el contenido crudo por encima de estos campos.
     contenido: finalContenido,
     resumen: finalResumen,
-    // Señales de riesgo factual evaluadas (trazabilidad del gate).
+    // Señales de riesgo factual + confianza evaluadas (trazabilidad del gate).
     factuality: {
-      signals: factualitySignals,
+      signals: allSignals,
       evaluatedAt: new Date().toISOString(),
+    },
+    // Trust layer persistido CON la decisión (pre-Supervisor): el Supervisor
+    // ya recibió estos factores como señales TRUST_*. Misma shape que el
+    // writer post-guardado de guardar-directo para no romper consumidores.
+    confianza: {
+      nivel: trust.nivel,
+      resumen: trust.resumen,
+      requiereRevisionHumana: trust.requiereRevisionHumana,
+      riesgos: trust.riesgos.map((r) => r.detail ?? r.text).slice(0, 10),
+      noDisponible: trust.noDisponible.length,
+      fuentes: trust.fuentes,
+      at: new Date().toISOString(),
     },
     ...(aiArtifactsRemoved ? { aiArtifactsRemoved: true } : {}),
   };
@@ -224,7 +257,7 @@ export async function guardarConMeni(
     input,
     meni,
     supervisor,
-    factualitySignals,
+    factualitySignals: allSignals,
     aiArtifactsRemoved,
   });
 
@@ -235,7 +268,7 @@ export async function guardarConMeni(
     supervisorApproved,
     updateData: cleanUpdateData,
     canonical: { titulo: cleanedTitulo, resumen: finalResumen, contenido: finalContenido },
-    factualitySignals,
+    factualitySignals: allSignals,
     attemptId,
   };
 }

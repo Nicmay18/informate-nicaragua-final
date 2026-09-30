@@ -102,12 +102,9 @@ export async function enviarTelegram(noticia: Noticia, db: Firestore): Promise<C
       const photoData = await photoRes.json();
       if (photoData.ok) return { ok: true };
 
-      // Fallback si la imagen falla por tipo o URL
-      if (photoData.description?.includes('wrong type') || photoData.description?.includes('failed to get HTTP URL content')) {
-        logger.info('[Telegram] sendPhoto falló, fallback a sendMessage');
-      } else {
-        return { ok: false, error: photoData.description };
-      }
+      // Si la foto falla por cualquier motivo, intentar mensaje de texto —
+      // es preferible perder la imagen que perder la distribución completa.
+      logger.info('[Telegram] sendPhoto falló, fallback a sendMessage:', photoData.description);
     }
 
     const msgRes = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {

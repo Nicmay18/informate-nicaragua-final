@@ -167,10 +167,9 @@ const RECURSOS_SUCESOS = `
 <p>Si presenciaste o tenés información sobre este incidente, podés contactar a las siguientes instituciones:</p>
 
 <ul>
-<li><strong>Policía Nacional de Nicaragua:</strong> 118 (emergencias) o 505-2228-2000 (denuncias)</li>
-<li><strong>Cruz Blanca Nicaragüense:</strong> 128 (ambulancias) o 505-2228-4848</li>
-<li><strong>Bomberos Unidos de Nicaragua:</strong> 115 (emergencias) o 505-2228-3883</li>
-<li><strong>INSS (Instituto Nicaragüense de Seguridad Social):</strong> 133 (información)</li>
+<li><strong>Policía Nacional:</strong> 118</li>
+<li><strong>Bomberos:</strong> 115</li>
+<li><strong>Cruz Blanca Nicaragüense (ambulancias):</strong> 128</li>
 </ul>
 
 <h3>Consejos de prevención</h3>
@@ -198,7 +197,7 @@ const CONTEXTO_GENERICO = `
 
 <p>Frente a incidentes de esta naturaleza, las entidades de seguridad y salud activan protocolos estandarizados que incluyen: acordonamiento del área, atención médica de urgencia, recolección de evidencia cuando corresponde, y traslado de afectados a centros asistenciales.</p>
 
-<p>La coordinación entre Policía Nacional, Cruz Blanca y centros de salud es fundamental para una respuesta efectiva. Sin embargo, los tiempos de respuesta pueden verse afectados por factores como la distancia, las condiciones climáticas y la disponibilidad de unidades.</p>
+<p>La coordinación entre Policía Nacional, Bomberos, Cruz Blanca y centros de salud es fundamental para una respuesta efectiva. Sin embargo, los tiempos de respuesta pueden verse afectados por factores como la distancia, las condiciones climáticas y la disponibilidad de unidades.</p>
 `;
 
 const CITAS_GENERICAS = `

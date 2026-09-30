@@ -275,3 +275,65 @@ describe('regresión: caso iPhone Duo', () => {
     expect(canonical.contenido).not.toContain('contentReference');
   });
 });
+
+// ─── FINAL AUDIT: VAGUE_ATTRIBUTION + Trust pre-decisión ───
+
+describe('auditoría final: atribución vaga y confianza', () => {
+  // Caso real Phase A: confianza BAJA + 0 fuentes + score 93 → PUBLICAR.
+  const VAGUE_INPUT = {
+    titulo: 'Aumentan accidentes de tránsito durante el fin de semana',
+    resumen: 'De acuerdo con reportes de medios locales, hubo varios siniestros.',
+    contenido:
+      '<p>De acuerdo con reportes de medios locales, al menos 7 personas fallecieron ' +
+      'en accidentes de tránsito durante los últimos tres días. Según fuentes, unas ' +
+      '12 personas resultaron con lesiones de distinta consideración y 4 vehículos ' +
+      'quedaron totalmente destruidos. Las autoridades investigan las causas de los ' +
+      'siniestros ocurridos en diferentes carreteras del país.</p>',
+    categoria: 'Sucesos',
+    autor: 'Redacción',
+  };
+
+  const CONCRETE_INPUT = {
+    titulo: 'Policía Nacional reporta 7 fallecidos en accidentes de tránsito',
+    resumen: 'Según la Policía Nacional, los siniestros ocurrieron el fin de semana.',
+    contenido:
+      '<p>Según el informe oficial de la Policía Nacional, 7 personas fallecieron en ' +
+      'accidentes de tránsito durante los últimos tres días. La institución confirmó ' +
+      'que 12 personas resultaron lesionadas y que 4 vehículos quedaron destruidos ' +
+      'en siniestros registrados en carreteras del país.</p>',
+    categoria: 'Sucesos',
+    autor: 'Redacción',
+  };
+
+  it('atribución vaga + 0 fuentes + cifras materiales → señal VAGUE_ATTRIBUTION', () => {
+    const signals = detectFactualitySignals({
+      titulo: VAGUE_INPUT.titulo,
+      resumen: VAGUE_INPUT.resumen,
+      contenido: VAGUE_INPUT.contenido,
+    });
+    expect(signals.map(s => s.code)).toContain('VAGUE_ATTRIBUTION');
+  });
+
+  it('atribución concreta (institución nombrada) NO produce VAGUE_ATTRIBUTION', () => {
+    const signals = detectFactualitySignals({
+      titulo: CONCRETE_INPUT.titulo,
+      resumen: CONCRETE_INPUT.resumen,
+      contenido: CONCRETE_INPUT.contenido,
+    });
+    expect(signals.map(s => s.code)).not.toContain('VAGUE_ATTRIBUTION');
+  });
+
+  it('confianza BAJA + 0 fuentes ya no sale con PUBLICAR limpio', async () => {
+    runMeniAsyncMock.mockResolvedValue(meniResult(VAGUE_INPUT.contenido, VAGUE_INPUT.resumen));
+    const { supervisor, factualitySignals, updateData } = await guardarConMeni(VAGUE_INPUT, db);
+    // La capa Trust corre PRE-decisión: TRUST_SOURCE_MISSING + VAGUE_ATTRIBUTION
+    // entran al Supervisor → al menos INVESTIGAR_MAS, nunca PUBLICAR directo.
+    const codes = factualitySignals.map(s => s.code);
+    expect(codes).toContain('VAGUE_ATTRIBUTION');
+    expect(codes).toContain('TRUST_SOURCE_MISSING');
+    expect(supervisor.verdict).not.toBe('PUBLICAR');
+    // confianza queda persistida con la decisión, no solo post-guardado
+    const confianza = updateData.confianza as { nivel: string } | undefined;
+    expect(confianza?.nivel).toBeDefined();
+  });
+});

@@ -1,0 +1,994 @@
+[
+  {
+    "id": "nB1YmO9bFoRxD2AN3FeB",
+    "slug": "managua-pone-en-marcha-plan-de-rehabilitacion-en-11-puntos",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 91,
+    "supervisorDecision": {
+      "decisionId": "sup_1790618784070_hrladi",
+      "timestamp": "2026-09-28T18:06:24.070Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-28T18:06:26.006Z",
+      "undefined:APPLIED@2026-09-28T18:06:29.255Z",
+      "undefined:APPLIED@2026-09-28T18:06:31.982Z"
+    ],
+    "created": "2026-09-28T18:06:21.228Z",
+    "updated": "2026-09-28T18:06:24.073Z",
+    "titulo": "Managua pone en marcha plan de rehabilitación en 11 puntos"
+  },
+  {
+    "id": "jFNTYnB2FhIBsw3GgU71",
+    "slug": "tres-dias-siete-muertos-el-saldo-de-los-accidentes-de-transito",
+    "categoria": "Sucesos",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 93,
+    "supervisorDecision": {
+      "decisionId": "sup_1790615778659_664m70",
+      "timestamp": "2026-09-28T17:16:18.659Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Tres días, siete muertos: el saldo de los accidentes de tránsito\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, identidad o circunstancias, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "BAJA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-28T17:16:22.224Z",
+      "undefined:APPLIED@2026-09-28T17:16:25.753Z",
+      "undefined:APPLIED@2026-09-28T17:16:30.392Z"
+    ],
+    "created": "2026-09-28T17:16:15.735Z",
+    "updated": "2026-09-28T17:16:18.663Z",
+    "titulo": "Tres días, siete muertos: el saldo de los accidentes de tránsito"
+  },
+  {
+    "id": "ZuLscQ40E5ZXI3OvT9kb",
+    "slug": "familia-leonesa-pide-ayuda-para-repatriar-a-gabriela-reyes",
+    "categoria": "Internacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 92,
+    "supervisorDecision": {
+      "decisionId": "sup_1790613304609_mbo0zv",
+      "timestamp": "2026-09-28T16:35:04.609Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Familia leonesa pide ayuda para repatriar a Gabriela Reyes\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "BAJA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-28T16:35:07.793Z",
+      "undefined:APPLIED@2026-09-28T16:35:11.752Z",
+      "undefined:APPLIED@2026-09-28T16:35:16.178Z"
+    ],
+    "created": "2026-09-28T16:35:01.563Z",
+    "updated": "2026-09-28T16:35:04.612Z",
+    "titulo": "Familia leonesa pide ayuda para repatriar a Gabriela Reyes"
+  },
+  {
+    "id": "fJsjbYbGuy7YG9wpapet",
+    "slug": "matagalpa-reune-a-mas-de-1-000-personas-alrededor-del-indio-viejo",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 93,
+    "supervisorDecision": {
+      "decisionId": "sup_1790532647919_1b58al",
+      "timestamp": "2026-09-27T18:10:47.919Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-27T18:10:49.749Z",
+      "undefined:APPLIED@2026-09-27T18:10:52.506Z",
+      "undefined:APPLIED@2026-09-27T18:10:57.076Z"
+    ],
+    "created": "2026-09-27T18:10:45.668Z",
+    "updated": "2026-09-27T18:10:47.922Z",
+    "titulo": "Matagalpa reúne a más de 1,000 personas alrededor del indio viejo"
+  },
+  {
+    "id": "BE7DvkHhak28Lh8gKWJ7",
+    "slug": "butacas-que-se-mueven-viento-y-agua-que-es-4dx",
+    "categoria": "Tecnología",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 91,
+    "supervisorDecision": {
+      "decisionId": "sup_1790530596653_5lklpx",
+      "timestamp": "2026-09-27T17:36:36.653Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Butacas que se mueven, viento y agua: ¿qué es 4DX?.\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-27T17:36:38.576Z",
+      "undefined:APPLIED@2026-09-27T17:36:41.687Z",
+      "undefined:APPLIED@2026-09-27T17:36:46.121Z"
+    ],
+    "created": "2026-09-27T17:36:34.520Z",
+    "updated": "2026-09-27T17:36:36.657Z",
+    "titulo": "Butacas que se mueven, viento y agua: ¿qué es 4DX?."
+  },
+  {
+    "id": "FKDaPntsVqelCPD1ZwXQ",
+    "slug": "china-documenta-un-caso-grave-de-infeccion-por-el-virus-oya",
+    "categoria": "Internacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 90,
+    "supervisorDecision": {
+      "decisionId": "sup_1790467628671_xupnk4",
+      "timestamp": "2026-09-27T00:07:08.671Z",
+      "verdict": "PUBLICAR_CON_CAMBIOS",
+      "reason": "El Supervisor pide ajustes menores antes de publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"China documenta un caso grave de infección por el virus Oya\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-27T00:07:10.067Z",
+      "undefined:APPLIED@2026-09-27T00:07:12.615Z",
+      "undefined:APPLIED@2026-09-27T00:07:16.520Z"
+    ],
+    "created": "2026-09-27T00:07:06.163Z",
+    "updated": "2026-09-27T00:07:08.675Z",
+    "titulo": "China documenta un caso grave de infección por el virus Oya"
+  },
+  {
+    "id": "PljHZPu9CH75ifQUVbGs",
+    "slug": "toys-r-us-incluye-a-nicaragua-en-su-plan-de-60-tiendas",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 94,
+    "supervisorDecision": {
+      "decisionId": "sup_1790454326282_h6ncgh",
+      "timestamp": "2026-09-26T20:25:26.282Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Toys “R” Us incluye a Nicaragua en su plan de 60 tiendas\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "BAJA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-26T20:25:27.689Z",
+      "undefined:APPLIED@2026-09-26T20:25:30.838Z",
+      "undefined:APPLIED@2026-09-26T20:25:35.217Z"
+    ],
+    "created": "2026-09-26T20:25:23.868Z",
+    "updated": "2026-09-26T20:25:26.286Z",
+    "titulo": "Toys “R” Us incluye a Nicaragua en su plan de 60 tiendas"
+  },
+  {
+    "id": "BsCKN3VfP3OB2ZYsFhCl",
+    "slug": "costa-rica-acumula-772-casos-de-hepatitis-a-en-2026",
+    "categoria": "Internacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 94,
+    "supervisorDecision": {
+      "decisionId": "sup_1790450170394_r715ra",
+      "timestamp": "2026-09-26T19:16:10.394Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Costa Rica acumula 772 casos de hepatitis A en 2026\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "BAJA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-26T19:16:12.782Z",
+      "undefined:APPLIED@2026-09-26T19:16:16.025Z",
+      "undefined:APPLIED@2026-09-26T19:16:19.601Z"
+    ],
+    "created": "2026-09-26T19:16:05.770Z",
+    "updated": "2026-09-26T19:16:10.398Z",
+    "titulo": "Costa Rica acumula 772 casos de hepatitis A en 2026"
+  },
+  {
+    "id": "p0Fyc81DtaRrkrFngAf3",
+    "slug": "baja-presion-alcanza-90-de-probabilidad-de-desarrollo",
+    "categoria": "Internacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 90,
+    "supervisorDecision": {
+      "decisionId": "sup_1790448112639_f3skfe",
+      "timestamp": "2026-09-26T18:41:52.640Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Baja presión alcanza 90 % de probabilidad de desarrollo\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-26T18:41:54.831Z",
+      "undefined:APPLIED@2026-09-26T18:41:57.729Z",
+      "undefined:APPLIED@2026-09-26T18:42:01.923Z"
+    ],
+    "created": "2026-09-26T18:41:50.414Z",
+    "updated": "2026-09-26T18:41:52.643Z",
+    "titulo": "Baja presión alcanza 90 % de probabilidad de desarrollo"
+  },
+  {
+    "id": "Rz5ftUJv3N8lADZKSoAJ",
+    "slug": "se-acaba-el-cruce-de-la-muerte-instalan-semaforos",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 90,
+    "supervisorDecision": {
+      "decisionId": "sup_1790443152282_etfmc3",
+      "timestamp": "2026-09-26T17:19:12.282Z",
+      "verdict": "PUBLICAR_CON_CAMBIOS",
+      "reason": "El Supervisor pide ajustes menores antes de publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-26T17:19:13.956Z",
+      "undefined:APPLIED@2026-09-26T17:19:16.749Z",
+      "undefined:APPLIED@2026-09-26T17:19:20.744Z"
+    ],
+    "created": "2026-09-26T17:19:06.335Z",
+    "updated": "2026-09-26T17:19:12.299Z",
+    "titulo": "¿Se acaba el “Cruce de la Muerte”? Instalan semáforos"
+  },
+  {
+    "id": "qizxXXxoJuq3ORvt39BX",
+    "slug": "capturan-a-sospechoso-por-homicidio-de-zaranda-en-bluefields",
+    "categoria": "Sucesos",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 92,
+    "supervisorDecision": {
+      "decisionId": "sup_1790439606509_9n7lsu",
+      "timestamp": "2026-09-26T16:20:06.509Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "BAJA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-26T16:20:07.904Z",
+      "undefined:APPLIED@2026-09-26T16:20:10.875Z",
+      "undefined:APPLIED@2026-09-26T16:20:15.972Z"
+    ],
+    "created": "2026-09-26T16:20:04.042Z",
+    "updated": "2026-09-26T16:20:06.520Z",
+    "titulo": "Capturan a sospechoso por homicidio de “Zaranda” en Bluefields"
+  },
+  {
+    "id": "Bbk3pXOZIJb8i0HLQ2zo",
+    "slug": "se-apago-en-panama-la-voz-de-david-mercado-orgullo-de-masaya",
+    "categoria": "Espectáculos",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 93,
+    "supervisorDecision": {
+      "decisionId": "sup_1790437576016_rijobn",
+      "timestamp": "2026-09-26T15:46:16.016Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-26T15:46:17.695Z",
+      "undefined:APPLIED@2026-09-26T15:46:20.293Z",
+      "undefined:APPLIED@2026-09-26T15:46:24.487Z"
+    ],
+    "created": "2026-09-26T15:46:14.179Z",
+    "updated": "2026-09-26T15:46:16.026Z",
+    "titulo": "Se apagó en Panamá la voz de David Mercado, orgullo de Masaya"
+  },
+  {
+    "id": "zmwbyMcl38liOO7H5fEK",
+    "slug": "luego-de-luchar-por-su-vida-muere-nina-atropellada-por-un-camion",
+    "categoria": "Sucesos",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 92,
+    "supervisorDecision": {
+      "decisionId": "sup_1790378499123_p7m8c7",
+      "timestamp": "2026-09-25T23:21:39.123Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Luego de luchar por su vida, muere niña atropellada por un camión\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-25T23:21:41.086Z",
+      "undefined:APPLIED@2026-09-25T23:21:44.095Z",
+      "undefined:APPLIED@2026-09-25T23:21:45.092Z"
+    ],
+    "created": "2026-09-25T23:21:37.934Z",
+    "updated": "2026-09-25T23:21:39.125Z",
+    "titulo": "Luego de luchar por su vida, muere niña atropellada por un camión"
+  },
+  {
+    "id": "zxM76cRcNtUgtfVftyzm",
+    "slug": "pagas-seguro-facultativo-conoce-tus-beneficios",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 92,
+    "supervisorDecision": {
+      "decisionId": "sup_1790373241975_k3npzm",
+      "timestamp": "2026-09-25T21:54:01.987Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"¿Pagas Seguro Facultativo? Conoce tus beneficios\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "BAJA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-25T21:54:03.893Z",
+      "undefined:APPLIED@2026-09-25T21:54:07.789Z",
+      "undefined:APPLIED@2026-09-25T21:54:11.458Z"
+    ],
+    "created": "2026-09-25T21:53:59.741Z",
+    "updated": "2026-09-25T21:54:01.990Z",
+    "titulo": "¿Pagas Seguro Facultativo? Conoce tus beneficios"
+  },
+  {
+    "id": "q2xLcFM9Z9TQMxZvHulF",
+    "slug": "morgan-s-rock-recibe-una-michelin-key-en-nicaragua",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 90,
+    "supervisorDecision": {
+      "decisionId": "sup_1790370359547_dv7m8z",
+      "timestamp": "2026-09-25T21:05:59.547Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-25T21:06:01.419Z",
+      "undefined:APPLIED@2026-09-25T21:06:04.061Z",
+      "undefined:APPLIED@2026-09-25T21:06:05.283Z"
+    ],
+    "created": "2026-09-25T21:05:56.910Z",
+    "updated": "2026-09-25T21:05:59.550Z",
+    "titulo": "Morgan’s Rock recibe una MICHELIN Key en Nicaragua."
+  },
+  {
+    "id": "4MqQIbax4OnLtT42BFww",
+    "slug": "dia-nacional-del-maiz-se-celebrara-con-ferias-y-gastronomia",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 90,
+    "supervisorDecision": {
+      "decisionId": "sup_1790367453172_ic7wfm",
+      "timestamp": "2026-09-25T20:17:33.172Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-25T20:17:34.599Z",
+      "undefined:APPLIED@2026-09-25T20:17:37.342Z",
+      "undefined:APPLIED@2026-09-25T20:17:41.523Z"
+    ],
+    "created": "2026-09-25T20:17:30.739Z",
+    "updated": "2026-09-25T20:17:33.174Z",
+    "titulo": "Día Nacional del Maíz se celebrará con ferias y gastronomía"
+  },
+  {
+    "id": "uOIbGUSmB6tavmtYsVbt",
+    "slug": "nina-de-2-anos-muere-tras-caer-a-un-pozo-en-posoltega",
+    "categoria": "Sucesos",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 93,
+    "supervisorDecision": {
+      "decisionId": "sup_1790365936817_dymhpj",
+      "timestamp": "2026-09-25T19:52:16.817Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-25T19:52:18.381Z",
+      "undefined:APPLIED@2026-09-25T19:52:21.370Z",
+      "undefined:APPLIED@2026-09-25T19:52:25.547Z"
+    ],
+    "created": "2026-09-25T19:52:14.541Z",
+    "updated": "2026-09-25T19:52:16.819Z",
+    "titulo": "Niña de 2 años muere tras caer a un pozo en Posoltega"
+  },
+  {
+    "id": "P5Ji4xszrUIvtOavAcN3",
+    "slug": "bacteria-come-carne-deja-12-muertos-en-florida-y-luisiana",
+    "categoria": "Internacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 94,
+    "supervisorDecision": {
+      "decisionId": "sup_1790358869403_k0pyvz",
+      "timestamp": "2026-09-25T17:54:29.403Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Bacteria “come carne” deja 12 muertos en Florida y Luisiana\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: identidad o circunstancias, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-25T17:54:31.357Z",
+      "undefined:APPLIED@2026-09-25T17:54:33.905Z",
+      "undefined:APPLIED@2026-09-25T17:54:38.158Z"
+    ],
+    "created": "2026-09-25T17:54:26.694Z",
+    "updated": "2026-09-25T17:54:29.405Z",
+    "titulo": "Bacteria “come carne” deja 12 muertos en Florida y Luisiana"
+  },
+  {
+    "id": "rEabHPR6ty9nmOEtZYrR",
+    "slug": "repochetas-nicaraguenses-sabor-tradicion-e-historia",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 95,
+    "supervisorDecision": {
+      "decisionId": "sup_1790356971819_iwxygz",
+      "timestamp": "2026-09-25T17:22:51.820Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Repochetas nicaragüenses: sabor, tradición e historia\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "BAJA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-25T17:22:53.342Z",
+      "undefined:APPLIED@2026-09-25T17:22:55.569Z",
+      "undefined:APPLIED@2026-09-25T17:22:56.715Z"
+    ],
+    "created": "2026-09-25T17:22:49.644Z",
+    "updated": "2026-09-25T17:22:51.823Z",
+    "titulo": "Repochetas nicaragüenses: sabor, tradición e historia"
+  },
+  {
+    "id": "xXgd9odu4qXOHdO4QyFG",
+    "slug": "torbellino-afecta-mas-de-35-viviendas-en-nagarote",
+    "categoria": "Sucesos",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 91,
+    "supervisorDecision": {
+      "decisionId": "sup_1790355016718_dwopwe",
+      "timestamp": "2026-09-25T16:50:16.718Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-25T16:50:18.372Z",
+      "undefined:APPLIED@2026-09-25T16:50:20.974Z",
+      "undefined:APPLIED@2026-09-25T16:50:24.802Z"
+    ],
+    "created": "2026-09-25T16:50:12.763Z",
+    "updated": "2026-09-25T16:50:16.721Z",
+    "titulo": "Torbellino afecta más de 35 viviendas en Nagarote."
+  },
+  {
+    "id": "gE9P2rHVhRM0rLqAlb2U",
+    "slug": "nisi-blass-gana-bronce-para-nicaragua-en-viga-de-equilibrio",
+    "categoria": "Deportes",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 90,
+    "supervisorDecision": {
+      "decisionId": "sup_1790292132947_40a9oe",
+      "timestamp": "2026-09-24T23:22:12.947Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"Nisi Blass gana bronce para Nicaragua en viga de equilibrio\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-24T23:22:14.304Z",
+      "undefined:APPLIED@2026-09-24T23:22:16.605Z",
+      "undefined:APPLIED@2026-09-24T23:22:20.704Z"
+    ],
+    "created": "2026-09-24T23:22:10.071Z",
+    "updated": "2026-09-24T23:22:12.949Z",
+    "titulo": "Nisi Blass gana bronce para Nicaragua en viga de equilibrio"
+  },
+  {
+    "id": "fZyaicyOM8U0q3pkhzpS",
+    "slug": "desfile-hipico-de-masaya-recorrera-la-ciudad-este-domingo",
+    "categoria": "Espectáculos",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 92,
+    "supervisorDecision": {
+      "decisionId": "sup_1790288381052_w54hat",
+      "timestamp": "2026-09-24T22:19:41.052Z",
+      "verdict": "PUBLICAR_CON_CAMBIOS",
+      "reason": "El Supervisor pide ajustes menores antes de publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-24T22:19:42.311Z",
+      "undefined:APPLIED@2026-09-24T22:19:44.459Z",
+      "undefined:APPLIED@2026-09-24T22:19:49.055Z"
+    ],
+    "created": "2026-09-24T22:19:38.679Z",
+    "updated": "2026-09-24T22:19:41.063Z",
+    "titulo": "Desfile Hípico de Masaya recorrerá la ciudad este domingo"
+  },
+  {
+    "id": "d1JwxltReT1Wj88Jl4ZD",
+    "slug": "meta-lanza-gafas-sin-camara-y-apuesta-por-audio-e-ia",
+    "categoria": "Tecnología",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 94,
+    "supervisorDecision": {
+      "decisionId": "sup_1790284833524_w129gd",
+      "timestamp": "2026-09-24T21:20:33.524Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"“Meta lanza gafas sin cámara y apuesta por audio e IA”\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-24T21:20:35.541Z",
+      "undefined:APPLIED@2026-09-24T21:20:37.823Z",
+      "undefined:APPLIED@2026-09-24T21:20:42.469Z"
+    ],
+    "created": "2026-09-24T21:20:30.958Z",
+    "updated": "2026-09-24T21:20:33.537Z",
+    "titulo": "“Meta lanza gafas sin cámara y apuesta por audio e IA”"
+  },
+  {
+    "id": "pAv7atGxknGok8Wtt6uC",
+    "slug": "la-mascota-atiende-a-16-ninos-con-cardiopatias-congenitas",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 91,
+    "supervisorDecision": {
+      "decisionId": "sup_1790283333222_nqpp8g",
+      "timestamp": "2026-09-24T20:55:33.222Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [
+        {
+          "severity": "WARNING",
+          "domain": "TITULO",
+          "problem": "Título podría ser más específico: \"La Mascota atiende a 16 niños con cardiopatías congénitas\"",
+          "impact": "El título no identifica todos los elementos periodísticos clave",
+          "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+          "action": "Considerar enriquecer el título con datos del contenido",
+          "autoFixable": false
+        }
+      ],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [
+      "undefined:APPLIED@2026-09-24T20:55:34.911Z",
+      "undefined:APPLIED@2026-09-24T20:55:37.387Z",
+      "undefined:APPLIED@2026-09-24T20:55:41.607Z"
+    ],
+    "created": "2026-09-24T20:55:31.019Z",
+    "updated": "2026-09-24T20:55:33.225Z",
+    "titulo": "La Mascota atiende a 16 niños con cardiopatías congénitas"
+  },
+  {
+    "id": "T24bvS3a65qUMCLj3Mzf",
+    "slug": "de-100-a-102-metros-la-hazana-de-peart-en-apoyo",
+    "categoria": "Deportes",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 91,
+    "supervisorDecision": {
+      "decisionId": "sup_1790281433597_kq7abi",
+      "timestamp": "2026-09-24T20:23:53.597Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [],
+    "created": "2026-09-24T20:23:52.146Z",
+    "updated": "2026-09-24T20:23:53.599Z",
+    "titulo": "De 100 a 102 metros: la hazaña de Peart en Apoyo."
+  },
+  {
+    "id": "gTQSj8gGMnYRoU3KHR66",
+    "slug": "genesis-dolmos-la-mejor-estudiante-de-primaria-de-nicaragua",
+    "categoria": "Nacionales",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 93,
+    "supervisorDecision": {
+      "decisionId": "sup_1790280047927_ps4cmo",
+      "timestamp": "2026-09-24T20:00:47.940Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [],
+    "created": "2026-09-24T20:00:45.202Z",
+    "updated": "2026-09-24T20:00:47.942Z",
+    "titulo": "Génesis Dolmos, la mejor estudiante de primaria de Nicaragua"
+  },
+  {
+    "id": "eA53ptkMPQdrNlotbJ7c",
+    "slug": "nina-de-8-anos-grave-tras-ser-atropellada-en-managua",
+    "categoria": "Sucesos",
+    "estado": "publicado",
+    "publicado": true,
+    "aprobadoMeni": true,
+    "scoreMeni": 91,
+    "supervisorDecision": {
+      "decisionId": "sup_1790276216443_f3aynv",
+      "timestamp": "2026-09-24T18:56:56.443Z",
+      "verdict": "PUBLICAR",
+      "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+      "confidence": 0.5,
+      "scoreOverride": false,
+      "issues": [],
+      "actions": [],
+      "resultingState": "READY",
+      "modelVersion": "editorial-supervisor-v1.0"
+    },
+    "supervisorApproved": true,
+    "confianza": "ALTA",
+    "factualitySignals": [],
+    "mutationLog": [],
+    "created": "2026-09-24T18:56:53.567Z",
+    "updated": "2026-09-24T18:56:56.446Z",
+    "titulo": "Niña de 8 años grave tras ser atropellada en Managua"
+  }
+]

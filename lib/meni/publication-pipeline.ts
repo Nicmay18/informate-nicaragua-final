@@ -86,160 +86,60 @@ function buildUrl(slug: string, utm = ''): string {
 }
 
 // ── Telegram ────────────────────────────────────────────────
+// ÚNICA implementación: lib/distribution/channels.ts (enviarTelegram).
+// Este wrapper adapta PipelineInput → Noticia. NO duplicar el sender aquí.
 async function sendTelegram(db: Firestore, input: PipelineInput): Promise<{ ok: boolean; error?: string; skipped?: boolean }> {
-  try {
-    const snap = await db.collection('config').doc('admin').get();
-    const data = snap.data() || {};
-    const token = process.env.TG_TOKEN || data.telegram?.token || '';
-    const chatId = process.env.TG_CHAT_ID || process.env.TG_CHAT || data.telegram?.chatId || '';
-    if (!token || !chatId) return { ok: false, error: 'Faltan credenciales Telegram' };
-
-    const url = buildUrl(input.slug, 'telegram');
-    const emoji = EMOJI_CAT[input.categoria] || '📰';
-
-    let contexto = '';
-    const texto = (input.resumen || stripHtml(input.contenido)).replace(/\n+/g, ' ').trim();
-    const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [];
-    for (const o of oraciones) {
-      const limpia = o.trim();
-      if (contexto.length + limpia.length + 1 > 180 && contexto.length > 0) break;
-      contexto += (contexto ? ' ' : '') + limpia;
-    }
-    if (!contexto) contexto = texto.substring(0, 120);
-
-    const caption = `<b>${emoji} ${input.titulo}</b>\n\n${contexto}...\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n#NicaraguaInformate`;
-    const imagen = input.imagenRedes || input.imagen;
-    const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');
-
-    if (imagenValida) {
-      const photoRes = await fetch(`https://api.telegram.org/bot${token}/sendPhoto`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          photo: imagen,
-          caption: caption.slice(0, 1024),
-          parse_mode: 'HTML',
-          reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] },
-        }),
-      });
-      const photoData = await photoRes.json();
-      if (photoData.ok) return { ok: true };
-    }
-
-    const msgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: caption.slice(0, 4096),
-        parse_mode: 'HTML',
-        reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] },
-      }),
-    });
-    const msgData = await msgRes.json();
-    return { ok: msgData.ok, error: msgData.ok ? undefined : msgData.description };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : 'Error' };
-  }
+  const { enviarTelegram } = await import('@/lib/distribution/channels');
+  return enviarTelegram(
+    {
+      titulo: input.titulo,
+      slug: input.slug,
+      resumen: input.resumen,
+      contenido: stripHtml(input.contenido),
+      categoria: input.categoria,
+      imagen: input.imagen,
+      imagenRedes: input.imagenRedes,
+    },
+    db,
+  );
 }
 
 // ── Facebook ────────────────────────────────────────────────
+// ÚNICA implementación: lib/distribution/channels.ts (enviarFacebook).
+// Si el story trae copy social ya generado, se usa como titular del post.
 async function sendFacebook(input: PipelineInput): Promise<{ ok: boolean; error?: string; skipped?: boolean }> {
-  try {
-    const token = process.env.FB_PAGE_ACCESS_TOKEN || '';
-    const pageId = process.env.FB_PAGE_ID || '';
-    if (!token || !pageId) return { ok: false, skipped: true, error: 'Credenciales Facebook no configuradas' };
-
-    const url = buildUrl(input.slug, 'facebook');
-    const emoji = EMOJI_CAT[input.categoria] || '📰';
-
-    let contexto = '';
-    const texto = (input.resumen || stripHtml(input.contenido)).replace(/\n+/g, ' ').trim();
-    const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [];
-    for (const o of oraciones) {
-      const limpia = o.trim();
-      if (contexto.length + limpia.length + 1 > 200 && contexto.length > 0) break;
-      contexto += (contexto ? ' ' : '') + limpia;
-    }
-    if (!contexto) contexto = texto.substring(0, 140);
-
-    const socialFromStory = input.story?.distribution?.social;
-  const mensaje = socialFromStory
-    ? `${emoji} ${socialFromStory}\n\n👉 ${url}\n\n#NicaraguaInformate`
-    : `${emoji} ${input.titulo}\n\n${contexto}...\n\n👉 ${url}\n\n#NicaraguaInformate`;
-
-    const res = await fetch(`https://graph.facebook.com/v18.0/${pageId}/feed`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: mensaje, link: url, access_token: token }),
-    });
-    const data = await res.json();
-    return { ok: !data.error, error: data.error?.message };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : 'Error' };
-  }
+  const { enviarFacebook } = await import('@/lib/distribution/channels');
+  const socialFromStory = input.story?.distribution?.social;
+  return enviarFacebook({
+    titulo: socialFromStory ? String(socialFromStory) : input.titulo,
+    slug: input.slug,
+    resumen: socialFromStory ? '' : input.resumen,
+    contenido: stripHtml(input.contenido),
+    categoria: input.categoria,
+    imagen: input.imagen,
+    imagenRedes: input.imagenRedes,
+  });
 }
 
 // ── IndexNow (Bing + Yandex) ────────────────────────────────
+// ÚNICA implementación: lib/distribution/channels.ts (enviarIndexNow).
 async function sendIndexNow(input: PipelineInput): Promise<{ ok: boolean; error?: string }> {
-  try {
-    const key = process.env.INDEXNOW_KEY;
-    if (!key) { return { ok: false, error: 'INDEXNOW_KEY no configurada' }; }
-    const url = buildUrl(input.slug);
-    const payload = {
-      host: 'nicaraguainformate.com',
-      key,
-      keyLocation: `https://nicaraguainformate.com/${key}.txt`,
-      urlList: [url],
-    };
-    await Promise.allSettled([
-      fetch('https://www.bing.com/indexnow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify(payload),
-      }),
-      fetch('https://yandex.com/indexnow', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json; charset=utf-8' },
-        body: JSON.stringify(payload),
-      }),
-    ]);
-    return { ok: true };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : 'Error' };
-  }
+  const { enviarIndexNow } = await import('@/lib/distribution/channels');
+  return enviarIndexNow({ titulo: input.titulo, slug: input.slug });
 }
 
 // ── Push (OneSignal) ────────────────────────────────────────
+// ÚNICA implementación: lib/distribution/channels.ts (enviarPush).
 async function sendPush(input: PipelineInput): Promise<{ ok: boolean; error?: string; skipped?: boolean }> {
-  try {
-    const appId = process.env.ONESIGNAL_APP_ID || '';
-    const restKey = process.env.ONESIGNAL_REST_API_KEY || '';
-    if (!appId || !restKey) return { ok: true, skipped: true, error: 'Push no configurado' };
-
-    const url = buildUrl(input.slug, 'push');
-    const res = await fetch('https://onesignal.com/api/v1/notifications', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        Authorization: `Basic ${restKey}`,
-      },
-      body: JSON.stringify({
-        app_id: appId,
-        included_segments: ['Subscribed Users'],
-        headings: { en: input.titulo, es: input.titulo },
-        contents: { en: input.resumen || 'Nueva noticia de Nicaragua Informate', es: input.resumen || 'Nueva noticia de Nicaragua Informate' },
-        url,
-        chrome_web_image: input.imagen || undefined,
-      }),
-    });
-    const data = await res.json();
-    return { ok: !!data.id, error: data.errors?.[0] };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : 'Error' };
-  }
+  const { enviarPush } = await import('@/lib/distribution/channels');
+  return enviarPush({
+    titulo: input.titulo,
+    slug: input.slug,
+    resumen: input.resumen,
+    imagen: input.imagen,
+  });
 }
+
 
 // ── Social Copy (Facebook + WhatsApp) ───────────────────────
 async function generateSocialCopy(input: PipelineInput): Promise<{ facebook: string | null; whatsapp: string | null; source: 'ia' | 'plantilla' | 'none' }> {

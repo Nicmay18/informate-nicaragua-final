@@ -1,0 +1,1575 @@
+{
+  "gh7lOQJoZIJeY5bXhoTe": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1790271372342_sdp2jb",
+        "timestamp": "2026-09-24T17:36:12.342Z",
+        "verdict": "PUBLICAR",
+        "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 92,
+      "nivelFecha": "2026-09-24T17:36:12.353Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-000000svn51f",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-24T17:36:10.914Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Sucesos) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 92%); el lector aprende algo nuevo (WOW index: 94.5%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (95%). Puntos de mejora: extensión corta (386 palabras, mínimo 400 para REPORTAJE).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 92%)",
+          "el lector aprende algo nuevo (WOW index: 94.5%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (95%)"
+        ],
+        "puntosMejora": [
+          "extensión corta (386 palabras, mínimo 400 para REPORTAJE)"
+        ],
+        "bloqueadores": []
+      },
+      "perfil": "sucesos",
+      "profile_confidence": 0.78,
+      "categoria": "Sucesos",
+      "palabras": 386,
+      "puntosClave": [
+        "Diez personas resultaron lesionadas luego de que un autobús que cubría la ruta Managua–Alamikamba se saliera de la.",
+        "Ronal Eduar Cristóbal , de 20 años, originario de Prinzapolka, barrio La Presa, quien viajaba como ayudante del.",
+        "Investigan las causas del accidente Tras el percance, surgió la versión de que el autobús habría presentado una."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/keyling-rivera.jpg",
+      "publicCategory": "Sucesos",
+      "profileInternal": "sucesos",
+      "titulo": "Diez lesionados tras accidente de autobús en Río Blanco",
+      "contenido": "<p><strong>Diez personas resultaron lesionadas luego de que un autobús que cubría la ruta Managua–Alamikamba se saliera de la vía durante la madrugada de este jueves en el kilómetro 192 de la carretera Río Blanco–Matiguás, en el departamento de Matagalpa.</strong></p> <p>El accidente ocurrió aproximadamente a la <strong>1:40 de la madrugada</strong>, cuando la unidad, con placa <strong>M 0693</strong>, circulaba por el sector conocido como la cuesta La Ponzoña.</p> <p>De acuerdo con la información disponible, en el autobús viajaban aproximadamente <strong>40 pasajeros</strong> cuando la unidad se salió de la carretera, impactó contra un costado de la vía y terminó en una zona verde y montosa ubicada a un lado de la carretera.</p> <h2>Diez personas fueron trasladadas a un centro de salud</h2> <p>Tras el accidente, <strong>diez personas fueron trasladadas al Centro de Salud Denis Gutiérrez, de Río Blanco</strong>, donde recibieron atención médica.</p> <p>Los pasajeros atendidos fueron identificados como:</p> <ul> <li><strong>Gleyda Ángela Vigil Alvarado</strong>, de 38 años, originaria de Corn Island.</li> <li><strong>Nely Cunningham Martínez</strong>, de 37 años, originaria de Corn Island.</li> <li><strong>Sandra Ilia Pinock Nelson</strong>, de 37 años, del barrio Bring Bay, Corn Island.</li> <li><strong>Ronal Eduar Cristóbal</strong>, de 20 años, originario de Prinzapolka, barrio La Presa, quien viajaba como ayudante del autobús.</li> <li><strong>Johana del Carmen Borge</strong>, de 32 años, originaria de Prinzapolka, comunidad La Palmera.</li> <li><strong>Carlos Pereira Fox</strong>, de 40 años, originario de Puerto Cabezas.</li> <li><strong>Jessy William Parson</strong>, de 34 años, originario de Bluefields.</li> <li><strong>Naila Josuara Thomas Funez</strong>, de 24 años, originaria de Corn Island.</li> <li><strong>Rolando López Garth</strong>, de 24 años, originario de Prinzapolka.</li> <li><strong>Humberto Salomón Brooks</strong>, de 52 años, originario de Alamikamba.</li>\n</ul> <h2>Investigan las causas del accidente</h2> <p>Tras el percance, surgió la versión de que el autobús habría presentado una falla en los frenos mientras descendía por la cuesta La Ponzoña. Esta versión habría sido proporcionada por el conductor de la unidad.</p> <p>Sin embargo, <strong>las circunstancias que provocaron que el autobús se saliera de la vía permanecen bajo investigación</strong>, por lo que la falla mecánica no ha sido establecida oficialmente como la causa del accidente.</p> <p>Las autoridades correspondientes realizan las diligencias para determinar cómo ocurrió el accidente y establecer las circunstancias en las que la unidad perdió el control.</p> <p>Los pasajeros lesionados fueron trasladados para recibir atención médica, mientras las autoridades continúan con las investigaciones del caso.</p>",
+      "fechaActualizacion": "2026-09-24T17:36:12.354Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-24T17:36:09.527Z",
+      "publishedAt": "2026-09-24T17:36:12.354Z",
+      "dateModified": "2026-09-24T17:36:12.354Z",
+      "resumen": "Diez personas resultaron lesionadas luego de que un autobús que cubría la ruta Managua–Alamikamba se saliera de la vía durante la madrugada de este juev...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/diez-lesionados-tras-accidente-de-autobu-1790271266650.webp",
+      "slug": "diez-lesionados-tras-accidente-de-autobus-en-rio-blanco",
+      "autor": "Keyling Elieth Rivera Muñoz",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/sucesos",
+          "anchor": "Noticias de sucesos",
+          "type": "categoria"
+        }
+      ],
+      "id": "gh7lOQJoZIJeY5bXhoTe",
+      "confianza": {
+        "nivel": "BAJA",
+        "resumen": "23 afirmaciones | 1 atribuidas | 2 sin confirmar | 0 no disponibles | 2 riesgos | 0 contradicciones | fuentes: 0",
+        "requiereRevisionHumana": true,
+        "riesgos": [
+          "afirmación provisional sin fuente",
+          "afirmación provisional sin fuente"
+        ],
+        "noDisponible": 0,
+        "fuentes": [],
+        "at": "2026-09-24T17:36:14.575Z"
+      },
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-24T17:36:21.028Z",
+      "vistas": 47
+    },
+    "lifecycle": {
+      "articleId": "gh7lOQJoZIJeY5bXhoTe",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-24T17:36:14.107Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-24T17:36:14.107Z",
+      "dateModified": "2026-09-24T17:36:14.107Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "gh7lOQJoZIJeY5bXhoTe",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 92,
+        "fecha": "2026-09-24T17:36:14.483Z",
+        "validationStatus": "PENDING_VALIDATION",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "eA53ptkMPQdrNlotbJ7c": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1790276216443_f3aynv",
+        "timestamp": "2026-09-24T18:56:56.443Z",
+        "verdict": "PUBLICAR",
+        "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 91,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 91,
+      "nivelFecha": "2026-09-24T18:56:56.444Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-0000008ed44y",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-24T18:56:54.846Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Sucesos) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 91%); el lector aprende algo nuevo (WOW index: 94.5%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (94%).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 91%)",
+          "el lector aprende algo nuevo (WOW index: 94.5%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (94%)",
+          "extensión adecuada (518 palabras, mínimo 400)"
+        ],
+        "puntosMejora": [],
+        "bloqueadores": []
+      },
+      "perfil": "sucesos",
+      "profile_confidence": 0.82,
+      "categoria": "Sucesos",
+      "palabras": 518,
+      "puntosClave": [
+        "Una niña de 8 años, identificada como Elie Carolina Somarriba Orozco, resultó gravemente lesionada la mañana de este.",
+        "El camión involucrado tiene placa ES-05617 y era conducido por Chistofer Isaías Díaz Sevilla, de 21 años.",
+        "La niña permanece hospitalizada Mientras continúa la investigación, Elie Carolina Somarriba Orozco permanece recibiendo atención médica en el."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/keyling-rivera.jpg",
+      "publicCategory": "Sucesos",
+      "profileInternal": "sucesos",
+      "titulo": "Niña de 8 años grave tras ser atropellada en Managua",
+      "contenido": "<p><strong>Una niña de 8 años, identificada como Elie Carolina Somarriba Orozco, resultó gravemente lesionada la mañana de este jueves tras ser atropellada por un camión frente a las instalaciones de Aldeas Infantiles SOS, en Managua, cuando cruzaba la vía junto a su madre por un paso peatonal señalizado.</strong></p> <p>El accidente ocurrió antes de las <strong>7:00 de la mañana</strong>. La menor cruzaba la vía de norte a sur acompañada por su madre, <strong>Mercedes Carolina Orozco Huembes</strong>, cuando fue impactada por la parte frontal izquierda del vehículo, que circulaba de este a oeste.</p> <p>El camión involucrado tiene placa <strong>ES-05617</strong> y era conducido por <strong>Chistofer Isaías Díaz Sevilla, de 21 años</strong>, quien, de acuerdo con la información preliminar del caso, no portaba licencia de conducir.</p> <h2>La llanta del camión pasó sobre la zona pélvica</h2> <p>Tras el impacto, la niña cayó sobre la vía y la llanta anterior izquierda del camión pasó sobre su zona pélvica, provocándole lesiones de consideración.</p> <p>La menor fue auxiliada y trasladada de emergencia al <strong>Hospital Carlos Roberto Huembes</strong>, donde permanece bajo atención médica. Su estado es reportado como <strong>delicado</strong> debido a la gravedad de las lesiones.</p> <p>Una cobertura local confirmó que la menor y su madre utilizaban el paso peatonal habilitado al momento del accidente y que el suceso quedó registrado por cámaras de seguridad. Las imágenes muestran además que el vehículo alcanzó a impactar a la madre de la niña. </p> <h2>Agente de tránsito intentó ayudar en el rescate</h2> <p>En medio de la emergencia, un agente de tránsito que se encontraba en el sector acudió para intentar auxiliar a la menor.</p> <p>De acuerdo con la información recopilada en el lugar, al escuchar los gritos de la niña, el oficial intentó retirar el vehículo para facilitar las labores de rescate. Incluso habría tratado de empujar una <strong>rastra que transportaba piedra cantera</strong> para conseguir liberar a la menor y permitir que fuera atendida.</p> <p>La escena provocó momentos de angustia entre las personas que se encontraban en el lugar, mientras se realizaban las maniobras para sacar a la niña de debajo del vehículo y trasladarla a un centro hospitalario.</p> <h2>Conductor quedó detenido</h2> <p>Después del accidente, el conductor del camión, <strong>Chistofer Isaías Díaz Sevilla</strong>, quedó detenido por la Policía Nacional mientras se realizan las investigaciones correspondientes.</p> <p>Las autoridades deberán determinar las circunstancias exactas en las que ocurrió el atropellamiento y establecer las responsabilidades que correspondan conforme al resultado de las investigaciones.</p> <p>El hecho ocurrió en una zona donde existe un paso peatonal habilitado, por lo que las pesquisas deberán establecer la dinámica del accidente y las condiciones en las que circulaba el vehículo al momento del impacto.</p> <h2>La niña permanece hospitalizada</h2> <p>Mientras continúa la investigación, <strong>Elie Carolina Somarriba Orozco permanece recibiendo atención médica</strong> en el Hospital Carlos Roberto Huembes, donde los especialistas valoran la gravedad de las lesiones sufridas en el accidente.</p> <p>La información disponible hasta el momento no establece una conclusión definitiva sobre las causas del atropellamiento. Las autoridades deberán esclarecer los hechos a partir de las evidencias recopiladas, entre ellas las imágenes de las cámaras de seguridad y las diligencias realizadas en el lugar.</p>",
+      "fechaActualizacion": "2026-09-24T18:56:56.446Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-24T18:56:53.567Z",
+      "publishedAt": "2026-09-24T18:56:56.446Z",
+      "dateModified": "2026-09-24T18:56:56.446Z",
+      "resumen": "Una niña de 8 años, identificada como Elie Carolina Somarriba Orozco, resultó gravemente lesionada la mañana de este jueves tras ser atropellada por un...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/nina-de-8-anos-grave-tras-ser-atropellad-1790276044666.webp",
+      "slug": "nina-de-8-anos-grave-tras-ser-atropellada-en-managua",
+      "autor": "Keyling Elieth Rivera Muñoz",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/sucesos",
+          "anchor": "Noticias de sucesos",
+          "type": "categoria"
+        }
+      ],
+      "id": "eA53ptkMPQdrNlotbJ7c",
+      "confianza": {
+        "nivel": "ALTA",
+        "resumen": "23 afirmaciones | 3 atribuidas | 1 sin confirmar | 1 no disponibles | 0 riesgos | 0 contradicciones | fuentes: 1",
+        "requiereRevisionHumana": false,
+        "riesgos": [],
+        "noDisponible": 1,
+        "fuentes": [
+          "Policía Nacional"
+        ],
+        "at": "2026-09-24T18:56:57.817Z"
+      },
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-24T18:57:01.991Z",
+      "vistas": 148
+    },
+    "lifecycle": {
+      "articleId": "eA53ptkMPQdrNlotbJ7c",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-24T18:56:57.295Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-24T18:56:57.295Z",
+      "dateModified": "2026-09-24T18:56:57.295Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "eA53ptkMPQdrNlotbJ7c",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 91,
+        "fecha": "2026-09-24T18:56:57.673Z",
+        "validationStatus": "PENDING_VALIDATION",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "pAv7atGxknGok8Wtt6uC": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1790283333222_nqpp8g",
+        "timestamp": "2026-09-24T20:55:33.222Z",
+        "verdict": "PUBLICAR",
+        "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [
+          {
+            "severity": "WARNING",
+            "domain": "TITULO",
+            "problem": "Título podría ser más específico: \"La Mascota atiende a 16 niños con cardiopatías congénitas\"",
+            "impact": "El título no identifica todos los elementos periodísticos clave",
+            "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+            "action": "Considerar enriquecer el título con datos del contenido",
+            "autoFixable": false
+          }
+        ],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 91,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 91,
+      "nivelFecha": "2026-09-24T20:55:33.224Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-000000mv8g9v",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-24T20:55:31.693Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Nacionales) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 92%); el lector aprende algo nuevo (WOW index: 91%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (95%).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 92%)",
+          "el lector aprende algo nuevo (WOW index: 91%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (95%)",
+          "extensión adecuada (663 palabras, mínimo 400)"
+        ],
+        "puntosMejora": [],
+        "bloqueadores": []
+      },
+      "perfil": "nacionales",
+      "profile_confidence": 0.66,
+      "categoria": "Nacionales",
+      "palabras": 663,
+      "puntosClave": [
+        "Dieciséis niñas y niños con enfermedades del corazón reciben atención especializada durante una brigada cardíaca que se desarrolla.",
+        "Una cooperación que se mantiene desde hace cinco años La participación de Mending Kids en este tipo de.",
+        "La jornada continuará hasta el 25 de septiembre La brigada cardíaca permanecerá en el Hospital Infantil Manuel de."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/logo.webp",
+      "publicCategory": "Nacionales",
+      "profileInternal": "nacionales",
+      "titulo": "La Mascota atiende a 16 niños con cardiopatías congénitas",
+      "contenido": "<p><strong>Dieciséis niñas y niños con enfermedades del corazón reciben atención especializada durante una brigada cardíaca que se desarrolla del 22 al 25 de septiembre en el Hospital Infantil Manuel de Jesús Rivera “La Mascota”, en Managua.</strong></p> <p>La jornada reúne a especialistas de la organización <strong>Mending Kids</strong>, procedentes de California, Estados Unidos, con médicos nicaragüenses y especialistas en hemodinamia de Panamá y Costa Rica, para realizar procedimientos dirigidos a pacientes pediátricos con determinadas cardiopatías congénitas.</p> <h2>¿Qué procedimiento reciben los pacientes?</h2> <p>Durante la brigada se realizan <strong>cateterismos cardíacos con fines diagnósticos y terapéuticos</strong>. Se trata de procedimientos mínimamente invasivos que permiten estudiar determinadas condiciones del corazón y, en algunos casos, tratarlas sin necesidad de una cirugía cardíaca abierta.</p> <p>La posibilidad de realizar un cateterismo depende del tipo de cardiopatía que presente cada paciente. Por ello, además de los procedimientos programados, el personal médico realiza valoraciones en consulta externa para determinar qué otros niños pueden beneficiarse de esta alternativa durante la jornada, en futuras brigadas o mediante otro tratamiento.</p> <h2>¿De dónde proceden los niños?</h2> <p>Los pacientes contemplados para esta jornada proceden de <strong>Managua, Carazo, Rivas, Granada, Chinandega, Jinotega y Nueva Guinea</strong>, lo que permite concentrar atención especializada para familias provenientes de diferentes regiones del país.</p> <p>La planificación oficial contempla la atención de 16 niñas y niños durante la jornada del 22 al 25 de septiembre. En la cobertura realizada el miércoles 23, especialistas informaron que había <strong>15 procedimientos programados y nueve ya realizados</strong> hasta ese momento. </p> <h2>Una cooperación que se mantiene desde hace cinco años</h2> <p>La participación de Mending Kids en este tipo de jornadas forma parte de una cooperación que, según especialistas de “La Mascota”, se mantiene desde hace aproximadamente <strong>cinco años</strong>.</p> <p>Las brigadas se realizan dos veces al año y permiten que médicos nacionales trabajen junto a especialistas extranjeros en procedimientos de cardiología pediátrica. En jornadas anteriores se ha atendido a más de 100 niñas y niños, de acuerdo con información proporcionada por especialistas que participan en el programa. </p> <h2>¿Por qué es importante el cateterismo cardíaco?</h2> <p>Las cardiopatías congénitas son alteraciones que afectan la estructura o el funcionamiento del corazón y pueden requerir diferentes tipos de tratamiento, dependiendo de cada diagnóstico.</p> <p>En los casos que pueden resolverse mediante hemodinamia, el cateterismo permite intervenir desde el interior de los vasos sanguíneos, evitando una cirugía abierta. Esto puede representar una alternativa menos invasiva para determinados pacientes y favorecer su recuperación.</p> <p>Sin embargo, no todos los problemas cardíacos pueden ser tratados mediante esta técnica. La decisión depende de la valoración individual realizada por los especialistas y de las características de cada cardiopatía.</p> <h2>La atención también incluye nuevas valoraciones</h2> <p>Mientras se desarrollan los procedimientos, los equipos médicos mantienen consultas para valorar a otros pacientes con enfermedades cardíacas.</p> <p>Estas evaluaciones permiten determinar si un niño puede ser incluido en la jornada actual, si debe esperar una próxima brigada o si necesita otro tipo de tratamiento. De esta manera, la atención no se limita únicamente a los procedimientos realizados durante estos cuatro días.</p> <h2>La Mascota fortalece su capacidad cardíaca</h2> <p>La jornada se desarrolla en un hospital que ha venido fortaleciendo sus capacidades para atender a pacientes pediátricos con enfermedades del corazón. En junio de 2026 fueron rehabilitadas y equipadas áreas de atención especializada en cardiología pediátrica, incluyendo espacios destinados al cuidado de pacientes que requieren vigilancia después de procedimientos cardíacos.</p> <p>El hospital también cuenta actualmente con una nueva sala de hemodinamia, infraestructura que permite desarrollar procedimientos especializados como los realizados durante esta brigada. </p> <h2>La jornada continuará hasta el 25 de septiembre</h2> <p>La brigada cardíaca permanecerá en el Hospital Infantil Manuel de Jesús Rivera “La Mascota” hasta el <strong>25 de septiembre</strong>. Durante este período se prevé completar los procedimientos programados y continuar con la valoración de pacientes que podrían requerir atención especializada en próximas jornadas.</p> <p>La participación conjunta de especialistas nacionales e internacionales permite ampliar temporalmente la capacidad de atención en cardiología pediátrica y dar seguimiento a niñas y niños provenientes de distintas zonas de Nicaragua.</p>",
+      "fechaActualizacion": "2026-09-24T20:55:33.225Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-24T20:55:31.019Z",
+      "publishedAt": "2026-09-24T20:55:33.225Z",
+      "dateModified": "2026-09-24T20:55:33.225Z",
+      "resumen": "Dieciséis niñas y niños con enfermedades del corazón reciben atención especializada durante una brigada cardíaca que se desarrolla del 22 al 25 de septi...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/16-ninos-reciben-atencion-cardiaca-en-la-1790283112028.webp",
+      "slug": "la-mascota-atiende-a-16-ninos-con-cardiopatias-congenitas",
+      "autor": "José Luis López Ramírez",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/nacionales",
+          "anchor": "Noticias de nacionales",
+          "type": "categoria"
+        }
+      ],
+      "id": "pAv7atGxknGok8Wtt6uC",
+      "confianza": {
+        "nivel": "ALTA",
+        "resumen": "34 afirmaciones | 5 atribuidas | 0 sin confirmar | 0 no disponibles | 0 riesgos | 0 contradicciones | fuentes: 0",
+        "requiereRevisionHumana": false,
+        "riesgos": [],
+        "noDisponible": 0,
+        "fuentes": [],
+        "at": "2026-09-24T20:55:34.828Z"
+      },
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-24T20:55:41.533Z",
+      "mutationLog": [
+        {
+          "at": "2026-09-24T20:55:34.911Z",
+          "actor": "guardar-directo",
+          "reason": "Trust layer post-guardado",
+          "fields": [
+            "confianza"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-000000mv8g9v",
+          "hashAfter": "meni-000000mv8g9v",
+          "reeval": {
+            "required": false
+          }
+        },
+        {
+          "at": "2026-09-24T20:55:37.387Z",
+          "actor": "publication-pipeline",
+          "reason": "Distribución completada",
+          "fields": [
+            "distribuida",
+            "fechaDistribucion"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-000000mv8g9v",
+          "hashAfter": "meni-000000mv8g9v",
+          "reeval": {
+            "required": false
+          }
+        },
+        {
+          "at": "2026-09-24T20:55:41.607Z",
+          "actor": "distribuir",
+          "reason": "Distribución manual completada",
+          "fields": [
+            "distribuida",
+            "fechaDistribucion"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-000000mv8g9v",
+          "hashAfter": "meni-000000mv8g9v",
+          "reeval": {
+            "required": false
+          }
+        }
+      ],
+      "vistas": 14
+    },
+    "lifecycle": {
+      "articleId": "pAv7atGxknGok8Wtt6uC",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-24T20:55:34.415Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-24T20:55:34.415Z",
+      "dateModified": "2026-09-24T20:55:34.415Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "pAv7atGxknGok8Wtt6uC",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 91,
+        "fecha": "2026-09-24T20:55:34.726Z",
+        "validationStatus": "PENDING_VALIDATION",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "AQiSAE7CeGLS9n5AvpzG": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1790204379900_m2862b",
+        "timestamp": "2026-09-23T22:59:39.901Z",
+        "verdict": "PUBLICAR",
+        "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 91,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 91,
+      "nivelFecha": "2026-09-23T22:59:39.916Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 1 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-000000woljxd",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-23T22:59:38.202Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Nacionales) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 97%); el lector aprende algo nuevo (WOW index: 91.5%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (92%). Puntos de mejora: extensión corta (363 palabras, mínimo 400 para REPORTAJE).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 97%)",
+          "el lector aprende algo nuevo (WOW index: 91.5%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (92%)"
+        ],
+        "puntosMejora": [
+          "extensión corta (363 palabras, mínimo 400 para REPORTAJE)"
+        ],
+        "bloqueadores": []
+      },
+      "perfil": "nacionales",
+      "profile_confidence": 0.51,
+      "categoria": "Nacionales",
+      "palabras": 363,
+      "puntosClave": [
+        "La Policía Nacional reforzó durante la última semana los controles de seguridad vial en 84 tramos priorizados de.",
+        "Después aparecen Matagalpa, con 71; Masaya, con 51; León, con 50; Estelí, con 42, y Chinandega, con 30..",
+        "Reportan disminución de personas lesionadas En el acumulado del año, hasta el 20 de septiembre de 2026."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/logo.webp",
+      "publicCategory": "Nacionales",
+      "profileInternal": "nacionales",
+      "titulo": "Controles viales en Nicaragua dejan 94 detenidos por ebriedad",
+      "fechaActualizacion": "2026-09-23T22:59:39.917Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-23T22:59:37.346Z",
+      "publishedAt": "2026-09-23T22:59:39.917Z",
+      "dateModified": "2026-09-23T22:59:39.917Z",
+      "resumen": "La Policía Nacional reforzó durante la última semana los controles de seguridad vial en 84 tramos priorizados de Nicaragua, con operativos que incluyero...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/controles-viales-en-nicaragua-dejan-94-d-1790204242813.webp",
+      "slug": "controles-viales-en-nicaragua-dejan-94-detenidos-por-ebriedad",
+      "autor": "José Luis López Ramírez",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/nacionales",
+          "anchor": "Noticias de nacionales",
+          "type": "categoria"
+        }
+      ],
+      "id": "AQiSAE7CeGLS9n5AvpzG",
+      "confianza": {
+        "nivel": "ALTA",
+        "resumen": "20 afirmaciones | 3 atribuidas | 0 sin confirmar | 0 no disponibles | 0 riesgos | 0 contradicciones | fuentes: 1",
+        "requiereRevisionHumana": false,
+        "riesgos": [],
+        "noDisponible": 0,
+        "fuentes": [
+          "Policía Nacional"
+        ],
+        "at": "2026-09-23T22:59:41.762Z"
+      },
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-23T22:59:47.974Z",
+      "contenido": "<p><strong>La Policía Nacional reforzó durante la última semana los controles de seguridad vial en 84 tramos priorizados de Nicaragua, con operativos que incluyeron pruebas de alcoholemia, radares de velocidad y revisión de vehículos.</strong></p> <p>Entre el <strong>14 y el 20 de septiembre</strong>, los agentes requisaron <strong>16,347 vehículos</strong> y realizaron <strong>8,312 pruebas de alcoholemia</strong> en distintos puntos del país, de acuerdo con el reporte de la institución.</p> <p>Los controles dejaron <strong>94 conductores detenidos por manejar en estado de ebriedad</strong>. A esto se suman <strong>1,019 licencias de conducir suspendidas</strong> y <strong>351 personas detenidas por conducir sin licencia</strong>, cuyos vehículos también fueron ocupados.</p> <h2>Más de mil colisiones en una semana</h2> <p>En el mismo período, se registraron <strong>1,022 colisiones de tránsito</strong> en el territorio nacional, con un saldo de <strong>35 personas lesionadas</strong>.</p> <p><strong>Managua concentró la mayor cantidad de colisiones, con 626 casos</strong>. Después aparecen Matagalpa, con 71; Masaya, con 51; León, con 50; Estelí, con 42, y Chinandega, con 30.</p> <p>Las motocicletas estuvieron involucradas en <strong>311 de las colisiones reportadas</strong>. Le siguieron las camionetas, con 246 casos, y los vehículoes, con 231. También estuvieron involucrados camiones y autobuses.</p> <h2>Operativos se mantienen en 84 tramos</h2> <p>Los controles permanecen activos en <strong>84 tramos priorizados del país</strong>, donde los agentes utilizan alcoholímetros y radares de velocidad para detectar infracciones y conductas de riesgo.</p> <p>Las acciones también incluyeron pruebas de alcoholemia dirigidas a conductores del transporte colectivo en los <strong>153 municipios de Nicaragua</strong>.</p> <p>De acuerdo con la Policía Nacional, estos operativos forman parte de las acciones implementadas para fortalecer la seguridad vial y prevenir accidentes en las carreteras.</p> <h2>Reportan disminución de personas lesionadas</h2> <p>En el acumulado del año, hasta el <strong>20 de septiembre de 2026</strong>, la institución reportó una disminución de <strong>324 personas lesionadas por accidentes de tránsito</strong> en comparación con el período utilizado para establecer esta medición.</p> <p>Además de los controles en carretera, durante la semana se desarrollaron actividades de educación vial dirigidas a conductores, peatones y otros sectores de la población.</p> <p>Las autoridades reiteraron el llamado a respetar las normas de tránsito, evitar conducir bajo los efectos del alcohol y mantener una conducta responsable para reducir los riesgos en las vías.</p>",
+      "ultimaRevisionEditorial": {
+        "fecha": "2026-09-23T23:08:03.449Z",
+        "proceso": "correccion-editorial-normal",
+        "tipo": "concatenacion_mecanica"
+      },
+      "vistas": 181
+    },
+    "lifecycle": {
+      "articleId": "AQiSAE7CeGLS9n5AvpzG",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-23T22:59:41.346Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-23T22:59:41.346Z",
+      "dateModified": "2026-09-23T22:59:41.346Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "AQiSAE7CeGLS9n5AvpzG",
+        "predFacebook": "Alta",
+        "predDiscover": "Media",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 91,
+        "fecha": "2026-09-23T22:59:41.670Z",
+        "validationStatus": "PENDING_VALIDATION",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "gPe3e3k6GAmgPpBJzGkX": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1789758360360_ot9uk6",
+        "timestamp": "2026-09-18T19:06:00.370Z",
+        "verdict": "PUBLICAR_CON_CAMBIOS",
+        "reason": "El Supervisor pide ajustes menores antes de publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 91,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 91,
+      "nivelFecha": "2026-09-18T19:06:00.372Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-000000ywlf3i",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-18T19:05:58.799Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Internacionales) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 92%); el lector aprende algo nuevo (WOW index: 93%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (93%).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 92%)",
+          "el lector aprende algo nuevo (WOW index: 93%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (93%)",
+          "extensión adecuada (1050 palabras, mínimo 400)"
+        ],
+        "puntosMejora": [],
+        "bloqueadores": []
+      },
+      "perfil": "internacional",
+      "profile_confidence": 0.64,
+      "categoria": "Internacionales",
+      "palabras": 1050,
+      "puntosClave": [
+        "Tres ciudadanos nicaragüenses aparecen durante septiembre de 2026 en expedientes distintos dentro de Estados Unidos, pero los casos.",
+        "Roger Hurtado: un proceso diferente en California El tercer caso corresponde a Roger Hurtado-García, de 54 años.",
+        "Una diferencia fundamental: arresto no significa condena La distinción resulta especialmente importante al informar sobre personas detenidas en."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/logo.webp",
+      "publicCategory": "Internacionales",
+      "profileInternal": "internacional",
+      "titulo": "Tres nicaragüenses enfrentan procesos distintos en EE. UU.",
+      "contenido": "<p>Tres ciudadanos nicaragüenses aparecen durante septiembre de 2026 en expedientes distintos dentro de Estados Unidos, pero los casos no corresponden a una misma operación ni tienen el mismo desenlace.</p> <p>Uno de ellos fue <strong>arrestado en Florida después de un accidente de tránsito</strong>; otro fue <strong>deportado después de una condena relacionada con cocaína</strong>; y un tercero permanece bajo custodia migratoria en California mientras enfrenta un proceso penal pendiente.</p> <p>La diferencia es importante porque un arresto local, una condena penal y una detención migratoria son etapas y procedimientos diferentes. Mezclarlos puede dar la impresión de que los tres casos tienen el mismo resultado, cuando los expedientes muestran situaciones jurídicas distintas.</p> <h2>Florida: un arresto después de un accidente</h2> <p>El primero de los casos corresponde a <strong>Jessica Johana Castro Pérez, de 30 años</strong>, quien fue arrestada el 1 de septiembre de 2026 en Margate, Florida.</p> <p>Registros de incidentes de esa ciudad reportaron que Castro Pérez fue detenida por un caso relacionado con <strong>abandonar el lugar de un accidente de tránsito</strong>. La información publicada señala que la mujer habría golpeado otro vehículo y posteriormente se habría retirado del lugar; el incidente habría sido observado por un agente, quien posteriormente habría logrado localizarla. </p> <p>El dato debe manejarse con precisión: <strong>un arresto no equivale a una condena</strong>. El registro de Broward utilizado para este tipo de información advierte expresamente que los datos de arrestos pueden modificarse y que las personas detenidas se presumen inocentes hasta que un tribunal determine lo contrario. </p> <p>Por ahora, la información disponible no permite establecer detalles adicionales sobre los daños ocasionados, el valor de las pérdidas o el desenlace judicial del expediente. Esos elementos tendrían que ser confirmados mediante el registro del tribunal correspondiente.</p> <h2>Gonzalo Guzmán: de una condena penal a la deportación</h2> <p>El segundo expediente tiene un desenlace diferente. <strong>Gonzalo Antonio Guzmán Guzmán, ciudadano nicaragüense, fue incluido por el Servicio de Inmigración y Control de Aduanas de Estados Unidos (ICE) en una publicación sobre extranjeros deportados.</strong></p> <p>La publicación de ICE, difundida durante el fin de semana, señala que Guzmán Guzmán fue condenado por <strong>conspiración para poseer cocaína con intención de distribuirla mientras se encontraba a bordo de una embarcación</strong>. Su nombre aparece junto al de ciudadanos de Belice, México y Costa Rica incluidos en la misma comunicación de la agencia. </p> <p>En este caso, por tanto, no se trata simplemente de una persona detenida por una acusación reciente. ICE lo presenta como alguien que <strong>ya había sido condenado por un delito relacionado con drogas</strong> y posteriormente fue objeto de una medida de remoción del territorio estadounidense.</p> <p>La publicación no proporciona en el texto disponible la fecha del juicio, la duración de la condena, el tribunal que emitió la sentencia ni las circunstancias específicas de la operación marítima. Por ello, esos datos no deben agregarse como hechos confirmados sin consultar el expediente judicial correspondiente.</p> <h2>Roger Hurtado: un proceso diferente en California</h2> <p>El tercer caso corresponde a <strong>Roger Hurtado-García, de 54 años</strong>, quien aparece en información relacionada con la oficina de ICE en San Francisco.</p> <p>De acuerdo con la información disponible, Hurtado-García permanece bajo custodia migratoria mientras enfrenta un <strong>cargo penal pendiente relacionado con presunta copulación oral mediante fuerza o con resultado de lesiones</strong>.</p> <p>La diferencia con el caso de Guzmán Guzmán es fundamental: en el expediente de Hurtado-García se habla de <strong>un cargo pendiente</strong>, no de una condena por ese delito. Por esa razón, no corresponde presentarlo como una persona condenada por el hecho mientras no exista una sentencia que así lo establezca.</p> <p>La búsqueda realizada no permitió localizar una ficha oficial de ICE indexada con información adicional sobre su arresto, el tribunal, la fecha de la audiencia o el estado posterior del proceso penal. Por ello, esos elementos quedan fuera de esta publicación para evitar añadir información no verificada.</p> <h2>Por qué los tres casos no deben confundirse</h2> <p>Los expedientes muestran tres momentos diferentes dentro del sistema estadounidense.</p> <p>En Florida, <strong>Jessica Castro Pérez aparece vinculada a un arresto local por un hecho de tránsito</strong>. En el caso de Gonzalo Guzmán, existe una <strong>condena penal previa y posteriormente una deportación informada por ICE</strong>. En California, Roger Hurtado-García aparece bajo <strong>custodia migratoria mientras tiene un proceso penal pendiente</strong>.</p> <p>ICE explica que sus operaciones de Enforcement and Removal Operations incluyen la detención y remoción de personas sujetas a las leyes migratorias, particularmente aquellas que tienen antecedentes o condenas penales. La agencia también mantiene sistemas para localizar a personas bajo custodia migratoria y tramitar procedimientos de remoción. </p> <p>Esto explica por qué una persona puede aparecer primero en un expediente policial o judicial estatal y posteriormente entrar en un procedimiento migratorio federal. <strong>Los sistemas penal y migratorio pueden estar relacionados, pero no son el mismo proceso.</strong></p> <h2>Una diferencia fundamental: arresto no significa condena</h2> <p>La distinción resulta especialmente importante al informar sobre personas detenidas en Estados Unidos. Un arresto significa que una persona fue puesta bajo custodia por una presunta infracción; una acusación implica que enfrenta un cargo; una condena supone que un tribunal determinó su responsabilidad penal; y una deportación corresponde a un procedimiento migratorio de remoción.</p> <p>En el caso de Guzmán Guzmán, ICE habla expresamente de una <strong>condena previa</strong>. En el caso de Castro Pérez, la información disponible corresponde a un <strong>arresto</strong>. Y en el de Hurtado-García, la información disponible señala una <strong>detención migratoria junto con un cargo penal pendiente</strong>.</p> <p>Las diferencias no son solamente terminológicas. Cambian lo que puede afirmarse responsablemente sobre cada persona y evitan presentar como hechos probados acusaciones que todavía se encuentran en proceso judicial.</p> <h2>Tres nicaragüenses, tres rutas dentro del sistema estadounidense</h2> <p>Los tres expedientes muestran cómo ciudadanos de una misma nacionalidad pueden terminar ante distintas autoridades estadounidenses y por razones completamente diferentes.</p> <p>Uno quedó registrado en un caso de tránsito en Florida; otro fue incluido por ICE entre las personas deportadas después de una condena relacionada con drogas; y un tercero permanece bajo custodia migratoria mientras se desarrolla un proceso asociado a un cargo penal pendiente en California.</p> <p>Hasta que existan nuevos documentos judiciales o comunicados oficiales que amplíen estos expedientes, esos son los elementos que pueden establecerse con la información disponible. La principal diferencia entre ellos está en <strong>qué autoridad intervino, en qué etapa se encuentra cada caso y si existe o no una condena</strong>.</p>",
+      "fechaActualizacion": "2026-09-18T19:06:00.373Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-18T19:05:57.817Z",
+      "publishedAt": "2026-09-18T19:06:00.373Z",
+      "dateModified": "2026-09-18T19:06:00.373Z",
+      "resumen": "Tres ciudadanos nicaragüenses aparecen durante septiembre de 2026 en expedientes distintos dentro de Estados Unidos, pero los casos no corresponden a un...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/tres-nicaraguenses-enfrentan-procesos-di-1789758161136.webp",
+      "slug": "tres-nicaraguenses-enfrentan-procesos-distintos-en-ee-uu",
+      "autor": "José Luis López Ramírez",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/internacionales",
+          "anchor": "Noticias de internacionales",
+          "type": "categoria"
+        }
+      ],
+      "id": "gPe3e3k6GAmgPpBJzGkX",
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-18T19:06:05.820Z",
+      "vistas": 66,
+      "confianza": {
+        "nivel": "ALTA",
+        "resumen": "46 afirmaciones | 2 atribuidas | 1 sin confirmar | 0 no disponibles | 0 riesgos | 0 contradicciones | fuentes: 0",
+        "requiereRevisionHumana": false,
+        "factores": [
+          "SOURCE_MISSING"
+        ],
+        "riesgos": [],
+        "noDisponible": 0,
+        "provisionalesSinFuente": 0,
+        "fuentes": [],
+        "queFalta": [
+          "nombrar la fuente institucional o periodística",
+          "ubicación del hecho"
+        ],
+        "at": "2026-09-23T19:13:34.727Z"
+      }
+    },
+    "lifecycle": {
+      "articleId": "gPe3e3k6GAmgPpBJzGkX",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-18T19:06:01.328Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-18T19:06:01.328Z",
+      "dateModified": "2026-09-18T19:06:01.328Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "gPe3e3k6GAmgPpBJzGkX",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 91,
+        "fecha": "2026-09-18T19:06:02.234Z",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "51OIyVo7HhoY8dcsmoto": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1789849144693_f4opjt",
+        "timestamp": "2026-09-19T20:19:04.693Z",
+        "verdict": "PUBLICAR",
+        "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [
+          {
+            "severity": "WARNING",
+            "domain": "TITULO",
+            "problem": "Título podría ser más específico: \"Tribunal limita deportaciones tras 22,000 migrantes enviados\"",
+            "impact": "El título no identifica todos los elementos periodísticos clave",
+            "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+            "action": "Considerar enriquecer el título con datos del contenido",
+            "autoFixable": false
+          }
+        ],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 92,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 92,
+      "nivelFecha": "2026-09-19T20:19:04.695Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-000000ox4kco",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-19T20:19:02.734Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Internacionales) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 92%); el lector aprende algo nuevo (WOW index: 92.5%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (93%).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 92%)",
+          "el lector aprende algo nuevo (WOW index: 92.5%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (93%)",
+          "extensión adecuada (1955 palabras, mínimo 400)"
+        ],
+        "puntosMejora": [],
+        "bloqueadores": []
+      },
+      "perfil": "internacional",
+      "profile_confidence": 0.59,
+      "categoria": "Internacionales",
+      "palabras": 1955,
+      "puntosClave": [
+        "Un tribunal federal de apelaciones de Estados Unidos puso límites a la política utilizada por el Departamento de.",
+        "Los destinos identificados fueron Burundi, Camerún, República Centroafricana, Guinea Ecuatorial, Esuatini, Liberia, Ruanda y Sierra Leona..",
+        "Para Nicaragua y el resto de Centroamérica, el dato relevante es que ciudadanos de la región ya forman."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/logo.webp",
+      "publicCategory": "Internacionales",
+      "profileInternal": "internacional",
+      "titulo": "Tribunal limita deportaciones tras 22,000 migrantes enviados",
+      "contenido": "<p>Un tribunal federal de apelaciones de Estados Unidos puso límites a la política utilizada por el Departamento de Seguridad Nacional (DHS) para enviar migrantes a países distintos de aquellos a los que originalmente serían deportados, después de que <strong>más de 22,000 personas fueran trasladadas a terceros países</strong> durante el desarrollo de esta política.</p> <p>La decisión fue emitida el viernes 18 de septiembre por el <strong>Tribunal de Apelaciones del Primer Circuito</strong>, con sede en Boston. Los tres jueces del panel determinaron que el procedimiento utilizado por el DHS no garantizaba a determinados migrantes suficiente aviso ni una oportunidad significativa para plantear objeciones relacionadas con su seguridad antes de ser enviados a un tercer país.</p> <p>El fallo respalda en gran medida una decisión anterior del juez federal Brian Murphy, de Massachusetts, quien había declarado ilegal la política del DHS. Sin embargo, la corte de apelaciones también dejó sin efecto una parte de aquella resolución relacionada con el orden que debía seguir el Gobierno para seleccionar los países de destino.</p> <h2>Más de 25,000 personas ya fueron trasladadas</h2> <p>El número de personas afectadas aumentó mientras el litigio avanzaba. El proyecto <strong>Third Country Deportation Watch</strong>, impulsado por Refugees International y Human Rights First, reporta más de 25,000 migrantes enviados a por lo menos 29 terceros países desde el inicio de esta política.</p> <p>El registro de U.S. Committee for Refugees and Immigrants (USCRI), actualizado en septiembre, contabilizaba más de <strong>22,000 personas enviadas a al menos 26 países hasta agosto de 2026</strong>. La organización señala que su base se construye con información pública y puede no reflejar todos los acuerdos o transferencias.</p> <p>La diferencia entre ambos conteos responde principalmente a las fechas de actualización y al alcance de cada base de datos. Para dimensionar el fenómeno a la fecha del fallo, los registros más recientes sitúan el número por encima de los 25,000 traslados.</p> <h2>¿Qué es una deportación a un tercer país?</h2> <p>Se considera <strong>tercer país</strong> aquel que no corresponde al país de ciudadanía o residencia habitual del migrante y con el que la persona puede no tener vínculos significativos.</p> <p>La legislación migratoria estadounidense contempla determinadas circunstancias en las que una persona con una orden final de expulsión puede ser enviada a otro país dispuesto a recibirla cuando su retorno al destino inicialmente previsto resulte impracticable, inconveniente o imposible.</p> <p>Estas disposiciones conviven con mecanismos de protección que permiten a determinadas personas plantear objeciones cuando sostienen que su traslado podría exponerlas a persecución u otros daños contemplados por la legislación estadounidense.</p> <p>El conflicto judicial surgió porque el DHS adoptó en 2025 una política que permitió acelerar algunas de esas transferencias, incluso cuando el tercer país no había formado parte del procedimiento migratorio original.</p> <h2>El aviso previo fue el centro de la disputa</h2> <p>El litigio comenzó en marzo de 2025, cuando los demandantes cuestionaron que el Gobierno pudiera enviar a migrantes hacia países con los que no tenían vínculos sin darles previamente una oportunidad real de objetar ese destino.</p> <p>Los documentos judiciales describen una política que, en determinadas circunstancias, podía permitir que un migrante recibiera <strong>tan solo seis horas de aviso</strong> antes de ser enviado a un tercer país. Cuando existían determinadas garantías diplomáticas del país receptor, incluso podía no existir aviso previo bajo las directrices cuestionadas.</p> <p>El Primer Circuito concluyó que ese procedimiento no era compatible con las garantías establecidas en la legislación migratoria estadounidense para las personas que alegan temor de persecución.</p> <p>El juez Seth Aframe, autor de la decisión del panel, explicó que el derecho de una persona a cuestionar su deportación por temor a persecución pierde efectividad si no recibe aviso previo del destino y una oportunidad significativa para impugnarlo.</p> <h2>El fallo protege el derecho a alegar riesgos en el destino</h2> <p>Uno de los aspectos jurídicos discutidos en el caso es la posibilidad de que una persona alegue que enfrentaría <strong>persecución o un trato prohibido por la legislación estadounidense</strong> si es trasladada al tercer país seleccionado por las autoridades.</p> <p>La referencia a estos riesgos no significa que las personas deportadas hayan sufrido esos hechos. El tribunal se refiere a la <strong>oportunidad de presentar una objeción antes de la transferencia</strong>, cuando el migrante sostiene que su traslado podría exponerlo a un daño que la legislación estadounidense busca evitar.</p> <p>Por esa razón, la decisión se concentra en las garantías del procedimiento: el migrante debe conocer el destino con suficiente anticipación y disponer de una oportunidad significativa para explicar por qué considera que no debería ser enviado allí.</p> <h2>Qué riesgo puede alegar un migrante</h2> <p>Las normas migratorias estadounidenses contemplan mecanismos de protección para personas que sostienen que podrían enfrentar determinadas formas de persecución o malos tratos en el país al que serían trasladadas.</p> <p>En este contexto jurídico también puede aparecer la referencia a <strong>tortura</strong>, pero ello no significa que las personas enviadas a terceros países hayan sido torturadas ni que el tribunal haya concluido que los países receptores sean lugares donde necesariamente ocurra ese delito.</p> <p>La cuestión planteada ante el tribunal es más concreta: <strong>si una persona afirma que enfrenta un peligro en el país de destino, debe contar con una oportunidad real para presentar esa alegación antes de que se ejecute la transferencia</strong>, cuando la protección invocada resulte aplicable a su caso.</p> <p>El Primer Circuito también examinó las garantías ofrecidas por algunos países receptores y cuestionó si el procedimiento utilizado por el Gobierno permitía valorar adecuadamente las circunstancias individuales de cada migrante.</p> <h2>Nicaragua aparece entre los países afectados</h2> <p>El impacto de esta política también alcanza a ciudadanos nicaragüenses. El registro de USCRI documentó que hasta junio de 2026 <strong>unos 20 nicaragüenses habían sido enviados a Guatemala</strong> como terceros países.</p> <p>Una actualización más reciente de Third Country Deportation Watch registra a ciudadanos de Nicaragua, Honduras y El Salvador entre las personas trasladadas a Guatemala. El seguimiento contabiliza cientos de personas de esas tres nacionalidades dentro de las transferencias hacia ese país.</p> <p>Este dato es relevante para Nicaragua Informate porque demuestra que el fallo del Primer Circuito no se refiere únicamente a casos ocurridos lejos de Centroamérica. <strong>Ciudadanos nicaragüenses ya aparecen dentro de los registros de transferencias a terceros países</strong>, por lo que cualquier modificación de las garantías procesales en Estados Unidos puede tener consecuencias directas para personas de esta nacionalidad.</p> <h2>Los nicaragüenses también fueron enviados a África</h2> <p>La expansión de esta política no se ha limitado a Guatemala. En agosto, documentos del Gobierno estadounidense obtenidos por CBS News mostraron que, durante un período de diez días, más de <strong>100 deportados procedentes de Afganistán, Cuba, Nicaragua y otros países</strong> fueron enviados a ocho países africanos.</p> <p>Los destinos identificados fueron Burundi, Camerún, República Centroafricana, Guinea Ecuatorial, Esuatini, Liberia, Ruanda y Sierra Leona.</p> <p>La dimensión geográfica ayuda a entender por qué el procedimiento de notificación se convirtió en una cuestión central ante los tribunales: una persona que sale de Estados Unidos puede terminar en un país con el que no tiene ciudadanía, residencia habitual o vínculos familiares.</p> <h2>El caso de Nicaragua tiene además otra particularidad</h2> <p>Nicaragua no solamente aparece como país de origen de algunas personas trasladadas bajo esta política. También figura como <strong>destino de extranjeros deportados desde Estados Unidos</strong>.</p> <p>El registro de USCRI señala que entre enero de 2025 y junio de 2026 fueron enviados a Nicaragua <strong>116 ciudadanos extranjeros de 16 nacionalidades</strong>. Entre ellos aparecen hondureños, cubanos, ecuatorianos, guatemaltecos, colombianos, peruanos, venezolanos y salvadoreños, entre otras nacionalidades.</p> <p>Este fenómeno debe diferenciarse de los casos de nicaragüenses enviados a terceros países. Que Nicaragua reciba a ciudadanos extranjeros no significa que esos traslados respondan necesariamente al mismo mecanismo utilizado para enviar a nicaragüenses a otros territorios.</p> <p>USCRI señala que, hasta junio de 2026, <strong>no había un acuerdo público entre Estados Unidos y Nicaragua</strong> que estableciera formalmente al país como tercer país receptor bajo este esquema.</p> <h2>Por qué el fallo tiene relevancia para Centroamérica</h2> <p>La decisión adquiere una dimensión regional porque los registros de estas transferencias incluyen ciudadanos de distintos países centroamericanos.</p> <p>El caso demuestra que una orden de deportación desde Estados Unidos puede terminar teniendo como destino un país distinto al de nacionalidad del migrante. Para los ciudadanos de Nicaragua, Honduras y El Salvador, esto significa que <strong>el país seleccionado como destino puede convertirse en un elemento relevante del procedimiento migratorio</strong>.</p> <p>El alcance práctico del fallo dependerá de cada caso y de la forma en que las autoridades estadounidenses implementen la resolución. No todas las deportaciones a terceros países tienen las mismas circunstancias ni todos los migrantes presentan las mismas reclamaciones.</p> <h2>El tribunal no prohibió todas las deportaciones</h2> <p>El fallo tampoco establece una prohibición absoluta de deportar personas hacia terceros países. La legislación estadounidense permite determinadas transferencias cuando se cumplen las condiciones previstas por la ley y el país receptor está dispuesto a aceptar a la persona.</p> <p>Lo que el Primer Circuito cuestionó fue la interpretación del DHS que permitía realizar determinadas transferencias <strong>sin una notificación efectiva y sin una oportunidad significativa para presentar una reclamación de temor</strong>.</p> <p>La diferencia es importante: el debate judicial no determina simplemente si una persona puede ser deportada, sino <strong>qué procedimiento debe respetarse antes de enviarla a un país que no era el destino inicialmente previsto</strong>.</p> <h2>La Corte Suprema ya intervino anteriormente</h2> <p>El caso tiene un antecedente importante en la Corte Suprema de Estados Unidos. En 2025, el máximo tribunal permitió temporalmente que el Gobierno continuara con determinadas deportaciones mientras avanzaba el litigio contra la política del DHS.</p> <p>Esa intervención permitió que las transferencias continuaran mientras el caso seguía en los tribunales inferiores.</p> <p>Posteriormente, en febrero de 2026, el juez Murphy emitió una decisión definitiva contra la política. La administración Trump apeló y el Primer Circuito acaba de pronunciarse sobre el fondo de la controversia.</p> <h2>La decisión todavía puede ser recurrida</h2> <p>La administración estadounidense puede intentar llevar nuevamente el caso ante la <strong>Corte Suprema</strong>. La posibilidad de una nueva revisión mantiene abierta la disputa sobre el alcance definitivo de las reglas que deberán aplicar las autoridades migratorias.</p> <p>Además, el asesor jurídico general del DHS, James Percival, sostuvo públicamente después de la decisión que la política continuaba vigente porque el fallo del Primer Circuito todavía no había entrado en efecto. Esa posición del Gobierno introduce una cuestión práctica que deberá resolverse mientras continúa el proceso judicial.</p> <h2>Qué cambia para los migrantes nicaragüenses</h2> <p>El punto de mayor importancia para los ciudadanos nicaragüenses no es que todas las deportaciones hayan quedado anuladas, sino que <strong>el destino propuesto adquiere relevancia dentro del procedimiento</strong> cuando se trata de una transferencia a un tercer país.</p> <p>Los registros disponibles muestran que nicaragüenses ya han sido enviados a Guatemala y que ciudadanos de Nicaragua también estuvieron entre las personas trasladadas hacia países africanos.</p> <p>Por eso, el fallo puede tener una repercusión regional: obliga a revisar el procedimiento mediante el cual Estados Unidos informa y permite cuestionar el destino de personas que serán trasladadas fuera de su país de origen.</p> <h2>Un cambio sobre el procedimiento, no sobre todos los destinos</h2> <p>La decisión del Primer Circuito no determina que cada tercer país utilizado por Estados Unidos sea inseguro ni que todas las personas trasladadas enfrenten automáticamente persecución, malos tratos o tortura.</p> <p>Su importancia está en otro punto: <strong>el migrante debe tener una oportunidad real de plantear un temor de persecución o de sufrir otros daños protegidos por la legislación antes de que se ejecute la transferencia</strong>, cuando el caso esté comprendido por las garantías reconocidas por el tribunal.</p> <p>Después de decenas de miles de transferencias y de meses de litigio, la discusión entra ahora en una nueva etapa. Para Nicaragua y el resto de Centroamérica, el dato relevante es que ciudadanos de la región ya forman parte de esta política y que los tribunales estadounidenses continúan definiendo cuáles son las garantías que deben acompañar cada traslado.</p>",
+      "fechaActualizacion": "2026-09-19T20:19:04.695Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-19T20:18:58.711Z",
+      "publishedAt": "2026-09-19T20:19:04.695Z",
+      "dateModified": "2026-09-19T20:19:04.695Z",
+      "resumen": "Un tribunal federal de apelaciones de Estados Unidos puso límites a la política utilizada por el Departamento de Seguridad Nacional (DHS) para enviar mi...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/tribunal-limita-deportaciones-tras-22-00-1789848357234.webp",
+      "slug": "tribunal-limita-deportaciones-tras-22-000-migrantes-enviados",
+      "autor": "Maycol Josué Nicaragua Rivas",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/internacionales",
+          "anchor": "Noticias de internacionales",
+          "type": "categoria"
+        }
+      ],
+      "id": "51OIyVo7HhoY8dcsmoto",
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-19T20:19:10.192Z",
+      "confianza": {
+        "nivel": "ALTA",
+        "resumen": "73 afirmaciones | 12 atribuidas | 0 sin confirmar | 0 no disponibles | 0 riesgos | 0 contradicciones | fuentes: 2",
+        "requiereRevisionHumana": false,
+        "factores": [],
+        "riesgos": [],
+        "noDisponible": 0,
+        "provisionalesSinFuente": 0,
+        "fuentes": [
+          "Gobierno",
+          "Corte Suprema"
+        ],
+        "queFalta": [
+          "ubicación del hecho"
+        ],
+        "at": "2026-09-23T19:12:58.740Z"
+      },
+      "vistas": 10
+    },
+    "lifecycle": {
+      "articleId": "51OIyVo7HhoY8dcsmoto",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-19T20:19:05.843Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-19T20:19:05.843Z",
+      "dateModified": "2026-09-19T20:19:05.843Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "51OIyVo7HhoY8dcsmoto",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 92,
+        "fecha": "2026-09-19T20:19:06.674Z",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "gE9P2rHVhRM0rLqAlb2U": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1790292132947_40a9oe",
+        "timestamp": "2026-09-24T23:22:12.947Z",
+        "verdict": "PUBLICAR",
+        "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [
+          {
+            "severity": "WARNING",
+            "domain": "TITULO",
+            "problem": "Título podría ser más específico: \"Nisi Blass gana bronce para Nicaragua en viga de equilibrio\"",
+            "impact": "El título no identifica todos los elementos periodísticos clave",
+            "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+            "action": "Considerar enriquecer el título con datos del contenido",
+            "autoFixable": false
+          }
+        ],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 90,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 90,
+      "nivelFecha": "2026-09-24T23:22:12.948Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (5 puntos a favor, 2 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-0000009vocs1",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-24T23:22:11.265Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Deportes) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 97%); el lector aprende algo nuevo (WOW index: 96.5%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (92%).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 97%)",
+          "el lector aprende algo nuevo (WOW index: 96.5%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (92%)",
+          "extensión adecuada (678 palabras, mínimo 400)"
+        ],
+        "puntosMejora": [],
+        "bloqueadores": []
+      },
+      "perfil": "deportes",
+      "profile_confidence": 0.7,
+      "categoria": "Deportes",
+      "palabras": 678,
+      "puntosClave": [
+        "La gimnasta nicaragüense Nisi Ester Blass Palacio , de 10 años, conquistó la medalla de bronce en salto.",
+        "¿Qué competencia se disputa en El Salvador?.",
+        "El campeonato continuará desarrollándose en Ciudad Merliot hasta el domingo 27 de septiembre , cuando está previsto el."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/logo.webp",
+      "publicCategory": "Deportes",
+      "profileInternal": "deportes",
+      "titulo": "Nisi Blass gana bronce para Nicaragua en viga de equilibrio",
+      "contenido": "<p><strong></strong> La gimnasta nicaragüense <strong>Nisi Ester Blass Palacio</strong>, de 10 años, conquistó la <strong>medalla de bronce en salto</strong> y terminó en el <strong>sexto lugar del All Around</strong> durante el Campeonato Centroamericano y del Caribe de Gimnasia Artística <strong>USAG y Xcel 2026</strong>, que se desarrolla en el <strong>Complejo Deportivo Ciudad de Merliot, El Salvador</strong>.</p> <p>Blass Palacio compite en el <strong>Nivel I, categoría de 10 años</strong>, y consiguió uno de los podios de la representación nicaragüense en una competencia que reúne a aproximadamente <strong>700 atletas de 10 países</strong>. El campeonato inició el <strong>22 de septiembre</strong> y tiene programada su jornada de cierre para este <strong>domingo 27 de septiembre</strong>.</p> <h2>El bronce llegó en la prueba de salto</h2> <p>El resultado más destacado de Nisi Blass Palacio llegó en <strong>salto</strong>, donde consiguió la tercera posición de su categoría y recibió la medalla de bronce.</p> <p>El salto es una de las pruebas de la gimnasia artística en la que la atleta debe combinar la velocidad de la carrera con el impulso, la ejecución del movimiento en el aire y una recepción controlada. Cada una de esas fases forma parte de la valoración de la rutina.</p> <p>Para la gimnasta nicaragüense, el resultado significó subir al podio en una competencia internacional disputada frente a atletas de diferentes países y procesos de formación.</p> <h2>También quedó entre las primeras en el All Around</h2> <p>Además de su tercer lugar en salto, Blass Palacio terminó en la <strong>sexta posición del All Around</strong>, una clasificación que reúne el desempeño de la gimnasta en las diferentes pruebas de su categoría.</p> <p>A diferencia de una final individual de aparato, el All Around permite observar el rendimiento general de la atleta durante la competencia. Por eso, el sexto puesto complementa el resultado obtenido en salto y muestra que la nicaragüense se mantuvo dentro del grupo de las primeras participantes de su categoría.</p> <p>Con apenas <strong>10 años</strong>, competir en este escenario también representa una experiencia internacional dentro de su proceso de formación deportiva, al enfrentarse a gimnastas de otros países y adaptarse a un entorno competitivo distinto al habitual.</p> <h2>¿Qué competencia se disputa en El Salvador?</h2> <p>El certamen en el que participa Nisi es el <strong>Campeonato Centroamericano y del Caribe de Gimnasia Artística USAG y Xcel 2026</strong>, desarrollado en el Complejo Deportivo Ciudad de Merliot.</p> <p>La competencia cuenta con participantes de <strong>Nicaragua, El Salvador, Guatemala, Honduras, Costa Rica, México, República Dominicana, Colombia y Puerto Rico</strong>, entre los países mencionados por la organización y la cobertura del evento. <p>El programa contempla diferentes niveles dentro de los sistemas <strong>USAG y Xcel</strong>, incluidos niveles de formación. Los organizadores explicaron que, aunque algunas categorías corresponden a etapas iniciales de desarrollo, estos eventos permiten a los atletas adquirir experiencia competitiva de cara a desafíos de mayor exigencia. <h2>Una sede que recibe a gimnastas de la región</h2> <p>El <strong>Complejo Deportivo Ciudad de Merliot</strong> se ha convertido en escenario de diferentes competencias internacionales de gimnasia en El Salvador. En septiembre también se desarrolló allí otro Campeonato Centroamericano y del Caribe correspondiente a categorías <strong>UPAG, juvenil y adulta</strong>, pero se trata de un evento distinto al certamen USAG y Xcel en el que compite Nisi Blass Palacio. <p>La distinción es importante porque ambos campeonatos utilizan una sede y una denominación regional similares, pero corresponden a programas y fechas diferentes. El torneo USAG y Xcel en el que participa la nicaragüense comenzó el <strong>22 de septiembre</strong> y continuará hasta el <strong>27 de septiembre</strong>. <h2>Nisi deja dos resultados para Nicaragua</h2> <p>La actuación de Blass Palacio queda registrada con dos resultados en esta edición del campeonato: <strong>tercer lugar y medalla de bronce en salto</strong>, además del <strong>sexto puesto en el All Around</strong>.</p> <p>El resultado llega en una etapa temprana de su desarrollo deportivo y en una competencia que le permite representar a Nicaragua fuera del país y sumar experiencia frente a gimnastas de la región.</p> <p>El campeonato continuará desarrollándose en Ciudad Merliot hasta el <strong>domingo 27 de septiembre</strong>, cuando está previsto el cierre de las actividades programadas para esta edición.</p></p></p></p></p>",
+      "fechaActualizacion": "2026-09-24T23:22:12.949Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-24T23:22:10.071Z",
+      "publishedAt": "2026-09-24T23:22:12.949Z",
+      "dateModified": "2026-09-24T23:22:12.949Z",
+      "resumen": "La gimnasta nicaragüense Nisi Ester Blass Palacio , de 10 años, conquistó la medalla de bronce en salto y terminó en el sexto lugar del All Around duran...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/nisi-blass-gana-bronce-para-nicaragua-en-1790291804542.webp",
+      "slug": "nisi-blass-gana-bronce-para-nicaragua-en-viga-de-equilibrio",
+      "autor": "José Luis López Ramírez",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/deportes",
+          "anchor": "Noticias de deportes",
+          "type": "categoria"
+        }
+      ],
+      "id": "gE9P2rHVhRM0rLqAlb2U",
+      "confianza": {
+        "nivel": "ALTA",
+        "resumen": "28 afirmaciones | 2 atribuidas | 0 sin confirmar | 0 no disponibles | 0 riesgos | 0 contradicciones | fuentes: 0",
+        "requiereRevisionHumana": false,
+        "riesgos": [],
+        "noDisponible": 0,
+        "fuentes": [],
+        "at": "2026-09-24T23:22:14.204Z"
+      },
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-24T23:22:20.585Z",
+      "mutationLog": [
+        {
+          "at": "2026-09-24T23:22:14.304Z",
+          "actor": "guardar-directo",
+          "reason": "Trust layer post-guardado",
+          "fields": [
+            "confianza"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-0000009vocs1",
+          "hashAfter": "meni-0000009vocs1",
+          "reeval": {
+            "required": false
+          }
+        },
+        {
+          "at": "2026-09-24T23:22:16.605Z",
+          "actor": "publication-pipeline",
+          "reason": "Distribución completada",
+          "fields": [
+            "distribuida",
+            "fechaDistribucion"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-0000009vocs1",
+          "hashAfter": "meni-0000009vocs1",
+          "reeval": {
+            "required": false
+          }
+        },
+        {
+          "at": "2026-09-24T23:22:20.704Z",
+          "actor": "distribuir",
+          "reason": "Distribución manual completada",
+          "fields": [
+            "distribuida",
+            "fechaDistribucion"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-0000009vocs1",
+          "hashAfter": "meni-0000009vocs1",
+          "reeval": {
+            "required": false
+          }
+        }
+      ],
+      "vistas": 12
+    },
+    "lifecycle": {
+      "articleId": "gE9P2rHVhRM0rLqAlb2U",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-24T23:22:13.501Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-24T23:22:13.501Z",
+      "dateModified": "2026-09-24T23:22:13.501Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "gE9P2rHVhRM0rLqAlb2U",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 90,
+        "fecha": "2026-09-24T23:22:14.102Z",
+        "validationStatus": "PENDING_VALIDATION",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "EzMFBmEbwymm9YYvvcW5": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1789838280819_z8k2ex",
+        "timestamp": "2026-09-19T17:18:00.820Z",
+        "verdict": "PUBLICAR",
+        "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [
+          {
+            "severity": "WARNING",
+            "domain": "TITULO",
+            "problem": "Título podría ser más específico: \"Muere Pedro Dixon, “La Pajarita Chinandegana”, a los 28 años\"",
+            "impact": "El título no identifica todos los elementos periodísticos clave",
+            "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+            "action": "Considerar enriquecer el título con datos del contenido",
+            "autoFixable": false
+          }
+        ],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 91,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 91,
+      "nivelFecha": "2026-09-19T17:18:00.822Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-000000egkx1s",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-19T17:17:59.347Z",
+      "editorialTier": "INVESTIGACION",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "INVESTIGACION",
+        "resumen": "Esta nota fue aprobada como INVESTIGACION (Espectáculos) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 91%); el lector aprende algo nuevo (WOW index: 92.5%); mantiene baja similitud con la fuente (0% transcripción, máximo 30%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (94%). Puntos de mejora: 1 advertencia(s) menor(es) detectada(s).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 91%)",
+          "el lector aprende algo nuevo (WOW index: 92.5%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 30%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (94%)",
+          "extensión adecuada (779 palabras, mínimo 600)"
+        ],
+        "puntosMejora": [
+          "1 advertencia(s) menor(es) detectada(s)"
+        ],
+        "bloqueadores": []
+      },
+      "perfil": "espectaculos",
+      "profile_confidence": 0.6,
+      "categoria": "Espectáculos",
+      "palabras": 779,
+      "puntosClave": [
+        "Chinandega amaneció este sábado 19 de septiembre con la noticia de la muerte de Pedro Francisco Dixon Flores.",
+        "“La Pajarita Chinandegana” era el nombre con el que había construido una identidad pública y con el que.",
+        "“La Pajarita Chinandegana” queda vinculada a una historia que comenzó en su comunidad y terminó alcanzando una audiencia."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/keyling-rivera.jpg",
+      "publicCategory": "Espectáculos",
+      "profileInternal": "espectaculos",
+      "titulo": "Muere Pedro Dixon, “La Pajarita Chinandegana”, a los 28 años",
+      "fechaActualizacion": "2026-09-19T17:18:00.823Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-19T17:17:55.408Z",
+      "publishedAt": "2026-09-19T17:18:00.823Z",
+      "dateModified": "2026-09-19T17:18:00.823Z",
+      "resumen": "Chinandega amaneció este sábado 19 de septiembre con la noticia de la muerte de Pedro Francisco Dixon Flores, de 28 años , conocido públicamente como “L...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/noticia-1789838132166.webp",
+      "slug": "muere-pedro-dixon-la-pajarita-chinandegana-a-los-28-anos",
+      "autor": "Keyling Elieth Rivera Muñoz",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/espectaculos",
+          "anchor": "Noticias de espectaculos",
+          "type": "categoria"
+        }
+      ],
+      "id": "EzMFBmEbwymm9YYvvcW5",
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-19T17:18:07.207Z",
+      "contenido": "<p>Chinandega amaneció este sábado 19 de septiembre con la noticia de la muerte de <strong>Pedro Francisco Dixon Flores, de 28 años</strong>, conocido públicamente como “La Pajarita Chinandegana”, una figura que durante los últimos años logró construir una comunidad de seguidores alrededor de su contenido y de la personalidad que mostraba en redes sociales.</p> <p>Pedro fue encontrado sin vida dentro de la vivienda de su padre, en el <strong>barrio El Rosario, Chinandega</strong>. El hallazgo ocurrió durante las primeras horas de la mañana y movilizó a familiares y posteriormente a las autoridades.</p> <h2>Así fue encontrado en su vivienda</h2> <p>Según la información preliminar proporcionada por familiares, Pedro habría llegado a la vivienda alrededor de las <strong>8:00 de la noche del viernes</strong>. Posteriormente ingresó a su habitación para descansar.</p> <p>Alrededor de las <strong>6:00 de la mañana del sábado</strong>, su padre, Pedro Antonio Dixon, entró al cuarto y lo encontró sin vida. Ante la situación, realizó el aviso correspondiente al Centro de Emergencias para solicitar la presencia de las autoridades.</p> <p>Un equipo técnico de investigación llegó aproximadamente a las <strong>7:20 de la mañana</strong>, acompañado por personal médico forense. En el inmueble se efectuó una inspección y se recopilaron declaraciones de familiares, entre ellos el padre de Pedro y su hermana, <strong>Heyzel Esperanza Dixon</strong>.</p> <h2>La causa de muerte todavía debe establecerse oficialmente</h2> <p>Las circunstancias del fallecimiento permanecen bajo investigación. La valoración médico-legal es la que permitirá establecer oficialmente <strong>la causa y las circunstancias de la muerte</strong>.</p> <p>En las primeras horas circularon versiones sobre la forma en que habría ocurrido el fallecimiento. Sin embargo, mientras no exista un resultado médico-legal que lo confirme, esos datos deben mantenerse como información preliminar.</p> <p>La Policía realizó las diligencias correspondientes en la vivienda y la investigación deberá determinar qué ocurrió durante las horas previas al hallazgo.</p> <h2>Quién era Pedro Dixon para Chinandega</h2> <p>Para quienes lo conocieron en redes sociales, Pedro Dixon no era únicamente el ganador de un programa de televisión. <strong>“La Pajarita Chinandegana” era el nombre con el que había construido una identidad pública</strong> y con el que llegó a ser reconocido dentro y fuera de su departamento.</p> <p>Su contenido estaba ligado principalmente a su personalidad, sus ocurrencias y la manera particular en que se mostraba ante sus seguidores. Esa forma de expresarse lo convirtió en un rostro reconocible para muchas personas de Chinandega y, posteriormente, para usuarios de otras partes de Nicaragua.</p> <p>Su presencia también tuvo un significado particular dentro de la <strong>comunidad LGBT de Chinandega</strong>, donde “La Pajarita” era una figura pública reconocida por mostrarse abiertamente bajo la personalidad con la que había ganado notoriedad en redes sociales.</p> <p>Más allá de las etiquetas, su popularidad se construyó alrededor de una característica que sus seguidores identificaban fácilmente: <strong>Pedro hacía de su propia personalidad parte central de su contenido</strong>. Esa cercanía fue la que posteriormente le permitió trasladar su popularidad de las redes a un espacio de mayor exposición nacional.</p> <h2>Su paso por La Casa de Frazier</h2> <p>En mayo de este año, Pedro alcanzó uno de los momentos más importantes de su trayectoria al participar en <strong>La Casa de Frazier</strong>, reality que reunió a diferentes figuras conocidas en las plataformas digitales.</p> <p>Durante la competencia logró convertirse en uno de los participantes con mayor respaldo del público y terminó proclamándose ganador de la primera edición. El premio fue de <strong>10 mil dólares</strong>, además de otros reconocimientos obtenidos durante el programa. La cobertura de aquella etapa también registró que había ganado una motocicleta antes de llegar a la final. </p> <p>Su triunfo tuvo una repercusión especial en Chinandega. El regreso después de la final fue acompañado por muestras de respaldo de seguidores que habían seguido su participación y que identificaban en Pedro a uno de los personajes digitales más conocidos que había surgido de ese departamento.</p> <h2>La despedida será en el barrio El Rosario</h2> <p>Tras conocerse el fallecimiento, familiares y personas cercanas comenzaron a organizar las honras fúnebres. De acuerdo con la información disponible, <strong>la vela se realizará en la casa de su padre, en el barrio El Rosario, Chinandega</strong>.</p> <p>La dirección que circula entre familiares ubica la vivienda desde la esquina de La Garita, una cuadra al norte y aproximadamente 20 varas al sur.</p> <p>Mientras familiares y amigos preparan la despedida, las autoridades continúan con las diligencias para establecer oficialmente qué ocurrió.</p> <p>La muerte de Pedro Francisco Dixon Flores deja a Chinandega despidiendo a una figura que en pocos meses pasó de ser conocida principalmente en redes sociales a convertirse en un personaje reconocido a nivel nacional. <strong>“La Pajarita Chinandegana” queda vinculada a una historia que comenzó en su comunidad y terminó alcanzando una audiencia mucho más amplia</strong>.</p>",
+      "confianza": {
+        "nivel": "BAJA",
+        "resumen": "35 afirmaciones | 3 atribuidas | 2 sin confirmar | 0 no disponibles | 1 riesgos | 0 contradicciones | fuentes: 0",
+        "requiereRevisionHumana": true,
+        "factores": [
+          "SOURCE_MISSING",
+          "PROVISIONAL_CLAIM"
+        ],
+        "riesgos": [
+          "afirmación provisional sin fuente"
+        ],
+        "noDisponible": 0,
+        "provisionalesSinFuente": 1,
+        "fuentes": [],
+        "queFalta": [
+          "nombrar la fuente institucional o periodística",
+          "fuente para las afirmaciones provisionales"
+        ],
+        "at": "2026-09-23T19:13:11.279Z"
+      },
+      "vistas": 719
+    },
+    "lifecycle": {
+      "articleId": "EzMFBmEbwymm9YYvvcW5",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-19T17:18:02.176Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-19T17:18:02.176Z",
+      "dateModified": "2026-09-19T17:18:02.176Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "EzMFBmEbwymm9YYvvcW5",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 91,
+        "fecha": "2026-09-19T17:18:02.641Z",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "ioylw52HAMCLqp5NlLBb": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1789012600998_bej4i2",
+        "timestamp": "2026-09-10T03:56:40.998Z",
+        "verdict": "PUBLICAR_CON_CAMBIOS",
+        "reason": "El Supervisor pide ajustes menores antes de publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [
+          {
+            "severity": "WARNING",
+            "domain": "TITULO",
+            "problem": "Título podría ser más específico: \"Apple presenta el iPhone Duo, su primer modelo plegable\"",
+            "impact": "El título no identifica todos los elementos periodísticos clave",
+            "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+            "action": "Considerar enriquecer el título con datos del contenido",
+            "autoFixable": false
+          }
+        ],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 95,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE ORO",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 95,
+      "nivelFecha": "2026-09-10T03:56:41.000Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 2 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-000000czq0se",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-10T03:56:39.721Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Tecnología) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 97%); el lector aprende algo nuevo (WOW index: 95.5%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (94%).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 97%)",
+          "el lector aprende algo nuevo (WOW index: 95.5%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (94%)",
+          "extensión adecuada (810 palabras, mínimo 400)"
+        ],
+        "puntosMejora": [],
+        "bloqueadores": []
+      },
+      "perfil": "tecnologia",
+      "profile_confidence": 0.84,
+      "categoria": "Tecnología",
+      "palabras": 806,
+      "puntosClave": [
+        "Apple presentó oficialmente el iPhone Duo plegable , su primer teléfono con pantalla flexible y uno de los.",
+        "Además, el dispositivo integra una cámara frontal Center Stage que puede ampliar automáticamente el campo de visión para.",
+        "Apple también confirmó que el iPhone Duo tendrá un diseño exclusivamente eSIM a nivel mundial y que será."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/logo.webp",
+      "publicCategory": "Tecnología",
+      "profileInternal": "tecnologia",
+      "titulo": "Apple presenta el iPhone Duo, su primer modelo plegable",
+      "contenido": "<p>Apple presentó oficialmente el <strong>iPhone Duo plegable</strong>, su primer teléfono con pantalla flexible y uno de los lanzamientos más importantes de la compañía en 2026. El nuevo dispositivo apuesta por un formato tipo libro que combina una pantalla exterior compacta con un panel interior de mayor tamaño para facilitar el consumo de contenido, los videojuegos y la multitarea.</p>\n\n<p>De acuerdo con Apple, el <strong>iPhone Duo</strong> incorpora una pantalla interior de 7.6 pulgadas cuando está completamente abierto, mientras que al cerrarse utiliza una pantalla exterior de 5.4 pulgadas. La compañía señala que ambas mantienen la misma relación de aspecto para que la experiencia visual sea continua al pasar de una pantalla a otra.:contentReference[oaicite:1]{index=1}</p>\n\n<h2>Así es el primer iPhone plegable de Apple</h2>\n\n<p>El nuevo dispositivo representa un cambio importante en el diseño tradicional del iPhone. Abierto, Apple lo presenta como el iPhone más delgado de su historia y destaca una superficie con acabado nano-texturizado en la pantalla interior, diseñada para reducir los reflejos y mejorar la visibilidad.</p>\n\n<p>La pantalla exterior permite utilizar el teléfono cuando está cerrado y, según Apple, ofrece un área equivalente al 90 % de la superficie de pantalla del iPhone 18 Pro. Al abrirlo, el usuario obtiene un espacio considerablemente mayor para trabajar con aplicaciones, ver videos o jugar.</p>\n\n<p>El sistema de bisagra fue diseñado para permitir una apertura y cierre suaves y mantener la pantalla interior estable cuando el teléfono está completamente abierto. Además, el equipo utiliza titanio de grado 5 y cuenta con certificación IP68 de resistencia al agua, salpicaduras y polvo.</p>\n\n<h2>iPhone Duo incorpora el nuevo chip A20 Pro</h2>\n\n<p>En el apartado de rendimiento, el <strong>iPhone Duo</strong> utiliza el nuevo chip A20 Pro, acompañado por un sistema de administración térmica que incluye una cámara de vapor diseñada para mantener el rendimiento durante tareas exigentes.</p>\n\n<p>Apple asegura que el procesador ofrece mejoras importantes en rendimiento sostenido y eficiencia, algo especialmente relevante para un dispositivo que debe mover simultáneamente una pantalla interior de gran tamaño, aplicaciones de productividad, videojuegos y funciones de inteligencia artificial.</p>\n\n<p>El teléfono también incorpora una arquitectura de doble batería. La compañía afirma que puede alcanzar hasta 31 horas de reproducción de video utilizando la pantalla interior y hasta 44 horas cuando se utiliza la pantalla exterior.:contentReference[oaicite:2]{index=2}</p>\n\n<h2>Cámaras de 48 megapíxeles y nuevas funciones</h2>\n\n<p>El apartado fotográfico también recibió cambios importantes. El iPhone Duo cuenta con una cámara principal Fusion de 48 megapíxeles y una cámara Fusion Ultra Wide de 48 megapíxeles.</p>\n\n<p>La cámara principal incorpora un teleobjetivo de calidad óptica de 2x y estabilización óptica mediante desplazamiento del sensor. Además, el dispositivo integra una cámara frontal Center Stage que puede ampliar automáticamente el campo de visión para incluir a varias personas en una fotografía o videollamada.</p>\n\n<p>El diseño plegable permite utilizar las dos pantallas para crear nuevas experiencias fotográficas. Por ejemplo, el usuario puede utilizar las cámaras traseras de mayor resolución para tomarse una fotografía mientras observa la vista previa en la pantalla exterior.</p>\n\n<p>Apple también incorporó funciones como Duo Preview, Duo FaceTime y Smart Take, además de grabación de video en 4K a 120 cuadros por segundo con Dolby Vision en la cámara principal.:contentReference[oaicite:3]{index=3}</p>\n\n<h2>iOS 27 aprovecha la pantalla plegable</h2>\n\n<p>El software fue adaptado específicamente para el nuevo formato. El iPhone Duo funcionará con <strong>iOS 27.1</strong>, versión que aprovecha la pantalla interior para ofrecer nuevas herramientas de productividad.</p>\n\n<p>Una de las principales novedades es Split View, que permite utilizar dos aplicaciones simultáneamente, una junto a la otra. También es posible abrir dos ventanas de una misma aplicación, como Safari, facilitando tareas como comparar información o consultar diferentes páginas al mismo tiempo.</p>\n\n<p>Apple también integró nuevas funciones de Apple Intelligence y una nueva versión de Siri que se está implementando en fase beta. Estas herramientas pueden aprovechar el contexto personal del usuario y la información que aparece en pantalla para realizar determinadas acciones.</p>\n\n<h2>Precio y fecha de lanzamiento del iPhone Duo</h2>\n\n<p>El <strong>iPhone Duo</strong> tendrá un precio inicial de <strong>1,999 dólares en Estados Unidos</strong> para la versión de 256 GB. También estará disponible con capacidades de almacenamiento de 512 GB, 1 TB y 2 TB.</p>\n\n<p>El dispositivo llegará en los colores Star White y Night Sky. Las preventas comenzarán el <strong>16 de octubre de 2026</strong>, mientras que su disponibilidad comercial iniciará el <strong>23 de octubre</strong> en más de 70 países y regiones, entre ellos México, Colombia, Brasil, Estados Unidos y otros mercados.</p>\n\n<p>Apple también confirmó que el iPhone Duo tendrá un diseño exclusivamente eSIM a nivel mundial y que será compatible con Apple Pencil con USB-C más adelante este año.:contentReference[oaicite:4]{index=4}</p>\n\n<p>Con el iPhone Duo, Apple entra finalmente al mercado de los teléfonos plegables con una propuesta que combina su ecosistema de software, nuevas funciones de inteligencia artificial y un formato de pantalla pensado para ofrecer más espacio sin renunciar a un dispositivo que pueda utilizarse cerrado.</p>",
+      "fechaActualizacion": "2026-09-10T03:56:41.000Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-10T03:56:37.215Z",
+      "publishedAt": "2026-09-10T03:56:41.000Z",
+      "dateModified": "2026-09-10T03:56:41.000Z",
+      "resumen": "Apple presentó oficialmente el iPhone Duo plegable , su primer teléfono con pantalla flexible y uno de los lanzamientos más importantes de la compañía e...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/apple-presenta-el-iphone-duo-su-primer-m-1789012496980.webp",
+      "slug": "apple-presenta-el-iphone-duo-su-primer-modelo-plegable",
+      "autor": "José Luis López Ramírez",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/tecnologia",
+          "anchor": "Noticias de tecnologia",
+          "type": "categoria"
+        }
+      ],
+      "id": "ioylw52HAMCLqp5NlLBb",
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-10T03:56:45.513Z",
+      "vistas": 9,
+      "confianza": {
+        "nivel": "ALTA",
+        "resumen": "40 afirmaciones | 4 atribuidas | 0 sin confirmar | 0 no disponibles | 0 riesgos | 0 contradicciones | fuentes: 0",
+        "requiereRevisionHumana": false,
+        "factores": [
+          "SOURCE_MISSING"
+        ],
+        "riesgos": [],
+        "noDisponible": 0,
+        "provisionalesSinFuente": 0,
+        "fuentes": [],
+        "queFalta": [
+          "nombrar la fuente institucional o periodística"
+        ],
+        "at": "2026-09-23T19:13:38.117Z"
+      }
+    },
+    "lifecycle": {
+      "articleId": "ioylw52HAMCLqp5NlLBb",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-10T03:56:41.666Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-10T03:56:41.666Z",
+      "dateModified": "2026-09-10T03:56:41.666Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "ioylw52HAMCLqp5NlLBb",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 95,
+        "fecha": "2026-09-10T03:56:42.505Z",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  },
+  "d1JwxltReT1Wj88Jl4ZD": {
+    "article": {
+      "supervisorDecision": {
+        "decisionId": "sup_1790284833524_w129gd",
+        "timestamp": "2026-09-24T21:20:33.524Z",
+        "verdict": "PUBLICAR",
+        "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+        "confidence": 0.5,
+        "scoreOverride": false,
+        "issues": [
+          {
+            "severity": "WARNING",
+            "domain": "TITULO",
+            "problem": "Título podría ser más específico: \"“Meta lanza gafas sin cámara y apuesta por audio e IA”\"",
+            "impact": "El título no identifica todos los elementos periodísticos clave",
+            "cause": "Faltan: lugar donde ocurrió, autoridad que confirmó el hecho, cuándo ocurrió",
+            "action": "Considerar enriquecer el título con datos del contenido",
+            "autoFixable": false
+          }
+        ],
+        "actions": [],
+        "resultingState": "READY",
+        "modelVersion": "editorial-supervisor-v1.0"
+      },
+      "supervisorApproved": true,
+      "editorialState": "READY",
+      "scoreMeni": 94,
+      "aprobadoMeni": true,
+      "calificacionMeni": "PUBLICABLE",
+      "nivel": "FORENSE",
+      "recomendacionesMeni": [],
+      "nivelScore": 94,
+      "nivelFecha": "2026-09-24T21:20:33.535Z",
+      "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 3 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+      "contentHash": "meni-000000pee7sv",
+      "meniVersion": "2.1.1-prod",
+      "evaluationTimestamp": "2026-09-24T21:20:31.941Z",
+      "editorialTier": "REPORTAJE",
+      "editorialReason": {
+        "aprobado": true,
+        "tier": "REPORTAJE",
+        "resumen": "Esta nota fue aprobada como REPORTAJE (Tecnología) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 97%); el lector aprende algo nuevo (WOW index: 94.3%); mantiene baja similitud con la fuente (0% transcripción, máximo 40%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (93%).",
+        "puntosPositivos": [
+          "aporta valor diferencial que otros medios no incluyen (exclusividad: 97%)",
+          "el lector aprende algo nuevo (WOW index: 94.3%)",
+          "mantiene baja similitud con la fuente (0% transcripción, máximo 40%)",
+          "incorpora antecedentes y contexto relacionado",
+          "sello editorial Nicaragua Informate sólido (93%)",
+          "extensión adecuada (866 palabras, mínimo 400)"
+        ],
+        "puntosMejora": [],
+        "bloqueadores": []
+      },
+      "perfil": "tecnologia",
+      "profile_confidence": 0.91,
+      "categoria": "Tecnología",
+      "palabras": 866,
+      "puntosClave": [
+        "Meta presentó sus nuevas Ray-Ban Meta Audio, unas gafas inteligentes que prescinden de la cámara y concentran su.",
+        "En este punto existe una diferencia importante entre los nuevos modelos: las Ray-Ban Meta Audio no tienen cámara.",
+        "Por ahora, la compañía está llevando Muse progresivamente a sus gafas con IA, mientras las nuevas Ray-Ban Meta."
+      ],
+      "fuente": "Redaccion Nicaragua Informate",
+      "fuentesComplementarias": [],
+      "autorFoto": "/logo.webp",
+      "publicCategory": "Tecnología",
+      "profileInternal": "tecnologia",
+      "titulo": "“Meta lanza gafas sin cámara y apuesta por audio e IA”",
+      "contenido": "<p><strong>Meta presentó sus nuevas Ray-Ban Meta Audio, unas gafas inteligentes que prescinden de la cámara y concentran su propuesta en el audio, las llamadas y la inteligencia artificial, durante el evento Meta Connect 2026.</strong></p> <p>El nuevo dispositivo forma parte de una ampliación de la línea de gafas inteligentes de la compañía y llegará acompañado por <strong>Muse</strong>, el agente personal de inteligencia artificial de Meta, que la empresa prepara para incorporarlo a sus gafas con IA durante los próximos meses.</p> <h2>¿Qué tienen de diferente las nuevas gafas?</h2> <p>La principal diferencia de las <strong>Ray-Ban Meta Audio</strong> es que no incorporan cámara. En lugar de centrarse en capturar fotografías y videos, el dispositivo está diseñado para ofrecer audio de oído abierto, llamadas y acceso manos libres a funciones de inteligencia artificial.</p> <p>Meta asegura que las gafas pesan apenas <strong>43 gramos</strong> y pueden ofrecer hasta <strong>12 horas de uso con una sola carga</strong>. El estuche incluido puede proporcionar hasta 48 horas adicionales de autonomía.</p> <p>El modelo estará disponible inicialmente en dos diseños de Ray-Ban: <strong>Clubmaster y Burbank</strong>, con diferentes combinaciones de monturas y lentes, además de compatibilidad con diversas graduaciones ópticas. </p> <h2>¿Cuánto costarán y cuándo estarán disponibles?</h2> <p>Las Ray-Ban Meta Audio pueden reservarse desde ahora en Estados Unidos a partir de <strong>US$349</strong> y Meta informó que los primeros envíos comenzarán el <strong>13 de octubre de 2026</strong>. </p> <p>El precio las coloca por debajo de la nueva generación de Ray-Ban Meta con cámara, que parte de <strong>US$449</strong>.</p> <h2>Muse quiere convertirse en un asistente que haga tareas por el usuario</h2> <p>El otro gran anuncio de Meta es <strong>Muse</strong>, un agente personal de inteligencia artificial presentado por la compañía a comienzos de septiembre y que ahora comienza a extenderse hacia sus dispositivos físicos.</p> <p>A diferencia de un asistente que únicamente responde preguntas, Meta plantea Muse como un sistema capaz de <strong>realizar tareas en nombre del usuario</strong>. La compañía afirma que puede ayudar con acciones como enviar correos electrónicos, reservar viajes, completar formularios y avanzar en determinadas tareas mientras el usuario deja de utilizar la aplicación.</p> <p>Meta también ha explicado que Muse puede trabajar con aplicaciones y servicios conectados por el usuario y pedir autorización antes de realizar determinadas acciones sensibles, como enviar un correo o efectuar una compra. </p> <h2>¿Qué podrá hacer Muse desde las gafas?</h2> <p>La integración permitirá acceder al agente mediante comandos de voz y utilizarlo sin necesidad de sacar el teléfono. Meta ha señalado que Muse podrá interactuar con aquello que el usuario esté viendo en las gafas compatibles y ayudar con tareas relacionadas con la información que tiene delante.</p> <p>La compañía ha puesto como ejemplos consultar información sobre un producto, interpretar un cartel o ayudar a organizar una lista de materiales. También plantea que el agente pueda trabajar en segundo plano y continuar determinadas tareas hasta que necesite una autorización del usuario. </p> <p>En este punto existe una diferencia importante entre los nuevos modelos: <strong>las Ray-Ban Meta Audio no tienen cámara</strong>, por lo que no pueden utilizar las funciones visuales de las gafas equipadas con cámara. Su propuesta está centrada en el audio y el acceso al asistente mediante voz.</p> <h2>Meta mantiene las gafas con cámara</h2> <p>La compañía no está abandonando las gafas con cámara. En el mismo evento presentó las <strong>Ray-Ban Meta Gen 3</strong>, que incorporan una cámara de 12 megapíxeles y permiten grabar video en 3K Ultra HD.</p> <p>Este modelo también incorpora una matriz de seis micrófonos que, según Meta, reduce más del 90 % del ruido de fondo en llamadas y comandos de voz. Su batería alcanza hasta nueve horas de uso y parte de un precio de <strong>US$449</strong>. </p> <p>Las Gen 3 también tendrán una función para capturar y reproducir video con <strong>Dolby Atmos y sonido espacial de 360 grados</strong>, prevista para finales de este año.</p> <h2>Una apuesta por llevar la IA más allá del teléfono</h2> <p>El anuncio refleja una estrategia más amplia de Meta: convertir las gafas en una vía de acceso permanente a sus servicios de inteligencia artificial sin depender de una pantalla de teléfono.</p> <p>La compañía informó que, para finales de 2026, espera contar con <strong>más de 100 modelos diferentes de gafas con inteligencia artificial</strong> entre las marcas Ray-Ban, Oakley y Meta Glasses. </p> <p>Con las Ray-Ban Meta Audio, Meta añade una alternativa sin cámara; con las Gen 3 mantiene el camino de las gafas capaces de capturar imágenes y video; y con Muse busca que ambas categorías evolucionen hacia dispositivos capaces no solo de responder instrucciones, sino también de ejecutar tareas.</p> <h2>¿Qué significa la llegada de Muse a las gafas?</h2> <p>La apuesta de Meta supone pasar de unas gafas que funcionan principalmente como extensión del teléfono a un dispositivo que puede convertirse en una interfaz para interactuar con un agente de inteligencia artificial.</p> <p>El reto estará en determinar hasta dónde los usuarios estarán dispuestos a delegar tareas personales a un sistema que puede acceder a aplicaciones y servicios en su nombre. Meta asegura que Muse incorpora controles de permisos, almacenamiento protegido y solicitudes de autorización para determinadas acciones. </p> <p>Por ahora, la compañía está llevando Muse progresivamente a sus gafas con IA, mientras las nuevas Ray-Ban Meta Audio comenzarán a llegar a los compradores en octubre.</p>",
+      "fechaActualizacion": "2026-09-24T21:20:33.537Z",
+      "publicado": true,
+      "estado": "publicado",
+      "fecha": "2026-09-24T21:20:30.958Z",
+      "publishedAt": "2026-09-24T21:20:33.537Z",
+      "dateModified": "2026-09-24T21:20:33.537Z",
+      "resumen": "Meta presentó sus nuevas Ray-Ban Meta Audio, unas gafas inteligentes que prescinden de la cámara y concentran su propuesta en el audio, las llamadas y l...",
+      "departamento": "Managua",
+      "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/meta-lanza-gafas-sin-camara-y-apuesta-po-1790284567892.webp",
+      "slug": "meta-lanza-gafas-sin-camara-y-apuesta-por-audio-e-ia",
+      "autor": "José Luis López Ramírez",
+      "palabrasClave": [],
+      "tags": [],
+      "keywords": "",
+      "related_links": [
+        {
+          "url": "/categoria/tecnologia",
+          "anchor": "Noticias de tecnologia",
+          "type": "categoria"
+        }
+      ],
+      "id": "d1JwxltReT1Wj88Jl4ZD",
+      "confianza": {
+        "nivel": "ALTA",
+        "resumen": "39 afirmaciones | 2 atribuidas | 0 sin confirmar | 0 no disponibles | 0 riesgos | 0 contradicciones | fuentes: 0",
+        "requiereRevisionHumana": false,
+        "riesgos": [],
+        "noDisponible": 0,
+        "fuentes": [],
+        "at": "2026-09-24T21:20:35.475Z"
+      },
+      "distribuida": true,
+      "fechaDistribucion": "2026-09-24T21:20:42.386Z",
+      "mutationLog": [
+        {
+          "at": "2026-09-24T21:20:35.541Z",
+          "actor": "guardar-directo",
+          "reason": "Trust layer post-guardado",
+          "fields": [
+            "confianza"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-000000pee7sv",
+          "hashAfter": "meni-000000pee7sv",
+          "reeval": {
+            "required": false
+          }
+        },
+        {
+          "at": "2026-09-24T21:20:37.823Z",
+          "actor": "publication-pipeline",
+          "reason": "Distribución completada",
+          "fields": [
+            "distribuida",
+            "fechaDistribucion"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-000000pee7sv",
+          "hashAfter": "meni-000000pee7sv",
+          "reeval": {
+            "required": false
+          }
+        },
+        {
+          "at": "2026-09-24T21:20:42.469Z",
+          "actor": "distribuir",
+          "reason": "Distribución manual completada",
+          "fields": [
+            "distribuida",
+            "fechaDistribucion"
+          ],
+          "classification": "TECHNICAL",
+          "result": "APPLIED",
+          "hashBefore": "meni-000000pee7sv",
+          "hashAfter": "meni-000000pee7sv",
+          "reeval": {
+            "required": false
+          }
+        }
+      ],
+      "vistas": 7
+    },
+    "lifecycle": {
+      "articleId": "d1JwxltReT1Wj88Jl4ZD",
+      "state": "MONITOREO",
+      "timeline": [
+        {
+          "timestamp": "2026-09-24T21:20:34.309Z",
+          "fact": "Sin cambios detectados",
+          "source": "news-watch-v1.0",
+          "sourceLevel": "PRIMARY"
+        }
+      ],
+      "datePublished": "2026-09-24T21:20:34.309Z",
+      "dateModified": "2026-09-24T21:20:34.309Z",
+      "updateCount": 0,
+      "watchConfig": {
+        "frequency": "BREAKING",
+        "intervalMinutes": 10,
+        "maxChecks": 100,
+        "enabled": true
+      }
+    },
+    "predictions": [
+      {
+        "articleId": "d1JwxltReT1Wj88Jl4ZD",
+        "predFacebook": "Alta",
+        "predDiscover": "Alta",
+        "predPortada": "Portada",
+        "predPublicar": "SI",
+        "confianza": 94,
+        "fecha": "2026-09-24T21:20:35.330Z",
+        "validationStatus": "PENDING_VALIDATION",
+        "realFacebook": null,
+        "realDiscover": null,
+        "realPortada": null
+      }
+    ],
+    "corrections": []
+  }
+}

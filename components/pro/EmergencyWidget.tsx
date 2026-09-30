@@ -1,13 +1,13 @@
 'use client';
 
-import { Phone, Ambulance, Flame, Shield, HeartPulse } from 'lucide-react';
+import { Flame, Shield, HeartPulse } from 'lucide-react';
 
+// Números oficiales de Nicaragua (verificados: Policía Nacional, Embajada de
+// Francia en Nicaragua). Nicaragua NO usa el 911 como número general.
 const EMERGENCIAS = [
-  { numero: '911', label: 'Emergencias', icon: Phone, color: '#DC2626' },
   { numero: '118', label: 'Policía Nacional', icon: Shield, color: '#0F172A' },
   { numero: '115', label: 'Bomberos', icon: Flame, color: '#B45309' },
-  { numero: '128', label: 'Cruz Roja', icon: HeartPulse, color: '#DC2626' },
-  { numero: '505-8418-1000', label: 'Ambulancia MINSA', icon: Ambulance, color: '#059669' },
+  { numero: '128', label: 'Cruz Blanca Nicaragüense', icon: HeartPulse, color: '#DC2626' },
 ];
 
 export default function EmergencyWidget() {

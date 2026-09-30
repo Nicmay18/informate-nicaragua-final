@@ -1,0 +1,176 @@
+{
+  "supervisorDecision": {
+    "decisionId": "sup_1790615778659_664m70",
+    "timestamp": "2026-09-28T17:16:18.659Z",
+    "verdict": "PUBLICAR",
+    "reason": "La noticia cumple los criterios editoriales mínimos para publicar.",
+    "confidence": 0.5,
+    "scoreOverride": false,
+    "issues": [
+      {
+        "severity": "WARNING",
+        "domain": "TITULO",
+        "problem": "Título podría ser más específico: \"Tres días, siete muertos: el saldo de los accidentes de tránsito\"",
+        "impact": "El título no identifica todos los elementos periodísticos clave",
+        "cause": "Faltan: lugar donde ocurrió, identidad o circunstancias, autoridad que confirmó el hecho, cuándo ocurrió",
+        "action": "Considerar enriquecer el título con datos del contenido",
+        "autoFixable": false
+      }
+    ],
+    "actions": [],
+    "resultingState": "READY",
+    "modelVersion": "editorial-supervisor-v1.0"
+  },
+  "supervisorApproved": true,
+  "editorialState": "READY",
+  "scoreMeni": 93,
+  "aprobadoMeni": true,
+  "calificacionMeni": "PUBLICABLE",
+  "nivel": "FORENSE",
+  "recomendacionesMeni": [],
+  "nivelScore": 93,
+  "nivelFecha": "2026-09-28T17:16:18.661Z",
+  "diagnosticoMeni": "Esta nota tiene potencial (6 puntos a favor, 1 en contra). Con 1 mejora(s) puede ser una nota sólida de Nicaragua Informate.",
+  "contentHash": "meni-000000u6m59b",
+  "meniVersion": "2.1.1-prod",
+  "evaluationTimestamp": "2026-09-28T17:16:16.968Z",
+  "editorialTier": "INVESTIGACION",
+  "editorialReason": {
+    "aprobado": true,
+    "tier": "INVESTIGACION",
+    "resumen": "Esta nota fue aprobada como INVESTIGACION (Sucesos) porque aporta valor diferencial que otros medios no incluyen (exclusividad: 92%); el lector aprende algo nuevo (WOW index: 97.5%); mantiene baja similitud con la fuente (0% transcripción, máximo 30%); incorpora antecedentes y contexto relacionado; sello editorial Nicaragua Informate sólido (97%).",
+    "puntosPositivos": [
+      "aporta valor diferencial que otros medios no incluyen (exclusividad: 92%)",
+      "el lector aprende algo nuevo (WOW index: 97.5%)",
+      "mantiene baja similitud con la fuente (0% transcripción, máximo 30%)",
+      "incorpora antecedentes y contexto relacionado",
+      "sello editorial Nicaragua Informate sólido (97%)",
+      "extensión adecuada (898 palabras, mínimo 600)"
+    ],
+    "puntosMejora": [],
+    "bloqueadores": []
+  },
+  "perfil": "sucesos",
+  "profile_confidence": 0.84,
+  "classificationSource": "editor",
+  "suggestedCategory": "Sucesos",
+  "classificationConflict": false,
+  "classificationStatus": "OK",
+  "classificationReason": "La categoría seleccionada por el editor es Sucesos y las señales del texto son coherentes.",
+  "categoria": "Sucesos",
+  "palabras": 898,
+  "puntosClave": [
+    "Siete personas murieron en seis accidentes de tránsito registrados entre el sábado 26 y el lunes 28 de.",
+    "Peatón muere tras ser atropellado por un camión en Estelí En Estelí, Iván José Cruz Estrada, de 49.",
+    "En Rivas, el caso está relacionado con la presencia de un animal sobre la carretera, mientras que en."
+  ],
+  "fuente": "Redaccion Nicaragua Informate",
+  "fuentesComplementarias": [],
+  "autorFoto": "/keyling-rivera.jpg",
+  "publicCategory": "Sucesos",
+  "profileInternal": "sucesos",
+  "contenido": "<p><strong>Siete personas murieron en seis accidentes de tránsito registrados entre el sábado 26 y el lunes 28 de septiembre</strong> en Managua, Matagalpa, Rivas y Estelí, de acuerdo con reportes de medios locales. Los hechos ocurrieron en carreteras, calles y sectores urbanos, bajo circunstancias diferentes.</p> <p>Entre las víctimas se encuentran <strong>cuatro conductores de motos, una pasajera y dos peatones</strong>. También hubo personas lesionadas en algunos de los accidentes, mientras las autoridades mantienen abiertas las investigaciones para establecer las circunstancias de cada caso.</p> <h2>Dos jóvenes mueren tras choque frontal en La Dalia</h2> <p>Uno de los accidentes con mayor saldo ocurrió el domingo en la <strong>comarca La Estrella, kilómetro 177 de la carretera, en el municipio de La Dalia, Matagalpa</strong>.</p> <p>En ese punto colisionaron de frente dos motos y murieron <strong>Sergio Adonay Zeledón Palacios, de 25 años, y Alan Eliud Pineda Valdivia, de 28</strong>.</p> <p>Una versión preliminar señala que Zeledón habría invadido el carril contrario, provocando la colisión. Las circunstancias exactas del accidente continuaban bajo investigación.</p> <p>En el vehículo conducido por Pineda también viajaba <strong>Yader Johan Amaya, de 18 años</strong>, quien resultó lesionado y fue trasladado para recibir atención médica.</p> <p>Agentes de Tránsito realizaron las diligencias correspondientes para establecer cómo ocurrió el choque.</p> <h2>Una vaca sobre la vía provoca accidente mortal en Rivas</h2> <p>En Rivas, <strong>Alexandra Saraí Rodríguez Salgado, de 23 años</strong>, murió la noche del domingo en el hospital Gaspar García Laviana, donde permanecía internada por las graves lesiones sufridas en un accidente ocurrido cerca de la rotonda de Sapoá, municipio de Cárdenas.</p> <p>De acuerdo con los reportes disponibles, Alexandra viajaba como pasajera cuando el vehículo en el que se movilizaba impactó contra una <strong>vaca que se encontraba sobre la vía</strong>.</p> <p>La joven sufrió lesiones de gravedad, principalmente en la cabeza, y fue trasladada al hospital de Rivas, donde posteriormente falleció.</p> <p>El conductor resultó con golpes leves. Alexandra era madre de <strong>dos menores de edad</strong>.</p> <h2>Adulto mayor muere tras impactar contra un árbol en Managua</h2> <p>En el sector de <strong>El Dorado, Managua</strong>, murió <strong>Manuel Antonio González Sánchez, de 72 años</strong>, después de perder el control del vehículo de dos ruedas que conducía e impactar contra un árbol.</p> <p>El accidente ocurrió el domingo cuando González Sánchez regresaba a su vivienda después de realizar unas compras.</p> <p>Reportes locales señalaron una posible descompensación de salud antes de la pérdida de control. La causa exacta del fallecimiento debía ser determinada mediante los procedimientos forenses correspondientes.</p> <p>Por esa razón, la posible condición médica debe considerarse una versión preliminar hasta que las autoridades establezcan si la muerte estuvo relacionada con un problema de salud previo o con las lesiones sufridas durante el accidente.</p> <h2>Joven de 19 años muere tras salir de la vía en Rancho Grande</h2> <p>En <strong>Rancho Grande, Matagalpa</strong>, murió <strong>Ángel Geovanny Larios Delgadillo, de 19 años</strong>, después de sufrir un accidente en el kilómetro 210 de la comunidad Las Carpas N.° 1.</p> <p>La información preliminar indica que Larios conducía una Serpento cuando realizó una maniobra de giro, perdió el control y salió de la vía hasta impactar contra un poste de madera.</p> <p>El joven sufrió lesiones de gravedad y fue trasladado hacia el hospital de Rancho Grande, pero murió durante el traslado.</p> <h2>Peatón muere tras ser atropellado por un camión en Estelí</h2> <p>En Estelí, <strong>Iván José Cruz Estrada, de 49 años</strong>, murió en el hospital San Juan de Dios después de sufrir graves lesiones al ser atropellado por un camión.</p> <p>El accidente ocurrió en el <strong>kilómetro 177, en la comunidad El Cacique, sobre la carretera Estelí-La Concordia</strong>.</p> <p>Según la información preliminar disponible, Cruz Estrada caminaba por el sector cuando fue impactado por el pesado vehículo.</p> <p>El hombre fue trasladado al centro asistencial, donde falleció posteriormente debido a la gravedad de las lesiones.</p> <h2>Matagalpino muere tras ser atropellado</h2> <p>También en Matagalpa fue identificado <strong>Derek Ernesto Alfaro Talavera, de 25 años</strong>, quien murió después de ser atropellado por una persona que se movilizaba en una moto.</p> <p>El accidente ocurrió la noche del sábado en el sector de los semáforos frente al <strong>colegio Santa Teresita</strong>. Alfaro Talavera caminaba por la zona cuando fue impactado.</p> <p>Su cuerpo fue identificado posteriormente por su madre, quien lo había buscado antes de conocer que había sufrido el accidente.</p> <p>Las autoridades realizan las investigaciones para determinar las circunstancias en que ocurrió el atropello.</p> <h2>Qué falta por esclarecer en estos casos</h2> <p>Los seis accidentes ocurrieron de manera independiente y presentan circunstancias diferentes. Por ello, no corresponde atribuir las siete muertes a una sola causa sin que exista una investigación que establezca un patrón común.</p> <p>En La Dalia, por ejemplo, las autoridades deben determinar cómo se produjo la invasión del carril y las condiciones que rodearon el choque frontal. En Rivas, el caso está relacionado con la presencia de un animal sobre la carretera, mientras que en Managua todavía debe precisarse la causa del fallecimiento de González Sánchez.</p> <p>También existen casos en los que las investigaciones deben establecer cómo ocurrió el atropello o qué maniobra precedió a la salida de la vía. Esas diligencias son las que permitirán pasar de las versiones preliminares a una explicación sustentada de cada accidente.</p> <p>Para las familias de las víctimas, mientras tanto, la investigación representa solo una parte de las consecuencias. Cada fallecimiento deja procesos familiares y personales que comienzan precisamente cuando termina la emergencia y las autoridades empiezan a reconstruir lo ocurrido.</p>",
+  "resumen": "Siete personas murieron en seis accidentes de tránsito registrados entre el sábado 26 y el lunes 28 de septiembre en Managua, Matagalpa, Rivas y Estelí,...",
+  "factuality": {
+    "signals": [],
+    "evaluatedAt": "2026-09-28T17:16:18.661Z"
+  },
+  "titulo": "Tres días, siete muertos: el saldo de los accidentes de tránsito",
+  "fechaActualizacion": {
+    "_seconds": 1790615778,
+    "_nanoseconds": 663000000
+  },
+  "publicado": true,
+  "estado": "publicado",
+  "fecha": {
+    "_seconds": 1790615775,
+    "_nanoseconds": 735000000
+  },
+  "publishedAt": {
+    "_seconds": 1790615778,
+    "_nanoseconds": 663000000
+  },
+  "dateModified": {
+    "_seconds": 1790615778,
+    "_nanoseconds": 663000000
+  },
+  "departamento": "Managua",
+  "imagen": "https://raw.githubusercontent.com/Nicmay18/informate-images/main/images/tres-dias-siete-muertos-el-saldo-de-los--1790615233019.webp",
+  "slug": "tres-dias-siete-muertos-el-saldo-de-los-accidentes-de-transito",
+  "autor": "Keyling Elieth Rivera Muñoz",
+  "palabrasClave": [],
+  "tags": [],
+  "keywords": "",
+  "related_links": [
+    {
+      "url": "/categoria/sucesos",
+      "anchor": "Noticias de sucesos",
+      "type": "categoria"
+    }
+  ],
+  "id": "jFNTYnB2FhIBsw3GgU71",
+  "confianza": {
+    "nivel": "BAJA",
+    "resumen": "48 afirmaciones | 8 atribuidas | 2 sin confirmar | 0 no disponibles | 2 riesgos | 0 contradicciones | fuentes: 0",
+    "requiereRevisionHumana": true,
+    "riesgos": [
+      "afirmación provisional sin fuente",
+      "afirmación provisional sin fuente"
+    ],
+    "noDisponible": 0,
+    "fuentes": [],
+    "at": "2026-09-28T17:16:22.150Z"
+  },
+  "distribuida": true,
+  "fechaDistribucion": "2026-09-28T17:16:30.146Z",
+  "mutationLog": [
+    {
+      "at": "2026-09-28T17:16:22.224Z",
+      "actor": "guardar-directo",
+      "reason": "Trust layer post-guardado",
+      "fields": [
+        "confianza"
+      ],
+      "classification": "TECHNICAL",
+      "result": "APPLIED",
+      "hashBefore": "meni-000000u6m59b",
+      "hashAfter": "meni-000000u6m59b",
+      "reeval": {
+        "required": false
+      }
+    },
+    {
+      "at": "2026-09-28T17:16:25.753Z",
+      "actor": "publication-pipeline",
+      "reason": "Distribución completada",
+      "fields": [
+        "distribuida",
+        "fechaDistribucion"
+      ],
+      "classification": "TECHNICAL",
+      "result": "APPLIED",
+      "hashBefore": "meni-000000u6m59b",
+      "hashAfter": "meni-000000u6m59b",
+      "reeval": {
+        "required": false
+      }
+    },
+    {
+      "at": "2026-09-28T17:16:30.392Z",
+      "actor": "distribuir",
+      "reason": "Distribución manual completada",
+      "fields": [
+        "distribuida",
+        "fechaDistribucion"
+      ],
+      "classification": "TECHNICAL",
+      "result": "APPLIED",
+      "hashBefore": "meni-000000u6m59b",
+      "hashAfter": "meni-000000u6m59b",
+      "reeval": {
+        "required": false
+      }
+    }
+  ],
+  "vistas": 10
+}
