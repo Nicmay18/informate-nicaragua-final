@@ -28,9 +28,46 @@ export const OFFICIAL_SOURCES: readonly string[] = [
   'ENATREL', 'ENACAL', 'Telecom', 'Tigo', 'Claro', 'UNAN', 'UCA', 'MAG',
   'MARENA', 'INTUR', 'MIFIC', 'MIGE', 'MEFCCA', 'MIFAMILIA', 'IPSFA',
   'INATEC', 'Procuraduría', 'INVUR',
+  // Nombres legales completos de las instituciones anteriores — en prensa
+  // nacional se citan con frecuencia por nombre, no por sigla ("El Instituto
+  // Nicaragüense de Estudios Territoriales" = INETER).
+  'Instituto Nicaragüense de Estudios Territoriales',
+  'Instituto Nicaragüense de Seguridad Social',
+  'Instituto Nicaragüense de Tecnología Agropecuaria',
+  'Instituto Nicaragüense de Turismo',
+  'Instituto Nicaragüense de Fomento Municipal',
+  'Instituto Nacional Tecnológico',
+  'Instituto de Medicina Legal',
+  'Instituto de la Vivienda Urbana y Rural',
+  'Instituto de Previsión Social de las Fuerzas Armadas',
+  'Sistema Nacional para la Prevención, Mitigación y Atención de Desastres',
+  'Comités Municipales para la Prevención, Mitigación y Atención de Desastres',
+  'Comité Municipal para la Prevención',
+  'Ministerio del Ambiente y los Recursos Naturales',
+  'Ministerio Agropecuario y Forestal',
+  'Ministerio de Transporte e Infraestructura',
+  'Ministerio de Fomento, Industria y Comercio',
+  'Ministerio de Economía Familiar',
+  'Ministerio de la Familia',
+  'Empresa Nicaragüense de Acueductos y Alcantarillados',
+  'Empresa Nacional de Transmisión Eléctrica',
+  'Procuraduría General de la República',
+  'Consejo Nacional de Universidades',
+  'Universidad Nacional Autónoma de Nicaragua',
+  'Universidad Centroamericana',
+  'Banco Central de Nicaragua',
+  'Presidencia de la República',
   // Instituciones y organismos internacionales
   'ONU', 'OMS', 'OPS', 'OEA', 'OIM', 'UNICEF', 'UNESCO', 'ACNUR', 'FAO',
   'FMI', 'BID',
+  // Nombres completos de organismos internacionales
+  'Organización Mundial de la Salud',
+  'Organización Panamericana de la Salud',
+  'Organización de los Estados Americanos',
+  'Organización de Estados Americanos',
+  'Naciones Unidas',
+  'Fondo Monetario Internacional',
+  'Banco Interamericano de Desarrollo',
   // Fuentes oficiales extranjeras frecuentes en el corpus
   'Organismo de Investigación Judicial', 'OIJ',
   'Ministerio Público de Costa Rica', 'Fiscalía General de la República de Costa Rica',
@@ -50,6 +87,9 @@ export const OFFICIAL_SOURCES: readonly string[] = [
  */
 const OFFICIAL_SOURCE_PATTERNS: readonly string[] = [
   'Ministerio de [A-ZÁÉÍÓÚa-záéíóúñ]+',
+  // Cualquier "Instituto Nicaragüense de X" es una institución identificable
+  // (INETER, INIFOM, INTUR, INTA… siguen esta forma legal).
+  'Instituto Nicaragüense de [A-ZÁÉÍÓÚa-záéíóúñ]+',
 ];
 
 /**

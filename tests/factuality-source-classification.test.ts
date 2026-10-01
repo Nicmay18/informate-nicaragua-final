@@ -55,6 +55,13 @@ describe('fuentes institucionales reconocidas (taxonomía unificada)', () => {
     'Según ENATREL',
     'Según la Presidencia',
     'Según la Asamblea Nacional',
+    // Nombres legales completos — la nota real de Siuna citaba a INETER
+    // por su nombre, no por la sigla, y se marcaba FIELD_REPORT.
+    'Según el Instituto Nicaragüense de Estudios Territoriales',
+    'Según el Instituto Nicaragüense de Seguridad Social',
+    'Según el Sistema Nacional para la Prevención, Mitigación y Atención de Desastres',
+    'Según la Empresa Nicaragüense de Acueductos y Alcantarillados',
+    'Según la Organización Panamericana de la Salud',
   ])('%s → NO produce VAGUE_ATTRIBUTION ni FIELD_REPORT', (frase) => {
     const signals = evalua(frase);
     expect(codes(signals)).not.toContain('VAGUE_ATTRIBUTION');
