@@ -135,6 +135,12 @@ export async function guardarConMeni(
     titulo: cleanedTitulo,
     cuerpo: finalContenido,
     categoria: canonicalCategoria,
+    // La fuente estructurada del documento también es evidencia: una nota
+    // con fuente/enlaces reales no puede recibir SOURCE_MISSING por no
+    // nombrarla literalmente en el texto.
+    fuentesExternas: [fuente, ...fuentesComplementarias].filter(
+      (f): f is string => typeof f === 'string' && f.trim().length > 0
+    ),
   });
   const TRUST_SIGNAL_SEVERITY: Record<string, FactualitySignal['severity']> = {
     CONTRADICTION: 'CRITICAL',

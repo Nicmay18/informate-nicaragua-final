@@ -76,7 +76,11 @@ export interface TrustReport {
 // Verbos/expresiones de atribución periodística. La lista anterior omitía
 // formas frecuentes ("relataron testigos", "aseguró", "manifestó",
 // "según vecinos") y producía falsos positivos de atribución faltante.
-const RE_ATRIBUCION = /\b(según|de acuerdo con|informó|informaron|confirmó|confirmaron|dijo|dijeron|señaló|señalaron|reportó|reportaron|afirmó|afirmaron|declaró|declararon|explicó|explicaron|indicó|indicaron|precisó|precisaron|detalló|detallaron|anunció|anunciaron|relató|relataron|contó|contaron|aseguró|aseguraron|manifestó|manifestaron|expresó|expresaron|admitió|admitieron|reveló|revelaron|difundió|difundieron|publicó|publicaron|destacó|destacaron|sostuvo|sostuvieron|denunció|denunciaron|testificó|testificaron|testigos|vecinos|familiares|residentes|pobladores|comunicado|boletín|informe)\b/i;
+// Cobertura de tiempos verbales: pretérito + presente + participio.
+// Antes solo se reconocían pretéritos ("señaló", "informaron"); formas como
+// "han señalado", "señalan" o "datos difundidos" quedaban sin atribuir y
+// producían falsos PROVISIONAL_CLAIM sobre notas correctamente atribuidas.
+const RE_ATRIBUCION = /\b(según|de acuerdo con|informó|informaron|informa|informan|informad[oa]s?|confirmó|confirmaron|confirma|confirman|confirmad[oa]s?|dijo|dijeron|dice|dicen|dich[oa]s?|señaló|señalaron|señala|señalan|señalad[oa]s?|reportó|reportaron|reporta|reportan|reportad[oa]s?|afirmó|afirmaron|afirma|afirman|afirmad[oa]s?|declaró|declararon|declara|declaran|declarad[oa]s?|explicó|explicaron|explica|explican|explicad[oa]s?|indicó|indicaron|indica|indican|indicad[oa]s?|precisó|precisaron|precisan|detalló|detallaron|detalla|detallan|detallad[oa]s?|anunció|anunciaron|anuncia|anuncian|anunciad[oa]s?|relató|relataron|relata|relatan|relatad[oa]s?|contó|contaron|aseguró|aseguraron|asegura|aseguran|asegurad[oa]s?|manifestó|manifestaron|manifiesta|manifiestan|manifestad[oa]s?|expresó|expresaron|expresa|expresan|expresad[oa]s?|admitió|admitieron|admite|admiten|admitid[oa]s?|reveló|revelaron|revela|revelan|revelad[oa]s?|difundió|difundieron|difunde|difunden|difundid[oa]s?|publicó|publicaron|publica|publican|publicad[oa]s?|destacó|destacaron|destaca|destacan|destacad[oa]s?|sostuvo|sostuvieron|sostiene|sostienen|denunció|denunciaron|denuncia|denuncian|denunciad[oa]s?|testificó|testificaron|testifica|testifican|testificad[oa]s?|testigos|vecinos|familiares|residentes|pobladores|comunicado|boletín|informe)\b/i;
 const RE_NO_CONFIRMADA = /\b(presuntamente|al parecer|reportes no confirmados|trascendió|versiones preliminares|se rumora|habría|supuestamente|aparentemente|preliminarmente|según versiones)\b/i;
 const RE_NO_DISPONIBLE = /\b(se investiga|investigación en curso|se desconoce|no se sabe|no han informado|sin pronunciamiento|aún no se ha confirmado|pendiente de confirmar|no proporcionaron|no se ha revelado|hasta el momento no)\b/i;
 const RE_SUCESO = /\b(asesin|homicidio|falleci|muert|deten|arrest|acusad|señalad|sospech|víctima|delito|robo|violencia|balacera|apuñal|atropell)\w*/i;
@@ -85,7 +89,11 @@ const RE_SUCESO = /\b(asesin|homicidio|falleci|muert|deten|arrest|acusad|señala
 // positivo). Con clases de letras explícitas "robó" solo casa como palabra.
 const RE_DELITO_AFIRMADO = /(^|[^a-záéíóúñü])(asesinó|mató|robó|violó|estafó|secuestró|atropelló)(?![a-záéíóúñü])/i;
 const RE_NOMBRE_PROPIO = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,2}\b/g;
-const RE_FUENTE = /\b(Policía Nacional|Ministerio Público|Corte Suprema|INIFOM|MINSA|Bomberos|INTA|INETER|MTI|Fiscalía|Conapred|CNU|INSS|CSE|SERENE|Alcaldía|Gobierno|CNN|Reuters|AP|EFE|AFP|BBC|ONU|OEA|OIM|UNICEF|OPS|OMS|Banco Central|BCN)\b/g;
+// "Policía" a secas (forma estándar en prensa nacional, p.ej. "la Policía
+// investiga" — expresión aceptada del perfil sucesos) cuenta como institución
+// nombrada igual que "Policía Nacional". Case-sensitive a propósito: solo
+// "Policía" con mayúscula, no el sustantivo común "policía".
+const RE_FUENTE = /\b(Policía Nacional|Policía|Ministerio Público|Corte Suprema|INIFOM|MINSA|Bomberos|INTA|INETER|MTI|Fiscalía|Conapred|CNU|INSS|CSE|SERENE|Alcaldía|Gobierno|CNN|Reuters|AP|EFE|AFP|BBC|ONU|OEA|OIM|UNICEF|OPS|OMS|Banco Central|BCN)\b/g;
 // Contexto temporal real: fecha numérica O expresión temporal relativa que
 // ubica el hecho en el tiempo ("este miércoles", "durante la noche",
 // "el pasado fin de semana"). Un detector que no las reconoce produce
@@ -114,6 +122,10 @@ export function analyzeTrust(input: {
   titulo: string;
   cuerpo: string;
   categoria?: string;
+  /** Fuentes estructuradas del documento (fuente, fuentesComplementarias,
+   * enlaces a medios). Sin este campo, una nota CON fuente persistida podia
+   * recibir SOURCE_MISSING porque el detector solo miraba el texto. */
+  fuentesExternas?: string[];
 }): TrustReport {
   const paras = paragraphs(input.cuerpo);
   const tituloSents = splitSentences(input.titulo);
@@ -126,6 +138,10 @@ export function analyzeTrust(input: {
   const contradicciones: TrustFinding[] = [];
   const fuentes = new Set<string>();
   const entidades = new Set<string>();
+  for (const ext of input.fuentesExternas ?? []) {
+    const trimmed = (ext ?? '').trim();
+    if (trimmed) fuentes.add(trimmed);
+  }
 
   let totalSents = 0;
   let provisionalesSinFuente = 0;

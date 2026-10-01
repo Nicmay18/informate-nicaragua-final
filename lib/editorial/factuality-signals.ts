@@ -85,7 +85,7 @@ function hasEvidence(input: FactualityInput): boolean {
  * El segundo no se puede verificar — ver VAGUE_ATTRIBUTION_PROPOSAL.md.
  */
 const CONCRETE_INSTITUTION_RE =
-  /\b(Polic[íi]a Nacional|Ministerio Público|Ministerio de [A-ZÁÉÍÓÚa-záéíóúñ]+|MINSA|Bomberos|Fiscal[íi]a|Corte Suprema|INETER|INIFOM|INSS|INTA|MTI|CNU|CSE|SERENE|Conapred|Alcald[íi]a|Gobierno|Banco Central|BCN|EFE|AFP|\bAP\b|Reuters|ONU|OMS|OPS|OEA|OIM|UNICEF|BBC|CNN)\b/i;
+  /\b(Polic[íi]a Nacional|Polic[íi]a|Ministerio Público|Ministerio de [A-ZÁÉÍÓÚa-záéíóúñ]+|MINSA|Bomberos|Fiscal[íi]a|Corte Suprema|INETER|INIFOM|INSS|INTA|MTI|CNU|CSE|SERENE|Conapred|Alcald[íi]a|Gobierno|Banco Central|BCN|EFE|AFP|\bAP\b|Reuters|ONU|OMS|OPS|OEA|OIM|UNICEF|BBC|CNN)\b/i;
 // Sensible a mayúsculas a propósito: "según el viceministro" NO es concreta;
 // "según Juan Pérez" sí. Con /i el set [A-ZÁÉÍÓÚÑ] casaría minúsculas también.
 const CONCRETE_NAMED_RE =

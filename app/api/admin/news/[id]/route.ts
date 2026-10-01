@@ -181,6 +181,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
           titulo: String(updateData.titulo ?? existingData.titulo ?? ''),
           cuerpo: String(updateData.contenido ?? existingData.contenido ?? ''),
           categoria: String(updateData.categoria ?? existingData.categoria ?? 'General'),
+          fuentesExternas: [
+            updateData.fuente ?? existingData.fuente,
+            ...((updateData.fuentesComplementarias ?? existingData.fuentesComplementarias ?? []) as string[]),
+          ].filter((x): x is string => typeof x === 'string' && x.trim().length > 0),
         });
         await applyTechnicalMutation(
           db,

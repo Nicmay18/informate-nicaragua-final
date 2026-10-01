@@ -420,6 +420,10 @@ export async function POST(request: NextRequest) {
           titulo: String(titulo ?? ''),
           cuerpo: String(contenido ?? ''),
           categoria: categoria || 'General',
+          fuentesExternas: [
+            meniUpdateData?.fuente,
+            ...((meniUpdateData?.fuentesComplementarias as string[] | undefined) ?? []),
+          ].filter((x): x is string => typeof x === 'string' && x.trim().length > 0 && x !== 'Redaccion Nicaragua Informate'),
         });
         if (articleDocId) {
           const { applyTechnicalMutation } = await import('@/lib/editorial/mutation-policy');
