@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   aggregateSources,
   bucketViewsByHour,
+  buildHeatmapDays,
   buildInsights,
   classifyTrend,
   dailySeries,
@@ -183,6 +184,48 @@ describe('traffic-insights — serie diaria y resumen horario', () => {
     const flat = dailySeries({ '2026-09-28': 10, '2026-09-29': 10, '2026-09-30': 10, '2026-10-01': 10 }, 4, NOW);
     expect(siteTrend(flat).direction).toBe('flat');
     expect(siteTrend([{ date: 'x', views: 5 }])).toEqual({ direction: 'insufficient', deltaPct: null });
+  });
+});
+
+describe('traffic-insights — heatmap honesto', () => {
+  const dates30 = Array.from({ length: 56 }, (_, i) => {
+    const d = new Date(NOW.getTime() - i * 86400000);
+    return d.toISOString().split('T')[0];
+  }).sort(); // 2026-08-07 → 2026-10-01
+
+  it('distingue día medido con 0 vistas de día sin datos', () => {
+    const totals = { '2026-09-30': 1272 }; // solo este día tiene doc con vistas
+    const days = buildHeatmapDays(totals, dates30, 5, NOW);
+    // últimos 5 días: 27,28,29,30,01 — todos tienen doc en traffic_daily
+    expect(days.length).toBe(5);
+    expect(days[3]).toEqual({ date: '2026-09-30', views: 1272, hasData: true });
+    // 27,28,29,01 tienen doc real con 0 vistas registradas → hasData true, views 0
+    expect(days[0].hasData).toBe(true);
+    expect(days[0].views).toBe(0);
+  });
+
+  it('día fuera de availableDates → hasData=false (nunca 0 fabricado)', () => {
+    const days = buildHeatmapDays({}, [], 3, NOW);
+    expect(days.every(d => !d.hasData)).toBe(true);
+    expect(days.every(d => d.views === 0)).toBe(true);
+  });
+
+  it('día en availableDates sin doc en totals → hasData=true con views=0 real', () => {
+    const days = buildHeatmapDays({}, ['2026-09-30'], 3, NOW);
+    const d30 = days.find(d => d.date === '2026-09-30');
+    expect(d30).toEqual({ date: '2026-09-30', views: 0, hasData: true });
+    const d29 = days.find(d => d.date === '2026-09-29');
+    expect(d29?.hasData).toBe(false); // no hay doc → sin datos, no "0 visitas"
+  });
+
+  it('cubre todo el rango disponible, no solo la ventana del gráfico', () => {
+    const totals: Record<string, number> = {};
+    dates30.forEach(d => { totals[d] = 100; });
+    const days = buildHeatmapDays(totals, dates30, 56, NOW);
+    expect(days.length).toBe(56);
+    expect(days[0].date).toBe('2026-08-07');
+    expect(days[55].date).toBe('2026-10-01');
+    expect(days.every(d => d.hasData && d.views === 100)).toBe(true);
   });
 });
 

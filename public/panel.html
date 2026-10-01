@@ -6371,26 +6371,40 @@ VERIFICACIÓN FINAL
       }).join('');
     }
 
-    function anHeatmap(daily) {
-      if (!daily || !daily.length) return '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin histórico suficiente.</p>';
-      const max = Math.max(1, ...daily.map(d => d.views));
+    function anHeatmap(days, coverage) {
+      if (!days || !days.length) return '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin histórico suficiente.</p>';
+      const max = Math.max(1, ...days.map(d => d.views));
       const cell = 18, gap = 4;
-      // grid 7 filas (días semana) x semanas — último día a la derecha
-      const days = daily.slice();
-      const cols = Math.ceil(days.length / 7);
-      let cells = '';
-      // alinear: la primera celda cae en el día de semana real (UTC)
+      // Alinear cada día a su día de semana real (UTC, clave persistida en traffic_daily)
       const firstDow = new Date(days[0].date + 'T00:00:00Z').getUTCDay();
+      let cells = '';
       days.forEach((d, i) => {
         const pos = i + firstDow;
         const col = Math.floor(pos / 7), row = pos % 7;
+        const x = col * (cell + gap), y = row * (cell + gap);
+        let bg, tip;
+        if (!d.hasData) {
+          // sin datos medidos: celda claramente distinta (borde punteado, sin relleno)
+          bg = '#ffffff';
+          tip = d.date + ' · sin datos';
+          cells += '<rect x="' + x + '" y="' + y + '" width="' + cell + '" height="' + cell + '" rx="3" fill="' + bg + '" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 2"><title>' + tip + '</title></rect>';
+          return;
+        }
         const intensity = d.views / max;
-        const bg = d.views === 0 ? '#f1f5f9' : 'rgba(37,99,235,' + (0.15 + intensity * 0.85).toFixed(2) + ')';
-        cells += '<rect x="' + (col * (cell + gap)) + '" y="' + (row * (cell + gap)) + '" width="' + cell + '" height="' + cell + '" rx="3" fill="' + bg + '"><title>' + d.date + ': ' + d.views + ' visitas</title></rect>';
+        bg = d.views === 0 ? '#f1f5f9' : 'rgba(37,99,235,' + (0.15 + intensity * 0.85).toFixed(2) + ')';
+        tip = d.date + ' · ' + d.views + ' visitas';
+        cells += '<rect x="' + x + '" y="' + y + '" width="' + cell + '" height="' + cell + '" rx="3" fill="' + bg + '"><title>' + tip + '</title></rect>';
       });
-      const w = (cols + 1) * (cell + gap), h = 7 * (cell + gap);
-      return '<svg viewBox="0 0 ' + w + ' ' + h + '" style="max-width:100%;height:auto;display:block;margin:0 auto;">' + cells + '</svg>'
-        + '<p style="font-size:11px;color:var(--gray-500);text-align:center;margin-top:8px;">' + days.length + ' días de histórico real · ' + days[0].date + ' → ' + days[days.length-1].date + '</p>';
+      const maxPos = (days.length - 1) + firstDow;
+      const colsUsed = Math.floor(maxPos / 7) + 1;
+      const w = colsUsed * (cell + gap), h = 7 * (cell + gap);
+      const first = coverage && coverage.first ? coverage.first : days[0].date;
+      const last = coverage && coverage.last ? coverage.last : days[days.length - 1].date;
+      const dowLabels = '<text x="0" y="0" font-size="0"></text>';
+      return '<div style="overflow-x:auto;">'
+        + '<svg viewBox="0 0 ' + w + ' ' + h + '" style="min-width:' + w + 'px;max-width:100%;height:auto;display:block;margin:0 auto;">' + dowLabels + cells + '</svg></div>'
+        + '<p style="font-size:11px;color:var(--gray-500);text-align:center;margin-top:8px;">Datos disponibles: ' + first + ' → ' + last + ' · ' + days.length + ' días medidos · días UTC</p>'
+        + '<p style="font-size:10px;color:var(--gray-400);text-align:center;margin-top:2px;">Celda gris = 0 visitas reales · celda punteada = sin datos medidos</p>';
     }
 
     function anTrendBadge(t, delta) {
@@ -6435,7 +6449,7 @@ VERIFICACIÓN FINAL
         document.getElementById('an-daily-range').textContent = st.daily && st.daily.length ? '(' + st.daily[0].date + ' → ' + st.daily[st.daily.length-1].date + ')' : '';
         document.getElementById('an-daily-chart').innerHTML = anBars(
           (st.daily || []).map(d => ({ label: d.date.slice(5), value: d.views })), { color: '#16a34a', labels: 10 });
-        document.getElementById('an-heatmap').innerHTML = anHeatmap(st.daily || []);
+        document.getElementById('an-heatmap').innerHTML = anHeatmap(st.heatmap || [], st.meta && st.meta.dailyCoverage);
         document.getElementById('an-sources-body').innerHTML = anSourceBars(st.sourcesPeriod || st.fuentes || {});
 
         // categorías + poblar select

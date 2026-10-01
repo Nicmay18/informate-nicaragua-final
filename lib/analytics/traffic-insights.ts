@@ -291,6 +291,40 @@ export function dailySeries(
   return out;
 }
 
+/**
+ * Heatmap honesto: distingue tres estados por día.
+ * - hasDoc=true  → el día existe en traffic_daily → views es REAL (incluye 0).
+ * - hasDoc=false → no hay doc medido → 'sin datos' (nunca dibujar como 0).
+ * Cubre todo el histórico disponible (availableDates = doc IDs reales de
+ * traffic_daily), no solo la serie visible del gráfico diario.
+ */
+export interface HeatmapDay {
+  date: string;
+  views: number;
+  hasData: boolean; // false = sin datos medidos, true = medido (0 es valor real)
+}
+
+export function buildHeatmapDays(
+  dailyTotals: Record<string, number>,
+  availableDates: string[],
+  days: number,
+  now: Date = new Date(),
+): HeatmapDay[] {
+  const available = new Set(availableDates);
+  const out: HeatmapDay[] = [];
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(now.getTime() - i * 24 * 3600 * 1000);
+    const key = d.toISOString().split('T')[0];
+    const measured = available.has(key) || key in dailyTotals;
+    out.push({
+      date: key,
+      views: measured ? (dailyTotals[key] || 0) : 0,
+      hasData: measured,
+    });
+  }
+  return out;
+}
+
 /** Tendencia sitewide: últimos `days/2` días vs la mitad previa. */
 export function siteTrend(series: DayPoint[]): { direction: 'up' | 'down' | 'flat' | 'insufficient'; deltaPct: number | null } {
   if (series.length < 4) return { direction: 'insufficient', deltaPct: null };

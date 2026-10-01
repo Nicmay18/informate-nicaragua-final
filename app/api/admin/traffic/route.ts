@@ -5,6 +5,7 @@ import { getTrafficForDate, getTrafficPerformance } from '@/lib/analytics/traffi
 import {
   aggregateSources,
   bucketViewsByHour,
+  buildHeatmapDays,
   buildInsights,
   classifyTrend,
   dailySeries,
@@ -17,6 +18,7 @@ import {
   windowedArticleCounts,
   MANAGUA_TZ,
   type ArticleWindowStats,
+  type HeatmapDay,
   type TrafficLogEvent,
 } from '@/lib/analytics/traffic-insights';
 import { logger } from '@/lib/logger';
@@ -59,6 +61,58 @@ async function fetchNoticiaMeta(
     }
   }
   return map;
+}
+
+/**
+ * Cobertura real del heatmap: lista los doc IDs de traffic_daily (las fechas
+ * medidas de verdad) y suma vistas por día. Días más allá de la ventana de
+ * `dailyGrowth` se leen directamente (acotado a los últimos 70 días).
+ * Se cachea 5 min para controlar lecturas.
+ */
+const HEATMAP_MAX_DAYS = 70;
+
+async function fetchHeatmapData(
+  db: FirebaseFirestore.Firestore,
+  now: Date,
+  baseTotals: Record<string, number>,
+): Promise<{ days: HeatmapDay[]; first: string | null; last: string | null }> {
+  let dayIds: string[] = [];
+  try {
+    const docs = await db.collection('traffic_daily').listDocuments();
+    dayIds = docs.map(d => d.id).sort();
+  } catch (err) {
+    logger.warn('[admin/traffic] listDocuments traffic_daily falló:', err);
+  }
+
+  const totals: Record<string, number> = { ...baseTotals };
+  // Leer totales de días cubiertos por traffic_daily pero fuera de dailyGrowth
+  const missing = dayIds.filter(d => !(d in totals));
+  const toRead = missing.slice(-HEATMAP_MAX_DAYS);
+  for (let i = 0; i < toRead.length; i += 10) {
+    const chunk = toRead.slice(i, i + 10);
+    await Promise.all(chunk.map(async (date) => {
+      try {
+        const snap = await db.collection('traffic_daily').doc(date).collection('articles').get();
+        let v = 0;
+        for (const doc of snap.docs) v += (doc.data().views as number) || 0;
+        totals[date] = v;
+      } catch {
+        // si falla un día, queda fuera de totals → hasData solo si el doc existe
+      }
+    }));
+  }
+
+  const first = dayIds[0] || null;
+  const last = dayIds[dayIds.length - 1] || null;
+
+  // Cobertura: desde el día medido más antiguo hasta hoy, acotada.
+  let days = 30;
+  if (first) {
+    const span = Math.floor((now.getTime() - new Date(`${first}T00:00:00Z`).getTime()) / 86400000) + 1;
+    days = Math.min(Math.max(span, 7), HEATMAP_MAX_DAYS);
+  }
+
+  return { days: buildHeatmapDays(totals, dayIds, days, now), first, last };
 }
 
 function toEvent(data: FirebaseFirestore.DocumentData): TrafficLogEvent | null {
@@ -107,6 +161,7 @@ export async function GET(request: NextRequest) {
     const periodDays = period === '30d' ? 30 : period === '7d' ? 7 : 1;
     const perf = await getTrafficPerformance(db, periodDays, 50);
     const daily = dailySeries(perf.performance?.dailyGrowth || {}, Math.max(periodDays, 7), now);
+    const heatmapData = await fetchHeatmapData(db, now, perf.performance?.dailyGrowth || {});
 
     // ---- Mapa slug → noticia (título/categoría/vistas) --------------------
     const slugFreq = new Map<string, number>();
@@ -240,6 +295,7 @@ export async function GET(request: NextRequest) {
       period,
       hourly,
       daily,
+      heatmap: heatmapData.days,
       sourcesPeriod,
       categorias,
       articulos,
@@ -254,6 +310,7 @@ export async function GET(request: NextRequest) {
         logLimit: LOG_LIMIT_24H,
         logTruncated: logTruncated,
         sessions: sessionsInstrumented ? 'available' : 'not_instrumented',
+        dailyCoverage: { first: heatmapData.first, last: heatmapData.last, days: heatmapData.days.length },
         filters: {
           periodo: period,
           fuente: filterFuente || null,
