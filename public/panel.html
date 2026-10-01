@@ -928,6 +928,10 @@
                 </div>
               </div>
 
+              <!-- Estado persistente de la decisión editorial / errores de publicación.
+                   No es un toast: permanece visible hasta re-analizar o cerrar manualmente. -->
+              <div id="publicacionEstado" style="display:none;margin-top:20px;"></div>
+
               <div style="display: flex; gap: 10px; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--gray-200);">
                 <button type="submit" class="btn btn-primary btn-lg" id="btnGuardar"><i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Publicar Noticia</span></button>
                 <button type="button" class="btn btn-secondary btn-lg" onclick="vistaPreviaNoticia()"><i class="fas fa-eye"></i><span>Vista previa</span></button>
@@ -4114,7 +4118,8 @@ sin texto ni marcas de agua, composición periodística"
           });
           const saveData = await saveRes.json().catch(() => ({}));
           if (!saveRes.ok) {
-            if (saveData?.blockingIssues?.length) mostrarDiagnosticoMeni(saveData);
+            mostrarErrorPublicacion(saveData, saveRes.status);
+            if (saveData?.blockingIssues?.length || saveData?.supervisor) mostrarDiagnosticoMeni(normalizarDiagnosticoBloqueo(saveData));
             throw new Error(saveData?.error || 'Error guardando via API');
           }
           acciones.push('✅ Noticia actualizada · Nivel ' + nivelInfo.nivel);
@@ -4128,7 +4133,8 @@ sin texto ni marcas de agua, composición periodística"
           });
           const saveData = await saveRes.json().catch(() => ({}));
           if (!saveRes.ok) {
-            if (saveData?.blockingIssues?.length) mostrarDiagnosticoMeni(saveData);
+            mostrarErrorPublicacion(saveData, saveRes.status);
+            if (saveData?.blockingIssues?.length || saveData?.supervisor) mostrarDiagnosticoMeni(normalizarDiagnosticoBloqueo(saveData));
             throw new Error(saveData?.error || 'Error publicando via API');
           }
           noticiaId = saveData.id || '';
@@ -4224,6 +4230,9 @@ sin texto ni marcas de agua, composición periodística"
         else if (!esNueva) acciones.push('📝 Noticia editada');
 
         // ─── RESUMEN FINAL ───
+        // Limpiar banner persistente: la publicación técnica + editorial pasó.
+        const pe = document.getElementById('publicacionEstado');
+        if (pe) { pe.innerHTML = ''; pe.style.display = 'none'; }
         showToast(acciones.join('<br>'), indexFail.length ? 'warning' : 'success', 'Resumen de publicación', 10000);
 
         if (esNueva) {
@@ -6879,7 +6888,10 @@ VERIFICACIÓN FINAL
         const adminToken = localStorage.getItem('admin_api_key') || '';
         const bodyData = { titulo, contenido, resumen, categoria, imagen: imagenUrl, imagenDestacada: imagenUrl, slug: '', keywords, autor };
 
-        // Lanzar ambos análisis en paralelo
+        // Lanzar ambos análisis en paralelo sobre el MISMO snapshot.
+        // /api/admin/analizar solo alimenta la caché del badge de nivel;
+        // la autoridad editorial visible es MENI + Supervisor (meni/evaluar
+        // corre guardarConMeni, la misma cadena que PUBLICAR).
         const [respForense, respMeni] = await Promise.allSettled([
           fetch('/api/admin/analizar', {
             method: 'POST',
@@ -6893,24 +6905,30 @@ VERIFICACIÓN FINAL
           }).then(r => r.json())
         ]);
 
-        let htmlFinal = '';
-
-        // ─── MENI DIAGNÓSTICO (primero, es el más importante) ───
-        if (respMeni.status === 'fulfilled' && respMeni.value && respMeni.value.success) {
-          const meni = respMeni.value.result;
-          window._ultimoMeni = meni;
-          htmlFinal += renderMeniDiagnostic(meni);
-        } else if (respMeni.status === 'rejected') {
-          htmlFinal += '<div style="padding:12px;color:#dc2626;background:#fee2e2;border-radius:8px;margin-bottom:16px;"><strong>MENI:</strong> ' + (respMeni.reason?.message || 'Error desconocido') + '</div>';
-        }
-
-        // ─── ANÁLISIS FORENSE (Editor IA viejo) ───
+        // Caché del nivel editorial para el badge al guardar (sin render
+        // como autoridad — evita dos "Forense" compitiendo en pantalla).
         if (respForense.status === 'fulfilled' && respForense.value) {
           const data = respForense.value;
           window._ultimoForense = { titulo, contenido, nivel: data.nivel, puntuacion: data.puntuacion };
-          htmlFinal += renderAnalisisForense(data);
-        } else if (respForense.status === 'rejected') {
-          htmlFinal += '<div style="padding:12px;color:#dc2626;background:#fee2e2;border-radius:8px;margin-bottom:16px;"><strong>Forense:</strong> ' + (respForense.reason?.message || 'Error desconocido') + '</div>';
+        }
+
+        let htmlFinal = '';
+
+        if (respMeni.status === 'fulfilled' && respMeni.value && respMeni.value.success) {
+          const meni = respMeni.value.result;
+          const supervisor = respMeni.value.supervisor || null;
+          window._ultimoMeni = meni;
+          window._ultimaDecisionEditorial = supervisor;
+
+          // DECISIÓN FINAL primero (autoridad real: Supervisor via guardarConMeni)
+          htmlFinal += renderDecisionFinal(supervisor, meni);
+          htmlFinal += renderMeniDiagnostic(meni);
+          htmlFinal += renderForenseCanonico(meni);
+          actualizarEstadoPublicacion(supervisor, meni);
+        } else if (respMeni.status === 'rejected') {
+          htmlFinal += '<div style="padding:12px;color:#dc2626;background:#fee2e2;border-radius:8px;margin-bottom:16px;"><strong>MENI:</strong> ' + (respMeni.reason?.message || 'Error desconocido') + '</div>';
+        } else if (respMeni.status === 'fulfilled' && respMeni.value && respMeni.value.error) {
+          htmlFinal += '<div style="padding:12px;color:#dc2626;background:#fee2e2;border-radius:8px;margin-bottom:16px;"><strong>MENI:</strong> ' + respMeni.value.error + '</div>';
         }
 
         resultado.innerHTML = htmlFinal || '<div style="padding:16px;color:var(--gray-500);">Sin resultados.</div>';
@@ -6918,6 +6936,162 @@ VERIFICACIÓN FINAL
         resultado.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
       }
     };
+
+    // ═══════════════════════════════════════════════════════════════
+    // DECISIÓN EDITORIAL FINAL — única autoridad visible (Supervisor,
+    // la misma cadena que ejecuta guardarConMeni al publicar).
+    // ═══════════════════════════════════════════════════════════════
+    function renderDecisionFinal(supervisor, meni) {
+      const sup = supervisor || null;
+      let estado, color, bg, detalle = '';
+
+      if (!sup) {
+        estado = '⚪ DECISIÓN NO VERIFICABLE';
+        color = '#475569'; bg = '#f1f5f9';
+        detalle = 'El Supervisor no respondió en la evaluación previa. El veredicto MENI es solo referencia; la decisión real se tomará al publicar.';
+      } else if (sup.approved && sup.verdict === 'PUBLICAR') {
+        estado = '🟢 PUBLICACIÓN PERMITIDA';
+        color = '#16a34a'; bg = '#d1fae5';
+        detalle = sup.reason || '';
+      } else if (sup.approved && sup.verdict === 'PUBLICAR_CON_CAMBIOS') {
+        estado = '🟡 PUBLICAR CON CAMBIOS';
+        color = '#ca8a04'; bg = '#fef3c7';
+        detalle = sup.reason || '';
+        const acciones = (sup.actions || sup.issues || []).slice(0, 4);
+        if (acciones.length) {
+          detalle += '<ul style="margin:8px 0 0;padding-left:18px;font-size:12px;">' + acciones.map(a =>
+            '<li>' + (a.action || a.problem || a.mensaje || JSON.stringify(a)) + '</li>').join('') + '</ul>';
+        }
+      } else {
+        estado = sup.verdict === 'REVISION_HUMANA' ? '🟠 REVISIÓN HUMANA REQUERIDA' : '🔴 PUBLICACIÓN BLOQUEADA';
+        color = sup.verdict === 'REVISION_HUMANA' ? '#ea580c' : '#dc2626';
+        bg = sup.verdict === 'REVISION_HUMANA' ? '#ffedd5' : '#fee2e2';
+        const first = (sup.issues || [])[0];
+        detalle = '<div style="margin-top:8px;font-size:12px;"><strong>Motivo:</strong> ' + (sup.reason || first?.problem || 'Decisión del Supervisor') + '</div>';
+        detalle += '<div style="font-size:12px;margin-top:4px;"><strong>Módulo que bloquea:</strong> SUPERVISOR' + (first?.domain ? ' · ' + first.domain : '') + '</div>';
+        if (first) {
+          if (first.problem) detalle += '<div style="font-size:12px;margin-top:4px;"><strong>Qué debes corregir:</strong> ' + first.problem + '</div>';
+          if (first.action || first.recommendation) detalle += '<div style="font-size:12px;margin-top:4px;"><strong>Acción:</strong> ' + (first.action || first.recommendation) + '</div>';
+          if (first.currentValue || first.expectedValue) detalle += '<div style="font-size:12px;margin-top:4px;">Actual: ' + (first.currentValue || '—') + ' → Esperado: ' + (first.expectedValue || '—') + '</div>';
+        }
+      }
+
+      return '<div style="background:' + bg + ';border:2px solid ' + color + ';border-radius:12px;padding:16px;margin-bottom:20px;">'
+        + '<div style="font-size:11px;font-weight:700;color:' + color + ';letter-spacing:1px;margin-bottom:6px;">DECISIÓN EDITORIAL FINAL (SUPERVISOR)</div>'
+        + '<div style="font-size:20px;font-weight:800;color:' + color + ';">' + estado + '</div>'
+        + (detalle ? '<div style="color:#374151;margin-top:6px;">' + detalle + '</div>' : '')
+        + '</div>';
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // FORENSE CANÓNICO — el mismo motor que evalúa dentro de MENI
+    // (lib/meni/forensic.ts via pipeline). Muestra integridad/riesgo,
+    // NO una autorización de publicación.
+    // ═══════════════════════════════════════════════════════════════
+    function renderForenseCanonico(meni) {
+      const f = meni && meni.forense;
+      if (!f) return '';
+      const nivelColor = { VERDE: '#16a34a', AMARILLO: '#ca8a04', ROJO: '#dc2626' };
+      const color = nivelColor[f.nivel] || '#475569';
+      let html = '<div style="background:#f8fafc;border:1px solid ' + color + ';border-radius:12px;padding:16px;margin-bottom:16px;">';
+      html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+      html += '<div><h3 style="margin:0;font-size:15px;color:#334155;"><i class="fas fa-microscope"></i> FORENSE — Integridad y riesgo</h3>';
+      html += '<p style="margin:2px 0 0;font-size:12px;color:var(--gray-500);">Evalúa evidencia, atribución y riesgo. No autoriza publicación por sí solo.</p></div>';
+      html += '<div style="text-align:right;"><div style="font-size:18px;font-weight:800;color:' + color + ';">' + f.score + '/100</div>';
+      html += '<span style="font-size:11px;font-weight:700;padding:2px 10px;border-radius:12px;background:' + color + ';color:#fff;">Riesgo: ' + f.nivel + '</span></div></div>';
+
+      if (f.evidencias && f.evidencias.length) {
+        html += '<div style="font-size:12px;color:#334155;margin-bottom:8px;">';
+        f.evidencias.forEach(e => {
+          const icono = e.estado === 'OK' ? '✅' : e.estado === 'NO_APLICA' ? '⚪' : '❌';
+          html += '<div style="margin-bottom:3px;">' + icono + ' <strong>' + e.tipo + ':</strong> ' + e.mensaje + '</div>';
+        });
+        html += '</div>';
+      }
+      if (f.riesgosLegales && f.riesgosLegales.length) {
+        html += '<div style="background:#fee2e2;border-radius:6px;padding:8px;font-size:12px;color:#991b1b;margin-bottom:8px;"><strong>⚖️ Riesgos legales:</strong> ' + f.riesgosLegales.join(' · ') + '</div>';
+      }
+      if (f.adjetivosEmocionales && f.adjetivosEmocionales.length) {
+        html += '<div style="background:#fef3c7;border-radius:6px;padding:8px;font-size:12px;color:#92400e;margin-bottom:8px;"><strong>Lenguaje emocional:</strong> ' + f.adjetivosEmocionales.join(', ') + '</div>';
+      }
+      if (f.recomendaciones && f.recomendaciones.length) {
+        html += '<div style="font-size:12px;color:#475569;">' + f.recomendaciones.slice(0, 5).map(r =>
+          '<div style="margin-bottom:3px;">• ' + (r.mensaje || r.area) + '</div>').join('') + '</div>';
+      }
+      html += '</div>';
+      return html;
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    // ESTADO DE PUBLICACIÓN — banner persistente + deshabilita Publicar
+    // cuando la decisión editorial ya determinó que no puede salir.
+    // ═══════════════════════════════════════════════════════════════
+    function actualizarEstadoPublicacion(supervisor, meni) {
+      const btn = document.getElementById('btnGuardar');
+      const estado = document.getElementById('publicacionEstado');
+      if (!estado) return;
+      if (supervisor && !supervisor.approved) {
+        const first = (supervisor.issues || [])[0];
+        estado.innerHTML =
+          '<div style="background:#fee2e2;border:2px solid #dc2626;border-radius:10px;padding:14px;">'
+          + '<div style="font-size:15px;font-weight:800;color:#dc2626;">🔴 PUBLICACIÓN BLOQUEADA</div>'
+          + '<div style="font-size:12px;color:#7f1d1d;margin-top:6px;"><strong>Motivo:</strong> ' + (supervisor.reason || (first && first.problem) || 'Decisión del Supervisor') + '</div>'
+          + '<div style="font-size:12px;color:#7f1d1d;margin-top:4px;"><strong>Etapa:</strong> SUPERVISOR' + (first && first.domain ? ' · ' + first.domain : '') + '</div>'
+          + (first && (first.action || first.recommendation) ? '<div style="font-size:12px;color:#065f46;margin-top:4px;"><strong>Qué corregir:</strong> ' + (first.action || first.recommendation) + '</div>' : '')
+          + '<div style="font-size:11px;color:#991b1b;margin-top:8px;">El botón Publicar queda deshabilitado hasta corregir y re-analizar.</div>'
+          + '</div>';
+        estado.style.display = 'block';
+        if (btn) btn.disabled = true;
+      } else {
+        estado.innerHTML = '';
+        estado.style.display = 'none';
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    // Error persistente al publicar: distingue decisión editorial de fallo técnico.
+    function mostrarErrorPublicacion(saveData, status) {
+      const estado = document.getElementById('publicacionEstado');
+      if (!estado) return;
+      const esEditorial = !!(saveData && (saveData.code === 'SUPERVISOR_BLOCKED' || saveData.blockingIssues?.length || saveData.supervisor));
+      const titulo = esEditorial ? '🔴 PUBLICACIÓN NO PERMITIDA (decisión editorial)' : '⚠️ DECISIÓN EDITORIAL: APROBADA — PUBLICACIÓN TÉCNICA FALLÓ';
+      const borde = esEditorial ? '#dc2626' : '#ea580c';
+      let html = '<div style="background:' + (esEditorial ? '#fee2e2' : '#ffedd5') + ';border:2px solid ' + borde + ';border-radius:10px;padding:14px;">'
+        + '<div style="font-size:15px;font-weight:800;color:' + borde + ';">' + titulo + '</div>'
+        + '<div style="font-size:12px;margin-top:6px;color:#374151;"><strong>Motivo:</strong> ' + (saveData?.error || 'Error HTTP ' + status) + '</div>';
+      if (esEditorial) {
+        html += '<div style="font-size:12px;color:#374151;margin-top:4px;"><strong>Etapa:</strong> ' + (saveData?.blockingStage || 'SUPERVISOR') + ' · <strong>Código:</strong> ' + (saveData?.code || '—') + '</div>';
+        const first = (saveData?.critical || saveData?.supervisor?.issues || [])[0];
+        if (first?.action || first?.recommendation) html += '<div style="font-size:12px;color:#065f46;margin-top:4px;"><strong>Corrección:</strong> ' + (first.action || first.recommendation) + '</div>';
+      } else {
+        html += '<div style="font-size:12px;color:#7c2d12;margin-top:4px;">Esto es un fallo de infraestructura (Firestore, red, autenticación), no un rechazo editorial. Reintentá o revisá la conexión.</div>';
+      }
+      html += '<button type="button" class="btn btn-secondary btn-sm" onclick="ejecutarAnalisisForense()" style="margin-top:10px;"><i class="fas fa-redo"></i> Reanalizar</button></div>';
+      estado.innerHTML = html;
+      estado.style.display = 'block';
+      estado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Normaliza la respuesta de bloqueo del API al formato del modal de
+    // diagnóstico (supervisor.issues → blockingIssues).
+    function normalizarDiagnosticoBloqueo(saveData) {
+      if (saveData && saveData.blockingIssues && saveData.blockingIssues.length) return saveData;
+      const issues = (saveData && saveData.supervisor && saveData.supervisor.issues) || (saveData && saveData.critical) || [];
+      return {
+        ...saveData,
+        diagnostico: saveData?.supervisor?.reason || saveData?.error || '',
+        blockingIssues: issues.map(i => ({
+          code: i.domain || 'SUPERVISOR',
+          title: i.severity || 'BLOQUEO',
+          description: i.problem || '',
+          evidence: i.evidence || '',
+          currentValue: i.currentValue,
+          expectedValue: i.expectedValue,
+          howToFix: i.action || i.recommendation || '',
+          module: 'SUPERVISOR',
+        })),
+      };
+    }
 
     // ═══════════════════════════════════════════════════════════════
     // RENDER MENI DIAGNÓSTICO — Score, Sello NI, Bloqueantes, Correcciones
@@ -6949,12 +7123,13 @@ VERIFICACIÓN FINAL
       html += '<div>' + aprobadoBadge + '</div>';
       html += '</div>';
 
-      // Veredicto ejecutivo
+      // Veredicto ejecutivo MENI — referencia interna, NO la autoridad final.
+      // La autoridad es la DECISIÓN EDITORIAL FINAL (Supervisor) que se muestra arriba.
       if (veredicto && veredicto.publicar) {
         const vColor = veredicto.publicar === 'SI' ? '#16a34a' : veredicto.publicar === 'MEJORAR' ? '#ca8a04' : '#dc2626';
         html += '<div style="background:#1e293b;border-radius:8px;padding:12px;margin-bottom:16px;">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
-        html += '<div><span style="font-size:12px;color:#94a3b8;">Veredicto del Editor Jefe:</span> <span style="display:inline-block;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:700;color:#fff;background:' + vColor + ';">' + veredicto.publicar + '</span></div>';
+        html += '<div><span style="font-size:12px;color:#94a3b8;">Veredicto MENI (referencia, no autoriza):</span> <span style="display:inline-block;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:700;color:#fff;background:' + vColor + ';">' + veredicto.publicar + '</span></div>';
         if (veredicto.confianza) html += '<span style="font-size:11px;color:#64748b;">Confianza: ' + veredicto.confianza + '%</span>';
         html += '</div>';
         if (veredicto.razon) html += '<p style="margin:8px 0 0;font-size:12px;color:#cbd5e1;">' + veredicto.razon + '</p>';

@@ -96,8 +96,10 @@ export function detectTier(input: {
   // Si tiene menos de 120 palabras, es flash
   if (palabras < 120) return 'FLASH';
 
-  // Si tiene menos de 350 palabras, es noticia
-  if (palabras < 350) return 'NOTICIA';
+  // Si tiene menos de 400 palabras, es noticia estándar (el mínimo de
+  // REPORTAJE es 400: clasificar 350-399 como reportaje haría que la nota
+  // incumpliera el mínimo de su propio tier — contradicción interna).
+  if (palabras < 400) return 'NOTICIA';
 
   // Si tiene más de 600 palabras y menciona antecedentes/investigación, es investigación
   const lower = textoPlano.toLowerCase();
@@ -107,7 +109,7 @@ export function detectTier(input: {
   if (palabras >= 600 && (tieneInvestigacion || tieneReportaje)) return 'INVESTIGACION';
 
   // Default para contenido extenso
-  if (palabras >= 350) return 'REPORTAJE';
+  if (palabras >= 400) return 'REPORTAJE';
 
   return 'NOTICIA';
 }

@@ -66,12 +66,21 @@ export function evaluateRawTitle(titulo: string): {
 
   // Detectar qué falta
   const hasLocation = /\b(en|de|del|de la|de las)\s+[A-ZÁÉÍÓÚ]/.test(titulo) ||
-    /\b(Managua|León|Chinandega|Masaya|Granada|Estelí|Matagalpa|Bluefields|Carazo|Jinotega)\b/i.test(titulo);
+    /\b(Managua|León|Chinandega|Masaya|Granada|Estelí|Matagalpa|Bluefields|Carazo|Jinotega|Nicaragua|nacional|del país|a nivel nacional)\b/i.test(titulo);
   const hasVictim = /\b(víctima|muerto|herido|fallecido|sin vida|lesionado)\b/i.test(titulo);
-  const hasAuthority = /\b(policía|autoridad|ministerio|gobierno|interpol|ejército|bomberos)\b/i.test(titulo);
-  const hasTime = /\b(hoy|ayer|anoche|esta mañana|esta tarde|esta semana|lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b/i.test(titulo);
+  // Autoridad incluye siglas institucionales nicaragüenses: una nota del
+  // MINED/MINSA/INSS no debe exigirse "ministerio" o "gobierno" literal.
+  const hasAuthority = /\b(policía|autoridad|ministerio|gobierno|interpol|ejército|bomberos|fiscalía|alcaldía|presidencia|asamblea|corte suprema|banco central|MINED|MINSA|MINFAR|INSS|INETER|INTA|MTI|CSE|CNU|MARENA|MAG|INATEC|INIFOM|ENACAL|ENATREL|MIFIC|MIFAMILIA|MEFCCA|INTUR|INIFOM|UNAN|BCN|INVUR|IPSFA)\b/i.test(titulo);
+  // El año calendario ("para 2026", "cierre de 2026") es contexto temporal
+  // válido en noticias institucionales/programáticas.
+  const hasTime = /\b(hoy|ayer|anoche|esta mañana|esta tarde|esta semana|lunes|martes|miércoles|jueves|viernes|sábado|domingo|20\d{2}|este año|próximo año|año lectivo)\b/i.test(titulo);
 
-  if (!hasLocation) issues.push('lugar donde ocurrió');
+  // Anuncios institucionales (MINED anuncia..., Gobierno presenta...) son de
+  // alcance nacional por naturaleza: no exigir lugar específico.
+  const isInstitutionalAnnouncement = hasAuthority &&
+    /\b(anuncia|presenta|informa|confirma|lanza|entrega|inaugura|publica|autoriza|aprueba|destina|asigna|declara|revela|promulga)\w*/i.test(titulo);
+
+  if (!hasLocation && !isInstitutionalAnnouncement) issues.push('lugar donde ocurrió');
   if (!hasVictim && /hallan|encuentran|cuerpo|muerto/i.test(titulo)) issues.push('identidad o circunstancias');
   if (!hasAuthority) issues.push('autoridad que confirmó el hecho');
   if (!hasTime) issues.push('cuándo ocurrió');

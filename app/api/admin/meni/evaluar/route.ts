@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     // (guardarConMeni = MENI + Supervisor) para que lo que el editor ve
     // coincida con lo que pasará al publicar. Sin eso, una nota podía
     // mostrarse APROBADA y fallar con SUPERVISOR_BLOCKED al guardar.
-    let supervisor: { verdict: string; approved: boolean; reason: string } | undefined;
+    let supervisor: { verdict: string; approved: boolean; reason: string; issues?: unknown[]; actions?: unknown[] } | undefined;
     let db: ReturnType<typeof getAdminDb> | undefined;
     try { db = getAdminDb(); } catch { db = undefined; }
     if (db) {
@@ -54,6 +54,8 @@ export async function POST(request: NextRequest) {
         verdict: guard.supervisor.verdict,
         approved: guard.supervisorApproved,
         reason: guard.supervisor.reason,
+        issues: guard.supervisor.issues,
+        actions: guard.supervisor.actions,
       };
     } else {
       resultado = runMeni(noticia);
