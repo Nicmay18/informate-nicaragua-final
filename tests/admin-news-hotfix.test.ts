@@ -42,7 +42,9 @@ describe('admin/news hotfix — noticias recién publicadas deben aparecer', () 
     const docs = createSnap(rows).docs;
     docs.push({ id: 'sin-fecha', data: () => ({}) });
     const get = vi.fn().mockResolvedValue({ docs });
-    vi.mocked(getAdminDb).mockReturnValue({ collection: vi.fn().mockReturnValue({ get }) } as any);
+    const q: any = { get };
+    q.select = vi.fn().mockReturnValue(q);
+    vi.mocked(getAdminDb).mockReturnValue({ collection: vi.fn().mockReturnValue(q) } as any);
     const { GET } = await import('@/app/api/admin/news/route');
     const { NextRequest } = await import('next/server');
     const res = await GET(new NextRequest('http://localhost/api/admin/news'));
@@ -61,7 +63,9 @@ describe('admin/news hotfix — noticias recién publicadas deben aparecer', () 
       { id: 'b', data: { fecha: '2026-09-16T10:00:00Z', dateModified: '2026-09-18T10:00:00Z' } },
       { id: 'c', data: { fecha: null } },
     ]).docs;
-    vi.mocked(getAdminDb).mockReturnValue({ collection: () => ({ get: async () => ({ docs }) }) } as any);
+    const q: any = { get: async () => ({ docs }) };
+    q.select = vi.fn().mockReturnValue(q);
+    vi.mocked(getAdminDb).mockReturnValue({ collection: () => q } as any);
     const { GET } = await import('@/app/api/admin/news/route');
     const { NextRequest } = await import('next/server');
     const json = await (await GET(new NextRequest('http://localhost/api/admin/news'))).json();
@@ -71,7 +75,9 @@ describe('admin/news hotfix — noticias recién publicadas deben aparecer', () 
 
   it('un fallo de lectura no se convierte en una lista parcial exitosa', async () => {
     const { getAdminDb } = await import('@/lib/firebase-admin');
-    vi.mocked(getAdminDb).mockReturnValue({ collection: () => ({ get: async () => { throw new Error('lectura fallida'); } }) } as any);
+    const q: any = { get: async () => { throw new Error('lectura fallida'); } };
+    q.select = vi.fn().mockReturnValue(q);
+    vi.mocked(getAdminDb).mockReturnValue({ collection: () => q } as any);
     const { GET } = await import('@/app/api/admin/news/route');
     const { NextRequest } = await import('next/server');
     const res = await GET(new NextRequest('http://localhost/api/admin/news'));

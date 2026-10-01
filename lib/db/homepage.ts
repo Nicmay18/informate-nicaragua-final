@@ -1,8 +1,9 @@
+import { unstable_cache } from 'next/cache';
 import { incrementTrafficDaily } from '@/lib/analytics/traffic-aggregator';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 import { trafficLogExpiresAt } from '@/lib/analytics/traffic-ttl';
-import { FieldValue } from 'firebase-admin/firestore';
+import { FieldValue, FieldPath } from 'firebase-admin/firestore';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { incrementView, flush } from '@/lib/view-counter';
 import { CATEGORIES, isLutoNews, type Noticia } from '@/lib/types';
@@ -65,13 +66,22 @@ export async function incrementViewsBySlug(
   try {
     const db = getAdminDb();
 
-    let docRef = db.collection('noticias').doc(slug);
-    let docSnap = await docRef.get();
+    // Solo se necesitan titulo + vistas para el tracking: leer el documento
+    // completo transfería el cuerpo HTML entero por cada vista registrada.
+    let snap = await db
+      .collection('noticias')
+      .where(FieldPath.documentId(), '==', slug)
+      .select('titulo', 'vistas', 'slug')
+      .limit(1)
+      .get();
+    let docRef = snap.empty ? db.collection('noticias').doc(slug) : snap.docs[0].ref;
+    let docSnap = snap.empty ? null : snap.docs[0];
 
-    if (!docSnap.exists) {
-      const snap = await db
+    if (!docSnap) {
+      snap = await db
         .collection('noticias')
         .where('slug', '==', slug)
+        .select('titulo', 'vistas', 'slug')
         .limit(1)
         .get();
       if (snap.empty) {
@@ -107,10 +117,16 @@ export async function incrementViewsBySlug(
     }
 
     // Forzar flush y devolver el contador canónico real (noticias.vistas).
+    // Query con select para no descargar el documento completo.
     try {
       await flush();
-      const updated = await docRef.get();
-      const updatedData = updated.data() || {};
+      const updatedSnap = await db
+        .collection('noticias')
+        .where(FieldPath.documentId(), '==', docRef.id)
+        .select('vistas')
+        .limit(1)
+        .get();
+      const updatedData = updatedSnap.empty ? {} : updatedSnap.docs[0].data();
       return typeof updatedData.vistas === 'number' ? updatedData.vistas : currentViews + 1;
     } catch (flushErr) {
       logger.warn('[homepage.ts] No se pudo leer el contador actualizado:', flushErr);
@@ -174,7 +190,21 @@ const SECTION_LIMITS: Record<string, number> = {
  * Construye el homepage consultando cada sección por categoría directamente.
  * Evita que noticias viejas aparezcan cuando existen más recientes en esa categoría.
  */
+// Data Cache global: una sola recomputación por ventana en todas las regiones
+// de Vercel en lugar de repetir ~20 queries por regeneración ISR. El tag
+// 'noticias' se invalida en cada publicación/edición, así que la portada sigue
+// reflejando noticias nuevas de inmediato.
+const _cachedGetHomePageData = unstable_cache(
+  async () => buildHomePageData(),
+  ['homepage-data'],
+  { revalidate: 60, tags: ['noticias'] }
+);
+
 export async function getHomePageData(): Promise<HomePageData> {
+  return _cachedGetHomePageData();
+}
+
+async function buildHomePageData(): Promise<HomePageData> {
   const categoryNames = CATEGORIES.map(c => c.name);
   // La portada necesita un universo mayor que "las últimas 15": el ranking editorial
   // debe poder rescatar una noticia importante aunque no sea la más reciente.

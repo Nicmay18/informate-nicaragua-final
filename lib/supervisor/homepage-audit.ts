@@ -31,6 +31,7 @@ async function loadHomepageArticles(db: Firestore, limit = 30): Promise<Array<{
     const snap = await db.collection('noticias')
       .where('publicado', '==', true)
       .where('estado', '==', 'publicado')
+      .select('titulo', 'categoria', 'imagen', 'publishedAt', 'fecha', 'fechaPublicacion', 'archived', 'noindex', 'vistas', 'views')
       .limit(limit * 2)
       .get();
 

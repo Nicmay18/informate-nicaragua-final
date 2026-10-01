@@ -316,34 +316,53 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
   }
 }
 
+// Data Cache compartido entre regiones/instancias: sin esta capa, cada
+// regeneración ISR (y cada PoP de Vercel) volvía a ejecutar las 3 sub-queries
+// de fetchPublishedDocs contra Firestore. El tag 'noticias' lo invalidan todas
+// las rutas de publicación, así que una nota nueva/edición sigue apareciendo
+// de inmediato.
+const _cachedGetNews = unstable_cache(
+  async (count: number) => fetchNoticiasList([...LIST_FIELDS], count),
+  ['news-list'],
+  { revalidate: 60, tags: ['noticias'] }
+);
+
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  return fetchNoticiasList([...LIST_FIELDS], validatedCount);
+  return _cachedGetNews(validatedCount);
 }
+
+const _cachedGetNewsByCategory = unstable_cache(
+  async (categoria: string, count: number): Promise<Noticia[]> => {
+    try {
+      const fetchLimit = Math.min(count * 2, 100);
+      const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
+
+      const noticias = docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
+      // Deduplicar por slug
+      const unique = new Map<string, Noticia>();
+      for (const n of noticias) {
+        const existing = unique.get(n.slug);
+        if (!existing || new Date(n.fecha).getTime() > new Date(existing.fecha).getTime()) {
+          unique.set(n.slug, n);
+        }
+      }
+      return Array.from(unique.values()).sort((a, b) =>
+        new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+      ).slice(0, count);
+    } catch (err) {
+      if (err instanceof FirestoreOutageError) throw err;
+      logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
+      return [];
+    }
+  },
+  ['news-by-category'],
+  { revalidate: 60, tags: ['noticias'] }
+);
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  try {
-    const fetchLimit = Math.min(validatedCount * 2, 100);
-    const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
-
-    const noticias = docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
-    // Deduplicar por slug
-    const unique = new Map<string, Noticia>();
-    for (const n of noticias) {
-      const existing = unique.get(n.slug);
-      if (!existing || new Date(n.fecha).getTime() > new Date(existing.fecha).getTime()) {
-        unique.set(n.slug, n);
-      }
-    }
-    return Array.from(unique.values()).sort((a, b) =>
-      new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
-    ).slice(0, validatedCount);
-  } catch (err) {
-    if (err instanceof FirestoreOutageError) throw err;
-    logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
-    return [];
-  }
+  return _cachedGetNewsByCategory(categoria, validatedCount);
 }
 
 const _cachedGetMasLeidas = unstable_cache(
@@ -532,19 +551,19 @@ export async function getAllSlugs(): Promise<string[]> {
   }
 }
 
-export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
-  const validatedCount = validateCount(count, 3);
-  try {
-    const docs = await fetchPublishedDocs([...LIST_FIELDS], validatedCount + 10, categoria);
-
+// Pool por categoría cacheado (tag 'noticias'): la exclusión del slug propio
+// se aplica DESPUÉS del cache para que todos los artículos de una categoría
+// compartan la misma entrada en Data Cache. El cache debe devolver objetos
+// planos — los DocumentSnapshot de Firestore no son serializables.
+const _cachedRelatedPool = unstable_cache(
+  async (categoria: string, fetchLimit: number): Promise<Noticia[]> => {
+    const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
     return docs
       .map((doc: any) => {
         const data = doc.data();
-        const slug = data.slug || doc.id;
-        if (slug === excludeSlug) return null;
         return {
           id: doc.id,
-          slug,
+          slug: data.slug || doc.id,
           titulo: cleanArticleBody(data.titulo || ''),
           resumen: cleanArticleBody(data.resumen || ''),
           contenido: cleanArticleBody(data.contenido || ''),
@@ -568,9 +587,18 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
           archived: data.archived,
         } as Noticia;
       })
-      .filter((n): n is Noticia => n !== null && isPublicNews(n) && !isToxicSlug(n.slug))
-      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-      .slice(0, validatedCount);
+      .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+  },
+  ['related-pool'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
+export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
+  const validatedCount = validateCount(count, 3);
+  try {
+    const pool = await _cachedRelatedPool(categoria, validatedCount + 10);
+    return pool.filter((n) => n.slug !== excludeSlug).slice(0, validatedCount);
   } catch (err) {
     if (err instanceof FirestoreOutageError) throw err;
     logger.error('[data.ts] getRelatedNews error:', err instanceof Error ? err.message : String(err));
@@ -734,7 +762,8 @@ const _cachedGetSitemapNews = unstable_cache(
           'imagen',
           'imagenRedes',
           'resumen',
-          'contenido',
+          // 'contenido' excluido a propósito: el sitemap solo necesita metadatos;
+          // descargarlo multiplicaba la transferencia saliente de Firestore.
         ],
         MAX_SITEMAP_LIMIT
       );

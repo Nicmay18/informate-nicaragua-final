@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { unstable_cache } from 'next/cache';
 import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { getTrafficForDate, getTrafficPerformance } from '@/lib/analytics/traffic-reader';
+import { getTrafficPerformance } from '@/lib/analytics/traffic-reader';
 import {
   aggregateSources,
   bucketViewsByHour,
@@ -71,36 +72,52 @@ async function fetchNoticiaMeta(
  */
 const HEATMAP_MAX_DAYS = 70;
 
+/**
+ * Totales por día de traffic_daily, cacheados 5 min en Data Cache.
+ * El panel hace polling cada 60s: sin este cache cada request releía hasta
+ * 70 subcolecciones `articles` completas (cientos/miles de lecturas por minuto).
+ */
+const _cachedDailyTotals = unstable_cache(
+  async (): Promise<{ dayIds: string[]; totals: Record<string, number> }> => {
+    const { getAdminDb } = await import('@/lib/firebase-admin');
+    const db = getAdminDb();
+    let dayIds: string[] = [];
+    try {
+      const docs = await db.collection('traffic_daily').listDocuments();
+      dayIds = docs.map(d => d.id).sort();
+    } catch (err) {
+      logger.warn('[admin/traffic] listDocuments traffic_daily falló:', err);
+    }
+
+    const totals: Record<string, number> = {};
+    const toRead = dayIds.slice(-HEATMAP_MAX_DAYS);
+    for (let i = 0; i < toRead.length; i += 10) {
+      const chunk = toRead.slice(i, i + 10);
+      await Promise.all(chunk.map(async (date) => {
+        try {
+          const snap = await db.collection('traffic_daily').doc(date).collection('articles').get();
+          let v = 0;
+          for (const doc of snap.docs) v += (doc.data().views as number) || 0;
+          totals[date] = v;
+        } catch {
+          // si falla un día, queda fuera de totals → hasData solo si el doc existe
+        }
+      }));
+    }
+    return { dayIds, totals };
+  },
+  ['traffic-daily-totals'],
+  { revalidate: 300, tags: ['traffic-data'] }
+);
+
 async function fetchHeatmapData(
-  db: FirebaseFirestore.Firestore,
+  _db: FirebaseFirestore.Firestore,
   now: Date,
   baseTotals: Record<string, number>,
 ): Promise<{ days: HeatmapDay[]; first: string | null; last: string | null }> {
-  let dayIds: string[] = [];
-  try {
-    const docs = await db.collection('traffic_daily').listDocuments();
-    dayIds = docs.map(d => d.id).sort();
-  } catch (err) {
-    logger.warn('[admin/traffic] listDocuments traffic_daily falló:', err);
-  }
-
-  const totals: Record<string, number> = { ...baseTotals };
-  // Leer totales de días cubiertos por traffic_daily pero fuera de dailyGrowth
-  const missing = dayIds.filter(d => !(d in totals));
-  const toRead = missing.slice(-HEATMAP_MAX_DAYS);
-  for (let i = 0; i < toRead.length; i += 10) {
-    const chunk = toRead.slice(i, i + 10);
-    await Promise.all(chunk.map(async (date) => {
-      try {
-        const snap = await db.collection('traffic_daily').doc(date).collection('articles').get();
-        let v = 0;
-        for (const doc of snap.docs) v += (doc.data().views as number) || 0;
-        totals[date] = v;
-      } catch {
-        // si falla un día, queda fuera de totals → hasData solo si el doc existe
-      }
-    }));
-  }
+  const { dayIds, totals: cachedTotals } = await _cachedDailyTotals();
+  // baseTotals (dailyGrowth reciente) tiene prioridad sobre el cache de 5 min.
+  const totals: Record<string, number> = { ...cachedTotals, ...baseTotals };
 
   const first = dayIds[0] || null;
   const last = dayIds[dayIds.length - 1] || null;
@@ -271,8 +288,9 @@ export async function GET(request: NextRequest) {
     const insights = buildInsights({ articles: articulos, categories: categorias, hours, site });
 
     // ---- Shape legacy (compatibilidad con panel existente) ----------------
-    const today = now.toISOString().split('T')[0];
-    const read = await getTrafficForDate(db, today, 10);
+    // perf ya leyó el día actual dentro de getTrafficPerformance — reutilizarlo
+    // evita una segunda lectura de traffic_daily/traffic_log por request.
+    const read = { views24h: perf.views24h, source: perf.source, migrationHealth: perf.migrationHealth };
     const topPaginas = articulos.slice(0, 10).map(a => ({ slug: a.slug, titulo: a.titulo, vistas: period === '24h' ? a.h24 : (periodViews.get(a.slug)?.views || a.h24) }));
     const ultimosEventos = events24h.slice(0, RECENT_LIMIT).map(e => ({
       slug: e.slug,

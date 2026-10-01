@@ -9,6 +9,7 @@ import { auditHomepage } from '@/lib/supervisor';
 import type { HomePageData } from '@/lib/db/homepage';
 import type { Noticia } from '@/lib/types';
 import type { Metadata } from 'next';
+import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
 import { escapeJsonLd } from '@/lib/jsonld';
@@ -18,6 +19,12 @@ import { getCspNonce } from '@/lib/nonce';
 // ISR: Home regenerado cada 1 minuto para reflejar noticias nuevas de inmediato.
 // ============================================================================
 export const revalidate = 60;
+
+const getCachedHomepageAudit = unstable_cache(
+  async () => auditHomepage(getAdminDb()),
+  ['homepage-audit'],
+  { revalidate: 300, tags: ['noticias'] }
+);
 
 const SITE_URL = 'https://nicaraguainformate.com';
 const OG_IMAGE = `${SITE_URL}/logo.webp`;
@@ -108,10 +115,11 @@ export default async function HomePage() {
       logger.warn('[HomePage] Brand Health:', critical.map((a) => a.message).join(' | '));
     }
 
-    // Supervisor editorial de la homepage (Editor Jefe de portada)
+    // Supervisor editorial de la homepage (Editor Jefe de portada).
+    // Cacheado: auditar con la misma frecuencia que el ISR disparaba una
+    // lectura de 60 documentos completos por regeneración solo para logging.
     try {
-      const db = getAdminDb();
-      const audit = await auditHomepage(db);
+      const audit = await getCachedHomepageAudit();
       if (audit.issues.length > 0) {
         const criticalIssues = audit.issues.filter(i => i.severity === 'CRITICAL' || i.severity === 'IMPORTANT');
         const warnings = audit.issues.filter(i => i.severity === 'WARNING' || i.severity === 'OPTIMIZATION');

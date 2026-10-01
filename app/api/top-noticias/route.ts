@@ -10,6 +10,7 @@ export async function GET() {
       .collection('noticias')
       .orderBy('vistas', 'desc')
       .limit(6)
+      .select('titulo', 'slug', 'categoria', 'vistas', 'imagen', 'fecha')
       .get();
 
     const metric = getMetricDefinition('article.rank.lifetime.top');

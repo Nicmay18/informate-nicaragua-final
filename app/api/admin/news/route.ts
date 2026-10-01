@@ -52,8 +52,18 @@ function canonicalMs(data: Record<string, any>): number {
  * quedaban al final de la lista del Admin (o fuera del limit al crecer).
  * Solución sin migrar datos: partir el query por tipo y reordenar en memoria.
  */
+// Solo los campos que el listado del panel realmente usa. Sin select, cada
+// carga de la lista descargaba el `contenido` HTML completo de cada documento
+// (lecturas iguales pero payload 10-50x mayor → transferencia saliente).
+const ADMIN_LIST_FIELDS = [
+  'slug', 'titulo', 'resumen', 'contenido', 'categoria', 'departamento',
+  'autor', 'imagen', 'imagenDestacada', 'keywords', 'fecha', 'publishedAt',
+  'fechaPublicacion', 'fechaActualizacion', 'publicado', 'estado', 'archived',
+  'destacada', 'vistas', 'puntosClave', 'palabras', 'nivel', 'nivelScore',
+] as const;
+
 async function fetchAdminDocs(db: FirebaseFirestore.Firestore) {
-  const snap = await db.collection('noticias').get();
+  const snap = await db.collection('noticias').select(...ADMIN_LIST_FIELDS).get();
   return snap.docs.sort((a, b) => canonicalMs(b.data()) - canonicalMs(a.data()) || a.id.localeCompare(b.id));
 }
 
