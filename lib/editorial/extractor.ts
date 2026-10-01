@@ -26,6 +26,7 @@ import type {
   MeniEvidence,
 } from './types';
 import { detectCategory } from './category-detector';
+import { OFFICIAL_SOURCE_CI_RE } from './known-sources';
 
 // Patrones reutilizables
 const ADJETIVOS_EMOCIONALES = /\b(?:incre[ií]ble|impresionante|escalofriante|conmocionado|indignado|furibundo|escandaloso|brutal|terrible|horrendo|devastador|espectacular|maravilloso|fant[aá]stico|extraordinario|impactante|alarmante|preocupante|grave|urgente|cr[ií]tico|catastr[oó]fico)\b/gi;
@@ -38,49 +39,13 @@ const ATRIBUCIONES_FALSAS = /\b(?:seg[uú]n fuentes (?:an[oó]nimas|confidencial
 
 const NOMBRES_PROPIOS = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,3}\b/g;
 
-// Lista de instituciones nicaragüenses y multilaterales (sin duplicados genéricos).
-const INSTITUCIONES_KNOWN = [
-  'Policía Nacional', 'Policía', 'Fiscalía', 'Bomberos', 'Cruz Roja',
-  'Medicina Legal', 'Hospital', 'Ministerio de Salud', 'MINSA', 'MINED', 'INETER',
-  'SINAPRED', 'COMUPRED', 'Alcaldía', 'Asamblea Nacional', 'Banco Central',
-  'ENATREL', 'ENACAL', 'Telecom', 'Tigo', 'Claro', 'UNAN', 'UCA', 'FAO',
-  'OMS', 'OPS', 'UNESCO', 'UNICEF', 'ACNUR', 'OEA', 'FMI', 'BID', 'BCN',
-  'MAG', 'MARENA', 'MTI', 'INTUR', 'MIFIC', 'MIGE', 'MEFCCA', 'MIFAMILIA',
-  'INSS', 'IPSFA', 'INATEC', 'Procuraduría', 'Corte Suprema',
-  'Consejo Supremo Electoral', 'Gobierno de Nicaragua', 'Gobierno',
-  'Presidencia', 'Copresidencia', 'Poder Judicial', 'Ejército de Nicaragua',
-  'Fuerza Naval', 'Distrito Naval', 'INVUR', 'INSS', 'IPSFA',
-];
-const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const INSTITUCIONES = new RegExp('\\b(?:' + INSTITUCIONES_KNOWN.map(escape).join('|') + ')\\b', 'gi');
-
-// Fuentes oficiales internacionales que deben reconocerse aunque la nota trate
-// un hecho fuera de Nicaragua. Se mantienen separadas para que el catálogo sea
-// ampliable sin mezclarlo con instituciones nicaragüenses.
-const FUENTES_OFICIALES_INTERNACIONALES = [
-  'Organismo de Investigación Judicial', 'OIJ',
-  'Ministerio Público de Costa Rica', 'Fiscalía General de la República de Costa Rica',
-  'Poder Judicial de Costa Rica', 'Fuerza Pública de Costa Rica',
-  'Ministerio de Seguridad Pública de Costa Rica', 'Migración y Extranjería de Costa Rica',
-  'Policía de Fronteras de Costa Rica',
-  'Fiscalía General', 'Ministerio Público', 'Poder Judicial',
-  'Interpol', 'Europol', 'FBI', 'Department of Homeland Security',
-  'Departamento de Estado de Estados Unidos', 'Gobierno de Costa Rica',
-];
-
-const FUENTES_OFICIALES_KNOWN = [
-  'Policía Nacional', 'Policía', 'Fiscalía', 'Ministerio de Salud', 'MINSA',
-  'Poder Judicial', 'Corte Suprema', 'Bomberos', 'Cruz Roja', 'Medicina Legal',
-  'Hospital', 'MINED', 'INETER', 'SINAPRED', 'COMUPRED', 'Alcaldía',
-  'Asamblea Nacional', 'Banco Central', 'ENATREL', 'ENACAL', 'FAO', 'OMS',
-  'OPS', 'UNESCO', 'UNICEF', 'ACNUR', 'OEA', 'FMI', 'BID', 'BCN', 'MAG',
-  'MARENA', 'MTI', 'INTUR', 'MIFIC', 'MIGE', 'MEFCCA', 'MIFAMILIA', 'INSS',
-  'IPSFA', 'INATEC', 'Gobierno de Nicaragua', 'Gobierno', 'Presidencia',
-  'Copresidencia', 'Ejército de Nicaragua', 'Fuerza Naval', 'Distrito Naval',
-  'INVUR', 'Ministerio de Educación', 'Ministerio de Gobernación',
-  'Ministerio de Obras Públicas', 'Ministerio de Transporte', 'Ministerio de Agricultura',
-];
-const FUENTES_OFICIALES = new RegExp('\\b(?:' + [...FUENTES_OFICIALES_KNOWN, ...FUENTES_OFICIALES_INTERNACIONALES].map(escape).join('|') + ')\\b', 'gi');
+// Instituciones y fuentes oficiales: catálogo canónico compartido
+// (./known-sources). Este archivo antes mantenía una lista local y las
+// capas decisorias (factuality-signals, trust) otras más pobres — la
+// divergencia hacía que SINAPRED/COMUPRED/Cruz Roja/MINED se trataran
+// como "fuente vaga" en el gate aunque el extractor las reconocía.
+const INSTITUCIONES = new RegExp(OFFICIAL_SOURCE_CI_RE.source, 'gi');
+const FUENTES_OFICIALES = new RegExp(OFFICIAL_SOURCE_CI_RE.source, 'gi');
 
 const FECHAS_REGEX = /\b(?:\d{1,2}\s+de\s+(?:enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|\d{4}|2025|2024)\b/gi;
 

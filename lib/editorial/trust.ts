@@ -21,6 +21,12 @@
  * citada en la oración anterior también atribuye la provisional).
  */
 
+import {
+  OFFICIAL_SOURCE_CS_RE,
+  OFFICIAL_SOURCE_CS_GLOBAL_RE,
+  NICARAGUA_PLACE_CS_GLOBAL_RE,
+} from './known-sources';
+
 export type TrustLevel = 'ALTA' | 'MEDIA' | 'BAJA';
 
 export interface TrustFinding {
@@ -89,17 +95,22 @@ const RE_SUCESO = /\b(asesin|homicidio|falleci|muert|deten|arrest|acusad|señala
 // positivo). Con clases de letras explícitas "robó" solo casa como palabra.
 const RE_DELITO_AFIRMADO = /(^|[^a-záéíóúñü])(asesinó|mató|robó|violó|estafó|secuestró|atropelló)(?![a-záéíóúñü])/i;
 const RE_NOMBRE_PROPIO = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,2}\b/g;
-// "Policía" a secas (forma estándar en prensa nacional, p.ej. "la Policía
-// investiga" — expresión aceptada del perfil sucesos) cuenta como institución
-// nombrada igual que "Policía Nacional". Case-sensitive a propósito: solo
-// "Policía" con mayúscula, no el sustantivo común "policía".
-const RE_FUENTE = /\b(Policía Nacional|Policía|Ministerio Público|Corte Suprema|INIFOM|MINSA|Bomberos|INTA|INETER|MTI|Fiscalía|Conapred|CNU|INSS|CSE|SERENE|Alcaldía|Gobierno|CNN|Reuters|AP|EFE|AFP|BBC|ONU|OEA|OIM|UNICEF|OPS|OMS|Banco Central|BCN)\b/g;
+// Fuentes nombradas: catálogo canónico compartido (./known-sources) —
+// antes era una lista local más pobre que la del extractor, lo que marcaba
+// SOURCE_MISSING sobre fuentes institucionales reales (SINAPRED, MINED,
+// Ejército, Cruz Roja…). Case-sensitive a propósito: solo la forma
+// capitalizada cuenta como fuente nombrada; el sustantivo común ("policía",
+// "hospital", "gobierno") no debe inflar el set de fuentes detectadas.
+// RE_FUENTE_CS: para .test() (no-global evita estado de lastIndex).
+const RE_FUENTE = OFFICIAL_SOURCE_CS_GLOBAL_RE;
+const RE_FUENTE_CS = OFFICIAL_SOURCE_CS_RE;
 // Contexto temporal real: fecha numérica O expresión temporal relativa que
 // ubica el hecho en el tiempo ("este miércoles", "durante la noche",
 // "el pasado fin de semana"). Un detector que no las reconoce produce
 // falsos positivos de TEMPORAL_CONTEXT_MISSING — corregido, no relajado.
 const RE_FECHA = /\b(\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|(este|el|la|pasad[oa]s?|próxim[oa]s?)?\s*(lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b|ayer|anteayer|hoy|esta (mañana|tarde|noche|madrugada|semana)|durante (la|el) (noche|madrugada|mañana|tarde|fin de semana|día)|(el|este|fin de) (fin de semana|año|mes)|recientemente|en horas de la (madrugada|mañana|tarde|noche)|últim[oa]s? (días|horas|semanas)|últimas \d+ horas|últimos \d+ (días|años)|hace \w+ (días|horas|semanas|meses|años)|\d{4})\b/i;
-const RE_LUGAR = /\b(Managua|León|Granada|Masaya|Chinandega|Matagalpa|Estelí|Jinotega|Nueva Segovia|Rivas|Chontales|Boaco|Carazo|Río San Juan|Siuna|Rosita|Bonanza|Bilwi|Puerto Cabezas|Waspán|Bluefields|Corn Island|Caribe (Norte|Sur)|RAAN|RAAS|Tipitapa|Jinotepe|Diriamba|Ocotal|Somoto|Juigalpa|San Carlos|Nindirí|Niquinohomo|Catarina|Ticuantepe|Ciudad Sandino)\b/g;
+// Lugares: catálogo canónico compartido (./known-sources).
+const RE_LUGAR = NICARAGUA_PLACE_CS_GLOBAL_RE;
 
 function paragraphs(html: string): string[] {
   return html
@@ -204,7 +215,7 @@ export function analyzeTrust(input: {
 
   for (const s of tituloSents) evalSentence(s, RE_ATRIBUCION.test(input.titulo));
   for (const p of paras) {
-    const parrafoAtribuido = RE_ATRIBUCION.test(p) || RE_FUENTE.test(p);
+    const parrafoAtribuido = RE_ATRIBUCION.test(p) || RE_FUENTE_CS.test(p);
     for (const s of splitSentences(p)) evalSentence(s, parrafoAtribuido);
   }
 

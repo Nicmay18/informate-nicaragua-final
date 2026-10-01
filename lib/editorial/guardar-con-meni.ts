@@ -146,12 +146,22 @@ export async function guardarConMeni(
   const TRUST_SIGNAL_SEVERITY: Record<string, FactualitySignal['severity']> = {
     CONTRADICTION: 'CRITICAL',
   };
-  const trustSignals: FactualitySignal[] = trust.factores.map((f) => ({
-    code: `TRUST_${f}`,
-    severity: TRUST_SIGNAL_SEVERITY[f] ?? 'IMPORTANT',
-    evidence: trust.diagnostico.queFalta.join('; ').slice(0, 160) || f,
-    desc: `capa de confianza: ${f}`,
-  }));
+  // Dedup del mismo root cause: si la barrera factual ya reportó el problema
+  // de sourcing (VAGUE_ATTRIBUTION/FIELD_REPORT/NO_ATTRIBUTION/
+  // UNSOURCED_MATERIAL_FIGURES), TRUST_SOURCE_MISSING describe la MISMA causa
+  // — se anexa la evidencia y no se emite como segundo issue al Supervisor.
+  const SOURCING_CODES = new Set([
+    'VAGUE_ATTRIBUTION', 'FIELD_REPORT', 'NO_ATTRIBUTION', 'UNSOURCED_MATERIAL_FIGURES',
+  ]);
+  const sourcingAlreadyReported = factualitySignals.some(s => SOURCING_CODES.has(s.code));
+  const trustSignals: FactualitySignal[] = trust.factores
+    .filter((f) => !(f === 'SOURCE_MISSING' && sourcingAlreadyReported))
+    .map((f) => ({
+      code: `TRUST_${f}`,
+      severity: TRUST_SIGNAL_SEVERITY[f] ?? 'IMPORTANT',
+      evidence: trust.diagnostico.queFalta.join('; ').slice(0, 160) || f,
+      desc: `capa de confianza: ${f}`,
+    }));
   const allSignals = [...factualitySignals, ...trustSignals];
 
   // Decisión del Agente Supervisor Editorial Permanente (REGLA DE CIERRE)

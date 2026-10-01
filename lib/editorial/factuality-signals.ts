@@ -13,6 +13,8 @@
  * Un texto bien atribuido o con research no genera señales aunque sea extraordinario.
  */
 
+import { OFFICIAL_SOURCE_CI_RE, hasConcretePlace } from './known-sources';
+
 export type FactualitySeverity = 'CRITICAL' | 'IMPORTANT';
 
 export interface FactualitySignal {
@@ -83,13 +85,47 @@ function hasEvidence(input: FactualityInput): boolean {
  * Atribución CONCRETA: institución, agencia o persona identificable.
  * "según la Policía Nacional" ≠ "según medios locales".
  * El segundo no se puede verificar — ver VAGUE_ATTRIBUTION_PROPOSAL.md.
+ *
+ * Instituciones: catálogo canónico compartido (./known-sources) — el mismo
+ * que usa el extractor. Antes esta lista era propia y más pobre: SINAPRED,
+ * MINED, Ejército, Cruz Roja, Medicina Legal, etc. se marcaban como vagas
+ * aunque son fuentes institucionales reales.
  */
-const CONCRETE_INSTITUTION_RE =
-  /\b(Polic[íi]a Nacional|Polic[íi]a|Ministerio Público|Ministerio de [A-ZÁÉÍÓÚa-záéíóúñ]+|MINSA|Bomberos|Fiscal[íi]a|Corte Suprema|INETER|INIFOM|INSS|INTA|MTI|CNU|CSE|SERENE|Conapred|Alcald[íi]a|Gobierno|Banco Central|BCN|EFE|AFP|\bAP\b|Reuters|ONU|OMS|OPS|OEA|OIM|UNICEF|BBC|CNN)\b/i;
-// Sensible a mayúsculas a propósito: "según el viceministro" NO es concreta;
-// "según Juan Pérez" sí. Con /i el set [A-ZÁÉÍÓÚÑ] casaría minúsculas también.
-const CONCRETE_NAMED_RE =
-  /\b(según|informó|dijo|confirmó|declaró|reveló|precisó|declaraciones de|portavoz de|vocero de|comunicado de[l]?)\s+(?:la |el |los |las )?[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/;
+const CONCRETE_INSTITUTION_RE = OFFICIAL_SOURCE_CI_RE;
+
+// Marcador de atribución case-INSENSITIVE (corrige "Según X" al inicio de
+// oración, antes ignorado por la regex case-sensitive) + nombre propio
+// capitalizado verificado aparte, porque con /i global el set [A-Z] casaría
+// minúsculas y "según el viceministro" pasaría como persona identificada.
+const ATTRIBUTION_MARKER_CI_RE =
+  /\b(según|de acuerdo (?:a|con)|informó|dijo|confirmó|declaró|reveló|precisó|declaraciones de|portavoz de|vocero de|comunicado de[l]?)\s+(?:la |el |los |las )?/gi;
+const PROPER_NAME_START_RE = /^[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+/;
+
+/** ¿Hay al menos una atribución a persona identificable por nombre? */
+function hasConcreteNamedSource(text: string): boolean {
+  for (const m of text.matchAll(ATTRIBUTION_MARKER_CI_RE)) {
+    const rest = text.slice((m.index ?? 0) + m[0].length);
+    if (PROPER_NAME_START_RE.test(rest)) return true;
+  }
+  return false;
+}
+
+/**
+ * FIELD_REPORT — reporting de campo propio / testimonios desde el lugar.
+ * Distinto de fuente institucional Y de atribución vaga:
+ *   "de acuerdo con reportes recibidos desde la comunidad de X, Siuna"
+ *   "según habitantes de la comunidad de El Inocente N.º 2"
+ *   "información obtenida en el lugar"
+ * Requiere DOS componentes: (a) lenguaje de reporte de campo y
+ * (b) ubicación concreta del hecho. "según testigos" o "según medios
+ * locales" sin contexto territorial siguen siendo VAGUE — no promocionan.
+ */
+const FIELD_REPORT_LANG_RE =
+  /\b(reportes?|informaci[oó]n|versiones?|testimonios?|relatos?|im[aá]genes)\s+(recibid\w+|obtenid\w+|provenientes?|recolectad\w+|proporcionad\w+|difundid\w+)?\s*(desde|en|de)\s+(la|el|una)\s+(comunidad|zona|lugar|aldea|municipio|sitio|sector)\b|\bseg[uú]n\s+(habitantes|pobladores|residentes|comunitarios|vecinos|familiares|testigos|lugareños)\s+(de|del|en)\s+(la\s+)?(comunidad|zona|aldea|municipio|localidad|sector)\b|\b(desde|en)\s+el\s+(lugar|sitio)\s+(de\s+(la|los|el)\s+)?(hechos?|incidente|siniestro|accidente|emergencia|tragedia)\b|\b(corresponsal|enviado\s+especial|en\s+terreno|cobertura\s+(de\s+)?Nicaragua\s+Informate)\b|\b(Nicaragua\s+Informate|este\s+medio|nuestro\s+(equipo|corresponsal|reportero))\s+(conoció|confirmó|verificó|document[óa]|estuvo|obtuvo|visit[óo])\b/i;
+
+function hasFieldReport(text: string): boolean {
+  return FIELD_REPORT_LANG_RE.test(text) && hasConcretePlace(text);
+}
 
 /**
  * Detecta señales de riesgo factual. Pure function, sin IO.
@@ -182,23 +218,39 @@ export function detectFactualitySignals(input: FactualityInput): FactualitySigna
     });
   }
 
-  // ── F. Atribución vaga/colectiva ──
+  // ── F. Clasificación de la atribución ──
   // Tiene lenguaje atributivo (por eso las señales B–E2 no dispararon) pero
   // NINGUNA fuente concreta identificable + ≥2 cifras materiales.
-  // IMPORTANT → Supervisor: INVESTIGAR_MAS (no bloqueo — ver spec).
+  // Se distinguen dos clases:
+  //   FIELD_REPORT — reporting de campo con ubicación concreta (testimonios
+  //     de la comunidad X, información obtenida en el lugar). No es fuente
+  //     institucional, pero tampoco agregación vaga. Sigue siendo IMPORTANT:
+  //     el Supervisor decide (INVESTIGAR_MAS) — la clasificación corrige el
+  //     diagnóstico, no relaja la barrera.
+  //   VAGUE_ATTRIBUTION — atribución colectiva sin territorialidad ni
+  //     primera mano ("según medios", "reportes", "autoridades").
   if (
     hasAttribution &&
     !hasExternalEvidence &&
     !CONCRETE_INSTITUTION_RE.test(text) &&
-    !CONCRETE_NAMED_RE.test(text) &&
+    !hasConcreteNamedSource(text) &&
     distinctFigures.size >= 2
   ) {
-    signals.push({
-      code: 'VAGUE_ATTRIBUTION',
-      severity: 'IMPORTANT',
-      evidence: 'atribución colectiva sin fuente nombrada ("medios", "reportes", "autoridades")',
-      desc: 'afirmaciones atribuidas solo a fuentes vagas; no hay institución, agencia ni persona identificable',
-    });
+    if (hasFieldReport(text)) {
+      signals.push({
+        code: 'FIELD_REPORT',
+        severity: 'IMPORTANT',
+        evidence: 'reportes/testimonios desde el lugar con ubicación concreta, sin fuente institucional nombrada',
+        desc: 'la nota se sostiene en reporting de campo (información o testimonios desde el lugar del hecho); falta confirmación de fuente institucional o persona identificable',
+      });
+    } else {
+      signals.push({
+        code: 'VAGUE_ATTRIBUTION',
+        severity: 'IMPORTANT',
+        evidence: 'atribución colectiva sin fuente nombrada ("medios", "reportes", "autoridades")',
+        desc: 'afirmaciones atribuidas solo a fuentes vagas; no hay institución, agencia ni persona identificable',
+      });
+    }
   }
 
   return signals;

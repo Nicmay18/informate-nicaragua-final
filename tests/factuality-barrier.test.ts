@@ -326,11 +326,13 @@ describe('auditoría final: atribución vaga y confianza', () => {
   it('confianza BAJA + 0 fuentes ya no sale con PUBLICAR limpio', async () => {
     runMeniAsyncMock.mockResolvedValue(meniResult(VAGUE_INPUT.contenido, VAGUE_INPUT.resumen));
     const { supervisor, factualitySignals, updateData } = await guardarConMeni(VAGUE_INPUT, db);
-    // La capa Trust corre PRE-decisión: TRUST_SOURCE_MISSING + VAGUE_ATTRIBUTION
-    // entran al Supervisor → al menos INVESTIGAR_MAS, nunca PUBLICAR directo.
+    // La capa Trust corre PRE-decisión. VAGUE_ATTRIBUTION entra al
+    // Supervisor → al menos INVESTIGAR_MAS, nunca PUBLICAR directo.
+    // TRUST_SOURCE_MISSING describe el MISMO root cause: guardarConMeni lo
+    // deduplica (un problema de sourcing = un issue, no dos).
     const codes = factualitySignals.map(s => s.code);
     expect(codes).toContain('VAGUE_ATTRIBUTION');
-    expect(codes).toContain('TRUST_SOURCE_MISSING');
+    expect(codes).not.toContain('TRUST_SOURCE_MISSING');
     expect(supervisor.verdict).not.toBe('PUBLICAR');
     // confianza queda persistida con la decisión, no solo post-guardado
     const confianza = updateData.confianza as { nivel: string } | undefined;
