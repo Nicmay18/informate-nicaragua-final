@@ -21,7 +21,7 @@ function isRateLimited(key: string): boolean {
   return false;
 }
 
-export async function trackViewAction(slug: string, referrer?: string, utmSource?: string, userAgent?: string) {
+export async function trackViewAction(slug: string, referrer?: string, utmSource?: string, userAgent?: string, sessionId?: string) {
   try {
     // Extraer IP real (funciona detrás de Vercel/Cloudflare)
     const h = await headers();
@@ -34,7 +34,8 @@ export async function trackViewAction(slug: string, referrer?: string, utmSource
       return { ok: true, views: null, rateLimited: true };
     }
 
-    const result = await incrementViewsBySlug(slug, referrer, utmSource, userAgent);
+    const safeSessionId = typeof sessionId === 'string' ? sessionId.slice(0, 100) : undefined;
+    const result = await incrementViewsBySlug(slug, referrer, utmSource, userAgent, safeSessionId);
 
     if (result === null) {
       logger.error('[track-view] incrementViewsBySlug returned null:', { ip, slug });

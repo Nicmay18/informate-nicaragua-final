@@ -12,6 +12,30 @@ import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { injectInternalLinks } from '@/lib/article-links';
 import { editorialCleanup, isSensitiveArticle, CLEANUP_ALLOWED_SLUGS, normalizeText, jaccardSimilarity } from '@/lib/editorial-cleanup';
 import { trackViewAction } from '@/app/actions/track-view';
+
+// Sesion anonima compartida con JourneyTracker (30 min, sessionStorage).
+function getAnalyticsSessionId(): string | undefined {
+  if (typeof window === 'undefined') return undefined;
+  try {
+    const KEY = 'ni_session_id';
+    const TS = 'ni_session_ts';
+    const now = Date.now();
+    const id = sessionStorage.getItem(KEY);
+    const ts = sessionStorage.getItem(TS);
+    if (id && ts && now - parseInt(ts, 10) < 30 * 60 * 1000) {
+      sessionStorage.setItem(TS, String(now));
+      return id;
+    }
+    const nid = typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : 's-' + now + '-' + Math.random().toString(36).slice(2, 9);
+    sessionStorage.setItem(KEY, nid);
+    sessionStorage.setItem(TS, String(now));
+    return nid;
+  } catch {
+    return undefined;
+  }
+}
 import { getArticleMetricsAction } from '@/app/actions/get-article-metrics';
 import KeyPoints from './KeyPoints';
 import ShareBar from './ShareBar';
@@ -82,7 +106,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
         const utmSource = urlParams?.get('utm_source') || '';
         const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
-        const result = await trackViewAction(noticia.slug, referrer, utmSource, userAgent);
+        const result = await trackViewAction(noticia.slug, referrer, utmSource, userAgent, getAnalyticsSessionId());
         if (result.ok && typeof result.views === 'number') {
           setViews(result.views);
           sessionStorage.setItem(sessionKey, 'true');

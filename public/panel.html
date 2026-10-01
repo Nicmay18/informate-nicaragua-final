@@ -1493,61 +1493,109 @@ sin texto ni marcas de agua, composición periodística"
       </div>
 
       <!-- ANALYTICS -->
-      <div id="analytics-tab" class="tab-content">
+            <div id="analytics-tab" class="tab-content">
         <div class="page-header">
-          <div class="page-title"><h1>Analytics & Tráfico Real</h1><p>Métricas en tiempo real — De dónde vienen tus lectores y qué están leyendo ahora.</p></div>
+          <div class="page-title"><h1>Analytics & Tráfico Real</h1><p>Centro de control — solo datos reales de producción. Sin métricas simuladas.</p></div>
           <div class="header-actions">
-            <button class="btn btn-primary" onclick="cargarTraficoRealTime()" style="background: var(--danger);"><i class="fas fa-satellite-dish"></i><span>Ver Tráfico Vivo</span></button>
-            <button class="btn btn-secondary" onclick="cargarMetricas()"><i class="fas fa-sync-alt"></i><span>Histórico</span></button>
+            <span id="an-last-update" style="font-size:12px;color:var(--gray-500);align-self:center;">Sin actualizar</span>
+            <button class="btn btn-secondary" id="an-auto-btn" onclick="toggleAnalyticsAuto()"><i class="fas fa-sync-alt"></i><span>Auto: OFF</span></button>
+            <button class="btn btn-primary" onclick="cargarTraficoRealTime()" style="background: var(--danger);"><i class="fas fa-satellite-dish"></i><span>Actualizar</span></button>
           </div>
         </div>
 
-        <!-- Dashboard Tiempo Real -->
-        <div id="real-time-dashboard" style="margin-bottom: 24px;">
-          <div class="stats-grid">
-            <div class="stat-card" style="border-bottom: 3px solid #1877f2;">
-              <div class="stat-header">
-                <div><div class="stat-value" id="rt-facebook">0</div><div class="stat-label">Facebook</div></div>
-                <div class="stat-icon" style="background: #1877f220; color: #1877f2;"><i class="fab fa-facebook-f"></i></div>
-              </div>
+        <!-- FILTROS -->
+        <div class="card" style="margin-bottom: 20px;">
+          <div class="card-body" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px 20px;">
+            <div style="display:flex;gap:4px;background:var(--gray-100);border-radius:8px;padding:3px;">
+              <button class="btn-sm an-period-btn" data-period="24h" onclick="setAnalyticsPeriod('24h')" style="border:none;background:var(--primary-600);color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">24h</button>
+              <button class="btn-sm an-period-btn" data-period="7d" onclick="setAnalyticsPeriod('7d')" style="border:none;background:transparent;color:var(--gray-600);padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">7 días</button>
+              <button class="btn-sm an-period-btn" data-period="30d" onclick="setAnalyticsPeriod('30d')" style="border:none;background:transparent;color:var(--gray-600);padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;">30 días</button>
             </div>
-            <div class="stat-card" style="border-bottom: 3px solid #229ED9;">
-              <div class="stat-header">
-                <div><div class="stat-value" id="rt-telegram">0</div><div class="stat-label">Telegram</div></div>
-                <div class="stat-icon" style="background: #229ed920; color: #229ed9;"><i class="fab fa-telegram-plane"></i></div>
-              </div>
-            </div>
-            <div class="stat-card" style="border-bottom: 3px solid #34a853;">
-              <div class="stat-header">
-                <div><div class="stat-value" id="rt-google">0</div><div class="stat-label">Google / Discover</div></div>
-                <div class="stat-icon" style="background: #34a85320; color: #34a853;"><i class="fab fa-google"></i></div>
-              </div>
-            </div>
-            <div class="stat-card" style="border-bottom: 3px solid #25D366;">
-              <div class="stat-header">
-                <div><div class="stat-value" id="rt-whatsapp">0</div><div class="stat-label">WhatsApp</div></div>
-                <div class="stat-icon" style="background: #25d36620; color: #25d366;"><i class="fab fa-whatsapp"></i></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="content-grid" style="margin-top: 20px;">
-            <div class="card">
-              <div class="card-header"><h3 class="card-title"><i class="fas fa-bolt" style="color: var(--danger);"></i>Top 10 en las últimas 24h</h3></div>
-              <div class="card-body" id="rt-top-paginas">
-                <p style="color: var(--gray-400); font-size: 13px; text-align: center; padding: 20px;">Esperando datos de tráfico...</p>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header"><h3 class="card-title"><i class="fas fa-users" style="color: var(--primary-600);"></i>Últimos Visitantes</h3></div>
-              <div class="card-body" id="rt-ultimos-eventos" style="max-height: 400px; overflow-y: auto;">
-                <p style="color: var(--gray-400); font-size: 13px; text-align: center; padding: 20px;">Buscando actividad reciente...</p>
-              </div>
-            </div>
+            <select id="an-fuente" onchange="aplicarFiltrosAnalytics()" style="padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:12px;">
+              <option value="">Todas las fuentes</option>
+              <option value="facebook">Facebook</option>
+              <option value="google">Google / Discover</option>
+              <option value="telegram">Telegram</option>
+              <option value="whatsapp">WhatsApp</option>
+              <option value="twitter">Twitter / X</option>
+              <option value="directo">Directo</option>
+              <option value="otro">Otros referrers</option>
+              <option value="desconocido">Desconocido</option>
+            </select>
+            <select id="an-categoria" onchange="aplicarFiltrosAnalytics()" style="padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:12px;">
+              <option value="">Todas las categorías</option>
+            </select>
+            <input id="an-articulo" type="text" placeholder="Filtrar por slug de artículo..." onchange="aplicarFiltrosAnalytics()" style="padding:7px 10px;border:1px solid var(--gray-200);border-radius:8px;font-size:12px;min-width:200px;">
+            <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosAnalytics()"><i class="fas fa-times"></i><span>Limpiar</span></button>
           </div>
         </div>
 
-        <div class="nav-label" style="margin: 32px 0 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Métricas Acumuladas (Todo el tiempo)</div>
+        <!-- TIEMPO REAL -->
+        <div class="stats-grid" style="margin-bottom:20px;">
+          <div class="stat-card" style="border-bottom:3px solid var(--danger);">
+            <div class="stat-header"><div><div class="stat-value" id="an-rt-eventos">—</div><div class="stat-label">Visitas últimos 15 min</div></div><div class="stat-icon" style="background:#ef444420;color:var(--danger);"><i class="fas fa-bolt"></i></div></div>
+          </div>
+          <div class="stat-card" style="border-bottom:3px solid var(--primary-500);">
+            <div class="stat-header"><div><div class="stat-value" id="an-rt-articulos">—</div><div class="stat-label">Artículos con tráfico ahora</div></div><div class="stat-icon" style="background:var(--primary-100);color:var(--primary-600);"><i class="fas fa-newspaper"></i></div></div>
+          </div>
+          <div class="stat-card" style="border-bottom:3px solid var(--info);">
+            <div class="stat-header"><div><div class="stat-value" id="an-rt-sesiones">—</div><div class="stat-label">Visitantes activos (sesiones)</div></div><div class="stat-icon" style="background:#0ea5e920;color:var(--info);"><i class="fas fa-users"></i></div></div>
+          </div>
+          <div class="stat-card" style="border-bottom:3px solid var(--success);">
+            <div class="stat-header"><div><div class="stat-value" id="an-peak-hour">—</div><div class="stat-label">Hora pico (Nicaragua)</div></div><div class="stat-icon" style="background:#22c55e20;color:var(--success);"><i class="fas fa-clock"></i></div></div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW 1: hora + fuentes -->
+        <div class="content-grid" style="margin-bottom:20px;">
+          <div class="card">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-chart-column" style="color:var(--primary-600);"></i>Tráfico por hora — últimas 24h (hora Nicaragua)</h3></div>
+            <div class="card-body" id="an-hourly-chart"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-share-alt" style="color:var(--info);"></i>Fuentes de tráfico</h3></div>
+            <div class="card-body" id="an-sources-body"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW 2: diario + heatmap -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-chart-line" style="color:var(--success);"></i>Tráfico por día <span id="an-daily-range" style="font-weight:400;font-size:11px;color:var(--gray-500);"></span></h3></div>
+          <div class="card-body" id="an-daily-chart"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
+        </div>
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-th" style="color:var(--warning);"></i>Calendario de actividad <span style="font-weight:400;font-size:11px;color:var(--gray-500);">(intensidad por día — datos reales disponibles)</span></h3></div>
+          <div class="card-body" id="an-heatmap"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
+        </div>
+
+        <!-- ROW 3: categorías + insights -->
+        <div class="content-grid" style="margin-bottom:20px;">
+          <div class="card">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-tags" style="color:var(--info);"></i>Categorías del período</h3></div>
+            <div class="card-body" id="an-categorias-body"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-lightbulb" style="color:var(--warning);"></i>Tendencias (reglas deterministas)</h3></div>
+            <div class="card-body" id="an-insights-body"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
+          </div>
+        </div>
+
+        <!-- TABLA ARTÍCULOS -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-list-ol" style="color:var(--primary-600);"></i>Rendimiento de artículos <span style="font-weight:400;font-size:11px;color:var(--gray-500);">1h / 6h / 24h en vivo · período · total histórico</span></h3></div>
+          <div class="card-body" id="an-articulos-body" style="overflow-x:auto;"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
+        </div>
+
+        <!-- ÚLTIMOS EVENTOS -->
+        <div class="card">
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-users" style="color: var(--primary-600);"></i>Últimos Visitantes</h3></div>
+          <div class="card-body" id="rt-ultimos-eventos" style="max-height: 400px; overflow-y: auto;">
+            <p style="color: var(--gray-400); font-size: 13px; text-align: center; padding: 20px;">Buscando actividad reciente...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-label" style="margin: 32px 0 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Métricas Acumuladas (Todo el tiempo)</div>
         <div class="stats-grid" id="metricas-stats">
           <div class="stat-card"><div class="stat-header"><div><div class="stat-value" id="m-total-vistas">0</div><div class="stat-label">Vistas Totales</div></div><div class="stat-icon blue"><i class="fas fa-eye"></i></div></div><div class="stat-change"><i class="fas fa-database"></i><span>Desde Firestore</span></div></div>
           <div class="stat-card"><div class="stat-header"><div><div class="stat-value" id="m-promedio-vistas">0</div><div class="stat-label">Vistas Promedio</div></div><div class="stat-icon green"><i class="fas fa-chart-bar"></i></div></div><div class="stat-change"><i class="fas fa-newspaper"></i><span>Por noticia</span></div></div>
@@ -6237,78 +6285,214 @@ VERIFICACIÓN FINAL
       }
     };
 
-    window.cargarTraficoRealTime = async function() {
-      const topEl = document.getElementById('rt-top-paginas');
+    // ---------- ANALYTICS: centro de control (solo datos reales) ----------
+    const NI_AN = { period: '24h', timer: null };
+    window.NI_AN = NI_AN;
+
+    window.setAnalyticsPeriod = function(p) {
+      NI_AN.period = p;
+      document.querySelectorAll('.an-period-btn').forEach(b => {
+        const on = b.dataset.period === p;
+        b.style.background = on ? 'var(--primary-600)' : 'transparent';
+        b.style.color = on ? '#fff' : 'var(--gray-600)';
+      });
+      cargarTraficoRealTime();
+    };
+
+    window.aplicarFiltrosAnalytics = function() { cargarTraficoRealTime(); };
+
+    window.limpiarFiltrosAnalytics = function() {
+      document.getElementById('an-fuente').value = '';
+      document.getElementById('an-categoria').value = '';
+      document.getElementById('an-articulo').value = '';
+      cargarTraficoRealTime();
+    };
+
+    window.toggleAnalyticsAuto = function() {
+      const btn = document.getElementById('an-auto-btn');
+      if (NI_AN.timer) {
+        clearInterval(NI_AN.timer);
+        NI_AN.timer = null;
+        btn.innerHTML = '<i class="fas fa-sync-alt"></i><span>Auto: OFF</span>';
+      } else {
+        NI_AN.timer = setInterval(() => { cargarTraficoRealTime(true); }, 60000);
+        btn.innerHTML = '<i class="fas fa-sync-alt fa-spin"></i><span>Auto: 60s</span>';
+        cargarTraficoRealTime(true);
+      }
+    };
+
+    function anEsc(t) {
+      return String(t == null ? '' : t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function anBars(data, opts) {
+      opts = opts || {};
+      if (!data || !data.length) return '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin datos en este período.</p>';
+      const W = 640, H = 170, PADL = 30, PADB = 22, PADT = 8;
+      const max = Math.max(1, ...data.map(d => d.value));
+      const inner = W - PADL - 8;
+      const step = inner / data.length;
+      const bw = Math.max(2, step - 3);
+      let bars = '';
+      data.forEach((d, i) => {
+        const bh = Math.max(d.value > 0 ? 2 : 0, Math.round((d.value / max) * (H - PADT - PADB)));
+        const x = PADL + i * step, y = H - PADB - bh;
+        bars += '<rect x="' + x.toFixed(1) + '" y="' + y + '" width="' + bw.toFixed(1) + '" height="' + bh + '" rx="2" fill="' + (opts.color || '#2563eb') + '"><title>' + anEsc(d.label) + ': ' + d.value + '</title></rect>';
+      });
+      const labelEvery = Math.ceil(data.length / (opts.labels || 8));
+      let labels = '';
+      data.forEach((d, i) => {
+        if (i % labelEvery !== 0) return;
+        labels += '<text x="' + (PADL + i * step + bw / 2).toFixed(1) + '" y="' + (H - 6) + '" font-size="9" fill="#94a3b8" text-anchor="middle">' + anEsc(d.label) + '</text>';
+      });
+      // línea del máximo
+      const grid = '<line x1="' + PADL + '" y1="' + (H - PADB) + '" x2="' + W + '" y2="' + (H - PADB) + '" stroke="#e2e8f0" stroke-width="1"/>'
+        + '<text x="4" y="' + (PADT + 8) + '" font-size="9" fill="#94a3b8">' + max + '</text>';
+      return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block;">' + grid + bars + labels + '</svg>';
+    }
+
+    const AN_SOURCE_COLORS = { facebook:'#1877f2', telegram:'#229ed9', google:'#34a853', whatsapp:'#25d366', twitter:'#0f1419', directo:'#64748b', otro:'#a855f7', desconocido:'#cbd5e1' };
+    const AN_SOURCE_LABELS = { facebook:'Facebook', telegram:'Telegram', google:'Google / Discover', whatsapp:'WhatsApp', twitter:'Twitter/X', directo:'Directo', otro:'Otros', desconocido:'Desconocido' };
+
+    function anSourceBars(sources) {
+      const entries = Object.entries(sources || {}).filter(([,v]) => v > 0).sort((a,b) => b[1]-a[1]);
+      if (!entries.length) return '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin datos de fuentes.</p>';
+      const total = entries.reduce((s,[,v]) => s+v, 0);
+      const max = entries[0][1];
+      return entries.map(([k,v]) => {
+        const pct = Math.round((v/total)*100);
+        const w = Math.round((v/max)*100);
+        const color = AN_SOURCE_COLORS[k] || '#94a3b8';
+        const label = AN_SOURCE_LABELS[k] || k;
+        return '<div style="margin-bottom:12px;">'
+          + '<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;font-weight:600;color:var(--gray-800);">' + label + '</span><span style="font-size:12px;font-weight:700;color:var(--gray-600);">' + v.toLocaleString() + ' · ' + pct + '%</span></div>'
+          + '<div style="height:8px;background:var(--gray-100);border-radius:999px;overflow:hidden;"><div style="width:' + w + '%;height:100%;background:' + color + ';border-radius:999px;"></div></div>'
+          + '</div>';
+      }).join('');
+    }
+
+    function anHeatmap(daily) {
+      if (!daily || !daily.length) return '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin histórico suficiente.</p>';
+      const max = Math.max(1, ...daily.map(d => d.views));
+      const cell = 18, gap = 4;
+      // grid 7 filas (días semana) x semanas — último día a la derecha
+      const days = daily.slice();
+      const cols = Math.ceil(days.length / 7);
+      let cells = '';
+      // alinear: la primera celda cae en el día de semana real (UTC)
+      const firstDow = new Date(days[0].date + 'T00:00:00Z').getUTCDay();
+      days.forEach((d, i) => {
+        const pos = i + firstDow;
+        const col = Math.floor(pos / 7), row = pos % 7;
+        const intensity = d.views / max;
+        const bg = d.views === 0 ? '#f1f5f9' : 'rgba(37,99,235,' + (0.15 + intensity * 0.85).toFixed(2) + ')';
+        cells += '<rect x="' + (col * (cell + gap)) + '" y="' + (row * (cell + gap)) + '" width="' + cell + '" height="' + cell + '" rx="3" fill="' + bg + '"><title>' + d.date + ': ' + d.views + ' visitas</title></rect>';
+      });
+      const w = (cols + 1) * (cell + gap), h = 7 * (cell + gap);
+      return '<svg viewBox="0 0 ' + w + ' ' + h + '" style="max-width:100%;height:auto;display:block;margin:0 auto;">' + cells + '</svg>'
+        + '<p style="font-size:11px;color:var(--gray-500);text-align:center;margin-top:8px;">' + days.length + ' días de histórico real · ' + days[0].date + ' → ' + days[days.length-1].date + '</p>';
+    }
+
+    function anTrendBadge(t, delta) {
+      const map = { acelerando:['#16a34a','▲'], perdiendo:['#dc2626','▼'], estable:['#64748b','■'], nuevo:['#0ea5e9','★'] };
+      const [c, icon] = map[t] || map.estable;
+      const extra = (delta !== null && delta !== undefined) ? ' ' + (delta > 0 ? '+' : '') + delta + '%' : '';
+      return '<span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;color:#fff;background:' + c + ';">' + icon + ' ' + t + extra + '</span>';
+    }
+
+    window.cargarTraficoRealTime = async function(silent) {
       const ultimosEl = document.getElementById('rt-ultimos-eventos');
-      
       try {
         const adminToken = localStorage.getItem('admin_api_key') || '';
-        const [resp, noticiasCache] = await Promise.all([
-          fetch('/api/admin/traffic', { method: 'POST', cache: 'no-store', headers: { 'x-admin-token': adminToken } }),
-          getNoticiasCache().catch(() => [])
-        ]);
+        const q = new URLSearchParams({ periodo: NI_AN.period });
+        const f = document.getElementById('an-fuente').value;
+        const c = document.getElementById('an-categoria').value;
+        const a = document.getElementById('an-articulo').value.trim();
+        if (f) q.set('fuente', f);
+        if (c) q.set('categoria', c);
+        if (a) q.set('articulo', a);
+        const resp = await fetch('/api/admin/traffic?' + q.toString(), { method: 'POST', cache: 'no-store', headers: { 'x-admin-token': adminToken } });
         const text = await resp.text();
         if (!resp.ok) throw new Error(text);
         const data = JSON.parse(text);
-
         if (!data.ok) throw new Error(data.error || 'Error desconocido');
-        
-        const stats = data.stats;
-        const vistasMap = new Map(noticiasCache.map(n => [n.slug, n.vistas || 0]));
-        
-        // 1. Actualizar contadores por fuente
-        document.getElementById('rt-facebook').textContent = (stats.fuentes.facebook || 0).toLocaleString();
-        document.getElementById('rt-telegram').textContent = (stats.fuentes.telegram || 0).toLocaleString();
-        document.getElementById('rt-google').textContent = (stats.fuentes.google || 0).toLocaleString();
-        document.getElementById('rt-whatsapp').textContent = (stats.fuentes.whatsapp || 0).toLocaleString();
-        
-        // 2. Renderizar Top Páginas (24h)
-        topEl.innerHTML = stats.topPaginas.map((n, i) => {
-          const totalVistas = vistasMap.get(n.slug) || 0;
-          return `
-          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);">
-            <div style="font-size:16px;font-weight:800;color:var(--gray-300);width:20px;">${i+1}</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:normal;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
-              <div style="font-size:11px;color:var(--gray-500);">${n.vistas.toLocaleString()} vistas en 24h · ${totalVistas.toLocaleString()} totales</div>
-            </div>
-            <div style="padding:4px 8px;background:var(--primary-50);color:var(--primary-700);border-radius:6px;font-size:11px;font-weight:700;">+${n.vistas} hoy</div>
-          </div>
-        `;
-        }).join('') || '<p style="text-align:center;padding:20px;color:var(--gray-400);">Sin visitas en las últimas 24h.</p>';
-        
-        // 3. Renderizar Feed de Actividad
-        ultimosEl.innerHTML = stats.ultimosEventos.map(ev => {
+        const st = data.stats;
+
+        // timestamp de actualización
+        document.getElementById('an-last-update').textContent = 'Actualizado: ' + new Date().toLocaleTimeString();
+
+        // realtime
+        document.getElementById('an-rt-eventos').textContent = (st.realtime ? st.realtime.events : 0).toLocaleString();
+        document.getElementById('an-rt-articulos').textContent = (st.realtime ? st.realtime.distinctSlugs : 0).toLocaleString();
+        document.getElementById('an-rt-sesiones').textContent = st.realtime && st.realtime.distinctSessions !== null && st.realtime.distinctSessions !== undefined
+          ? st.realtime.distinctSessions.toLocaleString()
+          : 'sin datos';
+        document.getElementById('an-peak-hour').textContent = st.horarios && st.horarios.peakHour ? st.horarios.peakHour : 'sin datos';
+
+        // charts
+        document.getElementById('an-hourly-chart').innerHTML = anBars(
+          (st.hourly || []).map(h => ({ label: h.label, value: h.views })), { color: '#2563eb', labels: 8 });
+        document.getElementById('an-daily-range').textContent = st.daily && st.daily.length ? '(' + st.daily[0].date + ' → ' + st.daily[st.daily.length-1].date + ')' : '';
+        document.getElementById('an-daily-chart').innerHTML = anBars(
+          (st.daily || []).map(d => ({ label: d.date.slice(5), value: d.views })), { color: '#16a34a', labels: 10 });
+        document.getElementById('an-heatmap').innerHTML = anHeatmap(st.daily || []);
+        document.getElementById('an-sources-body').innerHTML = anSourceBars(st.sourcesPeriod || st.fuentes || {});
+
+        // categorías + poblar select
+        const catSel = document.getElementById('an-categoria');
+        const catVal = catSel.value;
+        const cats = (st.categorias || []).map(x => x.categoria);
+        catSel.innerHTML = '<option value="">Todas las categorías</option>' + cats.map(x => '<option value="' + anEsc(x) + '"' + (x === catVal ? ' selected' : '') + '>' + anEsc(x) + '</option>').join('');
+        const catSum = cats.length;
+        document.getElementById('an-categorias-body').innerHTML = catSum ? (st.categorias || []).map(x =>
+          '<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span style="font-size:12px;font-weight:600;color:var(--gray-800);">' + anEsc(x.categoria) + '</span><span style="font-size:12px;font-weight:700;color:var(--gray-600);">' + x.views.toLocaleString() + ' · ' + x.pct + '%</span></div>'
+          + '<div style="height:6px;background:var(--gray-100);border-radius:999px;"><div style="width:' + x.pct + '%;height:100%;background:linear-gradient(90deg,var(--primary-500),var(--info));border-radius:999px;"></div></div></div>'
+        ).join('') : '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin datos de categorías.</p>';
+
+        // insights
+        document.getElementById('an-insights-body').innerHTML = (st.insights && st.insights.length)
+          ? st.insights.map(i => '<div style="display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--gray-50);font-size:13px;color:var(--gray-700);"><i class="fas fa-circle" style="font-size:6px;color:var(--primary-500);margin-top:7px;"></i><span>' + anEsc(i) + '</span></div>').join('')
+          : '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin señales de tendencia con los datos actuales.</p>';
+
+        // tabla artículos
+        const rows = st.articulos || [];
+        document.getElementById('an-articulos-body').innerHTML = rows.length
+          ? '<table style="width:100%;border-collapse:collapse;font-size:12px;min-width:640px;">'
+            + '<thead><tr style="text-align:left;color:var(--gray-500);border-bottom:2px solid var(--gray-100);">'
+            + '<th style="padding:8px 6px;">#</th><th style="padding:8px 6px;">Artículo</th><th style="padding:8px 6px;">Categoría</th>'
+            + '<th style="padding:8px 6px;text-align:right;">1h</th><th style="padding:8px 6px;text-align:right;">6h</th><th style="padding:8px 6px;text-align:right;">' + (NI_AN.period === '24h' ? '24h' : NI_AN.period) + '</th>'
+            + '<th style="padding:8px 6px;text-align:right;">Total</th><th style="padding:8px 6px;">Tendencia</th></tr></thead><tbody>'
+            + rows.map((r, i) => {
+                const periodViews = NI_AN.period === '24h' ? r.h24 : (r.h24 || 0);
+                return '<tr style="border-bottom:1px solid var(--gray-50);">'
+                  + '<td style="padding:8px 6px;color:var(--gray-400);font-weight:700;">' + (i+1) + '</td>'
+                  + '<td style="padding:8px 6px;max-width:280px;"><div style="font-weight:600;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + anEsc(r.titulo) + '</div><div style="font-size:10px;color:var(--gray-400);">' + anEsc(r.slug) + '</div></td>'
+                  + '<td style="padding:8px 6px;color:var(--gray-600);">' + anEsc(r.categoria) + '</td>'
+                  + '<td style="padding:8px 6px;text-align:right;font-weight:' + (r.h1 > 0 ? '800;color:var(--danger)' : '400;color:var(--gray-500)') + ';">' + r.h1 + '</td>'
+                  + '<td style="padding:8px 6px;text-align:right;color:var(--gray-700);">' + r.h6 + '</td>'
+                  + '<td style="padding:8px 6px;text-align:right;color:var(--gray-700);">' + periodViews + '</td>'
+                  + '<td style="padding:8px 6px;text-align:right;font-weight:700;color:var(--gray-800);">' + r.total.toLocaleString() + '</td>'
+                  + '<td style="padding:8px 6px;">' + anTrendBadge(r.trend, r.deltaPct) + '</td></tr>';
+              }).join('') + '</tbody></table>'
+          : '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin artículos con tráfico en este período/filtro.</p>';
+
+        // últimos eventos
+        ultimosEl.innerHTML = (st.ultimosEventos || []).map(ev => {
           const time = new Date(ev.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-          const icon = ev.source === 'facebook' ? 'fab fa-facebook' : 
-                       ev.source === 'telegram' ? 'fab fa-telegram' :
-                       ev.source === 'google' ? 'fab fa-google' :
-                       ev.source === 'whatsapp' ? 'fab fa-whatsapp' : 'fas fa-globe';
-          const color = ev.source === 'facebook' ? '#1877f2' : 
-                        ev.source === 'telegram' ? '#229ed9' :
-                        ev.source === 'google' ? '#34a853' :
-                        ev.source === 'whatsapp' ? '#25d366' : 'var(--gray-400)';
-          
-          return `
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-50);">
-              <div style="width:32px;height:32px;border-radius:8px;background:${color}15;color:${color};display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">
-                <i class="${icon}"></i>
-              </div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:12px;font-weight:600;color:var(--gray-800);white-space:normal;overflow:hidden;text-overflow:ellipsis;">${ev.titulo || ev.slug}</div>
-                <div style="font-size:10px;color:var(--gray-500);">Desde ${ev.source.toUpperCase()} · ${time}</div>
-              </div>
-            </div>
-          `;
+          const icon = ev.source === 'facebook' ? 'fab fa-facebook' : ev.source === 'telegram' ? 'fab fa-telegram' : ev.source === 'google' ? 'fab fa-google' : ev.source === 'whatsapp' ? 'fab fa-whatsapp' : 'fas fa-globe';
+          const color = AN_SOURCE_COLORS[ev.source] || 'var(--gray-400)';
+          return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-50);">'
+            + '<div style="width:32px;height:32px;border-radius:8px;background:' + color + '15;color:' + color + ';display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;"><i class="' + icon + '"></i></div>'
+            + '<div style="flex:1;min-width:0;"><div style="font-size:12px;font-weight:600;color:var(--gray-800);overflow:hidden;text-overflow:ellipsis;">' + anEsc(ev.titulo || ev.slug) + '</div>'
+            + '<div style="font-size:10px;color:var(--gray-500);">Desde ' + anEsc((ev.source || 'directo').toUpperCase()) + ' · ' + time + '</div></div></div>';
         }).join('') || '<p style="text-align:center;padding:20px;color:var(--gray-400);">Esperando visitas...</p>';
-        
-        showToast('Tráfico actualizado en tiempo real', 'success');
+
+        if (!silent) showToast('Tráfico actualizado', 'success');
       } catch (e) {
         console.error('Error cargando tráfico:', e);
         const msg = e && e.message ? e.message : String(e);
-        if (topEl) topEl.innerHTML = `<p style="color:#f87171;text-align:center;padding:20px">Error: ${msg}</p>`;
-        if (ultimosEl) ultimosEl.innerHTML = `<p style="color:#f87171;text-align:center;padding:20px">Error: ${msg}</p>`;
-        showToast('No hay datos de tráfico aún', 'info');
+        if (ultimosEl) ultimosEl.innerHTML = '<p style="color:#f87171;text-align:center;padding:20px">Error: ' + anEsc(msg.slice(0, 200)) + '</p>';
+        if (!silent) showToast('No hay datos de tráfico aún', 'info');
       }
     };
 

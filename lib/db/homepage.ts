@@ -54,7 +54,8 @@ export async function incrementViewsBySlug(
   slug: string,
   referrer?: string,
   utmSource?: string,
-  userAgent?: string
+  userAgent?: string,
+  sessionId?: string
 ): Promise<number | null> {
   if (!isValidSlug(slug)) {
     logger.error('[homepage.ts] Slug rechazado por validación:', slug);
@@ -96,6 +97,7 @@ export async function incrementViewsBySlug(
         source: detectarFuente(referrer, utmSource, userAgent),
         timestamp: FieldValue.serverTimestamp(),
         expiresAt: trafficLogExpiresAt(),
+        ...(sessionId ? { sessionId } : {}),
       });
 
       const device = detectarDispositivo(userAgent);
