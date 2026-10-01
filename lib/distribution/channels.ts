@@ -4,7 +4,6 @@
  * consumidor de la cola de reintentos los reutilice sin duplicación.
  */
 import type { Firestore } from 'firebase-admin/firestore';
-import { logger } from '@/lib/logger';
 
 export interface Noticia {
   titulo: string;
@@ -57,73 +56,30 @@ export async function yaDistribuido(
   }
 }
 
-/** Envía a Telegram */
+/**
+ * Telegram — delega al sender unico endurecido (lib/distribution/telegram):
+ * escape HTML correcto para parse_mode:HTML, resumen con fallback
+ * (resumen -> metaDescription -> 1er parrafo), timeout 8s, 1 retry en
+ * errores retryables e idempotencia por claim atomico. La firma publica
+ * (Noticia -> ChannelResult) se conserva para todos los callers.
+ */
 export async function enviarTelegram(noticia: Noticia, db: Firestore): Promise<ChannelResult> {
-  try {
-    const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
-    if (!TG_TOKEN || !TG_CHAT_ID) return { ok: false, error: 'Faltan credenciales Telegram' };
-
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=telegram`;
-    const emoji: Record<string, string> = {
-      Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
-      Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍',
-    };
-    const catEmoji = emoji[noticia.categoria || ''] || '📰';
-
-    // Extraer 1-2 oraciones
-    let contexto = '';
-    const texto = (noticia.resumen || noticia.contenido || '').replace(/\n+/g, ' ').trim();
-    const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [];
-    for (const o of oraciones) {
-      const limpia = o.trim();
-      if (contexto.length + limpia.length + 1 > 180 && contexto.length > 0) break;
-      contexto += (contexto ? ' ' : '') + limpia;
-    }
-    if (!contexto) contexto = texto.substring(0, 120);
-
-    const caption = `<b>${catEmoji} ${noticia.titulo}</b>\n\n${contexto}...\n\n🔗 <a href="${url}">Leer noticia completa</a>\n\n#NicaraguaInformate`;
-
-    const imagen = noticia.imagenRedes || noticia.imagen;
-    const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http');
-
-    // Intentar con foto primero; si falla, fallback a mensaje de texto
-    if (imagenValida) {
-      const photoRes = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TG_CHAT_ID,
-          photo: imagen,
-          caption: caption.slice(0, 1024),
-          parse_mode: 'HTML',
-          reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] },
-        }),
-      });
-      const photoData = await photoRes.json();
-      if (photoData.ok) return { ok: true };
-
-      // Si la foto falla por cualquier motivo, intentar mensaje de texto —
-      // es preferible perder la imagen que perder la distribución completa.
-      logger.info('[Telegram] sendPhoto falló, fallback a sendMessage:', photoData.description);
-    }
-
-    const msgRes = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TG_CHAT_ID,
-        text: caption.slice(0, 4096),
-        parse_mode: 'HTML',
-        reply_markup: { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] },
-      }),
-    });
-    const msgData = await msgRes.json();
-    return { ok: msgData.ok, error: msgData.ok ? undefined : msgData.description };
-  } catch (e: any) {
-    return { ok: false, error: e.message };
-  }
+  const { sendTelegramArticle } = await import('@/lib/distribution/telegram');
+  const r = await sendTelegramArticle(
+    {
+      slug: noticia.slug,
+      titulo: noticia.titulo,
+      resumen: noticia.resumen,
+      metaDescription: (noticia as { metaDescription?: string }).metaDescription,
+      contenido: noticia.contenido,
+      categoria: noticia.categoria,
+      imagen: noticia.imagen,
+      imagenRedes: noticia.imagenRedes,
+    },
+    { db },
+  );
+  return { ok: r.ok, skipped: r.skipped, error: r.error };
 }
-
 /** Envía a Facebook (si hay token) */
 export async function enviarFacebook(noticia: Noticia): Promise<ChannelResult> {
   try {
