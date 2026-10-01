@@ -1542,7 +1542,7 @@ sin texto ni marcas de agua, composición periodística"
             <div class="stat-header"><div><div class="stat-value" id="an-rt-sesiones">—</div><div class="stat-label">Visitantes activos (sesiones)</div></div><div class="stat-icon" style="background:#0ea5e920;color:var(--info);"><i class="fas fa-users"></i></div></div>
           </div>
           <div class="stat-card" style="border-bottom:3px solid var(--success);">
-            <div class="stat-header"><div><div class="stat-value" id="an-peak-hour">—</div><div class="stat-label">Hora pico (Nicaragua)</div></div><div class="stat-icon" style="background:#22c55e20;color:var(--success);"><i class="fas fa-clock"></i></div></div>
+            <div class="stat-header"><div><div class="stat-value" id="an-peak-hour">—</div><div class="stat-label">Hora pico — últimas 24h (Nicaragua)</div></div><div class="stat-icon" style="background:#22c55e20;color:var(--success);"><i class="fas fa-clock"></i></div></div>
           </div>
         </div>
 
@@ -1588,7 +1588,7 @@ sin texto ni marcas de agua, composición periodística"
 
         <!-- ÚLTIMOS EVENTOS -->
         <div class="card">
-          <div class="card-header"><h3 class="card-title"><i class="fas fa-users" style="color: var(--primary-600);"></i>Últimos Visitantes</h3></div>
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-users" style="color: var(--primary-600);"></i>Últimas visitas (eventos individuales)</h3></div>
           <div class="card-body" id="rt-ultimos-eventos" style="max-height: 400px; overflow-y: auto;">
             <p style="color: var(--gray-400); font-size: 13px; text-align: center; padding: 20px;">Buscando actividad reciente...</p>
           </div>
@@ -6377,6 +6377,7 @@ VERIFICACIÓN FINAL
       const cell = 18, gap = 4;
       // Alinear cada día a su día de semana real (UTC, clave persistida en traffic_daily)
       const firstDow = new Date(days[0].date + 'T00:00:00Z').getUTCDay();
+      const todayKey = new Date().toISOString().split('T')[0];
       let cells = '';
       days.forEach((d, i) => {
         const pos = i + firstDow;
@@ -6392,7 +6393,7 @@ VERIFICACIÓN FINAL
         }
         const intensity = d.views / max;
         bg = d.views === 0 ? '#f1f5f9' : 'rgba(37,99,235,' + (0.15 + intensity * 0.85).toFixed(2) + ')';
-        tip = d.date + ' · ' + d.views + ' visitas';
+        tip = d.date + ' · ' + d.views + ' visitas' + (d.date === todayKey ? ' (hoy — día en curso, cifra parcial)' : '');
         cells += '<rect x="' + x + '" y="' + y + '" width="' + cell + '" height="' + cell + '" rx="3" fill="' + bg + '"><title>' + tip + '</title></rect>';
       });
       const maxPos = (days.length - 1) + firstDow;
