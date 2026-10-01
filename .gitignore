@@ -248,3 +248,5 @@ public/data/meni-*.json
 /cdc*.json
 
 .env.vercel-*
+
+.audit/
