@@ -303,7 +303,10 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    return [];
+    return [
+      // Links cortos forenses: /l/abc123 -> /api/l/abc123 (redirect 302 con tracking).
+      { source: '/l/:id', destination: '/api/l/:id' },
+    ];
   },
   async headers() {
     return [
