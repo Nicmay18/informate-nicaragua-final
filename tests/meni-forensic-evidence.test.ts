@@ -113,3 +113,16 @@ describe('MENI Forense — evidencia y contexto por perfil', () => {
     expect(warnings).not.toContain('EVIDENCIA_REQUERIDA:qué cambia');
   });
 });
+
+
+describe('MENI production profile regression', () => {
+  it('Nacionales no vuelve a emitir evidencia requerida para cifras, atribución y cambio', async () => {
+    const { evaluate } = await import('@/lib/editorial/core/pipeline');
+    const contenido = '<p>Mendy Aráuz informó que Nicaragua reabrió 2,503 clubes de primaria y 825 de secundaria, con 41,688 estudiantes. La ministra informó además la distribución de 10,000 guías y 1,700 kits de ajedrez. Pamela Alarcón, coordinadora nacional, explicó que participaron 12 centros educativos. La ampliación cambia el alcance del programa y permite incorporar a más estudiantes mediante clubes, teleclases y competencias.</p>'.repeat(8);
+    const result = evaluate({ titulo: 'Prueba MENI', contenido, resumen: 'Prueba editorial', categoria: 'Nacionales', autor: 'Redacción', fecha: '2026-01-01T00:00:00Z', fechaActualizacion: '2026-01-01T00:00:00Z', slug: 'prueba-meni', palabrasClave: ['Nicaragua'], imagenDestacada: 'https://example.com/a.jpg' } as any);
+    const warnings = result.valorEditorial.warnings.join(' ');
+    expect(warnings).not.toContain('EVIDENCIA_REQUERIDA:cifras');
+    expect(warnings).not.toContain('EVIDENCIA_REQUERIDA:quién lo dijo');
+    expect(warnings).not.toContain('EVIDENCIA_REQUERIDA:qué cambia');
+  });
+});
