@@ -11,6 +11,10 @@ import { logger } from '@/lib/logger';
 
 const DEBUG = process.env.MENI_DEBUG === 'true';
 
+// Piso duro de calidad: coincide con la banda 'NO PUBLICAR' de scoreToGrade().
+// 80–89 (MEJORAR) sin blockers reales → REVISAR, decisión del Editor Jefe.
+const NO_PUBLISH_FLOOR = 80;
+
 export function logMeni(...args: unknown[]): void {
   if (DEBUG) {
     logger.debug('[MENI-DEBUG]', ...args);
@@ -245,17 +249,36 @@ export function buildMeniDiagnostics(opts: {
   }
 
   if (!opts.aprobado && typeof opts.scoreFinal === 'number' && opts.scoreFinal < MIN_APPROVED_SCORE && blockingIssues.length === 0) {
-    blockingIssues.push({
-      code: 'MENI_SCORE_THRESHOLD',
-      module: 'meni-core',
-      severity: 'BLOCKER',
-      title: 'Score final por debajo del umbral',
-      description: `La nota obtuvo ${opts.scoreFinal} puntos, insuficiente para aprobar.`,
-      currentValue: opts.scoreFinal,
-      expectedValue: `≥ ${MIN_APPROVED_SCORE}`,
-      howToFix: 'Mejorar SEO, EEAT, redacción forense y evitar sensacionalismo. Ver recomendaciones.',
-      field: 'general',
-    });
+    // El umbral de 90 es el piso de APROBACIÓN AUTOMÁTICA, no un defecto.
+    // Una nota en banda MEJORAR (80–89) sin hallazgos reales es REVISAR:
+    // la decisión final la toma el Editor Jefe (humano), no el algoritmo.
+    // Solo por debajo del piso de calidad (80 = 'NO PUBLICAR') el score
+    // insuficiente se convierte en bloqueo real.
+    if (opts.scoreFinal >= NO_PUBLISH_FLOOR) {
+      warnings.push({
+        code: 'MENI_SCORE_THRESHOLD',
+        module: 'meni-core',
+        severity: 'WARNING',
+        title: 'Score por debajo del umbral de aprobación automática',
+        description: `La nota obtuvo ${opts.scoreFinal} puntos, por debajo de la auto-aprobación pero sin defectos bloqueantes.`,
+        currentValue: opts.scoreFinal,
+        expectedValue: `≥ ${MIN_APPROVED_SCORE} (auto-aprobación)`,
+        howToFix: 'No requiere reescritura. El Editor Jefe puede confirmar la publicación si la nota está correctamente documentada.',
+        field: 'general',
+      });
+    } else {
+      blockingIssues.push({
+        code: 'MENI_SCORE_FLOOR',
+        module: 'meni-core',
+        severity: 'BLOCKER',
+        title: 'Score final por debajo del piso de calidad',
+        description: `La nota obtuvo ${opts.scoreFinal} puntos, por debajo del mínimo publicable.`,
+        currentValue: opts.scoreFinal,
+        expectedValue: `≥ ${NO_PUBLISH_FLOOR}`,
+        howToFix: 'La nota presenta deficiencias sustantivas; revisar los hallazgos del diagnóstico.',
+        field: 'general',
+      });
+    }
   }
 
   return { blockingIssues, warnings };

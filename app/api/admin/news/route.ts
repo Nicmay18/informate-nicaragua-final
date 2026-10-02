@@ -223,7 +223,12 @@ export async function POST(request: NextRequest) {
 
     const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical, attemptId } = await guardarConMeni(noticiaInput, db);
 
-    if (!meniOk) {
+    // Solo BLOQUEAR impide publicar de verdad; REVISAR puede ser confirmado
+    // explícitamente por el Editor Jefe (decisión humana, trazable).
+    const editorialDecision = meni.editorialVerdict?.decision;
+    const canOverride = body.editorOverride === true && editorialDecision === 'REVISAR';
+
+    if (!meniOk && !canOverride) {
       const first = meni.blockingIssues?.[0];
       await updateDecisionLog(db, attemptId, {
         result: 'REJECTED',
@@ -238,12 +243,13 @@ export async function POST(request: NextRequest) {
         scoreFinal: meni.scoreFinal,
         calificacion: meni.calificacion,
         diagnostico: meni.diagnostico,
+        needsEditorConfirm: editorialDecision === 'REVISAR',
         editorialVerdict: meni.editorialVerdict,
       }, { status: 400 });
     }
 
     // BLOQUEO del Supervisor Editorial — MENI no es el jefe
-    if (!supervisorApproved) {
+    if (!supervisorApproved && !canOverride) {
       const issues = supervisor.issues || [];
       const criticalIssues = issues.filter(i => i.severity === 'CRITICAL');
       const first = criticalIssues[0] || issues[0];
@@ -269,6 +275,7 @@ export async function POST(request: NextRequest) {
         },
         critical: criticalIssues,
         warnings: issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
+        needsEditorConfirm: editorialDecision === 'REVISAR',
         editorialVerdict: meni.editorialVerdict,
       }, { status: 400 });
     }

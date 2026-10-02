@@ -123,7 +123,7 @@ function esCoberturaEventoPasado(input: NoticiaInput): boolean {
 }
 
 type ForensicBehavior = 'REQUERIDO' | 'OPCIONAL' | 'NO_APLICA';
-type ForensicMode = 'actualidad' | 'politica_nacional' | 'economia' | 'salud' | 'turismo_guia' | 'turismo_cobertura' | 'gastronomia' | 'general';
+type ForensicMode = 'actualidad' | 'politica_nacional' | 'nacionales_tematico' | 'economia' | 'salud' | 'turismo_guia' | 'turismo_cobertura' | 'gastronomia' | 'general';
 
 function getForensicMode(profile: MeniContentProfile, input: NoticiaInput): ForensicMode {
   if (profile === 'gastronomia') return 'gastronomia';
@@ -136,13 +136,15 @@ function getForensicMode(profile: MeniContentProfile, input: NoticiaInput): Fore
   }
   if (profile === 'economia') return 'economia';
   if (profile === 'salud') return 'salud';
-  // cultura, educacion, ambiente y astronomia se publican como Nacionales;
-  // por tanto el análisis forense sigue las reglas de nacionales/política.
+  if (profile === 'politica' || profile === 'nacionales') return 'politica_nacional';
+  // cultura, educacion, ambiente y astronomia se publican como Nacionales pero
+  // NO son cobertura política: requieren atribución igual, pero la cita textual
+  // literal es opcional — una nota de anuncio institucional puede documentarse
+  // con paráfrasis atribuida ("informó", "según datos presentados").
   if (
-    profile === 'politica' || profile === 'nacionales' ||
     profile === 'cultura' || profile === 'educacion' ||
     profile === 'ambiente' || profile === 'astronomia'
-  ) return 'politica_nacional';
+  ) return 'nacionales_tematico';
   return 'actualidad';
 }
 
@@ -160,7 +162,7 @@ function behaviorFor(
       return 'REQUERIDO';
     case 'citaDirecta':
       if (mode === 'politica_nacional') return 'REQUERIDO';
-      if (mode === 'gastronomia' || mode === 'turismo_guia' || mode === 'turismo_cobertura' || mode === 'economia' || mode === 'salud') return 'OPCIONAL';
+      if (mode === 'nacionales_tematico' || mode === 'gastronomia' || mode === 'turismo_guia' || mode === 'turismo_cobertura' || mode === 'economia' || mode === 'salud') return 'OPCIONAL';
       return 'NO_APLICA';
     case 'precios':
       if (mode === 'economia') return 'REQUERIDO';
@@ -260,7 +262,7 @@ export function detectAportePropioGastronomia(input: NoticiaInput): { tiene: boo
   return { tiene, items };
 }
 
-function buildForensicChecks(input: NoticiaInput, mode: ForensicMode): MeniForenseEvidencia[] {
+function buildForensicChecks(input: NoticiaInput, mode: ForensicMode, perfilLabel: string): MeniForenseEvidencia[] {
   const texto = fullText(input);
   const tipos: EvidenciaTipo[] = [
     'citaDirecta', 'atribucionPeriodistica', 'precios', 'horarios', 'costos',
@@ -279,7 +281,7 @@ function buildForensicChecks(input: NoticiaInput, mode: ForensicMode): MeniForen
     if (behavior === 'OPCIONAL') {
       return { tipo: EVIDENCIA_LABELS[tipo], estado: 'NO_APLICA', mensaje: 'Elemento opcional para este perfil.' };
     }
-    return { tipo: EVIDENCIA_LABELS[tipo], estado: 'FALTANTE', mensaje: `Se esperaba esta evidencia para el perfil "${mode}".` };
+    return { tipo: EVIDENCIA_LABELS[tipo], estado: 'FALTANTE', mensaje: `Se esperaba esta evidencia para el perfil "${perfilLabel}".` };
   });
 }
 
@@ -310,7 +312,7 @@ export function analyzeForensic(
   else if (forense.nivelRiesgo === 'Medio') nivel = 'AMARILLO';
 
   const mode = getForensicMode(resolvedProfile, input);
-  const evidencias = buildForensicChecks(input, mode);
+  const evidencias = buildForensicChecks(input, mode, resolvedProfile);
   const recomendaciones = checksToRecomendaciones(evidencias);
 
   return {

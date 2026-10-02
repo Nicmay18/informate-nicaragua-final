@@ -7,7 +7,7 @@ import { extractPuntosClave, extractFuente, getAutorFoto } from '@/lib/eeat-help
 import { resolveEditorialClassification, PUBLIC_CATEGORY_TO_PROFILE } from './canonical';
 import { makeEditorialDecision } from '@/lib/supervisor/editorial-supervisor';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
-import { stripAICitationMarkers } from '@/lib/sanitize';
+import { stripAICitationMarkers, hasAICitationMarkers } from '@/lib/sanitize';
 import { detectFactualitySignals } from './factuality-signals';
 import type { FactualitySignal } from './factuality-signals';
 import { analyzeTrust } from './trust';
@@ -79,10 +79,14 @@ export async function guardarConMeni(
   const cleanedTitulo = stripAICitationMarkers(input.titulo);
   const cleanedResumen = stripAICitationMarkers(input.resumen);
   const cleanedContenido = stripAICitationMarkers(input.contenido);
+  // La flag de procedencia IA solo marca cuando había marcadores REALES
+  // (:contentReference/oaicite). El strip también normaliza whitespace —
+  // comparar strings la convertía en falso positivo en todo pegado con
+  // saltos de línea o dobles espacios (bloqueo AI_PROVENANCE_ARTIFACT).
   const aiArtifactsRemoved =
-    cleanedContenido !== (input.contenido || '') ||
-    cleanedTitulo !== (input.titulo || '') ||
-    cleanedResumen !== (input.resumen || '');
+    hasAICitationMarkers(input.titulo) ||
+    hasAICitationMarkers(input.resumen) ||
+    hasAICitationMarkers(input.contenido);
   const cleanInput: NoticiaInput = {
     ...input,
     titulo: cleanedTitulo,

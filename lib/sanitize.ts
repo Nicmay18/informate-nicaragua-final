@@ -1,5 +1,25 @@
 import { escapeJsonLd } from './jsonld';
 
+/** Patrones que stripAICitationMarkers realmente elimina como artefactos IA. */
+const AI_MARKER_RES = [
+  /:contentReference\[[^\]]*\]\{[^}]*\}/,
+  /:contentReference\[[^\]]*\]/,
+  /\[\s*oaicite:\d+\s*\]/,
+  /\boaici?te:\d+/i,
+  /\b:?contentReference\b/i,
+];
+
+/**
+ * ¿El texto contiene marcadores de cita IA reales?
+ * Importante: NO confundir con "el string cambió tras el strip" — el strip
+ * también colapsa whitespace, así que comparar strings dispara la flag en
+ * cualquier pegado con `\n\n` o dobles espacios (falso positivo universal).
+ */
+export function hasAICitationMarkers(content: string | undefined | null): boolean {
+  const s = String(content || '');
+  return AI_MARKER_RES.some((re) => re.test(s));
+}
+
 /**
  * Elimina marcadores de citas generados por IA que pudieron quedar en el cuerpo.
  * Patrones: :contentReference[oaicite:N]{index=N} y variantes.

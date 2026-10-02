@@ -4067,6 +4067,9 @@ sin texto ni marcas de agua, composición periodística"
 
       try {
         const slug = noticiaId ? undefined : generarSlug(titulo);
+        // Confirmación del Editor Jefe (notas en REVISAR): se consume una vez.
+        const editorOverride = window.__editorOverride === true;
+        window.__editorOverride = false;
 
         // Auto-generar keywords si el campo está vacío (para análisis y persistencia)
         const keywordsInput = document.getElementById('keywords');
@@ -4114,7 +4117,7 @@ sin texto ni marcas de agua, composición periodística"
           const saveRes = await fetch('/api/admin/guardar-directo', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-            body: JSON.stringify({ id: noticiaId, ...noticiaData, fecha: noticiaData.fecha ? new Date().toISOString() : undefined, fechaActualizacion: new Date().toISOString(), publicado })
+            body: JSON.stringify({ id: noticiaId, ...noticiaData, fecha: noticiaData.fecha ? new Date().toISOString() : undefined, fechaActualizacion: new Date().toISOString(), publicado, editorOverride })
           });
           const saveData = await saveRes.json().catch(() => ({}));
           if (!saveRes.ok) {
@@ -4129,7 +4132,7 @@ sin texto ni marcas de agua, composición periodística"
           const saveRes = await fetch('/api/admin/guardar-directo', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-            body: JSON.stringify({ ...noticiaData, fecha: new Date().toISOString(), fechaActualizacion: new Date().toISOString(), publicado, slug: slug || noticiaData.slug })
+            body: JSON.stringify({ ...noticiaData, fecha: new Date().toISOString(), fechaActualizacion: new Date().toISOString(), publicado, slug: slug || noticiaData.slug, editorOverride })
           });
           const saveData = await saveRes.json().catch(() => ({}));
           if (!saveRes.ok) {
@@ -7054,25 +7057,43 @@ VERIFICACIÓN FINAL
       const btn = document.getElementById('btnGuardar');
       const estado = document.getElementById('publicacionEstado');
       if (!estado) return;
-      const evBlocked = meni && meni.editorialVerdict && meni.editorialVerdict.decision === 'BLOQUEAR';
-      if ((supervisor && !supervisor.approved) || evBlocked) {
-        const first = (supervisor.issues || [])[0];
+      const evDecision = meni && meni.editorialVerdict && meni.editorialVerdict.decision;
+      const evBlocked = evDecision === 'BLOQUEAR';
+      const evRevisar = evDecision === 'REVISAR';
+      if (evBlocked) {
+        const first = (supervisor && supervisor.issues || [])[0];
         estado.innerHTML =
           '<div style="background:#fee2e2;border:2px solid #dc2626;border-radius:10px;padding:14px;">'
           + '<div style="font-size:15px;font-weight:800;color:#dc2626;">🔴 PUBLICACIÓN BLOQUEADA</div>'
-          + '<div style="font-size:12px;color:#7f1d1d;margin-top:6px;"><strong>Motivo:</strong> ' + (supervisor.reason || (first && first.problem) || 'Decisión del Supervisor') + '</div>'
+          + '<div style="font-size:12px;color:#7f1d1d;margin-top:6px;"><strong>Motivo:</strong> ' + ((supervisor && supervisor.reason) || (first && first.problem) || 'Decisión del Supervisor') + '</div>'
           + '<div style="font-size:12px;color:#7f1d1d;margin-top:4px;"><strong>Etapa:</strong> SUPERVISOR' + (first && first.domain ? ' · ' + first.domain : '') + '</div>'
           + (first && (first.action || first.recommendation) ? '<div style="font-size:12px;color:#065f46;margin-top:4px;"><strong>Qué corregir:</strong> ' + (first.action || first.recommendation) + '</div>' : '')
           + '<div style="font-size:11px;color:#991b1b;margin-top:8px;">El botón Publicar queda deshabilitado hasta corregir y re-analizar.</div>'
           + '</div>';
         estado.style.display = 'block';
         if (btn) btn.disabled = true;
+      } else if (evRevisar || (supervisor && !supervisor.approved)) {
+        // REVISAR = revisión humana, no bloqueo: el Editor Jefe puede confirmar al guardar.
+        estado.innerHTML =
+          '<div style="background:#ffedd5;border:2px solid #ea580c;border-radius:10px;padding:14px;">'
+          + '<div style="font-size:15px;font-weight:800;color:#ea580c;">🟠 REVISAR — requiere decisión del Editor Jefe</div>'
+          + '<div style="font-size:12px;color:#7c2d12;margin-top:6px;">' + ((meni && meni.editorialVerdict && meni.editorialVerdict.resumen) || (supervisor && supervisor.reason) || 'Revisar los hallazgos antes de publicar.') + '</div>'
+          + '<div style="font-size:11px;color:#9a3412;margin-top:8px;">Sin bloqueantes reales. Si la nota está correctamente documentada, presioná Publicar y luego «Confirmar como Editor Jefe».</div>'
+          + '</div>';
+        estado.style.display = 'block';
+        if (btn) btn.disabled = false;
       } else {
         estado.innerHTML = '';
         estado.style.display = 'none';
         if (btn) btn.disabled = false;
       }
     }
+
+    // El Editor Jefe confirma una nota en estado REVISAR y reintenta el guardado.
+    window.confirmarPublicacionEditor = function() {
+      window.__editorOverride = true;
+      guardarNoticia(new Event('submit'));
+    };
 
     // Error persistente al publicar: distingue decisión editorial de fallo técnico.
     function mostrarErrorPublicacion(saveData, status) {
@@ -7090,6 +7111,11 @@ VERIFICACIÓN FINAL
         if (first?.action || first?.recommendation) html += '<div style="font-size:12px;color:#065f46;margin-top:4px;"><strong>Corrección:</strong> ' + (first.action || first.recommendation) + '</div>';
       } else {
         html += '<div style="font-size:12px;color:#7c2d12;margin-top:4px;">Esto es un fallo de infraestructura (Firestore, red, autenticación), no un rechazo editorial. Reintentá o revisá la conexión.</div>';
+      }
+      // REVISAR no es un bloqueo: el Editor Jefe puede confirmar y publicar.
+      if (saveData && saveData.needsEditorConfirm === true) {
+        html += '<div style="font-size:12px;color:#065f46;margin-top:8px;font-weight:700;">La nota no tiene defectos bloqueantes — quedó en estado REVISAR. Si la revisaste y está bien documentada, confirmá la publicación.</div>'
+          + '<button type="button" class="btn btn-primary btn-sm" onclick="confirmarPublicacionEditor()" style="margin-top:8px;"><i class="fas fa-user-check"></i> Confirmar como Editor Jefe y publicar</button>';
       }
       html += '<button type="button" class="btn btn-secondary btn-sm" onclick="ejecutarAnalisisForense()" style="margin-top:10px;"><i class="fas fa-redo"></i> Reanalizar</button></div>';
       estado.innerHTML = html;

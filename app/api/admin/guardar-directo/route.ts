@@ -112,8 +112,14 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
+    // Decisión editorial unificada. Solo BLOQUEAR impide publicar de verdad;
+    // REVISAR requiere confirmación explícita del Editor Jefe (humano).
+    const editorialDecision = meni.editorialVerdict?.decision;
+    const editorConfirmed = body.editorOverride === true;
+    const canOverride = editorConfirmed && editorialDecision === 'REVISAR';
+
     // BLOQUEO si no pasa filtros criticos
-    if (!meniOk) {
+    if (!meniOk && !canOverride) {
       const first = meni.blockingIssues?.[0];
       await updateDecisionLog(db, attemptId, {
         result: 'REJECTED',
@@ -132,6 +138,7 @@ export async function POST(request: NextRequest) {
         editorialTier: meni.editorialTier,
         editorialReason: meni.editorialReason,
         duplicado: meni.duplicado,
+        needsEditorConfirm: editorialDecision === 'REVISAR',
         correcciones: [
           ...(meni.autoCorrections || []),
           ...(meni.qualityGate?.corregidos || []),
@@ -145,7 +152,7 @@ export async function POST(request: NextRequest) {
     }
 
     // BLOQUEO del Agente Supervisor Editorial Permanente
-    if (!supervisorApproved) {
+    if (!supervisorApproved && !canOverride) {
       const issues = supervisor.issues || [];
       const criticalIssues = issues.filter(i => i.severity === 'CRITICAL');
       const first = criticalIssues[0] || issues[0];
@@ -160,6 +167,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         error: problem,
         code: 'SUPERVISOR_BLOCKED',
+        needsEditorConfirm: editorialDecision === 'REVISAR',
         supervisor: {
           decisionId: supervisor.decisionId,
           verdict: supervisor.verdict,
@@ -178,7 +186,16 @@ export async function POST(request: NextRequest) {
     const updateData: Record<string, unknown> = {
       ...meniUpdateData,
       supervisorDecision: supervisor,
-      supervisorApproved,
+      supervisorApproved: supervisorApproved || canOverride,
+      // Trazabilidad: si el Editor Jefe confirmó una nota REVISAR, queda registrado.
+      ...(canOverride ? {
+        editorOverride: {
+          confirmed: true,
+          at: new Date().toISOString(),
+          meniScore: meni.scoreFinal,
+          supervisorVerdict: supervisor.verdict,
+        },
+      } : {}),
       editorialState: supervisor.resultingState,
       titulo: finalTitulo,
       contenido: finalContenido,
