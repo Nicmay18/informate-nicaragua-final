@@ -261,6 +261,46 @@ export async function applySubstantiveMutation(
         reeval: reevalInfo,
       }),
     });
+    // Learning 4.0 (FASE 1): una mutación sustantiva APLICADA es una
+    // corrección editorial real — alimenta editor_corrections → editor_patterns.
+    // Antes de esta conexión el canal quedaba vacío (0 correcciones en 125
+    // mutaciones) porque solo el PUT del panel registraba — y las rutas de
+    // mutación de política (enrich, clean-*, limpiar-*) nunca lo hacían.
+    // El `kind` distingue decisiones humanas de mutaciones del sistema:
+    // solo las humanas promueven patrones.
+    try {
+      const { registerCorrection, inferCorrectionKind, isTrivialChange } =
+        await import('@/lib/meni/editor-jefe/correction-tracker');
+      const kind = inferCorrectionKind(meta.actor);
+      const categoria = String(updateData.categoria ?? before.categoria ?? 'General');
+      const CAMPO_MAP: Record<string, 'titulo' | 'entrada' | 'cuerpo'> = {
+        titulo: 'titulo',
+        resumen: 'entrada',
+        contenido: 'cuerpo',
+      };
+      for (const field of changed) {
+        const campo = CAMPO_MAP[field];
+        if (!campo) continue;
+        const antes = String(before[field] ?? '');
+        const despues = String(
+          (canonical as Record<string, unknown> | undefined)?.[field] ?? merged[field as keyof SubstantiveMutationInput] ?? '',
+        );
+        if (isTrivialChange(antes, despues)) continue;
+        await registerCorrection(db, {
+          articleId,
+          campo,
+          antes,
+          despues,
+          categoria,
+          kind,
+          origen: meta.actor,
+        });
+      }
+    } catch (corrErr) {
+      // El aprendizaje nunca rompe la mutación editorial.
+      console.warn('[mutation-policy] correction tracking falló (no bloqueante):', corrErr);
+    }
+
     return {
       applied: true,
       meniScore: meni.scoreFinal ?? null,

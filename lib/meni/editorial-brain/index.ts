@@ -12,7 +12,7 @@
  */
 
 import { CONTRATO_GLOBAL } from '../editorial-contract';
-import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria } from './types';
+import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria, AprendizajeContexto } from './types';
 import { MIN_APPROVED_SCORE } from '@/lib/meni/scoring';
 import { classifySports, isIndividualSport } from '../sports-classifier';
 import { runNewsValueEngine } from './news-value-engine';
@@ -291,7 +291,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     objetivoPedagogico: readerJourney.objetivoPedagogico,
   };
 
-  const baseDecision: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial' | 'valeLaPenaPublicar' | 'motivoPrincipal' | 'aportaAlLector' | 'diferenciaCompetencia' | 'utilidadReal' | 'explicacion' | 'contexto' | 'servicio' | 'riesgoEditorial' | 'acciones' | 'readerLearning' | 'editorialContribution' | 'fuentesFaltan' | 'journalistChecklist' | 'patronesAplicados' | 'correccionesSugeridas' | 'ranking' | 'saturacion' | 'memoriaEditorial' | 'veredictoEjecutivo'> = {
+  const baseDecision: Omit<EditorialDecision, 'editorialDna' | 'estadoEditorial' | 'valeLaPenaPublicar' | 'motivoPrincipal' | 'aportaAlLector' | 'diferenciaCompetencia' | 'utilidadReal' | 'explicacion' | 'contexto' | 'servicio' | 'riesgoEditorial' | 'acciones' | 'readerLearning' | 'editorialContribution' | 'fuentesFaltan' | 'journalistChecklist' | 'patronesAplicados' | 'correccionesSugeridas' | 'ranking' | 'saturacion' | 'memoriaEditorial' | 'veredictoEjecutivo' | 'aprendizaje'> = {
     newsValue,
     competition,
     nicaraguaInformate,
@@ -425,7 +425,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // ─────────────────────────────────────────────────────────────
   const { fuentesFaltan, journalistChecklist } = construirJournalistChecklist(input, diagnostico, categoriaForPatterns);
 
-  const { patronesAplicados, correccionesSugeridas } = applyPatternsToDiagnostic(
+  const { patronesAplicados, correccionesSugeridas, trazas } = applyPatternsToDiagnostic(
     input.editorPatterns || [],
     categoriaForPatterns,
   );
@@ -443,6 +443,26 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // Fase 3: Memoria Editorial Inteligente
   // ─────────────────────────────────────────────────────────────
   const memoriaEditorial = buildMemoriaEditorial(input.knowledgeQuery, categoriaForPatterns);
+
+  // ─────────────────────────────────────────────────────────────
+  // Learning 4.0 — contexto de aprendizaje trazable (FASE 3/13)
+  // La memoria se expone como EVIDENCIA explicable: patrones con sus
+  // casos y versión, predicciones validadas con su tasa, falsos
+  // positivos conocidos. NUNCA modifica score ni publicar — es
+  // contexto para el periodista y el Supervisor.
+  // ─────────────────────────────────────────────────────────────
+  const aprendizaje: AprendizajeContexto | undefined =
+    trazas.length > 0 || input.predictionContext || memoriaEditorial
+      ? {
+          patrones: trazas,
+          ...(input.predictionContext ? { predicciones: input.predictionContext } : {}),
+          conocimientoVersion: [
+            ...trazas.map(t => `pattern:${t.patternId}@v${t.version}`),
+            ...(input.predictionContext ? [`predictions:n${input.predictionContext.totalValidadas}`] : []),
+          ].join('+') || undefined,
+          memoriaUtilizada: trazas.length > 0 || !!input.predictionContext || (memoriaEditorial?.totalRelacionadas ?? 0) > 0,
+        }
+      : undefined;
 
   const decision: EditorialDecision = {
     ...baseDecision,
@@ -474,6 +494,7 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     veredictoEjecutivo: {} as VeredictoEditorJefe, // placeholder, computed below
     ...(saturacion ? { saturacion } : {}),
     ...(memoriaEditorial ? { memoriaEditorial } : {}),
+    ...(aprendizaje ? { aprendizaje } : {}),
   };
 
   // Ranking se computa al final porque necesita el decision completo
@@ -501,11 +522,27 @@ function buildVeredictoEjecutivo(
 
   const queFalta = d.acciones.slice(0, 3);
 
-  const respuestaEjecutiva = publicar === 'SI'
+  let respuestaEjecutiva = publicar === 'SI'
     ? `📢 Veredicto del Editor Jefe: ${d.editorialContribution} Además, ${d.readerLearning}`
     : publicar === 'NO'
     ? `📢 Veredicto del Editor Jefe: No publicar. ${d.motivoPrincipal}. No aporta razón suficiente para leerse en Nicaragua Informate.`
     : `📢 Veredicto del Editor Jefe: Mejorar antes de publicar. ${d.acciones[0] || d.motivoPrincipal}. Aún no justifica por qué leerla aquí y no en otro medio.`;
+
+  // Learning 4.0 (FASE 15): el veredicto DECLARA qué conocimiento histórico
+  // usó y con cuánta evidencia — la traza completa queda en `d.aprendizaje`.
+  if (d.aprendizaje?.memoriaUtilizada) {
+    const bits: string[] = [];
+    if (d.aprendizaje.patrones.length > 0) {
+      const casos = d.aprendizaje.patrones.reduce((s, p) => s + p.casos, 0);
+      bits.push(`${d.aprendizaje.patrones.length} patrón(es) del editor (${casos} correcciones previas)`);
+    }
+    if (d.aprendizaje.predicciones && d.aprendizaje.predicciones.totalValidadas > 0) {
+      bits.push(`${d.aprendizaje.predicciones.totalValidadas} predicciones validadas (${Math.round(d.aprendizaje.predicciones.tasa * 100)}% acierto)`);
+    }
+    if (bits.length > 0) {
+      respuestaEjecutiva += ` Conocimiento histórico de Nicaragua Informate: ${bits.join('; ')}.`;
+    }
+  }
 
   const portadaMap: Record<EditorialRanking['valorPortada'], VeredictoEditorJefe['recomendacionPortada']> = {
     principal: 'Hero principal',

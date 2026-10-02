@@ -1,7 +1,7 @@
 import { pipelineV4 } from '@/lib/editorial';
 import type { EvaluacionEditorial, NoticiaInput as EditorialNoticiaInput } from '@/lib/editorial';
 import { generarMetaDescription } from '@/lib/editorial/meta';
-import type { NoticiaInput, MeniResult, MeniRiesgoEditorial, MeniRecomendacion } from './types';
+import type { NoticiaInput, MeniResult, MeniRiesgoEditorial, MeniRecomendacion, RevisionEditorJefe } from './types';
 import { analyzeForensic } from './forensic';
 import { analyzeEEAT } from './eeat';
 import { analyzeSEO } from './seo';
@@ -46,6 +46,8 @@ export interface MeniRunOptions {
     editorPatterns?: import('@/lib/meni/editorial-brain/types').EditorPattern[];
     portadaData?: { categoria: string; fecha: string }[];
     knowledgeQuery?: import('@/lib/meni/knowledge-base/types').KnowledgeQueryResult;
+    /** Learning 4.0 — estadística de predicciones ya validadas con datos reales. */
+    predictionContext?: import('@/lib/meni/editorial-brain/types').PrediccionContexto;
   };
 }
 
@@ -164,6 +166,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     ...(editorJefe?.editorPatterns ? { editorPatterns: editorJefe.editorPatterns } : {}),
     ...(editorJefe?.portadaData ? { portadaData: editorJefe.portadaData } : {}),
     ...(editorJefe?.knowledgeQuery ? { knowledgeQuery: editorJefe.knowledgeQuery } : {}),
+    ...(editorJefe?.predictionContext ? { predictionContext: editorJefe.predictionContext } : {}),
   });
   const editorialDna = editorialDecision.editorialDna;
 
@@ -408,6 +411,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
       veredictoEjecutivo: editorialDecision.veredictoEjecutivo,
       ...(editorialDecision.saturacion ? { saturacion: editorialDecision.saturacion } : {}),
       ...(editorialDecision.memoriaEditorial ? { memoriaEditorial: editorialDecision.memoriaEditorial } : {}),
+      ...(editorialDecision.aprendizaje ? { aprendizaje: editorialDecision.aprendizaje } : {}),
     },
     blockingIssues,
     warnings,
@@ -514,11 +518,19 @@ export async function runMeniAsync(
       .catch(() => {});
     tasks.push(kbTask);
 
+    // Learning 4.0 (FASE 6): solo predicciones ya validadas contra realidad.
+    const predictionsTask = import('@/lib/meni/learning-engine/prediction-context')
+      .then(({ loadPredictionContext }) => loadPredictionContext(options.db))
+      .then(ctx => { if (ctx) editorJefe!.predictionContext = ctx; })
+      .catch(() => {});
+    tasks.push(predictionsTask);
+
     await Promise.all(tasks);
     logMeni('Editor Jefe data loaded', {
       patterns: editorJefe.editorPatterns?.length || 0,
       portada: editorJefe.portadaData?.length || 0,
       knowledge: editorJefe.knowledgeQuery?.totalArticles || 0,
+      predictions: editorJefe.predictionContext?.totalValidadas || 0,
     });
   }
 
@@ -539,6 +551,69 @@ export async function runMeniAsync(
     } catch {
       editorBrain = undefined;
     }
+  }
+
+  // ─────────────────────────────────────────────────────────────
+  // Learning 4.0 (FASE 7): memoria de falsos positivos
+  // - Un defecto auto-inducido (el autofix corrompió su propio texto)
+  //   se registra automáticamente — el bloqueo sigue firme, pero la
+  //   causa queda en memoria para corregir el proceso previo.
+  // - Un defecto que ya consta como falso positivo se anota como
+  //   contexto trazable. Nunca se silencia el Quality Gate.
+  // Corre ANTES del early-return de skipDuplicateCheck: la memoria FP
+  // depende del Quality Gate, no del chequeo de duplicados.
+  // ─────────────────────────────────────────────────────────────
+  const selfInduced = base.qualityGate?.selfInducedDefects || [];
+  const defectCodes = (base.qualityGate?.issues || [])
+    .filter((i: { categoria?: string; evidencia?: string }) => i.categoria === 'defecto_mecanico')
+    .map((i: { evidencia?: string }) => String(i.evidencia || '').trim())
+    .filter(Boolean);
+  if (selfInduced.length > 0 || defectCodes.length > 0) {
+    try {
+      const { registerFalsePositiveEvent, loadFalsePositiveContext } =
+        await import('@/lib/meni/learning-engine/false-positive-registry');
+      for (const code of selfInduced) {
+        void registerFalsePositiveEvent(options.db, {
+          code,
+          kind: 'SELF_INDUCED_DEFECT',
+          contexto: `${input.titulo || ''} :: ${code}`,
+          origen: 'quality-gate:auto',
+          articleId: input.id,
+          nota: 'El autofix introdujo el defecto que disparó el bloqueo (firma CONCAT_MOTOCICLETA).',
+        });
+      }
+      const knownFPs = await loadFalsePositiveContext(
+        options.db,
+        [...new Set([...selfInduced, ...defectCodes])],
+      );
+      if (knownFPs.length > 0) {
+        base.warnings = [
+          ...(base.warnings || []),
+          ...knownFPs.map((fp): RevisionEditorJefe => ({
+            code: `FP_${fp.code}`,
+            module: 'learning',
+            severity: 'WARNING',
+            title: 'Falso positivo / defecto conocido en memoria',
+            description: `${fp.code} aparece en esta evaluación y ya fue registrado ${fp.ocurrencias} vez(ces) como ${fp.kind}. ${fp.nota}`,
+            currentValue: fp.ocurrencias,
+            expectedValue: 'defecto originado en el texto, no en el pipeline',
+            howToFix: 'Verificar si el defecto proviene del contenido real o de una transformación previa (autofix). El bloqueo se mantiene.',
+            field: 'contenido',
+            evidence: fp.code,
+          })),
+        ];
+        const ed = base.editorialDecision;
+        if (ed) {
+          ed.aprendizaje = {
+            patrones: ed.aprendizaje?.patrones ?? [],
+            ...(ed.aprendizaje?.predicciones ? { predicciones: ed.aprendizaje.predicciones } : {}),
+            falsosPositivos: knownFPs,
+            conocimientoVersion: ed.aprendizaje?.conocimientoVersion,
+            memoriaUtilizada: true,
+          };
+        }
+      }
+    } catch { /* el aprendizaje nunca rompe la evaluación */ }
   }
 
   if (options.skipDuplicateCheck) {

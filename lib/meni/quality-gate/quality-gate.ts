@@ -97,6 +97,17 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
   // Corre sobre el texto YA corregido + título: lo que realmente se publicaría.
   // BLOCK → bloquea sin importar la fuente de verdad; REVIEW → issue warning.
   const mechDefects = findGenerationDefects(`${input.titulo}\n${textoCorregido}`);
+  // Learning 4.0 (FASE 7): un defecto presente SOLO tras el autofix es
+  // auto-inducido — el pipeline corrompió su propio texto (firma del caso
+  // CONCAT_MOTOCICLETA). Se reporta en `selfInducedDefects` para memoria de
+  // falsos positivos; el bloqueo NO se relaja (el texto corregido sí está
+  // defectuoso y es el que se publicaría).
+  const preAutofixDefects = new Set(
+    findGenerationDefects(`${input.titulo}\n${textoPlano}`).map((d) => d.code),
+  );
+  const selfInducedDefects = mechDefects
+    .filter((d) => !preAutofixDefects.has(d.code))
+    .map((d) => d.code);
   const mechBlocking = mechDefects.filter((d) => d.action === 'BLOCK');
   issuesRestantes = [
     ...issuesRestantes,
@@ -146,6 +157,7 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
     editorScore,
     textoCorregido,
     transcriptionReport: transcription.report ?? undefined,
+    ...(selfInducedDefects.length > 0 ? { selfInducedDefects } : {}),
     timestamp: new Date().toISOString(),
   };
 }

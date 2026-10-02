@@ -421,8 +421,8 @@ describe('Swiss Watch — tablero global', () => {
     }
   });
 
-  it('declara los 8 crons del protocolo', () => {
-    expect(DECLARED_CRONS).toHaveLength(9);
+  it('declara los 10 crons del protocolo', () => {
+    expect(DECLARED_CRONS).toHaveLength(10);
     DECLARED_CRONS.forEach((c) => {
       expect(c.path.startsWith('/api/cron/')).toBe(true);
       expect(c.schedule.split(' ')).toHaveLength(5);

@@ -381,6 +381,8 @@ export async function POST(request: NextRequest) {
               antes: corr.antes || '',
               despues: corr.despues || '',
               categoria: categoria || 'General',
+              kind: 'DECISION_HUMANA',
+              origen: 'guardar-directo',
             });
           }
           logger.info('[guardar-directo] Editor Jefe: correcciones registradas:', body.correcciones.length);

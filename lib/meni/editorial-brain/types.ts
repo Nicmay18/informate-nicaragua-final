@@ -46,6 +46,8 @@ export type EditorialBrainInput = NoticiaInput & {
   portadaData?: { categoria: string; fecha: string }[];
   // Editor Jefe — Fase 3: query de Knowledge Base
   knowledgeQuery?: KnowledgeQueryResult;
+  // Learning 4.0 — predicciones históricas validadas
+  predictionContext?: PrediccionContexto;
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -287,7 +289,22 @@ export interface LlmInstructions {
 
 export type CampoCorreccion = 'titulo' | 'entrada' | 'contexto' | 'servicio' | 'orden' | 'cuerpo' | 'frases';
 
+/**
+ * Origen/clase de una corrección registrada (FASE 1 — Learning 4.0).
+ * Solo DECISION_HUMANA alimenta la promoción de patrones: las mutaciones
+ * iniciadas por el sistema (limpiezas masivas, autofix) son observaciones,
+ * no decisiones editoriales.
+ */
+export type CorreccionKind =
+  | 'AUTO_CORREGIBLE'
+  | 'SUGERENCIA_EDITORIAL'
+  | 'DECISION_HUMANA'
+  | 'FALSO_POSITIVO'
+  | 'DECISION_SUPERVISOR';
+
 export interface EditorPattern {
+  /** ID del documento en editor_patterns (campo_categoria_tipo). */
+  id?: string;
   campo: CampoCorreccion;
   descripcion: string;
   frecuencia: number;
@@ -296,6 +313,10 @@ export interface EditorPattern {
   ejemploDespues: string;
   confianzaNivel: number;
   ultimaVez: string;
+  /** Estado del ciclo gobernado; solo 'ACTIVE' es consumido por MENI. */
+  learningState?: string;
+  /** Versión del conocimiento — se incrementa en cada activación. */
+  version?: number;
 }
 
 export interface CorreccionRegistrada {
@@ -306,6 +327,58 @@ export interface CorreccionRegistrada {
   categoria: string;
   fecha: string;
   diferenciaTipo: 'acortar' | 'ampliar' | 'agregar_contexto' | 'eliminar_relleno' | 'agregar_servicio' | 'reordenar' | 'otro';
+  /** Clasificación del origen (FASE 1). Ausente = corrección humana del panel. */
+  kind?: CorreccionKind;
+  /** Actor/origen de la mutación (ruta o componente que la produjo). */
+  origen?: string;
+}
+
+// ═══════════════════════════════════════════════════════════
+// Learning 4.0 — contexto de aprendizaje trazable
+// La memoria se expone como EVIDENCIA explicable, nunca como
+// multiplicador de score: cada señal declara su origen, sus
+// casos de soporte y su versión de conocimiento.
+// ═══════════════════════════════════════════════════════════
+
+/** Traza de un patrón ACTIVE que influyó en el diagnóstico. */
+export interface PatronAplicadoTraza {
+  patternId: string;
+  descripcion: string;
+  /** Número de correcciones que sustentan el patrón. */
+  casos: number;
+  confianza: number;
+  version: number;
+  categorias: string[];
+}
+
+/** Estadística de predicciones MENI validadas con datos reales. */
+export interface PrediccionContexto {
+  totalValidadas: number;
+  aciertos: number;
+  /** Tasa 0-1 calculada solo sobre campos con fuente real (publicar/portada). */
+  tasa: number;
+  /** Ejemplos recientes trazables (articleId + predicción vs real). */
+  ejemplos: { articleId: string; campo: string; predicho: unknown; real: unknown; correcto: boolean }[];
+}
+
+/** Aviso de un defecto conocido ya registrado como falso positivo/auto-inducido. */
+export interface FalsoPositivoAviso {
+  code: string;
+  kind: 'SELF_INDUCED_DEFECT' | 'FALSE_POSITIVE';
+  /** Veces registradas anteriormente. */
+  ocurrencias: number;
+  nota: string;
+}
+
+/** Bloque único de aprendizaje consultado en esta evaluación (FASE 13). */
+export interface AprendizajeContexto {
+  patrones: PatronAplicadoTraza[];
+  predicciones?: PrediccionContexto;
+  falsosPositivos?: FalsoPositivoAviso[];
+  /** Versión del conocimiento usado (máx. activatedAt/updatedAt disponible). */
+  conocimientoVersion?: string;
+  /** true si al menos una fuente de memoria aportó contexto real. */
+  memoriaUtilizada: boolean;
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -455,6 +528,8 @@ export interface EditorialDecision {
   // ─────────────────────────────────────────────────────────────
   patronesAplicados: EditorPattern[];
   correccionesSugeridas: string[];
+  /** Learning 4.0 — traza explicable del conocimiento usado (FASE 13/15). */
+  aprendizaje?: AprendizajeContexto;
   // ─────────────────────────────────────────────────────────────
   // Fase 2: Ranking Editorial + Editor de Portada
   // ─────────────────────────────────────────────────────────────

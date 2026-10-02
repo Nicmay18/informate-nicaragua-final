@@ -251,6 +251,10 @@ export interface EditorialDecisionFlat {
     contextoNarrativo: string;
     totalRelacionadas: number;
   };
+  /** Learning 4.0 — traza del conocimiento histórico consultado en esta
+   *  evaluación (patrones ACTIVE, predicciones validadas, falsos positivos
+   *  conocidos). Contexto explicable; nunca un multiplicador de score. */
+  aprendizaje?: import('@/lib/meni/editorial-brain/types').AprendizajeContexto;
   // MENI Editor Jefe Ejecutivo — la única salida visible
   veredictoEjecutivo?: {
     publicar: string;

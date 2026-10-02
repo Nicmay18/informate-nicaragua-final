@@ -259,6 +259,24 @@ export async function guardarConMeni(
       at: new Date().toISOString(),
     },
     ...(aiArtifactsRemoved ? { aiArtifactsRemoved: true } : {}),
+    // Learning 4.0 (FASE 13): traza compacta del conocimiento histórico
+    // usado en ESTA evaluación — patrones activos con versión, predicciones
+    // validadas, falsos positivos conocidos. Permite responder "¿por qué
+    // MENI recomendó esto?" sin caja negra.
+    ...(meni.editorialDecision?.aprendizaje
+      ? {
+          meniLearning: {
+            patrones: meni.editorialDecision.aprendizaje.patrones.map(
+              (p) => ({ id: p.patternId, version: p.version, casos: p.casos, confianza: p.confianza }),
+            ),
+            prediccionesValidadas: meni.editorialDecision.aprendizaje.predicciones?.totalValidadas ?? 0,
+            tasaAciertoPredicciones: meni.editorialDecision.aprendizaje.predicciones?.tasa ?? null,
+            falsosPositivos: (meni.editorialDecision.aprendizaje.falsosPositivos || []).map((f) => f.code),
+            conocimientoVersion: meni.editorialDecision.aprendizaje.conocimientoVersion ?? null,
+            evaluatedAt: new Date().toISOString(),
+          },
+        }
+      : {}),
   };
 
   // Sanitizar para Firestore: nunca enviar `undefined` (ni plano ni anidado).

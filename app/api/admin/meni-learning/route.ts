@@ -41,7 +41,11 @@ export async function GET(request: NextRequest) {
     .orderBy('at', 'desc').limit(20).get()
     .catch(() => null);
   const recentTransitions = cyclesSnap?.docs.map(d => d.data()) ?? [];
-  return NextResponse.json({ ...report, recentTransitions });
+  const fpSnap = await db.collection('meni_false_positives')
+    .orderBy('lastSeen', 'desc').limit(50).get()
+    .catch(() => null);
+  const falsePositives = fpSnap?.docs.map(d => ({ id: d.id, ...d.data() })) ?? [];
+  return NextResponse.json({ ...report, recentTransitions, falsePositives });
 }
 
 export async function POST(request: NextRequest) {
@@ -51,16 +55,51 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json().catch(() => null);
   const { patternId, action, note, evidence } = body ?? {};
+  const db = getAdminDb();
+
+  // Learning 4.0 — acciones operativas (no son transiciones de patrón)
+  if (action === 'run-cycle') {
+    const { runExperienceHarvest } = await import('@/lib/meni/learning-engine/experience-harvest');
+    const { runLearningCycle } = await import('@/lib/meni/learning-engine');
+    const [harvest, cycle] = await Promise.all([
+      runExperienceHarvest(db),
+      runLearningCycle(db).catch(() => null),
+    ]);
+    return NextResponse.json({
+      ok: true,
+      harvest,
+      cycle: cycle ? { articlesAnalyzed: cycle.totalArticlesAnalyzed, insights: cycle.insights.length } : null,
+    });
+  }
+
+  if (action === 'report-false-positive') {
+    const { code, contexto, articleId, kind } = body ?? {};
+    if (typeof code !== 'string' || !code.trim()) {
+      return NextResponse.json({ error: 'code requerido' }, { status: 400 });
+    }
+    const { registerFalsePositiveEvent } = await import('@/lib/meni/learning-engine/false-positive-registry');
+    await registerFalsePositiveEvent(db, {
+      code: code.trim(),
+      kind: kind === 'SELF_INDUCED_DEFECT' ? 'SELF_INDUCED_DEFECT' : 'FALSE_POSITIVE',
+      contexto: typeof contexto === 'string' ? contexto : 'admin:report',
+      origen: 'admin:report',
+      articleId: typeof articleId === 'string' ? articleId : undefined,
+      nota: typeof note === 'string' ? note : undefined,
+      status: 'CONFIRMED',
+    });
+    logger.info('[meni-learning] Falso positivo reportado', { code });
+    return NextResponse.json({ ok: true, code });
+  }
+
   const target = ACTION_TARGET[action];
 
   if (!patternId || !target) {
     return NextResponse.json(
-      { error: 'patternId y action requeridos (validate|approve|activate|reject|rollback)' },
+      { error: 'patternId y action requeridos (validate|approve|activate|reject|rollback|run-cycle|report-false-positive)' },
       { status: 400 },
     );
   }
 
-  const db = getAdminDb();
   const ok = await transitionLearning(db, patternId, target, {
     by: 'admin-operator',
     note: typeof note === 'string' ? note : undefined,

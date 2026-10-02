@@ -83,6 +83,11 @@ export interface QualityGateResult {
   editorScore: number;
   textoCorregido: string;
   transcriptionReport?: TranscriptionReportResult;
+  /** Códigos de defectos mecánicos que NO existían en el texto original y
+   *  aparecieron SOLO tras el autofix — firma de un defecto auto-inducido
+   *  (caso CONCAT_MOTOCICLETA). El gate sigue bloqueando; este campo solo
+   *  registra la proveniencia para la memoria de falsos positivos. */
+  selfInducedDefects?: string[];
   timestamp: string;
 }
 

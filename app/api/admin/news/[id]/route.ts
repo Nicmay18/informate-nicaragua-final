@@ -165,6 +165,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
             antes: c.antes,
             despues: c.despues,
             categoria: String(updateData.categoria || existingData.categoria || 'General'),
+            kind: 'DECISION_HUMANA',
+            origen: 'admin/news PUT',
           });
         }
         if (campos.length > 0) {

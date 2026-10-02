@@ -9,7 +9,7 @@
  */
 
 import type { Firestore } from 'firebase-admin/firestore';
-import type { EditorPattern, CorreccionRegistrada, CampoCorreccion } from '@/lib/meni/editorial-brain/types';
+import type { EditorPattern, CorreccionRegistrada, CampoCorreccion, CorreccionKind, PatronAplicadoTraza } from '@/lib/meni/editorial-brain/types';
 import { transitionLearning, isCandidateEligible } from '@/lib/meni/learning-engine/lifecycle';
 
 const COLLECTION = 'editor_corrections';
@@ -18,15 +18,56 @@ const MIN_CORRECTIONS_FOR_PATTERN = 3;
 const MIN_CONFIDENCE = 0.6;
 
 /**
+ * Kinds que cuentan como evidencia editorial para promover patrones.
+ * Las mutaciones del sistema (SUGERENCIA_EDITORIAL de limpiezas masivas,
+ * AUTO_CORREGIBLE) se guardan como observación pero NO fabrican patrones:
+ * un patrón requiere decisiones humanas repetidas.
+ * `undefined` = corrección humana registrada por el panel (legado).
+ */
+const HUMAN_EVIDENCE_KINDS = new Set<CorreccionKind>(['DECISION_HUMANA']);
+
+/**
+ * Normaliza un campo para comparación trivial: una corrección que solo
+ * cambia whitespace/etiquetas HTML no es decisión editorial.
+ */
+function normalizeForTrivialCheck(text: string): string {
+  return text
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+}
+
+export function isTrivialChange(antes: string, despues: string): boolean {
+  return normalizeForTrivialCheck(antes) === normalizeForTrivialCheck(despues);
+}
+
+/** Infere el kind de una mutación según el actor que la originó. */
+export function inferCorrectionKind(actor: string): CorreccionKind {
+  const a = actor.toLowerCase();
+  if (a.includes('supervisor')) return 'DECISION_SUPERVISOR';
+  if (a.includes('admin') || a.includes('editor') || a.includes('panel') || a.includes('periodista')) {
+    return 'DECISION_HUMANA';
+  }
+  if (a.includes('autofix') || a.includes('autocorrect')) return 'AUTO_CORREGIBLE';
+  return 'SUGERENCIA_EDITORIAL';
+}
+
+/**
  * Registra una corrección manual del editor.
  * Compara el texto antes/después y clasifica el tipo de cambio.
+ * No registra cambios triviales (whitespace/etiquetas) — no son decisiones.
  */
 export async function registerCorrection(
   db: Firestore,
   correction: Omit<CorreccionRegistrada, 'fecha' | 'diferenciaTipo'> & { fecha?: string },
 ): Promise<void> {
+  if (isTrivialChange(correction.antes, correction.despues)) return;
+
   const diferenciaTipo = classifyCorrection(correction.antes, correction.despues, correction.campo);
   const record: CorreccionRegistrada = {
+    kind: correction.kind ?? 'DECISION_HUMANA',
     ...correction,
     fecha: correction.fecha || new Date().toISOString(),
     diferenciaTipo,
@@ -68,7 +109,7 @@ function classifyCorrection(antes: string, despues: string, campo: CampoCorrecci
  * Detecta patrones en un campo específico después de suficientes correcciones.
  * Si encuentra un patrón repetido (>= MIN_CORRECTIONS_FOR_PATTERN), lo persiste.
  */
-async function detectAndPersistPattern(
+export async function detectAndPersistPattern(
   db: Firestore,
   campo: CampoCorreccion,
   categoria: string,
@@ -82,7 +123,15 @@ async function detectAndPersistPattern(
 
   if (snap.size < MIN_CORRECTIONS_FOR_PATTERN) return null;
 
-  const corrections = snap.docs.map(d => d.data() as CorreccionRegistrada);
+  // Solo decisiones humanas promueven patrones. Las correcciones iniciadas
+  // por el sistema (limpiezas masivas, autofix) son observaciones — si
+  // contaran, 50 aplicaciones idénticas de una regla fabricarían un
+  // "patrón" que en realidad es el propio sistema hablando consigo mismo.
+  const corrections = snap.docs
+    .map(d => d.data() as CorreccionRegistrada)
+    .filter(c => c.kind === undefined || HUMAN_EVIDENCE_KINDS.has(c.kind));
+
+  if (corrections.length < MIN_CORRECTIONS_FOR_PATTERN) return null;
 
   // Agrupar por tipo de diferencia
   const byType = new Map<string, CorreccionRegistrada[]>();
@@ -169,7 +218,10 @@ export async function loadEditorPatterns(db: Firestore): Promise<EditorPattern[]
       .where('learningState', '==', 'ACTIVE')
       .get();
     if (snap.empty) return [];
-    return snap.docs.map(d => d.data() as unknown as EditorPattern);
+    return snap.docs.map(d => ({
+      id: d.id,
+      ...(d.data() as unknown as EditorPattern),
+    }));
   } catch {
     return [];
   }
@@ -182,26 +234,41 @@ export async function loadEditorPatterns(db: Firestore): Promise<EditorPattern[]
 export function applyPatternsToDiagnostic(
   patterns: EditorPattern[],
   categoria: string,
-): { patronesAplicados: EditorPattern[]; correccionesSugeridas: string[] } {
+): { patronesAplicados: EditorPattern[]; correccionesSugeridas: string[]; trazas: PatronAplicadoTraza[] } {
   const relevant = patterns.filter(
     p => p.categorias.includes(categoria) || p.categorias.includes('General'),
   );
 
+  // Cada sugerencia declara su evidencia: N casos reales del medio y la
+  // confianza del patrón (FASE 15 — el aprendizaje debe ser explicable).
+  const evidencia = (p: EditorPattern) =>
+    `[aprendido de ${p.frecuencia} correcciones del editor · confianza ${Math.round(p.confianzaNivel * 100)}%${p.version ? ` · v${p.version}` : ''}]`;
+
   const correccionesSugeridas = relevant.map(p => {
     const verbMap: Record<string, string> = {
-      acortar: `Acortar ${p.campo} — el editor suele reducirlo (${Math.round(p.confianzaNivel * 100)}% de las veces)`,
-      ampliar: `Ampliar ${p.campo} — el editor suele expandirlo`,
-      agregar_contexto: `Agregar contexto histórico — el editor siempre lo añade en esta categoría`,
-      eliminar_relleno: `Eliminar frases de relleno — el editor las quita sistemáticamente`,
-      agregar_servicio: `Agregar servicio al lector — el editor lo incluye siempre`,
-      reordenar: `Reordenar contenido — el editor cambia el orden habitualmente`,
-      otro: `Revisar ${p.campo} — el editor suele ajustarlo`,
+      acortar: `Acortar ${p.campo} — el editor suele reducirlo ${evidencia(p)}`,
+      ampliar: `Ampliar ${p.campo} — el editor suele expandirlo ${evidencia(p)}`,
+      agregar_contexto: `Agregar contexto histórico — el editor lo añade en esta categoría ${evidencia(p)}`,
+      eliminar_relleno: `Eliminar frases de relleno — el editor las quita sistemáticamente ${evidencia(p)}`,
+      agregar_servicio: `Agregar servicio al lector — el editor lo incluye habitualmente ${evidencia(p)}`,
+      reordenar: `Reordenar contenido — el editor cambia el orden habitualmente ${evidencia(p)}`,
+      otro: `Revisar ${p.campo} — el editor suele ajustarlo ${evidencia(p)}`,
     };
-    return verbMap[p.campo] || p.descripcion;
+    return verbMap[p.campo] || `${p.descripcion} ${evidencia(p)}`;
   });
+
+  const trazas: PatronAplicadoTraza[] = relevant.map(p => ({
+    patternId: p.id || `${p.campo}_${categoria}_unknown`,
+    descripcion: p.descripcion,
+    casos: p.frecuencia,
+    confianza: p.confianzaNivel,
+    version: p.version ?? 0,
+    categorias: p.categorias,
+  }));
 
   return {
     patronesAplicados: relevant,
     correccionesSugeridas,
+    trazas,
   };
 }
