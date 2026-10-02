@@ -210,10 +210,10 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
   Nacionales: {
     requiredEvidence: {
       'qué anunció el gobierno o institución': /\b(?:gobierno|ministerio|programa|plan|inauguraci[oó]n|obra|infraestructura|carretera|vivienda|educaci[oó]n|MINED|energ[ií]a|ENATREL|agua\s+potable|ENACAL|reforestaci[oó]n|MARENA|producci[oó]n|agropecuario|MAG|cooperaci[oó]n|beca|censo|INEC)\b/i,
-      'cifras':        /\b(?:\d+\s*(?:millones|mil|beneficiarios?|personas?|familias?|casas?|km|hect[aá]reas|escuelas?|hospitales?)|C?\$[\d.,]+)\b/i,
+      'cifras':        /\b(?:C?\$[\d.,]+|\d{1,3}(?:[.,]\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)(?:\s*(?:millones?|mil|por\s+ciento|%|beneficiarios?|personas?|familias?|casas?|km|hect[aá]reas|escuelas?|hospitales?|estudiantes?|kits?|gu[ií]as?|clubes?|docentes?|maestros?|centros?|colegios?))\b/i,
       'dónde aplica':  /\b(?:Managua|departamento|municipio|comunidad|barrio|zona|rural|urbana|regi[oó]n|carretera|km\s+\d+|nacional|nacionalmente|pa[ií]s|Nicaragua|nicarag[uü]ense|territorio)\b/i,
-      'quién lo dijo': /\b(?:ministro|viceministro|copresidente|alcald[ea]|director[oa]|autoridad|instituci[oó]n|oficial|gobierno)\b/i,
-      'qué cambia':   /\b(?:cambia|entra\s+en\s+vigor|vigencia|aplica|modifica|nuevo|anterior|diferencia|implicaciones?|consecuencias?)\b/i,
+      'quién lo dijo': /\b(?:ministro|ministra|viceministro|viceministra|copresidente|copresidenta|alcald[ea]|director[oa]|coordinador|coordinadora|autoridad|instituci[oó]n|oficial|gobierno|ministerio|presidencia|portavoz|funcionario|funcionaria)\b/i,
+      'qué cambia':   /\b(?:cambia|cambio|cambios|entra\s+en\s+vigor|vigencia|aplica|modifica|nuevo|nueva|anterior|diferencia|implicaciones?|consecuencias?|ampl[ií]a|ampli[aá]r|alcance|expansi[oó]n|incorpora|incorpor[aá]r|extiende|aumenta|aumentar)\b/i,
     },
     requiredContext: {
       tipo: 'contexto nacional o histórico',
