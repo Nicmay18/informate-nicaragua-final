@@ -140,6 +140,7 @@ export async function POST(request: NextRequest) {
           metaDescription: metaGenerada,
           tituloSEO: meni.seo.tituloSEO,
         },
+        editorialVerdict: meni.editorialVerdict,
       }, { status: 400 });
     }
 
@@ -169,6 +170,7 @@ export async function POST(request: NextRequest) {
         },
         critical: criticalIssues,
         warnings: issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
+        editorialVerdict: meni.editorialVerdict,
       }, { status: 400 });
     }
 

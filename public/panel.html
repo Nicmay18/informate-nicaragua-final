@@ -6942,6 +6942,30 @@ VERIFICACIÓN FINAL
     // la misma cadena que ejecuta guardarConMeni al publicar).
     // ═══════════════════════════════════════════════════════════════
     function renderDecisionFinal(supervisor, meni) {
+      // MENI 4 Final: si existe el veredicto unificado (que ya integra
+      // factualidad + Supervisor), es LA decisión visible del Editor Jefe.
+      const ev = meni && meni.editorialVerdict;
+      if (ev && ev.decision) {
+        const meta = {
+          PUBLICAR: { label: '🟢 PUBLICAR — LISTA', color: '#16a34a', bg: '#d1fae5' },
+          PUBLICAR_CON_CAMBIOS: { label: '🟡 PUBLICAR CON CAMBIOS', color: '#ca8a04', bg: '#fef3c7' },
+          REVISAR: { label: '🟠 REVISAR ANTES DE PUBLICAR', color: '#ea580c', bg: '#ffedd5' },
+          BLOQUEAR: { label: '🔴 BLOQUEAR', color: '#dc2626', bg: '#fee2e2' },
+        };
+        const m = meta[ev.decision] || meta.REVISAR;
+        const recsNoBloquean = ev.decision === 'PUBLICAR_CON_CAMBIOS'
+          ? '<div style="font-size:12px;margin-top:6px;color:#92400e;">Estas recomendaciones NO impiden publicar.</div>' : '';
+        return '<div style="background:' + m.bg + ';border:2px solid ' + m.color + ';border-radius:12px;padding:16px;margin-bottom:20px;">'
+          + '<div style="font-size:11px;font-weight:700;color:' + m.color + ';letter-spacing:1px;margin-bottom:6px;">EDITOR JEFE — DECISIÓN FINAL</div>'
+          + '<div style="font-size:20px;font-weight:800;color:' + m.color + ';">' + m.label + '</div>'
+          + '<div style="color:#374151;margin-top:6px;font-size:13px;">' + ev.resumen + '</div>'
+          + '<div style="font-size:11px;color:#6b7280;margin-top:4px;">Bloqueantes: ' + ev.counts.blockers
+          + ' · Por revisar: ' + ev.counts.warnings + ' · Recomendaciones: ' + ev.counts.recommendations
+          + (ev.supervisorVerdict ? ' · Supervisor: ' + ev.supervisorVerdict : '') + '</div>'
+          + recsNoBloquean
+          + '</div>';
+      }
+
       const sup = supervisor || null;
       let estado, color, bg, detalle = '';
 
@@ -7030,7 +7054,8 @@ VERIFICACIÓN FINAL
       const btn = document.getElementById('btnGuardar');
       const estado = document.getElementById('publicacionEstado');
       if (!estado) return;
-      if (supervisor && !supervisor.approved) {
+      const evBlocked = meni && meni.editorialVerdict && meni.editorialVerdict.decision === 'BLOQUEAR';
+      if ((supervisor && !supervisor.approved) || evBlocked) {
         const first = (supervisor.issues || [])[0];
         estado.innerHTML =
           '<div style="background:#fee2e2;border:2px solid #dc2626;border-radius:10px;padding:14px;">'
@@ -7122,6 +7147,48 @@ VERIFICACIÓN FINAL
       html += '<p style="margin:4px 0 0;font-size:13px;color:#94a3b8;">Score: <strong style="color:' + scoreColor + ';font-size:16px;">' + score + '</strong> · Calificación: <strong>' + calif + '</strong> · ADN NI: <strong>' + adnNI + '%</strong> · Perfil: <strong style="color:#a78bfa;">' + (meni.profile_used || 'N/D') + '</strong> · MENI: <strong style="color:#a78bfa;">' + (meni.meniVersion || 'N/D') + '</strong></p></div>';
       html += '<div>' + aprobadoBadge + '</div>';
       html += '</div>';
+
+      // ── EDITOR JEFE — veredicto unificado (MENI 4 Final) ──────────────
+      // Única decisión visible con reglas inequívocas. Las recomendaciones
+      // se etiquetan explícitamente "NO BLOQUEA PUBLICACIÓN".
+      const ev = meni.editorialVerdict;
+      if (ev && ev.decision) {
+        const evMeta = {
+          PUBLICAR: { icon: '🟢', label: 'LISTA PARA PUBLICAR', color: '#16a34a', bg: '#052e16', border: '#16a34a' },
+          PUBLICAR_CON_CAMBIOS: { icon: '🟡', label: 'PUBLICAR CON CAMBIOS', color: '#ca8a04', bg: '#422006', border: '#ca8a04' },
+          REVISAR: { icon: '🟠', label: 'REVISAR ANTES DE PUBLICAR', color: '#ea580c', bg: '#431407', border: '#ea580c' },
+          BLOQUEAR: { icon: '🔴', label: 'BLOQUEAR', color: '#dc2626', bg: '#450a0a', border: '#dc2626' },
+        };
+        const m = evMeta[ev.decision] || evMeta.REVISAR;
+        html += '<div style="background:' + m.bg + ';border:2px solid ' + m.border + ';border-radius:10px;padding:16px;margin-bottom:16px;">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">';
+        html += '<div style="font-size:16px;font-weight:800;color:' + m.color + ';">' + m.icon + ' EDITOR JEFE — ' + m.label + '</div>';
+        html += '<div style="font-size:11px;color:#94a3b8;">' + ev.counts.blockers + ' bloqueante(s) · ' + ev.counts.warnings + ' a revisar · ' + ev.counts.recommendations + ' recomendación(es)</div>';
+        html += '</div>';
+        html += '<p style="margin:8px 0 0;font-size:12px;color:#e2e8f0;line-height:1.5;">' + ev.resumen + '</p>';
+
+        const sevBadge = {
+          BLOCKER: '<span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;">BLOQUEANTE</span>',
+          WARNING: '<span style="background:#ea580c;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;">REVISAR</span>',
+          RECOMMENDATION: '<span style="background:#7c3aed;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;">RECOMENDACIÓN — NO BLOQUEA PUBLICACIÓN</span>',
+          INFO: '<span style="background:#475569;color:#e2e8f0;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;">INFO</span>',
+        };
+        const sevBg = { BLOCKER: '#7f1d1d', WARNING: '#431407', RECOMMENDATION: '#1e1b4b', INFO: '#0f172a' };
+        (ev.hallazgos || []).forEach(h => {
+          html += '<div style="background:' + (sevBg[h.severity] || '#1e293b') + ';border-radius:8px;padding:10px;margin-top:8px;">';
+          html += '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' + (sevBadge[h.severity] || sevBadge.INFO) + '<span style="font-size:11px;color:#64748b;">' + (h.module || '') + '</span></div>';
+          html += '<div style="font-size:12px;font-weight:700;color:#f1f5f9;margin-top:6px;">' + h.title + '</div>';
+          if (h.location && h.location.cita) html += '<div style="font-size:11px;color:#94a3b8;margin-top:4px;">📍 ' + (h.location.parrafo ? 'Párrafo ' + h.location.parrafo + ' — ' : '') + '“' + h.location.cita + '”</div>';
+          if (h.description && h.description !== h.title) html += '<div style="font-size:11px;color:#cbd5e1;margin-top:4px;">' + h.description + '</div>';
+          if (h.howToFix) html += '<div style="font-size:11px;color:#86efac;margin-top:4px;">→ ' + h.howToFix + '</div>';
+          html += '</div>';
+        });
+        if ((ev.aciertos || []).length > 0) {
+          html += '<details style="margin-top:10px;"><summary style="font-size:12px;color:#86efac;cursor:pointer;">✓ Validado correctamente (' + ev.aciertos.length + ')</summary>';
+          html += '<div style="font-size:11px;color:#86efac;margin-top:6px;padding-left:12px;">' + ev.aciertos.map(a => '• ' + a).join('<br>') + '</div></details>';
+        }
+        html += '</div>';
+      }
 
       // Veredicto ejecutivo MENI — referencia interna, NO la autoridad final.
       // La autoridad es la DECISIÓN EDITORIAL FINAL (Supervisor) que se muestra arriba.
@@ -8870,6 +8937,35 @@ VERIFICACIÓN FINAL
       '</div>';
     }
     let html = '';
+    // EDITOR JEFE — veredicto unificado (MENI 4 Final): una sola decisión
+    // visible también en el rechazo de guardado, con severidades explícitas.
+    const ev = data.editorialVerdict;
+    if (ev && ev.decision) {
+      const evMeta = {
+        PUBLICAR: { icon: '🟢', label: 'LISTA PARA PUBLICAR', color: '#16a34a', bg: '#f0fdf4' },
+        PUBLICAR_CON_CAMBIOS: { icon: '🟡', label: 'PUBLICAR CON CAMBIOS', color: '#ca8a04', bg: '#fefce8' },
+        REVISAR: { icon: '🟠', label: 'REVISAR ANTES DE PUBLICAR', color: '#ea580c', bg: '#fff7ed' },
+        BLOQUEAR: { icon: '🔴', label: 'BLOQUEAR', color: '#dc2626', bg: '#fef2f2' },
+      };
+      const m = evMeta[ev.decision] || evMeta.REVISAR;
+      html += '<div style="background:' + m.bg + '; border:2px solid ' + m.color + '; border-radius:10px; padding:14px; margin-bottom:16px;">' +
+        '<div style="font-size:15px; font-weight:800; color:' + m.color + ';">' + m.icon + ' EDITOR JEFE — ' + m.label + '</div>' +
+        '<div style="font-size:12px; color:#4b5563; margin-top:4px;">' + ev.resumen + '</div>';
+      const sevBadge = {
+        BLOCKER: '<span style="background:#dc2626;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">BLOQUEANTE</span>',
+        WARNING: '<span style="background:#ea580c;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">REVISAR</span>',
+        RECOMMENDATION: '<span style="background:#7c3aed;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">RECOMENDACIÓN — NO BLOQUEA PUBLICACIÓN</span>',
+        INFO: '<span style="background:#94a3b8;color:#fff;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;">INFO</span>',
+      };
+      (ev.hallazgos || []).forEach(function(h) {
+        html += '<div style="margin-top:8px; padding:8px 10px; background:#fff; border-radius:6px; font-size:12px;">' +
+          sevBadge[h.severity] + ' <strong>' + h.title + '</strong>' +
+          (h.location && h.location.cita ? '<div style="color:#6b7280; margin-top:4px;">📍 ' + (h.location.parrafo ? 'Párrafo ' + h.location.parrafo + ' — ' : '') + '“' + h.location.cita + '”</div>' : '') +
+          (h.howToFix ? '<div style="color:#065f46; margin-top:4px;">→ ' + h.howToFix + '</div>' : '') +
+        '</div>';
+      });
+      html += '</div>';
+    }
     const blockers = (data.blockingIssues || []);
     const warnings = (data.warnings || []);
     const correcciones = (data.correcciones || []);

@@ -81,6 +81,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
           code: first?.code || 'MENI_NOT_APPROVED',
           blockingIssues: meni.blockingIssues || [],
           scoreFinal: meni.scoreFinal,
+          editorialVerdict: meni.editorialVerdict,
         }, { status: 400 });
       }
 
@@ -106,6 +107,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
           },
           critical: criticalIssues,
           warnings: issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
+          editorialVerdict: meni.editorialVerdict,
         }, { status: 400 });
       }
 

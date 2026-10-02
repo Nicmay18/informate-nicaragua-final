@@ -238,6 +238,7 @@ export async function POST(request: NextRequest) {
         scoreFinal: meni.scoreFinal,
         calificacion: meni.calificacion,
         diagnostico: meni.diagnostico,
+        editorialVerdict: meni.editorialVerdict,
       }, { status: 400 });
     }
 
@@ -268,6 +269,7 @@ export async function POST(request: NextRequest) {
         },
         critical: criticalIssues,
         warnings: issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
+        editorialVerdict: meni.editorialVerdict,
       }, { status: 400 });
     }
 

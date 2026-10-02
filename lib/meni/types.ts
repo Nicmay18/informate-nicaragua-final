@@ -209,6 +209,13 @@ export interface MeniResult {
   editorialDecision?: EditorialDecisionFlat;
   /** Decisión editorial canónica — una sola fuente de verdad (REGLA 17) */
   canonicalEditorialDecision?: EditorialDecision;
+  /**
+   * MENI 4 Final — veredicto unificado del Editor Jefe:
+   * PUBLICAR | PUBLICAR_CON_CAMBIOS | REVISAR | BLOQUEAR, con
+   * hallazgos de severidad explícita. Una RECOMMENDATION jamás impide
+   * publicación. Una sola fuente de verdad para panel y APIs.
+   */
+  editorialVerdict?: import('./editorial-verdict').EditorialVerdict;
 }
 
 export interface EditorialDecisionFlat {

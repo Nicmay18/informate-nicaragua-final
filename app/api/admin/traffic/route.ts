@@ -34,6 +34,34 @@ function verificarAuth(request: NextRequest): boolean {
 const LOG_LIMIT_24H = 5000;
 const RECENT_LIMIT = 20;
 const CATMAP_SLUG_CAP = 90;
+/**
+ * El panel hace polling cada 60s. Las AGREGACIONES 24h (horas, ventanas,
+ * fuentes) se cachean 5 min — no necesitan frescura de segundos. La parte
+ * verdaderamente en vivo (realtime + últimos eventos) sale de una consulta
+ * pequeña fresca (últimos RECENT_FRESH_LIMIT docs). Esto baja el costo del
+ * polling de ~600-1300 lecturas/min a ~200/min + scan amortizado.
+ */
+const EVENTS24H_CACHE_SECONDS = 300;
+const RECENT_FRESH_LIMIT = 200;
+
+const _cachedEvents24h = unstable_cache(
+  async (sinceIso: string): Promise<{ events: TrafficLogEvent[]; truncated: boolean }> => {
+    const { getAdminDb } = await import('@/lib/firebase-admin');
+    const db = getAdminDb();
+    const snap = await db
+      .collection('traffic_log')
+      .where('timestamp', '>=', new Date(sinceIso))
+      .orderBy('timestamp', 'desc')
+      .limit(LOG_LIMIT_24H)
+      .get();
+    const events = snap.docs
+      .map((d: FirebaseFirestore.QueryDocumentSnapshot) => toEvent(d.data()))
+      .filter((e: TrafficLogEvent | null): e is TrafficLogEvent => e !== null);
+    return { events, truncated: snap.docs.length >= LOG_LIMIT_24H };
+  },
+  ['traffic-events-24h'],
+  { revalidate: EVENTS24H_CACHE_SECONDS },
+);
 
 interface NoticiaMeta { titulo: string; categoria: string; vistas: number; }
 
@@ -161,18 +189,21 @@ export async function GET(request: NextRequest) {
     const filterArticulo = (searchParams.get('articulo') || '').trim();
     const now = new Date();
 
-    // ---- Lectura 1: traffic_log últimas 24h (acotada) ---------------------
-    const since24 = new Date(now.getTime() - 24 * 3600 * 1000);
-    const logSnap = await db
+    // ---- Lectura 1a: traffic_log 24h para agregados (cache 5 min) --------
+    // `since` redondeado a 15 min para que el bucket de cache sea estable
+    // dentro de su ventana (la lectura cacheada re-validate cada 5 min).
+    const since24 = new Date(Math.floor((now.getTime() - 24 * 3600 * 1000) / 900000) * 900000);
+    const { events: events24h, truncated: logTruncated } = await _cachedEvents24h(since24.toISOString());
+
+    // ---- Lectura 1b: eventos recientes frescos (realtime/últimos) ---------
+    const recentSnap = await db
       .collection('traffic_log')
-      .where('timestamp', '>=', since24)
       .orderBy('timestamp', 'desc')
-      .limit(LOG_LIMIT_24H)
+      .limit(RECENT_FRESH_LIMIT)
       .get();
-    const events24h = logSnap.docs
+    const recentEvents = recentSnap.docs
       .map(d => toEvent(d.data()))
       .filter((e): e is TrafficLogEvent => e !== null);
-    const logTruncated = logSnap.docs.length >= LOG_LIMIT_24H;
 
     // ---- Lectura 2: series diarias + agregados del período (cache 5min) ---
     const periodDays = period === '30d' ? 30 : period === '7d' ? 7 : 1;
@@ -208,7 +239,7 @@ export async function GET(request: NextRequest) {
     const hourly = bucketViewsByHour(filteredEvents, now);
     const windows = windowedArticleCounts(filteredEvents, now);
     const { last6, prev6 } = split6hWindows(filteredEvents, now);
-    const realtime = realtimeSnapshot(events24h, now, 15);
+    const realtime = realtimeSnapshot(recentEvents, now, 15);
     const hours = hourSummary(hourly);
 
     // Fuentes del período: 24h desde eventos; 7d/30d desde traffic_daily
@@ -292,14 +323,14 @@ export async function GET(request: NextRequest) {
     // evita una segunda lectura de traffic_daily/traffic_log por request.
     const read = { views24h: perf.views24h, source: perf.source, migrationHealth: perf.migrationHealth };
     const topPaginas = articulos.slice(0, 10).map(a => ({ slug: a.slug, titulo: a.titulo, vistas: period === '24h' ? a.h24 : (periodViews.get(a.slug)?.views || a.h24) }));
-    const ultimosEventos = events24h.slice(0, RECENT_LIMIT).map(e => ({
+    const ultimosEventos = recentEvents.slice(0, RECENT_LIMIT).map(e => ({
       slug: e.slug,
       titulo: metaMap.get(e.slug)?.titulo || e.titulo || e.slug,
       source: normalizeSource(e.source),
       timestamp: e.timestamp.toISOString(),
     }));
 
-    const sessionsInstrumented = events24h.some(e => e.sessionId);
+    const sessionsInstrumented = recentEvents.some(e => e.sessionId);
 
     const stats = {
       // legacy
@@ -327,6 +358,7 @@ export async function GET(request: NextRequest) {
         tzDaily: 'UTC (clave de día tal como persiste traffic_daily)',
         logLimit: LOG_LIMIT_24H,
         logTruncated: logTruncated,
+        events24hCacheSeconds: EVENTS24H_CACHE_SECONDS,
         sessions: sessionsInstrumented ? 'available' : 'not_instrumented',
         dailyCoverage: { first: heatmapData.first, last: heatmapData.last, days: heatmapData.days.length },
         filters: {

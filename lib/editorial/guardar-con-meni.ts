@@ -12,6 +12,7 @@ import { detectFactualitySignals } from './factuality-signals';
 import type { FactualitySignal } from './factuality-signals';
 import { analyzeTrust } from './trust';
 import { newAttemptId, writeDecisionLog } from './decision-log';
+import { decideFromFindings, collectGateFindings } from '@/lib/meni/editorial-verdict';
 
 /**
  * Elimina recursivamente valores `undefined` de cualquier estructura
@@ -195,6 +196,31 @@ export async function guardarConMeni(
   const ok = meni.aprobado;
   const supervisorApproved = ['PUBLICAR', 'PUBLICAR_CON_CAMBIOS'].includes(supervisor.verdict);
 
+  // MENI 4 Final — veredicto unificado del Editor Jefe: hallazgos de MENI
+  // (score/QG/explicabilidad/recomendaciones) + capa de cierre (señales de
+  // factualidad + confianza + issues del Supervisor). Una sola fuente de
+  // verdad: cada hallazgo declara su severidad y si bloquea o no.
+  const finalVerdict = decideFromFindings(
+    [
+      ...(meni.editorialVerdict?.hallazgos || []),
+      ...collectGateFindings({
+        contenido: finalContenido,
+        factualitySignals: allSignals,
+        supervisor,
+      }),
+    ],
+    {
+      scoreFinal: meni.scoreFinal,
+      aprobado: meni.aprobado && supervisorApproved,
+      supervisorVerdict: supervisor.verdict,
+      aciertos: [
+        ...(meni.editorialVerdict?.aciertos || []),
+        ...(allSignals.length === 0 ? ['Sin señales de riesgo factual detectadas'] : []),
+      ],
+    },
+  );
+  meni.editorialVerdict = finalVerdict;
+
   // REGLA 14: Una sola decision editorial canonica — el Supervisor.
   // buildEditorialDecision (decision.ts) fue eliminado del flujo porque
   // producia una segunda decision paralela que nadie respetaba.
@@ -245,6 +271,16 @@ export async function guardarConMeni(
     factuality: {
       signals: allSignals,
       evaluatedAt: new Date().toISOString(),
+    },
+    // MENI 4 Final — veredicto editorial unificado persistido con la nota.
+    // La UI puede mostrar la decisión del Editor Jefe sin re-evaluar.
+    editorVerdict: {
+      decision: finalVerdict.decision,
+      resumen: finalVerdict.resumen,
+      counts: finalVerdict.counts,
+      supervisorVerdict: supervisor.verdict,
+      hallazgos: finalVerdict.hallazgos.slice(0, 40),
+      evaluatedAt: finalVerdict.evaluatedAt,
     },
     // Trust layer persistido CON la decisión (pre-Supervisor): el Supervisor
     // ya recibió estos factores como señales TRUST_*. Misma shape que el

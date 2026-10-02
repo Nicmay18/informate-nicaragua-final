@@ -96,7 +96,19 @@ export async function detectarDuplicado(
 }
 
 /**
- * Version server-side con Admin SDK (para API routes)
+ * Version server-side con Admin SDK (para API routes).
+ *
+ * DOS FASES (control de costo/transferencia):
+ *  FASE 1 — criba por metadatos: lee solo titulo+resumen de las notas
+ *           (~200-500 bytes/doc en vez de ~5-30KB con contenido HTML).
+ *           Un duplicado real comparte vocabulario del mismo evento en
+ *           su título/resumen; umbral de candidatura deliberadamente
+ *           bajo (0.10) para no perder recall. Además se incluyen los
+ *           top-10 por similitud de metadatos como red de seguridad.
+ *  FASE 2 — confirmación: solo los candidatos descargan `contenido`
+ *           (getAll, una RPC) y se aplica el mismo Jaccard de antes
+ *           sobre titulo+contenido. La precisión del resultado final
+ *           es idéntica a la versión de una fase.
  */
 export async function detectarDuplicadoAdmin(
   dbAdmin: any,
@@ -106,21 +118,52 @@ export async function detectarDuplicadoAdmin(
   excluirId?: string
 ): Promise<ResultadoDuplicado> {
   const shinglesNuevo = generarShingles(contenidoNuevo + ' ' + tituloNuevo, 5);
+  const shinglesTituloNuevo = generarShingles(tituloNuevo || '', 5);
 
+  // FASE 1: metadatos solamente.
   const snapshot = await dbAdmin
     .collection('noticias')
-    .select('titulo', 'contenido', 'slug', 'estado')
+    .select('titulo', 'resumen', 'slug', 'estado')
     .limit(2000)
     .get();
-  const coincidencias: ResultadoDuplicado['coincidencias'] = [];
 
+  const CANDIDATE_MIN = 0.1;
+  const PHASE2_CAP = 20;
+  const TOP_FALLBACK = 10;
+
+  const scored: { ref: any; id: string; titulo: string; metaScore: number }[] = [];
   for (const doc of snapshot.docs) {
     if (excluirId && doc.id === excluirId) continue;
+    const data = doc.data();
+    const shinglesMeta = generarShingles(`${data.titulo || ''} ${data.resumen || ''}`, 5);
+    // Criba: similitud del título nuevo contra título+resumen existentes.
+    // Si el artículo nuevo es largo, también mezclamos el contenido nuevo
+    // a baja resolución para no perder duplicados con titular reescrito.
+    const metaScore = Math.max(
+      similitudJaccard(shinglesTituloNuevo, shinglesMeta),
+      similitudJaccard(generarShingles(`${tituloNuevo} ${contenidoNuevo.slice(0, 600)}`, 5), shinglesMeta),
+    );
+    scored.push({ ref: doc.ref, id: doc.id, titulo: data.titulo || 'Sin titulo', metaScore });
+  }
 
+  scored.sort((a, b) => b.metaScore - a.metaScore);
+  // Candidatos: superan el umbral de criba, o están en el top-N con alguna
+  // similitud > 0 (red de seguridad ante títulos muy reescritos). Si TODO
+  // puntúa 0, el contenido no comparte vocabulario con ninguna nota.
+  const candidatos = scored.slice(0, PHASE2_CAP)
+    .filter((c, idx) => c.metaScore >= CANDIDATE_MIN || (idx < TOP_FALLBACK && c.metaScore > 0));
+
+  // FASE 2: contenido completo solo de candidatos (una sola RPC getAll).
+  const docsCompletos = candidatos.length > 0
+    ? await dbAdmin.getAll(...candidatos.map((c) => c.ref))
+    : [];
+
+  const coincidencias: ResultadoDuplicado['coincidencias'] = [];
+  for (const doc of docsCompletos) {
+    if (!doc.exists) continue;
     const data = doc.data();
     const textoExistente = (data.contenido || '') + ' ' + (data.titulo || '');
     const shinglesExistente = generarShingles(textoExistente, 5);
-
     const similitud = similitudJaccard(shinglesNuevo, shinglesExistente);
 
     if (similitud >= umbral) {

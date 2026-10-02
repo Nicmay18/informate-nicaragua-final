@@ -34,6 +34,7 @@ import { detectContentProfile, type MeniContentProfile } from '@/lib/meni/profil
 import { computeInputHash } from '@/lib/meni/hash';
 import { computeContextScore } from '@/lib/meni/contextualiza';
 import { filterRecommendations } from '@/lib/meni/recommendation-filter';
+import { buildEditorialVerdict, decideFromFindings, collectGateFindings } from '@/lib/meni/editorial-verdict';
 import type { ActiveAdjustments } from '@/lib/meni/learning-engine/learning-adapter';
 
 export interface MeniRunOptions {
@@ -326,6 +327,19 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   });
 
   const { blockingIssues, warnings } = buildMeniDiagnostics({ qualityGate, scoreFinal, aprobado: aprobadoFinal, editorialDna });
+  // MENI 4 Final — veredicto unificado del Editor Jefe (fase MENI pura;
+  // duplicado/factualidad/Supervisor se agregan aguas abajo y recomputan).
+  const editorialVerdict = buildEditorialVerdict({
+    contenido: input.contenido || '',
+    scoreFinal,
+    aprobado: aprobadoFinal,
+    blockingIssues,
+    warnings,
+    qualityGateIssues: qualityGate.issues,
+    explainability: evaluacion.explainability,
+    recomendaciones: recomendacionesContextuales.map((r) => ({ area: r.area, mensaje: r.mensaje })),
+    aciertos: forense.evidencias.filter((e) => e.estado === 'OK').map((e) => e.mensaje),
+  });
   logMeni('Quality gate result', {
     bloqueado: qualityGate.bloqueado,
     issuesCount: qualityGate.issues.length,
@@ -433,21 +447,46 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     matched_keywords: contentProfile.matched_keywords,
     matched_entities: contentProfile.matched_entities,
     contextScore,
+    editorialVerdict,
   };
+}
+
+/** Firma de defectos mecánicos bloqueantes del Quality Gate. */
+function mechanicalBlockers(result: MeniResult): Set<string> {
+  return new Set(
+    (result.qualityGate?.issues || [])
+      .filter((i) => i.severidad === 'blocking')
+      .map((i) => `${i.categoria}:${i.evidencia || i.mensaje}`),
+  );
 }
 
 export function runMeni(input: NoticiaInput, options?: MeniRunOptions): MeniResult {
   let currentInput = input;
   logMeni('=== runMeni (auto-correct wrapper) start ===', input.titulo);
   const now = new Date();
-  let result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe, now);
+  const firstResult = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe, now);
+  let result = firstResult;
   let autoCorrections: AutoCorrection[] = [];
   if (!result.aprobado && result.score_status !== 'INVALID') {
     const corrected = autoCorrectNoticia(currentInput, result);
     if (corrected.corrections.length > 0) {
-      autoCorrections = corrected.corrections;
-      currentInput = corrected.input;
-      result = evaluateMeni(currentInput, options?.activeAdjustments, options?.editorJefe, now);
+      // Validación post-auto-corrección (regla del pipeline seguro):
+      // la corrección mecánica re-evalúa — si el texto corregido introduce
+      // defectos mecánicos que el original NO tenía, la auto-corrección se
+      // revierte y se reporta como warning. Nunca texto → defecto propio
+      // → bloqueo sin que el sistema lo admita.
+      const reEval = evaluateMeni(corrected.input, options?.activeAdjustments, options?.editorJefe, now);
+      const preBlockers = mechanicalBlockers(firstResult);
+      const newBlockers = [...mechanicalBlockers(reEval)].filter((b) => !preBlockers.has(b));
+      if (newBlockers.length > 0) {
+        logMeni('auto-corrección revertida — introdujo defectos mecánicos nuevos', { newBlockers });
+        result = firstResult;
+        autoCorrections = [];
+      } else {
+        autoCorrections = corrected.corrections;
+        currentInput = corrected.input;
+        result = reEval;
+      }
     }
   }
   logMeni('=== runMeni (auto-correct wrapper) end ===', {
@@ -662,6 +701,29 @@ export async function runMeniAsync(
     }
   }
 
+  // MENI 4 Final — el chequeo de duplicados corre post-evaluación: se
+  // re-computa el veredicto sobre los hallazgos de MENI + el hallazgo
+  // de duplicado (BLOCKER si aplica). La factualidad y el Supervisor
+  // se añaden en guardarConMeni y vuelven a re-computar la decisión.
+  const editorialVerdict = decideFromFindings(
+    [
+      ...(base.editorialVerdict?.hallazgos || []),
+      ...collectGateFindings({
+        contenido: input.contenido || '',
+        duplicado: {
+          esDuplicado: duplicado.esDuplicado,
+          similitud: duplicado.similitud,
+          tituloCoincidencia: duplicado.coincidencias?.[0]?.titulo,
+        },
+      }),
+    ],
+    {
+      scoreFinal: base.scoreFinal,
+      aprobado,
+      aciertos: base.editorialVerdict?.aciertos || [],
+    },
+  );
+
   logMeni('=== runMeniAsync end ===', { aprobado, similitud: duplicado.similitud, blockingIssues: blockingIssues.length, warnings: warnings.length, tMs: Date.now() - t1 });
   logTime('runMeniAsync', t1);
 
@@ -674,6 +736,7 @@ export async function runMeniAsync(
     warnings,
     duplicado,
     editorBrain,
+    editorialVerdict,
   };
 }
 
