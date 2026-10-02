@@ -18,9 +18,13 @@ function unifyTerminology(html: string): { texto: string; corrections: QualityGa
   for (const [canonico, variantes] of Object.entries(TERMINOLOGY_VARIANTS)) {
     const ordenadas = [...variantes].sort((a, b) => b.length - a.length);
     for (const variante of ordenadas) {
-      const regex = new RegExp(escapeRegex(variante), 'gi');
+      if (variante === canonico) continue;
+      // \b es obligatorio: sin boundaries, "moto" coincide dentro de
+      // "motocicleta"/"motociclista" y fabrica "motocicletacicleta" —
+      // falso positivo de CONCAT_MOTOCICLETA. (s)? preserva plurales.
+      const regex = new RegExp(`\\b${escapeRegex(variante)}(s)?\\b`, 'gi');
       if (regex.test(texto)) {
-        texto = texto.replace(regex, canonico);
+        texto = texto.replace(regex, (_m, s: string | undefined) => canonico + (s ?? ''));
         corrections.push({
           categoria: 'terminologia',
           descripcion: `Unificado "${variante}" → "${canonico}"`,

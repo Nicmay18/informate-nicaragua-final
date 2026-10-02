@@ -19,6 +19,10 @@ export function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 const INSTITUCIONES_CONOCIDAS = [
   'policía nacional', 'ministerio de salud', 'minsa', 'ejército de nicaragua',
   'cruz roja', 'bomberos', 'alcaldía', 'ineter', 'mined', 'corte suprema',
@@ -265,10 +269,15 @@ export function detectDuplicateParagraphs(contenidoHtml: string): QualityGateIss
 
 export function detectTerminologyVariants(textoPlano: string): QualityGateIssue[] {
   const issues: QualityGateIssue[] = [];
-  const lower = textoPlano.toLowerCase();
 
   for (const [canonico, variantes] of Object.entries(TERMINOLOGY_VARIANTS)) {
-    const encontradas = variantes.filter((v) => lower.includes(v));
+    // Word boundaries obligatorias: con includes(), "moto" está contenido en
+    // "motocicleta" → cualquier texto con la palabra canónica correcta se
+    // marcaba como "varias formas" y disparaba un autofix que fabricaba la
+    // concatenación "motocicletacicleta" (falso CONCAT_MOTOCICLETA).
+    const encontradas = variantes.filter((v) =>
+      new RegExp(`\\b${escapeRegex(v)}s?\\b`, 'i').test(textoPlano)
+    );
     const unicas = new Set(encontradas);
     if (unicas.size > 1) {
       issues.push({

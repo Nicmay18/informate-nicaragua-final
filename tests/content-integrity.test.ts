@@ -5,6 +5,8 @@
  */
 import { describe, it, expect } from 'vitest';
 import { findGenerationDefects } from '@/lib/editorial/content-integrity';
+import { detectTerminologyVariants } from '@/lib/meni/quality-gate/validator';
+import { applyAutoFix } from '@/lib/meni/quality-gate/autoFix';
 
 describe('findGenerationDefects', () => {
   it('detecta concatenación imposible motocicleta*', () => {
@@ -51,5 +53,55 @@ describe('findGenerationDefects', () => {
     for (const t of legit) {
       expect(findGenerationDefects(t), t).toEqual([]);
     }
+  });
+});
+
+// Regresión CONCAT_MOTOCICLETA: el falso positivo no venía del detector sino
+// de unifyTerminology — la variante 'moto' se reemplazaba sin \b y fabricaba
+// "motocicletacicleta" dentro del propio texto corregido. La cadena evaluada
+// aquí es la misma que corre runQualityGate: detect → autoFix → defects.
+describe('CONCAT_MOTOCICLETA — pipeline quality-gate', () => {
+  function pipelineDefects(contenido: string) {
+    const textoPlano = contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    const issues = detectTerminologyVariants(textoPlano);
+    const { textoCorregido } = applyAutoFix(contenido, issues);
+    return { defects: findGenerationDefects(`Título\n${textoCorregido}`), textoCorregido };
+  }
+
+  it('la palabra "motocicleta" correcta nunca produce CONCAT_MOTOCICLETA', () => {
+    const casosLimpios = [
+      'motocicleta',
+      'una motocicleta',
+      'La motocicleta era una Pulsar negra',
+      'motocicleta,',
+      'motocicleta.',
+      '<p>La motocicleta era una Pulsar negra.</p>',
+      '<p>La motocicleta se accidentó.</p><p>La motocicleta quedó destrozada.</p>',
+      '<p>El motociclista fue trasladado.</p>',
+      '<p>Las motocicletas invadieron el carril.</p>',
+      '<p>Pilotos de motocross entrenan en Managua.</p>',
+    ];
+    for (const c of casosLimpios) {
+      const { defects, textoCorregido } = pipelineDefects(c);
+      expect(defects.map(d => d.code), `${c} → ${textoCorregido}`).not.toContain('CONCAT_MOTOCICLETA');
+    }
+  });
+
+  it('una concatenación real sigue siendo detectada', () => {
+    const { defects } = pipelineDefects('<p>Las motocicletacicletas invadieron</p>');
+    expect(defects.map(d => d.code)).toContain('CONCAT_MOTOCICLETA');
+    const { defects: d2 } = pipelineDefects('<p>El motocicletaciclista fue trasladado.</p>');
+    expect(d2.map(d => d.code)).toContain('CONCAT_MOTOCICLETA');
+  });
+
+  it('la unificación legítima "moto" → "motocicleta" sigue funcionando', () => {
+    const { textoCorregido } = pipelineDefects('<p>La moto era roja y la motocicleta negra.</p>');
+    expect(textoCorregido).toContain('La motocicleta era roja');
+    expect(textoCorregido).not.toContain('motocicletacicleta');
+  });
+
+  it('texto con solo la forma canónica no dispara issue de terminología', () => {
+    expect(detectTerminologyVariants('La motocicleta era una Pulsar negra')).toHaveLength(0);
+    expect(detectTerminologyVariants('Las motocicletas y los motociclistas')).toHaveLength(0);
   });
 });
