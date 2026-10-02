@@ -8,9 +8,11 @@ export const profileNacionales: EditorialProfile = {
   requiredEvidence: {
     quePaso:      /\b(?:anunci[oaó]|inaugur[oaó]|present[oaó]|programa|plan|proyecto|inversi[oó]n|obra|construcci[oó]n|entreg[oaó])\b/i,
     quien:        /\b(?:gobierno|ministerio|presidencia|alcald[ií]a|autoridad|funcionario|instituci[oó]n)\b/i,
-    cifras:       /\b(?:C?\$[\d.,]+|\d+(?:\.\d+)?(?:\s*(?:millones|mil|por ciento|%))|\d+\s+(?:viviendas?|escuelas?|hect[aá]reas|kil[oó]metros|personas|familias?|beneficiarios?))\b/i,
+    cifras:       /\b(?:C?\$[\d.,]+|\d{1,3}(?:[.,]\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?)(?:\s*(?:millones?|mil|por\s+ciento|%|viviendas?|escuelas?|hect[aá]reas|kil[oó]metros|personas|familias?|beneficiarios?|estudiantes?|kits?|gu[ií]as?|clubes?|docentes?|maestros?|centros?|colegios?))\b/i,
+    'quién lo dijo': /\b(?:ministro|ministra|viceministro|viceministra|director|directora|coordinador|coordinadora|funcionario|funcionaria|autoridad|portavoz|gobierno|ministerio|presidencia)\b/i,
     cronograma:   /\b(?:agosto|septiembre|octubre|noviembre|diciembre|2025|2026|pr[oó]ximo\s+(?:año|mes|semestre)|inicia(?:r[aá]?)?|previsto|meta)\b/i,
     impacto:      /\b(?:beneficiar[aá]?|beneficiados?|familias?|comunidades?|habitantes|estudiantes?|empleos?|resultados?)\b/i,
+    'qué cambia': /\b(?:cambia|cambio|cambios|ampl[ií]a|ampli[aá]r|nuevo|nueva|anterior|diferencia|implicaciones?|consecuencias?|alcance|expansi[oó]n|incorpora|incorpor[aá]r|extiende|extender|aumenta|aumentar)\b/i,
   },
   requiredContext: { tipo: 'nacionales', patrones: [/\b(?:comunicado|informe|parte|declaraci[oó]n|seg[uú]n)\b/i] },
   requiredUtility: { preguntas: ['qué pasó', 'quién', 'cifras', 'cronograma', 'impacto'] },

@@ -102,4 +102,14 @@ describe('MENI Forense — evidencia y contexto por perfil', () => {
     expect(result.valorEditorial.score).toBeLessThanOrEqual(100);
     expect(result.veredicto).toBeTruthy();
   });
+
+  it('Nacionales reconoce cifras educativas, quién las atribuye y qué cambia', () => {
+    const base = 'Mendy Aráuz informó que Nicaragua reabrió 2,503 clubes de primaria y 825 de secundaria, con 41,688 estudiantes. La ministra también informó la distribución de 10,000 guías y 1,700 kits de ajedrez. Pamela Alarcón, coordinadora nacional, explicó que participaron 12 centros educativos. La ampliación cambia el alcance del programa y permite incorporar a más estudiantes mediante clubes, teleclases y competencias. El programa nacional mantiene continuidad durante 2026.';
+    const result = evaluate(noticia(pad(base, RELLENO_NEUTRO), 'Nacionales'));
+    const warnings = result.valorEditorial.warnings.join(' ');
+
+    expect(warnings).not.toContain('EVIDENCIA_REQUERIDA:cifras');
+    expect(warnings).not.toContain('EVIDENCIA_REQUERIDA:quién lo dijo');
+    expect(warnings).not.toContain('EVIDENCIA_REQUERIDA:qué cambia');
+  });
 });
