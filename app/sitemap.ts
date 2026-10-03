@@ -24,8 +24,13 @@ const cachedGetEntitySlugs = unstable_cache(
     try {
       const { getAdminDb } = await import('@/lib/firebase-admin');
       const db = getAdminDb();
-      const snap = await db.collection('kb_entities').select('slug').limit(500).get();
-      return snap.docs.map((d) => d.data().slug).filter(Boolean) as string[];
+      const snap = await db.collection('kb_entities').select('slug', 'articleCount').limit(500).get();
+      // Solo entidades con cobertura real (>=3 artículos) van al sitemap —
+      // las de 1-2 artículos son páginas delgadas que AdSense penaliza.
+      return snap.docs
+        .filter((d) => (d.data().articleCount ?? 0) >= 3)
+        .map((d) => d.data().slug)
+        .filter(Boolean) as string[];
     } catch {
       return [];
     }

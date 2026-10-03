@@ -25,7 +25,9 @@ export async function generateMetadata({
     title: `${data.entity.name} | Nicaragua Informate`,
     description: data.entity.description || `Información sobre ${data.entity.name} en Nicaragua`,
     alternates: { canonical },
-    robots: { index: true, follow: true },
+    // Entidades con cobertura mínima (<3 artículos) son páginas de apoyo
+    // interno — noindex para no diluir la calidad indexable ante AdSense.
+    robots: { index: (data.entity.articleCount ?? 0) >= 3, follow: true },
     openGraph: {
       title: `${data.entity.name} | Nicaragua Informate`,
       description: data.entity.description || '',

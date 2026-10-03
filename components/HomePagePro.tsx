@@ -174,7 +174,7 @@ function SectionGrid({ titulo, slug, noticias, reverse }: { titulo: string; slug
     <section className="rd-section" data-reveal>
       <div className="rd-section-head">
         <h2>{titulo}</h2>
-        <Link href={`/categoria/${slug}`}>Ver más →</Link>
+        <Link href={slug === 'noticias' ? '/noticias' : `/categoria/${slug}`}>Ver más →</Link>
       </div>
       <div className={`rd-story-grid ${reverse ? 'is-reverse' : ''}`}>
         <article className="rd-story-primary">
