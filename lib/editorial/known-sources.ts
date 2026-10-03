@@ -77,6 +77,15 @@ export const OFFICIAL_SOURCES: readonly string[] = [
   'Fiscalía General', 'Interpol', 'Europol', 'FBI',
   'Department of Homeland Security',
   'Departamento de Estado de Estados Unidos', 'Gobierno de Costa Rica',
+  // Organismos deportivos — fuentes institucionales verificables en
+  // crónicas deportivas: rankings, sanciones, calendarios y resultados
+  // oficiales (p.ej. "la AMB lo colocó séptimo en su clasificación").
+  'Asociación Mundial de Boxeo', 'Consejo Mundial de Boxeo',
+  'Organización Mundial de Boxeo', 'Federación Internacional de Boxeo',
+  'Federación Nicaragüense de Boxeo',
+  'AMB', 'WBA', 'CMB', 'WBC', 'OMB', 'WBO', 'FIB', 'IBF',
+  'FIFA', 'CONCACAF', 'FIBA', 'FIVB',
+  'Comité Olímpico Internacional', 'Comité Olímpico Nicaragüense', 'COI',
   // Agencias y medios
   'EFE', 'AFP', 'AP', 'Reuters', 'BBC', 'CNN',
 ];

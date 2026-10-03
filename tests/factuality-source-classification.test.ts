@@ -192,6 +192,63 @@ describe('caso real: nota de deslizamiento en Siuna', () => {
 });
 
 // ═══════════════════════════════════════════════════════════════
+// Caso real: crónica deportiva con organismo rector nombrado
+// (nota de boxeo "La Cobra" Orozco — score 91, forense VERDE,
+// bloqueada por NO_ATTRIBUTION + ATTRIBUTION_MISSING aunque el
+// texto nombraba a la AMB/WBA como fuente institucional)
+// ═══════════════════════════════════════════════════════════════
+
+describe('caso real: crónica deportiva con organismo nombrado', () => {
+  const parrafoResultado =
+    'Jordán Orozco derrotó por nocaut técnico a Yusniel Abrahante en el ' +
+    'sexto round para conservar el título WBA Continental Gold de la división ' +
+    'gallo. Orozco llegó al combate con récord de 17 victorias y 17 nocauts ' +
+    'y Abrahante con marca de 8-2. Con el triunfo, el nicaragüense elevó su ' +
+    'récord a 18 victorias sin derrotas y 18 nocauts. Orozco cumplió 22 años ' +
+    'el mismo día del combate, tras 86 combates y 81 victorias como amateur.';
+  const parrafoFuente =
+    'La Asociación Mundial de Boxeo (AMB) lo había colocado en el séptimo ' +
+    'puesto de su clasificación de septiembre de 2026 entre los contendientes ' +
+    'de la categoría gallo.';
+  const cuerpo = `<p>${parrafoResultado}</p><p>${parrafoFuente}</p>`;
+
+  it('organismo rector nombrado (AMB/WBA) → NO_ATTRIBUTION no dispara', () => {
+    const signals = detectFactualitySignals({
+      titulo: 'La Cobra Orozco sigue invicto y retiene su título',
+      resumen: '',
+      contenido: cuerpo,
+      fuentesComplementarias: [],
+    });
+    expect(codes(signals)).not.toContain('NO_ATTRIBUTION');
+  });
+
+  it('sin organismo nombrado → NO_ATTRIBUTION sigue disparando (barrera intacta)', () => {
+    const sinFuente =
+      `<p>${parrafoResultado.replace('el título WBA Continental Gold', 'un cinturón continental')}</p>` +
+      '<p>El organismo rector de la categoría lo había ubicado entre los ' +
+      'primeros puestos de su clasificación anual entre los contendientes ' +
+      'de la división.</p>';
+    const signals = detectFactualitySignals({
+      titulo: 'La Cobra Orozco sigue invicto y retiene su título',
+      resumen: '',
+      contenido: sinFuente,
+      fuentesComplementarias: [],
+    });
+    expect(codes(signals)).toContain('NO_ATTRIBUTION');
+  });
+
+  it('trust: organismo nombrado → sin SOURCE_MISSING ni ATTRIBUTION_MISSING', () => {
+    const trust = analyzeTrust({
+      titulo: 'La Cobra Orozco sigue invicto y retiene su título',
+      cuerpo,
+      categoria: 'Deportes',
+    });
+    expect(trust.factores).not.toContain('SOURCE_MISSING');
+    expect(trust.factores).not.toContain('ATTRIBUTION_MISSING');
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
 // Trust consume el mismo catálogo — SOURCE_MISSING coherente
 // ═══════════════════════════════════════════════════════════════
 

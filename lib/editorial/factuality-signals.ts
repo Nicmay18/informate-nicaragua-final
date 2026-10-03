@@ -13,7 +13,7 @@
  * Un texto bien atribuido o con research no genera señales aunque sea extraordinario.
  */
 
-import { OFFICIAL_SOURCE_CI_RE, hasConcretePlace } from './known-sources';
+import { OFFICIAL_SOURCE_CI_RE, OFFICIAL_SOURCE_CS_RE, hasConcretePlace } from './known-sources';
 
 export type FactualitySeverity = 'CRITICAL' | 'IMPORTANT';
 
@@ -209,7 +209,15 @@ export function detectFactualitySignals(input: FactualityInput): FactualitySigna
   // Texto sustancial con afirmaciones materiales pero cero marcadores de
   // atribución y cero evidencia estructurada.
   const makesFactualClaims = distinctFigures.size >= 1 || !!extraordinary || EXTRAORDINARY_RE.test(input.titulo || '');
-  if (makesFactualClaims && !hasAttribution && !hasExternalEvidence && text.length > 300) {
+  // Una fuente concreta identificable en el texto satisface la cláusula
+  // "fuentes" de esta señal: el texto NO está "sin fuentes" aunque no use
+  // verbos de atribución (crónica deportiva: "la AMB lo colocó séptimo en
+  // su clasificación"). Case-sensitive a propósito — misma doctrina que
+  // trust.ts: solo la forma capitalizada cuenta como fuente nombrada; el
+  // sustantivo común ("al hospital", "la policía") no desactiva la barrera.
+  const hasConcreteSource =
+    OFFICIAL_SOURCE_CS_RE.test(text) || hasConcreteNamedSource(text);
+  if (makesFactualClaims && !hasAttribution && !hasExternalEvidence && !hasConcreteSource && text.length > 300) {
     signals.push({
       code: 'NO_ATTRIBUTION',
       severity: 'IMPORTANT',
