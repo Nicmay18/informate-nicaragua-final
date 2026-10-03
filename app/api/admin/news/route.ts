@@ -165,7 +165,7 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
 export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   try {
-    const [{ normalizarTitulo }, { ensureUniqueSlug }, { guardarConMeni }, { updateDecisionLog }] = await Promise.all([
+    const [{ normalizarTitulo }, { ensureUniqueSlug }, { guardarConMeni, mapMeniScoreToNivel }, { updateDecisionLog }] = await Promise.all([
       import('@/lib/meni/titulo'),
       import('@/lib/slug'),
       import('@/lib/editorial/guardar-con-meni'),
@@ -299,6 +299,19 @@ export async function POST(request: NextRequest) {
       publicado: publicado !== false,
       estado: publicado !== false ? 'publicado' : 'borrador',
       related_links: relatedLinks,
+      // Confirmación del Editor Jefe = aprobación editorial final completa;
+      // aprobadoMeni:false dejaría la nota publicada pero invisible (404).
+      supervisorApproved: supervisorApproved || canOverride,
+      ...(canOverride ? {
+        aprobadoMeni: true,
+        nivel: mapMeniScoreToNivel(meni.scoreFinal, true),
+        editorOverride: {
+          confirmed: true,
+          at: new Date().toISOString(),
+          meniScore: meni.scoreFinal,
+          supervisorVerdict: supervisor.verdict,
+        },
+      } : {}),
     });
     await updateDecisionLog(db, attemptId, { result: 'SAVED', savedArticleId: docRef.id });
 

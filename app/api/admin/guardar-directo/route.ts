@@ -6,7 +6,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { categoryToSlug } from '@/lib/types';
-import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { guardarConMeni, mapMeniScoreToNivel } from '@/lib/editorial/guardar-con-meni';
 import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import { findBlockingDefects, repairMechanicalDefects } from '@/lib/editorial/content-integrity';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
@@ -187,8 +187,12 @@ export async function POST(request: NextRequest) {
       ...meniUpdateData,
       supervisorDecision: supervisor,
       supervisorApproved: supervisorApproved || canOverride,
-      // Trazabilidad: si el Editor Jefe confirmó una nota REVISAR, queda registrado.
+      // La confirmación del Editor Jefe ES la aprobación editorial final:
+      // aprobadoMeni=false dejaría la nota invisible (isPublicArticle exige true)
+      // aunque se haya persistido — nota publicada que da 404.
       ...(canOverride ? {
+        aprobadoMeni: true,
+        nivel: mapMeniScoreToNivel(meni.scoreFinal, true),
         editorOverride: {
           confirmed: true,
           at: new Date().toISOString(),

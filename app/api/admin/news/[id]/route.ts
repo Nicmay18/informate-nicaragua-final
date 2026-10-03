@@ -7,7 +7,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { Timestamp } from 'firebase-admin/firestore';
 import { ensureUniqueSlug } from '@/lib/slug';
 import { categoryToSlug } from '@/lib/types';
-import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
+import { guardarConMeni, mapMeniScoreToNivel } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { findBlockingDefects } from '@/lib/editorial/content-integrity';
@@ -120,7 +120,22 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       // Merge MENI update data with metadata-only fields
       // La categoria siempre viene del calculo canonico de MENI, no del body
       const metadataAllowed = ['imagen', 'autor', 'destacada', 'publicado'];
-      const updateData: Record<string, unknown> = { ...meniUpdateData };
+      const updateData: Record<string, unknown> = {
+        ...meniUpdateData,
+        // Confirmación del Editor Jefe = aprobación editorial final completa;
+        // aprobadoMeni:false dejaría la nota publicada pero invisible (404).
+        supervisorApproved: supervisorApproved || canOverride,
+        ...(canOverride ? {
+          aprobadoMeni: true,
+          nivel: mapMeniScoreToNivel(meni.scoreFinal, true),
+          editorOverride: {
+            confirmed: true,
+            at: new Date().toISOString(),
+            meniScore: meni.scoreFinal,
+            supervisorVerdict: supervisor.verdict,
+          },
+        } : {}),
+      };
       for (const key of metadataAllowed) {
         if (body[key] !== undefined) {
           if (key === 'destacada' || key === 'publicado') {
