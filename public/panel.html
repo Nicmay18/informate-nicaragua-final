@@ -4080,12 +4080,25 @@ sin texto ni marcas de agua, composición periodística"
           }
           // Guardar via API con Admin SDK (ignora security rules)
           const adminToken = localStorage.getItem('admin_api_key') || '';
-          const saveRes = await fetch('/api/admin/guardar-directo', {
+          const payloadUpd = { id: noticiaId, ...noticiaData, fecha: noticiaData.fecha ? new Date().toISOString() : undefined, fechaActualizacion: new Date().toISOString(), publicado, editorOverride };
+          let saveRes = await fetch('/api/admin/guardar-directo', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-            body: JSON.stringify({ id: noticiaId, ...noticiaData, fecha: noticiaData.fecha ? new Date().toISOString() : undefined, fechaActualizacion: new Date().toISOString(), publicado, editorOverride })
+            body: JSON.stringify(payloadUpd)
           });
-          const saveData = await saveRes.json().catch(() => ({}));
+          let saveData = await saveRes.json().catch(() => ({}));
+          // REVISAR sin bloqueantes: preguntar al Editor Jefe y reintentar en el mismo click.
+          if (!saveRes.ok && saveData.needsEditorConfirm === true) {
+            const okConfirm = confirm('🟠 REVISAR — La nota no tiene defectos bloqueantes (score ' + (saveData.scoreFinal ?? '—') + '/100, el umbral automático es 90).\n\nSi la revisaste y está correctamente documentada, presioná ACEPTAR para publicar como Editor Jefe.');
+            if (okConfirm) {
+              saveRes = await fetch('/api/admin/guardar-directo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+                body: JSON.stringify({ ...payloadUpd, editorOverride: true })
+              });
+              saveData = await saveRes.json().catch(() => ({}));
+            }
+          }
           if (!saveRes.ok) {
             mostrarErrorPublicacion(saveData, saveRes.status);
             if (saveData?.blockingIssues?.length || saveData?.supervisor) mostrarDiagnosticoMeni(normalizarDiagnosticoBloqueo(saveData));
@@ -4095,12 +4108,25 @@ sin texto ni marcas de agua, composición periodística"
         } else {
           // Crear via API con Admin SDK
           const adminToken = localStorage.getItem('admin_api_key') || '';
-          const saveRes = await fetch('/api/admin/guardar-directo', {
+          const payloadNew = { ...noticiaData, fecha: new Date().toISOString(), fechaActualizacion: new Date().toISOString(), publicado, slug: slug || noticiaData.slug, editorOverride };
+          let saveRes = await fetch('/api/admin/guardar-directo', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-            body: JSON.stringify({ ...noticiaData, fecha: new Date().toISOString(), fechaActualizacion: new Date().toISOString(), publicado, slug: slug || noticiaData.slug, editorOverride })
+            body: JSON.stringify(payloadNew)
           });
-          const saveData = await saveRes.json().catch(() => ({}));
+          let saveData = await saveRes.json().catch(() => ({}));
+          // REVISAR sin bloqueantes: preguntar al Editor Jefe y reintentar en el mismo click.
+          if (!saveRes.ok && saveData.needsEditorConfirm === true) {
+            const okConfirm = confirm('🟠 REVISAR — La nota no tiene defectos bloqueantes (score ' + (saveData.scoreFinal ?? '—') + '/100, el umbral automático es 90).\n\nSi la revisaste y está correctamente documentada, presioná ACEPTAR para publicar como Editor Jefe.');
+            if (okConfirm) {
+              saveRes = await fetch('/api/admin/guardar-directo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+                body: JSON.stringify({ ...payloadNew, editorOverride: true })
+              });
+              saveData = await saveRes.json().catch(() => ({}));
+            }
+          }
           if (!saveRes.ok) {
             mostrarErrorPublicacion(saveData, saveRes.status);
             if (saveData?.blockingIssues?.length || saveData?.supervisor) mostrarDiagnosticoMeni(normalizarDiagnosticoBloqueo(saveData));
