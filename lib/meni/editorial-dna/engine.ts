@@ -47,6 +47,10 @@ interface ComputeDnaOptions {
   pesosAdnNI?: AdnNiWeights;
   pesosSelloNI?: SelloNiWeights;
   umbralesBloqueo?: BloqueoThresholds;
+  /** Similitud real n-grama vs fuente original (0-100). Cuando se provee,
+   *  la dimensión transcripción usa esta métrica — nunca la diferencia
+   *  editorial como proxy. */
+  transcriptionPercent?: number;
 }
 
 export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult {
@@ -119,16 +123,19 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   // ═══════════════════════════════════════════════════════════════
   // TRANSCRIPCIÓN: qué tanto copia la fuente
   // ═══════════════════════════════════════════════════════════════
+  // La dimensión mide SOLO transcripción real (similitud n-grama vs la
+  // fuente original). No mezcla originalidad ni diferencia editorial —
+  // son métricas distintas con contratos distintos.
   let transcripcionScore = 100;
   if (qualityGate) {
-    const originality = qualityGate.originalidadPorcentaje;
     const transcription = qualityGate.explanationIndex?.porcentajeTranscripcion ?? 0;
-    // Menos transcripción y más originalidad = mejor
-    transcripcionScore = clamp(Math.round(originality * 0.6 + (100 - transcription) * 0.4));
-  } else if (decision) {
-    // Sin quality gate, asumir moderado basado en diferencia editorial
-    transcripcionScore = clamp(decision.editorialDifference.score);
+    transcripcionScore = clamp(100 - transcription);
+  } else if (opts.transcriptionPercent !== undefined) {
+    transcripcionScore = clamp(100 - opts.transcriptionPercent);
   }
+  // Sin fuenteOriginal no hay texto contra el que comparar: la métrica
+  // no es medible y queda en 100 (sin evidencia de copia, sin penalización).
+  // La diferencia editorial se evalúa en exclusividad/selloNI, no aquí.
 
   const transcripcion = makeDimension(
     transcripcionScore,

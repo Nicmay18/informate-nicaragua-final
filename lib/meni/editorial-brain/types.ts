@@ -33,6 +33,9 @@ export interface KnowledgeContext {
 
 export type EditorialBrainInput = NoticiaInput & {
   fuente?: string;
+  /** Texto de la fuente original cuando existe — alimenta el detector
+   *  real de transcripción (n-gramas), nunca la diferencia editorial. */
+  fuenteOriginal?: string;
   categoriaSugerida?: string;
   /** Perfil interno detectado (turismo, sucesos, etc.) */
   perfil?: MeniContentProfile;

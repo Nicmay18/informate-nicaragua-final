@@ -19,6 +19,8 @@ import { getModule } from './modules';
 import { runIntelligenceEngine } from './intelligence';
 import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
 import { runQualityGate } from '@/lib/meni/quality-gate';
+import { computeExplanationIndex, computeOriginalityPercent } from '@/lib/meni/quality-gate/editorScore';
+import { stripHtml } from '@/lib/meni/quality-gate/validator';
 import {
   buildMeniDiagnostics,
   buildDuplicateBlockingIssue,
@@ -173,6 +175,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     categoriaSugerida: categoria,
     perfil: perfilEvaluado,
     fuente: input.contenido,
+    fuenteOriginal: input.fuenteOriginal,
     tierThresholds: thresholds,
     evaluacion,
     ...(editorJefe?.editorPatterns ? { editorPatterns: editorJefe.editorPatterns } : {}),
@@ -209,9 +212,20 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     categoria,
     perfil: perfilEvaluado,
     stage: 'POST_LLM',
+    fuenteOriginal: input.fuenteOriginal,
     sourceOfTruth: {
       score: editorialDecision.score,
-      originalidad: editorialDecision.editorialDna.selloNI.originalidad,
+      // 'Originalidad' mide originalidad real (reescritura + contexto +
+      // explicación + servicio + organización) — no la diferencia editorial,
+      // que es una métrica distinta evaluada por el brain.
+      originalidad: computeOriginalityPercent(
+        computeExplanationIndex(
+          stripHtml(`${input.titulo} ${input.contenido}`),
+          input.fuenteOriginal,
+          perfilEvaluado,
+        ),
+        input.contenido,
+      ),
       servicio: editorialDecision.editorialDna.selloNI.servicio,
       bloqueado: editorialDecision.bloquear,
       explanationIndex: {

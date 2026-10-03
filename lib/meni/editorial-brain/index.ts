@@ -26,6 +26,7 @@ import { runReaderRetentionEngine } from './reader-retention-engine';
 import { runStoryCompletenessEngine } from './story-completeness-engine';
 import { runIntelligenceEngine } from '@/lib/meni/intelligence';
 import { computeEditorialDNA } from '@/lib/meni/editorial-dna/engine';
+import { analyzeTranscriptionByParagraph } from '@/lib/meni/quality-gate/transcription-detector';
 import { runStoryPlanner } from '@/lib/meni/story-planner';
 import { runAntiClickbait } from '@/lib/meni/anti-clickbait';
 import { runReaderJourney } from '@/lib/meni/reader-journey';
@@ -318,8 +319,16 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
     puntosPerdidos: [],
   };
 
+  // Transcripción real SOLO cuando existe fuente original (flujo
+  // editor-autónomo). Sin fuente no hay qué comparar — la dimensión
+  // no se alimenta de la diferencia editorial como proxy.
+  const transcriptionPct = input.fuenteOriginal
+    ? analyzeTranscriptionByParagraph(input.contenido, input.fuenteOriginal).similitudPromedio
+    : undefined;
+
   const editorialDna = computeEditorialDNA({
     decision: baseDecision,
+    transcriptionPercent: transcriptionPct,
     minDnaScore: input.tierThresholds?.minAdnNI,
     minExclusividad: input.tierThresholds?.minExclusividad,
     minWow: input.tierThresholds?.minWow,

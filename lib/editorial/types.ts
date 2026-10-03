@@ -9,6 +9,9 @@ export interface NoticiaInput {
   titulo: string;
   contenido: string;
   resumen: string;
+  /** Texto de la fuente original cuando existe (flujo editor-autónomo,
+   *  nota basada en comunicado). Alimenta el detector real de transcripción. */
+  fuenteOriginal?: string;
   categoria: string;
   autor: string;
   fecha: string;

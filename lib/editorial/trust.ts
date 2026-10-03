@@ -167,6 +167,14 @@ export function analyzeTrust(input: {
     const fuenteLocal = s.match(RE_FUENTE) ?? [];
 
     for (const m of s.matchAll(RE_FUENTE)) fuentes.add(m[0]);
+    // Fuente explícita no catalogada: si la oración atribuye a un nombre
+    // propio ('según el Colegio Teresiano Managua', 'informó el INDES'),
+    // esa entidad ES la fuente citada — no exigir el catálogo oficial.
+    // Regla general: marcador de atribución + nombre propio en la misma
+    // oración = fuente nombrada.
+    if (RE_ATRIBUCION.test(s)) {
+      for (const m of s.matchAll(RE_NOMBRE_PROPIO)) fuentes.add(m[0]);
+    }
     for (const m of s.matchAll(RE_NOMBRE_PROPIO)) entidades.add(m[0]);
 
     if (noDisponibleHit) {
