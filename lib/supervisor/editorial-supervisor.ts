@@ -66,8 +66,11 @@ export function evaluateRawTitle(titulo: string): {
 
   // Detectar qué falta
   const hasLocation = /\b(en|de|del|de la|de las)\s+[A-ZÁÉÍÓÚ]/.test(titulo) ||
-    /\b(Managua|León|Chinandega|Masaya|Granada|Estelí|Matagalpa|Bluefields|Carazo|Jinotega|Nicaragua|nacional|del país|a nivel nacional)\b/i.test(titulo);
-  const hasVictim = /\b(víctima|muerto|herido|fallecido|sin vida|lesionado)\b/i.test(titulo);
+    /\b(Managua|León|Chinandega|Masaya|Granada|Estelí|Matagalpa|Bluefields|Carazo|Jinotega|Nicaragua|nacional|del país|a nivel nacional)\b/i.test(titulo) ||
+    // Lugar internacional: un titular que menciona país/ciudad extranjera
+    // ya identifica el dónde — no exigir 'en <Lugar>' ni lista nacional.
+    /\b(Costa Rica|Honduras|El Salvador|Guatemala|Panamá|Colombia|Venezuela|México|Estados Unidos|España|Chile|Argentina|Brasil|Perú|Ecuador|Cuba|Haití|República Dominicana|Bolivia|Uruguay|Paraguay|Rusia|Ucrania|Israel|Palestina|Irán|China|Japón|Taiwán|Corea|Francia|Alemania|Italia|Reino Unido|Canadá|Vaticano)\b/i.test(titulo);
+  const hasVictim = /\b(víctima|muerto|muerte|muertos|herido|heridos|fallecido|fallecidos|sin vida|lesionado|lesionados|homicidio|homicidios|asesinato|asesinados|detenido|detenidos|capturado|capturados|accidente|incendio|sismo|terremoto|desaparecido|desaparecidos)\b/i.test(titulo);
   // Autoridad incluye siglas institucionales nicaragüenses: una nota del
   // MINED/MINSA/INSS no debe exigirse "ministerio" o "gobierno" literal.
   const hasAuthority = /\b(policía|autoridad|ministerio|gobierno|interpol|ejército|bomberos|fiscalía|alcaldía|presidencia|asamblea|corte suprema|banco central|MINED|MINSA|MINFAR|INSS|INETER|INTA|MTI|CSE|CNU|MARENA|MAG|INATEC|INIFOM|ENACAL|ENATREL|MIFIC|MIFAMILIA|MEFCCA|INTUR|INIFOM|UNAN|BCN|INVUR|IPSFA)\b/i.test(titulo);

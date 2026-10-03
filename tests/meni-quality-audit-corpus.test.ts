@@ -20,6 +20,7 @@
 import { describe, it, expect } from 'vitest';
 import { evaluate } from '../lib/editorial/core/pipeline';
 import { isAlreadySatisfied, normalizeForComparison, dedupeRecommendations } from '../lib/editorial/normalize';
+import { evaluateRawTitle, makeEditorialDecision } from '../lib/supervisor/editorial-supervisor';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -115,6 +116,33 @@ describe('Casos reales documentados — falsos negativos resueltos', () => {
     expect(isAlreadySatisfied('Costa Rica: 623 homicidios, la mayoría jóvenes', { titulo: t, textoPlano: 'x' })).toBe(false);
     // Propuesta distinta NO se descarta
     expect(isAlreadySatisfied('Cambiar el título por "Ola criminal sacude Costa Rica en 2026"', { titulo: t, textoPlano: 'x' })).toBe(false);
+  });
+
+  it('supervisor: título específico internacional NO pide "más específico" (eco roto)', () => {
+    // El caso real: lugar (Costa Rica) + sujeto/dato (623 homicidios, 64,4 %) ya
+    // identifican los elementos periodísticos — el evaluador no debe marcar 3 faltantes.
+    const ev = evaluateRawTitle('Costa Rica registra 623 homicidios y 64,4 % son jóvenes');
+    expect(ev.needsInvestigation).toBe(false);
+    expect(ev.missingData).not.toContain('lugar donde ocurrió');
+    expect(ev.verdict).not.toBe('INVESTIGAR_MAS');
+  });
+
+  it('supervisor: makeEditorialDecision no emite el issue "más específico" para ese título', () => {
+    const d = makeEditorialDecision({
+      titulo: 'Costa Rica registra 623 homicidios y 64,4 % son jóvenes',
+      contenido: '<p>' + 'Costa Rica registra 623 homicidios según el Ministerio de Seguridad Pública. '.repeat(30) + '</p>',
+      categoria: 'Internacionales',
+      aprobadoMeni: true,
+      scoreMeni: 90,
+    } as any);
+    const issues = (d.issues || []).map((i: any) => i.problem).join(' ');
+    expect(issues).not.toContain('más específico');
+  });
+
+  it('supervisor: el estándar sigue — título genérico real SÍ pide investigar', () => {
+    const ev = evaluateRawTitle('Hallan cuerpo en zona rural');
+    expect(ev.needsInvestigation).toBe(true);
+    expect(ev.missingData.length).toBeGreaterThanOrEqual(3);
   });
 
   it('dedupe: recomendaciones equivalentes no se repiten', () => {
