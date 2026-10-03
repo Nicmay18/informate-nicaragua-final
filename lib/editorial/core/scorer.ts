@@ -326,8 +326,26 @@ const evaluarValorEditorial: Evaluator = (ev, profile) => {
 
   // Evidencia requerida por perfil (solo contenido largo)
   if (esLargo) {
+    // Si la capa de utilidad (extractor) ya respondió el mismo concepto,
+    // la evidencia existe aunque el patrón de perfil sea más estricto.
+    // Regla sistémica: un módulo no puede negar lo que otro ya detectó.
+    const EVIDENCE_ALIASES: Record<string, string[]> = {
+      'qué pasó': ['qué ocurrió'],
+      'estado actual': ['estado actual'],
+      'dónde': ['dónde'],
+      'cuándo': ['cuándo'],
+      'impacto': ['impacto'],
+      'cifras': ['cifras'],
+      'qué cambia': ['qué cambia'],
+      'seguimiento': ['seguimiento'],
+      'quién lo dijo': ['quién', 'fuente'],
+      'qué anunció el gobierno o institución': ['quién', 'fuente'],
+      'dónde aplica': ['dónde'],
+    };
     for (const [key, regex] of Object.entries(profile.requiredEvidence)) {
-      if (!regex.test(ev.textoPlano)) {
+      const utilityHit = (EVIDENCE_ALIASES[key] || [key])
+        .some(q => ev.utility.preguntasRespondidas.includes(q));
+      if (!regex.test(ev.textoPlano) && !utilityHit) {
         warnings.push(`No se encontró evidencia requerida: ${key}`);
         tracer.sub(3, warnings[warnings.length - 1], `EVIDENCIA_REQUERIDA:${key}`);
         recommendations.push(`Incluir ${key} según el perfil de ${profile.categoria}`);

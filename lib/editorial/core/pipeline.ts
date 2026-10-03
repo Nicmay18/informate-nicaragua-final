@@ -6,6 +6,7 @@ import { evaluateRisk } from './risk-engine';
 import { decide } from './decision-engine';
 import { buildExplainability } from './explainability';
 import { verifyIntegrity } from './integrity-engine';
+import { dedupeRecommendations, isAlreadySatisfied } from '../normalize';
 import { isPublicCategory } from '@/lib/types';
 
 // Perfiles internos que tienen capa de inteligencia propia (además de las
@@ -45,8 +46,14 @@ export function evaluate(noticia: NoticiaInput): EvaluacionEditorial {
   const allModules = [calidad.seo, calidad.eeat, calidad.discover, calidad.adsense, calidad.valorEditorial, riesgo.forense];
   const explainability = buildExplainability(allModules);
 
-  // 7. Sugerencias consolidadas
-  const sugerencias = allModules.flatMap(m => m.recommendations.concat(m.warnings));
+  // 7. Sugerencias consolidadas — capa final 'ya satisfecho':
+  //   - deduplicar recomendaciones equivalentes tras normalizar;
+  //   - descartar propuestas que ya están en el artículo (título vigente
+  //     propuesto como cambio, citas/texto ya presentes).
+  const sugerencias = dedupeRecommendations(
+    allModules.flatMap(m => m.recommendations.concat(m.warnings))
+      .filter(s => !isAlreadySatisfied(s, { titulo: noticia.titulo || '', textoPlano: evidence.textoPlano }))
+  );
 
   const result: EvaluacionEditorial = {
     evidence,

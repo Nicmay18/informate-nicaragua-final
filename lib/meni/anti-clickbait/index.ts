@@ -16,6 +16,7 @@
  */
 
 import type { AntiClickbaitInput, AntiClickbaitResult, ClickbaitSignal } from './types';
+import { isSubstantiallySameTitle } from '@/lib/editorial/normalize';
 
 const PATRONES_CURIOSIDAD_ARTIFICIAL: { regex: RegExp; descripcion: string }[] = [
   { regex: /lo\s+que\s+(encontr[oó]|pas[oó]|sucedi[oó]|descubri[oó]|vio|dijo|hizo)/i, descripcion: 'Estructura "lo que..." genera curiosidad sin informar' },
@@ -127,7 +128,10 @@ export function runAntiClickbait(input: AntiClickbaitInput): AntiClickbaitResult
     razon = 'El título informa directamente sin recurrir a curiosidad artificial.';
   }
 
-  const tituloSugerido = veredicto === 'bloqueado' ? sugerirTitulo(titulo, input.contenido) : undefined;
+  const propuesta = veredicto === 'bloqueado' ? sugerirTitulo(titulo, input.contenido) : undefined;
+  // Capa 'ya satisfecho': no proponer un título equivalente al vigente
+  // (acentos, puntuación, mayúsculas o reordenamiento trivial).
+  const tituloSugerido = propuesta && !isSubstantiallySameTitle(propuesta, titulo) ? propuesta : undefined;
 
   return {
     veredicto,

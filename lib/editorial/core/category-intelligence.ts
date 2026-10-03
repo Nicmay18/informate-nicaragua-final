@@ -55,7 +55,7 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
     requiredContext: {
       tipo: 'impacto regional o para Nicaragua',
       patrones: [
-        /\b(?:impacto\s+(?:regional|en\s+Nicaragua|para\s+Nicaragua)|repercusi[oó]n|relaciones\s+bilaterales|cooperaci[oó]n|migraci[oó]n|comercio|frontera|remesas?)\b/i,
+        /\b(?:impacto\s+(?:regional|en\s+Nicaragua|para\s+Nicaragua)|repercusi[oó]n|relaciones\s+bilaterales|cooperaci[oó]n|migraci[oó]n|comercio|frontera|remesas?|Centroam[eé]rica|centroamerican|pa[ií]s(?:es)?\s+vecinos?|cercan[ií]a\s+geogr[aá]fica|din[aá]micas?\s+regionales?|seguridad\s+regional|crimen\s+organizado|relevancia\s+regional|efecto\s+regional|contexto\s+regional|inter[eé]s\s+para\s+(?:Centroam[eé]rica|Nicaragua|la\s+regi[oó]n)|afecta\s+a\s+Nicaragua|implica\s+para|incidencia\s+regional)\b/i,
       ],
     },
     requiredUtility: { preguntas: ['por qué importa a Nicaragua', 'qué pasó', 'quiénes o qué países', 'qué cambia', 'antecedentes'] },
