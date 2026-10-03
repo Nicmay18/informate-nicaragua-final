@@ -30,6 +30,9 @@ export function loadProfile(category: string): EditorialProfile {
 
   return {
     ...legacy,
+    // El nombre del perfil reportado en mensajes ("según el perfil de X")
+    // debe ser el realmente evaluado — coherencia con lo que muestra la UI.
+    categoria: category,
     ...(intelligence ? intelligence : {}),
     scoreWeights: defaultModuleWeights,
     gates: defaultGates,

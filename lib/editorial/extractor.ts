@@ -27,6 +27,7 @@ import type {
 } from './types';
 import { detectCategory } from './category-detector';
 import { OFFICIAL_SOURCE_CI_RE } from './known-sources';
+import { detectContentProfile } from '@/lib/meni/profile-detector';
 
 // Patrones reutilizables
 const ADJETIVOS_EMOCIONALES = /\b(?:incre[ií]ble|impresionante|escalofriante|conmocionado|indignado|furibundo|escandaloso|brutal|terrible|horrendo|devastador|espectacular|maravilloso|fant[aá]stico|extraordinario|impactante|alarmante|preocupante|grave|urgente|cr[ií]tico|catastr[oó]fico)\b/gi;
@@ -229,7 +230,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     'qué ocurrió':     /\b(?:ocurri[oó]|sucedi[oó]|incidente|ataque|disparo|bala|robo|hurto|accidente|incautaci[oó]n|decomis[oa]|incendio|colisi[oó]n|explosi[oó]n|pelea|altercado)\b/i,
     'dónde':           /\b(?:barrio|colonia|carretera|ruta|km\s+\d+|municipio|departamento|comunidad|zona|sector|calle|avenida|Managua|Le[oó]n|Granada|Estel[ií])\b/i,
     'cuándo':          /\b(?:\d{1,2}\s+de\s+\w+|\d{1,2}:\d{2}|madrugada|mañana|tarde|noche|horas?\s+de\s+la|s[aá]bado|domingo|lunes|martes|mi[eé]rcoles|jueves|viernes)\b/i,
-    'estado actual':   /\b(?:investigaci[oó]n|pesquisas|b[uú]squeda|operativo|detenid[oa]|capturad[oa]|trasladad[oa]|hospital|recuperaci[oó]n|estable|grave|cr[ií]tico)\b/i,
+    'estado actual':   /\b(?:investigaci[oó]n|pesquisas|b[uú]squeda|operativo|detenid[oa]|capturad[oa]|recuperaci[oó]n|hasta\s+la\s+[uú]ltima\s+informaci[oó]n|[uú]ltimo\s+parte|estado\s+(?:delicado|grave|cr[ií]tico|estable|reservado|de\s+gravedad|sensible)|condici[oó]n\s+(?:delicada|grave|cr[ií]tica|estable)|bajo\s+(?:observaci[oó]n|atenci[oó]n\s+m[eé]dica|tratamiento|pron[óo]stico)|hospitalizad[oa]s?|ingresad[oa]s?|permanece(?:n)?|contin[uú]a(?:n)?|sigue(?:n)?|se\s+encuentra(?:n)?|se\s+mantiene(?:n)?|evoluciona?)\b/i,
     'seguimiento':     /\b(?:actualizaci[oó]n|pr[oó]ximas?\s+horas|se\s+espera|en\s+desarrollo|m[aá]s\s+informaci[oó]n|vigilancia|monitoreo|seguimiento)\b/i,
     'impacto':         /\b(?:herid[oa]s?|fallecid[oa]s?|afectad[oa]s?|damnificad[oa]s?|evacuad[oa]s?|v[ií]ctimas?|p[eé]rdidas?|da[nñ]os?)\b/i,
     'qué hacer':       /\b(?:recomienda|qu[eé]\s+hacer|c[oó]mo\s+actuar|pasos?\s+a\s+seguir|emergencia|128|118|primeros?\s+auxilios?)\b/i,
@@ -324,6 +325,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
 
   // ── CATEGORIA ────────────────────────────────
   const category = detectCategory(noticia, textoPlano);
+  const perfil = detectContentProfile(noticia.titulo || '', textoPlano, noticia.resumen || '').profile_detected;
 
   // ── TIPO DE CONTENIDO ────────────────────────
   // FLASH / NOTICIA / REPORTAJE / INVESTIGACION
@@ -363,6 +365,7 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     sources: sourceEvidence,
     risk,
     category,
+    perfil,
     tipoContenido,
     meni,
     noticia,

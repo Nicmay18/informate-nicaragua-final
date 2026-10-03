@@ -162,6 +162,8 @@ export interface ArticleEvidence {
   sources: SourceEvidence;
   risk: RiskEvidence;
   category: string;
+  /** Perfil interno detectado (salud, sucesos, economia…) para evaluar con su capa de inteligencia propia. */
+  perfil: string;
   tipoContenido: TipoContenido;
 
   // Evidencia específica de MENI (forense + datos concretos).

@@ -52,7 +52,8 @@ export interface MeniRunOptions {
   };
 }
 
-import { resolveEditorialClassification } from '@/lib/editorial/canonical';
+import { resolveEditorialClassification, PUBLIC_CATEGORY_TO_PROFILE } from '@/lib/editorial/canonical';
+import { isPublicCategory } from '@/lib/types';
 
 const MIN_PROFILE_CONFIDENCE = 0.40;
 
@@ -152,6 +153,16 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   const rawCategory = evaluacion.evidence.category || categoria || 'general';
   const modulo = getModule(rawCategory);
 
+  // Coherencia perfil-evaluado vs perfil-mostrado: el pipeline evaluó la
+  // evidencia con `evidence.category` (categoría pública efectiva); el perfil
+  // interno que se reporta y alimenta los analizadores debe ser ese mismo,
+  // no el perfil almacenado/sugerido que puede divergir (p.ej. nota policial
+  // almacenada como 'nacionales' pero evaluada con reglas de 'Sucesos').
+  const editorEligioCategoria = !!(input.categoria && isPublicCategory(input.categoria.trim()));
+  const perfilEvaluado: MeniContentProfile = editorEligioCategoria
+    ? (PUBLIC_CATEGORY_TO_PROFILE[evaluacion.evidence.category as keyof typeof PUBLIC_CATEGORY_TO_PROFILE] || perfil)
+    : ((evaluacion.evidence.perfil as MeniContentProfile) || perfil);
+
   // ═══════════════════════════════════════════════════════════
   // 1. EDITORIAL BRAIN — la única fuente de verdad
   // Todo deriva de aquí: score, aprobado, estado, diagnostico, riesgo
@@ -160,7 +171,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     ...input,
     categoria: categoria,
     categoriaSugerida: categoria,
-    perfil: perfil,
+    perfil: perfilEvaluado,
     fuente: input.contenido,
     tierThresholds: thresholds,
     evaluacion,
@@ -172,11 +183,11 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   const editorialDna = editorialDecision.editorialDna;
 
   const seo = analyzeSEO(evaluacion, input);
-  const forense = analyzeForensic(evaluacion, input, perfil);
+  const forense = analyzeForensic(evaluacion, input, perfilEvaluado);
   const eeat = analyzeEEAT(evaluacion);
   const discover = analyzeDiscover(evaluacion);
   const adsense = analyzeAdSense(evaluacion);
-  const valorEditorial = buildValorEditorial(evaluacion, input, perfil);
+  const valorEditorial = buildValorEditorial(evaluacion, input, perfilEvaluado);
   const auditoria = audit(evaluacion);
 
   const textoPlano = evaluacion.evidence.textoPlano ?? (input.contenido || '');
@@ -196,7 +207,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     titulo: input.titulo,
     contenido: input.contenido,
     categoria,
-    perfil: perfil,
+    perfil: perfilEvaluado,
     stage: 'POST_LLM',
     sourceOfTruth: {
       score: editorialDecision.score,
@@ -442,7 +453,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     editorialReason,
     articleHash,
     evaluationTimestamp: now.toISOString(),
-    profile_used: perfil,
+    profile_used: perfilEvaluado,
     profile_confidence: contentProfile.profile_confidence,
     matched_keywords: contentProfile.matched_keywords,
     matched_entities: contentProfile.matched_entities,

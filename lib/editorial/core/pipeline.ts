@@ -6,13 +6,31 @@ import { evaluateRisk } from './risk-engine';
 import { decide } from './decision-engine';
 import { buildExplainability } from './explainability';
 import { verifyIntegrity } from './integrity-engine';
+import { isPublicCategory } from '@/lib/types';
+
+// Perfiles internos que tienen capa de inteligencia propia (además de las
+// 6 categorías públicas). Si el detector identifica uno de estos y el editor
+// no eligió categoría, la evidencia se evalúa con SU perfil — no con el
+// genérico de la categoría pública a la que se mapea.
+const INTERNAL_INTEL_PROFILE: Record<string, string> = {
+  salud: 'Salud',
+  politica: 'Politica',
+  economia: 'Economia',
+};
 
 export function evaluate(noticia: NoticiaInput): EvaluacionEditorial {
   // 1. Extracción única
   const evidence = extract(noticia);
 
-  // 2. Cargar perfil declarativo
-  const profile = loadProfile(evidence.category);
+  // 2. Cargar perfil declarativo: la categoría explícita del editor manda;
+  // si no hay, se evalúa con el perfil interno detectado (o su categoría
+  // pública cuando no tiene inteligencia propia). Coherencia total: el
+  // perfil evaluado es el mismo que se reporta y se menciona en mensajes.
+  const editorChose = !!(noticia.categoria && isPublicCategory(noticia.categoria.trim()));
+  const evalCategory = editorChose
+    ? evidence.category
+    : (INTERNAL_INTEL_PROFILE[evidence.perfil] || evidence.category);
+  const profile = loadProfile(evalCategory);
 
   // 3. Calidad editorial (ponderado)
   const calidad = scoreCalidad(evidence, profile);

@@ -17,11 +17,16 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
   Sucesos: {
     requiredEvidence: {
       'qué pasó':    /\b(?:ocurri[oó]|sucedi[oó]|incidente|accidente|robo|hurto|incautaci[oó]n|decomis[oa]|incendio|colisi[oó]n|explosi[oó]n|fuga|hallazgo|pelea|altercado|atropell[oa]|ahogad[oa]|sumersi[oó]n|disparo|lesion[oa]|fallecid[oa]|v[ií]ctima|detenid[oa]|capturad[oa])\b/i,
-      'dónde':       /\b(?:barrio|colonia|carretera|ruta|km\s+\d+|municipio|departamento|comunidad|zona|sector|calle|avenida|entrada|rotonda|puente|intersecci[oó]n)\b/i,
-      'cuándo':      /\b(?:\d{1,2}\s+de\s+\w+|\d{1,2}:\d{2}|madrugada|mañana|tarde|noche|anoche|ayer|hoy|antier|horas?\s+de\s+la|s[aá]bado|domingo|lunes|martes|mi[eé]rcoles|jueves|viernes)\b/i,
+      'dónde':       /\b(?:barrio|colonia|carretera|ruta|km\s+\d+|municipio|departamento|comunidad|zona|sector|calle|avenida|entrada|rotonda|puente|intersecci[oó]n|centro\s+(?:asistencial|de\s+salud)|hospital|cl[ií]nica|mercado|gasolinera|vivienda|residencial)\b/i,
+      'cuándo':      /\b(?:\d{1,2}\s+de\s+\w+|\d{1,2}:\d{2}|madrugada|mañana|tarde|noche|anoche|ayer|hoy|antier|horas?\s+de\s+la|s[aá]bado|domingo|lunes|martes|mi[eé]rcoles|jueves|viernes|[uú]ltimas?\s+horas|esta\s+(?:mañana|tarde|noche|madrugada)|medianoche|mediod[ií]a|fin\s+de\s+semana|esta\s+semana)\b/i,
       'cómo ocurrió': /\b(?:testigos?|seg[uú]n|versiones?|de acuerdo|informaci[oó]n preliminar|circunstancias?|presuntamente|aparentemente|motivo|causa)\b/i,
-      'estado actual': /\b(?:investigaci[oó]n|pesquisas|seguimiento|b[uú]squeda|operativo|proceso|diligencias|peritaje|autopsia|expediente)\b/i,
-      'impacto':     /\b(?:herid[oa]s?|fallecid[oa]s?|afectad[oa]s?|damnificad[oa]s?|evacuad[oa]s?|v[ií]ctimas?|p[eé]rdidas?|da[nñ]os?|lesiones?|detenid[oa]s?)\b/i,
+      // Semántica, no literal: reconoce (a) seguimiento procesal del hecho,
+      // (b) condición vigente de personas (permanece/continúa/se encuentra +
+      // hospitalizado, estado delicado/grave/crítico/estable, bajo observación),
+      // y (c) temporalidad atribuida ("hasta la última información").
+      // NO acepta eventos pasados puros ("fue trasladado al hospital").
+      'estado actual': /\b(?:investigaci[oó]n|pesquisas|seguimiento|b[uú]squeda|operativo|proceso|diligencias|peritaje|autopsia|expediente|hasta\s+la\s+[uú]ltima\s+informaci[oó]n|[uú]ltimo\s+parte|al\s+cierre\s+de\s+(?:esta\s+)?edici[oó]n|hasta\s+el\s+momento|estado\s+(?:delicado|grave|cr[ií]tico|estable|reservado|de\s+gravedad|sensible)|condici[oó]n\s+(?:delicada|grave|cr[ií]tica|estable)|bajo\s+(?:observaci[oó]n|atenci[oó]n\s+m[eé]dica|tratamiento|pron[óo]stico)|pron[óo]stico\s+(?:reservado|delicado|grave)|hospitalizad[oa]s?|permanece(?:n)?|contin[uú]a(?:n)?|se\s+encuentra(?:n)?|se\s+mantiene(?:n)?|evoluciona?)\b/i,
+      'impacto':     /\b(?:herid[oa]s?|fallecid[oa]s?|afectad[oa]s?|damnificad[oa]s?|evacuad[oa]s?|v[ií]ctimas?|p[eé]rdidas?|da[nñ]os?|lesiones?|detenid[oa]s?|hospitalizad[oa]s?|ingresad[oa]s?|lesionad[oa]s?)\b/i,
     },
     requiredContext: {
       tipo: 'antecedentes o prevención del suceso',
@@ -210,10 +215,10 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
   Nacionales: {
     requiredEvidence: {
       'qué anunció el gobierno o institución': /\b(?:gobierno|ministerio|programa|plan|inauguraci[oó]n|obra|infraestructura|carretera|vivienda|educaci[oó]n|MINED|energ[ií]a|ENATREL|agua\s+potable|ENACAL|reforestaci[oó]n|MARENA|producci[oó]n|agropecuario|MAG|cooperaci[oó]n|beca|censo|INEC)\b/i,
-      'cifras':        /\b(?:\d+\s*(?:millones|mil|beneficiarios?|personas?|familias?|casas?|km|hect[aá]reas|escuelas?|hospitales?)|C?\$[\d.,]+)\b/i,
-      'dónde aplica':  /\b(?:Managua|departamento|municipio|comunidad|barrio|zona|rural|urbana|regi[oó]n|carretera|km\s+\d+|nacional|nacionalmente|pa[ií]s|Nicaragua|nicarag[uü]ense|territorio)\b/i,
-      'quién lo dijo': /\b(?:ministro|viceministro|copresidente|alcald[ea]|director[oa]|autoridad|instituci[oó]n|oficial|gobierno)\b/i,
-      'qué cambia':   /\b(?:cambia|entra\s+en\s+vigor|vigencia|aplica|modifica|nuevo|anterior|diferencia|implicaciones?|consecuencias?)\b/i,
+      'cifras':        /\b(?:\d+\s*(?:millones|mil|beneficiarios?|personas?|familias?|casas?|km|hect[aá]reas|escuelas?|hospitales?|por\s+ciento|%)|C?\$[\d.,]+)\b/i,
+      'dónde aplica':  /\b(?:Managua|departamento|municipio|comunidad|barrio|zona|rural|urbana|regi[oó]n|carretera|km\s+\d+|nacional|nacionalmente|pa[ií]s|Nicaragua|nicarag[uü]ense|territorio|Costa\s+Caribe|RACCN|RACCS|Caribe\s+(?:Norte|Sur))\b/i,
+      'quién lo dijo': /\b(?:ministro|viceministro|copresidente|alcald[ea]|director[oa]|autoridad|instituci[oó]n|oficial|gobierno|portavoz|vocero|secretari[oa]|coordinador[ae]?|president[ea]?|comunicado|familiares?|testigos?|vecinos?|pobladores?)\b/i,
+      'qué cambia':   /\b(?:cambia|entra\s+en\s+vigor|vigencia|aplica|modifica|nuevo|anterior|diferencia|implicaciones?|consecuencias?|permitir[aá]|beneficia|incluye|contempla|establece|implementa|ampl[ií]a|mejora)\b/i,
     },
     requiredContext: {
       tipo: 'contexto nacional o histórico',
