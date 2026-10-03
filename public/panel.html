@@ -6989,6 +6989,19 @@ VERIFICACIÓN FINAL
     function mostrarErrorPublicacion(saveData, status) {
       const estado = document.getElementById('publicacionEstado');
       if (!estado) return;
+      // REVISAR confirmable: NO es un fallo — es la decisión pendiente del
+      // Editor Jefe. Banner propio, sin lenguaje de "error" ni "fallo técnico".
+      if (saveData && saveData.needsEditorConfirm === true) {
+        estado.innerHTML =
+          '<div style="background:#ffedd5;border:2px solid #ea580c;border-radius:10px;padding:14px;">'
+          + '<div style="font-size:15px;font-weight:800;color:#ea580c;">🟠 REVISAR — confirmación del Editor Jefe requerida</div>'
+          + '<div style="font-size:12px;color:#7c2d12;margin-top:6px;">La nota no tiene defectos bloqueantes — el score no llegó a la auto-aprobación y quedó en revisión editorial. Si la revisaste y está correctamente documentada, confirmá la publicación.</div>'
+          + '<button type="button" class="btn btn-primary btn-sm" onclick="confirmarPublicacionEditor()" style="margin-top:10px;"><i class="fas fa-user-check"></i> Confirmar como Editor Jefe y publicar</button>'
+          + '</div>';
+        estado.style.display = 'block';
+        estado.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return;
+      }
       const esEditorial = !!(saveData && (saveData.code === 'SUPERVISOR_BLOCKED' || saveData.blockingIssues?.length || saveData.supervisor));
       const titulo = esEditorial ? '🔴 PUBLICACIÓN NO PERMITIDA (decisión editorial)' : '⚠️ DECISIÓN EDITORIAL: APROBADA — PUBLICACIÓN TÉCNICA FALLÓ';
       const borde = esEditorial ? '#dc2626' : '#ea580c';
@@ -7001,11 +7014,6 @@ VERIFICACIÓN FINAL
         if (first?.action || first?.recommendation) html += '<div style="font-size:12px;color:#065f46;margin-top:4px;"><strong>Corrección:</strong> ' + (first.action || first.recommendation) + '</div>';
       } else {
         html += '<div style="font-size:12px;color:#7c2d12;margin-top:4px;">Esto es un fallo de infraestructura (Firestore, red, autenticación), no un rechazo editorial. Reintentá o revisá la conexión.</div>';
-      }
-      // REVISAR no es un bloqueo: el Editor Jefe puede confirmar y publicar.
-      if (saveData && saveData.needsEditorConfirm === true) {
-        html += '<div style="font-size:12px;color:#065f46;margin-top:8px;font-weight:700;">La nota no tiene defectos bloqueantes — quedó en estado REVISAR. Si la revisaste y está bien documentada, confirmá la publicación.</div>'
-          + '<button type="button" class="btn btn-primary btn-sm" onclick="confirmarPublicacionEditor()" style="margin-top:8px;"><i class="fas fa-user-check"></i> Confirmar como Editor Jefe y publicar</button>';
       }
       html += '<button type="button" class="btn btn-secondary btn-sm" onclick="ejecutarAnalisisForense()" style="margin-top:10px;"><i class="fas fa-redo"></i> Reanalizar</button></div>';
       estado.innerHTML = html;
