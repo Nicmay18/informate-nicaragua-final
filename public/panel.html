@@ -1599,39 +1599,6 @@ sin texto ni marcas de agua, composición periodística"
         </div>
       </div>
 
-      <div class="nav-label" style="margin: 32px 0 16px; border-bottom: 1px solid var(--gray-200); padding-bottom: 8px;">Métricas Acumuladas (Todo el tiempo)</div>
-        <div class="stats-grid" id="metricas-stats">
-          <div class="stat-card"><div class="stat-header"><div><div class="stat-value" id="m-total-vistas">0</div><div class="stat-label">Vistas Totales</div></div><div class="stat-icon blue"><i class="fas fa-eye"></i></div></div><div class="stat-change"><i class="fas fa-database"></i><span>Desde Firestore</span></div></div>
-          <div class="stat-card"><div class="stat-header"><div><div class="stat-value" id="m-promedio-vistas">0</div><div class="stat-label">Vistas Promedio</div></div><div class="stat-icon green"><i class="fas fa-chart-bar"></i></div></div><div class="stat-change"><i class="fas fa-newspaper"></i><span>Por noticia</span></div></div>
-          <div class="stat-card"><div class="stat-header"><div><div class="stat-value" id="m-noticia-top">—</div><div class="stat-label">Noticia Más Leída</div></div><div class="stat-icon orange"><i class="fas fa-trophy"></i></div></div><div class="stat-change"><i class="fas fa-fire"></i><span>Top 1</span></div></div>
-          <div class="stat-card"><div class="stat-header"><div><div class="stat-value" id="m-activas">0</div><div class="stat-label">Noticias Activas</div></div><div class="stat-icon red"><i class="fas fa-newspaper"></i></div></div><div class="stat-change"><i class="fas fa-layer-group"></i><span>En base de datos</span></div></div>
-        </div>
-        <div class="content-grid">
-          <div class="card">
-            <div class="card-header"><h3 class="card-title"><i class="fas fa-list-ol" style="color: var(--primary-600);"></i>Top 10 Noticias Más Vistas</h3></div>
-            <div class="card-body" id="top-noticias-body">
-              <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
-              <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
-              <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header"><h3 class="card-title"><i class="fas fa-tags" style="color: var(--info);"></i>Vistas por Categoría</h3></div>
-            <div class="card-body" id="vistas-categorias-body">
-              <div class="skeleton" style="height: 30px; margin-bottom: 8px;"></div>
-              <div class="skeleton" style="height: 30px; margin-bottom: 8px;"></div>
-              <div class="skeleton" style="height: 30px; margin-bottom: 8px;"></div>
-            </div>
-          </div>
-        </div>
-        <div class="card" style="margin-top: 24px;">
-          <div class="card-header"><h3 class="card-title"><i class="fas fa-calendar-alt" style="color: var(--success);"></i>Actividad Reciente</h3></div>
-          <div class="card-body" id="actividad-reciente-body">
-            <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
-            <div class="skeleton" style="height: 40px; margin-bottom: 8px;"></div>
-            <div class="skeleton" style="height: 40px;"></div>
-          </div>
-        </div>
       </div>
 
       <!-- CONFIGURACIÓN -->
@@ -3519,7 +3486,6 @@ sin texto ni marcas de agua, composición periodística"
       if (tabId === 'dashboard-tab') { cargarEstadisticas(); cargarGoogleIntel(); }
       if (tabId === 'categorias-tab') cargarResumenCategorias();
       if (tabId === 'analytics-tab') {
-        cargarMetricas();
         cargarTraficoRealTime();
       }
       if (tabId === 'config-tab') cargarConfiguracion();
@@ -6520,82 +6486,6 @@ VERIFICACIÓN FINAL
         const msg = e && e.message ? e.message : String(e);
         if (ultimosEl) ultimosEl.innerHTML = '<p style="color:#f87171;text-align:center;padding:20px">Error: ' + anEsc(msg.slice(0, 200)) + '</p>';
         if (!silent) showToast('No hay datos de tráfico aún', 'info');
-      }
-    };
-
-    window.cargarMetricas = async function() {
-      try {
-        const noticiasRaw = await getNoticiasCache();
-        const noticias = [];
-        const vistasPorCategoria = {};
-        let totalVistas = 0;
-        let activas = 0;
-        noticiasRaw.forEach(data => {
-          if (data.estado === 'publicado') activas++;
-          const v = data.vistas || 0;
-          totalVistas += v;
-          noticias.push({ titulo: data.titulo || '(sin título)', categoria: data.categoria || 'General', vistas: v, fecha: data.fecha, slug: data.slug });
-          const cat = data.categoria || 'General';
-          vistasPorCategoria[cat] = (vistasPorCategoria[cat] || 0) + v;
-        });
-
-        document.getElementById('m-total-vistas').textContent = totalVistas.toLocaleString();
-        document.getElementById('m-activas').textContent = activas.toLocaleString();
-        const promedio = activas > 0 ? Math.round(totalVistas / activas) : 0;
-        document.getElementById('m-promedio-vistas').textContent = promedio.toLocaleString();
-
-        const top = noticias.sort((a, b) => b.vistas - a.vistas);
-        if (top.length > 0) {
-          document.getElementById('m-noticia-top').textContent = top[0].vistas.toLocaleString();
-        }
-
-        const topEl = document.getElementById('top-noticias-body');
-        topEl.innerHTML = top.slice(0, 10).map((n, i) => `
-          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);">
-            <div style="width:28px;height:28px;border-radius:50%;background:${i===0?'#f59e0b':i===1?'#94a3b8':i===2?'#b45309':'var(--gray-200)'};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">${i+1}</div>
-            <div style="flex:1;min-width:0;">
-              <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:normal;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
-              <div style="font-size:11px;color:var(--gray-500);">${n.categoria} • ${n.vistas.toLocaleString()} vistas</div>
-            </div>
-          </div>
-        `).join('') || '<div class="empty-state"><div class="empty-state-icon"><i class="fas fa-eye-slash"></i></div><h3>Sin datos</h3><p>Aún no hay vistas registradas.</p></div>';
-
-        const catEl = document.getElementById('vistas-categorias-body');
-        const catEntries = Object.entries(vistasPorCategoria).sort((a, b) => b[1] - a[1]);
-        const maxCat = catEntries[0]?.[1] || 1;
-        catEl.innerHTML = catEntries.map(([cat, v]) => {
-          const pct = maxCat > 0 ? Math.round((v / maxCat) * 100) : 0;
-          return `
-            <div style="margin-bottom:12px;">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-                <span style="font-size:13px;font-weight:600;color:var(--gray-800);">${cat}</span>
-                <span style="font-size:12px;font-weight:700;color:var(--gray-600);">${v.toLocaleString()}</span>
-              </div>
-              <div style="height:6px;background:var(--gray-100);border-radius:999px;overflow:hidden;">
-                <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--primary-500),var(--primary-600));border-radius:999px;transition:width 0.4s ease;"></div>
-              </div>
-            </div>
-          `;
-        }).join('') || '<p style="color:var(--gray-400);font-size:13px;">Sin datos de categorías</p>';
-
-        const recEl = document.getElementById('actividad-reciente-body');
-        const recientes = noticias.filter(n => n.fecha).sort((a, b) => getFechaMs(b.fecha) - getFechaMs(a.fecha)).slice(0, 8);
-        recEl.innerHTML = recientes.map(n => {
-          const f = formatearFechaRobusta(n.fecha);
-          return `
-            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-100);">
-              <div style="width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0;"></div>
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:normal;overflow:hidden;text-overflow:ellipsis;">${n.titulo}</div>
-                <div style="font-size:11px;color:var(--gray-500);">${f} • ${n.vistas.toLocaleString()} vistas</div>
-              </div>
-            </div>
-          `;
-        }).join('') || '<p style="color:var(--gray-400);font-size:13px;">Sin actividad reciente</p>';
-
-      } catch (e) {
-        console.error('Error cargando métricas:', e);
-        showToast('Error cargando métricas: ' + e.message, 'error');
       }
     };
 
