@@ -1,7 +1,7 @@
 ﻿import { getSitemapNews } from '@/lib/data';
 import { unstable_cache } from 'next/cache';
 import { normalizeEditorialTitle } from '@/lib/formateo';
-import { safeDate } from '@/app/sitemap';
+import { parseFechaReal } from '@/app/sitemap';
 import { logger } from '@/lib/logger';
 
 const SITE_URL = 'https://nicaraguainformate.com';
@@ -23,8 +23,8 @@ async function fetchNewsSitemapRaw() {
   const articles = await getSitemapNews();
   return articles
     .filter((a) => {
-      const d = safeDate(a.fecha);
-      return !isNaN(d.getTime()) && d.getTime() >= cutoffMs;
+      const d = parseFechaReal(a.fecha);
+      return d !== null && d.getTime() >= cutoffMs;
     })
     .map((a) => ({
       slug: a.slug,
@@ -35,7 +35,7 @@ async function fetchNewsSitemapRaw() {
 }
 
 const cachedFetchNewsSitemap = unstable_cache(fetchNewsSitemapRaw, ['news-sitemap'], {
-  revalidate: 86400,
+  revalidate: 1800,
   tags: ['news-sitemap'],
 });
 
@@ -48,11 +48,11 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
 ${articles.map((article) => {
-  const articleDate = safeDate(article.fecha);
+  const articleDate = parseFechaReal(article.fecha);
   // ISO 8601 con timezone para Google News
-  const publicationDate = !isNaN(articleDate.getTime())
-    ? articleDate.toLocaleString('sv-SE', { timeZone: 'America/Managua' }).replace(' ', 'T') + '-06:00'
-    : new Date().toISOString();
+  // fecha ya validada en el filtro — sin isNaN ni fabricar now()
+  if (!articleDate) return '';
+  const publicationDate = articleDate.toLocaleString('sv-SE', { timeZone: 'America/Managua' }).replace(' ', 'T') + '-06:00';
   const publicationName = 'Nicaragua Informate';
   const publicationLanguage = 'es';
   

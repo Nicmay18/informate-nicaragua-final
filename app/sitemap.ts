@@ -59,6 +59,26 @@ export function safeDate(value: unknown): Date {
   return isNaN(d.getTime()) ? new Date() : d;
 }
 
+/** Variante honesta: devuelve null cuando no hay fecha interpretable.
+ *  safeDate fabrica 'now' en inválidas — aceptable como fallback de UI, pero
+ *  jamás como lastmod/publication_date de sitemap (fecha falsa = defecto §XVII). */
+export function parseFechaReal(value: unknown): Date | null {
+  if (!value) return null;
+  if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
+    try { const d = (value as any).toDate(); return d instanceof Date && !isNaN(d.getTime()) ? d : null; } catch { return null; }
+  }
+  if (typeof value === 'object' && value !== null && '_seconds' in value) {
+    try {
+      const sec = Number((value as any)._seconds);
+      const ns = Number((value as any)._nanoseconds || 0);
+      const d = new Date(sec * 1000 + ns / 1_000_000);
+      return !isNaN(d.getTime()) ? d : null;
+    } catch { return null; }
+  }
+  const d = typeof value === 'string' ? new Date(value) : value instanceof Date ? value : null;
+  return d && !isNaN(d.getTime()) ? d : null;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticUrls: MetadataRoute.Sitemap = [
     { url: baseUrl, changeFrequency: 'daily', priority: 1 },
@@ -125,8 +145,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
 
     const articleUrls: MetadataRoute.Sitemap = cleanArticles.map((article) => {
-      const publishedAt = safeDate(article.fecha);
-      const lastMod = safeDate(article.fechaActualizacion || article.fecha);
+      const publishedAt = parseFechaReal(article.fecha) || new Date(0);
+      const lastMod = parseFechaReal(article.fechaActualizacion || article.fecha);
       const now = new Date();
       const daysSincePublished = Math.floor(
         (now.getTime() - publishedAt.getTime()) / (1000 * 60 * 60 * 24)
@@ -141,7 +161,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
       return {
         url: `${baseUrl}/noticias/${article.slug}`,
-        lastModified: lastMod,
+        ...(lastMod ? { lastModified: lastMod } : {}),
         changeFrequency,
         priority,
       };

@@ -6329,6 +6329,13 @@ VERIFICACIÓN FINAL
       }
     };
 
+    function anSafeError(e) {
+      try {
+        const m = (e && e.message) ? String(e.message) : String(e);
+        try { const j = JSON.parse(m); if (j && j.error) return String(j.error).slice(0, 120); } catch {}
+        return m.slice(0, 120);
+      } catch { return 'Error desconocido'; }
+    }
     function anEsc(t) {
       return String(t == null ? '' : t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
@@ -6528,7 +6535,7 @@ VERIFICACIÓN FINAL
       } catch (e) {
         console.error('Error cargando tráfico:', e);
         const msg = e && e.message ? e.message : String(e);
-        if (ultimosEl) ultimosEl.innerHTML = '<p style="color:#f87171;text-align:center;padding:20px">Error: ' + anEsc(msg.slice(0, 200)) + '</p>';
+        if (ultimosEl) ultimosEl.innerHTML = '<p style="color:#f87171;text-align:center;padding:20px">No se pudo cargar el trafico. ' + anEsc(anSafeError(msg)) + '</p>';
         if (!silent) showToast('No hay datos de tráfico aún', 'info');
       }
     };
@@ -6599,7 +6606,7 @@ VERIFICACIÓN FINAL
         lista.innerHTML = `
           <div style="text-align: center; padding: 40px; color: var(--danger);">
             <i class="fas fa-exclamation-circle" style="font-size: 24px; margin-bottom: 12px;"></i>
-            <p>Error al cargar: ${err.message}</p>
+            <p>Error al cargar: ${anSafeError(err)}</p>
             <button class="btn btn-secondary" onclick="cargarNoticiasPeligro()" style="margin-top: 12px;">Reintentar</button>
           </div>
         `;

@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import OptimizedImage from './OptimizedImage';
 import { getCategory, SITE_CONFIG } from '@/lib/constants';
-import { tiempoLectura, fmtViews, formatDateES, extractPoints } from '@/lib/formateo';
+import { tiempoLectura, formatDateES, extractPoints } from '@/lib/formateo';
 import { getResponsiveImageUrl } from '@/lib/image-utils';
 import { injectTocIds } from '@/lib/toc';
 import { enhanceArticleHtml } from '@/lib/html';
@@ -72,7 +72,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   }, [noticia.id]);
 
   // Vista canónica: sincroniza con noticias.vistas en Firestore (misma fuente del panel)
-  const [views, setViews] = useState(() => noticia.vistas || 0);
+  const [, setViews] = useState(() => noticia.vistas || 0);
 
   useEffect(() => {
     setViews(noticia.vistas || 0);
@@ -124,7 +124,6 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
 
   const lecturaMin = tiempoLectura(noticia.contenido || noticia.resumen || '');
-  const vistas = fmtViews(views);
   const tags = useMemo(() => [category.name, ...extractPoints(noticia.titulo, 3)], [category.name, noticia.titulo]);
 
   const wordCount = useMemo(() => {
@@ -338,10 +337,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12,6 12,12 16,14" /></svg>
             {lecturaMin} min de lectura
           </span>
-          <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
-            {vistas} vistas
-          </span>
+          {/* Contador de vistas oculto al lector: la cifra se sigue registrando para el panel interno, pero mostrarla daña la percepción del medio cuando es baja. */}
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }} role="group" aria-label="Tamaño del texto">
             <div style={{ display: 'flex', gap: 2, padding: 3, background: '#f1f5f9', borderRadius: 9 }}>
               <button onClick={() => setFontIndex(i => Math.max(0, i - 1))} style={fontBtnStyle} aria-label="Reducir tamaño del texto" disabled={fontIndex === 0}>A−</button>
