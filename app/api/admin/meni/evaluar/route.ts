@@ -65,12 +65,25 @@ export async function POST(request: NextRequest) {
     const diagnosis = runEditorialDiagnosis(noticia, resultado);
     const ceoResponse = generateCEOResponse(diagnosis);
 
+    // Informe de sala de redacción — consolida los hallazgos existentes
+    // por rol editorial (mesa, estructura, fuentes, lenguaje, SEO, lector,
+    // redes) + decisión. Determinista, sin costo adicional.
+    const { buildInformeSala } = await import('@/lib/meni/sala-redaccion');
+    const sala = buildInformeSala({
+      meni: {
+        ...resultado,
+        articulo: { titulo: noticia.titulo, categoria: noticia.categoria, ...(resultado?.articulo || {}) },
+        supervisorVerdict: supervisor?.verdict || resultado?.editorialVerdict?.supervisorVerdict,
+      },
+    });
+
     return NextResponse.json({
       success: true,
       result: resultado,
       supervisor,
       diagnosis,
       ceo: ceoResponse,
+      salaRedaccion: sala,
       _timingMs: tMs,
     });
   } catch (error) {

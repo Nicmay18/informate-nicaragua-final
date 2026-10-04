@@ -125,6 +125,20 @@ export async function POST(request: NextRequest) {
     const editorConfirmed = body.editorOverride === true;
     const canOverride = editorConfirmed && editorialDecision === 'REVISAR';
 
+    // Informe de sala de redacción — consolida hallazgos por rol editorial.
+    // Se calcula una vez; va en éxito Y en ambos errores 400 para que el
+    // panel siempre muestre el informe del propietario.
+    const { buildInformeSala } = await import('@/lib/meni/sala-redaccion');
+    const salaBase = (dist?: Record<string, { ok?: boolean; skipped?: boolean; error?: string } | undefined>) =>
+      buildInformeSala({
+        meni: {
+          ...meni,
+          articulo: { titulo: titulo.trim(), categoria: (categoria as string) || 'General', ...(meni.articulo || {}) },
+          supervisorVerdict: supervisor?.verdict || meni.editorialVerdict?.supervisorVerdict,
+        },
+        distribucion: dist,
+      });
+
     // BLOQUEO si no pasa filtros criticos
     if (!meniOk && !canOverride) {
       const first = meni.blockingIssues?.[0];
@@ -155,6 +169,7 @@ export async function POST(request: NextRequest) {
           tituloSEO: meni.seo.tituloSEO,
         },
         editorialVerdict: meni.editorialVerdict,
+        salaRedaccion: salaBase(),
       }, { status: 400 });
     }
 
@@ -186,6 +201,7 @@ export async function POST(request: NextRequest) {
         critical: criticalIssues,
         warnings: issues.filter(i => i.severity === 'WARNING' || i.severity === 'IMPORTANT'),
         editorialVerdict: meni.editorialVerdict,
+        salaRedaccion: salaBase(),
       }, { status: 400 });
     }
 
@@ -549,6 +565,7 @@ export async function POST(request: NextRequest) {
         editorialDna: meni.editorialDna,
         editorialDecision: meni.editorialDecision,
       },
+      salaRedaccion: salaBase(pipelineResult?.distribucion as any),
       pipeline: pipelineResult ? {
         distribucion: pipelineResult.distribucion,
         socialCopy: pipelineResult.socialCopy,

@@ -6841,6 +6841,7 @@ VERIFICACIÓN FINAL
 
           // DECISIÓN FINAL primero (autoridad real: Supervisor via guardarConMeni)
           htmlFinal += renderDecisionFinal(supervisor, meni);
+          if (respMeni.value.salaRedaccion) htmlFinal += renderInformeSala(respMeni.value.salaRedaccion);
           htmlFinal += renderMeniDiagnostic(meni);
           htmlFinal += renderForenseCanonico(meni);
           actualizarEstadoPublicacion(supervisor, meni);
@@ -6855,6 +6856,32 @@ VERIFICACIÓN FINAL
         resultado.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
       }
     };
+
+    // ═══════════════════════════════════════════════════════════════
+    // INFORME DE SALA — informe del propietario (§12): una línea por
+    // especialista, la coordinación del Jefe, el Supervisor y la decisión.
+    // ═══════════════════════════════════════════════════════════════
+    function renderInformeSala(sala) {
+      if (!sala || !sala.especialistas || !sala.especialistas.length) return '';
+      const colores = { APROBADO: '#16a34a', CON_RECOMENDACIONES: '#2563eb', REVISAR: '#ea580c', BLOQUEADO: '#dc2626', GENERADAS: '#7c3aed', PENDIENTE: '#64748b' };
+      const labels = { APROBADO: 'APROBADO', CON_RECOMENDACIONES: 'APROBADO (sugerencias)', REVISAR: 'REVISAR', BLOQUEADO: 'BLOQUEADO', GENERADAS: 'GENERADAS', PENDIENTE: 'PENDIENTE' };
+      let html = '<div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px;margin-bottom:16px;">';
+      html += '<div style="font-size:14px;font-weight:800;color:#0f172a;margin-bottom:10px;"><i class="fas fa-building"></i> INFORME DE SALA — MESA DE ' + String(sala.mesa || '').toUpperCase() + '</div>';
+      (sala.especialistas || []).forEach(function(e) {
+        const c = colores[e.estado] || '#64748b';
+        html += '<div style="display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid #f1f5f9;font-size:12px;">'
+          + '<span style="color:#374151;">' + e.nombre + '</span>'
+          + '<span style="color:' + c + ';font-weight:700;white-space:nowrap;">' + (labels[e.estado] || e.estado) + '</span></div>';
+        if (e.estado === 'BLOQUEADO' || e.estado === 'REVISAR') {
+          html += '<div style="font-size:11px;color:#6b7280;padding:2px 0 6px 12px;">' + e.resumen + '</div>';
+        }
+      });
+      html += '<div style="margin-top:10px;padding:8px;background:#f8fafc;border-radius:6px;font-size:12px;"><strong>Jefe de Redacción:</strong> ' + (labels[sala.jefeRedaccion.estado] || sala.jefeRedaccion.estado) + ' — ' + sala.jefeRedaccion.razonamiento + '</div>';
+      html += '<div style="font-size:12px;color:#4b5563;margin-top:6px;"><strong>Supervisor:</strong> ' + sala.supervisor.verdict + ' · <strong>Decisión:</strong> ' + sala.decisionFinal.decision + '</div>';
+      if ((sala.cambiosRealizados || []).length) html += '<div style="font-size:11px;color:#16a34a;margin-top:6px;">Cambios realizados: ' + sala.cambiosRealizados.join('; ') + '</div>';
+      html += '</div>';
+      return html;
+    }
 
     // ═══════════════════════════════════════════════════════════════
     // DECISIÓN EDITORIAL FINAL — única autoridad visible (Supervisor,
@@ -8897,6 +8924,8 @@ VERIFICACIÓN FINAL
       '</div>';
     }
     let html = '';
+    // Informe de sala del guardado — si el API lo trajo, va arriba del veredicto.
+    if (data.salaRedaccion) html += renderInformeSala(data.salaRedaccion);
     // EDITOR JEFE — veredicto unificado (MENI 4 Final): una sola decisión
     // visible también en el rechazo de guardado, con severidades explícitas.
     const ev = data.editorialVerdict;
