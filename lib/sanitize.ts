@@ -47,11 +47,12 @@ export function cleanArticleBody(content: string | undefined | null): string {
   if (!marcadores) return marcadores;
   return marcadores
     // entidades de espacio → espacio real (permite normalizar " ,&nbsp;," etc.)
-    .replace(/&nbsp;|&#160;|&#x[aA]0;/gi, ' ')
-    // "neurológicas ," → "neurológicas," (espacio antes de puntuación tras palabra)
-    .replace(/([A-Za-zÁÉÍÓÚÑáéíóúñ0-9>"”»])[ \t\u00a0]+([,.;:!?])/g, '$1$2')
+    .replace(/&nbsp;|&#160;|&#x[aA]0;|&#8201;|&#8239;|&#8199;|&#x202[fF];|&#x2009;/gi, ' ')
+    // "neurológicas ," → "neurológicas," — cualquier espacio unicode antes de
+    // puntuación tras palabra/tag ([^\S\n] cubre nbsp, thin, narrow nbsp…)
+    .replace(/([A-Za-zÁÉÍÓÚÑáéíóúñ0-9>"”»])[^\S\n]+([,.;:!?])/g, '$1$2')
     // doble espacio horizontal → simple (no toca saltos de línea)
-    .replace(/[ \t\u00a0]{2,}/g, ' ')
+    .replace(/[^\S\n]{2,}/g, ' ')
     // espacio interior de comillas latinas: « texto » / “ texto ”
     .replace(/([“«])\s+/g, '$1')
     .replace(/\s+([”»])/g, '$1');
