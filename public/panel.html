@@ -7052,19 +7052,29 @@ VERIFICACIÓN FINAL
     function normalizarDiagnosticoBloqueo(saveData) {
       if (saveData && saveData.blockingIssues && saveData.blockingIssues.length) return saveData;
       const issues = (saveData && saveData.supervisor && saveData.supervisor.issues) || (saveData && saveData.critical) || [];
+      // Separación por severidad: solo CRITICAL va a "BLOQUEANTES".
+      // IMPORTANT/WARNING van a advertencias y el resto a recomendaciones,
+      // igual que el veredicto unificado (ev.hallazgos por severidad).
+      const mapIssue = (i) => ({
+        code: i.domain || 'SUPERVISOR',
+        title: i.severity || 'BLOQUEO',
+        description: i.problem || '',
+        evidence: i.evidence || '',
+        currentValue: i.currentValue,
+        expectedValue: i.expectedValue,
+        howToFix: i.action || i.recommendation || '',
+        module: 'SUPERVISOR',
+      });
+      const blocking = issues.filter(i => i.severity === 'CRITICAL').map(mapIssue);
+      const advs = issues.filter(i => i.severity === 'IMPORTANT' || i.severity === 'WARNING').map(mapIssue);
+      const recs = issues.filter(i => i.severity !== 'CRITICAL' && i.severity !== 'IMPORTANT' && i.severity !== 'WARNING')
+        .map(i => ({ mensaje: '[' + (i.severity || 'INFO') + '] ' + (i.problem || '') + (i.action || i.recommendation ? ' — ' + (i.action || i.recommendation) : '') }));
       return {
         ...saveData,
         diagnostico: saveData?.supervisor?.reason || saveData?.error || '',
-        blockingIssues: issues.map(i => ({
-          code: i.domain || 'SUPERVISOR',
-          title: i.severity || 'BLOQUEO',
-          description: i.problem || '',
-          evidence: i.evidence || '',
-          currentValue: i.currentValue,
-          expectedValue: i.expectedValue,
-          howToFix: i.action || i.recommendation || '',
-          module: 'SUPERVISOR',
-        })),
+        blockingIssues: blocking,
+        warnings: [...(saveData?.warnings || []), ...advs],
+        recomendaciones: [...(saveData?.recomendaciones || []), ...recs],
       };
     }
 

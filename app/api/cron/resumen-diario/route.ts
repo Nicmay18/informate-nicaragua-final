@@ -100,7 +100,13 @@ export async function GET(request: Request) {
     }
 
     // ── Traer noticias recientes (últimas 30h) y publicadas ──
-    const snap = await db.collection('noticias').limit(120).get();
+    // orderBy obligatorio: sin él, limit(120) devuelve los primeros docs por
+    // orden de inserción (los más VIEJOS). Con 400+ artículos el filtro de 30h
+    // descartaba todo → resumen saltado permanentemente (causa real del fallo).
+    const snap = await db.collection('noticias')
+      .orderBy('fecha', 'desc')
+      .limit(120)
+      .get();
     const ahora = Date.now();
     const limite = 30 * 60 * 60 * 1000; // 30 horas
 

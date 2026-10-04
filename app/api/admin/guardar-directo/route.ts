@@ -74,7 +74,14 @@ export async function POST(request: NextRequest) {
       imagen: imagen || body.imagen,
       imagenDestacada: imagen || body.imagenDestacada,
       slug: body.slug || '',
-      palabrasClave: body.palabrasClave || [],
+      // El panel envía `keywords` (string separado por comas); el flujo
+      // canónico usa `palabrasClave` (array). Normalizar ambos contratos.
+      palabrasClave: Array.isArray(body.palabrasClave) && body.palabrasClave.length
+        ? body.palabrasClave
+        : String(body.keywords || '')
+            .split(',')
+            .map((k: string) => k.trim())
+            .filter(Boolean),
     };
 
     // MENI canónico via guardarConMeni — única autoridad editorial
@@ -89,7 +96,7 @@ export async function POST(request: NextRequest) {
     const autoKeywordsDespues = meni.autoCorrections?.find((c: any) => c.campo === 'keywords')?.despues;
     const finalPalabrasClave = autoKeywordsDespues
       ? String(autoKeywordsDespues).split(',').map((k: string) => k.trim()).filter(Boolean)
-      : (body.palabrasClave || []);
+      : noticiaInput.palabrasClave;
     const metaGenerada = finalResumen.length >= 120 ? finalResumen : meni.seo.metaDescripcion;
 
     // VALIDATE→REJECT→LOG: solo defectos BLOCK rechazan aquí — los artefactos
