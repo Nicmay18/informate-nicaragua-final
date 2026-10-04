@@ -98,6 +98,8 @@ export function stripHtml(html: string): string {
     .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;|&amp;|&quot;|&lt;|&gt;/g, ' ')
     .replace(/\s+/g, ' ')
+    // quitar tags junto a puntuación deja "palabra ," — se pega de nuevo
+    .replace(/\s+([,.;:!?])/g, '$1')
     .trim();
 }
 

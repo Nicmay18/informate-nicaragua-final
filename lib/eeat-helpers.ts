@@ -13,6 +13,8 @@ function stripHtml(html: string): string {
     .replace(/&nbsp;/g, ' ')
     .replace(/&[a-zA-Z0-9#]+;/g, ' ')
     .replace(/\s+/g, ' ')
+    // quitar tags junto a puntuación deja "palabra ," — se pega de nuevo
+    .replace(/\s+([,.;:!?])/g, '$1')
     .trim();
 }
 
