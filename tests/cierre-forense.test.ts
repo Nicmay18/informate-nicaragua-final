@@ -85,6 +85,20 @@ describe('Cortes lingüísticos — nunca a media palabra ni tras abreviatura', 
   it('G: espacio antes de puntuación se elimina', () => {
     expect(cleanArticleBody('enfermedades neurológicas , procedimientos')).toContain('neurológicas,');
     expect(cleanArticleBody('doble  espacio')).toBe('doble espacio');
+    // nbsp antes de puntuación (defecto real en producción)
+    expect(cleanArticleBody('neurológicas , presentado')).toContain('neurológicas,');
+    // cierre de etiqueta + espacio + puntuación
+    expect(cleanArticleBody('<strong>neurológicas</strong> , presentado')).toContain('</strong>,');
+  });
+
+  it('extractPuntosClave no fusiona heading con oración', () => {
+    const conH2 = '<h2>La construcción avanza en Managua</h2><p>El Centro Nacional de Neurocirugía “Dr. Carlos Vanzetti” se construye en el sector de Las Colinas, Managua, como parte de la infraestructura.</p><p>Por ahora, la construcción mantiene un avance del 10 % y tiene como fecha prevista de conclusión el 5 de abril de 2027.</p>';
+    const pts = extractPuntosClave(conH2);
+    for (const p of pts) {
+      expect(p).not.toMatch(/Managua El Centro/);
+      expect(p).not.toMatch(/“Dr\.$/);
+    }
+    expect(pts.length).toBeGreaterThanOrEqual(1);
   });
 
   // Caso H: detección de texto roto

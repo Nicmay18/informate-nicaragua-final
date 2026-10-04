@@ -6,6 +6,9 @@ function stripHtml(html: string): string {
   return html
     .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    // headings no son oraciones de contenido: si se extraen junto al
+    // párrafo siguiente producen puntos fusionados ("Managua El Centro…")
+    .replace(/<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/gi, ' ')
     .replace(/<[^>]*>/g, ' ')
     .replace(/&nbsp;/g, ' ')
     .replace(/&[a-zA-Z0-9#]+;/g, ' ')
