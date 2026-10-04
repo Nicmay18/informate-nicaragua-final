@@ -1,4 +1,3 @@
-import '@/app/articulo.css';
 import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews } from '@/lib/data';
 import { notFound, permanentRedirect } from 'next/navigation';
@@ -76,7 +75,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     });
     const titleValidation = validateTitle(seoTitleResult);
 
-    let finalTitle = originalValidation.score >= 70
+    // El título editorial es la fuente de verdad: la plantilla SEO solo se
+    // usa cuando el título original es severamente deficiente (score < 50).
+    // Antes (umbral 70) el template ganaba sobre títulos buenos y producía
+    // concatenaciones robóticas tipo "X deja afectados en Nicaragua X".
+    let finalTitle = originalValidation.score >= 50
       ? noticia.titulo
       : (titleValidation.score >= 70 ? seoTitleResult : noticia.titulo);
 

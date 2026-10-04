@@ -2759,6 +2759,15 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   .ni-live-btn span:last-child{display:none}
   .ni-live-btn{padding:6px 10px}
 }
+@media(max-width:480px){
+  /* CAUSA RAÍZ hscroll móvil: logo nowrap (~165px) + acciones (153px) + gaps
+     superaban los 366px del inner -> desborde 15px y scroll horizontal */
+  .ni-header__inner{padding:0 10px;gap:8px}
+  .ni-header__actions{gap:6px}
+  .ni-live-btn{display:none}
+  .ni-hamburger{min-width:40px}
+  .ni-logo__wordmark{font-size:0.85rem}
+}
 
 /* Menú móvil */
 .ni-mobile-menu{position:fixed;inset:0;z-index:200}

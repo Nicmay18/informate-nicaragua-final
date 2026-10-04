@@ -89,8 +89,15 @@ export function generateOptimizedTitle(input: SEOInput): string {
 
   title = cleanTitle(title);
 
+  // Adjuntar contexto solo si aporta palabras nuevas — antes se concatenaba
+  // el resumen ciegamente y duplicaba el inicio del título (word-salad).
   if (contexto && !title.includes(contexto)) {
-    title = cutToLimit(`${title} ${contexto}`);
+    const titleWords = new Set(title.toLowerCase().split(/\s+/));
+    const ctxWords = contexto.toLowerCase().split(/\s+/).filter((w) => w.length > 3);
+    const nuevas = ctxWords.filter((w) => !titleWords.has(w));
+    if (nuevas.length > 0 && ctxWords.length - nuevas.length <= Math.floor(ctxWords.length / 2)) {
+      title = cutToLimit(`${title} ${contexto}`);
+    }
   }
 
   // Si no tiene verbo fuerte, forzar uno (determinístico para SSR)

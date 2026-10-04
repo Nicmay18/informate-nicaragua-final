@@ -90,10 +90,10 @@ export default function AudioButton({ titulo, resumen, contenido, articleId }: A
         </button>
         <div style={{ flex: 1, minWidth: 0 }}>
           <p style={{ margin: 0, fontWeight: 600, fontSize: 14, color: '#111827' }}>
-            {isPlaying ? 'Reproduciendo...' : 'Escuchar noticia en voz alta'}
+            {isPlaying ? 'Reproduciendo...' : 'Escuchar esta noticia'}
           </p>
           <p style={{ margin: '2px 0 0', fontSize: 12, color: '#6b7280' }}>
-            {isPlaying ? 'Usando síntesis de voz del navegador' : 'Voz generada localmente — sin costos de servidor'}
+            {isPlaying ? 'Audio de la noticia' : 'Lectura en voz alta disponible'}
           </p>
         </div>
         {isPlaying && (

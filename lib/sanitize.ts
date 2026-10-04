@@ -150,6 +150,10 @@ function buildAttrs(tag: string, attrs: Map<string, string>): string {
     if (FORBID_ATTR.has(name)) continue;
     if (!ALLOWED_ATTR.has(name)) continue;
 
+    if (name === 'src' && tag === 'img' && /^data:image\/(png|jpe?g|gif|webp|avif|bmp);/i.test(value)) {
+      parts.push(`src="${value}"`);
+      continue;
+    }
     if ((name === 'href' || name === 'src') && !isAllowedUrl(value)) continue;
     if (tag === 'iframe' && name === 'src' && !isAllowedIframeUrl(value)) continue;
 
