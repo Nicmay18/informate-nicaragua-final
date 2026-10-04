@@ -38,6 +38,7 @@ function getAnalyticsSessionId(): string | undefined {
 }
 import { getArticleMetricsAction } from '@/app/actions/get-article-metrics';
 import KeyPoints from './KeyPoints';
+import { extractPuntosClave } from '@/lib/eeat-helpers';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
 import NewsletterSignup from './NewsletterSignup';
@@ -176,7 +177,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
 
   // Puntos clave: solo si hay datos reales y sustantivos (no duplican bajada/título)
   const keyPoints = useMemo(() => {
-    const pts = (noticia.puntosClave || []).map((p) => p.trim()).filter((p) => p.length >= 40);
+    const regenerados = extractPuntosClave(noticia.contenido || '');
+    const pts = (regenerados.length >= 2 ? regenerados : (noticia.puntosClave || []))
+      .map((p) => p.trim()).filter((p) => p.length >= 40);
     if (pts.length < 2) return [];
     const resumenN = normalizeText(noticia.resumen || '');
     const tituloN = normalizeText(noticia.titulo || '');
@@ -187,7 +190,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         return true;
       })
       .slice(0, 3);
-  }, [noticia.puntosClave, noticia.resumen, noticia.titulo]);
+  }, [noticia.puntosClave, noticia.contenido, noticia.resumen, noticia.titulo]);
 
   // Container principal (estilos en article-page.css)
 

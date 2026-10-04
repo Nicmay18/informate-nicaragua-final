@@ -20,16 +20,26 @@ function splitSentences(text: string): string[] {
     .filter((s) => s.length > 30);
 }
 
-function concisar(frase: string, minPalabras = 12, maxPalabras = 18): string {
+function concisar(frase: string, minPalabras = 12, maxPalabras = 30): string {
   const palabras = frase.split(/\s+/).filter(Boolean);
-  const corte = Math.min(Math.max(palabras.length, minPalabras), maxPalabras);
-  const recorte = palabras.slice(0, corte);
-  const oracion = recorte
-    .join(' ')
-    .replace(/[\s,;:-]+$/g, '')
-    .trim();
-  if (!oracion) return '';
-  return oracion.charAt(0).toUpperCase() + oracion.slice(1) + '.';
+  if (palabras.length === 0) return '';
+  const limpio = frase.trim().replace(/[.\s,;:—-]+$/g, '');
+  // Oración completa: no recortar — el punto final es real, no fabricado
+  if (palabras.length <= maxPalabras) {
+    return limpio.charAt(0).toUpperCase() + limpio.slice(1) + '.';
+  }
+  // Oración larga: cortar en el último límite de cláusula dentro del máximo
+  const dentro = palabras.slice(0, maxPalabras).join(' ');
+  const lastSep = Math.max(dentro.lastIndexOf(','), dentro.lastIndexOf(';'), dentro.lastIndexOf('—'));
+  if (lastSep > 0) {
+    const cand = dentro.slice(0, lastSep).trim();
+    if (cand.split(/\s+/).filter(Boolean).length >= minPalabras) {
+      return cand.charAt(0).toUpperCase() + cand.slice(1) + '.';
+    }
+  }
+  // Sin límite de cláusula útil: truncar con '…' (honesto, no punto falso)
+  const trunc = dentro.replace(/[\s,;:—-]+$/g, '');
+  return trunc.charAt(0).toUpperCase() + trunc.slice(1) + '…';
 }
 
 export function extractPuntosClave(contenido: string, limite = 3): string[] {
