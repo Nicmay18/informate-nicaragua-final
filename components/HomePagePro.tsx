@@ -1,5 +1,6 @@
 "use client";
 
+import { extractoSeguro } from '@/lib/eeat-helpers';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -120,7 +121,7 @@ export default function HomePagePro({ data }: HomePageProProps) {
               <h1>
                 <Link href={`/noticias/${hero.slug}`}>{hero.titulo}</Link>
               </h1>
-              {hero.resumen && <p className="rd-dek">{hero.resumen}</p>}
+              {hero.resumen && <p className="rd-dek">{extractoSeguro(hero.resumen)}</p>}
               <div className="rd-byline">
                 {hero.autor && <span>{hero.autor.split(' ').slice(0, 2).join(' ')}</span>}
                 {hero.autor && <span className="rd-sep" />}

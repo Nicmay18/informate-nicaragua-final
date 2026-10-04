@@ -13,11 +13,27 @@ function stripHtml(html: string): string {
     .trim();
 }
 
-function splitSentences(text: string): string[] {
-  return text
+// Marcador interno: protege el punto de las abreviaturas para que
+// splitSentences no rompa nombres propios ("Dr. Carlos Vanzetti").
+const ABR_MARK = '\u0000';
+
+function protegerAbreviaturas(texto: string): string {
+  return texto
+    // multi-punto: a. m., p. m., EE. UU., i. e., e. g., S. S., R. S.
+    .replace(/\b((?:[A-Za-zÁÉÍÓÚÑáéíóúñ]\.\s?){2,})/g, (m) => m.replace(/\./g, ABR_MARK))
+    // abreviaturas simples frecuentes en español editorial
+    .replace(/\b(Dr|Dra|Ing|Lic|Licda|Prof|Profa|Sr|Sra|Srta|Ud|Uds|Mtro|Mtra|etc|aprox|av|km|pag|pág|num|St|vs|vol|cap|sec|dept|dto|fig|tel|cel)\./gi, `$1${ABR_MARK}`);
+}
+
+function restaurarAbreviaturas(texto: string): string {
+  return texto.split(ABR_MARK).join('.');
+}
+
+function splitSentences(text: string, minLen = 30): string[] {
+  return protegerAbreviaturas(text)
     .split(/(?<=[.!?])\s+/)
-    .map((s) => s.trim())
-    .filter((s) => s.length > 30);
+    .map((s) => restaurarAbreviaturas(s).trim())
+    .filter((s) => s.length > minLen);
 }
 
 function concisar(frase: string, minPalabras = 12, maxPalabras = 30): string {
@@ -93,4 +109,68 @@ export function getAutorFoto(autor: string | undefined): string {
     }
   }
   return DEFAULT_AUTHOR_PHOTO;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Cortes lingüísticos seguros — nunca a media palabra ni tras abreviatura
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * Detecta texto que quedó truncado a media palabra/oración:
+ *  - no cierra en unidad final (. ! ? … " » ) ])
+ *  - o cierra con "…" precedido de un fragmento de 1-2 letras ("para e…").
+ */
+export function isTextoRotoPorCorte(texto: string): boolean {
+  const t = (texto || '').trim();
+  if (!t) return false;
+  const m = t.match(/(\S+)\s*(?:\.\.\.|…)$/);
+  if (m && /^[a-záéíóúñ]{1,2}$/i.test(m[1])) return true;
+  // termina en abreviatura que exige nombre propio: "Neurocirugía “Dr." es roto
+  // ("etc." sí es un cierre válido y no entra en esta lista)
+  if (/(Dr|Dra|Ing|Lic|Licda|Prof|Profa|Sr|Sra|Srta|Ud|Uds|Mtro|Mtra|St|Sto|Sta)\."?\s*$/i.test(t)) return true;
+  if (!/[.!?…"”»)\]]$/.test(t)) return true;
+  return false;
+}
+
+/**
+ * Devuelve el texto terminando en unidad lingüística válida:
+ * oración completa > límite de cláusula > límite de palabra + "…".
+ * Jamás corta una palabra ni deja un fragmento suelto.
+ */
+export function extractoSeguro(texto: string, maxChars = 220): string {
+  const t = (texto || '').replace(/\s+/g, ' ').trim();
+  if (!t) return '';
+  if (!isTextoRotoPorCorte(t) && t.length <= maxChars) return t;
+
+  const dentro = t.slice(0, maxChars);
+  // 1) último cierre de oración — escaneado con abreviaturas protegidas
+  //    ("Dr." no cuenta como fin de oración) y piso pequeño: una oración
+  //    completa corta siempre gana a una elipsis a media palabra.
+  const protegido = protegerAbreviaturas(dentro);
+  let fin = -1;
+  for (const m of protegido.matchAll(/[.!?](?=["”»)\]]?\s|$)/g)) fin = m.index!;
+  const minimo = Math.min(60, Math.floor(maxChars * 0.4));
+  if (fin >= 15) return dentro.slice(0, fin + 1);
+  // 2) último límite de cláusula
+  const clausula = Math.max(dentro.lastIndexOf(', '), dentro.lastIndexOf('; '), dentro.lastIndexOf(' — '), dentro.lastIndexOf(': '));
+  if (clausula >= minimo) return dentro.slice(0, clausula).replace(/[\s,;:—-]+$/g, '') + '…';
+  // 3) último límite de palabra — nunca a media palabra
+  const finPalabra = dentro.lastIndexOf(' ');
+  if (finPalabra > minimo) return dentro.slice(0, finPalabra).replace(/[\s,;:—-]+$/g, '') + '…';
+  return t;
+}
+
+/**
+ * Reconstruye un resumen/dek desde el contenido: oraciones completas
+ * consecutivas hasta el límite. Devuelve '' si no hay material.
+ */
+export function buildDek(contenido: string, maxChars = 220): string {
+  const frases = splitSentences(stripHtml(contenido || ''), 1);
+  let dek = '';
+  for (const f of frases) {
+    const cand = dek ? dek + ' ' + f : f;
+    if (cand.length <= maxChars) { dek = cand; if (dek.length >= 80) break; }
+    else break;
+  }
+  return dek;
 }

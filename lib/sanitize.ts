@@ -43,7 +43,16 @@ export function stripAICitationMarkers(content: string | undefined | null): stri
  * render/consulta vea el contenido limpio.
  */
 export function cleanArticleBody(content: string | undefined | null): string {
-  return stripAICitationMarkers(content);
+  const marcadores = stripAICitationMarkers(content);
+  if (!marcadores) return marcadores;
+  return marcadores
+    // "neurológicas ," → "neurológicas," (espacio antes de puntuación tras palabra)
+    .replace(/([A-Za-zÁÉÍÓÚÑáéíóúñ0-9])[ \t]+([,.;:!?])/g, '$1$2')
+    // doble espacio horizontal → simple (no toca saltos de línea)
+    .replace(/[ \t]{2,}/g, ' ')
+    // espacio interior de comillas latinas: « texto » / “ texto ”
+    .replace(/([“«])\s+/g, '$1')
+    .replace(/\s+([”»])/g, '$1');
 }
 
 // Server-safe HTML sanitizer. Replaces isomorphic-dompurify because it tries

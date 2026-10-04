@@ -38,7 +38,7 @@ function getAnalyticsSessionId(): string | undefined {
 }
 import { getArticleMetricsAction } from '@/app/actions/get-article-metrics';
 import KeyPoints from './KeyPoints';
-import { extractPuntosClave } from '@/lib/eeat-helpers';
+import { extractPuntosClave, buildDek, isTextoRotoPorCorte } from '@/lib/eeat-helpers';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
 import NewsletterSignup from './NewsletterSignup';
@@ -175,6 +175,12 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
     !!noticia.resumen &&
     jaccardSimilarity(normalizeText(noticia.resumen), normalizeText(firstParagraphText)) >= 0.55;
 
+  // Dek seguro: resumen válido se muestra tal cual; si quedó roto por un
+  // corte a media palabra (pipeline antiguo) se regenera desde el contenido.
+  const resumenVisible = isTextoRotoPorCorte(noticia.resumen || '')
+    ? (buildDek(noticia.contenido || '') || noticia.resumen)
+    : noticia.resumen;
+
   // Puntos clave: solo si hay datos reales y sustantivos (no duplican bajada/título)
   const keyPoints = useMemo(() => {
     const regenerados = extractPuntosClave(noticia.contenido || '');
@@ -297,7 +303,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
         {/* Resumen / Lead: solo si aporta algo distinto al primer párrafo */}
         {noticia.resumen && !leadIsDuplicated && (
           <p style={{ fontFamily: "'Merriweather', serif", fontSize: 19, color: '#334155', lineHeight: 1.62, marginBottom: 28, paddingBottom: 20, borderBottom: '1px solid #e2e8f0', fontWeight: 500 }} itemProp="description">
-            {noticia.resumen}
+            {resumenVisible}
           </p>
         )}
 

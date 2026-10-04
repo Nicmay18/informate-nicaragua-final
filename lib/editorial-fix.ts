@@ -1,3 +1,4 @@
+import { extractoSeguro } from './eeat-helpers';
 import { generateSlug } from '@/lib/slug';
 import { countWords } from '@/lib/utils/word-count';
 
@@ -36,12 +37,12 @@ function getFirstSentence(text: string): string {
     .trim();
 
   const match = plain.match(/[^.!?]+[.!?]/);
-  return (match?.[0] || plain.slice(0, 180)).trim();
+  return (match?.[0] || extractoSeguro(plain, 180)).trim();
 }
 
 function buildMetaDescription(titulo: string, resumen: string, contenido: string): string {
   const source = (resumen || getFirstSentence(contenido) || titulo).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  const meta = source.length > 155 ? `${source.slice(0, 152).trim()}...` : source;
+  const meta = source.length > 155 ? extractoSeguro(source, 152) : source;
   return meta.length >= 120 ? meta : `${titulo}. ${meta}`.slice(0, 160);
 }
 

@@ -1,3 +1,4 @@
+import { extractoSeguro } from './eeat-helpers';
 import type { Noticia } from '@/lib/types';
 
 export type DistributionChannel = 'Telegram' | 'WhatsApp' | 'Newsletter' | 'Facebook';
@@ -68,7 +69,7 @@ export function recommendDistribution(noticia: Noticia): ChannelRecommendation[]
           : 'No enviar a WhatsApp.',
       format: (n, url) =>
         url
-          ? `📰 ${n.titulo}\n\n${n.resumen?.slice(0, 160)}…\n👉 ${url}`
+          ? `📰 ${n.titulo}\n\n${extractoSeguro(n.resumen || '', 160)}…\n👉 ${url}`
           : undefined,
     },
     {
