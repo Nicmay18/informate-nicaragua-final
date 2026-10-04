@@ -48,19 +48,49 @@ const NATIONAL_KEYWORDS = [
   'presidente',
 ];
 
+// La diversidad editorial NO es un peso: la aplica applyCategoryCap() con
+// tope duro por categoría (ver más abajo). Antes había una clave
+// 'diversidadEditorial: 0.05' declarada pero nunca usada en la fórmula —
+// peso muerto que hacía sumar los pesos 0.95 en lugar de 1.00.
 const WEIGHTS = {
   actualidad: 0.20,
   interesPublico: 0.20,
   calidadMeni: 0.25,
   categoriaEstrategica: 0.20,
   potencialSeo: 0.10,
-  diversidadEditorial: 0.05,
 };
 
 function hoursSince(dateString: string): number {
   const date = new Date(dateString);
   if (Number.isNaN(date.getTime())) return Infinity;
   return (Date.now() - date.getTime()) / 36e5;
+}
+
+/** Edad de la noticia en horas, medida desde su fecha de PUBLICACIÓN. */
+export function articleAgeHours(n: Noticia, now: number = Date.now()): number {
+  const t = new Date(n.fechaPublicacion || n.fecha).getTime();
+  return Number.isNaN(t) ? Infinity : (now - t) / 36e5;
+}
+
+/**
+ * Ventana máxima de 'noticia actual' para posiciones primarias (hero y
+ * Principales). Fuera de ella, un artículo SOLO puede ocupar posición
+ * primaria si tiene actividad medida hoy (traffic_daily) — nunca por su
+ * score histórico de MENI/vistas, que es exactamente como una nota vieja
+ * se disfrazaba de noticia del día.
+ */
+export const FRONT_PAGE_MAX_AGE_HOURS = 48;
+
+/**
+ * Elegible para hero/Principales: reciente (<= 48h desde publicación) o con
+ * tráfico medido hoy (activeSlugs viene de traffic_daily del día actual).
+ */
+export function isFrontPageEligible(
+  n: Noticia,
+  activeSlugs: ReadonlySet<string>,
+  now: number = Date.now(),
+): boolean {
+  return articleAgeHours(n, now) <= FRONT_PAGE_MAX_AGE_HOURS || activeSlugs.has(n.slug);
 }
 
 function normalizeScore(value: number, max: number): number {

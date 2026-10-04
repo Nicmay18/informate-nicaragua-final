@@ -14,6 +14,8 @@ import {
   normalizeSource,
   parsePeriod,
   realtimeSnapshot,
+  rehydrateTrafficEvents,
+  buildSuggestedActions,
   siteTrend,
   split6hWindows,
   windowedArticleCounts,
@@ -193,7 +195,14 @@ export async function GET(request: NextRequest) {
     // `since` redondeado a 15 min para que el bucket de cache sea estable
     // dentro de su ventana (la lectura cacheada re-validate cada 5 min).
     const since24 = new Date(Math.floor((now.getTime() - 24 * 3600 * 1000) / 900000) * 900000);
-    const { events: events24h, truncated: logTruncated } = await _cachedEvents24h(since24.toISOString());
+    const cached24h = await _cachedEvents24h(since24.toISOString());
+    // CAUSA RAÍZ 'Invalid time value': unstable_cache serializa a JSON, así
+    // que en cache-hit los timestamp llegan como string (no Date). Los
+    // helpers (managuaHourKey/Intl) lanzan RangeError sobre fechas inválidas
+    // y el panel mostraba {ok:false,error:'Invalid time value'}. Rehidratar
+    // SIEMPRE y descartar eventos con fecha inválida/malformada.
+    const events24h = rehydrateTrafficEvents(cached24h.events);
+    const logTruncated = cached24h.truncated;
 
     // ---- Lectura 1b: eventos recientes frescos (realtime/últimos) ---------
     const recentSnap = await db
@@ -317,6 +326,14 @@ export async function GET(request: NextRequest) {
     // Tendencias + insights deterministas
     const site = siteTrend(daily);
     const insights = buildInsights({ articles: articulos, categories: categorias, hours, site });
+    const accionesSugeridas = buildSuggestedActions({
+      articles: articulos,
+      sources: sourcesPeriod,
+      hours,
+      site,
+      realtimeActive: realtime.events,
+      totalPeriod: filteredEvents.length + Object.values(sourcesPeriod).reduce((s2, v) => s2 + v, 0),
+    });
 
     // ---- Shape legacy (compatibilidad con panel existente) ----------------
     // perf ya leyó el día actual dentro de getTrafficPerformance — reutilizarlo
@@ -350,6 +367,7 @@ export async function GET(request: NextRequest) {
       articulos,
       realtime,
       insights,
+      accionesSugeridas,
       tendencias: { site },
       horarios: hours,
       meta: {

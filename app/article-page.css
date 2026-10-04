@@ -37,7 +37,7 @@
   max-height: 70vh;
   display: block;
   border-radius: 8px;
-  margin: 24px 0;
+  margin: 24px auto;
 }
 
 .article-body figure {

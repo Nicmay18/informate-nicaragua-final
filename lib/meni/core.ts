@@ -364,6 +364,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     explainability: evaluacion.explainability,
     recomendaciones: recomendacionesContextuales.map((r) => ({ area: r.area, mensaje: r.mensaje })),
     aciertos: forense.evidencias.filter((e) => e.estado === 'OK').map((e) => e.mensaje),
+    antiClickbait: editorialDecision.antiClickbait,
   });
   logMeni('Quality gate result', {
     bloqueado: qualityGate.bloqueado,
@@ -473,6 +474,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     matched_entities: contentProfile.matched_entities,
     contextScore,
     editorialVerdict,
+    tituloSugerido: editorialDecision.antiClickbait.tituloSugerido,
   };
 }
 

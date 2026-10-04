@@ -4,6 +4,7 @@ import {
   bucketViewsByHour,
   buildHeatmapDays,
   buildInsights,
+  buildSuggestedActions,
   classifyTrend,
   dailySeries,
   hourSummary,
@@ -12,6 +13,7 @@ import {
   parsePeriod,
   periodMs,
   realtimeSnapshot,
+  rehydrateTrafficEvents,
   siteTrend,
   split6hWindows,
   windowedArticleCounts,
@@ -273,5 +275,165 @@ describe('traffic-insights — períodos y validación', () => {
   });
   it('MANAGUA_TZ es la zona documentada', () => {
     expect(MANAGUA_TZ).toBe('America/Managua');
+  });
+});
+
+describe('rehydrateTrafficEvents — cache-hit JSON (causa "Invalid time value")', () => {
+  it('pasa eventos con Date reales sin tocarlos', () => {
+    const d = new Date('2026-10-01T15:00:00Z');
+    const out = rehydrateTrafficEvents([{ slug: 'a', timestamp: d }]);
+    expect(out).toHaveLength(1);
+    expect(out[0].timestamp).toBe(d);
+    expect(managuaHourKey(out[0].timestamp)).toBe('2026-10-01T09');
+  });
+
+  it('convierte strings ISO (serialización de unstable_cache) a Date', () => {
+    const out = rehydrateTrafficEvents([{ slug: 'a', timestamp: '2026-10-01T15:00:00.000Z' }]);
+    expect(out).toHaveLength(1);
+    expect(out[0].timestamp instanceof Date).toBe(true);
+    // No debe lanzar RangeError al usarlo con Intl/timezone:
+    expect(() => managuaHourKey(out[0].timestamp)).not.toThrow();
+    expect(managuaHourKey(out[0].timestamp)).toBe('2026-10-01T09');
+  });
+
+  it('acepta epoch (ms) y Firestore-like { seconds, nanoseconds }', () => {
+    const ms = Date.parse('2026-10-01T15:00:00Z');
+    const out = rehydrateTrafficEvents([
+      { slug: 'a', timestamp: ms },
+      { slug: 'b', timestamp: { seconds: ms / 1000, nanoseconds: 0 } },
+    ]);
+    expect(out).toHaveLength(2);
+    expect(out[0].timestamp.getTime()).toBe(ms);
+    expect(out[1].timestamp.getTime()).toBe(ms);
+  });
+
+  it('descarta timestamps inválidos, null, undefined y objetos sin seconds', () => {
+    const out = rehydrateTrafficEvents([
+      { slug: 'a', timestamp: 'no-es-fecha' },
+      { slug: 'b', timestamp: null },
+      { slug: 'c' },
+      { slug: 'd', timestamp: { foo: 1 } },
+      { slug: 'e', timestamp: NaN },
+      { slug: 'ok', timestamp: '2026-10-01T15:00:00Z' },
+    ]);
+    expect(out).toHaveLength(1);
+    expect(out[0].slug).toBe('ok');
+  });
+
+  it('maneja entradas no-array y elementos primitivos', () => {
+    expect(rehydrateTrafficEvents(null)).toEqual([]);
+    expect(rehydrateTrafficEvents(undefined)).toEqual([]);
+    expect(rehydrateTrafficEvents('x')).toEqual([]);
+    expect(rehydrateTrafficEvents([null, 42, 'str'])).toEqual([]);
+  });
+});
+
+describe('buildSuggestedActions — solo datos reales, nunca inventados', () => {
+  const base = {
+    articles: [] as Parameters<typeof buildSuggestedActions>[0]['articles'],
+    sources: {} as Record<string, number>,
+    hours: { peakHour: null, lowHour: null },
+    site: { direction: 'flat' as const, deltaPct: null as number | null },
+    realtimeActive: 0,
+    totalPeriod: 0,
+  };
+
+  it('sin datos → una sola acción honesta SIN_DATOS', () => {
+    const out = buildSuggestedActions(base);
+    expect(out).toHaveLength(1);
+    expect(out[0].code).toBe('SIN_DATOS');
+  });
+
+  it('dependencia de fuente ≥60% → acción alta DEPENDENCIA_FUENTE', () => {
+    const out = buildSuggestedActions({
+      ...base,
+      sources: { facebook: 80, google: 10, directo: 10 },
+      totalPeriod: 100,
+      realtimeActive: 3,
+    });
+    const dep = out.find(a => a.code === 'DEPENDENCIA_FUENTE');
+    expect(dep).toBeDefined();
+    expect(dep!.prioridad).toBe('alta');
+    expect(dep!.evidencia).toContain('80');
+  });
+
+  it('fuentes diversificadas (<60%) → sin alerta de dependencia', () => {
+    const out = buildSuggestedActions({
+      ...base,
+      sources: { facebook: 40, google: 35, directo: 25 },
+      totalPeriod: 100,
+      realtimeActive: 3,
+    });
+    expect(out.some(a => a.code === 'DEPENDENCIA_FUENTE')).toBe(false);
+  });
+
+  it('artículo acelerando → IMPULSAR_AHORA con evidencia medida', () => {
+    const out = buildSuggestedActions({
+      ...base,
+      articles: [{
+        slug: 'a', titulo: 'Nota caliente', categoria: 'Nacionales',
+        h1: 5, h6: 30, h24: 50, total: 500,
+        trend: 'acelerando' as const, deltaPct: 40,
+      }],
+      totalPeriod: 50,
+      realtimeActive: 2,
+    });
+    const hot = out.find(a => a.code === 'IMPULSAR_AHORA');
+    expect(hot).toBeDefined();
+    expect(hot!.accion).toContain('Nota caliente');
+    expect(hot!.evidencia).toContain('30');
+  });
+
+  it('sin actividad en vivo pero con tráfico en período → SIN_ACTIVIDAD', () => {
+    const out = buildSuggestedActions({ ...base, totalPeriod: 100, realtimeActive: 0 });
+    expect(out.some(a => a.code === 'SIN_ACTIVIDAD')).toBe(true);
+  });
+
+  it('hora pico medida → acción info HORA_PICO', () => {
+    const out = buildSuggestedActions({
+      ...base,
+      hours: { peakHour: '19:00', lowHour: '04:00' },
+      totalPeriod: 10,
+      realtimeActive: 1,
+    });
+    const hp = out.find(a => a.code === 'HORA_PICO');
+    expect(hp).toBeDefined();
+    expect(hp!.accion).toContain('19:00');
+  });
+
+  it('tendencia down → acción alta TENDENCIA_CAIDA', () => {
+    const out = buildSuggestedActions({
+      ...base,
+      site: { direction: 'down' as const, deltaPct: -35 },
+      totalPeriod: 10,
+      realtimeActive: 1,
+    });
+    const t = out.find(a => a.code === 'TENDENCIA_CAIDA');
+    expect(t).toBeDefined();
+    expect(t!.prioridad).toBe('alta');
+  });
+
+  it('máximo 5 acciones, ordenadas por prioridad', () => {
+    const out = buildSuggestedActions({
+      articles: [{
+        slug: 'a', titulo: 'Hot', categoria: 'Nacionales',
+        h1: 5, h6: 30, h24: 50, total: 500,
+        trend: 'acelerando' as const, deltaPct: 40,
+      }, {
+        slug: 'b', titulo: 'Cold', categoria: 'Sucesos',
+        h1: 0, h6: 2, h24: 40, total: 300,
+        trend: 'perdiendo' as const, deltaPct: -50,
+      }],
+      sources: { facebook: 90, google: 10 },
+      hours: { peakHour: '19:00', lowHour: '04:00' },
+      site: { direction: 'down' as const, deltaPct: -35 },
+      realtimeActive: 0,
+      totalPeriod: 100,
+    });
+    expect(out.length).toBeLessThanOrEqual(5);
+    const rank = { alta: 0, media: 1, info: 2 };
+    for (let i = 1; i < out.length; i++) {
+      expect(rank[out[i].prioridad]).toBeGreaterThanOrEqual(rank[out[i - 1].prioridad]);
+    }
   });
 });

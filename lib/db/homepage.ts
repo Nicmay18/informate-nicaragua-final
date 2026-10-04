@@ -7,7 +7,8 @@ import { FieldValue, FieldPath } from 'firebase-admin/firestore';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { incrementView, flush } from '@/lib/view-counter';
 import { CATEGORIES, isLutoNews, type Noticia } from '@/lib/types';
-import { rankNoticias, selectDestacada } from '@/lib/home-ranking';
+import { rankNoticias, selectDestacada, isFrontPageEligible } from '@/lib/home-ranking';
+import { getTrafficForDate } from '@/lib/analytics/traffic-reader';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
@@ -216,14 +217,33 @@ async function buildHomePageData(): Promise<HomePageData> {
     ...categoryNames.map(name => getNewsByCategory(name, 12)),
   ]);
 
+  // Actividad medida HOY (traffic_daily): única justificación para que una
+  // noticia de más de 48h ocupe una posición primaria (hero/Principales).
+  // Fail-open: si la lectura falla, el gate queda en 'solo recientes'.
+  const todayKey = new Date().toISOString().slice(0, 10);
+  let activeSlugs = new Set<string>();
+  try {
+    const todayTraffic = await getTrafficForDate(getAdminDb(), todayKey, 100);
+    activeSlugs = new Set(todayTraffic.articles.map(a => a.slug).filter(Boolean));
+  } catch (err) {
+    logger.warn('[homepage] traffic_daily de hoy no disponible para gate de portada:', err);
+  }
+
   const porCategoria: Record<string, Noticia[]> = {};
   categoryNames.forEach((name, i) => { porCategoria[name] = categoryResults[i] ?? []; });
 
   const used = new Set<string>();
 
-  // HERO: la noticia más destacada del ranking editorial (no de luto).
+  // HERO + PRINCIPALES: posiciones primarias = 'noticia actual'. Solo
+  // entran noticias de <= 48h o con actividad medida hoy (activeSlugs).
+  // Fallback a `ranked` completo si el pool elegible quedara vacío
+  // (sin publicaciones recientes y sin tráfico hoy) — la portada nunca
+  // se queda vacía, pero en ese caso extremo se muestra lo mejor
+  // disponible, no se fabrica recencia.
   const ranked = rankNoticias(latest);
-  const hero = selectDestacada(ranked.filter(n => !isLutoNews(n))) ?? ranked[0] ?? null;
+  const frontPool = ranked.filter(n => isFrontPageEligible(n, activeSlugs));
+  const eligible = frontPool.length > 0 ? frontPool : ranked;
+  const hero = selectDestacada(eligible.filter(n => !isLutoNews(n))) ?? eligible[0] ?? null;
   if (hero) used.add(hero.id);
 
   // SECCIONES POR CATEGORÍA: prioridad de frescura. Cada categoría muestra
@@ -240,7 +260,7 @@ async function buildHomePageData(): Promise<HomePageData> {
   // PRINCIPALES: diversidad deliberada desde lo que no ya fue reservado.
   const principales: Noticia[] = [];
   const principalCounts: Record<string, number> = {};
-  for (const n of ranked) {
+  for (const n of eligible) {
     if (principales.length >= 5) break;
     if (used.has(n.id)) continue;
     const cap = n.categoria === 'Sucesos' ? 2 : 2;

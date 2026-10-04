@@ -216,6 +216,9 @@ export interface MeniResult {
    * publicación. Una sola fuente de verdad para panel y APIs.
    */
   editorialVerdict?: import('./editorial-verdict').EditorialVerdict;
+  /** Título alternativo propuesto por anti-clickbait cuando el vigente
+   *  fue bloqueado/advertido. El panel lo expone con «usar y re-analizar». */
+  tituloSugerido?: string;
 }
 
 export interface EditorialDecisionFlat {

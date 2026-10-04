@@ -57,6 +57,35 @@ export interface ArticleWindowStats {
 
 export type TrafficPeriod = '24h' | '7d' | '30d';
 
+/**
+ * `unstable_cache` serializa a JSON: los `Date` llegan como string en cache-hit
+ * aunque el tipo estático diga `Date` (causa raíz del 'Invalid time value' en
+ * producción). Esta función rehidrata `timestamp` a un `Date` válido y descarta
+ * eventos malformados antes de que lleguen a los helpers de Intl/timezone.
+ * Acepta `Date`, string ISO, epoch (ms) y Firestore-like `{ seconds, nanoseconds }`.
+ */
+export function rehydrateTrafficEvents(events: unknown): TrafficLogEvent[] {
+  if (!Array.isArray(events)) return [];
+  const out: TrafficLogEvent[] = [];
+  for (const raw of events) {
+    const e = raw as TrafficLogEvent & { timestamp?: unknown };
+    if (!e || typeof e !== 'object') continue;
+    const ts = e.timestamp;
+    let d: Date | null = null;
+    if (ts instanceof Date) d = ts;
+    else if (typeof ts === 'string' || typeof ts === 'number') d = new Date(ts);
+    else if (
+      ts && typeof ts === 'object' &&
+      typeof (ts as { seconds?: unknown }).seconds === 'number'
+    ) {
+      d = new Date((ts as { seconds: number }).seconds * 1000);
+    }
+    if (!d || isNaN(d.getTime())) continue;
+    out.push({ ...e, timestamp: d });
+  }
+  return out;
+}
+
 export const VALID_PERIODS: TrafficPeriod[] = ['24h', '7d', '30d'];
 
 export function parsePeriod(raw: string | null): TrafficPeriod {
@@ -376,4 +405,118 @@ export function buildInsights(input: {
     out.push(`El tráfico del sitio cayó ${input.site.deltaPct}% en la segunda mitad del período.`);
   }
   return out;
+}
+
+// ─────────────────────────────────────────────────────────────
+// Acciones sugeridas — qué hacer hoy, derivado de datos reales
+// ─────────────────────────────────────────────────────────────
+
+export interface SuggestedAction {
+  code: string;
+  /** Qué hacer hoy (imperativo corto). */
+  accion: string;
+  /** El dato real que justifica la acción. */
+  evidencia: string;
+  prioridad: 'alta' | 'media' | 'info';
+}
+
+/**
+ * ACCIONES SUGERIDAS del dashboard: cada una referencia el dato real que
+ * la produjo. Si un dato no existe, la acción no se emite — jamás se
+ * inventa una recomendación sin evidencia medida.
+ */
+export function buildSuggestedActions(input: {
+  articles: ArticleWindowStats[];
+  sources: Record<string, number>;
+  hours: { peakHour: string | null; lowHour: string | null };
+  site: { direction: string; deltaPct: number | null };
+  realtimeActive: number;
+  totalPeriod: number;
+}): SuggestedAction[] {
+  const out: SuggestedAction[] = [];
+
+  // Dependencia de una sola fuente: riesgo de canal.
+  const srcEntries = Object.entries(input.sources).filter(([, v]) => v > 0);
+  const srcTotal = srcEntries.reduce((s, [, v]) => s + v, 0);
+  if (srcTotal > 0) {
+    const [top, topViews] = srcEntries.sort((a, b) => b[1] - a[1])[0];
+    const pct = Math.round((topViews / srcTotal) * 100);
+    if (pct >= 60) {
+      out.push({
+        code: 'DEPENDENCIA_FUENTE',
+        accion: `Diversificar canales: ${top} concentra el ${pct}% del tráfico`,
+        evidencia: `${top}: ${topViews} de ${srcTotal} visitas del período`,
+        prioridad: 'alta',
+      });
+    }
+  }
+
+  // Artículo acelerando → impulsar mientras está caliente.
+  const hot = input.articles
+    .filter(a => (a.trend === 'acelerando' || a.trend === 'nuevo') && a.h6 > 0)
+    .sort((a, b) => b.h6 - a.h6)[0];
+  if (hot) {
+    out.push({
+      code: 'IMPULSAR_AHORA',
+      accion: `Impulsar en redes ahora: "${hot.titulo}"`,
+      evidencia: `${hot.h6} visitas en 6h${hot.deltaPct !== null ? ` (${hot.deltaPct > 0 ? '+' : ''}${hot.deltaPct}%)` : ''}`,
+      prioridad: 'media',
+    });
+  }
+
+  // Artículo que cae con tráfico previo → revisar/actualizar.
+  const caida = input.articles
+    .filter(a => a.trend === 'perdiendo' && a.deltaPct !== null)
+    .sort((a, b) => (a.deltaPct ?? 0) - (b.deltaPct ?? 0))[0];
+  if (caida && (caida.deltaPct ?? 0) <= -30) {
+    out.push({
+      code: 'REVISAR_ARTICULO',
+      accion: `Revisar: "${caida.titulo}" pierde tráfico`,
+      evidencia: `${caida.deltaPct}% vs 6h previas (${caida.h6} visitas ahora)`,
+      prioridad: 'media',
+    });
+  }
+
+  // Tendencia del sitio → ajustar ritmo editorial.
+  if (input.site.direction === 'down' && input.site.deltaPct !== null) {
+    out.push({
+      code: 'TENDENCIA_CAIDA',
+      accion: 'Reforzar publicación hoy: el tráfico viene cayendo',
+      evidencia: `${input.site.deltaPct}% en la segunda mitad del período`,
+      prioridad: 'alta',
+    });
+  }
+
+  // Sin actividad en vivo → la acción más simple que activa el ciclo.
+  if (input.realtimeActive === 0 && input.totalPeriod > 0) {
+    out.push({
+      code: 'SIN_ACTIVIDAD',
+      accion: 'Publicar o compartir una nota ahora — sin visitas en los últimos 15 min',
+      evidencia: '0 eventos en la ventana en vivo',
+      prioridad: 'media',
+    });
+  }
+
+  // Hora pico medida → programar cerca de ella.
+  if (input.hours.peakHour) {
+    out.push({
+      code: 'HORA_PICO',
+      accion: `Programar publicaciones cerca de las ${input.hours.peakHour} (hora Nicaragua)`,
+      evidencia: `Hora pico medida: ${input.hours.peakHour} · valle: ${input.hours.lowHour ?? 'N/D'}`,
+      prioridad: 'info',
+    });
+  }
+
+  // Nada medido en el período → estado honesto, no acciones inventadas.
+  if (out.length === 0 && input.totalPeriod === 0) {
+    out.push({
+      code: 'SIN_DATOS',
+      accion: 'Sin datos de tráfico en el período',
+      evidencia: 'Cuando haya visitas, aquí aparecerán acciones concretas.',
+      prioridad: 'info',
+    });
+  }
+
+  const rank = { alta: 0, media: 1, info: 2 };
+  return out.sort((a, b) => rank[a.prioridad] - rank[b.prioridad]).slice(0, 5);
 }

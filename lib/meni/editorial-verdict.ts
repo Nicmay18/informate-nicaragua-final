@@ -22,6 +22,7 @@
  */
 
 import type { RevisionEditorJefe } from './types';
+import type { AntiClickbaitResult } from './anti-clickbait/types';
 import type { QualityGateIssue } from './quality-gate/types';
 import type { FactualitySignal } from '@/lib/editorial/factuality-signals';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
@@ -267,6 +268,37 @@ function fromRecommendations(recs: { area: string; mensaje: string }[]): Editori
   }));
 }
 
+/**
+ * Anti Clickbait → hallazgo de TÍTULO. Semántica honesta:
+ *  - 'bloqueado'   → WARNING: defecto editorial real que exige revisión
+ *    humana (la decisión global ya cae a REVISAR por `aprobado=false`),
+ *    pero el hallazgo hace visible DÓNDE está el problema y propone un
+ *    título corregido que el editor puede aceptar y re-evaluar.
+ *  - 'advertencia' → RECOMMENDATION: señal media, nunca bloquea.
+ *  - 'aprobado'    → sin hallazgo.
+ * Nunca es BLOCKER: un título clickbait es corregible editando el campo,
+ * no un defecto factual/mecánico del contenido.
+ */
+function fromAntiClickbait(res: AntiClickbaitResult): EditorialFinding | null {
+  if (res.veredicto === 'aprobado') return null;
+  const sugerencia = res.tituloSugerido ? ` Sugerencia: «${res.tituloSugerido}».` : '';
+  const severity: FindingSeverity = res.veredicto === 'bloqueado' ? 'WARNING' : 'RECOMMENDATION';
+  return {
+    code: 'ANTI_CLICKBAIT_TITULO',
+    severity,
+    module: 'anti-clickbait',
+    title: res.veredicto === 'bloqueado'
+      ? 'El título genera curiosidad artificial en lugar de informar'
+      : 'El título tiene señales de clickbait',
+    description: `${res.razon}${sugerencia}`,
+    howToFix: res.tituloSugerido
+      ? `Aceptar el título sugerido («${res.tituloSugerido}») o reescribir el título informando el hecho directamente, luego re-analizar.`
+      : 'Reescribir el título informando el hecho directamente (qué, quién, dónde), luego re-analizar.',
+    bloquea: false,
+    field: 'titulo',
+  };
+}
+
 function fromDuplicate(similitud: number, titulo?: string): EditorialFinding {
   return {
     code: 'DUPLICATE_CONTENT',
@@ -292,6 +324,7 @@ export function collectMeniFindings(input: {
   qualityGateIssues?: QualityGateIssue[];
   explainability?: ExplainabilityItem[];
   recomendaciones?: { area: string; mensaje: string }[];
+  antiClickbait?: AntiClickbaitResult;
 }): EditorialFinding[] {
   const contenido = input.contenido || '';
   const hallazgos: EditorialFinding[] = [];
@@ -312,6 +345,8 @@ export function collectMeniFindings(input: {
   }
   for (const f of fromExplainability(input.explainability || [], contenido)) push(f);
   for (const f of fromRecommendations(input.recomendaciones || [])) push(f);
+  const acb = input.antiClickbait ? fromAntiClickbait(input.antiClickbait) : null;
+  if (acb) push(acb);
   return hallazgos;
 }
 
@@ -418,6 +453,7 @@ export function buildEditorialVerdict(input: {
   factualitySignals?: FactualitySignal[];
   supervisor?: SupervisorDecision;
   aciertos?: string[];
+  antiClickbait?: AntiClickbaitResult;
 }): EditorialVerdict {
   const hallazgos = [
     ...collectMeniFindings(input),

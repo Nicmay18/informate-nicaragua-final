@@ -1582,6 +1582,10 @@ sin texto ni marcas de agua, composición periodística"
             <div class="card-header"><h3 class="card-title"><i class="fas fa-lightbulb" style="color:var(--warning);"></i>Tendencias (reglas deterministas)</h3></div>
             <div class="card-body" id="an-insights-body"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
           </div>
+          <div class="card">
+            <div class="card-header"><h3 class="card-title"><i class="fas fa-tasks" style="color:var(--primary-600);"></i>Acciones sugeridas <span style="font-weight:400;font-size:11px;color:var(--gray-500);">(derivadas de los datos medidos)</span></h3></div>
+            <div class="card-body" id="an-acciones-body"><p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Cargando...</p></div>
+          </div>
         </div>
 
         <!-- TABLA ARTÍCULOS -->
@@ -6473,6 +6477,19 @@ VERIFICACIÓN FINAL
           ? st.insights.map(i => '<div style="display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--gray-50);font-size:13px;color:var(--gray-700);"><i class="fas fa-circle" style="font-size:6px;color:var(--primary-500);margin-top:7px;"></i><span>' + anEsc(i) + '</span></div>').join('')
           : '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin señales de tendencia con los datos actuales.</p>';
 
+        // acciones sugeridas — cada acción cita el dato real que la produce
+        const prioMeta = { alta: { c: 'var(--danger)', t: 'PRIORIDAD' }, media: { c: 'var(--warning)', t: 'HOY' }, info: { c: 'var(--info)', t: 'NOTA' } };
+        const accBody = document.getElementById('an-acciones-body');
+        if (accBody) accBody.innerHTML = (st.accionesSugeridas && st.accionesSugeridas.length)
+          ? st.accionesSugeridas.map(a => {
+              const pm = prioMeta[a.prioridad] || prioMeta.info;
+              return '<div style="padding:10px 0;border-bottom:1px solid var(--gray-50);">'
+                + '<div style="display:flex;gap:8px;align-items:flex-start;"><span style="flex-shrink:0;font-size:10px;font-weight:800;color:' + pm.c + ';background:' + pm.c + '18;padding:2px 8px;border-radius:10px;margin-top:1px;">' + pm.t + '</span>'
+                + '<span style="font-size:13px;font-weight:600;color:var(--gray-800);">' + anEsc(a.accion) + '</span></div>'
+                + '<div style="font-size:11px;color:var(--gray-500);margin:3px 0 0 30px;">' + anEsc(a.evidencia) + '</div></div>';
+            }).join('')
+          : '<p style="color:var(--gray-400);font-size:13px;text-align:center;padding:20px;">Sin datos suficientes para sugerir acciones.</p>';
+
         // tabla artículos
         const rows = st.articulos || [];
         document.getElementById('an-articulos-body').innerHTML = rows.length
@@ -6497,7 +6514,8 @@ VERIFICACIÓN FINAL
 
         // últimos eventos
         ultimosEl.innerHTML = (st.ultimosEventos || []).map(ev => {
-          const time = new Date(ev.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const evDate = new Date(ev.timestamp);
+          const time = isNaN(evDate.getTime()) ? 'Hora no disponible' : evDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
           const icon = ev.source === 'facebook' ? 'fab fa-facebook' : ev.source === 'telegram' ? 'fab fa-telegram' : ev.source === 'google' ? 'fab fa-google' : ev.source === 'whatsapp' ? 'fab fa-whatsapp' : 'fas fa-globe';
           const color = AN_SOURCE_COLORS[ev.source] || 'var(--gray-400)';
           return '<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--gray-50);">'
@@ -7038,6 +7056,24 @@ VERIFICACIÓN FINAL
       guardarNoticia(new Event('submit'));
     };
 
+    // §13-14: aceptar la recomendación de título del Editor Jefe.
+    // Aplica el título sugerido al campo y RE-EVALÚA la nota completa —
+    // si el problema se resolvió, el hallazgo desaparece del veredicto
+    // y la decisión puede pasar a PUBLICAR (una recomendación aceptada
+    // no queda como bloqueo artificial).
+    window.aplicarTituloSugerido = function() {
+      const sugerido = window._ultimoMeni && window._ultimoMeni.tituloSugerido;
+      if (!sugerido) { showToast('No hay título sugerido disponible', 'warning'); return; }
+      const tituloInput = document.getElementById('titulo');
+      if (!tituloInput) { showToast('Campo de título no encontrado', 'error'); return; }
+      tituloInput.value = sugerido;
+      tituloInput.dispatchEvent(new Event('input', { bubbles: true }));
+      const contador = document.getElementById('contadorTitulo');
+      if (contador) contador.textContent = String(sugerido.length);
+      showToast('Título aplicado — re-analizando…', 'info');
+      ejecutarAnalisisForense();
+    };
+
     // Error persistente al publicar: distingue decisión editorial de fallo técnico.
     function mostrarErrorPublicacion(saveData, status) {
       const estado = document.getElementById('publicacionEstado');
@@ -7168,6 +7204,13 @@ VERIFICACIÓN FINAL
           if (h.location && h.location.cita) html += '<div style="font-size:11px;color:#94a3b8;margin-top:4px;">📍 ' + (h.location.parrafo ? 'Párrafo ' + h.location.parrafo + ' — ' : '') + '“' + h.location.cita + '”</div>';
           if (h.description && h.description !== h.title) html += '<div style="font-size:11px;color:#cbd5e1;margin-top:4px;">' + h.description + '</div>';
           if (h.howToFix) html += '<div style="font-size:11px;color:#86efac;margin-top:4px;">→ ' + h.howToFix + '</div>';
+          // §13-14: la recomendación de título del Editor Jefe es ACCIONABLE.
+          // Si existe título sugerido, el editor puede aceptarlo y la nota se
+          // re-analiza de inmediato — un hallazgo resuelto no queda como
+          // bloqueo artificial en el veredicto.
+          if (h.field === 'titulo' && meni.tituloSugerido) {
+            html += '<button type="button" onclick="aplicarTituloSugerido()" style="margin-top:8px;background:#2563eb;color:#fff;border:0;border-radius:6px;padding:6px 12px;font-size:11px;font-weight:700;cursor:pointer;"><i class="fas fa-check"></i> Usar título sugerido y re-analizar</button>';
+          }
           html += '</div>';
         });
         if ((ev.aciertos || []).length > 0) {

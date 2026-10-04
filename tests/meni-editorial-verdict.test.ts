@@ -457,3 +457,57 @@ describe('Integración guardarConMeni — cadena completa con Supervisor', () =>
     expect(update.editorVerdict.counts).toEqual(r.meni.editorialVerdict!.counts);
   });
 });
+
+// ─────────────────────────── §13-14 — Título: hallazgo visible + sugerencia accionable ──
+
+const CONTENIDO_OPERATIVO = [
+  'La Policía Nacional informó que ocupó 50 kilos de cocaína en un operativo realizado en Managua, según confirmó el comisionado Juan Pérez en conferencia de prensa realizada este martes.',
+  'El operativo se realizó en el barrio Villa Reconciliación de Managua y resultó en la captura de tres personas, quienes fueron presentadas a las autoridades competentes para el proceso judicial correspondiente.',
+  'Según las autoridades, la droga tenía un valor estimado de 1.5 millones de dólares en el mercado ilícito. La investigación continúa para determinar la procedencia del cargamento y sus posibles vínculos con redes internacionales.',
+  'El comisionado Pérez explicó que el operativo fue resultado de tres meses de investigación con apoyo de inteligencia policial. Las autoridades anunciaron que darán más detalles en los próximos días.',
+].join('\n\n');
+
+describe('M — anti-clickbait: el problema del título es un hallazgo visible y accionable', () => {
+  it('título clickbait → hallazgo WARNING con field=titulo, bloquea=false y sugerencia', () => {
+    const r = runMeni(inputBase(CONTENIDO_OPERATIVO, {
+      titulo: 'Lo que encontró la Policía en Managua sorprendió a todos',
+    }));
+    const h = (r.editorialVerdict?.hallazgos || []).find(x => x.code === 'ANTI_CLICKBAIT_TITULO');
+    expect(h).toBeDefined();
+    // Severidad honesta: el título clickbait es un defecto editorial real que
+    // exige revisión humana — no un bloqueo técnico ni una sugerencia trivial.
+    expect(h!.severity).toBe('WARNING');
+    expect(h!.field).toBe('titulo');
+    expect(h!.bloquea).toBe(false);
+    // Jamás puede ser BLOCKER: un título se corrige editándolo.
+    expect((r.editorialVerdict?.hallazgos || []).some(x => x.code === 'ANTI_CLICKBAIT_TITULO' && x.severity === 'BLOCKER')).toBe(false);
+    // La sugerencia del Editor Jefe llega al resultado para que el panel la ofrezca.
+    expect(r.tituloSugerido).toBeDefined();
+    expect(r.tituloSugerido!.length).toBeGreaterThan(10);
+  });
+
+  it('recomendación aceptada → re-evaluar → el hallazgo desaparece (no queda bloqueo artificial)', () => {
+    const bad = runMeni(inputBase(CONTENIDO_OPERATIVO, {
+      titulo: 'Lo que encontró la Policía en Managua sorprendió a todos',
+    }));
+    expect(bad.tituloSugerido).toBeDefined();
+    // El editor acepta la sugerencia y se RE-EVALÚA la nota completa:
+    const fixed = runMeni(inputBase(CONTENIDO_OPERATIVO, { titulo: bad.tituloSugerido! }));
+    expect((fixed.editorialVerdict?.hallazgos || []).some(x => x.code === 'ANTI_CLICKBAIT_TITULO')).toBe(false);
+    expect(fixed.tituloSugerido).toBeUndefined();
+    // Y la decisión del Editor Jefe ya no puede estar marcada por el título.
+    expect(fixed.editorialVerdict!.decision).not.toBe('BLOQUEAR');
+  });
+
+  it('título con advertencia media → RECOMMENDATION, nunca bloquea', () => {
+    // 'advertencia' (signals medias, p.ej. sin verbo informativo) → sugerencia, no revisión dura.
+    const r = runMeni(inputBase(CONTENIDO_OPERATIVO, {
+      titulo: 'Nueva situación en el país genera reacciones diversas entre la población nicaragüense',
+    }));
+    const h = (r.editorialVerdict?.hallazgos || []).find(x => x.code === 'ANTI_CLICKBAIT_TITULO');
+    if (h) {
+      expect(h.severity).toBe('RECOMMENDATION');
+      expect(h.bloquea).toBe(false);
+    }
+  });
+});
