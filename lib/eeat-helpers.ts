@@ -176,5 +176,7 @@ export function buildDek(contenido: string, maxChars = 220): string {
     if (cand.length <= maxChars) { dek = cand; if (dek.length >= 80) break; }
     else break;
   }
+  // Primera oración sola > límite → cierre honesto en cláusula/palabra + '…'
+  if (!dek && frases.length > 0) return extractoSeguro(frases[0], maxChars);
   return dek;
 }

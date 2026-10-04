@@ -38,7 +38,7 @@ function getAnalyticsSessionId(): string | undefined {
 }
 import { getArticleMetricsAction } from '@/app/actions/get-article-metrics';
 import KeyPoints from './KeyPoints';
-import { extractPuntosClave, buildDek, isTextoRotoPorCorte } from '@/lib/eeat-helpers';
+import { extractPuntosClave, buildDek, isTextoRotoPorCorte, extractoSeguro } from '@/lib/eeat-helpers';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
 import NewsletterSignup from './NewsletterSignup';
@@ -178,7 +178,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
   // Dek seguro: resumen válido se muestra tal cual; si quedó roto por un
   // corte a media palabra (pipeline antiguo) se regenera desde el contenido.
   const resumenVisible = isTextoRotoPorCorte(noticia.resumen || '')
-    ? (buildDek(noticia.contenido || '') || noticia.resumen)
+    ? (buildDek(noticia.contenido || '') || extractoSeguro(noticia.resumen || '') || noticia.resumen)
     : noticia.resumen;
 
   // Puntos clave: solo si hay datos reales y sustantivos (no duplican bajada/título)
