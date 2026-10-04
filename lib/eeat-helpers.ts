@@ -126,8 +126,9 @@ export function getAutorFoto(autor: string | undefined): string {
 export function isTextoRotoPorCorte(texto: string): boolean {
   const t = (texto || '').trim();
   if (!t) return false;
-  const m = t.match(/(\S+)\s*(?:\.\.\.|…)$/);
-  if (m && /^[a-záéíóúñ]{1,2}$/i.test(m[1])) return true;
+  // Elipsis tras palabra = corte del pipeline antiguo ("durant…", "Cost…").
+  // Solo es legítima si sigue a un cierre de oración completo (.!?).
+  if (/(?:\.\.\.|…)$/.test(t)) return !/[.!?]["”»)\]]?\s*(?:\.\.\.|…)$/.test(t);
   // termina en abreviatura que exige nombre propio: "Neurocirugía “Dr." es roto
   // ("etc." sí es un cierre válido y no entra en esta lista)
   if (/(Dr|Dra|Ing|Lic|Licda|Prof|Profa|Sr|Sra|Srta|Ud|Uds|Mtro|Mtra|St|Sto|Sta)\."?\s*$/i.test(t)) return true;

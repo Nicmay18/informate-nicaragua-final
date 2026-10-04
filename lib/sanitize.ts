@@ -46,6 +46,8 @@ export function cleanArticleBody(content: string | undefined | null): string {
   const marcadores = stripAICitationMarkers(content);
   if (!marcadores) return marcadores;
   return marcadores
+    // entidades de espacio → espacio real (permite normalizar " ,&nbsp;," etc.)
+    .replace(/&nbsp;|&#160;|&#x[aA]0;/gi, ' ')
     // "neurológicas ," → "neurológicas," (espacio antes de puntuación tras palabra)
     .replace(/([A-Za-zÁÉÍÓÚÑáéíóúñ0-9>"”»])[ \t\u00a0]+([,.;:!?])/g, '$1$2')
     // doble espacio horizontal → simple (no toca saltos de línea)

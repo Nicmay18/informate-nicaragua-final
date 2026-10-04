@@ -105,6 +105,12 @@ describe('Cortes lingüísticos — nunca a media palabra ni tras abreviatura', 
   it('H: isTextoRotoPorCorte detecta fragmentos y respeta completos', () => {
     expect(isTextoRotoPorCorte('tiene prevista su finalización para e...')).toBe(true);
     expect(isTextoRotoPorCorte('Neurocirugía “Dr.')).toBe(true);
+    // palabra truncada + elipsis — defecto real en producción (varias categorías)
+    expect(isTextoRotoPorCorte('y 5,600 niños y niñas atendidos durant…')).toBe(true);
+    expect(isTextoRotoPorCorte('en el Centro de Eventos Pedregal, en Heredia, Cost…')).toBe(true);
+    expect(isTextoRotoPorCorte('con la reapertura de clubes, dis…')).toBe(true);
+    // elipsis tras palabra sin cierre de oración = sospechosa → regenera dek completo
+    expect(isTextoRotoPorCorte('Los vecinos escucharon ruidos extraños…')).toBe(true);
     expect(isTextoRotoPorCorte('El proyecto avanza en Managua.')).toBe(false);
     expect(isTextoRotoPorCorte('El centro tiene 75 camas y cuatro quirófanos.')).toBe(false);
   });
