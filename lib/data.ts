@@ -773,10 +773,16 @@ const _cachedGetSitemapNews = unstable_cache(
           const data = d.data() as FirestoreNoticiaData;
           const docSlug = data.slug || d.id;
           if (isToxicSlug(docSlug)) return null;
+          // Alinear con _cachedGetBySlug: la página 404ea docs con titulo<=5,
+          // contenido<=20 o categoria raw vacía. El sitemap no descarga
+          // 'contenido' (egress); 'palabras' actúa como proxy cuando existe.
+          const tituloOk = normalizeEditorialTitle(capitalizeFirst(cleanArticleBody(data.titulo || '')));
+          if (tituloOk.trim().length <= 5 || !data.categoria?.trim()) return null;
+          if (typeof data.palabras === 'number' && data.palabras <= 3) return null;
           const noticia: Noticia = {
             id: d.id,
             slug: docSlug,
-            titulo: normalizeEditorialTitle(capitalizeFirst(cleanArticleBody(data.titulo || ''))),
+            titulo: tituloOk,
             resumen: cleanArticleBody(data.resumen || ''),
             contenido: cleanArticleBody(data.contenido),
             categoria: resolvePublicCategory({
