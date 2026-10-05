@@ -521,7 +521,6 @@
             <li class="nav-item"><a class="nav-link" href="/panel/centro-de-comando"><i class="fas fa-satellite-dish" style="color: var(--danger);"></i><span>Centro de Comando</span><span class="nav-badge" style="background: var(--danger); color: white;">NUEVO</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('nueva-tab', this)"><i class="fas fa-plus-circle"></i><span>Nueva Noticia</span><span class="nav-badge">Nuevo</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('noticias-tab', this)"><i class="fas fa-newspaper"></i><span>Noticias</span></a></li>
-            <li class="nav-item"><a class="nav-link" onclick="showTab('evaluador-tab', this)"><i class="fas fa-microscope"></i><span>Evaluador</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('calidad-tab', this)"><i class="fas fa-stethoscope"></i><span>Auditoría Maestra</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('correcciones-tab', this)"><i class="fas fa-tools" style="color: var(--danger);"></i><span>Correcciones</span><span class="nav-badge" style="background: var(--danger); color: white;">PELIGRO</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('nios-tab', this)"><i class="fas fa-network-wired" style="color: var(--warning);"></i><span>NIOS</span><span class="nav-badge" style="background: var(--warning); color: white;">NUEVO</span></a></li>
@@ -614,22 +613,7 @@
           </div>
         </div>
 
-        <!-- VEREDICTO PROFESIONAL: ¿Vale la pena continuar? -->
-        <div class="card" id="veredicto-card" style="margin-bottom: 32px; border-left: 4px solid var(--gray-300);">
-          <div class="card-header"><h3 class="card-title"><i class="fas fa-award" style="color: var(--primary-600);"></i>Veredicto del proyecto</h3><span id="veredicto-badge" style="font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;background:var(--gray-100);color:var(--gray-600);">Calculando…</span></div>
-          <div class="card-body">
-            <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-              <div style="text-align:center;min-width:120px;">
-                <div id="veredicto-score" style="font-size:48px;font-weight:800;line-height:1;color:var(--gray-900);">—</div>
-                <div style="font-size:12px;color:var(--gray-500);font-weight:600;margin-top:4px;">PUNTAJE / 100</div>
-              </div>
-              <div style="flex:1;min-width:240px;">
-                <p id="veredicto-mensaje" style="font-size:14px;color:var(--gray-700);line-height:1.6;margin:0 0 12px;">Analizando el estado de tu medio…</p>
-                <div id="veredicto-checklist" style="display:grid;gap:6px;font-size:13px;"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Veredicto del proyecto: suprimido porque es una heurística interna, no una autoridad editorial -->
 
         <div class="content-grid">
           <div class="card">
@@ -758,7 +742,7 @@
                 <textarea class="form-textarea" id="contenido" placeholder="Escribe el cuerpo completo de la noticia aquí... Usa H2 para subtítulos, blockquote para citas y listas para enumerar puntos clave." required oninput="actualizarContadorPalabras()" onpaste="formatearTextoPegado(event)"></textarea>
                 <div class="word-counter">
                   <span>Palabras: <span class="count ok" id="contadorPalabras">0</span></span>
-                  <span id="adsenseStatus" style="color: var(--success); font-weight: 600;"><i class="fas fa-check-circle"></i> Meta ORO: 350+ palabras</span>
+                  <span id="adsenseStatus" style="color: var(--success); font-weight: 600;"><i class="fas fa-check-circle"></i> Longitud recomendada: 350+ palabras</span>
                 </div>
               </div>
 
@@ -1156,8 +1140,8 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
         </div>
       </div>
 
-      <!-- EVALUADOR -->
-      <div id="evaluador-tab" class="tab-content">
+      <!-- EVALUADOR: autoridad removida del panel (MENI + Forense + Supervisor son la autoridad editorial) -->
+      <div id="evaluador-tab" class="tab-content" style="display:none !important;">
         <div class="page-header">
           <div class="page-title"><h1>Corrector IA</h1><p>Identifica errores, mejora SEO y corrige tu noticia antes de publicar.</p></div>
         </div>
@@ -1197,9 +1181,7 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
                   </div>
                   <div id="evalAccionesAutomaticas" style="margin-top: 16px; padding: 16px; background: #fffbeb; border: 2px solid #fcd34d; border-radius: var(--radius-md); display: none;">
                     <h4 style="font-size: 13px; font-weight: 700; color: #92400e; margin-bottom: 8px;"><i class="fas fa-magic" style="margin-right: 6px;"></i>Corrección Automática</h4>
-                    <p style="font-size: 12px; color: #78350f; margin-bottom: 12px;">Esta noticia está en <strong id="evalNivelActual">PLATA</strong>. Podemos corregir automáticamente lo posible y te indicamos qué editar manualmente.</p>
-                    <button class="btn btn-primary" id="btnCorregirAuto" onclick="corregirNoticiaEvaluador()" style="font-size: 13px;"><i class="fas fa-wand-magic-sparkles"></i> Corregir automáticamente</button>
-                    <div id="evalCorreccionResultado" style="margin-top: 12px; font-size: 12px; color: var(--gray-700);"></div>
+                    <p style="font-size: 12px; color: #78350f; margin-bottom: 12px;">Esta noticia está en <strong id="evalNivelActual">PLATA</strong>. Editá manualmente lo que MENI/Forense indique.</p>
                   </div>
                   <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: center; font-size: 13px; color: var(--gray-500);">
                     <div>CPM estimado: <strong id="evalCpm" style="color: var(--gray-900);">$1.10</strong></div>
@@ -1405,7 +1387,6 @@ sin texto ni marcas de agua, composición periodística"
             <div style="display: flex; flex-direction: column; gap: 10px;">
               <button class="btn btn-danger" onclick="cargarNoticiasPeligro()" style="justify-content: flex-start; text-align: left;"><i class="fas fa-sync-alt"></i><span>Recargar Lista de Peligro</span></button>
               <button class="btn btn-primary" style="background: #9333ea; border-color: #9333ea; justify-content: flex-start; text-align: left;" onclick="detectarDuplicados()" title="Detectar noticias duplicadas que dañan el SEO en Google"><i class="fas fa-clone"></i><span>Detectar Duplicados SEO</span></button>
-              <button class="btn btn-warning" style="background: #d97706; border-color: #d97706; justify-content: flex-start; text-align: left;" onclick="redistribuirAutores()" title="Mover 50% de noticias de Keyling a Maycol y José para balancear autoría"><i class="fas fa-users"></i><span>Redistribuir Autores</span></button>
               <button class="btn btn-primary" style="background: #2563eb; border-color: #2563eb; justify-content: flex-start; text-align: left;" onclick="reindexarGoogle()" title="Enviar todas las noticias a Google Indexing API para que las indexe de inmediato (max 200 por dia)"><i class="fab fa-google"></i><span>Reindexar en Google</span></button>
             </div>
           </div>
@@ -1418,8 +1399,6 @@ sin texto ni marcas de agua, composición periodística"
             <p style="color: var(--gray-500); font-size: 13px; margin-bottom: 14px;">Estas herramientas ya cumplieron su función. El sitio está en 100/100. Se mantienen disponibles por si las necesitás de nuevo.</p>
             <div style="display: flex; flex-direction: column; gap: 10px;">
               <button class="btn btn-secondary" onclick="revertirSensacionalismo()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Revertir títulos cambiados de 'fallecidos' a 'muertos' por error"><i class="fas fa-undo-alt"></i><span>Revertir 'muertos'→'fallecidos'</span></button>
-              <button class="btn btn-secondary" onclick="limpiarSucesos()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Eliminar noticias irreparables y mejorar el resto automáticamente"><i class="fas fa-broom"></i><span>Limpiar Sucesos</span></button>
-              <button class="btn btn-secondary" onclick="limpiarPalabrasSensibles()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Revisar todas las noticias y reemplazar palabras sensibles"><i class="fas fa-filter"></i><span>Limpiar Palabras Sensibles</span></button>
               <button class="btn btn-secondary" onclick="limpiarNoindex()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Quitar noindex de todas las noticias"><i class="fas fa-broom"></i><span>Limpiar Noindex</span></button>
               <button class="btn btn-secondary" onclick="exportarSucesos()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Exportar noticias de sucesos para reescritura"><i class="fas fa-file-export"></i><span>Exportar Sucesos</span></button>
               <button class="btn btn-secondary" onclick="eliminarNoticiasViejas()" style="justify-content: flex-start; text-align: left; opacity: 0.8;" title="Eliminar las 50 noticias más viejas"><i class="fas fa-trash-alt"></i><span>Eliminar 50 Noticias Viejas</span></button>
@@ -1645,17 +1624,8 @@ sin texto ni marcas de agua, composición periodística"
             <div class="card" style="margin-bottom: 20px; border-left: 3px solid var(--success);">
               <div class="card-header"><h3 class="card-title"><i class="fas fa-upload" style="color: var(--success);"></i>Publicar Noticias</h3></div>
               <div class="card-body">
-                <p style="color: var(--gray-500); font-size: 13px; margin-bottom: 14px;">Publica todas las noticias guardadas en borrador para que aparezcan en el sitio.</p>
-                <button class="btn btn-success" onclick="publicarTodasLasNoticias()" id="btnPublicarTodas" style="width: 100%; font-size: 13px;"><i class="fas fa-globe"></i><span>Publicar Todas las Noticias</span></button>
-                <div id="publicarTodasStatus" style="display: none; margin-top: 12px; padding: 10px; background: var(--success-light); border-radius: var(--radius-md); font-size: 12px;"></div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="card-header"><h3 class="card-title">Mantenimiento</h3></div>
-              <div class="card-body">
-                <p style="color: var(--gray-500); font-size: 13px; margin-bottom: 14px;">Reemplaza imágenes rotas de Facebook CDN por imágenes de respaldo.</p>
-                <button class="btn btn-danger" onclick="migrarImagenes()" id="btnMigrar" style="width: 100%; font-size: 13px;"><i class="fas fa-wrench"></i><span>Reparar Imágenes de Facebook</span></button>
-                <div id="migrarStatus" style="display: none; margin-top: 12px; padding: 10px; background: var(--primary-50); border-radius: var(--radius-md); font-size: 12px;"></div>
+                <p style="color: var(--gray-500); font-size: 13px; margin-bottom: 14px;">Publicá noticias desde la lista de noticias o el editor individual.</p>
+                <button class="btn btn-success" onclick="document.getElementById('noticias-tab').click();" id="btnPublicarTodas" style="width: 100%; font-size: 13px;"><i class="fas fa-globe"></i><span>Ir a Noticias</span></button>
               </div>
             </div>
           </div>
@@ -1708,7 +1678,7 @@ sin texto ni marcas de agua, composición periodística"
                   <button class="btn btn-primary" onclick="guardarConfiguracion()" style="flex: 1; font-size: 13px;"><i class="fas fa-save"></i><span>Guardar</span></button>
                   <button class="btn btn-secondary" onclick="cargarConfiguracion()" style="flex: 1; font-size: 13px;"><i class="fas fa-sync"></i><span>Recargar</span></button>
                 </div>
-                <div style="margin-top: 12px; padding: 10px; background: var(--info-light); border-radius: var(--radius-md); font-size: 11px; color: var(--gray-600);"><i class="fas fa-info-circle" style="color: var(--info);"></i> Los tokens se guardan en localStorage. No se transmiten a servidores externos.</div>
+                <div style="margin-top: 12px; padding: 10px; background: var(--info-light); border-radius: var(--radius-md); font-size: 11px; color: var(--gray-600);"><i class="fas fa-info-circle" style="color: var(--info);"></i> Las credenciales sensibles se guardan en sessionStorage (vida de pestaña) y se transmiten en headers a los endpoints de admin para las operaciones que las requieren. Para mayor seguridad configurá tokens en variables de entorno del servidor.</div>
               </div>
             </div>
             <div class="card">
@@ -1717,7 +1687,6 @@ sin texto ni marcas de agua, composición periodística"
                 <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
                   <div style="display: flex; justify-content: space-between;"><span style="color: var(--gray-500);">Versión</span><span style="font-weight: 600;">5.0.0 Enterprise</span></div>
                   <div style="display: flex; justify-content: space-between;"><span style="color: var(--gray-500);">Firebase</span><span style="font-weight: 600; color: var(--success);">● Conectado</span></div>
-                  <div style="display: flex; justify-content: space-between;"><span style="color: var(--gray-500);">Último backup</span><span style="font-weight: 600;">Hace 2 horas</span></div>
                 </div>
                 <button class="btn btn-primary" onclick="verSitio()" style="margin-top: 16px; width: 100%; font-size: 13px;"><i class="fas fa-external-link-alt"></i><span>Abrir Sitio Web</span></button>
               </div>
@@ -2462,8 +2431,8 @@ sin texto ni marcas de agua, composición periodística"
      * @returns Promise<string> Ruta local /images/filename
      */
     async function uploadImageToGitHub(blob, filename) {
-      const token = localStorage.getItem('admin_github_token') || '';
-      const owner = localStorage.getItem('admin_github_owner') || 'Nicmay18';
+      const token = sessionStorage.getItem('admin_github_token') || '';
+      const owner = sessionStorage.getItem('admin_github_owner') || 'Nicmay18';
       // Forzar repo de imagenes separado
       const repo = 'informate-images';
       const path = 'images/';
@@ -2478,7 +2447,7 @@ sin texto ni marcas de agua, composición periodística"
 
       // Sin token local: subir via endpoint del servidor (usa GITHUB_TOKEN de Vercel o config/admin)
       if (!token) {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/upload-image', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
@@ -2490,7 +2459,7 @@ sin texto ni marcas de agua, composición periodística"
       }
 
       const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}${filename}`;
-      const branch = localStorage.getItem('admin_github_branch') || 'main';
+      const branch = sessionStorage.getItem('admin_github_branch') || 'main';
 
       // Intentar PUT directamente (evita 404 de pre-check en consola)
       let res = await fetch(url, {
@@ -3271,10 +3240,10 @@ sin texto ni marcas de agua, composición periodística"
       
       const adsenseStatus = document.getElementById('adsenseStatus');
       if (palabrasReales >= 350) {
-        adsenseStatus.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Meta ORO cumplida (350+)';
+        adsenseStatus.innerHTML = '<i class="fas fa-check-circle"></i> ✓ Longitud recomendada alcanzada (350+)';
         adsenseStatus.style.color = 'var(--success)';
       } else if (palabrasReales >= 200) {
-        adsenseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> PLATA/BRONCE: 350+ para ORO';
+        adsenseStatus.innerHTML = '<i class="fas fa-exclamation-circle"></i> Aún no alcanza 350+ palabras';
         adsenseStatus.style.color = 'var(--warning)';
       } else {
         adsenseStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Muy corta: 200+ recomendado';
@@ -3407,7 +3376,7 @@ sin texto ni marcas de agua, composición periodística"
           // La sesión usa cookie HttpOnly (no exponer la clave al JS).
           // Marcador local para no repetir el fetch; los headers vacíos
           // son ignorados por el middleware, que valida la cookie.
-          localStorage.setItem('admin_api_key', data.token || 'session-cookie');
+          sessionStorage.setItem('admin_api_key', data.token || 'session-cookie');
           showToast('Autenticación admin activada automáticamente', 'success');
         } else if (res.status === 403) {
           showToast('Tu email (' + user.email + ') no está autorizado. Agregalo en ADMIN_EMAILS en Vercel.', 'error', 'Acceso denegado');
@@ -3427,7 +3396,7 @@ sin texto ni marcas de agua, composición periodística"
     function checkAdminAuthBanner() {
       const banner = document.getElementById('adminAuthBanner');
       if (!banner) return;
-      const hasKey = !!localStorage.getItem('admin_api_key');
+      const hasKey = !!sessionStorage.getItem('admin_api_key');
       banner.style.display = hasKey ? 'none' : 'flex';
     }
 
@@ -3494,7 +3463,7 @@ sin texto ni marcas de agua, composición periodística"
       }
       if (tabId === 'config-tab') cargarConfiguracion();
       if (tabId === 'agente-tab') cargarMetricasAgente();
-      if (tabId === 'evaluador-tab') cargarSelectEvaluador();
+      // Evaluador ORO/PLATA/BRONCE eliminado: la autoridad editorial es MENI + Forense + Supervisor
       if (tabId === 'calidad-tab') {
         if (typeof renderDashboardCalidad === 'function') renderDashboardCalidad();
       }
@@ -3515,7 +3484,7 @@ sin texto ni marcas de agua, composición periodística"
       const badge = document.getElementById('googleIntelBadge');
       const fecha = document.getElementById('googleIntelFecha');
       if (!body) return;
-      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
       const salt = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}`;
       try {
         const res = await fetch(`/api/admin/nios-intelligence?action=dashboard&_refresh=${salt}`, {
@@ -3599,10 +3568,10 @@ sin texto ni marcas de agua, composición periodística"
 
     async function getNoticiasCache() {
       if (_panelCache && Date.now() - _panelCacheTime < _PANEL_CACHE_TTL) return _panelCache;
-      let adminToken = localStorage.getItem('admin_api_key') || '';
+      let adminToken = sessionStorage.getItem('admin_api_key') || '';
       if (!adminToken) {
         await fetchAdminToken();
-        adminToken = localStorage.getItem('admin_api_key') || '';
+        adminToken = sessionStorage.getItem('admin_api_key') || '';
       }
       const resp = await fetch(adminNewsUrl(), {
         method: 'POST',
@@ -3613,7 +3582,7 @@ sin texto ni marcas de agua, composición periodística"
       if (resp.status === 401) {
         localStorage.removeItem('admin_api_key');
         await fetchAdminToken();
-        adminToken = localStorage.getItem('admin_api_key') || '';
+        adminToken = sessionStorage.getItem('admin_api_key') || '';
         const resp2 = await fetch(adminNewsUrl(), {
           method: 'POST',
           headers: { 'x-admin-token': adminToken },
@@ -3685,8 +3654,8 @@ sin texto ni marcas de agua, composición periodística"
 
         categorias.forEach(c => { const el = document.getElementById(`count${c.key}`); if (el) el.textContent = `${conteo[c.id] || 0} noticias`; });
 
-        // ─── VEREDICTO DEL PROYECTO ───
-        calcularVeredicto({ totalNoticias, totalVistas, promVistas, promedio, publicadasSemana, calidadOk, conImagen });
+        // ─── VEREDICTO DEL PROYECTO: SUPRIMIDO (heurística interna) ───
+        // calcularVeredicto({ totalNoticias, totalVistas, promVistas, promedio, publicadasSemana, calidadOk, conImagen });
 
       } catch (error) {
         console.error("Error estadísticas:", error);
@@ -3811,8 +3780,8 @@ sin texto ni marcas de agua, composición periodística"
 
     async function postToApi(endpoint, payload) {
       const config = {
-        telegram: { token: localStorage.getItem('admin_tg_token') || '', chatId: localStorage.getItem('admin_tg_chat') || '' },
-        facebook: { page1: { id: localStorage.getItem('admin_fb_page1_id') || '', token: localStorage.getItem('admin_fb_page1_token') || '' }, page2: { id: localStorage.getItem('admin_fb_page2_id') || '', token: localStorage.getItem('admin_fb_page2_token') || '' } }
+        telegram: { token: sessionStorage.getItem('admin_tg_token') || '', chatId: sessionStorage.getItem('admin_tg_chat') || '' },
+        facebook: { page1: { id: sessionStorage.getItem('admin_fb_page1_id') || '', token: sessionStorage.getItem('admin_fb_page1_token') || '' }, page2: { id: sessionStorage.getItem('admin_fb_page2_id') || '', token: sessionStorage.getItem('admin_fb_page2_token') || '' } }
       };
       payload.config = config;
       
@@ -3905,7 +3874,7 @@ sin texto ni marcas de agua, composición periodística"
       // 3) Consultar backend
       let serverInfo = null;
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         const resp = await fetch('/api/admin/analizar', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
@@ -4083,7 +4052,7 @@ sin texto ni marcas de agua, composición periodística"
             }
           }
           // Guardar via API con Admin SDK (ignora security rules)
-          const adminToken = localStorage.getItem('admin_api_key') || '';
+          const adminToken = sessionStorage.getItem('admin_api_key') || '';
           const payloadUpd = { id: noticiaId, ...noticiaData, fecha: noticiaData.fecha ? new Date().toISOString() : undefined, fechaActualizacion: new Date().toISOString(), publicado, editorOverride };
           let saveRes = await fetch('/api/admin/guardar-directo', {
             method: 'POST',
@@ -4111,7 +4080,7 @@ sin texto ni marcas de agua, composición periodística"
           acciones.push('✅ Noticia actualizada · Nivel ' + nivelInfo.nivel);
         } else {
           // Crear via API con Admin SDK
-          const adminToken = localStorage.getItem('admin_api_key') || '';
+          const adminToken = sessionStorage.getItem('admin_api_key') || '';
           const payloadNew = { ...noticiaData, fecha: new Date().toISOString(), fechaActualizacion: new Date().toISOString(), publicado, slug: slug || noticiaData.slug, editorOverride };
           let saveRes = await fetch('/api/admin/guardar-directo', {
             method: 'POST',
@@ -4257,7 +4226,7 @@ sin texto ni marcas de agua, composición periodística"
             document.getElementById('statusRedesTitulo').textContent = 'Distribuyendo...';
             document.getElementById('statusRedesTexto').textContent = 'Enviando a canales...';
             progressBar.style.width = '60%';
-            const adminToken = localStorage.getItem('admin_api_key') || '';
+            const adminToken = sessionStorage.getItem('admin_api_key') || '';
             const distRes = await fetch('/api/admin/distribuir', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
@@ -4289,12 +4258,9 @@ sin texto ni marcas de agua, composición periodística"
           }
         }
         limpiarFormulario();
-        if (window.recargarSelectEvaluador) {
-          await window.recargarSelectEvaluador(false);
-        }
         
         // Revalidar en Vercel para que los cambios se vean al instante (noticia nueva Y editada)
-        const revalidateToken = localStorage.getItem('admin_revalidate_secret') || '';
+        const revalidateToken = sessionStorage.getItem('admin_revalidate_secret') || '';
         const slugReal = document.getElementById('noticiaSlug').value || slug || noticiaId;
         try {
           const headers = { 'Content-Type': 'application/json' };
@@ -4598,7 +4564,7 @@ sin texto ni marcas de agua, composición periodística"
 
     window.eliminarNoticia = async function(id) {
       if (!confirm('¿Eliminar permanentemente?')) return;
-      const apiKey = localStorage.getItem('admin_api_key');
+      const apiKey = sessionStorage.getItem('admin_api_key');
       if (!apiKey) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
       showLoading(true, 'Eliminando...');
       try {
@@ -4624,7 +4590,7 @@ sin texto ni marcas de agua, composición periodística"
       try {
         const resp = await fetch('/api/admin/config', { method: 'POST', body: JSON.stringify({ action: 'read' }) });
         // No hay endpoint de ping, guardamos directo
-        localStorage.setItem('admin_api_key', key);
+        sessionStorage.setItem('admin_api_key', key);
         el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Guardada</span>';
         checkAdminAuthBanner();
       } catch (e) {
@@ -4912,7 +4878,7 @@ sin texto ni marcas de agua, composición periodística"
       const strongs = (nuevoContenido.match(/<strong>/gi) || []).length;
       if (strongs < 5) {
         try {
-          const adminToken = localStorage.getItem('admin_api_key') || '';
+          const adminToken = sessionStorage.getItem('admin_api_key') || '';
           const res = await fetch('/api/admin/enrich-strong', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
@@ -5084,7 +5050,6 @@ sin texto ni marcas de agua, composición periodística"
               ${cambiosHtml}
               <div style="margin-top:8px;border-top:1px solid var(--gray-100);padding-top:6px;">${puedeLlegar}</div>
               <div style="margin-top:8px;display:flex;gap:6px;">
-                <button class="btn btn-primary" style="font-size:11px;padding:4px 10px;" onclick="document.getElementById('evalSelectNoticia').value='${n.id}';cargarEvaluacion();document.getElementById('evalSelectNoticia').scrollIntoView({behavior:'smooth'});"><i class="fas fa-eye"></i> Ver en evaluador</button>
                 <button class="btn btn-secondary" style="font-size:11px;padding:4px 10px;" onclick="cargarNoticiaParaEditar('${n.id}')"><i class="fas fa-edit"></i> Editar</button>
               </div>
             </div>
@@ -5125,7 +5090,7 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById('subtituloFormulario').textContent = 'Redacción profesional optimizada para AdSense y SEO.';
       document.getElementById('btnGuardar').innerHTML = '<i class="fas fa-paper-plane"></i><span id="btnGuardarTexto">Publicar Noticia</span>';
       document.getElementById('btnCancelarEdicion').style.display = 'none';
-      document.getElementById('enviarTelegram').checked = !!(localStorage.getItem('admin_tg_token')); document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = true;
+      document.getElementById('enviarTelegram').checked = !!(sessionStorage.getItem('admin_tg_token')); document.getElementById('enviarFacebook').checked = false; document.getElementById('destacada').checked = false; document.getElementById('publicado').checked = true;
       window.__estadoAnterior = undefined;
       actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
       if (window.resetEvaluadorPanel) {
@@ -5290,7 +5255,7 @@ window.batchRestore = async function() {
     window.actualizarPaginaPrincipal = async function() {
       const btn = document.getElementById('btnRevalidate');
       const statusDiv = document.getElementById('revalidateStatus');
-      const token = localStorage.getItem('admin_api_key') || '';
+      const token = sessionStorage.getItem('admin_api_key') || '';
       if (!token) { statusDiv.style.display = 'block'; statusDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-exclamation-circle"></i> Configurá el Admin API Key en Configuración > APIs y Tokens</span>'; return; }
       btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando caché del sitio...';
       try {
@@ -5336,18 +5301,9 @@ window.batchRestore = async function() {
 
     window.verificarConexiones = async function() {
       const tgDiv = document.getElementById('statusTelegram'); const fbDiv = document.getElementById('statusFacebook');
-      
-      // Temporalmente desactivado hasta deploy en Vercel
-      tgDiv.className = 'status-indicator status-warning'; tgDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Pendiente deploy</span>';
-      fbDiv.className = 'status-indicator status-warning'; fbDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Pendiente deploy</span>';
-      
-      // Comentado temporalmente para evitar errores 404
-      /*
-      tgDiv.className = 'status-indicator status-checking'; tgDiv.innerHTML = '<i class="fas fa-circle" style="font-size:7px;"></i><span>Verificando...</span>';
-      fbDiv.className = 'status-indicator status-checking'; fbDiv.innerHTML = '<i class="fas fa-circle" style="font-size:7px;"></i><span>Verificando...</span>';
-      try { await postToApi('telegram', { noticia: { titulo: 'Test', categoria: 'Tecnología', resumen: 'Test', imagen: 'https://via.placeholder.com/400' } }); tgDiv.className = 'status-indicator status-online'; tgDiv.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado</span>'; } catch (e) { tgDiv.className = 'status-indicator status-offline'; tgDiv.innerHTML = '<i class="fas fa-times-circle"></i><span>Error</span>'; }
-      try { await postToApi('facebook', { noticia: { titulo: 'Test', categoria: 'Tecnología', resumen: 'Test', imagen: 'https://via.placeholder.com/400' } }); fbDiv.className = 'status-indicator status-online'; fbDiv.innerHTML = '<i class="fas fa-check-circle"></i><span>Conectado</span>'; } catch (e) { fbDiv.className = 'status-indicator status-offline'; fbDiv.innerHTML = '<i class="fas fa-times-circle"></i><span>Error</span>'; }
-      */
+      if (tgDiv) { tgDiv.className = 'status-indicator status-warning'; tgDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Verificación no disponible</span>'; }
+      if (fbDiv) { fbDiv.className = 'status-indicator status-warning'; fbDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Verificación no disponible</span>'; }
+      showToast('La verificación de conexiones sociales está desactivada. Revisá la configuración manualmente.', 'warning');
     };
 
     // ─── AGENTE DE CRECIMIENTO IA ───
@@ -5366,7 +5322,7 @@ window.batchRestore = async function() {
     window.cargarMetricasAgente = async function() {
       appendAgenteLog('Cargando métricas...', 'info');
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/metricas', { method: 'POST', headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
         const data = await res.json();
         if (!data.success) throw new Error(data.error);
@@ -5487,7 +5443,7 @@ window.batchRestore = async function() {
       if (!slug) return;
       appendAgenteLog(`Distribuyendo ${slug}...`, 'info');
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/distribuir', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
@@ -5540,30 +5496,30 @@ window.batchRestore = async function() {
           // Sin permisos o offline, seguimos con localStorage
         }
         
-        const githubToken = vercelConfig?.github?.token || data.github?.token || localStorage.getItem('admin_github_token') || '';
-        const githubOwner = vercelConfig?.github?.owner || data.github?.owner || localStorage.getItem('admin_github_owner') || 'Nicmay18';
-        const githubRepo = vercelConfig?.github?.repo || data.github?.repo || localStorage.getItem('admin_github_repo') || 'informate-images';
-        const githubPath = vercelConfig?.github?.path || data.github?.path || localStorage.getItem('admin_github_path') || 'images/';
-        const tgToken = vercelConfig?.telegram?.token || data.telegram?.token || localStorage.getItem('admin_tg_token') || '';
-        const tgChat = vercelConfig?.telegram?.chatId || data.telegram?.chatId || localStorage.getItem('admin_tg_chat') || '';
-        const revalidateToken = vercelConfig?.revalidate?.secret || data.revalidate?.secret || localStorage.getItem('admin_revalidate_token') || '';
-        const adminApiKey = localStorage.getItem('admin_api_key') || '';
+        const githubToken = vercelConfig?.github?.token || data.github?.token || sessionStorage.getItem('admin_github_token') || '';
+        const githubOwner = vercelConfig?.github?.owner || data.github?.owner || sessionStorage.getItem('admin_github_owner') || 'Nicmay18';
+        const githubRepo = vercelConfig?.github?.repo || data.github?.repo || sessionStorage.getItem('admin_github_repo') || 'informate-images';
+        const githubPath = vercelConfig?.github?.path || data.github?.path || sessionStorage.getItem('admin_github_path') || 'images/';
+        const tgToken = vercelConfig?.telegram?.token || data.telegram?.token || sessionStorage.getItem('admin_tg_token') || '';
+        const tgChat = vercelConfig?.telegram?.chatId || data.telegram?.chatId || sessionStorage.getItem('admin_tg_chat') || '';
+        const revalidateToken = vercelConfig?.revalidate?.secret || data.revalidate?.secret || sessionStorage.getItem('admin_revalidate_token') || '';
+        const adminApiKey = sessionStorage.getItem('admin_api_key') || '';
         
         // Guardar en localStorage para que las funciones existentes funcionen
-        localStorage.setItem('admin_api_key', adminApiKey);
-        localStorage.setItem('admin_github_token', githubToken);
-        localStorage.setItem('admin_github_owner', githubOwner);
-        localStorage.setItem('admin_github_repo', githubRepo);
-        localStorage.setItem('admin_github_path', githubPath);
-        localStorage.setItem('admin_tg_token', tgToken);
-        localStorage.setItem('admin_tg_chat', tgChat);
-        localStorage.setItem('admin_revalidate_token', revalidateToken);
+        sessionStorage.setItem('admin_api_key', adminApiKey);
+        sessionStorage.setItem('admin_github_token', githubToken);
+        sessionStorage.setItem('admin_github_owner', githubOwner);
+        sessionStorage.setItem('admin_github_repo', githubRepo);
+        sessionStorage.setItem('admin_github_path', githubPath);
+        sessionStorage.setItem('admin_tg_token', tgToken);
+        sessionStorage.setItem('admin_tg_chat', tgChat);
+        sessionStorage.setItem('admin_revalidate_token', revalidateToken);
         
         // Facebook config (se mantiene en localStorage por ahora)
-        const fbPage1Id = localStorage.getItem('admin_fb_page1_id') || '';
-        const fbPage1Token = localStorage.getItem('admin_fb_page1_token') || '';
-        const fbPage2Id = localStorage.getItem('admin_fb_page2_id') || '';
-        const fbPage2Token = localStorage.getItem('admin_fb_page2_token') || '';
+        const fbPage1Id = sessionStorage.getItem('admin_fb_page1_id') || '';
+        const fbPage1Token = sessionStorage.getItem('admin_fb_page1_token') || '';
+        const fbPage2Id = sessionStorage.getItem('admin_fb_page2_id') || '';
+        const fbPage2Token = sessionStorage.getItem('admin_fb_page2_token') || '';
         
         const adminApiKeyInput = document.getElementById('configAdminApiKey');
         const githubTokenInput = document.getElementById('configGithubToken');
@@ -5593,16 +5549,16 @@ window.batchRestore = async function() {
         
         // Mostrar indicadores de que la config vino de Vercel
         if (vercelConfig) {
-          if (githubToken) { const el = document.getElementById('statusGithub'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado (Vercel)</span>'; }
-          if (tgToken) { const el = document.getElementById('statusTelegramConfig'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado (Vercel)</span>'; }
-          if (revalidateToken) { const el = document.getElementById('statusVercel'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Conectado (Vercel)</span>'; }
+          if (githubToken) { const el = document.getElementById('statusGithub'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Configuración cargada</span>'; }
+          if (tgToken) { const el = document.getElementById('statusTelegramConfig'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Configuración cargada</span>'; }
+          if (revalidateToken) { const el = document.getElementById('statusVercel'); if (el) el.innerHTML = '<span style="color:#16a34a;"><i class="fas fa-check-circle"></i> Configuración cargada</span>'; }
         }
       } catch (err) {
         console.error('Error cargando configuración:', err);
         // Fallback a localStorage si falla todo
-        const githubToken = localStorage.getItem('admin_github_token') || '';
-        const tgToken = localStorage.getItem('admin_tg_token') || '';
-        const tgChat = localStorage.getItem('admin_tg_chat') || '';
+        const githubToken = sessionStorage.getItem('admin_github_token') || '';
+        const tgToken = sessionStorage.getItem('admin_tg_token') || '';
+        const tgChat = sessionStorage.getItem('admin_tg_chat') || '';
         const githubTokenInput = document.getElementById('configGithubToken');
         const tokenInput = document.getElementById('configTgToken');
         const chatInput = document.getElementById('configTgChat');
@@ -5616,14 +5572,14 @@ window.batchRestore = async function() {
       let githubToken = document.getElementById('configGithubToken').value.trim();
       // Evitar sobreescribir con máscaras
       if (githubToken === '••••••••••••' || githubToken.includes('•••')) {
-        githubToken = localStorage.getItem('admin_github_token') || '';
+        githubToken = sessionStorage.getItem('admin_github_token') || '';
       }
       const githubOwner = document.getElementById('configGithubOwner').value.trim() || 'Nicmay18';
       const githubRepo = 'informate-images';
       const githubPath = 'images/';
       let tgToken = document.getElementById('configTgToken').value.trim();
       if (tgToken === '••••••••••••' || tgToken.includes('•••')) {
-        tgToken = localStorage.getItem('admin_tg_token') || '';
+        tgToken = sessionStorage.getItem('admin_tg_token') || '';
       }
       const tgChat = document.getElementById('configTgChat').value.trim();
       
@@ -5633,9 +5589,9 @@ window.batchRestore = async function() {
       const fbPage2Id = document.getElementById('configFbPage2Id').value.trim();
       const fbPage2Token = document.getElementById('configFbPage2Token').value.trim();
       
-      let adminApiKey = (document.getElementById('configAdminApiKey')?.value || '').trim() || localStorage.getItem('admin_api_key') || '';
+      let adminApiKey = (document.getElementById('configAdminApiKey')?.value || '').trim() || sessionStorage.getItem('admin_api_key') || '';
       if (adminApiKey === '••••••••••••' || adminApiKey.includes('•••')) {
-        adminApiKey = localStorage.getItem('admin_api_key') || '';
+        adminApiKey = sessionStorage.getItem('admin_api_key') || '';
       }
       
       try {
@@ -5647,43 +5603,43 @@ window.batchRestore = async function() {
         }, { merge: true });
         
         // También guardar en localStorage como backup
-        localStorage.setItem('admin_github_token', githubToken);
-        localStorage.setItem('admin_github_owner', githubOwner);
-        localStorage.setItem('admin_github_repo', githubRepo);
-        localStorage.setItem('admin_github_path', githubPath);
-        localStorage.setItem('admin_tg_token', tgToken);
-        localStorage.setItem('admin_tg_chat', tgChat);
-        localStorage.setItem('admin_fb_page1_id', fbPage1Id);
-        localStorage.setItem('admin_fb_page1_token', fbPage1Token);
-        localStorage.setItem('admin_fb_page2_id', fbPage2Id);
-        localStorage.setItem('admin_fb_page2_token', fbPage2Token);
+        sessionStorage.setItem('admin_github_token', githubToken);
+        sessionStorage.setItem('admin_github_owner', githubOwner);
+        sessionStorage.setItem('admin_github_repo', githubRepo);
+        sessionStorage.setItem('admin_github_path', githubPath);
+        sessionStorage.setItem('admin_tg_token', tgToken);
+        sessionStorage.setItem('admin_tg_chat', tgChat);
+        sessionStorage.setItem('admin_fb_page1_id', fbPage1Id);
+        sessionStorage.setItem('admin_fb_page1_token', fbPage1Token);
+        sessionStorage.setItem('admin_fb_page2_id', fbPage2Id);
+        sessionStorage.setItem('admin_fb_page2_token', fbPage2Token);
         
         let revalidateToken = document.getElementById('configRevalidateToken').value.trim();
         if (revalidateToken === '••••••••••••' || revalidateToken.includes('•••')) {
-          revalidateToken = localStorage.getItem('admin_revalidate_token') || '';
+          revalidateToken = sessionStorage.getItem('admin_revalidate_token') || '';
         }
-        localStorage.setItem('admin_revalidate_token', revalidateToken);
-        localStorage.setItem('admin_api_key', adminApiKey);
+        sessionStorage.setItem('admin_revalidate_token', revalidateToken);
+        sessionStorage.setItem('admin_api_key', adminApiKey);
         
         showToast('Configuración guardada de forma permanente en Firebase Cloud', 'success');
       } catch (err) {
         console.error('Error guardando configuración:', err);
         // Fallback a localStorage si falla Firebase
-        localStorage.setItem('admin_github_token', githubToken);
-        localStorage.setItem('admin_github_owner', githubOwner);
-        localStorage.setItem('admin_github_repo', githubRepo);
-        localStorage.setItem('admin_github_path', githubPath);
-        localStorage.setItem('admin_tg_token', tgToken);
-        localStorage.setItem('admin_tg_chat', tgChat);
-        localStorage.setItem('admin_fb_page1_id', fbPage1Id);
-        localStorage.setItem('admin_fb_page1_token', fbPage1Token);
-        localStorage.setItem('admin_fb_page2_id', fbPage2Id);
-        localStorage.setItem('admin_fb_page2_token', fbPage2Token);
+        sessionStorage.setItem('admin_github_token', githubToken);
+        sessionStorage.setItem('admin_github_owner', githubOwner);
+        sessionStorage.setItem('admin_github_repo', githubRepo);
+        sessionStorage.setItem('admin_github_path', githubPath);
+        sessionStorage.setItem('admin_tg_token', tgToken);
+        sessionStorage.setItem('admin_tg_chat', tgChat);
+        sessionStorage.setItem('admin_fb_page1_id', fbPage1Id);
+        sessionStorage.setItem('admin_fb_page1_token', fbPage1Token);
+        sessionStorage.setItem('admin_fb_page2_id', fbPage2Id);
+        sessionStorage.setItem('admin_fb_page2_token', fbPage2Token);
         let revalidateTokenFallback = document.getElementById('configRevalidateToken').value.trim();
         if (revalidateTokenFallback === '••••••••••••' || revalidateTokenFallback.includes('•••')) {
-          revalidateTokenFallback = localStorage.getItem('admin_revalidate_token') || '';
+          revalidateTokenFallback = sessionStorage.getItem('admin_revalidate_token') || '';
         }
-        localStorage.setItem('admin_revalidate_token', revalidateTokenFallback);
+        sessionStorage.setItem('admin_revalidate_token', revalidateTokenFallback);
         showToast('Configuración guardada localmente en este navegador (backup)', 'warning');
       }
     };
@@ -5723,7 +5679,7 @@ window.batchRestore = async function() {
       el.textContent = 'Verificando...';
       el.style.color = '#8a8a9e';
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/verificar-telegram', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
@@ -5754,7 +5710,7 @@ window.batchRestore = async function() {
       el.style.color = '#8a8a9e';
       try {
         // 1. Verificar si hay key en localStorage
-        const localKey = localStorage.getItem('admin_api_key');
+        const localKey = sessionStorage.getItem('admin_api_key');
         const hasLocal = !!localKey;
 
         // 2. Ping al servidor para ver si tiene ADMIN_API_KEY
@@ -6433,7 +6389,7 @@ VERIFICACIÓN FINAL
     window.cargarTraficoRealTime = async function(silent) {
       const ultimosEl = document.getElementById('rt-ultimos-eventos');
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         const q = new URLSearchParams({ periodo: NI_AN.period });
         const f = document.getElementById('an-fuente').value;
         const c = document.getElementById('an-categoria').value;
@@ -6593,9 +6549,7 @@ VERIFICACIÓN FINAL
                 ${n.transiciones_ia > 0 ? ` • <span style="color: var(--warning);">${n.transiciones_ia} IA</span>` : ''}
               </div>
             </div>
-            <button class="btn btn-sm" onclick="corregirNoticiaIndividual('${n.id}')" style="background: var(--primary-600); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: normal;">
-              <i class="fas fa-wrench"></i> Corregir
-            </button>
+            <span style="font-size: 11px; color: var(--gray-500);">Revisá en el editor</span>
           </div>
         `).join('');
         
@@ -6829,7 +6783,7 @@ VERIFICACIÓN FINAL
       resultado.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gray-500);"><div class="spinner" style="width:28px;height:28px;margin:0 auto 12px;border-width:2px;"></div>Editor IA + MENI analizando en paralelo...</div>';
 
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         const bodyData = { titulo, contenido, resumen, categoria, imagen: imagenUrl, imagenDestacada: imagenUrl, slug: '', keywords, autor };
 
         // Lanzar ambos análisis en paralelo sobre el MISMO snapshot.
@@ -7697,7 +7651,7 @@ VERIFICACIÓN FINAL
     // ENRICH LINKS MASIVO (corrección automática de links internos)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarEnrichLinksMasivo = async function() {
-      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
       if (!adminToken) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
       if (!confirm('Esto agregará links internos a todas las noticias que no los tengan. ¿Continuar?')) return;
       showLoading(true, 'Agregando links internos...');
@@ -7722,7 +7676,7 @@ VERIFICACIÓN FINAL
     // ENRICH STRONG MASIVO (negritas automáticas)
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarEnrichStrongMasivo = async function() {
-      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
       if (!adminToken) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
       if (!confirm('Esto resaltará palabras clave con <strong> en todas las noticias con pocas negritas. ¿Continuar?')) return;
       showLoading(true, 'Agregando negritas...');
@@ -7747,7 +7701,7 @@ VERIFICACIÓN FINAL
     // EXPANDIR THIN CONTENT MASIVO
     // ═══════════════════════════════════════════════════════════════
     window.ejecutarExpandirThinContent = async function() {
-      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
       if (!adminToken) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
       if (!confirm('Esto usará Gemini para expandir artículos con <350 palabras. Puede tardar varios minutos. ¿Continuar?')) return;
       showLoading(true, 'Expandiendo thin content...');
@@ -7776,7 +7730,7 @@ VERIFICACIÓN FINAL
       panel.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400);"><div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;border-width:3px;"></div><p>Cargando metricas' + (force ? ' (forzado)...' : '...') + '</p></div>';
 
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         const url = '/api/admin/dashboard-calidad' + (force ? '?force=1' : '');
         const resp = await fetch(url, { method: 'POST', headers: { 'x-admin-token': adminToken } });
         const data = await resp.json();
@@ -7797,7 +7751,7 @@ VERIFICACIÓN FINAL
       resultado.innerHTML = '<div style="text-align:center;padding:20px;"><i class="fas fa-spinner fa-spin"></i> Analizando noticias de Sucesos...</div>';
 
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         if (!adminToken) { throw new Error('Token no configurado. Guardá tu Admin API Key en Configuración.'); }
         const res = await fetch('/api/admin/auditoria-completa', {
           method: 'POST',
@@ -7866,7 +7820,7 @@ VERIFICACIÓN FINAL
       if (!confirm('⚠️ Esto va a:\n1. ELIMINAR noticias de asesinatos/homicidios/cuerpos (irreparables)\n2. MEJORAR TODAS las demás con contexto, citas y recursos\n\n¿Continuar?')) return;
       showLoading(true, 'Limpiando noticias de sucesos...');
       try {
-        const secret = localStorage.getItem('admin_api_key') || '';
+        const secret = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/limpiar-sucesos?secret=' + encodeURIComponent(secret), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -7906,7 +7860,7 @@ VERIFICACIÓN FINAL
       if (!confirm('🔍 Esto va a revisar TODAS las noticias (incluyendo las ya mejoradas) y reemplazar palabras sensibles en título, contenido y resumen.\n\nNO elimina noticias.\nNO agrega contexto genérico.\nSolo limpia palabras.\n\n¿Continuar?')) return;
       showLoading(true, 'Revisando palabras sensibles en todas las noticias...');
       try {
-        const secret = localStorage.getItem('admin_api_key') || '';
+        const secret = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/limpiar-palabras-sensibles?secret=' + encodeURIComponent(secret), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -7939,7 +7893,7 @@ VERIFICACIÓN FINAL
     window.exportarSucesos = async function() {
       showLoading(true, 'Exportando noticias de sucesos...');
       try {
-        const secret = localStorage.getItem('admin_api_key') || '';
+        const secret = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/exportar-sucesos?secret=' + encodeURIComponent(secret), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -7972,7 +7926,7 @@ VERIFICACIÓN FINAL
       if (!confirm('👥 Esto va a mover 50% de las noticias de Keyling a Maycol y José para balancear la autoría.\n\n¿Continuar?')) return;
       showLoading(true, 'Redistribuyendo autores...');
       try {
-        const secret = localStorage.getItem('admin_api_key') || '';
+        const secret = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/redistribuir-autores?secret=' + encodeURIComponent(secret), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -8030,8 +7984,9 @@ VERIFICACIÓN FINAL
       }
       html += '</p></div>';
       html += '<div style="text-align:center;flex-shrink:0;">';
-      html += '<p style="margin:0 0 4px;font-size:12px;color:var(--gray-500);text-transform:uppercase;font-weight:600;">Score Maestro</p>';
-      html += '<p style="margin:0;font-size:42px;font-weight:800;color:' + st.color + ';">' + (data.scoreMaestro || data.scoreDominio) + '<span style="font-size:18px;color:var(--gray-400);">/100</span></p>';
+      html += '<p style="margin:0 0 4px;font-size:11px;color:var(--gray-500);text-transform:uppercase;font-weight:600;">Score interno (heurística)</p>';
+      html += '<p style="margin:0;font-size:18px;font-weight:700;color:' + st.color + ';">' + (data.scoreMaestro || data.scoreDominio) + '<span style="font-size:12px;color:var(--gray-400);">/100</span></p>';
+      html += '<p style="margin:4px 0 0;font-size:10px;color:var(--gray-400);">No reemplaza MENI/Forense</p>';
       html += '</div></div>';
 
       // ═══════════════════════════════════════════════════════════════
@@ -8051,7 +8006,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-link" style="margin-right:6px;color:#d97706;"></i>Links Internos</p>';
           html += '<p style="margin:0;font-size:12px;color:#92400e;">' + (data.linksInternos || 0) + '% con links. Meta: 100%.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichLinks" onclick="ejecutarEnrichLinksMasivo()" style="white-space:normal;flex-shrink:0;"><i class="fas fa-bolt"></i> Agregar links a TODO</button>';
+          html += '<span style="font-size:12px;color:var(--gray-500);">Revisá manualmente y agregá links donde aporten.</span>';
           html += '</div>';
         }
 
@@ -8060,7 +8015,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#78350f;"><i class="fas fa-bold" style="margin-right:6px;color:#d97706;"></i>Negritas (Strong)</p>';
           html += '<p style="margin:0;font-size:12px;color:#92400e;">Promedio: ' + (data.promedioStrong || 0) + '/15. Meta: 15+ por noticia.</p></div>';
-          html += '<button class="btn btn-primary" id="btnEnrichStrong" onclick="ejecutarEnrichStrongMasivo()" style="white-space:normal;flex-shrink:0;"><i class="fas fa-bold"></i> Agregar negritas a TODO</button>';
+          html += '<span style="font-size:12px;color:var(--gray-500);">Revisá manualmente y resaltá datos clave.</span>';
           html += '</div>';
         }
 
@@ -8070,7 +8025,7 @@ VERIFICACIÓN FINAL
           html += '<div style="flex:1;min-width:200px;">';
           html += '<p style="margin:0 0 4px;font-size:14px;font-weight:700;color:#7f1d1d;"><i class="fas fa-file-alt" style="margin-right:6px;color:#dc2626;"></i>Thin Content</p>';
           html += '<p style="margin:0;font-size:12px;color:#991b1b;">' + (data.thinContent?.count || 0) + ' artículos con &lt;350 palabras. Esto bloquea AdSense y penaliza SEO.</p></div>';
-          html += '<button class="btn btn-primary" id="btnExpandirThin" onclick="ejecutarExpandirThinContent()" style="white-space:normal;flex-shrink:0;background:#dc2626;border-color:#dc2626;"><i class="fas fa-expand"></i> Expandir Thin Content</button>';
+          html += '<span style="font-size:12px;color:var(--gray-500);">Ampliá el contenido manualmente con información verificable.</span>';
           html += '</div>';
           if (data.thinContent?.detalles && data.thinContent.detalles.length > 0) {
             html += '<div style="margin-top:8px;padding:8px 12px;background:#fff;border-radius:8px;font-size:12px;">';
@@ -8112,7 +8067,7 @@ VERIFICACIÓN FINAL
         // Barra de progreso hacia SALUDABLE (85)
         html += '<div style="background:white;border:1px solid var(--gray-200);border-radius:12px;padding:20px;margin-bottom:16px;">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
-        html += '<span style="font-size:13px;font-weight:700;color:var(--gray-700);"><i class="fas fa-bullseye" style="margin-right:6px;color:var(--primary-500);"></i>Camino a SALUDABLE (meta: 85)</span>';
+        html += '<span style="font-size:13px;font-weight:700;color:var(--gray-700);"><i class="fas fa-bullseye" style="margin-right:6px;color:var(--primary-500);"></i>Métrica interna — distancia a SALUDABLE (meta: 85)</span>';
         html += '<span style="font-size:12px;font-weight:600;color:' + (falta <= 5 ? '#16a34a' : '#d97706') + ';">' + (falta === 0 ? '¡Llegaste!' : 'Faltan ~' + falta + ' puntos') + '</span></div>';
         html += '<div style="height:14px;background:var(--gray-100);border-radius:7px;overflow:hidden;">';
         html += '<div style="width:' + Math.min(100, (score/85)*100) + '%;height:100%;background:linear-gradient(90deg,' + st.color + ',#16a34a);border-radius:7px;transition:width 0.8s ease;"></div></div>';
@@ -8348,12 +8303,12 @@ VERIFICACIÓN FINAL
 
     // ─── REESCRIBIR NOTICIAS DE SUCESOS CON IA ───
     window.rescribirSucesosMasivo = async function() {
-      const geminiKey = localStorage.getItem('gemini_api_key') || prompt('Ingresá tu Gemini API Key (de AI Studio):');
+      const geminiKey = sessionStorage.getItem('gemini_api_key') || prompt('Ingresá tu Gemini API Key (de AI Studio):');
       if (!geminiKey) { showToast('Necesitás una API key de Gemini', 'warning'); return; }
       if (!confirm('⚠️ ¿Reescribir noticias de SUCESOS con IA? Esto usa tu cuota de Gemini (5 noticias por vez).')) return;
       showLoading(true, 'Reescribiendo noticias de sucesos con IA...');
       try {
-        const secret = localStorage.getItem('admin_api_key') || '';
+        const secret = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/rescribir-sucesos?secret=' + encodeURIComponent(secret), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -8404,7 +8359,7 @@ VERIFICACIÓN FINAL
       if (!confirm('⚠️ ¿Eliminar las 50 noticias más viejas de Firestore? Esta acción NO se puede deshacer.')) return;
       showLoading(true, 'Eliminando noticias viejas...');
       try {
-        const secret = localStorage.getItem('admin_api_key') || '';
+        const secret = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/eliminar-viejas?secret=' + encodeURIComponent(secret), { method: 'POST' });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error desconocido');
@@ -8545,7 +8500,7 @@ VERIFICACIÓN FINAL
 
     window.eliminarDuplicado = async function(id, btn) {
       if (!confirm('¿Borrar esta noticia duplicada? Esta acción NO se puede deshacer.\n\nSe recomienda conservar siempre la noticia marcada en verde (más vistas).')) return;
-      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
       if (!adminToken) { showToast('Falta la API Key de admin en Configuración', 'error'); return; }
       const fila = btn.closest('div[style*="display:flex"]');
       btn.disabled = true;
@@ -8562,7 +8517,7 @@ VERIFICACIÓN FINAL
         btn.outerHTML = '<span style="color:#16a34a; font-size:11px; font-weight:700;"><i class="fas fa-check"></i> Borrado</span>';
         invalidatePanelCache();
         // Revalidar caché del sitio para que Google no siga viendo la URL
-        const revToken = localStorage.getItem('admin_revalidate_secret') || '';
+        const revToken = sessionStorage.getItem('admin_revalidate_secret') || '';
         fetch('/api/revalidate', {
           method: 'POST',
           headers: revToken ? { 'Content-Type': 'application/json', 'x-revalidate-secret': revToken } : { 'Content-Type': 'application/json' },
@@ -8579,7 +8534,7 @@ VERIFICACIÓN FINAL
       if (!confirm('¿Quitar el flag "noindex" de TODAS las noticias?\n\nEsto permite que Google indexe todas las URLs. Las noticias que tienen noindex=true actualmente NO aparecen en Google.')) return;
       showLoading(true, 'Limpiando flags noindex...');
       try {
-        const adminToken = localStorage.getItem('admin_api_key') || '';
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
         if (!adminToken) { showToast('Falta la API Key de admin en Configuración', 'error'); return; }
         const res = await fetch('/api/admin/limpiar-noindex', {
           method: 'POST',
@@ -8612,7 +8567,7 @@ VERIFICACIÓN FINAL
       if (!confirm('⚠️ Enviar TODAS las noticias a Google para re-indexación?\nGoogle tiene límite de 200 URLs por día.\nLas nuevas noticias ya se envían automáticamente.')) return;
       showLoading(true, 'Enviando noticias a Google...');
       try {
-        const secret = localStorage.getItem('admin_api_key') || '';
+        const secret = sessionStorage.getItem('admin_api_key') || '';
         const res = await fetch('/api/admin/reindexar-google?secret=' + encodeURIComponent(secret), { method: 'POST' });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error desconocido');
@@ -9049,6 +9004,31 @@ VERIFICACIÓN FINAL
       btn +
     '</div>';
   }
+  // ═══════════════════════════════════════════════════════════════
+  // DESHABILITACIÓN DE AUTOMATIZACIONES EDITORIALES PELIGROSAS
+  // (FASE 1 — cirugía controlada del panel)
+  // ═══════════════════════════════════════════════════════════════
+  const funcionesDeshabilitadasFase1 = {
+    corregirNoticiaEvaluador: 'Corrección automática deshabilitada. Editá manualmente según MENI/Forense.',
+    corregirNoticiaIndividual: 'Corrección automática deshabilitada. Editá manualmente según MENI/Forense.',
+    aplicarCorreccion: 'Corrección automática deshabilitada. No se permite fabricar atribuciones.',
+    autoRestore: 'Restauración automática deshabilitada.',
+    batchRestore: 'Restauración automática deshabilitada.',
+    limpiarSEOmasivo: 'Limpieza SEO masiva deshabilitada.',
+    migrarImagenes: 'Migración automática de imágenes deshabilitada.',
+    publicarTodasLasNoticias: 'Publicación masiva deshabilitada. Publicá noticias individualmente.',
+    corregirTitulosMasivoPanel: 'Corrección masiva de títulos deshabilitada.',
+    redistribuirAutores: 'Redistribución automática de autores deshabilitada.',
+    limpiarSucesos: 'Limpieza automática de sucesos deshabilitada.',
+    limpiarPalabrasSensibles: 'Limpieza automática de palabras deshabilitada.',
+    ejecutarEnrichLinksMasivo: 'Inserción automática de links deshabilitada.',
+    ejecutarEnrichStrongMasivo: 'Inserción automática de negritas deshabilitada.',
+    ejecutarExpandirThinContent: 'Expansión automática de contenido deshabilitada.'
+  };
+  Object.keys(funcionesDeshabilitadasFase1).forEach(function(nombre) {
+    window[nombre] = function() { showToast(funcionesDeshabilitadasFase1[nombre], 'warning'); };
+  });
+
 })();
 </script>
 <script>
@@ -9066,7 +9046,7 @@ VERIFICACIÓN FINAL
     if (status) { status.textContent = 'MENI está analizando la fuente y redactando en modo periodista...'; status.style.color = '#92400e'; }
 
     try {
-      const adminToken = localStorage.getItem('admin_api_key') || '';
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
       const res = await fetch('/api/admin/meni/generar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
