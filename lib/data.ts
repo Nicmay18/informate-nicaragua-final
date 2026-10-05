@@ -762,8 +762,9 @@ const _cachedGetSitemapNews = unstable_cache(
           'imagen',
           'imagenRedes',
           'resumen',
-          // 'contenido' excluido a propósito: el sitemap solo necesita metadatos;
-          // descargarlo multiplicaba la transferencia saliente de Firestore.
+          // 'contenido' se incluye: el guard de página exige contenido>20 chars
+          // y el sitemap NO puede listar URLs que la página 404ea (SEO).
+          'contenido',
         ],
         MAX_SITEMAP_LIMIT
       );
@@ -773,18 +774,18 @@ const _cachedGetSitemapNews = unstable_cache(
           const data = d.data() as FirestoreNoticiaData;
           const docSlug = data.slug || d.id;
           if (isToxicSlug(docSlug)) return null;
-          // Alinear con _cachedGetBySlug: la página 404ea docs con titulo<=5,
-          // contenido<=20 o categoria raw vacía. El sitemap no descarga
-          // 'contenido' (egress); 'palabras' actúa como proxy cuando existe.
+          // Guard idéntico a _cachedGetBySlug: cualquier doc que la página
+          // 404ea (titulo<=5, contenido<=20, categoria vacía) tampoco va al
+          // sitemap — un sitemap con 404s degrada crawl/indexación.
           const tituloOk = normalizeEditorialTitle(capitalizeFirst(cleanArticleBody(data.titulo || '')));
-          if (tituloOk.trim().length <= 5 || !data.categoria?.trim()) return null;
-          if (typeof data.palabras === 'number' && data.palabras <= 3) return null;
+          const contenidoOk = cleanArticleBody(data.contenido);
+          if (tituloOk.trim().length <= 5 || contenidoOk.trim().length <= 20 || !data.categoria?.trim()) return null;
           const noticia: Noticia = {
             id: d.id,
             slug: docSlug,
             titulo: tituloOk,
             resumen: cleanArticleBody(data.resumen || ''),
-            contenido: cleanArticleBody(data.contenido),
+            contenido: contenidoOk,
             categoria: resolvePublicCategory({
               perfil: data.perfil,
               categoria: data.categoria,
