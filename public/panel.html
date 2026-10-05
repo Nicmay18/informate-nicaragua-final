@@ -565,13 +565,18 @@
       <!-- DASHBOARD -->
       <div id="dashboard-tab" class="tab-content active">
         <div class="page-header">
-          <div class="page-title"><h1>Dashboard Editorial</h1><p>Resumen de la redacción y métricas de audiencia.</p></div>
+          <div class='page-title'><h1>Nicaragua Informate hoy</h1><p>Salud, rendimiento y oportunidades del medio.</p></div>
           <div class="header-actions">
-            <button class="btn btn-primary" onclick="showTab('nueva-tab', document.querySelectorAll('.nav-link')[1])"><i class="fas fa-plus"></i><span>Crear Noticia</span></button>
+            <button class='btn btn-primary' onclick='showTab(&#39;nueva-tab&#39;, null)'><i class='fas fa-plus'></i><span>Crear Noticia</span></button>
           </div>
         </div>
 
-        <div class="categories-grid">
+        <div class='card' id='saludSitioCard' style='margin-bottom:24px;'>
+          <div class='card-header'><h3 class='card-title'><i class='fas fa-heartbeat' style='color:var(--success);'></i>Salud del sitio</h3></div>
+          <div class='card-body'><div id='saludSitioBody' style='font-size:13px;color:var(--gray-600);'>Cargando salud...</div></div>
+        </div>
+
+        <div class='categories-grid' style='display:none;'>
           <div class="category-card sucesos" onclick="filtrarPorCategoria('Sucesos')"><div class="category-icon"><i class="fas fa-exclamation-triangle"></i></div><div class="category-info"><h4>Sucesos</h4><span id="countSucesos">0 noticias</span></div></div>
           <div class="category-card nacionales" onclick="filtrarPorCategoria('Nacionales')"><div class="category-icon"><i class="fas fa-flag"></i></div><div class="category-info"><h4>Nacionales</h4><span id="countNacionales">0 noticias</span></div></div>
           <div class="category-card espectaculos" onclick="filtrarPorCategoria('Espectáculos')"><div class="category-icon"><i class="fas fa-star"></i></div><div class="category-info"><h4>Espectáculos</h4><span id="countEspectaculos">0 noticias</span></div></div>
@@ -580,7 +585,8 @@
           <div class="category-card internacionales" onclick="filtrarPorCategoria('Internacionales')"><div class="category-icon"><i class="fas fa-globe-americas"></i></div><div class="category-info"><h4>Internacionales</h4><span id="countInternacionales">0 noticias</span></div></div>
         </div>
 
-        <div class="stats-grid">
+        <h2 style='font-size:16px;font-weight:700;color:var(--gray-800);margin:0 0 16px;text-transform:uppercase;letter-spacing:0.5px;'>Rendimiento del medio</h2>
+        <div class='stats-grid'>
           <div class="stat-card">
             <div class="stat-header"><div><div class="stat-value" id="statNoticias">0</div><div class="stat-label">Noticias Publicadas</div></div><div class="stat-icon green"><i class="fas fa-newspaper"></i></div></div>
             <div class="stat-change" id="statNoticiasChange"><i class="fas fa-database"></i><span>Total en base de datos</span></div>
@@ -593,9 +599,9 @@
             <div class="stat-header"><div><div class="stat-value" id="statSemana">0</div><div class="stat-label">Publicadas esta semana</div></div><div class="stat-icon orange"><i class="fas fa-calendar-week"></i></div></div>
             <div class="stat-change" id="statSemanaChange"><i class="fas fa-clock"></i><span>Ritmo de publicación</span></div>
           </div>
-          <div class="stat-card">
-            <div class="stat-header"><div><div class="stat-value" id="statPromedio">0</div><div class="stat-label">Palabras Promedio</div></div><div class="stat-icon red"><i class="fas fa-font"></i></div></div>
-            <div class="stat-change" id="statPromedioChange"><i class="fas fa-check"></i><span>Meta AdSense: 350+</span></div>
+          <div class='stat-card'>
+            <div class='stat-header'><div><div class='stat-value' id='statPendientes'>0</div><div class='stat-label'>Contenido pendiente</div></div><div class='stat-icon red'><i class='fas fa-clock'></i></div></div>
+            <div class='stat-change' id='statPendientesChange'><i class='fas fa-edit'></i><span>No publicado aún</span></div>
           </div>
         </div>
 
@@ -613,9 +619,36 @@
           </div>
         </div>
 
+        <!-- TRÁFICO EN VIVO -->
+        <div class='card' id='liveTrafficCard' style='margin-bottom:24px;'>
+          <div class='card-header'><h3 class='card-title'><i class='fas fa-broadcast-tower' style='color:var(--danger);'></i>Tráfico en vivo</h3></div>
+          <div class='card-body'><div id='liveTrafficBody' style='font-size:13px;color:var(--gray-600);'>Cargando...</div></div>
+        </div>
+
+        <!-- OPORTUNIDADES -->
+        <div class='card' id='oportunidadesCard' style='margin-bottom:24px;'>
+          <div class='card-header'><h3 class='card-title'><i class='fas fa-lightbulb' style='color:var(--warning);'></i>Oportunidades</h3></div>
+          <div class='card-body'><div id='oportunidadesBody' style='font-size:13px;color:var(--gray-600);'>Cargando...</div></div>
+        </div>
+
+        <!-- ALERTAS -->
+        <div class='card' id='alertasCard' style='margin-bottom:24px;'>
+          <div class='card-header'><h3 class='card-title'><i class='fas fa-bell' style='color:var(--danger);'></i>Alertas</h3></div>
+          <div class='card-body'><div id='alertasBody' style='font-size:13px;color:var(--gray-600);'>Cargando...</div></div>
+        </div>
+
+        <!-- DIAGNÓSTICO TÉCNICO -->
+        <div class='card' id='diagnosticoCard' style='margin-bottom:24px;'>
+          <div class='card-header'><h3 class='card-title'><i class='fas fa-stethoscope' style='color:var(--gray-500);'></i>Diagnóstico técnico</h3></div>
+          <div class='card-body'>
+            <p style='font-size:13px;color:var(--gray-600);margin-bottom:12px;'>NIOS, agentes, heartbeats, colas y estados internos están disponibles en su área correspondiente.</p>
+            <button class='btn btn-secondary' onclick='showTab(&#39;nios-tab&#39;, null)'><i class='fas fa-network-wired'></i><span>Ver diagnóstico técnico</span></button>
+          </div>
+        </div>
+
         <!-- Veredicto del proyecto: suprimido porque es una heurística interna, no una autoridad editorial -->
 
-        <div class="content-grid">
+        <div class='content-grid' style='display:none;'>
           <div class="card">
             <div class="card-header"><h3 class="card-title"><i class="fas fa-bolt" style="color: var(--warning);"></i>Acceso Rápido</h3></div>
             <div class="card-body">
@@ -3456,7 +3489,7 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById(tabId).classList.add('active');
       if (navElement) navElement.classList.add('active');
       if (tabId === 'noticias-tab') { invalidatePanelCache(); cargarNoticias(window.categoriaActiva || 'todas'); }
-      if (tabId === 'dashboard-tab') { cargarEstadisticas(); cargarGoogleIntel(); }
+      if (tabId === 'dashboard-tab') { cargarEstadisticas(); cargarGoogleIntel(); cargarDashboardVivo(); }
       if (tabId === 'categorias-tab') cargarResumenCategorias();
       if (tabId === 'analytics-tab') {
         cargarTraficoRealTime();
@@ -3533,17 +3566,86 @@ sin texto ni marcas de agua, composición periodística"
         body.innerHTML = gscHtml + ga4Html;
         const collect = (g && g.collectedAt) || (a && a.collectedAt) || '';
         fecha.textContent = `Snapshot NIOS: ${data.date || '—'}${collect ? ' · recolectado ' + new Date(collect).toLocaleString('es-NI') : ''}`;
+
+        // Alertas de Google
+        const alertasEl = document.getElementById('alertasBody');
+        if (alertasEl) {
+          if (gscReal && ga4Real) {
+            alertasEl.innerHTML = '<div style="display:flex;align-items:center;gap:8px;color:var(--success);"><i class="fas fa-check-circle"></i><span>Sin alertas críticas</span></div>';
+          } else {
+            const msg = [];
+            if (!gscReal) msg.push('GSC: ' + gscStatus);
+            if (!ga4Real) msg.push('GA4: ' + ga4Status);
+            alertasEl.innerHTML = '<div style="display:flex;align-items:center;gap:8px;color:var(--warning);"><i class="fas fa-exclamation-circle"></i><span>Google no conectado (' + msg.join(' · ') + '). Verificá integración en Configuración.</span></div>';
+          }
+        }
       } catch (err) {
         badge.textContent = 'NIOS sin respuesta';
         badge.style.background = 'rgba(220,38,38,0.1)';
         badge.style.color = '#dc2626';
         body.innerHTML = `<div style="font-size:13px;color:var(--gray-600);">No se pudo consultar /api/admin/nios-intelligence: ${err.message}</div>`;
+        const alertasEl = document.getElementById('alertasBody');
+        if (alertasEl) alertasEl.innerHTML = '<div style="display:flex;align-items:center;gap:8px;color:var(--danger);"><i class="fas fa-times-circle"></i><span>No se pudo consultar Google/NIOS: ' + (err.message || 'error desconocido') + '</span></div>';
       }
     }
     window.cargarGoogleIntel = cargarGoogleIntel;
 
+    async function cargarDashboardVivo() {
+      const liveEl = document.getElementById('liveTrafficBody');
+      const oporEl = document.getElementById('oportunidadesBody');
+      if (liveEl) liveEl.innerHTML = '<div style="font-size:13px;color:var(--gray-500);">Consultando tráfico en vivo...</div>';
+      if (oporEl) oporEl.innerHTML = '<div style="font-size:13px;color:var(--gray-500);">Consultando oportunidades...</div>';
+      try {
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
+        const salt = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}`;
+        const res = await fetch('/api/admin/traffic?periodo=24h&_refresh=' + salt, { method: 'POST', cache: 'no-store', headers: { 'x-admin-token': adminToken } });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'Error desconocido');
+        const st = data.stats;
+
+        // Tráfico en vivo
+        if (liveEl) {
+          const rt = st.realtime || {};
+          const eventos = rt.events != null ? Number(rt.events).toLocaleString('es-NI') : 'sin datos';
+          const sesiones = rt.distinctSessions != null ? Number(rt.distinctSessions).toLocaleString('es-NI') : 'sin datos';
+          const articulos = rt.distinctSlugs != null ? Number(rt.distinctSlugs).toLocaleString('es-NI') : 'sin datos';
+          const fuentes = Object.entries(st.sourcesPeriod || st.fuentes || {})
+            .sort((a, b) => (b[1] || 0) - (a[1] || 0))
+            .slice(0, 3)
+            .map(([k, v]) => `${k}: ${Number(v).toLocaleString('es-NI')}`)
+            .join(' · ') || 'sin datos';
+          const top = (st.topPaginas || []).slice(0, 3).map(a => `<li style='margin:4px 0;'><a href='/${a.slug}' target='_blank' style='color:var(--primary-600);text-decoration:none;'>${a.titulo || a.slug}</a> <span style='color:var(--gray-400);'>(${Number(a.vistas).toLocaleString('es-NI')})</span></li>`).join('') || '<li style="color:var(--gray-400);">Sin artículos activos</li>';
+          liveEl.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:12px;">'
+            + '<div style="background:var(--gray-50);border-radius:8px;padding:12px;"><div style="font-size:11px;color:var(--gray-500);text-transform:uppercase;">Eventos 24h</div><div style="font-size:22px;font-weight:800;color:var(--gray-800);">' + eventos + '</div></div>'
+            + '<div style="background:var(--gray-50);border-radius:8px;padding:12px;"><div style="font-size:11px;color:var(--gray-500);text-transform:uppercase;">Sesiones</div><div style="font-size:22px;font-weight:800;color:var(--gray-800);">' + sesiones + '</div></div>'
+            + '<div style="background:var(--gray-50);border-radius:8px;padding:12px;"><div style="font-size:11px;color:var(--gray-500);text-transform:uppercase;">Artículos activos</div><div style="font-size:22px;font-weight:800;color:var(--gray-800);">' + articulos + '</div></div>'
+            + '</div>'
+            + '<div style="font-size:12px;color:var(--gray-600);margin-bottom:10px;"><strong>Principales fuentes:</strong> ' + fuentes + '</div>'
+            + '<div style="font-size:12px;color:var(--gray-600);"><strong>Artículos activos:</strong><ul style="margin:6px 0 0;padding-left:18px;">' + top + '</ul></div>';
+        }
+
+        // Oportunidades (máximo 5 acciones sugeridas)
+        if (oporEl) {
+          const acciones = (st.accionesSugeridas || []).slice(0, 5);
+          if (acciones.length === 0) {
+            oporEl.innerHTML = '<p style="color:var(--gray-400);font-size:13px;margin:0;">No hay oportunidades prioritarias con los datos actuales.</p>';
+          } else {
+            oporEl.innerHTML = '<ul style="margin:0;padding-left:18px;">' + acciones.map(a => {
+              const color = a.prioridad === 'alta' ? 'var(--danger)' : (a.prioridad === 'media' ? 'var(--warning)' : 'var(--info)');
+              return '<li style="margin:6px 0;font-size:13px;color:var(--gray-700);"><i class="fas fa-circle" style="font-size:6px;color:' + color + ';margin-right:8px;vertical-align:middle;"></i>' + a.texto + '</li>';
+            }).join('') + '</ul>';
+          }
+        }
+      } catch (err) {
+        if (liveEl) liveEl.innerHTML = '<div style="font-size:13px;color:var(--gray-600);">No se pudo consultar tráfico en vivo: ' + (err.message || 'error desconocido') + '</div>';
+        if (oporEl) oporEl.innerHTML = '<div style="font-size:13px;color:var(--gray-600);">No se pudieron cargar oportunidades.</div>';
+      }
+    }
+    window.cargarDashboardVivo = cargarDashboardVivo;
+
     async function cargarDatosIniciales() {
-      await Promise.all([cargarEstadisticas(), cargarUltimasNoticias()]);
+      await cargarEstadisticas();
       if (new URLSearchParams(window.location.search).get('tab') === 'noticias') {
         showTab('noticias-tab', document.querySelector('.nav-link[onclick*="noticias-tab"]'));
       }
@@ -3580,7 +3682,7 @@ sin texto ni marcas de agua, composición periodística"
         cache: 'no-store'
       });
       if (resp.status === 401) {
-        localStorage.removeItem('admin_api_key');
+        sessionStorage.removeItem('admin_api_key');
         await fetchAdminToken();
         adminToken = sessionStorage.getItem('admin_api_key') || '';
         const resp2 = await fetch(adminNewsUrl(), {
@@ -3614,8 +3716,14 @@ sin texto ni marcas de agua, composición periodística"
       try {
         const noticias = await getNoticiasCache();
         const totalNoticias = noticias.length;
-        document.getElementById('statNoticias').textContent = noticias.filter(esPublicadaAdmin).length.toLocaleString();
-        document.querySelector('#statNoticiasChange span').textContent = `${totalNoticias.toLocaleString()} noticias en total (todos los estados)`;
+        const publicadas = noticias.filter(esPublicadaAdmin).length;
+        const pendientes = totalNoticias - publicadas;
+        document.getElementById('statNoticias').textContent = publicadas.toLocaleString();
+        document.querySelector('#statNoticiasChange span').textContent = `${totalNoticias.toLocaleString()} noticias en total`;
+        document.getElementById('statPendientes').textContent = pendientes.toLocaleString();
+        const penEl = document.getElementById('statPendientesChange');
+        if (pendientes === 0) { penEl.innerHTML = '<i class="fas fa-check"></i><span>Sin notas pendientes</span>'; penEl.className = 'stat-change'; }
+        else { penEl.innerHTML = '<i class="fas fa-edit"></i><span>' + pendientes.toLocaleString() + ' por publicar</span>'; penEl.className = 'stat-change negative'; }
 
         const conteo = {}; categorias.forEach(c => conteo[c.id] = 0);
         let totalPalabras = 0;
@@ -3647,10 +3755,21 @@ sin texto ni marcas de agua, composición periodística"
         else if (publicadasSemana >= 3) { semEl.innerHTML = '<i class="fas fa-clock"></i><span>Ritmo aceptable</span>'; semEl.className = 'stat-change'; }
         else { semEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Ritmo bajo esta semana</span>'; semEl.className = 'stat-change negative'; }
 
-        document.getElementById('statPromedio').textContent = promedio;
-        const promEl = document.getElementById('statPromedioChange');
-        if (promedio >= 350) { promEl.innerHTML = '<i class="fas fa-check"></i><span>Cumple estándar AdSense</span>'; promEl.className = 'stat-change'; }
-        else { promEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Por debajo de 350 palabras</span>'; promEl.className = 'stat-change negative'; }
+        // Salud del sitio (datos locales)
+        const saludEl = document.getElementById('saludSitioBody');
+        if (saludEl) {
+          let saludHtml = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><i class="fas fa-check-circle" style="color:var(--success);"></i><strong>Sitio operativo</strong> — publicación y base de datos responden.</div>';
+          saludHtml += '<ul style="margin:0;padding-left:18px;font-size:12px;color:var(--gray-500);">';
+          saludHtml += '<li>' + publicadas.toLocaleString() + ' noticias publicadas</li>';
+          saludHtml += '<li>' + pendientes.toLocaleString() + ' noticias pendientes</li>';
+          saludHtml += '<li>' + publicadasSemana.toLocaleString() + ' publicadas esta semana</li>';
+          saludHtml += '</ul>';
+          saludEl.innerHTML = saludHtml;
+        }
+
+        // Alertas (inicial: sin alertas críticas; se actualiza con Google)
+        const alertasEl = document.getElementById('alertasBody');
+        if (alertasEl) alertasEl.innerHTML = '<div style="display:flex;align-items:center;gap:8px;color:var(--success);"><i class="fas fa-check-circle"></i><span>Sin alertas críticas</span></div>';
 
         categorias.forEach(c => { const el = document.getElementById(`count${c.key}`); if (el) el.textContent = `${conteo[c.id] || 0} noticias`; });
 
@@ -3659,7 +3778,7 @@ sin texto ni marcas de agua, composición periodística"
 
       } catch (error) {
         console.error("Error estadísticas:", error);
-        ['statNoticias', 'statVistas', 'statSemana', 'statPromedio'].forEach(id => {
+        ['statNoticias', 'statVistas', 'statSemana', 'statPendientes'].forEach(id => {
           const el = document.getElementById(id);
           if (el) { el.textContent = '⚠'; el.title = 'No se pudieron cargar los datos (error del servidor)'; }
         });
