@@ -31,6 +31,13 @@ export async function POST(request: NextRequest) {
     const body: EnrichRequest = await request.json();
     const { noticiaId, categoria, modo = 'noticia' } = body;
 
+    if (body.modo === 'masivo') {
+      return NextResponse.json(
+        { error: 'Enriquecimiento masivo retirado. Use modo "noticia" por artículo (pasa por MENI/Supervisor).', code: 'MASS_MODE_RETIRED' },
+        { status: 410 },
+      );
+    }
+
     const db = getAdminDb();
 
     if (modo === 'noticia' && noticiaId) {

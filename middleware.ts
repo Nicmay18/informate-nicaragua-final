@@ -57,13 +57,31 @@ function goneResponse(): NextResponse {
 
 const BLOCKED_API_PATHS = ['/api/audio', '/api/view', '/api/views'];
 
+// P0 — Endpoints de mutación masiva retirados. La capacidad queda cerrada
+// en servidor (410 Gone): no basta ocultar botones del panel.
+// Motivos: fabrican/alteran texto editorial o mutan/borran noticias en lote
+// sin justificación empresarial. Detalle: .audit/P0_ENDPOINTS_RETIRADOS.md
+const RETIRED_API_PATHS = [
+  '/api/admin/limpiar-sucesos',
+  '/api/admin/clean-backlog',
+  '/api/admin/eliminar-viejas',
+  '/api/admin/limpiar-noindex',
+  '/api/expandir-7',
+  '/api/clean-seo',
+];
+
+function retiredApiResponse(): NextResponse {
+  return NextResponse.json(
+    { error: 'Endpoint retirado: mutación masiva deshabilitada a nivel servidor.', code: 'ENDPOINT_RETIRED' },
+    { status: 410 },
+  );
+}
+
 // Endpoints de diagnóstico/forense que no deben ser públicos
 const SENSITIVE_API_PATHS = [
   '/api/auditor',
   '/api/auditor-wordcount',
   '/api/check-content',
-  '/api/clean-seo',
-  '/api/expandir-7',
   '/api/list-empty',
   '/api/pulir',
   '/api/listar-categoria',
@@ -129,8 +147,12 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const ua = request.headers.get('user-agent') || '';
 
+  if (RETIRED_API_PATHS.includes(pathname)) {
+    return retiredApiResponse();
+  }
+
   if (pathname.startsWith('/api/admin/')) {
-    const PUBLIC_ADMIN_ROUTES = ['/api/admin/session', '/api/admin/estado', '/api/admin/config', '/api/admin/repair-fechas'];
+    const PUBLIC_ADMIN_ROUTES = ['/api/admin/session', '/api/admin/estado', '/api/admin/config'];
     if (PUBLIC_ADMIN_ROUTES.includes(pathname)) {
       const pubResponse = NextResponse.next();
       pubResponse.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
