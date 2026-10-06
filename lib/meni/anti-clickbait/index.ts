@@ -19,7 +19,7 @@ import type { AntiClickbaitInput, AntiClickbaitResult, ClickbaitSignal } from '.
 import { isSubstantiallySameTitle } from '@/lib/editorial/normalize';
 
 const PATRONES_CURIOSIDAD_ARTIFICIAL: { regex: RegExp; descripcion: string }[] = [
-  { regex: /lo\s+que\s+(encontr[oó]|pas[oó]|sucedi[oó]|descubri[oó]|vio|dijo|hizo)/i, descripcion: 'Estructura "lo que..." genera curiosidad sin informar' },
+  { regex: /lo\s+que\s+(encontr[oó]|pas[oó]|sucedi[oó]|descubri[oó]|ocurri[oó]|vio|dijo|hizo)/i, descripcion: 'Estructura "lo que..." genera curiosidad sin informar' },
   { regex: /sorprendi[oó]\s+a\s+(todos|el\s+mundo|la\s+gente)/i, descripcion: 'Apela a sorpresa colectiva sin sustancia' },
   { regex: /no\s+(creer[aá]s?|imaginar[aá]s?|esperar[aá]s?)\s+lo\s+que/i, descripcion: 'Promesa de incredulidad sin información' },
   { regex: /nadie\s+(esperaba|imaginaba|se\s+esperaba)\s+(esto|aquello|eso)/i, descripcion: 'Teaser de sorpresa inesperada' },
@@ -35,9 +35,75 @@ const PATRONES_CURIOSIDAD_ARTIFICIAL: { regex: RegExp; descripcion: string }[] =
   { regex: /impactante|conmovedor|escalofriante|espeluznante|estremecedor/i, descripcion: 'Adjetivo extremo sin sustancia informativa' },
 ];
 
-const PATRONES_OMISION_CLAVE: { regex: RegExp; descripcion: string }[] = [
-  { regex: /^(?!.*(ocupa|captura|detiene|fallece|incendio|accidente|decomiso|allana|encuentra|arresta|incauta|rescata|libera|aprueba|rechaza|veta|firm[aó]|anunci[aó]|suspende|cierra|abre|inicia|termina|gana|pierde|empata|sube|baja|aumenta|reduce|crece|cae|descubre|denuncia|investiga|procesa|condena|absuelve)).{20,}$/i, descripcion: 'El título no contiene ningún verbo de información noticiosa' },
+const INFINITIVOS_NOTICIOSOS = new Set([
+  'obtener', 'ganar', 'perder', 'morir', 'anunciar', 'informar', 'reportar', 'confirmar',
+  'iniciar', 'comenzar', 'concluir', 'alcanzar', 'conseguir', 'registrar', 'presentar',
+  'participar', 'competir', 'vencer', 'recibir',
+  'ocupar', 'capturar', 'detener', 'fallecer', 'hallar', 'arrestar', 'incautar', 'rescatar',
+  'liberar', 'aprobar', 'rechazar', 'vetar', 'firmar', 'suspender', 'cerrar', 'abrir', 'terminar',
+  'empatar', 'subir', 'bajar', 'aumentar', 'reducir', 'crecer', 'caer', 'descubrir', 'denunciar',
+  'investigar', 'procesar', 'condenar', 'absolver', 'negar', 'explicar', 'advertir', 'recomendar',
+  'ordenar', 'prohibir', 'permitir', 'autorizar', 'entregar', 'inaugurar', 'culminar', 'estallar',
+  'colapsar', 'derrumbar', 'inundar', 'evacuar', 'detectar', 'diagnosticar', 'vacunar', 'recuperar',
+  'estudiar', 'encontrar',
+]);
+
+const RAICES_EXTRA = new Set(['mur', 'obtuv', 'consigu', 'consig', 'compit']);
+
+const SUFIJOS_VERBALES = [
+  'iendo', 'ando', 'isteis', 'asteis', 'ieron', 'aron', 'imos', 'amos', 'iste', 'aste',
+  'emos', 'ábamos', 'íamos', 'abais', 'íais', 'áis', 'éis', 'aban', 'ían', 'an', 'as',
+  'en', 'es', 'is', 'a', 'e', 'i', 'o', 'á', 'é', 'í', 'ó', 'ió', 'ar', 'er', 'ir',
 ];
+
+const RAICES_NOTICIOSAS = new Set<string>();
+INFINITIVOS_NOTICIOSOS.forEach((v) => {
+  const base = v.endsWith('ar') || v.endsWith('er') || v.endsWith('ir') ? v.slice(0, -2) : v;
+  if (base.length < 2) return;
+  RAICES_NOTICIOSAS.add(base);
+  // Variantes de cambio vocálico en el último tono de la raíz (e→ie/i, o→ue).
+  const m = base.match(/^(.*)([aeiou])([^aeiou]*)$/);
+  if (m) {
+    const pre = m[1];
+    const vowel = m[2];
+    const post = m[3];
+    if (vowel === 'e') {
+      RAICES_NOTICIOSAS.add(pre + 'ie' + post);
+      RAICES_NOTICIOSAS.add(pre + 'i' + post);
+    }
+    if (vowel === 'o') {
+      RAICES_NOTICIOSAS.add(pre + 'ue' + post);
+    }
+  }
+  if (v.endsWith('uir')) {
+    RAICES_NOTICIOSAS.add(base + 'y');
+  }
+});
+RAICES_EXTRA.forEach((r) => RAICES_NOTICIOSAS.add(r));
+
+function normalizarToken(t: string): string[] {
+  // Respetamos tildes y eñes; normalizamos a minúsculas y separamos por no-letras.
+  return (t.toLowerCase().match(/[\p{L}\p{N}]+/gu) || []);
+}
+
+function contieneVerboNoticioso(titulo: string): boolean {
+  const tokens = normalizarToken(titulo);
+  for (const token of tokens) {
+    if (INFINITIVOS_NOTICIOSOS.has(token)) return true;
+    if (RAICES_NOTICIOSAS.has(token)) return true;
+    for (const suf of SUFIJOS_VERBALES) {
+      if (token.length > suf.length + 1 && token.endsWith(suf)) {
+        const stem = token.slice(0, -suf.length);
+        if (RAICES_NOTICIOSAS.has(stem)) return true;
+        for (const ending of ['ar', 'er', 'ir']) {
+          const inf = stem + ending;
+          if (INFINITIVOS_NOTICIOSOS.has(inf)) return true;
+        }
+      }
+    }
+  }
+  return false;
+}
 
 const PATRONES_PROMESA_VACIA: { regex: RegExp; descripcion: string }[] = [
   { regex: /no\s+te\s+lo\s+vas\s+a\s+creer/i, descripcion: 'Promesa de incredulidad' },
@@ -48,10 +114,9 @@ const PATRONES_PROMESA_VACIA: { regex: RegExp; descripcion: string }[] = [
 ];
 
 function tieneInformacionSustancial(titulo: string): boolean {
-  const verbosInformativos = /\b(ocupa|captura|detiene|fallece|incendio|accidente|decomiso|allana|encuentra|arresta|incauta|rescata|libera|aprueba|rechaza|veta|firm[aó]|anunci[aó]|suspende|cierra|abre|inicia|termina|gana|pierde|empata|sube|baja|aumenta|reduce|crece|cae|descubre|denuncia|investiga|procesa|condena|absuelve|confirma|niega|explica|advierte|recomienda|ordena|proh[ií]be|permite|autoriza|entrega|recibe|presenta|inaugura|culmina|estalla|colapsa|derrumba|inunda|evacua|detecta|diagnostica|vacuna|recupera)\b/i;
   const tieneCifras = /\d+/.test(titulo);
   const tieneLugar = /\b(Managua|Le[oó]n|Granada|Masaya|Chinandega|Estel[ií]|Matagalpa|Jinotega|Rivas|Carazo|Tipitapa|Chontales|Boaco|Nindir[ií]|Bluefields|San\s+Carlos|Juigalpa|Nueva\s+Segovia|Madriz|R[ií]o\s+San\s+Juan)\b/i;
-  return verbosInformativos.test(titulo) || (tieneCifras && titulo.length > 40) || (tieneLugar && verbosInformativos.test(titulo));
+  return contieneVerboNoticioso(titulo) || (tieneCifras && titulo.length > 40) || (tieneLugar && contieneVerboNoticioso(titulo));
 }
 
 function sugerirTitulo(_titulo: string, contenido?: string): string | undefined {
@@ -82,15 +147,13 @@ export function runAntiClickbait(input: AntiClickbaitInput): AntiClickbaitResult
     }
   }
 
-  for (const p of PATRONES_OMISION_CLAVE) {
-    if (p.regex.test(titulo)) {
-      signals.push({
-        patron: p.regex.source,
-        tipo: 'omision_clave',
-        descripcion: p.descripcion,
-        severidad: 'media',
-      });
-    }
+  if (!contieneVerboNoticioso(titulo)) {
+    signals.push({
+      patron: 'sin_verbo_noticioso',
+      tipo: 'omision_clave',
+      descripcion: 'El título no contiene ningún verbo de información noticiosa',
+      severidad: 'media',
+    });
   }
 
   for (const p of PATRONES_PROMESA_VACIA) {
