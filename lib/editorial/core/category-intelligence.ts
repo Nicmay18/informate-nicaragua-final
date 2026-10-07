@@ -29,9 +29,14 @@ const INTELLIGENCE: Record<string, ProfileFields> = {
       'impacto':     /\b(?:herid[oa]s?|fallecid[oa]s?|afectad[oa]s?|damnificad[oa]s?|evacuad[oa]s?|v[ií]ctimas?|p[eé]rdidas?|da[nñ]os?|lesiones?|detenid[oa]s?|hospitalizad[oa]s?|ingresad[oa]s?|lesionad[oa]s?)\b/i,
     },
     requiredContext: {
-      tipo: 'antecedentes o prevención del suceso',
+      // 'Contexto' en Sucesos también es la EVOLUCIÓN del caso: cómo se
+      // descubrió, quién investiga, etapa procesal, audiencia, juicio.
+      // Exigir solo antecedentes/prevención empujaba a inventar contexto
+      // en notas judiciales correctamente documentadas.
+      tipo: 'antecedentes, prevención o evolución del caso',
       patrones: [
         /\b(?:antecedentes?|contexto|similar|precedente|prevenci[oó]n|medidas?|recomendaciones?|evitar|cuidado|alerta)\b/i,
+        /\b(?:investigaci[oó]n|acusaci[oó]n|expediente|audiencia|juicio|juzgado|proceso|cargos?|detenci[oó]n|operativo|seguimiento|denuncia|peritaje|imputaci[oó]n|pesquisa|diligencia)\b/i,
       ],
     },
     requiredUtility: { preguntas: ['qué pasó', 'dónde', 'cuándo', 'cómo ocurrió', 'estado actual', 'impacto'] },

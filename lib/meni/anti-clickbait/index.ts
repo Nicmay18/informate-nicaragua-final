@@ -46,9 +46,20 @@ const INFINITIVOS_NOTICIOSOS = new Set([
   'ordenar', 'prohibir', 'permitir', 'autorizar', 'entregar', 'inaugurar', 'culminar', 'estallar',
   'colapsar', 'derrumbar', 'inundar', 'evacuar', 'detectar', 'diagnosticar', 'vacunar', 'recuperar',
   'estudiar', 'encontrar',
+  // Auditoria forense MENI (titulares reales marcados 'sin verbo noticioso'
+  // aunque lo tenian): verbos judiciales, de avance y de resultado que el
+  // lexico anterior omitia. La morfologia (raiz+sufijo) ya los conjuga
+  // correctamente una vez presente el infinitivo.
+  'acusar', 'ampliar', 'avanzar', 'clasificar', 'completar', 'construir', 'dictar',
+  'eliminar', 'enviar', 'fijar', 'finalizar', 'identificar', 'impactar', 'afectar',
+  'resultar', 'sufrir', 'superar', 'revelar', 'lanzar', 'realizar', 'celebrar',
+  'imputar', 'sentenciar', 'declarar', 'resolver', 'decretar', 'ejecutar', 'emitir',
+  'convocar', 'designar', 'destituir', 'extraditar', 'enjuiciar', 'decomisar',
+  'intervenir', 'ocurrir', 'suceder', 'sucumbir', 'trasladar', 'ingresar', 'egresar',
+  'despedir', 'ascender', 'premiar', 'homenajear', 'inscribir', 'habilitar',
 ]);
 
-const RAICES_EXTRA = new Set(['mur', 'obtuv', 'consigu', 'consig', 'compit']);
+const RAICES_EXTRA = new Set(['mur', 'obtuv', 'consigu', 'consig', 'compit', 'detuv', 'tuv', 'hub', 'huv']);
 
 const SUFIJOS_VERBALES = [
   'iendo', 'ando', 'isteis', 'asteis', 'ieron', 'aron', 'imos', 'amos', 'iste', 'aste',
@@ -86,14 +97,19 @@ function normalizarToken(t: string): string[] {
   return (t.toLowerCase().match(/[\p{L}\p{N}]+/gu) || []);
 }
 
-function contieneVerboNoticioso(titulo: string): boolean {
+// Las raices se comparan sin tildes: "envia"->"envi"+"a"->"enviar" y
+// "amplia"->"ampli"+"a"->"ampliar" fallaban porque el stem conservaba el
+// acento. El match morfologico es insensible a diacriticos.
+const sinAcentos = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+export function contieneVerboNoticioso(titulo: string): boolean {
   const tokens = normalizarToken(titulo);
   for (const token of tokens) {
     if (INFINITIVOS_NOTICIOSOS.has(token)) return true;
     if (RAICES_NOTICIOSAS.has(token)) return true;
     for (const suf of SUFIJOS_VERBALES) {
       if (token.length > suf.length + 1 && token.endsWith(suf)) {
-        const stem = token.slice(0, -suf.length);
+        const stem = sinAcentos(token.slice(0, -suf.length));
         if (RAICES_NOTICIOSAS.has(stem)) return true;
         for (const ending of ['ar', 'er', 'ir']) {
           const inf = stem + ending;

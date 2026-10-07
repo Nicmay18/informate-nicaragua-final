@@ -88,6 +88,15 @@ export const OFFICIAL_SOURCES: readonly string[] = [
   'Comité Olímpico Internacional', 'Comité Olímpico Nicaragüense', 'COI',
   // Agencias y medios
   'EFE', 'AFP', 'AP', 'Reuters', 'BBC', 'CNN',
+  // Medios nacionales identificables ("según La Prensa" es fuente
+  // concreta; "según medios" sigue siendo vago).
+  'La Prensa', 'Confidencial', 'La Primerísima', '100% Noticias',
+  'El 19 Digital', 'Divergentes', 'Artículo 66', 'Despacho 505',
+  'Bolsa de Noticias', 'Radio Corporación', 'Radio Ya',
+  'Canal 10', 'Canal 8', 'VOS TV', 'TN8', 'El Nuevo Diario',
+  // Órganos judiciales: "el Juzgado Noveno de Distrito Penal" es una
+  // fuente institucional identificable aunque no sea ministerio.
+  'Juzgado', 'Tribunal', 'Corte de Apelaciones', 'Magistrados',
 ];
 
 /**

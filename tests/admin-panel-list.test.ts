@@ -21,11 +21,16 @@ describe('Panel real: listado continuo y filtros', () => {
       .mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({ news: [{ id: 'old' }] }) })
       .mockResolvedValueOnce({ ok: false, status: 401 })
       .mockResolvedValueOnce({ ok: true, status: 200, json: async () => ({ news: [{ id: 'new' }, { id: 'old' }] }) });
+    // El token de admin vive en sessionStorage (panel Fases 1-3+5:
+    // credencial con vida de pestana, no persistente). Se siembra el
+    // sessionStorage global de jsdom y fetchAdminToken lo re-emite tras 401.
+    sessionStorage.setItem('admin_api_key', 'test-admin');
     const localStorage = { getItem: () => 'test-admin', removeItem: vi.fn() };
+    const fetchAdminToken = vi.fn(async () => { sessionStorage.setItem('admin_api_key', 'test-admin'); });
     let sequence = 0;
     const window = { crypto: { randomUUID: () => `request-${++sequence}` } };
     const source = panel.slice(panel.indexOf('    let _panelCache ='), panel.indexOf('    function esPublicadaAdmin('));
-    const load = new Function('window', 'fetch', 'localStorage', 'fetchAdminToken', `${source}\nreturn getNoticiasCache;`)(window, fetch, localStorage, vi.fn());
+    const load = new Function('window', 'fetch', 'localStorage', 'fetchAdminToken', `${source}\nreturn getNoticiasCache;`)(window, fetch, localStorage, fetchAdminToken);
     expect(await load()).toEqual([{ id: 'old' }]);
     expect(await load()).toEqual([{ id: 'new' }, { id: 'old' }]);
     const urls = fetch.mock.calls.map(([url]) => new URL(url, 'https://nicaraguainformate.com'));

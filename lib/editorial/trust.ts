@@ -87,13 +87,22 @@ export interface TrustReport {
 // "han señalado", "señalan" o "datos difundidos" quedaban sin atribuir y
 // producían falsos PROVISIONAL_CLAIM sobre notas correctamente atribuidas.
 const RE_ATRIBUCION = /\b(según|de acuerdo con|informó|informaron|informa|informan|informad[oa]s?|confirmó|confirmaron|confirma|confirman|confirmad[oa]s?|dijo|dijeron|dice|dicen|dich[oa]s?|señaló|señalaron|señala|señalan|señalad[oa]s?|reportó|reportaron|reporta|reportan|reportad[oa]s?|afirmó|afirmaron|afirma|afirman|afirmad[oa]s?|declaró|declararon|declara|declaran|declarad[oa]s?|explicó|explicaron|explica|explican|explicad[oa]s?|indicó|indicaron|indica|indican|indicad[oa]s?|precisó|precisaron|precisan|detalló|detallaron|detalla|detallan|detallad[oa]s?|anunció|anunciaron|anuncia|anuncian|anunciad[oa]s?|relató|relataron|relata|relatan|relatad[oa]s?|contó|contaron|aseguró|aseguraron|asegura|aseguran|asegurad[oa]s?|manifestó|manifestaron|manifiesta|manifiestan|manifestad[oa]s?|expresó|expresaron|expresa|expresan|expresad[oa]s?|admitió|admitieron|admite|admiten|admitid[oa]s?|reveló|revelaron|revela|revelan|revelad[oa]s?|difundió|difundieron|difunde|difunden|difundid[oa]s?|publicó|publicaron|publica|publican|publicad[oa]s?|destacó|destacaron|destaca|destacan|destacad[oa]s?|sostuvo|sostuvieron|sostiene|sostienen|denunció|denunciaron|denuncia|denuncian|denunciad[oa]s?|testificó|testificaron|testifica|testifican|testificad[oa]s?|testigos|vecinos|familiares|residentes|pobladores|comunicado|boletín|informe)\b/i;
-const RE_NO_CONFIRMADA = /\b(presuntamente|al parecer|reportes no confirmados|trascendió|versiones preliminares|se rumora|habría|supuestamente|aparentemente|preliminarmente|según versiones)\b/i;
+const RE_NO_CONFIRMADA = /\b(presuntamente|al parecer|reportes no confirmados|trascendió|versiones preliminares|se rumora|habrí\w*|supuestamente|aparentemente|preliminarmente|según versiones)\b/i;
+// Atribución judicial: actor procesal + verbo de acto en la misma oración.
+// "la jueza determinó", "el juzgado fijó la audiencia", "la acusación
+// establece", "el expediente muestra" — atribución real sin marcador
+// genérico. Ambos órdenes (actor→verbo y verbo→actor).
+const RE_ACTOR_JUDICIAL = /\b(fiscal[ií]a|ministerio\s+p[úu]blico|juzgado|juez|jueza|jueces|tribunal(?:es)?|acusaci[oó]n|expediente|audiencia|defensa|querella|corte|sala\s+de\s+lo\s+penal|colegiado|magistrad[oa]s?|imputaci[oó]n|poder\s+judicial)\b/i;
+const RE_VERBO_JUDICIAL = /\b(determin|fij|orden|dict|decret|resolvi|resuelv|envi|imput|acus|proces|establec|rechaz|admit|conden|absuelv|senal|confirm|inform|declar|anunci|revel|detall|sostien|sostuv|indica|precis|muestr|document|describ|incluy|contien|consta)\w*\b/i;
+function tieneAtribucionJudicial(s: string): boolean {
+  return RE_ACTOR_JUDICIAL.test(s) && RE_VERBO_JUDICIAL.test(s);
+}
 const RE_NO_DISPONIBLE = /\b(se investiga|investigación en curso|se desconoce|no se sabe|no han informado|sin pronunciamiento|aún no se ha confirmado|pendiente de confirmar|no proporcionaron|no se ha revelado|hasta el momento no)\b/i;
-const RE_SUCESO = /\b(asesin|homicidio|falleci|muert|deten|arrest|acusad|señalad|sospech|víctima|delito|robo|violencia|balacera|apuñal|atropell)\w*/i;
+const RE_SUCESO = /\b(asesin|homicidio|falleci|muert|deten|arrest|acusad|señalad|sospech|víctima|delito|robo|robar|robad|violencia|balacera|apuñal|atropell)\w*/i;
 // Límites explícitos de letra (incl. acentos): \b falla con "robóticos"
 // porque "ó" no es \w — "robó" coincidía dentro de "robóticos" (falso
 // positivo). Con clases de letras explícitas "robó" solo casa como palabra.
-const RE_DELITO_AFIRMADO = /(^|[^a-záéíóúñü])(asesinó|mató|robó|violó|estafó|secuestró|atropelló)(?![a-záéíóúñü])/i;
+const RE_DELITO_AFIRMADO = /(^|[^a-záéíóúñü])(asesin(?:ó|aron)|mat(?:ó|aron)|rob(?:ó|aron)|viol(?:ó|aron)|estaf(?:ó|aron)|secuestr(?:ó|aron)|atropell(?:ó|aron))(?![a-záéíóúñü])/i;
 const RE_NOMBRE_PROPIO = /\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){1,2}\b/g;
 // Fuentes nombradas: catálogo canónico compartido (./known-sources) —
 // antes era una lista local más pobre que la del extractor, lo que marcaba
@@ -108,7 +117,7 @@ const RE_FUENTE_CS = OFFICIAL_SOURCE_CS_RE;
 // ubica el hecho en el tiempo ("este miércoles", "durante la noche",
 // "el pasado fin de semana"). Un detector que no las reconoce produce
 // falsos positivos de TEMPORAL_CONTEXT_MISSING — corregido, no relajado.
-const RE_FECHA = /\b(\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|(este|el|la|pasad[oa]s?|próxim[oa]s?)?\s*(lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b|ayer|anteayer|hoy|esta (mañana|tarde|noche|madrugada|semana)|durante (la|el) (noche|madrugada|mañana|tarde|fin de semana|día)|(el|este|fin de) (fin de semana|año|mes)|recientemente|en horas de la (madrugada|mañana|tarde|noche)|últim[oa]s? (días|horas|semanas)|últimas \d+ horas|últimos \d+ (días|años)|hace \w+ (días|horas|semanas|meses|años)|\d{4})\b/i;
+const RE_FECHA = /\b(\d{1,2} de (enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)|(este|el|la|pasad[oa]s?|próxim[oa]s?)?\s*(lunes|martes|miércoles|jueves|viernes|sábado|domingo)\b|ayer|anteayer|hoy|esta (mañana|tarde|noche|madrugada|semana)|durante (la|el) (noche|madrugada|mañana|tarde|fin de semana|día)|(el|este|fin de) (fin de semana|año|mes)|recientemente|en horas de la (madrugada|mañana|tarde|noche)|pr[óo]xim[oa]s?\s+(d[ií]as?|semanas?|mes(?:es)?|años?|lunes|martes|mi[ée]rcoles|jueves|viernes|s[áa]bado|domingo)|(el|la)\s+(mes|semana|año|d[ií]a)\s+pr[óo]xim[oa]?|últim[oa]s? (días|horas|semanas)|últimas \d+ horas|últimos \d+ (días|años)|hace \w+ (días|horas|semanas|meses|años)|\d{4})\b/i;
 // Lugares: catálogo canónico compartido (./known-sources).
 const RE_LUGAR = NICARAGUA_PLACE_CS_GLOBAL_RE;
 
@@ -160,7 +169,7 @@ export function analyzeTrust(input: {
 
   const evalSentence = (s: string, parrafoAtribuido: boolean) => {
     totalSents++;
-    const atribuida = RE_ATRIBUCION.test(s) || parrafoAtribuido;
+    const atribuida = RE_ATRIBUCION.test(s) || tieneAtribucionJudicial(s) || parrafoAtribuido;
     const provisional = RE_NO_CONFIRMADA.test(s);
     const noDisponibleHit = RE_NO_DISPONIBLE.test(s);
     const esSuceso = RE_SUCESO.test(s);
@@ -223,7 +232,7 @@ export function analyzeTrust(input: {
 
   for (const s of tituloSents) evalSentence(s, RE_ATRIBUCION.test(input.titulo));
   for (const p of paras) {
-    const parrafoAtribuido = RE_ATRIBUCION.test(p) || RE_FUENTE_CS.test(p);
+    const parrafoAtribuido = RE_ATRIBUCION.test(p) || RE_FUENTE_CS.test(p) || tieneAtribucionJudicial(p);
     for (const s of splitSentences(p)) evalSentence(s, parrafoAtribuido);
   }
 

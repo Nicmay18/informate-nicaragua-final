@@ -28,6 +28,7 @@ import { logger } from '@/lib/logger';
 import { resolvePublicCategory } from '@/lib/editorial/canonical';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
 import { MIN_APPROVED_SCORE } from '@/lib/meni/scoring';
+import { contieneVerboNoticioso } from '@/lib/meni/anti-clickbait';
 import type { PublicCategory } from '@/lib/types';
 import type { MeniContentProfile } from '@/lib/meni/profile-detector';
 
@@ -46,6 +47,12 @@ export function evaluateRawTitle(titulo: string): {
   suggestedAngle: string | null;
   verdict: SupervisorVerdict;
   reason: string;
+  /** Señales detectadas — el decisor las usa para el gate de convergencia. */
+  hasNewsVerb: boolean;
+  hasLocation: boolean;
+  hasAuthority: boolean;
+  hasVictim: boolean;
+  hasTime: boolean;
 } {
   const issues: string[] = [];
   const genericPatterns = [
@@ -116,7 +123,8 @@ export function evaluateRawTitle(titulo: string): {
     reason = 'El título tiene los elementos periodísticos mínimos: qué, dónde, cuándo, quién confirma.';
   }
 
-  return { isGeneric, needsInvestigation, missingData: issues, suggestedAngle, verdict, reason };
+  const hasNewsVerb = contieneVerboNoticioso(titulo);
+  return { isGeneric, needsInvestigation, missingData: issues, suggestedAngle, verdict, reason, hasNewsVerb, hasLocation, hasAuthority, hasVictim, hasTime };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -179,15 +187,24 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
     } else {
       // Fase post-redaccion: el titulo es debil pero ya hay contenido.
       // Marcar como WARNING para que el editor lo corrija, no bloquear.
-      issues.push({
-        severity: 'WARNING',
-        domain: 'TITULO',
-        problem: `Título podría ser más específico: "${ctx.titulo}"`,
-        impact: 'El título no identifica todos los elementos periodísticos clave',
-        cause: `Faltan: ${titleEval.missingData.join(', ')}`,
-        action: 'Considerar enriquecer el título con datos del contenido',
-        autoFixable: false,
-      });
+      // CONVERGENCIA: si el titulo ya es sustantivo (verbo noticioso +
+      // marcador identificable + longitud razonable), no volver a pedir
+      // "mas especifico" — el editor ya aplico la correccion y seguir
+      // recomendandola produce el bucle reportado de title_more_specific.
+      const tituloSustantivo = titleEval.hasNewsVerb &&
+        (titleEval.hasAuthority || titleEval.hasLocation || titleEval.hasVictim || /\d/.test(ctx.titulo)) &&
+        ctx.titulo.trim().length >= 30;
+      if (!tituloSustantivo) {
+        issues.push({
+          severity: 'WARNING',
+          domain: 'TITULO',
+          problem: `Título podría ser más específico: "${ctx.titulo}"`,
+          impact: 'El título no identifica todos los elementos periodísticos clave',
+          cause: `Faltan: ${titleEval.missingData.join(', ')}`,
+          action: 'Considerar enriquecer el título con datos del contenido',
+          autoFixable: false,
+        });
+      }
     }
   }
 
