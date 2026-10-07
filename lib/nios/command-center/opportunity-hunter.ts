@@ -2,10 +2,11 @@ import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { AUDIENCE_DEMAND } from './constants';
 import type { HuntedOpportunity, OpportunityHunter } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 function haystack(noticias: Noticia[], guides: EvergreenArticle[]): string {
   const fromNews = noticias
-    .filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado')
+    .filter((n) => isPublishedArticle(n))
     .map((n) => `${n.titulo} ${n.resumen} ${n.keywords || ''} ${(n.tags || []).join(' ')}`)
     .join(' ');
   const fromGuides = guides.map((g) => `${g.title} ${g.description}`).join(' ');

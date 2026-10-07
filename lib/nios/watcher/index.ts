@@ -3,6 +3,7 @@ import { runCategoryHealth } from '../category-health';
 import { runSeoCleanup } from '../seo-cleanup';
 import { buildKnowledgeGraph } from '../knowledge-graph';
 import { runContentIntelligence } from '../content-intelligence';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface NiosAlert {
   id: string;
@@ -23,7 +24,7 @@ function toDate(v: unknown): Date {
 }
 
 export function runWatcher(noticias: Noticia[]): NiosAlert[] {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const alerts: NiosAlert[] = [];
   const { health } = runCategoryHealth(noticias);
   const totalViews = published.reduce((s, n) => s + (n.vistas || 0), 0);

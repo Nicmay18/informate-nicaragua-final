@@ -30,6 +30,7 @@ import {
   worstStatus,
 } from './probes';
 import { evaluateAdSenseReadiness, REQUIRED_LEGAL_PAGES } from './adsense-readiness';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 import type {
   AdSenseReadinessVerdict,
   ExpertId,
@@ -441,7 +442,7 @@ export function buildBoard(input: BoardInput, now = new Date()): SwissWatchBoard
   );
 
   // ── MENI ──────────────────────────────────────────────────────────────
-  const published = input.noticias.filter((n) => n.estado === 'publicado');
+  const published = input.noticias.filter((n) => isPublishedArticle(n));
   const scored = published.filter((n) => typeof n.scoreMeni === 'number');
   const meniCoverage = published.length ? scored.length / published.length : 0;
   const meniStatus: SwissStatus =

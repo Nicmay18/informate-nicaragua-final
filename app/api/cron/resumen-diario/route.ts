@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { verifyAdminOrCronToken } from '@/lib/auth';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { logger } from '@/lib/logger';
 import { getTelegramConfig } from '@/lib/telegram';
@@ -114,8 +115,7 @@ export async function GET(request: Request) {
       .map(d => ({ id: d.id, ...d.data() } as Noticia))
       .filter(n => {
         if (!n.titulo || !n.slug) return false;
-        const publicada = n.estado ? n.estado === 'publicado' : n.publicado !== false;
-        if (!publicada) return false;
+        if (!isPublishedArticle(n)) return false;
         return ahora - fechaMs(n.fecha) <= limite;
       })
       // Orden: más vistas primero, luego más recientes

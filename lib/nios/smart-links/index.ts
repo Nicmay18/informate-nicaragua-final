@@ -1,6 +1,7 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { buildKnowledgeGraph } from '../knowledge-graph';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface LinkSuggestion {
   source: string;
@@ -14,7 +15,7 @@ export interface LinkSuggestion {
 
 export function runSmartLinks(noticias: Noticia[], guides: EvergreenArticle[] = []): LinkSuggestion[] {
   const graph = buildKnowledgeGraph(noticias, guides);
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const suggestions: LinkSuggestion[] = [];
 
   for (const n of published) {

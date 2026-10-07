@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import type { ContentWarRoom, EditorialBalance, WarRoomSlot } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -63,7 +64,7 @@ export function buildContentWarRoom(
   balance: EditorialBalance,
   now = new Date()
 ): ContentWarRoom {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const since = now.getTime() - 7 * DAY;
   const recent = published.filter((n) => toTime(n.fecha) > since);
 

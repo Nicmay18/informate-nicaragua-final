@@ -3,6 +3,7 @@ import { EVERGREEN_ARTICLES } from '@/lib/evergreen';
 import type { Noticia } from '@/lib/types';
 import type { NiosModuleReport, NiosRecommendation } from './types';
 import { daysAgo, rec, sortByPriority, trackError } from './utils';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 function classifyLifecycle(n: Noticia): string {
   const age = daysAgo(n.fecha);
@@ -38,7 +39,7 @@ export async function runContentLifecycle(): Promise<NiosModuleReport> {
     const decay = (lifecycle.decay || []).length;
     const updateCandidates = (lifecycle.candidata_actualizacion || []).length;
     const guideCandidates = (lifecycle.candidata_guia || []).length;
-    const archivable = noticias.filter((n) => n.estado === 'publicado' && daysAgo(n.fecha) > 365 && (n.vistas || 0) < 5).length;
+    const archivable = noticias.filter((n) => isPublishedArticle(n) && daysAgo(n.fecha) > 365 && (n.vistas || 0) < 5).length;
 
     const newGuideCandidates = guideCandidates;
 

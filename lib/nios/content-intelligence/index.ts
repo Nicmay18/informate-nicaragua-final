@@ -1,6 +1,7 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { countWords } from '@/lib/utils/word-count';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 export interface ContentIntelligence {
   duplicateGroups: { key: string; count: number; slugs: string[]; reason: string }[];
   cannibalization: { keyword: string; count: number; slugs: string[] }[];
@@ -48,7 +49,7 @@ function articleWordCount(n: Noticia): number {
 
 export function runContentIntelligence(noticias: Noticia[], guides: EvergreenArticle[] = []): ContentIntelligence {
   void guides;
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
 
   // duplicados por similaridad de palabras significativas
   const byWords: Record<string, string[]> = {};

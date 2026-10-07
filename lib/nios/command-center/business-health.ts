@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 import type {
   BusinessHealth,
   BusinessPillar,
@@ -31,7 +32,7 @@ export function buildBusinessHealth(
   revenue: RevenueEngine,
   now = Date.now()
 ): BusinessHealth {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const total = published.length;
 
   const last30 = published.filter((n) => toTime(n.fecha) > now - 30 * DAY);

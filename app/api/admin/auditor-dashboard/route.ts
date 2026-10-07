@@ -3,6 +3,7 @@ import { verifyAdminOrCronToken } from '@/lib/auth';
 import { getTrafficPerformance } from '@/lib/analytics/traffic-reader';
 import {
   getMetricDefinition,
+  isPublishedArticle,
   type MetricDefinition,
 } from '@/lib/nios/intelligence/metric-truth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
       vistasTotales += v;
       if (v > 0) { noticiasConVistas++; }
       else { noticiasSinVistas++; }
-      if (n.estado === 'publicado') noticiasPublicadas++;
+      if (isPublishedArticle(n)) noticiasPublicadas++;
       const oficialmenteDistribuida = n.distribuida === true || n.distribuida === 'true' || n.distribuida === 1 || !!n.fechaDistribucion;
       const tieneTraficoReal = (n.vistas || 0) > 0;
       if (oficialmenteDistribuida || tieneTraficoReal) {

@@ -2,6 +2,7 @@ import type { Noticia } from '@/lib/types';
 import { rankNoticias } from '@/lib/home-ranking';
 import { BRAND_PRIORITY, BRAND_SLOTS, HOME_CATEGORY_CAP } from './constants';
 import type { HomeQuality, HomeSlotAudit } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 const HOME_WINDOW = 20;
 
@@ -10,7 +11,7 @@ const HOME_WINDOW = 20;
  * No modifica el ranking: lo evalúa contra las reglas de marca.
  */
 export function buildHomeQuality(noticias: Noticia[]): HomeQuality {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
 
   if (published.length === 0) {
     return {

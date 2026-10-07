@@ -1,4 +1,5 @@
 import { pipelineV4 } from '@/lib/editorial';
+import { publishedArticlesQuery } from '@/lib/nios/intelligence/metric-truth';
 import type { EvaluacionEditorial, NoticiaInput as EditorialNoticiaInput } from '@/lib/editorial';
 import { generarMetaDescription } from '@/lib/editorial/meta';
 import type { NoticiaInput, MeniResult, MeniRiesgoEditorial, MeniRecomendacion, RevisionEditorJefe } from './types';
@@ -559,9 +560,8 @@ export async function runMeniAsync(
       .catch(() => {});
     tasks.push(patternsTask);
 
-    // Fase 2: datos de portada para saturación
-    const portadaTask = options.db.collection('noticias')
-      .where('publicado', '!=', false)
+    // Fase 2: datos de portada para saturación (universo canónico PUBLICADO)
+    const portadaTask = publishedArticlesQuery(options.db.collection('noticias'))
       .orderBy('fecha', 'desc')
       .limit(20)
       .get()

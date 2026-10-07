@@ -6,6 +6,7 @@
 import { CATEGORIES } from '@/lib/types';
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 import type {
   BusinessCommandCenter,
   CeoBriefing,
@@ -280,7 +281,7 @@ export function buildCeoChecklist(cards: CeoCard[]): CeoChecklistItem[] {
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 function publishedNoticias(noticias: Noticia[]): Noticia[] {
-  return noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  return noticias.filter((n) => isPublishedArticle(n));
 }
 
 function parsePubTime(n: Noticia): number {

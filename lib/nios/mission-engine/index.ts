@@ -3,6 +3,7 @@ import type { EvergreenArticle } from '@/lib/evergreen';
 import { runCategoryHealth } from '../category-health';
 import { runSeoCleanup } from '../seo-cleanup';
 import { runContentIntelligence } from '../content-intelligence';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface MissionV4 {
   id: string;
@@ -31,7 +32,7 @@ function toDate(v: unknown): Date {
 }
 
 export function runMissionEngine(noticias: Noticia[], guides: EvergreenArticle[] = []): MissionV4 {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const { health } = runCategoryHealth(noticias);
   const seo = runSeoCleanup(noticias);
   const ci = runContentIntelligence(noticias, guides);

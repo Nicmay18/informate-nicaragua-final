@@ -1,4 +1,5 @@
 import type { Noticia } from '@/lib/types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface CategoryHealth {
   count7: number;
@@ -40,7 +41,7 @@ export function runCategoryHealth(
   }
 
   for (const n of noticias) {
-    if (n.estado === 'borrador' || n.estado === 'archivado') continue;
+    if (!isPublishedArticle(n)) continue;
     const d = toDate(n.fecha);
     const t = d.getTime();
     const cat = n.categoria;

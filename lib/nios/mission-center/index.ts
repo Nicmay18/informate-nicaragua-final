@@ -2,6 +2,7 @@ import type { Noticia } from '@/lib/types';
 import { runCategoryHealth } from '../category-health';
 import { runSeoCleanup } from '../seo-cleanup';
 import { runContentIntelligence } from '../content-intelligence';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface MissionItem {
   id: string;
@@ -32,7 +33,7 @@ function toDate(v: unknown): Date {
 }
 
 export function runMissionCenter(noticias: Noticia[]): MissionCenter {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
 

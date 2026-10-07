@@ -1,6 +1,7 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { buildKnowledgeGraph } from '../knowledge-graph';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface EntityBrain {
   entity: string;
@@ -14,7 +15,7 @@ export interface EntityBrain {
 
 export function buildEntityBrain(noticias: Noticia[], guides: EvergreenArticle[] = []): EntityBrain[] {
   const graph = buildKnowledgeGraph(noticias, guides);
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
 
   return graph.entities.slice(0, 30).map((e) => {
     const news = published

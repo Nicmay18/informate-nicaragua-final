@@ -6,6 +6,7 @@ import { runMissionEngine } from '../mission-engine';
 import { runWatcher } from '../watcher';
 import { buildEntityBrain } from '../entity-brain';
 import { runContentRecycler } from '../content-recycler';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface MorningReport {
   title: string;
@@ -25,7 +26,7 @@ export function runMorningReport(noticias: Noticia[], guides: EvergreenArticle[]
   const brain = buildEntityBrain(noticias, guides);
   const recycler = runContentRecycler(noticias, guides);
 
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const viewsByCat: Record<string, number> = {};
   for (const n of published) {
     viewsByCat[n.categoria] = (viewsByCat[n.categoria] || 0) + (n.vistas || 0);

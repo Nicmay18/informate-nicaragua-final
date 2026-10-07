@@ -5,10 +5,13 @@ const fetchCounts = async () => {
   const { getAdminDb } = await import('@/lib/firebase-admin');
   const db = getAdminDb();
 
+  const { publishedArticlesQuery } = await import('@/lib/nios/intelligence/metric-truth');
+
   // count() NO lee documentos — solo cuenta, ~20x más barato que .get()
+  // "publicadas" = universo canónico PUBLICADO (metric-truth.ts).
   const [allAgg, pubAgg] = await Promise.all([
     db.collection('noticias').count().get(),
-    db.collection('noticias').where('publicado', '!=', false).count().get(),
+    publishedArticlesQuery(db.collection('noticias')).count().get(),
   ]);
 
   const total = allAgg.data().count;

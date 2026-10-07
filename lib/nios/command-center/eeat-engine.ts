@@ -2,6 +2,7 @@ import { getAllAuthors } from '@/lib/authors';
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import type { EeatEngine, EeatIndicator } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -20,7 +21,7 @@ export function buildEeatEngine(
   guides: EvergreenArticle[],
   now = Date.now(),
 ): EeatEngine {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const total = published.length;
   const authors = getAllAuthors();
 

@@ -1,6 +1,7 @@
 import type { Noticia } from '@/lib/types';
 import { CHANNEL_WINDOWS } from './constants';
 import type { Channel, ChannelCopy, DistributionCommand, DistributionPlan, Severity } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 const DAY = 24 * 60 * 60 * 1000;
 const SITE = 'https://nicaraguainformate.com';
@@ -82,7 +83,7 @@ function buildCopies(n: Noticia): ChannelCopy[] {
  * un texto adaptado por canal para cada una.
  */
 export function buildDistributionCommand(noticias: Noticia[], now = Date.now()): DistributionCommand {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const recent = published.filter((n) => toTime(n.fecha) > now - 2 * DAY);
 
   const pool = recent.length > 0 ? recent : published.slice(0, 12);

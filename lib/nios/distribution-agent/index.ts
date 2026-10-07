@@ -1,4 +1,5 @@
 import type { Noticia } from '@/lib/types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface DistributionQueueItem {
   id: string;
@@ -30,7 +31,7 @@ export function runDistributionAgent(noticias: Noticia[]): DistributionAgent {
   const todayStart = new Date();
   todayStart.setHours(0, 0, 0, 0);
   const today = noticias
-    .filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado')
+    .filter((n) => isPublishedArticle(n))
     .filter((n) => toDate(n.fecha).getTime() >= todayStart.getTime())
     .sort((a, b) => (b.vistas || 0) - (a.vistas || 0));
 

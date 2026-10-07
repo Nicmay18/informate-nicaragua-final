@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 import { logger } from '@/lib/logger';
 
 function isAuthorized(request: NextRequest): boolean {
@@ -26,7 +27,7 @@ export async function GET(request: NextRequest) {
       const data = d.data();
       total++;
       vistas += data.vistas || 0;
-      if (data.publicado !== false) publicadas++;
+      if (isPublishedArticle(data)) publicadas++;
       if (data.destacada) destacadas++;
 
       const cat = data.categoria || 'General';

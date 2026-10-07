@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
 
     for (const doc of noticiasSnap.docs) {
       const data = doc.data();
-      if (data.publicado !== false) {
+      if (isPublishedArticle(data)) {
         publicadas++;
       } else {
         rechazadas++;

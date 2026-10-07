@@ -16,6 +16,7 @@ import { loadNoticiasFromFirestore } from '@/lib/nios/intelligence/data-merger';
 import { logger } from '@/lib/logger';
 import type { ArticleFusion, GSCSnapshot, GA4Snapshot } from '@/lib/nios/intelligence/types';
 import type { CeoDecisionInput } from './ceo-action-registry';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 function formatNumber(n: number | undefined | null): string {
   if (typeof n !== 'number' || Number.isNaN(n)) return '0';
@@ -78,7 +79,7 @@ export async function observeCeoInputs(db: Firestore): Promise<CeoObservatoryRes
   let businessBrain = null;
   if (cc) {
     try {
-      const n = (await loadNoticiasFromFirestore(db, 500)).filter((x) => x.estado !== 'borrador' && x.estado !== 'archivado');
+      const n = (await loadNoticiasFromFirestore(db, 500)).filter((x) => isPublishedArticle(x));
       const g = getAllEvergreen();
       businessBrain = runBusinessBrain(n, g);
     } catch (err) {

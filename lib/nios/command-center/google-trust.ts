@@ -2,6 +2,7 @@ import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { hasWeakMetaDescription } from '@/lib/seo/effective';
 import type { GoogleTrust, TrustPillar } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 const DAY = 24 * 60 * 60 * 1000;
 
@@ -28,7 +29,7 @@ export function buildGoogleTrust(
   guides: EvergreenArticle[],
   now = Date.now()
 ): GoogleTrust {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const total = published.length;
 
   const withAuthor = published.filter((n) => !!n.autor?.trim()).length;

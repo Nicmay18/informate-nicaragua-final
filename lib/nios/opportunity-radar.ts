@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface NiosOpportunity {
   id: string;
@@ -44,7 +45,7 @@ export function runOpportunityRadar(
 
   const counts: Record<string, number> = {};
   for (const n of noticias) {
-    if (n.estado === 'borrador' || n.estado === 'archivado') continue;
+    if (!isPublishedArticle(n)) continue;
     counts[n.categoria] = (counts[n.categoria] || 0) + 1;
   }
 
@@ -65,7 +66,7 @@ export function runOpportunityRadar(
 
   // Noticias con alto tráfico o palabras clave de guía
   const candidates = noticias
-    .filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado')
+    .filter((n) => isPublishedArticle(n))
     .filter((n) => {
       const text = `${n.titulo} ${n.resumen}`.toLowerCase();
       return EVERGREEN_TRIGGERS.some((k) => text.includes(k));

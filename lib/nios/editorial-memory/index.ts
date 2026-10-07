@@ -1,6 +1,7 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { buildKnowledgeGraph } from '../knowledge-graph';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface MemoryEntry {
   entity: string;
@@ -27,7 +28,7 @@ function toDate(v: unknown): Date {
 
 export function buildEditorialMemory(noticias: Noticia[], guides: EvergreenArticle[] = []): EditorialMemory {
   const graph = buildKnowledgeGraph(noticias, guides);
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const memories: MemoryEntry[] = [];
 
   for (const e of graph.entities.slice(0, 50)) {

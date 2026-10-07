@@ -3,6 +3,7 @@ import type { EvergreenArticle } from '@/lib/evergreen';
 import { runContentIntelligence } from '../content-intelligence';
 import { runBusinessV3 } from '../business';
 import { buildKnowledgeGraph } from '../knowledge-graph';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface DailyBriefing {
   generatedAt: string;
@@ -37,7 +38,7 @@ export function runDailyAutomation(noticias: Noticia[], guides: EvergreenArticle
   const yesterdayEnd = new Date(yesterdayStart);
   yesterdayEnd.setDate(yesterdayEnd.getDate() + 1);
 
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const yesterday = published.filter((n) => {
     const t = toDate(n.fecha).getTime();
     return t >= yesterdayStart.getTime() && t < yesterdayEnd.getTime();

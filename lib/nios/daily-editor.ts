@@ -11,6 +11,7 @@ import { buildExecutiveDashboard, type ExecutiveDashboard } from './executive-re
 import { buildV3Report, type NiosV3Report } from './v3-report';
 import { buildV4Report, type NiosV4Report } from './v4-report';
 import { logger } from '@/lib/logger';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface DailyEditorReport {
   generatedAt: string;
@@ -60,7 +61,7 @@ export async function getDailyEditorReport(
     }
   }
 
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const distribution: Record<string, number> = {};
   for (const n of published) {
     distribution[n.categoria] = (distribution[n.categoria] || 0) + 1;

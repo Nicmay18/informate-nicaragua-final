@@ -2,6 +2,7 @@ import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { buildKnowledgeGraph } from '../knowledge-graph';
 import { runContentIntelligence } from '../content-intelligence';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface RecycleSuggestion {
   type: 'guía' | 'actualización' | 'especial' | 'cronología';
@@ -14,7 +15,7 @@ export interface RecycleSuggestion {
 }
 
 export function runContentRecycler(noticias: Noticia[], guides: EvergreenArticle[] = []): RecycleSuggestion[] {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const graph = buildKnowledgeGraph(noticias, guides);
   const ci = runContentIntelligence(noticias, guides);
   const suggestions: RecycleSuggestion[] = [];

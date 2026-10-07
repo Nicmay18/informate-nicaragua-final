@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface NiosEntity {
   id: string;
@@ -147,7 +148,7 @@ export function buildKnowledgeGraph(noticias: Noticia[], guides: EvergreenArticl
   }
 
   for (const n of noticias) {
-    if (n.estado === 'borrador' || n.estado === 'archivado') continue;
+    if (!isPublishedArticle(n)) continue;
     const text = `${n.titulo} ${n.resumen}`.replace(/[.,;:!?()\[\]{}]/g, ' ');
 
     // entidades conocidas

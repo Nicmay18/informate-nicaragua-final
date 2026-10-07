@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import { buildKnowledgeGraph } from '../knowledge-graph';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface YearCount {
   year: number;
@@ -39,7 +40,7 @@ export function buildEditorialTimeline(noticias: Noticia[]): EditorialTimeline {
 
   for (const e of graph.entities.slice(0, 50)) {
     const yearMap: Record<number, { count: number; views: number }> = {};
-    const news = noticias.filter((n) => e.news.includes(n.slug) && n.estado !== 'borrador' && n.estado !== 'archivado');
+    const news = noticias.filter((n) => e.news.includes(n.slug) && isPublishedArticle(n));
     const topNews = news
       .sort((a, b) => (b.vistas || 0) - (a.vistas || 0))
       .slice(0, 5)

@@ -1,4 +1,5 @@
 import type { Noticia } from '@/lib/types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface LearningInsight {
   pattern: string;
@@ -20,7 +21,7 @@ function toDate(v: unknown): Date {
 }
 
 export function runLearningSystem(noticias: Noticia[]): LearningSystem {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const insights: LearningInsight[] = [];
 
   // titulares con números

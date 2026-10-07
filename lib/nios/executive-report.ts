@@ -5,6 +5,7 @@ import type { NiosOpportunity } from './opportunity-radar';
 import type { SeoCleanupReport } from './seo-cleanup';
 import type { BusinessSignal } from './business-signals';
 import { hasWeakMetaDescription, hasWeakKeywords } from '@/lib/seo/effective';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface Kpi {
   id: string;
@@ -161,8 +162,8 @@ export function buildExecutiveDashboard(
   const ms14 = now.getTime() - 14 * 24 * 60 * 60 * 1000;
   const ms30 = now.getTime() - 30 * 24 * 60 * 60 * 1000;
 
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
-  const drafts = noticias.filter((n) => n.estado === 'borrador' || n.estado === 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
+  const drafts = noticias.filter((n) => !isPublishedArticle(n));
 
   const publishedToday = published.filter((n) => toDate(n.fecha).getTime() >= today).length;
   const totalViews = published.reduce((sum, n) => sum + (n.vistas || 0), 0);

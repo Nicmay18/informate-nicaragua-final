@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface BusinessSignalV3 {
   name: string;
@@ -33,7 +34,7 @@ const COMMERCIAL_KEYWORDS = [
 ];
 
 export function runBusinessV3(noticias: Noticia[], guides: EvergreenArticle[] = []): BusinessIntelligenceV3 {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
 
   const categoryViews: Record<string, number> = {};
   const authorViews: Record<string, number> = {};

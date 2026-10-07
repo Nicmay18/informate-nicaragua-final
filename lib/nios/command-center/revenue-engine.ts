@@ -2,6 +2,7 @@ import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { COMMERCIAL_CATEGORIES } from './constants';
 import type { RevenueEngine, RevenueOpportunity } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 /**
  * No vende publicidad ni fija precios. Identifica dónde el inventario
@@ -11,7 +12,7 @@ export function buildRevenueEngine(
   noticias: Noticia[],
   guides: EvergreenArticle[]
 ): RevenueEngine {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const total = published.length || 1;
 
   const counts: Record<string, number> = {};

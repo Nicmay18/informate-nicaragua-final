@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import { resolveEffectiveSeo } from '@/lib/seo/effective';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface SeoIssue {
   id: string;
@@ -19,7 +20,7 @@ export function runSeoCleanup(noticias: Noticia[]): SeoCleanupReport {
   const issues: SeoIssue[] = [];
 
   for (const n of noticias) {
-    if (n.estado === 'borrador' || n.estado === 'archivado') continue;
+    if (!isPublishedArticle(n)) continue;
 
     if (n.titulo && n.titulo.length > 60) {
       issues.push({

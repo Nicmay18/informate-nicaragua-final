@@ -27,6 +27,7 @@ import { buildEeatEngine } from './eeat-engine';
 import { buildBusinessIntelligence } from './business-intelligence';
 import { syncRecommendations, getCeoMemory } from '@/lib/nios/ceo-memory';
 import type { BusinessCommandCenter } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export * from './types';
 export { buildEditorialBalance } from './editorial-balance';
@@ -54,7 +55,7 @@ export function buildCommandCenter(
   now = new Date(),
   pendingCount = 0,
 ): BusinessCommandCenter {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
 
   const balance = buildEditorialBalance(noticias);
   const trust = buildGoogleTrust(noticias, guides, now.getTime());

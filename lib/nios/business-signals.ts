@@ -1,5 +1,6 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface BusinessSignal {
   id: string;
@@ -30,7 +31,7 @@ export function runBusinessSignals(
   const traffic: Record<string, number> = {};
 
   for (const n of noticias) {
-    if (n.estado === 'borrador' || n.estado === 'archivado') continue;
+    if (!isPublishedArticle(n)) continue;
     counts[n.categoria] = (counts[n.categoria] || 0) + 1;
     traffic[n.categoria] = (traffic[n.categoria] || 0) + (n.vistas || 0);
   }

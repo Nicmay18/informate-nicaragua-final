@@ -1,6 +1,7 @@
 import type { Noticia } from '@/lib/types';
 import { TARGET_MIX, OTHERS_TARGET } from './constants';
 import type { CategoryBalance, EditorialBalance } from './types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 function share(count: number, total: number): number {
   if (total <= 0) return 0;
@@ -12,7 +13,7 @@ function share(count: number, total: number): number {
  * objetivo y mide cuánto se aleja la identidad del medio de su plan.
  */
 export function buildEditorialBalance(noticias: Noticia[]): EditorialBalance {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const total = published.length;
 
   const counts: Record<string, number> = {};

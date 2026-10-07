@@ -27,8 +27,9 @@ export async function GET(request: NextRequest) {
   const db = getAdminDb();
 
   try {
-    // 1. Categorías inválidas en noticias publicadas
-    const noticiasSnap = await db.collection('noticias').where('publicado', '==', true).limit(100).get();
+    // 1. Categorías inválidas en noticias publicadas (universo canónico)
+    const { publishedArticlesQuery } = await import('@/lib/nios/intelligence/metric-truth');
+    const noticiasSnap = await publishedArticlesQuery(db.collection('noticias')).limit(100).get();
     const publicasValidas = ['Sucesos', 'Nacionales', 'Internacionales', 'Deportes', 'Tecnología', 'Espectáculos'];
     const conCategoriaInvalida = noticiasSnap.docs.filter((d) => {
       const cat = d.data().categoria;

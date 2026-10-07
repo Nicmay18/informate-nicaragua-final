@@ -14,6 +14,7 @@
  */
 
 import type { Noticia } from '@/lib/types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 import type {
   AdSenseBlocker,
   AdSenseCheck,
@@ -90,7 +91,7 @@ export function evaluateAdSenseReadiness(
   const problemPages: { slug: string; issue: string }[] = [];
 
   const published = input.noticias.filter(
-    (n) => n.estado === 'publicado' && !n.noindex,
+    (n) => isPublishedArticle(n) && !n.noindex,
   );
 
   // ── Check 1: volumen de contenido publicado ───────────────────────────

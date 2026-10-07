@@ -1,4 +1,5 @@
 import type { Noticia } from '@/lib/types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface ContentMixDay {
   day: string;
@@ -21,7 +22,7 @@ export function getContentMixRecommendation(
   weekStart: Date = new Date()
 ): { mix: ContentMixDay[]; rationale: string[] } {
   const last30 = noticias.filter((n) => {
-    if (!n.fecha || n.estado === 'borrador' || n.estado === 'archivado') return false;
+    if (!n.fecha || !isPublishedArticle(n)) return false;
     const d = new Date(n.fecha).getTime();
     const cutoff = weekStart.getTime() - 30 * 24 * 60 * 60 * 1000;
     return d >= cutoff;

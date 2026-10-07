@@ -260,8 +260,72 @@ const CATALOG: MetricDefinition[] = [
     source: 'Firestore',
     collection: 'noticias',
     field: 'estado',
-    definition: 'Artículos cuyo estado es "publicado".',
+    definition:
+      'Inventario editorial activo: publicado===true && estado==="publicado" && archived!==true. Autoridad: classifyArticleUniverse.',
     unit: 'artículos',
+    freshness: 'batch',
+    confidence: 'high',
+  },
+  {
+    key: 'site.articles.documents',
+    name: 'Documentos totales',
+    scope: 'site',
+    source: 'Firestore',
+    collection: 'noticias',
+    definition:
+      'Todos los documentos de la colección noticias, sin filtro. NO equivale a artículos publicados: incluye archivados, borradores, pendientes e inconsistentes.',
+    unit: 'documentos',
+    freshness: 'batch',
+    confidence: 'high',
+  },
+  {
+    key: 'site.articles.archived',
+    name: 'Artículos archivados',
+    scope: 'site',
+    source: 'Firestore',
+    collection: 'noticias',
+    field: 'archived',
+    definition:
+      'Retirados deliberadamente (soft-delete): archived===true o estado==="archivado". No forman parte del inventario publicado.',
+    unit: 'artículos',
+    freshness: 'batch',
+    confidence: 'high',
+  },
+  {
+    key: 'site.articles.drafts',
+    name: 'Borradores',
+    scope: 'site',
+    source: 'Firestore',
+    collection: 'noticias',
+    field: 'estado',
+    definition:
+      'No publicados y no archivados: estado==="borrador" o publicado===false sin marca de archivo.',
+    unit: 'artículos',
+    freshness: 'batch',
+    confidence: 'high',
+  },
+  {
+    key: 'site.articles.pending',
+    name: 'Pendientes',
+    scope: 'site',
+    source: 'Firestore',
+    collection: 'noticias',
+    field: 'estado',
+    definition:
+      'Documentos sin señal de ciclo de vida publicado/borrador/archivado. Universo de revisión, no del inventario publicado.',
+    unit: 'artículos',
+    freshness: 'batch',
+    confidence: 'high',
+  },
+  {
+    key: 'site.articles.inconsistent',
+    name: 'Documentos con ciclo de vida contradictorio',
+    scope: 'site',
+    source: 'Firestore',
+    collection: 'noticias',
+    definition:
+      'Campos publicado/estado/archived en combinaciones imposibles (p.ej. archivado y publicado a la vez). Se reportan para corrección manual; NO se corrigen automáticamente.',
+    unit: 'documentos',
     freshness: 'batch',
     confidence: 'high',
   },
@@ -420,4 +484,107 @@ export function wrapMetric<T>(key: string, value: T, collectedAt?: string): Metr
   const definition = getMetricDefinition(key);
   if (!definition) return null;
   return { key, value, collectedAt, definition };
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// UNIVERSO CANÓNICO DE ARTÍCULOS (P0.2)
+// Autoridad única para "¿qué significa artículo publicado/archivado/etc.?".
+//
+// Distinción deliberada con lib/editorial/canonical.ts:
+//   canonical.ts → "¿puede MOSTRARSE este artículo?" (lifecycle + MENI + noindex)
+//   aquí         → "¿cuántos artículos TIENE el medio?" (lifecycle puro)
+// Un artículo publicado que pierde aprobación sigue siendo publicado:
+// publicar es un hecho de ciclo de vida, no un veredicto de calidad.
+// ═══════════════════════════════════════════════════════════════════
+
+export type ArticleUniverse =
+  /** Forma parte del inventario editorial publicado/activo del medio. */
+  | 'publicado'
+  /** Retirado deliberadamente del inventario (soft-delete). */
+  | 'archivado'
+  /** No publicado; en preparación o rechazado sin archivar. */
+  | 'borrador'
+  /** Sin señal de ciclo de vida clara; universo de revisión. */
+  | 'pendiente'
+  /** Campos contradictorios. Se reporta; no se cuenta ni se corrige solo. */
+  | 'inconsistente';
+
+/** Campos mínimos que determinan el ciclo de vida de un artículo. */
+export interface ArticleLifecycleFields {
+  publicado?: boolean;
+  estado?: string;
+  archived?: boolean;
+}
+
+/**
+ * Clasificación canónica del ciclo de vida de un documento de `noticias`.
+ * ÚNICA fuente de verdad para el universo de un artículo. No muta datos.
+ */
+export function classifyArticleUniverse(data: ArticleLifecycleFields): ArticleUniverse {
+  const publicado = data.publicado === true;
+  const estadoPublicado = data.estado === 'publicado';
+  const archivado = data.archived === true || data.estado === 'archivado';
+  const borrador = data.estado === 'borrador' || data.publicado === false;
+
+  // Combinaciones imposibles primero: se reportan, no se interpretan.
+  if (archivado && (publicado || estadoPublicado)) return 'inconsistente';
+  if (borrador && (publicado || estadoPublicado)) return 'inconsistente';
+  if (archivado) return 'archivado';
+  if (publicado && estadoPublicado) return 'publicado';
+  if (publicado || estadoPublicado) return 'inconsistente'; // las flags discrepan
+  if (borrador) return 'borrador';
+  return 'pendiente';
+}
+
+/** "¿Es este documento un artículo publicado del inventario activo?" */
+export function isPublishedArticle(data: ArticleLifecycleFields): boolean {
+  return classifyArticleUniverse(data) === 'publicado';
+}
+
+/** "¿Fue este documento retirado del inventario (soft-delete)?" */
+export function isArchivedArticle(data: ArticleLifecycleFields): boolean {
+  return classifyArticleUniverse(data) === 'archivado';
+}
+
+export interface ArticleUniverseCounts {
+  documentos: number;
+  publicados: number;
+  archivados: number;
+  borradores: number;
+  pendientes: number;
+  inconsistentes: number;
+}
+
+/** Conteo canónico por universo sobre una lista de documentos ya cargada. */
+export function countArticleUniverse(docs: ArticleLifecycleFields[]): ArticleUniverseCounts {
+  const counts: ArticleUniverseCounts = {
+    documentos: docs.length,
+    publicados: 0,
+    archivados: 0,
+    borradores: 0,
+    pendientes: 0,
+    inconsistentes: 0,
+  };
+  for (const d of docs) {
+    const u = classifyArticleUniverse(d);
+    if (u === 'publicado') counts.publicados++;
+    else if (u === 'archivado') counts.archivados++;
+    else if (u === 'borrador') counts.borradores++;
+    else if (u === 'pendiente') counts.pendientes++;
+    else counts.inconsistentes++;
+  }
+  return counts;
+}
+
+/**
+ * Query canónica del universo PUBLICADO para Firestore.
+ * `publicado===true && estado==='publicado'` — en datos normalizados implica
+ * archived!==true (los archivados llevan publicado===false).
+ * NO usar `archived != true`: Firestore `!=` exige que el campo exista y
+ * excluiría todos los docs sin el campo `archived`.
+ */
+export function publishedArticlesQuery(
+  collection: FirebaseFirestore.CollectionReference,
+): FirebaseFirestore.Query {
+  return collection.where('publicado', '==', true).where('estado', '==', 'publicado');
 }

@@ -4,6 +4,7 @@ import { getAdInventory, getAvailableSlots } from '@/lib/ads/inventory';
 import type { RevenueEngine } from './types';
 import type { BusinessIntelligence, BusinessMetric } from './types';
 import { COMMERCIAL_CATEGORIES } from './constants';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 function metric(id: string, label: string, value: string, disponible: boolean, explicacion: string): BusinessMetric {
   return { id, label, value, disponible, explicacion };
@@ -19,7 +20,7 @@ export function buildBusinessIntelligence(
   _guides: EvergreenArticle[],
   revenue: RevenueEngine,
 ): BusinessIntelligence {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
 
   const inventory = getAdInventory();
   const available = getAvailableSlots();

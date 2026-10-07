@@ -6,6 +6,7 @@
 import type { Noticia } from '@/lib/types';
 import type { RelatedLink } from '@/lib/article-links';
 import { EVERGREEN_ARTICLES } from '@/lib/evergreen';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 interface ScoredCandidate {
   noticia: Noticia;
@@ -101,7 +102,7 @@ export async function generateInternalLinks(
 
   for (const candidate of allNews) {
     if (candidate.slug === noticia.slug) continue;
-    if (candidate.estado === 'borrador' || candidate.estado === 'archivado') continue;
+    if (!isPublishedArticle(candidate)) continue;
 
     let score = 0;
     const reasons: string[] = [];

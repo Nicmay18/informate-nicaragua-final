@@ -10,6 +10,7 @@ import type { Noticia } from '@/lib/types';
 import type { GSCSnapshot, GA4Snapshot, ArticleFusion, GSCQueryRow } from './types';
 import { logger } from '@/lib/logger';
 import { countWords } from '@/lib/utils/word-count';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
@@ -107,7 +108,7 @@ export function mergeArticleData(
   const fusions: ArticleFusion[] = [];
 
   for (const n of noticias) {
-    if (n.estado === 'borrador' || n.estado === 'archivado') continue;
+    if (!isPublishedArticle(n)) continue;
 
     const gscData = gscBySlug.get(n.slug);
     const ga4Data = ga4BySlug.get(n.slug);
@@ -199,5 +200,5 @@ export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Pro
         estado,
       } as Noticia;
     })
-    .filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+    .filter((n) => isPublishedArticle(n));
 }

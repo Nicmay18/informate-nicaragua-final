@@ -1,6 +1,7 @@
 import type { Noticia } from '@/lib/types';
 import type { EvergreenArticle } from '@/lib/evergreen';
 import { hasWeakMetaDescription, hasWeakKeywords } from '@/lib/seo/effective';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface EditorialScore {
   total: number;
@@ -12,7 +13,7 @@ export function calculateEditorialScore(
   noticias: Noticia[],
   guides: EvergreenArticle[] = []
 ): EditorialScore {
-  const published = noticias.filter((n) => n.estado !== 'borrador' && n.estado !== 'archivado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const total = published.length || 1;
 
   function withMeta(n: Noticia) {

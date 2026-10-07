@@ -66,6 +66,7 @@ export async function GET(request: NextRequest) {
       .collection('noticias')
       .where('distribuida', '==', false)
       .where('estado', '==', 'publicado')
+      .where('publicado', '==', true)
       .limit(50)
       .get();
 

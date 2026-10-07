@@ -1,5 +1,6 @@
 import { getAllAuthors } from '@/lib/authors';
 import type { Noticia } from '@/lib/types';
+import { isPublishedArticle } from '@/lib/nios/intelligence/metric-truth';
 
 export interface AuthorityPillar {
   id: string;
@@ -21,7 +22,7 @@ export interface AuthorityHealth {
  * autores verificados, fuentes declaradas, actualizaciones y páginas de confianza.
  */
 export function buildAuthorityHealth(noticias: Noticia[]): AuthorityHealth {
-  const published = noticias.filter((n) => n.estado === 'publicado');
+  const published = noticias.filter((n) => isPublishedArticle(n));
   const total = published.length || 1;
 
   const authors = getAllAuthors();

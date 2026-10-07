@@ -5399,7 +5399,7 @@ window.batchRestore = async function() {
       btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Buscando noticias en borrador...';
       try {
         const todas = await getNoticiasCache();
-        const borradores = todas.filter(n => n.estado !== 'publicado');
+        const borradores = todas.filter(n => !esPublicadaAdmin(n));
         if (borradores.length === 0) { statusDiv.innerHTML = '<span style="color:var(--success);"><i class="fas fa-check-circle"></i> No hay noticias en borrador. Todas ya están publicadas.</span>'; btn.disabled = false; return; }
         statusDiv.innerHTML = `⚙️ Publicando ${borradores.length} noticias... <div class="progress-bar" style="margin-top:6px;"><div class="progress-fill" id="publicarProgress" style="width:0%"></div></div>`;
         const batch = writeBatch(db);
