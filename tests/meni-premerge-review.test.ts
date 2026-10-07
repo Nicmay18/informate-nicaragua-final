@@ -88,7 +88,12 @@ describe('Pre-merge MENI — cadena única de verdad', () => {
     }
   });
 
-  it('CASO 2: score 89 no publica (ni con aprobadoMeni forzado)', () => {
+  it('CASO 2: score 89 sin defectos materiales es publicable (score es metrica, no decision)', () => {
+    // MENI 2.1.1-PROD: el score NO decide la publicación. Una nota con
+    // 89 puntos, recomendación "publicar" y cero problemas materiales es
+    // PUBLICAR. La banda 80-89 queda visible como INFO (MENI_SCORE_
+    // THRESHOLD) y el defecto real —si existe— llega como BLOCKER/WARNING
+    // en los hallazgos del veredicto unificado.
     for (const aprobadoMeni of [false, true]) {
       const sup = makeEditorialDecision({
         titulo: notaAprobable.titulo,
@@ -104,7 +109,7 @@ describe('Pre-merge MENI — cadena única de verdad', () => {
         wow: 85,
         eeat: 90,
       });
-      expect(sup.verdict).not.toBe('PUBLICAR');
+      expect(sup.verdict).toBe('PUBLICAR');
     }
   });
 

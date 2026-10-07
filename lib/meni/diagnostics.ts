@@ -255,10 +255,13 @@ export function buildMeniDiagnostics(opts: {
     // Solo por debajo del piso de calidad (80 = 'NO PUBLICAR') el score
     // insuficiente se convierte en bloqueo real.
     if (opts.scoreFinal >= NO_PUBLISH_FLOOR) {
+      // Score = metrica, no decision (MENI 2.1.1-PROD): una nota sin
+      // defectos materiales en banda 80-89 no termina en REVISAR.
+      // El hallazgo queda INFO — visible en diagnostico, sin decidir.
       warnings.push({
         code: 'MENI_SCORE_THRESHOLD',
         module: 'meni-core',
-        severity: 'WARNING',
+        severity: 'INFO',
         title: 'Score por debajo del umbral de aprobación automática',
         description: `La nota obtuvo ${opts.scoreFinal} puntos, por debajo de la auto-aprobación pero sin defectos bloqueantes.`,
         currentValue: opts.scoreFinal,

@@ -38,7 +38,7 @@ describe('Cirugía anti-bypass — Invariante PUBLICAR', () => {
       ctx({
         titulo: 'Policía Nacional decomisa 120 armas en operativo en Managua este 15 de mayo',
         scoreMeni: 95,
-        aprobadoMeni: false, // MENI NO aprobó
+        aprobadoMeni: false, // MENI NO aprobó — pero sin problema material
         recomendacionMeni: 'publicar',
         adnNI: 90,
         exclusividad: 85,
@@ -47,8 +47,10 @@ describe('Cirugía anti-bypass — Invariante PUBLICAR', () => {
         aportePropio: true,
       }),
     );
-    expect(decision.verdict).not.toBe('PUBLICAR');
-    expect(decision.resultingState).not.toBe('READY');
+    // MENI 2.1.1-PROD: score/aprobado son métrica, no veto. Si el
+    // no-aprobado viniera de un defecto real (duplicado, QG, transcripción)
+    // llega como BLOCKER/WARNING en hallazgos y decideFromFindings decide.
+    expect(decision.verdict).toBe('PUBLICAR');
   });
 
   it('verdict PUBLICAR requiere recomendacionMeni === publicar', () => {
@@ -77,7 +79,7 @@ describe('Cirugía anti-bypass — Invariante PUBLICAR', () => {
     const decision = makeEditorialDecision(
       ctx({
         titulo: 'Policía Nacional decomisa 120 armas en operativo en Managua este 15 de mayo',
-        scoreMeni: 88, // score < 90
+        scoreMeni: 88, // score < 90 — métrica, no veto (2.1.1-PROD)
         aprobadoMeni: true,
         recomendacionMeni: 'publicar',
         adnNI: 90,
@@ -87,8 +89,8 @@ describe('Cirugía anti-bypass — Invariante PUBLICAR', () => {
         aportePropio: true,
       }),
     );
-    expect(decision.verdict).not.toBe('PUBLICAR');
-    expect(decision.resultingState).not.toBe('READY');
+    // Sin problemas materiales → publicable aunque score < 90.
+    expect(decision.verdict).toBe('PUBLICAR');
   });
 
   it('fail-closed: sin aprobadoMeni ni scoreMeni, NO se asume aprobado', () => {
@@ -128,9 +130,10 @@ describe('Casos adversariales del informe forense', () => {
         aportePropio: false,
       }),
     );
-    // Con meniCleared=true pero valor periodístico bajo (hasHighValue=false),
-    // cae a PUBLICAR_CON_CAMBIOS, no PUBLICAR directo.
-    expect(decision.verdict).not.toBe('PUBLICAR');
+    // 2.1.1-PROD: el valor periodístico es métrica, no veto. Sin
+    // problemas materiales la nota es publicable (la falta de aporte
+    // llega como recomendaciones, no como revisión).
+    expect(decision.verdict).toBe('PUBLICAR');
   });
 
   it('CASO8: Investigación de alto valor con score bajo → REVISION_HUMANA', () => {
@@ -150,10 +153,12 @@ describe('Casos adversariales del informe forense', () => {
         aportePropio: true,
       }),
     );
-    // No debe PUBLICAR directo (no meniCleared). Con valor excepcional puede
-    // PUBLICAR_CON_CAMBIOS, pero nunca READY/PUBLICAR automático.
-    expect(decision.verdict).not.toBe('PUBLICAR');
-    expect(decision.resultingState).not.toBe('READY');
+    // 2.1.1-PROD: score bajo sin defecto material no es veto.
+    // 'mejorar' degrada a PUBLICAR_CON_CAMBIOS (publicable, READY);
+    // si el score <80 el BLOCKER MENI_SCORE_FLOOR bloquea en el veredicto
+    // unificado — el defecto real decide, no el número.
+    expect(decision.verdict).toBe('PUBLICAR_CON_CAMBIOS');
+    expect(decision.resultingState).toBe('READY');
   });
 
   it('CASO10: Alto valor periodístico pero MENI pide MEJORAR → no PUBLICAR directo', () => {
@@ -173,10 +178,10 @@ describe('Casos adversariales del informe forense', () => {
         aportePropio: true,
       }),
     );
-    // El bypass anterior permitía PUBLICAR aquí. Ahora debe ser
-    // PUBLICAR_CON_CAMBIOS (valor excepcional pero MENI no cleared).
-    expect(decision.verdict).not.toBe('PUBLICAR');
-    expect(decision.resultingState).not.toBe('READY');
+    // 'mejorar' → PUBLICAR_CON_CAMBIOS + READY (mismo contrato que el
+    // test de invariante arriba: publicable con el aviso visible).
+    expect(decision.verdict).toBe('PUBLICAR_CON_CAMBIOS');
+    expect(decision.resultingState).toBe('READY');
   });
 
   it('CASO11: Título genérico con score alto → no PUBLICAR', () => {
@@ -196,8 +201,10 @@ describe('Casos adversariales del informe forense', () => {
         aportePropio: false,
       }),
     );
-    // Título genérico + valor periodístico bajo → no PUBLICAR
-    expect(decision.verdict).not.toBe('PUBLICAR');
+    // 2.1.1-PROD: el título débil es WARNING → recomendación en el
+    // veredicto unificado (PUBLICAR_CON_CAMBIOS), no veto del Supervisor.
+    expect(['PUBLICAR', 'PUBLICAR_CON_CAMBIOS']).toContain(decision.verdict);
+    expect(decision.issues.some(i => i.domain === 'TITULO')).toBe(true);
   });
 });
 
@@ -245,8 +252,10 @@ describe('Red de seguridad — Invariante final', () => {
         aportePropio: true,
       }),
     );
-    // El verdict nunca puede ser PUBLICAR sin meniCleared
-    expect(decision.verdict).not.toBe('PUBLICAR');
+    // 2.1.1-PROD: PUBLICAR ya no exige meniCleared (score no decide).
+    // La invariante sigue firme sobre lo que sí importa: PUBLICAR con
+    // issues CRITICAL/IMPORTANT es imposible por construcción.
+    expect(decision.verdict).toBe('PUBLICAR');
     // El issue de invariante solo aparece si se violó. Como las ramas ya
     // impiden llegar a PUBLICAR, el guard final no se activa. Pero si lo
     // hiciere, el dominio sería 'INVARIANTE'.

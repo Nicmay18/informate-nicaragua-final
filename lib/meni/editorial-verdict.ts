@@ -415,11 +415,16 @@ export function decideFromFindings(
   if (counts.blockers > 0 || supervisorHardBlock) {
     decision = 'BLOQUEAR';
     resumen = `BLOQUEAR — ${counts.blockers} defecto(s) crítico(s)${supervisorHardBlock ? `; Supervisor: ${sv}` : ''}. Corregir antes de publicar.`;
-  } else if (counts.warnings > 0 || !opts.aprobado || sv === 'REVISION_HUMANA' || sv === 'INVESTIGAR_MAS' || sv === 'ACTUALIZAR') {
+    // Score = metrica, no decision (MENI 2.1.1-PROD): `!aprobado` por si
+    // solo NO fuerza REVISAR — toda causa material de no-aprobacion ya
+    // emite su propio BLOCKER/WARNING (duplicado, QG, transcripcion,
+    // factualidad). Excepcion: score invalido (null) = evaluacion
+    // incompleta, sin evidencia de seguridad -> REVISAR.
+  } else if (counts.warnings > 0 || (opts.scoreFinal === null && !opts.aprobado) || sv === 'REVISION_HUMANA' || sv === 'INVESTIGAR_MAS' || sv === 'ACTUALIZAR') {
     decision = 'REVISAR';
     resumen = counts.warnings > 0
       ? `REVISAR — ${counts.warnings} problema(s) que requieren revisión humana antes de publicar.`
-      : `REVISAR — la nota no alcanzó el umbral de aprobación automática (${opts.scoreFinal ?? '—'}/100)${sv ? `; Supervisor: ${sv}` : ''}.`;
+      : `REVISAR — evaluación incompleta o decisión del Supervisor${sv ? ` (${sv})` : ''}.`;
   } else if (counts.recommendations > 0) {
     decision = 'PUBLICAR_CON_CAMBIOS';
     resumen = `PUBLICAR CON CAMBIOS — ${counts.recommendations} recomendación(es) editorial(es) que NO impiden publicar.`;

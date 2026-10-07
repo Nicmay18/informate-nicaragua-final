@@ -408,7 +408,11 @@ describe('K — una sola decisión coherente con los hallazgos', () => {
     expect(decideFromFindings([finding('WARNING')], { scoreFinal: 95, aprobado: true }).decision).toBe('REVISAR');
     expect(decideFromFindings([finding('RECOMMENDATION')], { scoreFinal: 95, aprobado: true }).decision).toBe('PUBLICAR_CON_CAMBIOS');
     expect(decideFromFindings([finding('INFO')], { scoreFinal: 95, aprobado: true }).decision).toBe('PUBLICAR');
-    expect(decideFromFindings([], { scoreFinal: 80, aprobado: false }).decision).toBe('REVISAR');
+    // 2.1.1-PROD: score es métrica, no decisión — 0 hallazgos → PUBLICAR
+    // aunque aprobado=false (la banda 80-89 emite solo INFO, no warning).
+    expect(decideFromFindings([], { scoreFinal: 80, aprobado: false }).decision).toBe('PUBLICAR');
+    // Score inválido (null) sin aprobación → REVISAR (sin evidencia de seguridad)
+    expect(decideFromFindings([], { scoreFinal: null, aprobado: false }).decision).toBe('REVISAR');
     // Un RECOMMENDATION + BLOCKER → BLOQUEAR (el bloqueante manda)
     expect(
       decideFromFindings([finding('BLOCKER', 'a'), finding('RECOMMENDATION', 'b'), finding('WARNING', 'c')], { scoreFinal: 95, aprobado: true }).decision,

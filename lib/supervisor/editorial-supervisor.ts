@@ -392,21 +392,10 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
     });
   }
 
-  // ── 2.7 Valor periodístico y veredicto final ────────────────
-  // El Supervisor evalúa dimensiones editoriales INDEPENDIENTEMENTE del score.
-  // Un score técnico alto no oculta un valor periodístico bajo.
-  const aporteScore = ctx.aportePropio === true ? 100 : undefined;
-  const editorialDimensions = [
-    ctx.adnNI,
-    ctx.exclusividad,
-    ctx.wow,
-    ctx.eeat,
-    aporteScore,
-  ].filter((v): v is number => typeof v === 'number' && !Number.isNaN(v));
-  const journalisticValue = editorialDimensions.length > 0
-    ? Math.round(editorialDimensions.reduce((a, b) => a + b, 0) / editorialDimensions.length)
-    : (ctx.scoreMeni ?? 100);
-  const hasExceptionalValue = journalisticValue >= 85;
+  // ── 2.7 Veredicto final ─────────────────────────────────────
+  // El valor periodistico (adnNI/exclusividad/wow/eeat/aportePropio) es
+  // metrica de calidad, no veto: se refleja en el score y en las
+  // recomendaciones del veredicto unificado, no en la decision de publicar.
 
   let verdict: SupervisorVerdict;
   let resultingState: ArticleLifecycleState;
@@ -439,23 +428,29 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
       verdict = 'PUBLICAR_CON_CAMBIOS';
       resultingState = 'EDITORIAL_REVIEW';
     }
-  } else if (meniCleared && hasExceptionalValue) {
-    // GATE DE PUBLICACIÓN: MENI aprobó (score >= 90, sin bloqueos) y el Supervisor
-    // no encontró bloqueantes críticos/importantes. La recomendación editorial
-    // (MEJORAR/REVISAR) se mantiene como consejo, pero no bloquea.
-    verdict = 'PUBLICAR';
-    resultingState = 'READY';
-  } else if (!hasExceptionalValue) {
-    // MENI no aprobó y el valor periodístico no es excepcional.
-    verdict = recomendacionMeni === 'revisar' ? 'REVISION_HUMANA' : 'PUBLICAR_CON_CAMBIOS';
-    resultingState = 'EDITORIAL_REVIEW';
-  } else if (hasExceptionalValue) {
-    // MENI no aprobó, pero el valor periodístico es alto.
-    verdict = 'REVISION_HUMANA';
-    resultingState = 'EDITORIAL_REVIEW';
   } else {
-    verdict = 'PUBLICAR_CON_CAMBIOS';
-    resultingState = 'EDITORIAL_REVIEW';
+    // Sin issues CRITICAL ni IMPORTANT no hay problema material que haga
+    // inseguro publicar (MENI 2.1.1-PROD: el score es metrica, no
+    // decision). Reglas:
+    //  - fail-closed: sin evidencia de evaluacion MENI (ni aprobado ni
+    //    score) → REVISION_HUMANA. No se asume seguridad sin evidencia.
+    //  - recomendacionMeni "revisar" refleja problemas graves reales
+    //    (anti-clickbait bloqueado, checks criticos humanos) → REVISION_HUMANA.
+    //  - los WARNINGs (imagen, categoria, titulo debil…) NO degradan el
+    //    verdict del Supervisor: el veredicto unificado ya los baja a
+    //    PUBLICAR_CON_CAMBIOS via fromSupervisor (WARNING→RECOMMENDATION).
+    //  - "mejorar" degrada PUBLICAR → PUBLICAR_CON_CAMBIOS mas abajo.
+    const sinEvidenciaMeni = ctx.aprobadoMeni === undefined && ctx.scoreMeni === undefined;
+    if (sinEvidenciaMeni) {
+      verdict = 'REVISION_HUMANA';
+      resultingState = 'EDITORIAL_REVIEW';
+    } else if (recomendacionMeni === 'revisar') {
+      verdict = 'REVISION_HUMANA';
+      resultingState = 'EDITORIAL_REVIEW';
+    } else {
+      verdict = 'PUBLICAR';
+      resultingState = 'READY';
+    }
   }
 
   // La recomendación 'mejorar' de MENI es consejo, no veto: degrada un
@@ -476,20 +471,20 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
   }
 
   // ── 2.7b INVARIANTE FINAL DE PUBLICACIÓN ─────────────────────
-  // Cirugía anti-bypass: por construcción las ramas anteriores ya impiden
-  // llegar a PUBLICAR sin meniCleared, pero este guard es la red de seguridad
-  // explícita y auditable. Si por cualquier refactor futuro se llegara a
-  // verdict === 'PUBLICAR' sin meniCleared, se degrada a REVISION_HUMANA.
-  if (verdict === 'PUBLICAR' && !meniCleared) {
+  // Cirugía anti-bypass: PUBLICAR exige ausencia de problemas MATERIALES
+  // (CRITICAL/IMPORTANT) — NO exige score. El score es metrica (spec
+  // 2.1.1-PROD); un material-issue que un refactor futuro introduzca
+  // sobre una rama publicable degrada a REVISION_HUMANA igual que antes.
+  if (verdict === 'PUBLICAR' && (hasCriticalIssues || hasImportantIssues)) {
     verdict = 'REVISION_HUMANA';
     resultingState = 'EDITORIAL_REVIEW';
     issues.push({
       severity: 'CRITICAL',
       domain: 'INVARIANTE',
-      problem: 'Invariante de publicación violada: PUBLICAR sin meniCleared',
+      problem: 'Invariante de publicación violada: PUBLICAR con issues materiales',
       impact: 'Se evitó un bypass del gate editorial',
-      cause: 'Refactor futuro podría intentar PUBLICAR sin aprobación de MENI',
-      action: 'Revisar la rama que produjo PUBLICAR — requiere meniCleared=true',
+      cause: 'Refactor futuro podría intentar PUBLICAR sobre issues CRITICAL/IMPORTANT',
+      action: 'Revisar la rama que produjo PUBLICAR con issues materiales',
       autoFixable: false,
     });
   }
