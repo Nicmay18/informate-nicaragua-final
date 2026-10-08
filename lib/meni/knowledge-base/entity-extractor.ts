@@ -191,6 +191,26 @@ const TEMAS_NI: Record<string, string[]> = {
   'migración': ['migrante', 'deportado', 'frontera', 'emigración', ' éxodo'],
 };
 
+// Palabras funcionales y verbos sueltos: si aparecen como token del nombre,
+// el candidato es un fragmento de frase, no una entidad.
+const ENTITY_STOPWORDS = new Set([
+  'que','de','del','la','el','en','con','por','para','a','al','y','o','u',
+  'los','las','un','una','unos','unas','su','sus','este','esta','estos','estas',
+  'fue','fueron','ser','son','era','hay','tendra','tendria','conduce','conducen',
+  'cubiertos','cubierto','segundos','segundo','kilometro','kilometros','donde',
+  'cuando','como','mientras','sobre','entre','hacia','desde','hasta','despues',
+]);
+
+function isValidEntityName(name: string): boolean {
+  const words = name.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return false;
+  if (words.some((w) => ENTITY_STOPWORDS.has(w))) return false;
+  // el nombre debe contener al menos un token capitalizado o numérico
+  // más allá del prefijo genérico (barrio|carretera|autopista|km...).
+  const rest = name.replace(/^(barrio|colonia|residencial|sector|comunidad|carretera|autopista|km\.?)\s+/i, '');
+  return /[A-ZÁÉÍÓÚÑ0-9]/.test(rest);
+}
+
 function stripHtml(html: string): string {
   return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
@@ -218,7 +238,7 @@ function detectPersonas(text: string): string[] {
     let m: RegExpExecArray | null;
     while ((m = p.exec(text)) !== null) {
       const nombre = m[1].trim();
-      if (nombre.length > 5 && !['Nicaragua', 'Managua', 'Informate'].includes(nombre)) {
+      if (nombre.length > 5 && isValidEntityName(nombre) && !['Nicaragua', 'Managua', 'Informate'].includes(nombre)) {
         personas.add(nombre);
       }
     }
@@ -235,11 +255,13 @@ function detectLugares(text: string): string[] {
   const barrioPattern = /\b(barrio|colonia|residencial|sector|comunidad)\s+([A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){0,2})/g;
   let m: RegExpExecArray | null;
   while ((m = barrioPattern.exec(text)) !== null) {
-    lugares.add(`${m[1]} ${m[2]}`.trim());
+    const cand = `${m[1]} ${m[2]}`.trim();
+    if (isValidEntityName(cand)) lugares.add(cand);
   }
-  const carreteraPattern = /\b(carretera|autopista|km\.?)\s+([0-9]+|[A-ZÁÉÍÓÚÑa-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑa-záéíóúñ]+){0,2})/g;
+  const carreteraPattern = /\b(carretera|autopista|km\.?)\s+([0-9]+|[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+){0,2})/g;
   while ((m = carreteraPattern.exec(text)) !== null) {
-    lugares.add(`${m[1]} ${m[2]}`.trim());
+    const cand = `${m[1]} ${m[2]}`.trim();
+    if (isValidEntityName(cand)) lugares.add(cand);
   }
   return [...lugares].slice(0, 15);
 }

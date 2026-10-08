@@ -57,6 +57,9 @@ function goneResponse(): NextResponse {
 
 const BLOCKED_API_PATHS = ['/api/audio', '/api/view', '/api/views'];
 
+// Dotfiles/artefactos legacy servidos desde public/ no deben ser públicos.
+const BLOCKED_DOTFILES = ['/.htaccess'];
+
 // P0 — Endpoints de mutación masiva retirados. La capacidad queda cerrada
 // en servidor (410 Gone): no basta ocultar botones del panel.
 // Motivos: fabrican/alteran texto editorial o mutan/borran noticias en lote
@@ -146,6 +149,10 @@ function requireAdminAuth(request: NextRequest): NextResponse | null {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const ua = request.headers.get('user-agent') || '';
+
+  if (BLOCKED_DOTFILES.includes(pathname)) {
+    return new NextResponse(null, { status: 404, headers: { 'Cache-Control': 'no-store' } });
+  }
 
   if (RETIRED_API_PATHS.includes(pathname)) {
     return retiredApiResponse();

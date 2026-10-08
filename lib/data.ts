@@ -3,7 +3,7 @@ import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { capitalizeFirst, normalizeEditorialTitle } from './formateo';
 import { logger } from './logger';
 import { unstable_cache, revalidateTag } from 'next/cache';
-import { getEditorialDecision, isPublicArticle, resolvePublicCategory, shouldIndexArticle } from './editorial/canonical';
+import { getEditorialDecision, isRenderableArticle, resolvePublicCategory, shouldIndexArticle } from './editorial/canonical';
 import { cleanArticleBody } from './sanitize';
 import { isToxicSlug } from './seo-toxic';
 
@@ -32,6 +32,7 @@ export const LIST_FIELDS = [
   'slug',
   'titulo',
   'resumen',
+  'contenido',
   'imagen',
   'imagenRedes',
   'categoria',
@@ -178,7 +179,7 @@ function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
  * Filtro canónico de artículos aptos para portada/listados.
  */
 export function isPublicNews(data: Partial<Noticia>): boolean {
-  return isPublicArticle(data);
+  return isRenderableArticle(data);
 }
 
 export function invalidateFirestoreCache() {
@@ -189,6 +190,14 @@ export function invalidateFirestoreCache() {
 
 /** Timestamp límite para partir el campo `fecha` por tipo (ver fetchPublishedDocs). */
 const FECHA_TYPE_BOUNDARY = new Date('2100-01-01T00:00:00Z');
+/**
+ * Bound de tipo string para la rama `fecha` con valores string. CRÍTICO:
+ * `fecha > Timestamp` NO matchea strings en desigualdades de Firestore
+ * (verificado contra producción: devolvía 0 docs y dejaba invisibles 68 notas
+ * con fecha string + sin publishedAt). Un bound string sí cruza por orden de
+ * tipos (timestamp < string) y matchea todos los strings no vacíos.
+ */
+const FECHA_STRING_BOUNDARY = ' ';
 
 /** Fecha canónica de un doc crudo: publishedAt → fechaPublicacion → fecha. */
 function canonicalDocTs(data: FirestoreNoticiaData): number {
@@ -250,7 +259,7 @@ async function fetchPublishedDocs(fields: string[], fetchLimit: number, categori
     // Solo fecha tipo Timestamp (tipos < string en el orden de Firestore)
     safeGet('fecha-timestamp', base().where('fecha', '<', boundary).orderBy('fecha', 'desc').select(...selectFields).limit(fetchLimit)),
     // Solo fecha tipo string (tipos > timestamp)
-    safeGet('fecha-string', base().where('fecha', '>', boundary).orderBy('fecha', 'desc').select(...selectFields).limit(fetchLimit)),
+    safeGet('fecha-string', base().where('fecha', '>=', FECHA_STRING_BOUNDARY).orderBy('fecha', 'desc').select(...selectFields).limit(fetchLimit)),
   ]);
 
   // publishedAt cubre docs sin `fecha` o con fecha inválida. Intenta el query
@@ -450,7 +459,7 @@ const _cachedGetBySlug = unstable_cache(
         }
         const titulo = normalizeEditorialTitle(capitalizeFirst(cleanArticleBody(data.titulo || '')));
         const contenido = cleanArticleBody(data.contenido);
-        if (!docSlug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20 || !data.categoria?.trim()) {
+        if (!docSlug?.trim() || titulo.trim().length <= 5 || contenido.trim().length <= 20) {
           logger.warn('[data.ts] Noticia rechazada por datos insuficientes:', { slug, titulo: titulo.slice(0, 40) });
           return null;
         }
@@ -496,8 +505,8 @@ const _cachedGetBySlug = unstable_cache(
             ? data.fuentesComplementarias.filter((f: unknown) => typeof f === 'string').map((f: string) => cleanArticleBody(f)).filter(Boolean)
             : undefined,
         };
-        if (!isPublicArticle(noticia)) {
-          logger.warn('[data.ts] Noticia no apta para publicación según MENI:', { slug: docSlug, razon: getEditorialDecision(noticia).razon });
+        if (!isRenderableArticle(noticia)) {
+          logger.warn('[data.ts] Noticia no renderizable:', { slug: docSlug, razon: getEditorialDecision(noticia).razon });
           return null;
         }
         return noticia;
@@ -526,7 +535,7 @@ export async function getAllSlugs(): Promise<string[]> {
     const snap = await adminDb
       .collection('noticias')
       .where('estado', '==', 'publicado')
-      .select('slug', 'aprobadoMeni', 'publicado', 'archived', 'estado', 'noindex', 'perfil', 'categoria')
+      .select('slug', 'titulo', 'contenido', 'aprobadoMeni', 'publicado', 'archived', 'estado', 'noindex', 'perfil', 'categoria')
       .limit(2000)
       .get();
 
@@ -535,13 +544,15 @@ export async function getAllSlugs(): Promise<string[]> {
         const data = d.data() as FirestoreNoticiaData;
         const article: Partial<Noticia> = {
           slug: data.slug,
+          titulo: data.titulo,
+          contenido: data.contenido,
           aprobadoMeni: data.aprobadoMeni,
           publicado: data.publicado,
           archived: data.archived,
           estado: data.estado,
           noindex: data.noindex,
         };
-        return isPublicArticle(article) && !isToxicSlug(data.slug || '') ? data.slug : null;
+        return isRenderableArticle(article) && !isToxicSlug(data.slug || '') ? data.slug : null;
       })
       .filter(Boolean) as string[];
   } catch (err) {
@@ -779,7 +790,6 @@ const _cachedGetSitemapNews = unstable_cache(
           // sitemap — un sitemap con 404s degrada crawl/indexación.
           const tituloOk = normalizeEditorialTitle(capitalizeFirst(cleanArticleBody(data.titulo || '')));
           const contenidoOk = cleanArticleBody(data.contenido);
-          if (tituloOk.trim().length <= 5 || contenidoOk.trim().length <= 20 || !data.categoria?.trim()) return null;
           const noticia: Noticia = {
             id: d.id,
             slug: docSlug,
@@ -804,7 +814,7 @@ const _cachedGetSitemapNews = unstable_cache(
             aprobadoMeni: data.aprobadoMeni,
             noindex: !!data.noindex,
           };
-          return isPublicArticle(noticia) && shouldIndexArticle(noticia) ? noticia : null;
+          return isRenderableArticle(noticia) && shouldIndexArticle(noticia) ? noticia : null;
         })
         .filter(Boolean) as Noticia[];
     } catch (err) {

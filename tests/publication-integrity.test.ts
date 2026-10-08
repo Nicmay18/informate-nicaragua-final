@@ -9,12 +9,28 @@ import type { Noticia } from '@/lib/types';
 describe('Integridad de publicación', () => {
   it('permite publicación cuando aprobadoMeni=true, publicado=true, archived=false', () => {
     const n: Partial<Noticia> = {
+      slug: 'noticia-valida',
+      titulo: 'Título suficientemente largo',
+      contenido: 'Contenido suficiente para renderizar la página pública.',
       aprobadoMeni: true,
       publicado: true,
       archived: false,
       estado: 'publicado',
     };
     expect(isPublicNews(n)).toBe(true);
+  });
+
+  it('bloquea cuando el contenido fue vaciado (datos insuficientes)', () => {
+    const n: Partial<Noticia> = {
+      slug: 'noticia-vacia',
+      titulo: 'Título suficientemente largo',
+      contenido: '',
+      aprobadoMeni: true,
+      publicado: true,
+      archived: false,
+      estado: 'publicado',
+    };
+    expect(isPublicNews(n)).toBe(false);
   });
 
   it('bloquea cuando aprobadoMeni=false', () => {

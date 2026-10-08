@@ -38,6 +38,25 @@ export function isPublicArticle(article: Partial<Noticia>): boolean {
   return decision.publicar;
 }
 
+/**
+ * Verdad única de renderabilidad: una noticia "pública" debe poder
+ * renderizarse como página. Los mismos umbrales que exige el detalle
+ * (_cachedGetBySlug) se aplican aquí — listado, sitemap, navegación y
+ * detalle comparten esta regla (P0.2.6: divergencia listado↔detalle).
+ */
+export function hasRenderableContent(article: Partial<Noticia>): boolean {
+  return (
+    !!article.slug?.trim() &&
+    (article.titulo || '').trim().length > 5 &&
+    (article.contenido || '').trim().length > 20
+  );
+}
+
+/** isPublicArticle + hasRenderableContent: la noticia existe como página pública. */
+export function isRenderableArticle(article: Partial<Noticia>): boolean {
+  return isPublicArticle(article) && hasRenderableContent(article);
+}
+
 export function shouldIndexArticle(article: Partial<Noticia>): boolean {
   const decision = getEditorialDecision(article);
   return decision.indexar;

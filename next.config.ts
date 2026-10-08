@@ -133,18 +133,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/noticias/:slug',
-        has: [{ type: 'query' as const, key: 'slug' }],
-        destination: '/noticias/:slug',
-        permanent: true,
-      },
-      {
-        source: '/noticias/:slug',
-        has: [{ type: 'query' as const, key: 'id' }],
-        destination: '/noticias/:slug',
-        permanent: true,
-      },
-      {
         source: '/categoria/cultura',
         destination: '/categoria/espectaculos',
         permanent: true,
