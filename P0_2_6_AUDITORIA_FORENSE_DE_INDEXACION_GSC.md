@@ -613,12 +613,25 @@ Mismo patrón aplicado en `app/api/list-all/route.ts` (endpoint público del Hea
 | `/.htaccess` servido | sí | 404 |
 | GSC total no-indexadas | 1,380 | unchanged (GSC es memoria histórica) |
 
-## E. VEREDICTO DE CORRECCIÓN
+## E. VALIDACIÓN POST-DEPLOY (commit `e82e7246`, master → Vercel)
 
-**`🟡 ABIERTO — PENDIENTE VALIDACIÓN POST-DEPLOY + EXPORT GSC`**
+Probes en producción tras el deploy:
 
-- ✅ Origen real de los números divergentes **explicado con datos directos** (Firestone enum + probes REST), no suposiciones.
-- ✅ 4 defectos de código corregidos, typecheck + lint + tests verdes.
-- ⏳ **Post-deploy**: hay que re-probar los 511 slugs (HTTP 200 + canonical), el sitemap (=511), `/api/list-all`, los HTMLs legacy y los `?slug=` en producción.
-- ⏳ **GSC**: las 1,380 siguen sin export del usuario — el desglose por razón y las 108 URLs no contabilizadas requieren el CSV de GSC (cobertura → "Ver todas las páginas afectadas" → exportar). Sin ese CSV no se puede cerrar a 🟢.
-- ⚠️ Las 2 notas con `contenido` vaciado y la 1 tóxica necesitan decisión editorial (restaurar contenido / archivar / mantener denylist).
+| Probe | Antes | Después |
+|---|---|---|
+| `/.htaccess` | 200 | **404** ✓ |
+| `/noticias/:slug?slug=X` | 308 → misma URL (loop) | **200 directo** ✓ |
+| `/noticia.html?slug=X` | caía al loop | **308 → 200** (redirect único, sin loop) ✓ |
+| `sitemap.xml` noticias | 443 | **511** ✓ (+68 recuperadas) |
+| `/api/list-all` | subconjunto fecha-string | **200** con universo completo ✓ |
+
+El sitemap pasó de 443 a **511** — coincide exacto con el universo indexable Firestore.
+
+## F. VEREDICTO DE CORRECCIÓN
+
+**`🟡 ABIERTO — PENDIENTE EXPORT GSC + DECISIÓN EDITORIAL`**
+
+- ✅ Origen de los números divergentes probado con Firestore directo (no suposición).
+- ✅ 4 defectos de código corregidos + desplegados + **verificados en producción**.
+- ⏳ **GSC**: las 1,380 requieren el CSV de cobertura del usuario para el desglose por razón y las 108 URLs sin clasificar (GSC → Cobertura → Exportar).
+- ⚠️ 2 notas con `contenido` vaciado + 1 tóxica: decisión editorial (restaurar / archivar / mantener denylist).
