@@ -144,7 +144,7 @@ export async function GET(request: Request) {
 
     // ── Selección: pool canónico de publicadas (maneja fecha de tipo mixto)
     const docs = await fetchPublishedDocs(
-      ['slug', 'titulo', 'resumen', 'contenido', 'metaDescription', 'metaDescripcion', 'categoria', 'vistas', 'imagen', 'imagenRedes'],
+      ['slug', 'titulo', 'resumen', 'contenido', 'metaDescription', 'metaDescripcion', 'categoria', 'vistas', 'imagen', 'imagenRedes', 'publicado', 'aprobadoMeni', 'archived', 'noindex'],
       200,
     );
     const ahora = Date.now();
@@ -179,18 +179,33 @@ export async function GET(request: Request) {
     const mensaje = buildTelegramDigest(items, legible);
 
     // ── Claim atómico del día (solo si va a enviarse) ──
+    // create() gana la carrera entre ejecuciones concurrentes. Un claim
+    // 'sending' más viejo que 10 min se considera muerto (proceso que
+    // falló a medias) y se puede recuperar — nunca bloquea el día.
     if (!force) {
       try {
         await docRef.create({ fecha: iso, status: 'sending', claimedAt: new Date().toISOString() });
       } catch {
-        await runLog('skipped', { reason: 'Claim concurrente: otro proceso ya está enviando/envió' });
-        return NextResponse.json({ success: true, skipped: true, reason: 'Resumen en progreso o ya enviado' });
+        const snap = await docRef.get();
+        const data = snap.data() || {};
+        const claimedMs = Date.parse(data.claimedAt || '0') || 0;
+        const stale = Date.now() - claimedMs > 10 * 60 * 1000;
+        if (data.status === 'sent') {
+          await runLog('skipped', { reason: `Ya se envió el resumen de ${iso}` });
+          return NextResponse.json({ success: true, skipped: true, reason: `Ya se envió el resumen de ${iso}` });
+        }
+        if (!(data.status === 'sending' && stale) && data.status !== 'failed') {
+          await runLog('skipped', { reason: 'Claim concurrente: otro proceso está enviando' });
+          return NextResponse.json({ success: true, skipped: true, reason: 'Resumen en progreso o ya enviado' });
+        }
+        await docRef.set({ status: 'sending', claimedAt: new Date().toISOString(), recoveredFrom: data.status }, { merge: true });
       }
     }
 
     // ── Enviar con reintentos controlados ──
     const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
     if (!TG_TOKEN || !TG_CHAT_ID) {
+      if (!force) await docRef.set({ status: 'failed', error: 'no_credentials', enviadoEn: new Date().toISOString() }, { merge: true }).catch(() => {});
       await runLog('error', { reason: 'Faltan credenciales de Telegram' });
       await recordCronHeartbeat(cronPath, { status: 'down', durationMs: Date.now() - startedAt, note: 'Sin credenciales Telegram' });
       return NextResponse.json({ error: 'Faltan credenciales de Telegram' }, { status: 400 });
