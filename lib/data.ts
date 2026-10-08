@@ -224,7 +224,7 @@ function canonicalDocTs(data: FirestoreNoticiaData): number {
  * Ambos queries de fecha usan el índice compuesto estado+fecha ya existente.
  * El merge final se reordena por fecha canónica en memoria.
  */
-async function fetchPublishedDocs(fields: string[], fetchLimit: number, categoria?: string): Promise<QueryDocumentSnapshot[]> {
+export async function fetchPublishedDocs(fields: string[], fetchLimit: number, categoria?: string): Promise<QueryDocumentSnapshot[]> {
   const { adminDb } = await import('./firebase-admin');
   const { Timestamp } = await import('firebase-admin/firestore');
   // El select debe incluir los campos usados para filtrar/ordenar en memoria

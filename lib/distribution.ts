@@ -1,4 +1,5 @@
 import type { Noticia } from '@/lib/types';
+import { buildFacebookCopy, buildWhatsAppCopy } from '@/lib/distribution/social-copy';
 
 export interface DistributionPayload {
   facebook: string;
@@ -33,11 +34,9 @@ function contexto(texto: string, maxChars = 200): string {
 }
 
 /**
- * Textos editoriales por canal — cada canal tiene su propio tono:
- * - Facebook: contexto + pregunta de engagement (audiencia general)
- * - WhatsApp: formato de grupo/comunidad, directo y escaneable
- * - Newsletter: HTML con jerarquía editorial
- * - Push: alerta breve ≤ 90 chars
+ * Textos editoriales por canal — cada canal tiene su propio tono.
+ * Delega en la capa editorial común (social-copy): el ángulo se extrae
+ * una vez y cada canal lo presenta distinto (informar/atraer/compartir).
  * Determinista: nunca inventa datos; todo sale del artículo.
  */
 export function generateDistribution(noticia: Noticia, baseUrl = 'https://nicaraguainformate.com'): DistributionPayload {
@@ -45,33 +44,16 @@ export function generateDistribution(noticia: Noticia, baseUrl = 'https://nicara
   const emoji = CAT_EMOJI[noticia.categoria || ''] || '📰';
   const resumen = String(noticia.resumen || '');
   const hook = contexto(resumen, 200) || noticia.titulo;
-  const breve = contexto(resumen, 120) || noticia.titulo;
 
-  const facebook = [
-    `${emoji} ${noticia.titulo}`,
-    '',
-    hook,
-    '',
-    `👀 Lee los detalles completos:`,
-    `${url}?utm_source=facebook`,
-    '',
-    `¿Qué opinás? Te leemos en los comentarios 👇`,
-    `#NicaraguaInformate`,
-  ].join('\n');
+  const fb = buildFacebookCopy(noticia);
+  const facebook = `${fb.text}\n\n� ${fb.url}`;
 
-  const whatsapp = [
-    `${emoji} *${noticia.titulo}*`,
-    '',
-    `_${breve}_`,
-    '',
-    `Leé la nota completa 👇`,
-    `${url}?utm_source=whatsapp`,
-  ].join('\n');
+  const whatsapp = buildWhatsAppCopy(noticia);
 
   const newsletter = [
-    `<h2><a href="${url}">${noticia.titulo}</a></h2>`,
+    `<h2><a href="${url}?utm_source=newsletter&utm_medium=social">${noticia.titulo}</a></h2>`,
     `<p>${resumen || hook}</p>`,
-    `<p><a href="${url}" style="color:#2563eb;">Leer la noticia completa →</a></p>`,
+    `<p><a href="${url}?utm_source=newsletter&utm_medium=social" style="color:#2563eb;">Leer la noticia completa →</a></p>`,
   ].join('\n');
 
   const push = `${emoji} ${noticia.titulo}`.substring(0, 90);

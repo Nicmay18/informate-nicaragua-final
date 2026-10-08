@@ -66,7 +66,7 @@ export function runFacebookEngine(input: IntelligenceEngineInput): FacebookDecis
   const gancho = generarGancho(texto);
   const hashtags = generarHashtags(titulo, input.categoria, input.departamento);
   const slug = input.slug || titulo.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  const url = `https://informate.ni/noticias/${slug}`;
+  const url = `https://nicaraguainformate.com/noticias/${slug}?utm_source=facebook&utm_medium=social`;
   const copy = `${emoji} ${titulo}\n\n${gancho}\n\n${url}\n\n${hashtags.join(' ')}`;
   const score = computeScore(copy, hashtags);
 

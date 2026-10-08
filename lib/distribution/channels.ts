@@ -80,43 +80,43 @@ export async function enviarTelegram(noticia: Noticia, db: Firestore): Promise<C
   );
   return { ok: r.ok, skipped: r.skipped, error: r.error };
 }
-/** Envía a Facebook (si hay token) */
+/**
+ * Envía a Facebook (si hay token). Copy generado por la capa editorial
+ * común (social-copy): ángulo + contexto real + pregunta natural + CTA.
+ * Tras publicar, deja el enlace como primer comentario (best-effort).
+ */
 export async function enviarFacebook(noticia: Noticia): Promise<ChannelResult> {
   try {
     const FB_TOKEN = process.env.FB_PAGE_ACCESS_TOKEN || '';
     const FB_PAGE_ID = process.env.FB_PAGE_ID || '';
     if (!FB_TOKEN || !FB_PAGE_ID) return { ok: false, error: 'Faltan credenciales Facebook' };
 
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=facebook`;
-    const emoji: Record<string, string> = {
-      Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
-      Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍',
-    };
-    const catEmoji = emoji[noticia.categoria || ''] || '📰';
-
-    let contexto = '';
-    const texto = (noticia.resumen || noticia.contenido || '').replace(/\n+/g, ' ').trim();
-    const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [];
-    for (const o of oraciones) {
-      const limpia = o.trim();
-      if (contexto.length + limpia.length + 1 > 200 && contexto.length > 0) break;
-      contexto += (contexto ? ' ' : '') + limpia;
-    }
-    if (!contexto) contexto = texto.substring(0, 140);
-
-    const mensaje = `${catEmoji} ${noticia.titulo}\n\n${contexto}...\n\n👉 ${url}\n\n#NicaraguaInformate`;
+    const { buildFacebookCopy } = await import('@/lib/distribution/social-copy');
+    const copy = buildFacebookCopy(noticia);
 
     const res = await fetch(`https://graph.facebook.com/v18.0/${FB_PAGE_ID}/feed`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message: mensaje,
-        link: url,
+        message: copy.text,
+        link: copy.url,
         access_token: FB_TOKEN,
       }),
     });
     const data = await res.json();
-    return { ok: !data.error, error: data.error?.message };
+    if (data.error) return { ok: false, error: data.error?.message };
+
+    // Primer comentario con el enlace (best-effort: el post ya tiene link card)
+    if (data.id) {
+      try {
+        await fetch(`https://graph.facebook.com/v18.0/${data.id}/comments`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: copy.firstComment, access_token: FB_TOKEN }),
+        });
+      } catch { /* best effort */ }
+    }
+    return { ok: true };
   } catch (e: any) {
     return { ok: false, error: e.message };
   }
@@ -161,7 +161,7 @@ export async function enviarPush(noticia: Noticia): Promise<ChannelResult> {
       return { ok: false, skipped: true, error: 'Push: ONESIGNAL_APP_ID o ONESIGNAL_REST_API_KEY no configuradas' };
     }
 
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=push`;
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=push&utm_medium=social`;
 
     const res = await fetch('https://onesignal.com/api/v1/notifications', {
       method: 'POST',
@@ -194,7 +194,7 @@ export async function enviarTwitter(noticia: Noticia): Promise<ChannelResult> {
       return { ok: false, skipped: true, error: 'Twitter requiere TWITTER_ACCESS_TOKEN (OAuth 2.0). Configurar o desactivar este canal.' };
     }
 
-    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=twitter`;
+    const url = `https://nicaraguainformate.com/noticias/${noticia.slug}?utm_source=twitter&utm_medium=social`;
     const emoji: Record<string, string> = {
       Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
       Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍',

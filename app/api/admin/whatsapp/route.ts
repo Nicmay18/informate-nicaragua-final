@@ -49,13 +49,9 @@ export async function POST(request: NextRequest) {
     const { to, message, noticia, broadcast = false } = body;
 
     if (noticia) {
-      const emoji: Record<string, string> = {
-        Sucesos: '🚨', Nacionales: '📌', Economía: '💰', Cultura: '🎭',
-        Espectáculos: '🎬', Deportes: '⚽', Tecnología: '💻', Internacionales: '🌍'
-      };
-      const catEmoji = emoji[noticia.categoria] || '📰';
-      const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
-      const texto = `${catEmoji} *${noticia.titulo}*\n\n${(noticia.resumen || '').substring(0, 120)}...\n\n🔗 ${url}\n\n#NicaraguaInformate`;
+      // Copy propio de WhatsApp: directo, reenviable, con UTM del canal.
+      const { buildWhatsAppCopy } = await import('@/lib/distribution/social-copy');
+      const texto = buildWhatsAppCopy(noticia);
 
       if (broadcast) {
         // Enviar a lista de contactos (requiere lista configurada en Meta)
