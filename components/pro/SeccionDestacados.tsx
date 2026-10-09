@@ -77,7 +77,7 @@ export default function SeccionDestacados({ noticias }: SeccionDestacadosProps) 
                 <div className="destacado-body">
                   <h3 className="destacado-title">{n.titulo}</h3>
                   {n.resumen && <p className="destacado-extract">{n.resumen}</p>}
-                  <span className="destacado-meta">
+                  <span className="destacado-meta" suppressHydrationWarning>
                     <Clock size={13} /> {tiempoRelativo(n.fecha)}
                   </span>
                 </div>

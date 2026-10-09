@@ -65,7 +65,7 @@ export default function SeccionCategoria({
             <div className="categoria-destacada-body">
               <h3 className="categoria-destacada-title">{principal.titulo}</h3>
               {principal.resumen && <p className="categoria-destacada-resumen">{principal.resumen}</p>}
-              <span className="categoria-destacada-meta">
+              <span className="categoria-destacada-meta" suppressHydrationWarning>
                 <Clock size={13} /> {tiempoRelativo(principal.fecha)}
               </span>
             </div>
@@ -91,7 +91,7 @@ export default function SeccionCategoria({
                 </div>
                 <div className="categoria-secundaria-body">
                   <h4 className="categoria-secundaria-title">{n.titulo}</h4>
-                  <span className="categoria-secundaria-meta">
+                  <span className="categoria-secundaria-meta" suppressHydrationWarning>
                     <Clock size={13} /> {tiempoRelativo(n.fecha)}
                   </span>
                 </div>

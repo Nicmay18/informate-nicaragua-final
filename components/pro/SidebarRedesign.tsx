@@ -68,7 +68,7 @@ export default function SidebarRedesign({ masLeidas }: SidebarRedesignProps) {
                   <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--rd-accent)', background: 'var(--rd-accent-soft)', padding: '3px 8px', borderRadius: 999 }}>
                     {n.categoria}
                   </span>
-                  <span style={{ fontSize: 11, color: 'var(--rd-muted)' }}>{timeAgo(n.fecha)}</span>
+                  <span style={{ fontSize: 11, color: 'var(--rd-muted)' }} suppressHydrationWarning>{timeAgo(n.fecha)}</span>
                 </div>
                 <h4 style={{ fontFamily: 'var(--rd-serif)', fontSize: 14.5, lineHeight: 1.35, fontWeight: 600, margin: 0 }}>
                   <Link href={`/noticias/${n.slug}`} style={{ color: 'var(--rd-ink)', textDecoration: 'none' }}>{n.titulo}</Link>
