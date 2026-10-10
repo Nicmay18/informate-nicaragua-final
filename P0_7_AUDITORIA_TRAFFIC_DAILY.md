@@ -2,7 +2,7 @@
 
 ## Estado
 
-**CERRADA — CORREGIDA Y VALIDADA (código)** + verificación post-deploy pendiente (consulta de solo lectura).
+**CERRADA CON LIMITACIÓN EXTERNA** — fix commiteado (`15b82c6e`), desplegado en producción (`dpl_7KVDZJ9JMhkA4B32NVAW4kDrUA1C`, READY) y el dual-write ejecutándose; la verificación documental directa en Firestore y la materialización histórica quedan bloqueadas por credenciales Firebase no disponibles localmente (§7).
 
 > Nota de alcance: el stack real es **Firestore** (firebase-admin 12.x), no
 > PostgreSQL/Supabase. `traffic_log` y `traffic_daily` son colecciones
@@ -86,13 +86,14 @@ Sin cambios en `traffic_log`, GA4, consentimiento, tracking, frontend ni schema 
 
 ## 6. Producción
 
-- **Deploy realizado**: NO (corrección local, sin push).
-- **Commit**: pendiente — cambios en working tree (`lib/analytics/traffic-aggregator.ts`, `m18-probe.ts`, `tests/traffic-daily-writer.test.ts`, `scripts/p0-7-*`, este documento).
-- **Pendiente post-deploy**:
-  1. Deploy normal → el dual-write materializa padres desde la primera vista.
-  2. Ejecutar `scripts/p0-7-materialize-parents.mjs --dry-run` y luego real, con credenciales admin (cubre los ~56+ días históricos).
-  3. Verificación de solo lectura definitiva: `db.collection('traffic_daily').listDocuments()` (días presentes) + `…/articles.get()` por día + `collection('traffic_daily').get()` — tras el fix, la raíz debe devolver docs reales.
-  4. Confirmar en el panel `/api/admin/traffic` → `meta.dailyCoverage` y `source: 'traffic_daily'`.
+- **Deploy realizado**: SÍ. Commit `15b82c6e` → push `ef0e3068..15b82c6e` a `origin/master` (09-oct 20:37 CST) → Vercel deploy `dpl_7KVDZJ9JMhkA4B32NVAW4kDrUA1C` (`informate-nicaragua-nextjs-a9jyr55c3-…vercel.app`), estado **READY**, target production, alias `nicaraguainformate.com`.
+- **Dual-write verificado ejecutándose en el nuevo deployment**: runtime logs del deploy — `POST /noticias/joven-nicaraguense-muere-en-espana-y-familia-gestiona-repatriacion` ×2 → **200** (server action `trackViewAction` → `incrementViewsBySlug` → `traffic_log` + `incrementTrafficDaily` ya con materialización de padre); 29 requests en la ventana, **0 5xx, 0 errores `traffic-aggregator`**.
+- **Materialización histórica**: `scripts/p0-7-materialize-parents.mjs --dry-run` ejecutado localmente → aborta limpio (`FALTAN CREDENCIALES`, exit 2). NO VERIFICADA — requiere `FIREBASE_SERVICE_ACCOUNT_BASE64` o el trío `FIREBASE_PROJECT_ID/CLIENT_EMAIL/PRIVATE_KEY` (todos `sensitive` en Vercel, no recuperables por CLI).
+- **Verificación documental directa** (`listDocuments()` + lectura de `articles` + raíz): NO VERIFICADA por la misma limitación. El commit incluye `scripts/p0-7-traffic-daily-probe.mjs` listo para ejecutarla.
+- **Pendiente (con credenciales)**:
+  1. `node scripts/p0-7-traffic-daily-probe.mjs` → confirmar padres nuevos materializados desde el deploy.
+  2. `node scripts/p0-7-materialize-parents.mjs --dry-run` → contar padres fantasma históricos (~56+ días).
+  3. `node scripts/p0-7-materialize-parents.mjs` → materializar; re-ejecutar `--dry-run` debe dar 0 pendientes (idempotente).
 
 ## 7. Limitación externa (declarada)
 
