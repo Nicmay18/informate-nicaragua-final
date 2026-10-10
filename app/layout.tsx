@@ -17,6 +17,7 @@ import {
 import { escapeJsonLd } from '@/lib/jsonld';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
+import Analytics from '@/components/Analytics';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -207,6 +208,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <CookieBanner />
         </Suspense>
         <ConsentScript />
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
         <ThemeScript />
         <Suspense fallback={null}>
           <JourneyTracker />

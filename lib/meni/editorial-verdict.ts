@@ -10,10 +10,13 @@
  *                         mecánico, duplicado, integridad o evidencia).
  *   REVISAR             → existe ≥1 WARNING (riesgo factual/editorial que
  *                         requiere revisión humana) o MENI no aprobó sin
- *                         bloqueo duro (score < umbral).
- *   PUBLICAR_CON_CAMBIOS → solo hay RECOMMENDATIONs/INFO (o MENI aprobó
- *                         con observaciones). Nunca requieren reescritura.
- *   PUBLICAR            → sin hallazgos que requieran acción.
+ *                         emitir ningún hallazgo que lo explique.
+ *   PUBLICAR_CON_CAMBIOS → MENI no aprobó y solo hay RECOMMENDATIONs/INFO:
+ *                         la nota necesita cambios para llegar al umbral,
+ *                         pero ningún hallazgo es un bloqueo duro.
+ *   PUBLICAR            → MENI aprobó; sin BLOCKER/WARNING. Las
+ *                         RECOMMENDATIONs restantes se listan como
+ *                         sugerencias — jamás degradan el veredicto.
  *
  * Una RECOMMENDATION jamás puede impedir publicación.
  * Un WARNING solo puede impedir publicar si existe una regla explícita
@@ -425,10 +428,23 @@ export function decideFromFindings(
     resumen = counts.warnings > 0
       ? `REVISAR — ${counts.warnings} problema(s) que requieren revisión humana antes de publicar.`
       : `REVISAR — evaluación incompleta o decisión del Supervisor${sv ? ` (${sv})` : ''}.`;
+  } else if (opts.aprobado) {
+    // MENI aprobó: las RECOMMENDATIONs restantes son sugerencias, no
+    // condiciones. Quedan visibles en `hallazgos`, pero el veredicto es
+    // PUBLICAR — el score ya incorpora sus deducciones (degradar el
+    // veredicto además sería doble penalización de la misma causa).
+    decision = 'PUBLICAR';
+    resumen = counts.recommendations > 0
+      ? `LISTA PARA PUBLICAR — aprobada con ${counts.recommendations} sugerencia(s) editorial(es) opcionales.`
+      : 'LISTA PARA PUBLICAR — no se detectaron errores bloqueantes.';
   } else if (counts.recommendations > 0) {
+    // No aprobado con recomendaciones accionables: la nota necesita
+    // cambios para llegar al umbral — eso es exactamente "con cambios".
     decision = 'PUBLICAR_CON_CAMBIOS';
     resumen = `PUBLICAR CON CAMBIOS — ${counts.recommendations} recomendación(es) editorial(es) que NO impiden publicar.`;
   } else {
+    // 2.1.1-PROD: score es métrica, no decisión. Cero hallazgos → PUBLICAR
+    // aunque aprobado=false (la banda 80-89 emite solo INFO por diseño).
     decision = 'PUBLICAR';
     resumen = 'LISTA PARA PUBLICAR — no se detectaron errores bloqueantes.';
   }

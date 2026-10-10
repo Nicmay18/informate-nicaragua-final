@@ -157,7 +157,7 @@ describe('TEST 8 — decisión final', () => {
     const v = decideFromFindings([], { scoreFinal: 92, aprobado: true });
     expect(v.decision).toBe('PUBLICAR');
   });
-  it('solo recomendaciones + aprobado → PUBLICAR_CON_CAMBIOS (no REVISAR)', () => {
+  it('solo recomendaciones + aprobado → PUBLICAR (sugerencias visibles, no degradan)', () => {
     const rec: EditorialFinding = {
       code: 'RECOMENDACION_EDITORIAL',
       severity: 'RECOMMENDATION',
@@ -169,7 +169,9 @@ describe('TEST 8 — decisión final', () => {
       field: 'contenido',
     };
     const v = decideFromFindings([rec], { scoreFinal: 92, aprobado: true });
-    expect(v.decision).toBe('PUBLICAR_CON_CAMBIOS');
+    expect(v.decision).toBe('PUBLICAR');
+    // La sugerencia no se oculta — permanece en hallazgos.
+    expect(v.counts.recommendations).toBe(1);
   });
   it('WARNING real + aprobado → REVISAR (el gate sigue firme)', () => {
     const w: EditorialFinding = {

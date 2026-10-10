@@ -181,7 +181,7 @@ describe('A/B/L — nota correcta y recomendaciones nunca bloquean', () => {
     }
   });
 
-  it('L: sin blockers, decisión ∈ {PUBLICAR, PUBLICAR_CON_CAMBIOS, REVISAR} — jamás BLOQUEAR', () => {
+  it('L: aprobado + solo RECOMMENDATION → PUBLICAR (sugerencia visible, no degrada veredicto)', () => {
     const v = buildEditorialVerdict({
       contenido: 'texto', scoreFinal: 92, aprobado: true,
       recomendaciones: [{ area: 'editorial', mensaje: 'Agregar contexto' }],
@@ -190,11 +190,30 @@ describe('A/B/L — nota correcta y recomendaciones nunca bloquean', () => {
         scoreOverride: false, issues: [], actions: [], resultingState: 'PUBLICADO', modelVersion: 't',
       } as any,
     });
-    expect(v.decision).toBe('PUBLICAR_CON_CAMBIOS');
+    expect(v.decision).toBe('PUBLICAR');
+    // La recomendación sigue visible — no se oculta, solo no degrada.
+    expect(v.counts.recommendations).toBe(1);
+    expect(v.hallazgos[0].severity).toBe('RECOMMENDATION');
   });
 
   it('L2: sin hallazgos y aprobado → PUBLICAR', () => {
     const v = decideFromFindings([], { scoreFinal: 95, aprobado: true, supervisorVerdict: 'PUBLICAR' });
+    expect(v.decision).toBe('PUBLICAR');
+  });
+
+  it('L3: NO aprobado + recomendaciones → PUBLICAR_CON_CAMBIOS (necesita cambios reales)', () => {
+    const v = decideFromFindings(
+      [{
+        code: 'EVIDENCIA_REQUERIDA', severity: 'RECOMMENDATION', module: 'score:valorEditorial',
+        title: 'Falta evidencia', description: 'x', howToFix: 'y', bloquea: false,
+      }],
+      { scoreFinal: 85, aprobado: false },
+    );
+    expect(v.decision).toBe('PUBLICAR_CON_CAMBIOS');
+  });
+
+  it('L4: NO aprobado + score válido + cero hallazgos → PUBLICAR (contrato 2.1.1-PROD: score es métrica)', () => {
+    const v = decideFromFindings([], { scoreFinal: 85, aprobado: false });
     expect(v.decision).toBe('PUBLICAR');
   });
 });
@@ -251,8 +270,9 @@ describe('D — EVIDENCIA_REQUERIDA es recomendación, jamás bloqueo', () => {
       expect(e.severity).toBe('RECOMMENDATION');
       expect(e.bloquea).toBe(false);
     }
-    // Solo recomendaciones → PUBLICAR_CON_CAMBIOS, jamás BLOQUEAR
-    expect(v.decision).toBe('PUBLICAR_CON_CAMBIOS');
+    // Aprobado con solo recomendaciones → PUBLICAR (las deducciones ya
+    // están en el score; el veredicto no se degrada dos veces).
+    expect(v.decision).toBe('PUBLICAR');
   });
 });
 
@@ -406,7 +426,8 @@ describe('K — una sola decisión coherente con los hallazgos', () => {
   it('matriz de decisión', () => {
     expect(decideFromFindings([finding('BLOCKER')], { scoreFinal: 90, aprobado: true }).decision).toBe('BLOQUEAR');
     expect(decideFromFindings([finding('WARNING')], { scoreFinal: 95, aprobado: true }).decision).toBe('REVISAR');
-    expect(decideFromFindings([finding('RECOMMENDATION')], { scoreFinal: 95, aprobado: true }).decision).toBe('PUBLICAR_CON_CAMBIOS');
+    expect(decideFromFindings([finding('RECOMMENDATION')], { scoreFinal: 95, aprobado: true }).decision).toBe('PUBLICAR');
+    expect(decideFromFindings([finding('RECOMMENDATION')], { scoreFinal: 85, aprobado: false }).decision).toBe('PUBLICAR_CON_CAMBIOS');
     expect(decideFromFindings([finding('INFO')], { scoreFinal: 95, aprobado: true }).decision).toBe('PUBLICAR');
     // 2.1.1-PROD: score es métrica, no decisión — 0 hallazgos → PUBLICAR
     // aunque aprobado=false (la banda 80-89 emite solo INFO, no warning).
