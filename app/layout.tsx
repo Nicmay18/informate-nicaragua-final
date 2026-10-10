@@ -140,6 +140,14 @@ export const metadata: Metadata = {
   },
 };
 
+// Measurement ID de GA4: NEXT_PUBLIC_GA_ID con fallback a la propiedad
+// actual de producción. Validación de formato para no inicializar GA con
+// un valor vacío o mal formado (p. ej. env de CI).
+const GA_ID = (() => {
+  const id = (process.env.NEXT_PUBLIC_GA_ID || 'G-W1B5J61WEP').trim();
+  return /^G-[A-Z0-9]{6,}$/i.test(id) ? id : '';
+})();
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const nonce = await getCspNonce();
   return (
@@ -150,36 +158,46 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         <link rel="preconnect" href="https://images.weserv.nl" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        {/* Google Analytics 4 — gtag.js */}
-        <Script
-          strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-W1B5J61WEP"
-          nonce={nonce}
-        />
-        <Script
-          id="ga4-init"
-          strategy="afterInteractive"
-          nonce={nonce}
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              var niA = 'denied', niAd = 'denied';
-              try {
-                var niP = JSON.parse(localStorage.getItem('ni_cookie_preferences') || localStorage.getItem('cookie_preferences_ni') || 'null');
-                if (niP) { niA = niP.analytics ? 'granted' : 'denied'; niAd = niP.ads ? 'granted' : 'denied'; }
-              } catch (e) {}
-              gtag('consent', 'default', {
-                analytics_storage: niA,
-                ad_storage: niAd,
-                ad_user_data: niAd,
-                ad_personalization: niAd
-              });
-              gtag('js', new Date());
-              gtag('config', 'G-W1B5J61WEP');
-            `,
-          }}
-        />
+        {/* Google Analytics 4 — gtag.js. El Measurement ID se resuelve de
+            NEXT_PUBLIC_GA_ID; el fallback preserva la propiedad actual de
+            producción. En entornos no productivos definir NEXT_PUBLIC_GA_ID
+            con el ID de la propiedad de staging (o dejar Vercel sin valor
+            solo donde no deba medirse: basta omitir el script con un ID
+            vacío en el env de ese entorno). Si el valor no es un ID GA4
+            válido (G-XXXXXXXXXX) no se carga GA. */}
+        {GA_ID && (
+          <>
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              nonce={nonce}
+            />
+            <Script
+              id="ga4-init"
+              strategy="afterInteractive"
+              nonce={nonce}
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  var niA = 'denied', niAd = 'denied';
+                  try {
+                    var niP = JSON.parse(localStorage.getItem('ni_cookie_preferences') || localStorage.getItem('cookie_preferences_ni') || 'null');
+                    if (niP) { niA = niP.analytics ? 'granted' : 'denied'; niAd = niP.ads ? 'granted' : 'denied'; }
+                  } catch (e) {}
+                  gtag('consent', 'default', {
+                    analytics_storage: niA,
+                    ad_storage: niAd,
+                    ad_user_data: niAd,
+                    ad_personalization: niAd
+                  });
+                  gtag('js', new Date());
+                  gtag('config', '${GA_ID}');
+                `,
+              }}
+            />
+          </>
+        )}
         {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit — no duplicar en head */}
         {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
         <style nonce={nonce} dangerouslySetInnerHTML={{ __html: criticalCss }} />
