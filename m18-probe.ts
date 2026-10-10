@@ -81,14 +81,21 @@ async function main() {
         userAgent: (d.data() as any).userAgent,
       })),
     ),
-    db.collection('traffic_daily').orderBy('date', 'desc').limit(14).get().then((s) =>
-      s.docs.map((d) => ({
-        id: d.id,
-        date: (d.data() as any).date,
-        totalViews: (d.data() as any).totalViews,
-        sources: (d.data() as any).sources,
-      })),
-    ),
+    // P0-7: los padres traffic_daily/{date} pueden ser docs "fantasma" (solo
+    // contienen la subcolección articles). collection.get()/orderBy() sobre la
+    // raíz devuelve 0 docs aunque existan datos — se usa listDocuments() +
+    // lectura de la subcolección articles, que es la forma real del schema.
+    db.collection('traffic_daily').listDocuments().then(async (refs) => {
+      const dayIds = refs.map((r) => r.id).sort().slice(-14);
+      const perDay: { date: string; articles: number; totalViews: number }[] = [];
+      for (const day of dayIds) {
+        const s = await db.collection('traffic_daily').doc(day).collection('articles').get();
+        let total = 0;
+        for (const d of s.docs) total += ((d.data() as any).views as number) || 0;
+        perDay.push({ date: day, articles: s.size, totalViews: total });
+      }
+      return perDay;
+    }),
     db.collection('nios_alerts').orderBy('createdAt', 'desc').limit(20).get().then((s) =>
       s.docs.map((d) => ({
         id: d.id,

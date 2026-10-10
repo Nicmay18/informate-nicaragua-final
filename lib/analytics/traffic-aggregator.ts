@@ -160,12 +160,22 @@ export async function saveTrafficDailySummary(
   slug: string,
   summary: Partial<TrafficDailySummary>,
 ): Promise<void> {
-  const ref = db.collection(TRAFFIC_DAILY).doc(date).collection('articles').doc(slug);
+  const dayRef = db.collection(TRAFFIC_DAILY).doc(date);
+  const ref = dayRef.collection('articles').doc(slug);
+  const updatedAt = new Date().toISOString();
   const payload: Partial<TrafficDailySummary> = {
     ...summary,
-    updatedAt: new Date().toISOString(),
+    updatedAt,
   };
-  await ref.set(payload, { merge: true });
+  const batch = db.batch();
+  // El doc padre traffic_daily/{date} se materializa (firestore.rules ya lo
+  // permite: hasOnly(['updatedAt'])). Sin él el padre queda como documento
+  // fantasma y cualquier lectura a nivel colección (collection.get(),
+  // queries por campo, vista raíz de Firebase Console) reporta traffic_daily
+  // vacío aunque la subcolección articles esté poblada.
+  batch.set(dayRef, { updatedAt }, { merge: true });
+  batch.set(ref, payload, { merge: true });
+  await batch.commit();
 }
 
 /**
@@ -179,23 +189,34 @@ export async function incrementTrafficDaily(
   device: 'mobile' | 'desktop' | 'tablet' | 'unknown',
 ): Promise<void> {
   const date = new Date().toISOString().split('T')[0];
-  const ref = db.collection(TRAFFIC_DAILY).doc(date).collection('articles').doc(slug);
+  const dayRef = db.collection(TRAFFIC_DAILY).doc(date);
+  const ref = dayRef.collection('articles').doc(slug);
   const normalizedSource = normalizeTrafficSource(source);
+  const updatedAt = new Date().toISOString();
 
   try {
-    await ref.set(
+    const batch = db.batch();
+    // Materializa el doc padre (ver saveTrafficDailySummary): evita que el
+    // padre quede fantasma y la colección parezca vacía a nivel raíz.
+    batch.set(dayRef, { updatedAt }, { merge: true });
+    batch.set(
+      ref,
       {
         slug,
         date,
         views: FieldValue.increment(1),
         [`sources.${normalizedSource}`]: FieldValue.increment(1),
         [`devices.${device}`]: FieldValue.increment(1),
-        updatedAt: new Date().toISOString(),
+        updatedAt,
       },
       { merge: true },
     );
+    await batch.commit();
   } catch (err) {
-    logger.warn('[traffic-aggregator] Failed to increment traffic_daily:', err);
+    // logger.warn es silencioso en producción: un fallo aquí no dejaba rastro
+    // ni en consola ni en Sentry, ocultando exactamente la clase de error que
+    // vaciaría traffic_daily sin síntomas.
+    logger.error('[traffic-aggregator] Failed to increment traffic_daily:', err);
   }
 }
 
