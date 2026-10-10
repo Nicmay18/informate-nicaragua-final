@@ -16,25 +16,31 @@ estable se audita una muestra real de 100 notas publicadas.
 5. Clasificación: decisiones vs resultado esperado editorialmente; falsos
    positivos/negativos marcados para revisión humana.
 
-## Resultados — ejecución 2026-10-10 (commit fbe92034)
+## Resultados — ejecución 2026-10-10 (commit fbe92034; re-ejecutado y reconciliado en 91b6f144)
 
 - Muestra: **100 notas** (Sucesos 29, Nacionales 30, Internacionales 18,
   Deportes 13, Tecnología 5, Espectáculos 5).
 - Errores de evaluación: 0.
-- Aprobadas (score ≥ 90): **86**.
+- Aprobadas (`aprobado=true`): **86**.
 
-| Decisión | N | Interpretación |
-|---|---|---|
-| PUBLICAR | 76 | aprobadas sin WARNING/BLOCKER |
-| PUBLICAR_CON_CAMBIOS | 11 | no aprobadas con recomendaciones accionables |
-| REVISAR | 12 | WARNINGs reales que exigen revisión humana |
-| BLOQUEAR | 1 | defecto mecánico real en nota publicada |
+Matriz `aprobado` × decisión (suma = 100):
+
+| | PUBLICAR | PUBLICAR_CON_CAMBIOS | REVISAR | BLOQUEAR | Total |
+|---|---|---|---|---|---|
+| `aprobado=true` | 76 | 0 | 10 | 0 | **86** |
+| `aprobado=false` | 0 | 11 | 2 | 1 | **14** |
+| **Total** | **76** | **11** | **12** | **1** | **100** |
+
+Reconciliación: las 86 aprobadas = 76 `PUBLICAR` + 10 `REVISAR` (aprobada pero
+con WARNING → revisión humana). Los 11 `PUBLICAR_CON_CAMBIOS` son todas
+notas no aprobadas (score 88–89). No hay discrepancia: una versión anterior
+de este informe sumaba 76+11 como si ambas fueran "aprobadas" — incorrecto.
 
 ### Hallazgos frecuentes
 
 | Código | N/100 | Naturaleza |
 |---|---|---|
-| FALTAN_KEYWORDS | 86 | **Estructural**: 0/100 notas persisten `palabrasClave` — el campo no se puebla en la ruta de guardado. Deducción de −2 pts informativa; ya no degrada veredicto. |
+| FALTAN_KEYWORDS | 86 | **Estructural**: 0/100 notas persisten `palabrasClave` ni `keywords` — la ruta de guardado nunca puebla el campo. La deducción (−2 pts, módulo SEO) se emite como RECOMMENDATION en las 86 notas evaluadas tal cual se guardaron. Las 14 restantes NO lo muestran porque `runMeni` re-evalúa las notas no aprobadas tras `autoCorrectNoticia`, que **autogenera `palabrasClave`/`keywords`** (`lib/meni/autocorrect.ts` ~L191): en la segunda evaluación el hallazgo ya no existe. Corolario: la autocorrección arregla el hueco en memoria pero no persiste el campo (0/100 persistidas). |
 | ANTI_CLICKBAIT_TITULO | 60 | Heurística de advertencia; tasa de falso positivo alta sobre títulos publicados. Candidata a revisión editorial (no silenciar). |
 | RECOMENDACION_EDITORIAL | 45 | Acciones del brain en notas no aprobadas |
 | EVIDENCIA_REQUERIDA | 18 | Perfil: evidencia esperada por categoría |
