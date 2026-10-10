@@ -1,6 +1,7 @@
 import type { NoticiaInput } from './types';
 import type { MeniResult } from './types';
 import type { EntityMap } from './quality-gate/types';
+import { extractKeywords } from './utils/keywords';
 
 const DEFAULT_MAX_TITLE = 60;
 const MIN_META = 120;
@@ -118,6 +119,22 @@ function normalizeKeywords(input: NoticiaInput, meni: MeniResult): string[] | un
   if (existing && existing.length >= 3) return existing;
   const built = buildKeywords(meni);
   return built.length ? built : existing;
+}
+
+/**
+ * Resolución canónica de keywords para persistencia. Misma regla que la
+ * auto-corrección: las del editor ganan si son suficientes (>=3); si no,
+ * se MEZCLAN las existentes con las generadas por MENI (extractKeywords
+ * directo — `meni.seo.keywords` hace echo del input cuando hay keywords,
+ * por lo que no sirve para completar un set insuficiente).
+ * `undefined` si no hay nada que persistir.
+ */
+export function resolveKeywords(input: NoticiaInput, meni: MeniResult): string[] | undefined {
+  const existing = input.palabrasClave || (typeof input.keywords === 'string' ? input.keywords.split(',').map((k) => k.trim()).filter(Boolean) : input.keywords);
+  if (existing && existing.length >= 3) return existing;
+  const generated = extractKeywords(`${input.titulo} ${input.contenido}`, 12);
+  const merged = [...new Set([...(existing || []), ...buildKeywords(meni), ...generated])].slice(0, 8);
+  return merged.length ? merged : existing;
 }
 
 export function autoCorrectNoticia(input: NoticiaInput, meni: MeniResult): { input: NoticiaInput; corrections: AutoCorrection[] } {

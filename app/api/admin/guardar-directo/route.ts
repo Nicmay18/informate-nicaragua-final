@@ -311,12 +311,12 @@ export async function POST(request: NextRequest) {
     if (finalSlug !== undefined) updateData.slug = finalSlug;
     if (body.categoriaSlug !== undefined) updateData.categoriaSlug = body.categoriaSlug;
     if (body.autor !== undefined) updateData.autor = body.autor;
-    if (finalPalabrasClave !== undefined) {
+    // Solo sobreescribir cuando el panel/autocorrección aporta keywords
+    // reales: un array vacío pisaría las resueltas por guardarConMeni.
+    if (Array.isArray(finalPalabrasClave) && finalPalabrasClave.length > 0) {
       updateData.palabrasClave = finalPalabrasClave;
       updateData.tags = finalPalabrasClave;
-      updateData.keywords = Array.isArray(finalPalabrasClave)
-        ? finalPalabrasClave.join(', ')
-        : String(finalPalabrasClave);
+      updateData.keywords = finalPalabrasClave.join(', ');
     }
     // Actualizar o crear directamente con Admin SDK (ignora security rules)
     let articleDocId = id;

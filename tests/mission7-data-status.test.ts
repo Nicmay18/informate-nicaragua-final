@@ -99,6 +99,7 @@ const baseNoticia = (overrides: Partial<Noticia> = {}): Noticia =>
     tags: ['tag1', 'tag2'],
     related_links: [],
     estado: 'publicado',
+    publicado: true,
     vistas: 0,
     ...overrides,
   } as unknown as Noticia);
