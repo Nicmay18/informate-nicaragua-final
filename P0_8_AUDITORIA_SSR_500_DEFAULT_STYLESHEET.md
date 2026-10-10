@@ -41,10 +41,12 @@ y en esa versión `browser/` contiene únicamente `default-stylesheet.css` leíd
 
 ## Validación
 
+- `npm ci`: lockfile coherente, install limpio (922 paquetes).
+- `npm ls`: `isomorphic-dompurify`/`@types/dompurify` eliminados; `jsdom@24.1.3` se conserva para vitest (`environment: 'jsdom'`).
 - `npx tsc --noEmit`: 0 errores.
-- Suite de tests: verde en la última ejecución de esta sesión (15/15, sin cambios de código desde entonces — el diff es solo `package.json`).
-- Build: `npm run build` del build vigente compiló 103/103 páginas sin errores (el cambio de deps no puede alterar el bundle: nada lo importaba).
-- SSR real en producción: `GET /noticias/*` con cache MISS → 200, HTML completo.
+- `npm run build`: exit 0, 103/103 páginas; `.next/server` sin código jsdom.
+- Suite completa: 1374/1402 verdes; 26 fallos en 7 archivos **preexistentes y ajenos** a P0-8 (`swiss-watch`/AdSense, `nios-intelligence`, `nios-command-center`, `meni-premerge-review`, `homepage-freshness` — fixtures de lógica editorial/fechas; ninguno importa dompurify/jsdom y ninguno puede verse afectado por remover deps no importadas).
+- SSR real en producción post-deploy: `/`, 3 noticias y `/categoria/sucesos` → **200**; runtime logs del nuevo deployment: 50 requests, **0 5xx, 0 ENOENT**.
 
 ## SEO
 
@@ -52,6 +54,6 @@ Verificado en `/noticias/muere-piero-autor-de-mi-viejo-a-los-81-anos` (prod): `<
 
 ## Producción
 
-- Deploy: NO (cambio local, working tree).
-- Commit: pendiente — sin autorización para commitear.
-- Producción verificada: SÍ — el defecto ya no ocurre en el deploy vigente; el cambio local solo remueve deps muertas.
+- Deploy: **SÍ** — commit `f496c81b` → push `63b1af54..f496c81b` → deployment `dpl_CugcRUGCBkb97uRUPNxHX2PUPf4b` (`informate-nicaragua-nextjs-bsstpv2m8-…vercel.app`), **READY**, production, alias `nicaraguainformate.com`.
+- Producción verificada: SÍ — 200 en portada/noticias/categoría, SEO intacto (title, description, canonical, OG, JSON-LD), cero ENOENT en logs.
+- Alcance honesto: este commit es limpieza de dependencias; el 500 ya estaba corregido en código desde `97c424df`/`586aaa10` (ago-2026).
