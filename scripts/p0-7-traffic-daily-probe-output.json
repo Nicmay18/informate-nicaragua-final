@@ -1,0 +1,1246 @@
+{
+  "generatedAt": "2026-10-10T03:02:11.907Z",
+  "errors": [],
+  "trafficDaily": {
+    "parentIdsViaListDocuments": [
+      "2026-08-07",
+      "2026-08-08",
+      "2026-08-09",
+      "2026-08-10",
+      "2026-08-11",
+      "2026-08-12",
+      "2026-08-13",
+      "2026-08-14",
+      "2026-08-15",
+      "2026-08-16",
+      "2026-08-17",
+      "2026-08-18",
+      "2026-08-19",
+      "2026-08-20",
+      "2026-08-21",
+      "2026-08-22",
+      "2026-08-23",
+      "2026-08-24",
+      "2026-08-25",
+      "2026-08-26",
+      "2026-08-27",
+      "2026-08-28",
+      "2026-08-29",
+      "2026-08-30",
+      "2026-08-31",
+      "2026-09-01",
+      "2026-09-02",
+      "2026-09-03",
+      "2026-09-04",
+      "2026-09-05",
+      "2026-09-06",
+      "2026-09-07",
+      "2026-09-08",
+      "2026-09-09",
+      "2026-09-10",
+      "2026-09-11",
+      "2026-09-12",
+      "2026-09-13",
+      "2026-09-14",
+      "2026-09-15",
+      "2026-09-16",
+      "2026-09-17",
+      "2026-09-18",
+      "2026-09-19",
+      "2026-09-20",
+      "2026-09-21",
+      "2026-09-22",
+      "2026-09-23",
+      "2026-09-24",
+      "2026-09-25",
+      "2026-09-26",
+      "2026-09-27",
+      "2026-09-28",
+      "2026-09-29",
+      "2026-09-30",
+      "2026-10-01",
+      "2026-10-02",
+      "2026-10-03",
+      "2026-10-04",
+      "2026-10-05",
+      "2026-10-06",
+      "2026-10-07",
+      "2026-10-08",
+      "2026-10-09",
+      "2026-10-10"
+    ],
+    "parentCount": 65,
+    "flatGetDocCount": 65,
+    "flatGetSample": [
+      {
+        "id": "2026-08-07",
+        "exists": true,
+        "keys": [
+          "updatedAt"
+        ]
+      },
+      {
+        "id": "2026-08-08",
+        "exists": true,
+        "keys": [
+          "updatedAt"
+        ]
+      },
+      {
+        "id": "2026-08-09",
+        "exists": true,
+        "keys": [
+          "updatedAt"
+        ]
+      }
+    ],
+    "perDay": [
+      {
+        "date": "2026-09-01",
+        "articles": 65,
+        "totalViews": 517,
+        "sample": [
+          {
+            "id": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+            "date": "2026-09-01",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+            "views": 1,
+            "updatedAt": "2026-09-01T11:54:56.474Z"
+          },
+          {
+            "id": "accidentes-dejan-nuevas-muertes-y-heridos-en-nicaragua",
+            "date": "2026-09-01",
+            "sources.direct": 1,
+            "devices.mobile": 1,
+            "slug": "accidentes-dejan-nuevas-muertes-y-heridos-en-nicaragua",
+            "views": 1,
+            "updatedAt": "2026-09-01T10:17:45.760Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-02",
+        "articles": 59,
+        "totalViews": 1106,
+        "sample": [
+          {
+            "id": "acusado-de-disparar-a-policias-queda-en-prision-en-esteli",
+            "date": "2026-09-02",
+            "slug": "acusado-de-disparar-a-policias-queda-en-prision-en-esteli",
+            "sources.google": 2,
+            "devices.desktop": 6,
+            "sources.direct": 5,
+            "sources.facebook": 277,
+            "devices.mobile": 278,
+            "views": 284,
+            "updatedAt": "2026-09-02T23:54:15.698Z"
+          },
+          {
+            "id": "ambulancia-minsa-arrastrada-por-rio-en-ayapal-jinotega",
+            "date": "2026-09-02",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "ambulancia-minsa-arrastrada-por-rio-en-ayapal-jinotega",
+            "views": 1,
+            "updatedAt": "2026-09-02T17:06:21.606Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-03",
+        "articles": 56,
+        "totalViews": 896,
+        "sample": [
+          {
+            "id": "accidente-con-rastra-deja-una-joven-fallecida-en-managua",
+            "date": "2026-09-03",
+            "sources.google": 1,
+            "devices.mobile": 1,
+            "slug": "accidente-con-rastra-deja-una-joven-fallecida-en-managua",
+            "views": 1,
+            "updatedAt": "2026-09-03T06:31:13.890Z"
+          },
+          {
+            "id": "accidente-deja-lesionados-a-integrantes-de-carnavaleros-de-jaguar",
+            "date": "2026-09-03",
+            "sources.facebook": 1,
+            "devices.mobile": 1,
+            "slug": "accidente-deja-lesionados-a-integrantes-de-carnavaleros-de-jaguar",
+            "views": 1,
+            "updatedAt": "2026-09-03T02:31:12.707Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-04",
+        "articles": 55,
+        "totalViews": 1182,
+        "sample": [
+          {
+            "id": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "date": "2026-09-04",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "views": 1,
+            "updatedAt": "2026-09-04T01:57:01.730Z"
+          },
+          {
+            "id": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "date": "2026-09-04",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "views": 1,
+            "updatedAt": "2026-09-04T10:58:48.002Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-05",
+        "articles": 63,
+        "totalViews": 1118,
+        "sample": [
+          {
+            "id": "accidente-en-wapi-deja-un-fallecido-y-un-herido-tras-vuelco",
+            "date": "2026-09-05",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "accidente-en-wapi-deja-un-fallecido-y-un-herido-tras-vuelco",
+            "views": 1,
+            "updatedAt": "2026-09-05T11:33:54.353Z"
+          },
+          {
+            "id": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel",
+            "date": "2026-09-05",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "accidente-laboral-deja-un-fallecido-y-un-lesionado-en-managua-y-estel",
+            "views": 1,
+            "updatedAt": "2026-09-05T16:55:29.609Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-06",
+        "articles": 53,
+        "totalViews": 706,
+        "sample": [
+          {
+            "id": "acusado-de-disparar-a-policias-queda-en-prision-en-esteli",
+            "date": "2026-09-06",
+            "slug": "acusado-de-disparar-a-policias-queda-en-prision-en-esteli",
+            "sources.facebook": 2,
+            "devices.mobile": 2,
+            "views": 2,
+            "updatedAt": "2026-09-06T20:39:34.945Z"
+          },
+          {
+            "id": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "date": "2026-09-06",
+            "slug": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "sources.google": 3,
+            "devices.desktop": 2,
+            "sources.facebook": 156,
+            "devices.mobile": 157,
+            "views": 159,
+            "updatedAt": "2026-09-06T23:47:27.359Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-07",
+        "articles": 64,
+        "totalViews": 747,
+        "sample": [
+          {
+            "id": "acusado-de-disparar-a-policias-queda-en-prision-en-esteli",
+            "date": "2026-09-07",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "acusado-de-disparar-a-policias-queda-en-prision-en-esteli",
+            "views": 1,
+            "updatedAt": "2026-09-07T10:02:07.322Z"
+          },
+          {
+            "id": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "date": "2026-09-07",
+            "slug": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "sources.facebook": 76,
+            "devices.mobile": 76,
+            "views": 76,
+            "updatedAt": "2026-09-07T23:52:18.765Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-08",
+        "articles": 66,
+        "totalViews": 376,
+        "sample": [
+          {
+            "id": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+            "date": "2026-09-08",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+            "views": 1,
+            "updatedAt": "2026-09-08T11:56:10.448Z"
+          },
+          {
+            "id": "accidentes-dejan-nuevas-muertes-y-heridos-en-nicaragua",
+            "date": "2026-09-08",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "accidentes-dejan-nuevas-muertes-y-heridos-en-nicaragua",
+            "views": 1,
+            "updatedAt": "2026-09-08T02:06:43.419Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-09",
+        "articles": 61,
+        "totalViews": 391,
+        "sample": [
+          {
+            "id": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "date": "2026-09-09",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "views": 1,
+            "updatedAt": "2026-09-09T12:28:05.069Z"
+          },
+          {
+            "id": "accidente-deja-lesionados-a-integrantes-de-carnavaleros-de-jaguar",
+            "date": "2026-09-09",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "accidente-deja-lesionados-a-integrantes-de-carnavaleros-de-jaguar",
+            "views": 1,
+            "updatedAt": "2026-09-09T13:09:34.134Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-10",
+        "articles": 65,
+        "totalViews": 1007,
+        "sample": [
+          {
+            "id": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "date": "2026-09-10",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "views": 1,
+            "updatedAt": "2026-09-10T16:50:45.324Z"
+          },
+          {
+            "id": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+            "date": "2026-09-10",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+            "views": 1,
+            "updatedAt": "2026-09-10T12:24:08.417Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-11",
+        "articles": 44,
+        "totalViews": 1100,
+        "sample": [
+          {
+            "id": "accidente-deja-lesionados-a-integrantes-de-carnavaleros-de-jaguar",
+            "date": "2026-09-11",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "accidente-deja-lesionados-a-integrantes-de-carnavaleros-de-jaguar",
+            "views": 1,
+            "updatedAt": "2026-09-11T08:06:48.978Z"
+          },
+          {
+            "id": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "date": "2026-09-11",
+            "slug": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "sources.facebook": 43,
+            "devices.mobile": 43,
+            "views": 43,
+            "updatedAt": "2026-09-11T23:36:15.697Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-12",
+        "articles": 65,
+        "totalViews": 588,
+        "sample": [
+          {
+            "id": "accidentes-dejan-un-fallecido-y-varios-lesionados-en-nicaragua",
+            "date": "2026-09-12",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "accidentes-dejan-un-fallecido-y-varios-lesionados-en-nicaragua",
+            "views": 1,
+            "updatedAt": "2026-09-12T15:50:41.133Z"
+          },
+          {
+            "id": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+            "date": "2026-09-12",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+            "views": 1,
+            "updatedAt": "2026-09-12T11:45:37.571Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-13",
+        "articles": 59,
+        "totalViews": 1472,
+        "sample": [
+          {
+            "id": "accidente-con-rastra-deja-una-joven-fallecida-en-managua",
+            "date": "2026-09-13",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "accidente-con-rastra-deja-una-joven-fallecida-en-managua",
+            "views": 1,
+            "updatedAt": "2026-09-13T16:58:35.033Z"
+          },
+          {
+            "id": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+            "date": "2026-09-13",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+            "views": 1,
+            "updatedAt": "2026-09-13T12:43:24.423Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-14",
+        "articles": 61,
+        "totalViews": 856,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-14",
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.whatsapp": 1,
+            "devices.desktop": 1,
+            "sources.facebook": 6,
+            "devices.mobile": 6,
+            "views": 7,
+            "updatedAt": "2026-09-14T23:39:08.041Z"
+          },
+          {
+            "id": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "date": "2026-09-14",
+            "sources.facebook": 1,
+            "devices.mobile": 1,
+            "slug": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "views": 1,
+            "updatedAt": "2026-09-14T11:33:26.509Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-15",
+        "articles": 61,
+        "totalViews": 1376,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-15",
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.direct": 3,
+            "sources.facebook": 3,
+            "devices.mobile": 6,
+            "views": 6,
+            "updatedAt": "2026-09-15T20:12:29.593Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-09-15",
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "sources.whatsapp": 1,
+            "sources.facebook": 5,
+            "devices.mobile": 3,
+            "sources.google": 1,
+            "devices.desktop": 4,
+            "views": 7,
+            "updatedAt": "2026-09-15T18:30:34.022Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-16",
+        "articles": 62,
+        "totalViews": 771,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-16",
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.facebook": 2,
+            "devices.mobile": 2,
+            "views": 2,
+            "updatedAt": "2026-09-16T16:14:12.152Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-09-16",
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "sources.direct": 2,
+            "sources.facebook": 1,
+            "devices.mobile": 3,
+            "views": 3,
+            "updatedAt": "2026-09-16T02:27:03.925Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-17",
+        "articles": 54,
+        "totalViews": 621,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-17",
+            "sources.facebook": 1,
+            "devices.mobile": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "views": 1,
+            "updatedAt": "2026-09-17T23:53:56.604Z"
+          },
+          {
+            "id": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "date": "2026-09-17",
+            "sources.google": 1,
+            "slug": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "sources.direct": 1,
+            "devices.desktop": 2,
+            "views": 2,
+            "updatedAt": "2026-09-17T16:52:59.236Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-18",
+        "articles": 50,
+        "totalViews": 500,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-18",
+            "sources.google": 1,
+            "devices.desktop": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "views": 1,
+            "updatedAt": "2026-09-18T20:40:18.840Z"
+          },
+          {
+            "id": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "date": "2026-09-18",
+            "sources.google": 1,
+            "devices.desktop": 1,
+            "slug": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "views": 1,
+            "updatedAt": "2026-09-18T15:32:38.996Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-19",
+        "articles": 116,
+        "totalViews": 1338,
+        "sample": [
+          {
+            "id": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "date": "2026-09-19",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "views": 1,
+            "updatedAt": "2026-09-19T01:14:35.907Z"
+          },
+          {
+            "id": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+            "date": "2026-09-19",
+            "devices.mobile": 1,
+            "slug": "accidente-en-potosi-deja-dos-vidas-perdidas-en-una-colision-vial",
+            "devices.unknown": 1,
+            "sources.direct": 2,
+            "views": 2,
+            "updatedAt": "2026-09-19T01:40:04.261Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-20",
+        "articles": 100,
+        "totalViews": 492,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-20",
+            "sources.google": 1,
+            "devices.desktop": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "views": 1,
+            "updatedAt": "2026-09-20T03:42:38.657Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-09-20",
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "sources.direct": 3,
+            "devices.desktop": 3,
+            "views": 3,
+            "updatedAt": "2026-09-20T23:37:13.816Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-21",
+        "articles": 105,
+        "totalViews": 547,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-21",
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.direct": 3,
+            "devices.desktop": 3,
+            "views": 3,
+            "updatedAt": "2026-09-21T17:56:34.180Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-09-21",
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "sources.direct": 2,
+            "devices.desktop": 2,
+            "views": 2,
+            "updatedAt": "2026-09-21T20:12:51.529Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-22",
+        "articles": 87,
+        "totalViews": 533,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-22",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "views": 1,
+            "updatedAt": "2026-09-22T14:37:57.759Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-09-22",
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "sources.direct": 2,
+            "devices.desktop": 2,
+            "views": 2,
+            "updatedAt": "2026-09-22T23:10:43.368Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-23",
+        "articles": 89,
+        "totalViews": 669,
+        "sample": [
+          {
+            "id": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres",
+            "date": "2026-09-23",
+            "sources.google": 1,
+            "devices.desktop": 1,
+            "slug": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres",
+            "views": 1,
+            "updatedAt": "2026-09-23T21:17:55.848Z"
+          },
+          {
+            "id": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "date": "2026-09-23",
+            "sources.facebook": 1,
+            "devices.mobile": 1,
+            "slug": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "views": 1,
+            "updatedAt": "2026-09-23T18:48:16.162Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-24",
+        "articles": 82,
+        "totalViews": 486,
+        "sample": [
+          {
+            "id": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres",
+            "date": "2026-09-24",
+            "devices.unknown": 1,
+            "sources.direct": 1,
+            "slug": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres",
+            "views": 1,
+            "updatedAt": "2026-09-24T01:56:23.539Z"
+          },
+          {
+            "id": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "date": "2026-09-24",
+            "devices.unknown": 1,
+            "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "sources.direct": 2,
+            "devices.mobile": 1,
+            "views": 2,
+            "updatedAt": "2026-09-24T18:42:27.316Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-25",
+        "articles": 87,
+        "totalViews": 514,
+        "sample": [
+          {
+            "id": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+            "date": "2026-09-25",
+            "sources.direct": 1,
+            "devices.mobile": 1,
+            "slug": "accidentes-viales-dejan-seis-fallecidos-en-managua-y-caribe-norte",
+            "views": 1,
+            "updatedAt": "2026-09-25T03:21:29.707Z"
+          },
+          {
+            "id": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "date": "2026-09-25",
+            "sources.facebook": 1,
+            "devices.mobile": 1,
+            "slug": "acusan-a-cuatro-por-doble-asesinato-en-nagarote-dos-profugos",
+            "views": 1,
+            "updatedAt": "2026-09-25T17:29:21.048Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-26",
+        "articles": 95,
+        "totalViews": 1029,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-26",
+            "sources.other": 1,
+            "devices.mobile": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "views": 2,
+            "updatedAt": "2026-09-26T15:53:27.672Z"
+          },
+          {
+            "id": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres",
+            "date": "2026-09-26",
+            "sources.direct": 1,
+            "devices.mobile": 1,
+            "slug": "30-de-mayo-sera-feriado-nacional-obligatorio-por-dia-de-las-madres",
+            "views": 1,
+            "updatedAt": "2026-09-26T04:21:51.040Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-27",
+        "articles": 87,
+        "totalViews": 594,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-27",
+            "devices.mobile": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.direct": 2,
+            "devices.desktop": 1,
+            "views": 2,
+            "updatedAt": "2026-09-27T07:42:54.034Z"
+          },
+          {
+            "id": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "date": "2026-09-27",
+            "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "sources.direct": 2,
+            "devices.mobile": 2,
+            "views": 2,
+            "updatedAt": "2026-09-27T13:47:03.853Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-28",
+        "articles": 102,
+        "totalViews": 858,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-28",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.google": 1,
+            "devices.mobile": 1,
+            "views": 2,
+            "updatedAt": "2026-09-28T03:24:45.017Z"
+          },
+          {
+            "id": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "date": "2026-09-28",
+            "sources.direct": 1,
+            "devices.mobile": 1,
+            "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "views": 1,
+            "updatedAt": "2026-09-28T01:06:34.921Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-29",
+        "articles": 137,
+        "totalViews": 1213,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-29",
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "devices.mobile": 2,
+            "sources.direct": 3,
+            "devices.desktop": 1,
+            "views": 3,
+            "updatedAt": "2026-09-29T15:22:51.309Z"
+          },
+          {
+            "id": "accidentes-dejan-varios-lesionados-en-managua-leon-y-bilwi",
+            "date": "2026-09-29",
+            "sources.direct": 1,
+            "devices.mobile": 1,
+            "slug": "accidentes-dejan-varios-lesionados-en-managua-leon-y-bilwi",
+            "views": 1,
+            "updatedAt": "2026-09-29T21:57:42.612Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-09-30",
+        "articles": 156,
+        "totalViews": 1272,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-09-30",
+            "devices.mobile": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.direct": 2,
+            "devices.desktop": 1,
+            "views": 2,
+            "updatedAt": "2026-09-30T08:42:26.005Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-09-30",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "views": 1,
+            "updatedAt": "2026-09-30T03:54:26.403Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-01",
+        "articles": 115,
+        "totalViews": 464,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-01",
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.direct": 3,
+            "devices.desktop": 1,
+            "sources.google": 2,
+            "devices.mobile": 4,
+            "views": 5,
+            "updatedAt": "2026-10-01T21:59:27.464Z"
+          },
+          {
+            "id": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "date": "2026-10-01",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "85-familias-de-nagarote-recibiran-viviendas-este-22-de-mayo",
+            "views": 1,
+            "updatedAt": "2026-10-01T14:10:13.091Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-02",
+        "articles": 210,
+        "totalViews": 553,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-02",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "views": 1,
+            "updatedAt": "2026-10-02T03:10:25.072Z"
+          },
+          {
+            "id": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "date": "2026-10-02",
+            "sources.direct": 1,
+            "devices.mobile": 1,
+            "slug": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "views": 1,
+            "updatedAt": "2026-10-02T05:32:56.064Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-03",
+        "articles": 203,
+        "totalViews": 532,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-03",
+            "sources.facebook": 1,
+            "devices.mobile": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "views": 1,
+            "updatedAt": "2026-10-03T15:06:32.986Z"
+          },
+          {
+            "id": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "date": "2026-10-03",
+            "sources.direct": 1,
+            "devices.mobile": 1,
+            "slug": "3-321-tortugas-paslama-llegan-a-desovar-en-chacocente",
+            "views": 1,
+            "updatedAt": "2026-10-03T12:41:32.717Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-04",
+        "articles": 134,
+        "totalViews": 818,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-04",
+            "sources.direct": 1,
+            "devices.mobile": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.other": 1,
+            "devices.desktop": 1,
+            "views": 2,
+            "updatedAt": "2026-10-04T19:51:47.924Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-10-04",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "views": 1,
+            "updatedAt": "2026-10-04T13:33:48.163Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-05",
+        "articles": 137,
+        "totalViews": 575,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-05",
+            "sources.google": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "devices.mobile": 2,
+            "sources.direct": 2,
+            "devices.desktop": 1,
+            "views": 3,
+            "updatedAt": "2026-10-05T23:06:43.723Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-10-05",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "views": 1,
+            "updatedAt": "2026-10-05T13:18:49.084Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-06",
+        "articles": 116,
+        "totalViews": 756,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-06",
+            "sources.facebook": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "devices.unknown": 2,
+            "sources.direct": 3,
+            "devices.mobile": 2,
+            "views": 4,
+            "updatedAt": "2026-10-06T19:15:25.052Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-10-06",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "views": 1,
+            "updatedAt": "2026-10-06T09:25:27.267Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-07",
+        "articles": 169,
+        "totalViews": 588,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-07",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "sources.google": 1,
+            "devices.mobile": 1,
+            "views": 2,
+            "updatedAt": "2026-10-07T18:47:22.727Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-10-07",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "views": 1,
+            "updatedAt": "2026-10-07T13:52:22.824Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-08",
+        "articles": 150,
+        "totalViews": 635,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-08",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "views": 1,
+            "updatedAt": "2026-10-08T04:41:36.225Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-10-08",
+            "devices.desktop": 1,
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "sources.direct": 3,
+            "devices.mobile": 2,
+            "views": 3,
+            "updatedAt": "2026-10-08T18:39:36.644Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-09",
+        "articles": 143,
+        "totalViews": 804,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-09",
+            "devices.mobile": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "devices.unknown": 1,
+            "sources.direct": 3,
+            "devices.desktop": 1,
+            "views": 3,
+            "updatedAt": "2026-10-09T15:20:19.376Z"
+          },
+          {
+            "id": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "date": "2026-10-09",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "205-anos-de-independencia-la-historia-que-une-a-centroamerica",
+            "views": 1,
+            "updatedAt": "2026-10-09T08:00:03.576Z"
+          }
+        ]
+      },
+      {
+        "date": "2026-10-10",
+        "articles": 33,
+        "totalViews": 316,
+        "sample": [
+          {
+            "id": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "date": "2026-10-10",
+            "sources.direct": 1,
+            "devices.desktop": 1,
+            "slug": "10-sitios-para-encontrar-trabajo-remoto-desde-nicaragua-en-2026",
+            "views": 1,
+            "updatedAt": "2026-10-10T02:11:59.838Z"
+          },
+          {
+            "id": "34-pacientes-reciben-atencion-cardiaca-gratuita-en-managua",
+            "date": "2026-10-10",
+            "sources.facebook": 1,
+            "devices.mobile": 1,
+            "slug": "34-pacientes-reciben-atencion-cardiaca-gratuita-en-managua",
+            "views": 1,
+            "updatedAt": "2026-10-10T01:31:42.097Z"
+          }
+        ]
+      }
+    ]
+  },
+  "trafficLog": {
+    "sampleSize": 1000,
+    "newest": "2026-10-10T03:00:31.758Z",
+    "oldestInSample": "2026-10-09T03:35:53.554Z",
+    "byUtcDay": {
+      "2026-10-09": 684,
+      "2026-10-10": 316
+    },
+    "fieldNames": [
+      "expiresAt",
+      "id",
+      "referrer",
+      "sessionId",
+      "slug",
+      "source",
+      "timestamp",
+      "titulo",
+      "userAgent",
+      "utmSource"
+    ],
+    "sources": {
+      "facebook": 736,
+      "directo": 222,
+      "telegram": 6,
+      "otro": 5,
+      "google": 27,
+      "whatsapp": 4
+    },
+    "sample": [
+      {
+        "slug": "entregan-a-guatemala-a-cinco-pescadores-de-masachapa",
+        "source": "facebook",
+        "timestamp": "2026-10-10T03:00:31.758Z",
+        "hasExpiresAt": true
+      },
+      {
+        "slug": "terremoto-en-panama-obliga-a-suspender-zarpes-y-desviar-vuelos",
+        "source": "facebook",
+        "timestamp": "2026-10-10T02:59:29.051Z",
+        "hasExpiresAt": true
+      }
+    ]
+  },
+  "coverage": {
+    "daysWithLogButNoDaily": [],
+    "daysWithDailyButNoRecentLog": [
+      "2026-08-07",
+      "2026-08-08",
+      "2026-08-09",
+      "2026-08-10",
+      "2026-08-11",
+      "2026-08-12",
+      "2026-08-13",
+      "2026-08-14",
+      "2026-08-15",
+      "2026-08-16",
+      "2026-08-17",
+      "2026-08-18",
+      "2026-08-19",
+      "2026-08-20",
+      "2026-08-21",
+      "2026-08-22",
+      "2026-08-23",
+      "2026-08-24",
+      "2026-08-25",
+      "2026-08-26",
+      "2026-08-27",
+      "2026-08-28",
+      "2026-08-29",
+      "2026-08-30",
+      "2026-08-31",
+      "2026-09-01",
+      "2026-09-02",
+      "2026-09-03",
+      "2026-09-04",
+      "2026-09-05",
+      "2026-09-06",
+      "2026-09-07",
+      "2026-09-08",
+      "2026-09-09",
+      "2026-09-10",
+      "2026-09-11",
+      "2026-09-12",
+      "2026-09-13",
+      "2026-09-14",
+      "2026-09-15",
+      "2026-09-16",
+      "2026-09-17",
+      "2026-09-18",
+      "2026-09-19",
+      "2026-09-20",
+      "2026-09-21",
+      "2026-09-22",
+      "2026-09-23",
+      "2026-09-24",
+      "2026-09-25",
+      "2026-09-26",
+      "2026-09-27",
+      "2026-09-28",
+      "2026-09-29",
+      "2026-09-30",
+      "2026-10-01",
+      "2026-10-02",
+      "2026-10-03",
+      "2026-10-04",
+      "2026-10-05",
+      "2026-10-06",
+      "2026-10-07",
+      "2026-10-08"
+    ]
+  }
+}

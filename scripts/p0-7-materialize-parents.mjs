@@ -24,7 +24,7 @@ const DRY_RUN = process.argv.includes('--dry-run');
 // Cargar .env.local si existe (sin dependencias externas)
 try {
   for (const line of readFileSync('.env.local', 'utf8').split('\n')) {
-    const m = line.match(/^([A-Z_]+)=(.*)$/);
+    const m = line.match(/^([A-Z0-9_]+)=(.*?)\r?$/);
     if (!m) continue;
     let v = m[2].trim();
     if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);

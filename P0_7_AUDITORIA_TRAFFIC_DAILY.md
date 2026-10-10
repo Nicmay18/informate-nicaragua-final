@@ -2,7 +2,7 @@
 
 ## Estado
 
-**CERRADA CON LIMITACIÓN EXTERNA** — fix commiteado (`15b82c6e`), desplegado en producción (`dpl_7KVDZJ9JMhkA4B32NVAW4kDrUA1C`, READY) y el dual-write ejecutándose; la verificación documental directa en Firestore y la materialización histórica quedan bloqueadas por credenciales Firebase no disponibles localmente (§7).
+**CERRADA — VERIFICADA EN PRODUCCIÓN** — fix commiteado (`15b82c6e`), desplegado (`dpl_7KVDZJ9JMhkA4B32NVAW4kDrUA1C`, READY), dual-write confirmado con datos reales de Firestore y los 64 padres históricos materializados (65/65 reales, 0 pendientes, sin doble conteo).
 
 > Nota de alcance: el stack real es **Firestore** (firebase-admin 12.x), no
 > PostgreSQL/Supabase. `traffic_log` y `traffic_daily` son colecciones
@@ -82,19 +82,21 @@ Sin cambios en `traffic_log`, GA4, consentimiento, tracking, frontend ni schema 
 ## 5. Datos
 
 - **Rango histórico disponible**: última medición confirmada cubre desde ~2026-08-06 (56 días al 30-sep; ~5.800 vistas/7d al 2-oct). No hay evidencia de borrado — ningún código del repo elimina `traffic_daily` y los docs de `articles` no tienen campos timestamp sobre los que una política TTL pudiera actuar (`updatedAt` es string).
-- **Backfill**: NO se recalcularon artículos desde `traffic_log` (duplicaría conteos — `traffic_log` es el mismo origen del dual-write). El único backfill aplicable es la materialización de padres fantasma → `scripts/p0-7-materialize-parents.mjs` (pendiente de ejecutar donde haya credenciales; `--dry-run` primero).
+- **Backfill**: NO se recalcularon artículos desde `traffic_log` (duplicaría conteos — `traffic_log` es el mismo origen del dual-write). El único backfill aplicable es la materialización de padres fantasma → `scripts/p0-7-materialize-parents.mjs` (**ejecutado**: 64 padres materializados, ver §6).
 
 ## 6. Producción
 
 - **Deploy realizado**: SÍ. Commit `15b82c6e` → push `ef0e3068..15b82c6e` a `origin/master` (09-oct 20:37 CST) → Vercel deploy `dpl_7KVDZJ9JMhkA4B32NVAW4kDrUA1C` (`informate-nicaragua-nextjs-a9jyr55c3-…vercel.app`), estado **READY**, target production, alias `nicaraguainformate.com`.
 - **Dual-write verificado ejecutándose en el nuevo deployment**: runtime logs del deploy — `POST /noticias/joven-nicaraguense-muere-en-espana-y-familia-gestiona-repatriacion` ×2 → **200** (server action `trackViewAction` → `incrementViewsBySlug` → `traffic_log` + `incrementTrafficDaily` ya con materialización de padre); 29 requests en la ventana, **0 5xx, 0 errores `traffic-aggregator`**.
-- **Materialización histórica**: `scripts/p0-7-materialize-parents.mjs --dry-run` ejecutado localmente → aborta limpio (`FALTAN CREDENCIALES`, exit 2). NO VERIFICADA — requiere `FIREBASE_SERVICE_ACCOUNT_BASE64` o el trío `FIREBASE_PROJECT_ID/CLIENT_EMAIL/PRIVATE_KEY` (todos `sensitive` en Vercel, no recuperables por CLI).
-- **Verificación documental directa** (`listDocuments()` + lectura de `articles` + raíz): NO VERIFICADA por la misma limitación. El commit incluye `scripts/p0-7-traffic-daily-probe.mjs` listo para ejecutarla.
-- **Pendiente (con credenciales)**:
-  1. `node scripts/p0-7-traffic-daily-probe.mjs` → confirmar padres nuevos materializados desde el deploy.
-  2. `node scripts/p0-7-materialize-parents.mjs --dry-run` → contar padres fantasma históricos (~56+ días).
-  3. `node scripts/p0-7-materialize-parents.mjs` → materializar; re-ejecutar `--dry-run` debe dar 0 pendientes (idempotente).
+- **Verificación documental directa (ejecutada, 2026-10-10 ~03:00 UTC)**: sonda con service-account → `listDocuments()` = 65 IDs (2026-08-07 → 2026-10-10); `collection.get()` = **1 doc** antes de materializar (`2026-10-10`, keys `['updatedAt']` — el padre de hoy ya lo creó el dual-write desplegado); `perDay` muestra `articles` poblados (p.ej. 2026-10-09: 143 artículos / 804 vistas); `traffic_log` activo (muestra 1000: 686+314 eventos 09-10 oct, fuentes facebook 735 / directo 222 / google 28…); `daysWithLogButNoDaily` = `[]`.
+- **Materialización histórica (ejecutada)**:
+  - `--dry-run`: 65 escaneados, **64 padres fantasma** (2026-08-07 → 2026-10-09), 1 ya real, 0 sin artículos, 0 errores.
+  - Real: **64 padres materializados** con `{updatedAt}` (merge) — ningún doc `articles` tocado.
+  - Re-`--dry-run`: **0 pendientes**, 65 `alreadyReal` → idempotente.
+  - Sonda post: `collection.get()` = **65/65 docs**, todos con solo `['updatedAt']` (contrato `firestore.rules`); `articles` intactos (2026-10-09 sigue 143/804 — sin doble conteo); 2026-10-10 creció 32/314 → 33/316 durante la verificación (dual-write en vivo).
 
-## 7. Limitación externa (declarada)
+## 7. Limitación externa (resuelta en P0-7B)
 
-No se pudo leer Firestore de producción directamente: las credenciales Firebase no están disponibles localmente (`.env.local` vacío, service-account JSON ausente, secretos de Vercel marcados `sensitive`). La conclusión se sostiene en: (a) semántica documentada y reproducida de Firestore sobre padres fantasma, (b) evidencia histórica del repo de que `articles` estaba poblado al 2-oct, (c) el writer desplegado y ejecutándose en prod ahora mismo, (d) la propia sonda del repo midiendo con la query errada. La verificación definitiva queda acotada a 3 consultas de solo lectura (§6.3).
+Inicialmente no había credenciales Firebase locales (`.env.local` vacío, secrets de Vercel `sensitive`). En P0-7B se proporcionó un service-account JSON (`informate-instant-nicaragua-firebase-adminsdk-*.json`, fuera del repo y gitignored) cargado como `FIREBASE_SERVICE_ACCOUNT_BASE64` en `.env.local` (gitignored) — sin exponer valores en conversación ni en el repo. La verificación y materialización se completaron con esa credencial (§6).
+
+Nota de bug menor corregido en P0-7B: el parser manual de `.env.local` en ambos scripts usaba `^([A-Z_]+)=(.*)$`, que (a) no admite dígitos (`BASE64` nunca parseaba) y (b) no toleraba CRLF (archivo generado por Vercel CLI). Regex corregido a `^([A-Z0-9_]+)=(.*?)\r?$`.

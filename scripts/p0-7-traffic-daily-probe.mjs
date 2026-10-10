@@ -8,7 +8,7 @@ import { getFirestore } from 'firebase-admin/firestore';
 // --- cargar .env.local manualmente (sin dependencias) ---
 const env = {};
 for (const line of readFileSync('.env.local', 'utf8').split('\n')) {
-  const m = line.match(/^([A-Z_]+)=(.*)$/);
+  const m = line.match(/^([A-Z0-9_]+)=(.*?)\r?$/);
   if (!m) continue;
   let v = m[2].trim();
   if ((v.startsWith('"') && v.endsWith('"')) || (v.startsWith("'") && v.endsWith("'"))) v = v.slice(1, -1);
