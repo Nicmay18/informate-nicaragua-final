@@ -35,6 +35,7 @@ const mockNoticia = (overrides: Partial<Noticia> = {}): Noticia => ({
   tags: ['tag1', 'tag2'],
   related_links: [],
   estado: 'publicado',
+  publicado: true,
   ...overrides,
 });
 
@@ -125,21 +126,29 @@ describe('Data Merger', () => {
     expect(result[0].ga4Users).toBe(0);
   });
 
-  it('M15: fuses articles with missing/undefined estado and excludes borrador/archivado', () => {
+  it('M15: excluye borrador/archivado y docs con ciclo de vida ambiguo (universo canónico)', () => {
+    // Contrato canónico (metric-truth.ts, P0.2): un doc publicado requiere
+    // publicado===true && estado==='publicado'. Flags que discrepan o faltan
+    // clasifican 'inconsistente'/'pendiente' y NO se fusionan — el sistema
+    // no interpreta documentos ambiguos como publicados.
     const noticias = [
+      mockNoticia({ slug: 'published-article' }),
       mockNoticia({ slug: 'missing-estado', estado: undefined } as Partial<Noticia>),
       mockNoticia({ slug: 'borrador-article', estado: 'borrador' }),
       mockNoticia({ slug: 'archivado-article', estado: 'archivado' }),
       mockNoticia({ slug: 'programado-article', estado: 'programado' }),
+      mockNoticia({ slug: 'no-publicado-flag', publicado: undefined } as Partial<Noticia>),
     ];
 
     const result = mergeArticleData(noticias, null, null);
 
     const slugs = result.map(a => a.slug);
-    expect(slugs).toContain('missing-estado');
-    expect(slugs).toContain('programado-article');
+    expect(slugs).toContain('published-article');
+    expect(slugs).not.toContain('missing-estado');
     expect(slugs).not.toContain('borrador-article');
     expect(slugs).not.toContain('archivado-article');
+    expect(slugs).not.toContain('programado-article');
+    expect(slugs).not.toContain('no-publicado-flag');
   });
 });
 

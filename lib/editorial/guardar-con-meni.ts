@@ -13,6 +13,7 @@ import type { FactualitySignal } from './factuality-signals';
 import { analyzeTrust } from './trust';
 import { newAttemptId, writeDecisionLog } from './decision-log';
 import { decideFromFindings, collectGateFindings } from '@/lib/meni/editorial-verdict';
+import { resolveKeywords } from '@/lib/meni/autocorrect';
 
 /**
  * Elimina recursivamente valores `undefined` de cualquier estructura
@@ -225,6 +226,14 @@ export async function guardarConMeni(
   );
   meni.editorialVerdict = finalVerdict;
 
+  // Keywords: la ruta de creación nunca las enviaba → el campo quedaba
+  // vacío en el 100% de las notas auditadas (FALTAN_KEYWORDS estructural).
+  // Resolución canónica (misma regla que autoCorrectNoticia): las keywords
+  // del editor ganan si son suficientes; si no, se persisten las generadas
+  // por MENI. Así el campo existe de verdad en Firestore, no solo en la
+  // evaluación en memoria.
+  const persistedKeywords = resolveKeywords(cleanInput, meni);
+
   // REGLA 14: Una sola decision editorial canonica — el Supervisor.
   // buildEditorialDecision (decision.ts) fue eliminado del flujo porque
   // producia una segunda decision paralela que nadie respetaba.
@@ -267,6 +276,15 @@ export async function guardarConMeni(
     profileInternal: canonicalPerfil,
     research: input.research,
     story: input.story,
+    // Keywords canónicas: palabrasClave (array) + keywords (string, contrato
+    // legacy del panel) + tags (mismo contenido, lector del sitio).
+    ...(persistedKeywords?.length
+      ? {
+          palabrasClave: persistedKeywords,
+          keywords: persistedKeywords.join(', '),
+          tags: persistedKeywords,
+        }
+      : {}),
     // VERSIÓN EDITORIAL CANÓNICA — la única que puede llegar a publicación.
     // Las rutas no deben persistir el contenido crudo por encima de estos campos.
     contenido: finalContenido,
