@@ -534,6 +534,7 @@
           <ul class="nav-menu">
             <li class="nav-item"><a class="nav-link" onclick="showTab('categorias-tab', this)"><i class="fas fa-tags"></i><span>Categorías</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('analytics-tab', this)"><i class="fas fa-chart-line"></i><span>Analytics</span></a></li>
+            <li class="nav-item"><a class="nav-link" onclick="showTab('publicidad-tab', this)"><i class="fas fa-handshake"></i><span>Publicidad</span><span class="nav-badge" style="background: var(--success); color: white;">$</span></a></li>
             <li class="nav-item"><a class="nav-link" onclick="showTab('config-tab', this)"><i class="fas fa-cog"></i><span>Configuración</span></a></li>
           </ul>
         </div>
@@ -1643,6 +1644,88 @@ sin texto ni marcas de agua, composición periodística"
         </div>
       </div>
 
+      </div>
+
+      <!-- PUBLICIDAD / AUSPICIADORES -->
+      <div id="publicidad-tab" class="tab-content">
+        <div class="page-header">
+          <div class="page-title"><h1>Publicidad</h1><p>Auspiciadores directos. Cambiar de cliente no requiere tocar código.</p></div>
+          <div class="header-actions">
+            <button class="btn btn-secondary" onclick="cargarPublicidadTodo()"><i class="fas fa-sync-alt"></i><span>Actualizar</span></button>
+            <button class="btn btn-primary" onclick="nuevoAuspiciador()"><i class="fas fa-plus"></i><span>Nuevo auspiciador</span></button>
+          </div>
+        </div>
+
+        <!-- RESUMEN COMERCIAL -->
+        <div class="card" style="margin-bottom:20px;">
+          <div class="card-header">
+            <h3 class="card-title"><i class="fas fa-briefcase" style="color: var(--primary-600);"></i>Resumen comercial</h3>
+            <button class="btn btn-secondary btn-sm" onclick="exportarComercialCSV()"><i class="fas fa-file-csv"></i><span>Exportar CSV</span></button>
+          </div>
+          <div class="card-body" id="spComercial">
+            <p style="color: var(--gray-400); font-size: 13px;">Cargando resumen...</p>
+          </div>
+        </div>
+
+        <!-- FORMULARIO -->
+        <div class="card" id="spFormCard" style="display:none;margin-bottom:20px;">
+          <div class="card-header"><h3 class="card-title" id="spFormTitle">Nuevo auspiciador</h3></div>
+          <div class="card-body">
+            <input type="hidden" id="spId">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;">
+              <label style="font-size:12px;color:var(--gray-600);">Nombre comercial *
+                <input id="spNombre" type="text" maxlength="120" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:8px;" placeholder="Ej. Restaurante El Buen Sabor">
+              </label>
+              <label style="font-size:12px;color:var(--gray-600);">URL de destino (clic) *
+                <input id="spUrl" type="url" maxlength="1200" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:8px;" placeholder="https://wa.me/505...">
+              </label>
+              <label style="font-size:12px;color:var(--gray-600);">Logo (URL de imagen) *
+                <input id="spLogo" type="url" maxlength="1200" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:8px;" placeholder="https://.../logo.png">
+              </label>
+              <label style="font-size:12px;color:var(--gray-600);">Posición
+                <select id="spPosicion" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:8px;">
+                  <option value="articulo">Artículos (recomendado)</option>
+                  <option value="portada">Portada</option>
+                  <option value="ambos">Artículos + Portada</option>
+                </select>
+              </label>
+              <label style="font-size:12px;color:var(--gray-600);">Fecha de inicio *
+                <input id="spInicio" type="date" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:8px;">
+              </label>
+              <label style="font-size:12px;color:var(--gray-600);">Fecha de vencimiento *
+                <input id="spVencimiento" type="date" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:8px;">
+              </label>
+              <label style="font-size:12px;color:var(--gray-600);grid-column:1/-1;">Notas internas (opcional — convenio, precio pactado, contacto)
+                <input id="spNotas" type="text" maxlength="500" style="width:100%;padding:8px;border:1px solid var(--gray-200);border-radius:8px;">
+              </label>
+              <label style="font-size:13px;display:flex;align-items:center;gap:8px;">
+                <input id="spActivo" type="checkbox"> Activo (visible al público dentro de las fechas)
+              </label>
+            </div>
+            <p style="font-size:11px;color:var(--gray-400);margin:10px 0 0;">Producto: <strong>Auspiciador Local Nicaragua Informate</strong> — aparición en artículos durante la vigencia contratada (típicamente 30 días). El precio lo define el propietario con cada cliente; no hay tarifa automática.</p>
+            <div style="display:flex;gap:10px;margin-top:14px;">
+              <button class="btn btn-primary" onclick="guardarAuspiciador()"><i class="fas fa-save"></i><span>Guardar</span></button>
+              <button class="btn btn-secondary" onclick="document.getElementById('spFormCard').style.display='none'"><span>Cancelar</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- LISTA -->
+        <div class="card">
+          <div class="card-header"><h3 class="card-title"><i class="fas fa-ad" style="color: var(--primary-600);"></i>Auspiciadores</h3></div>
+          <div class="card-body" style="overflow-x:auto;">
+            <table style="width:100%;font-size:13px;border-collapse:collapse;">
+              <thead>
+                <tr style="text-align:left;color:var(--gray-500);border-bottom:1px solid var(--gray-200);">
+                  <th style="padding:8px;">Nombre</th><th>Estado</th><th>Posición</th><th>Vigencia</th><th>Impresiones</th><th>Clics</th><th>CTR</th><th></th>
+                </tr>
+              </thead>
+              <tbody id="spTableBody">
+                <tr><td colspan="8" style="padding:16px;color:var(--gray-400);">Cargando...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
       <!-- CONFIGURACIÓN -->
@@ -3514,6 +3597,7 @@ sin texto ni marcas de agua, composición periodística"
         cargarTraficoRealTime();
       }
       if (tabId === 'config-tab') cargarConfiguracion();
+      if (tabId === 'publicidad-tab') cargarPublicidadTodo();
       if (tabId === 'agente-tab') cargarMetricasAgente();
       // Evaluador ORO/PLATA/BRONCE eliminado: la autoridad editorial es MENI + Forense + Supervisor
       if (tabId === 'calidad-tab') {
@@ -3527,6 +3611,179 @@ sin texto ni marcas de agua, composición periodística"
       document.getElementById(panelId).classList.add('active');
       if (tabElement) tabElement.classList.add('active');
     };
+
+    /* ===== PUBLICIDAD / AUSPICIADORES ===== */
+    let _spCache = [];
+
+    window.cargarPublicidadTodo = async function() {
+      await Promise.all([cargarAuspiciadores(), cargarResumenComercial()]);
+    };
+
+    window.cargarAuspiciadores = async function() {
+      const tbody = document.getElementById('spTableBody');
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
+      try {
+        const res = await fetch('/api/admin/auspiciadores', { headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'HTTP ' + res.status);
+        _spCache = data.items || [];
+        if (_spCache.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" style="padding:16px;color:var(--gray-400);">Sin auspiciadores. Creá el primero con «Nuevo auspiciador».</td></tr>';
+          return;
+        }
+        const badge = { activo: 'background:#dcfce7;color:#166534;', programado: 'background:#dbeafe;color:#1e40af;', vencido: 'background:#fee2e2;color:#991b1b;', inactivo: 'background:#f1f5f9;color:#475569;' };
+        tbody.innerHTML = _spCache.map(s => `
+          <tr style="border-bottom:1px solid var(--gray-100);">
+            <td style="padding:8px;font-weight:600;">${escapeHtml(s.nombre)}</td>
+            <td><span style="padding:3px 8px;border-radius:6px;font-size:11px;font-weight:700;${badge[s.estado] || ''}">${s.estado}</span></td>
+            <td>${escapeHtml(s.posicion || 'articulo')}</td>
+            <td style="font-size:12px;">${s.fechaInicio} → ${s.fechaVencimiento}${s.estado === 'activo' && s.diasParaVencer <= 7 ? ` <span style="color:var(--danger);font-weight:700;">(${s.diasParaVencer}d)</span>` : ''}</td>
+            <td>${(s.impresiones || 0).toLocaleString()}</td>
+            <td>${(s.clics || 0).toLocaleString()}</td>
+            <td>${s.ctr}%</td>
+            <td style="white-space:nowrap;">
+              <button class="btn-sm btn-secondary" onclick="editarAuspiciador('${s.id}')" style="padding:4px 8px;font-size:11px;">Editar</button>
+              <button class="btn-sm btn-secondary" onclick="toggleAuspiciador('${s.id}', ${!s.activo})" style="padding:4px 8px;font-size:11px;">${s.activo ? 'Desactivar' : 'Activar'}</button>
+            </td>
+          </tr>`).join('');
+      } catch (e) {
+        tbody.innerHTML = `<tr><td colspan="8" style="padding:16px;color:var(--danger);">Error: ${escapeHtml(String(e.message || e))}</td></tr>`;
+      }
+    };
+
+    window.nuevoAuspiciador = function() {
+      document.getElementById('spFormTitle').textContent = 'Nuevo auspiciador';
+      document.getElementById('spId').value = '';
+      ['spNombre','spUrl','spLogo','spNotas'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('spPosicion').value = 'articulo';
+      const hoy = new Date().toISOString().slice(0, 10);
+      const en30 = new Date(Date.now() + 30 * 86400000).toISOString().slice(0, 10);
+      document.getElementById('spInicio').value = hoy;
+      document.getElementById('spVencimiento').value = en30;
+      document.getElementById('spActivo').checked = false;
+      document.getElementById('spFormCard').style.display = 'block';
+      document.getElementById('spFormCard').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.editarAuspiciador = function(id) {
+      const s = _spCache.find(x => x.id === id);
+      if (!s) return;
+      document.getElementById('spFormTitle').textContent = 'Editar auspiciador';
+      document.getElementById('spId').value = s.id;
+      document.getElementById('spNombre').value = s.nombre || '';
+      document.getElementById('spUrl').value = s.url || '';
+      document.getElementById('spLogo').value = s.logoUrl || '';
+      document.getElementById('spNotas').value = s.notas || '';
+      document.getElementById('spPosicion').value = s.posicion || 'articulo';
+      document.getElementById('spInicio').value = (s.fechaInicio || '').slice(0, 10);
+      document.getElementById('spVencimiento').value = (s.fechaVencimiento || '').slice(0, 10);
+      document.getElementById('spActivo').checked = !!s.activo;
+      document.getElementById('spFormCard').style.display = 'block';
+      document.getElementById('spFormCard').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.guardarAuspiciador = async function() {
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
+      const id = document.getElementById('spId').value;
+      const payload = {
+        nombre: document.getElementById('spNombre').value.trim(),
+        url: document.getElementById('spUrl').value.trim(),
+        logoUrl: document.getElementById('spLogo').value.trim(),
+        posicion: document.getElementById('spPosicion').value,
+        fechaInicio: document.getElementById('spInicio').value,
+        fechaVencimiento: document.getElementById('spVencimiento').value,
+        notas: document.getElementById('spNotas').value.trim(),
+        activo: document.getElementById('spActivo').checked,
+      };
+      try {
+        const res = await fetch(id ? `/api/admin/auspiciadores/${id}` : '/api/admin/auspiciadores', {
+          method: id ? 'PUT' : 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'HTTP ' + res.status);
+        document.getElementById('spFormCard').style.display = 'none';
+        await cargarPublicidadTodo();
+      } catch (e) {
+        alert('No se pudo guardar: ' + (e.message || e));
+      }
+    };
+
+    window.toggleAuspiciador = async function(id, activo) {
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
+      try {
+        const res = await fetch(`/api/admin/auspiciadores/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
+          body: JSON.stringify({ activo }),
+        });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'HTTP ' + res.status);
+        await cargarPublicidadTodo();
+      } catch (e) {
+        alert('No se pudo actualizar: ' + (e.message || e));
+      }
+    };
+
+    window.cargarResumenComercial = async function() {
+      const el = document.getElementById('spComercial');
+      const adminToken = sessionStorage.getItem('admin_api_key') || '';
+      try {
+        const res = await fetch('/api/admin/comercial?dias=30', { headers: { 'x-admin-token': adminToken }, cache: 'no-store' });
+        const data = await res.json();
+        if (!data.ok) throw new Error(data.error || 'HTTP ' + res.status);
+        const a = data.audiencia, p = data.publicidad;
+        const paises = (a.paises || []).map(x => `${x.codigo}: ${x.eventos}`).join(' · ') || 'Sin datos de país aún';
+        const topArt = (a.topArticulos || []).slice(0, 5).map(x => `<div style="font-size:12px;color:var(--gray-600);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${x.views} · ${escapeHtml(x.titulo || x.slug)}</div>`).join('') || '<div style="font-size:12px;color:var(--gray-400);">Sin datos</div>';
+        const campañas = (p.auspiciadores || []).map(x => `<div style="font-size:12px;color:var(--gray-600);">${escapeHtml(x.nombre)} — ${x.estado}, ${x.impresiones} imp. / ${x.clics} clics (${x.ctr}%)${x.estado === 'activo' && x.diasParaVencer <= 7 ? ` — vence en ${x.diasParaVencer}d` : ''}</div>`).join('') || '<div style="font-size:12px;color:var(--gray-400);">Sin campañas</div>';
+        el.innerHTML = `
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;">Audiencia (30 días)</div>
+              <div style="font-size:20px;font-weight:800;">${(a.pageviews || 0).toLocaleString()} <span style="font-size:12px;font-weight:500;color:var(--gray-500);">vistas</span></div>
+              <div style="font-size:12px;color:var(--gray-600);">${a.sesionesAprox} sesiones aprox.</div>
+              <div style="font-size:12px;color:var(--gray-600);margin-top:6px;"><strong>Países:</strong> ${paises}</div>
+              <div style="font-size:11px;color:var(--gray-400);margin-top:4px;">${a.geoNota || ''}</div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;">Artículos principales</div>
+              ${topArt}
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;">Publicidad</div>
+              <div style="font-size:20px;font-weight:800;">${p.activos} <span style="font-size:12px;font-weight:500;color:var(--gray-500);">activos · ${p.porVencer} por vencer</span></div>
+              <div style="margin-top:6px;">${campañas}</div>
+            </div>
+          </div>`;
+        window._comercialData = data;
+      } catch (e) {
+        el.innerHTML = `<p style="color:var(--danger);font-size:13px;">Error: ${escapeHtml(String(e.message || e))}</p>`;
+      }
+    };
+
+    window.exportarComercialCSV = function() {
+      const d = window._comercialData;
+      if (!d) { alert('Cargá el resumen primero'); return; }
+      const rows = [['auspiciador', 'estado', 'impresiones', 'clics', 'ctr_pct', 'dias_para_vencer']];
+      for (const s of d.publicidad.auspiciadores) rows.push([s.nombre, s.estado, s.impresiones, s.clics, s.ctr, s.diasParaVencer]);
+      rows.push([]);
+      rows.push(['fecha', 'vistas']);
+      for (const x of d.audiencia.diaria) rows.push([x.date, x.views]);
+      rows.push([]);
+      rows.push(['pais', 'eventos']);
+      for (const x of d.audiencia.paises) rows.push([x.codigo, x.eventos]);
+      const csv = rows.map(r => r.join(',')).join('\n');
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      a.download = `resumen-comercial-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+    };
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    /* ===== /PUBLICIDAD ===== */
 
     // Card "Google: Analytics + Search Console" — lee el snapshot real de NIOS
     // via GET /api/admin/nios-intelligence?action=dashboard. Si el estado no es

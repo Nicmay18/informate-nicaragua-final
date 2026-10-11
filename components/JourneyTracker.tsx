@@ -2,36 +2,11 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { getOrCreateAnonymousSession } from '@/lib/observability/session';
 
 const SESSION_STORAGE_KEY = 'ni_session_id';
-const SESSION_TIMESTAMP_KEY = 'ni_session_ts';
-const SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 min
 const SCROLL_DEBOUNCE_MS = 1000;
 const ENGAGEMENT_INTERVAL_MS = 1000;
-
-function getOrCreateAnonymousSession(): string {
-  if (typeof window === 'undefined') return '';
-  try {
-    const now = Date.now();
-    const storedId = sessionStorage.getItem(SESSION_STORAGE_KEY);
-    const storedTs = sessionStorage.getItem(SESSION_TIMESTAMP_KEY);
-
-    if (storedId && storedTs && now - parseInt(storedTs, 10) < SESSION_TIMEOUT_MS) {
-      sessionStorage.setItem(SESSION_TIMESTAMP_KEY, now.toString());
-      return storedId;
-    }
-
-    const newId = typeof crypto !== 'undefined' && 'randomUUID' in crypto
-      ? crypto.randomUUID()
-      : `s-${now}-${Math.random().toString(36).slice(2, 9)}`;
-
-    sessionStorage.setItem(SESSION_STORAGE_KEY, newId);
-    sessionStorage.setItem(SESSION_TIMESTAMP_KEY, now.toString());
-    return newId;
-  } catch {
-    return `s-fallback-${Date.now()}`;
-  }
-}
 
 function sendEvent(payload: Record<string, unknown>): void {
   try {

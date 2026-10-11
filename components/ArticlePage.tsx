@@ -38,6 +38,8 @@ function getAnalyticsSessionId(): string | undefined {
 }
 import { getArticleMetricsAction } from '@/app/actions/get-article-metrics';
 import KeyPoints from './KeyPoints';
+import SponsorBanner from './SponsorBanner';
+import type { AuspiciadorPublico } from '@/lib/ads/auspiciadores';
 import { extractPuntosClave, buildDek, isTextoRotoPorCorte, extractoSeguro } from '@/lib/eeat-helpers';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -60,9 +62,10 @@ const AdsenseUnit = lazy(() => import('./AdsenseUnit'));
 interface ArticlePageProps {
   noticia: Noticia;
   related?: Noticia[];
+  sponsor?: AuspiciadorPublico | null;
 }
 
-export default function ArticlePage({ noticia, related = [] }: ArticlePageProps) {
+export default function ArticlePage({ noticia, related = [], sponsor = null }: ArticlePageProps) {
   const FONT_STEPS = useMemo(() => [0.9, 1, 1.1, 1.2], []);
   const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
   const fontSize = FONT_STEPS[fontIndex];
@@ -390,6 +393,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
             )}
           </figure>
         )}
+
+        {/* Auspiciador — strip discreto, fuera del cuerpo editorial */}
+        {sponsor && <SponsorBanner sponsor={sponsor} slug={noticia.slug} />}
 
         <section>
         {/* Banner de calidad si el artículo está marcado para revisión editorial */}

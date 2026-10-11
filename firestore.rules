@@ -152,7 +152,7 @@ service cloud.firestore {
     match /traffic_daily/{date} {
       allow read: if isAdmin();
       allow create, update: if isAdmin()
-          && request.resource.data.keys().hasOnly(['updatedAt']);
+          && request.resource.data.keys().hasOnly(['updatedAt','views','countries']);
       allow delete: if false;
 
       match /articles/{slug} {
