@@ -995,13 +995,27 @@
                 </div>
               </div>
               <div id="tabRedes_facebook" style="display:none;">
-                <p style="font-size:11px; color:#6b7280; margin:0 0 6px;">Invita a comentar para más alcance orgánico en Facebook.</p>
+                <p style="font-size:12px; color:#6b7280; margin:0 0 8px;">Revisá el post y pegá el enlace como primer comentario. Esta vista no publica en redes.</p>
+                <div style="padding:12px; margin-bottom:12px; border:1px solid #bae6fd; border-radius:8px; background:#f0f9ff; color:#0c4a6e; font-size:13px;">
+                  <p id="shareCopyStatus" role="status" aria-live="polite" style="margin:0;"></p>
+                  <div id="shareCopyDetails" style="display:none;">
+                    <strong id="shareCopyAngle" style="display:block; margin-top:6px;"></strong>
+                    <p id="shareCopyReason" style="margin:6px 0;"></p>
+                    <p id="shareCopyEvidence" style="margin:0; white-space:pre-wrap;"></p>
+                    <p id="shareCopyTone" style="margin:6px 0 0;"></p>
+                  </div>
+                </div>
+                <label for="shareTextoFacebook" style="font-size:13px; font-weight:600;">Post de Facebook</label>
                 <textarea id="shareTextoFacebook" readonly style="width:100%; min-height:155px; font-size:13px; padding:10px 12px; border:1px solid #e5e7eb; border-radius:8px; resize:vertical; font-family:inherit; background:#f9fafb; color:#111827; line-height:1.65; box-sizing:border-box;"></textarea>
                 <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;">
                   <button type="button" onclick="copiarTextoRedesId('shareTextoFacebook','Facebook')" style="padding:8px 18px; background:#1877f2; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><i class="fab fa-facebook"></i> Copiar para Facebook</button>
                   <button type="button" id="btnRegenerarCopyFb" onclick="regenerarCopyFacebook()" style="padding:8px 14px; background:#7c3aed; color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600;"><i class="fas fa-wand-magic-sparkles"></i> Regenerar con IA</button>
                   <a id="shareFacebookLink" href="#" target="_blank" rel="noopener" style="padding:8px 14px; background:#e7f3ff; color:#1877f2; border-radius:6px; font-size:13px; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:6px;"><i class="fab fa-facebook"></i> Abrir Facebook</a>
                 </div>
+                <label for="sharePrimerComentario" style="display:block; margin-top:12px; font-size:13px; font-weight:600;">Primer comentario · enlace oficial</label>
+                <textarea id="sharePrimerComentario" readonly style="width:100%; min-height:85px; padding:10px; border:1px solid #e5e7eb; border-radius:8px; box-sizing:border-box; font-family:inherit; color:#111827; background:#f9fafb;"></textarea>
+                <button type="button" onclick="copiarTextoRedesId('sharePrimerComentario','primer comentario')" style="padding:8px 14px; border:0; border-radius:6px; background:#1877f2; color:#fff; cursor:pointer;">Copiar primer comentario</button>
+                <p style="font-size:11px; color:#6b7280;">La revisión editorial sigue siendo necesaria. Se reutiliza el análisis durante 5 minutos si la nota no cambia.</p>
                 <div style="margin-top:10px; padding:10px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
                   <div>
                     <p style="margin:0; font-size:12px; font-weight:600; color:#0369a1;">🔄 ¿Facebook muestra foto vieja?</p>
@@ -1999,12 +2013,33 @@ sin texto ni marcas de agua, composición periodística"
     };
 
     let _noticiaCompartirActual = null;
+    let _shareVersion = 0;
+    let _copyRequest = 0;
+    let _shareLinks = {};
     async function mostrarPanelCompartir(noticia) {
       const panel = document.getElementById('panelCompartirManual');
       if (!panel) return;
       _noticiaCompartirActual = noticia;
+      const version = ++_shareVersion;
+      _shareLinks = {};
+      ['shareTextoTelegram', 'shareTextoFacebook', 'shareTextoCompleto', 'sharePrimerComentario'].forEach(id => {
+        document.getElementById(id).value = '';
+        document.getElementById(id).placeholder = 'Preparando distribución...';
+      });
+      ['shareCopyAngle', 'shareCopyReason', 'shareCopyEvidence', 'shareCopyTone'].forEach(id => document.getElementById(id).textContent = '');
+      document.getElementById('shareCopyDetails').style.display = 'none';
+      document.getElementById('shareCopyStatus').textContent = 'Analizando la nota...';
+      document.getElementById('btnRegenerarCopyFb').disabled = true;
+      document.getElementById('shareWhatsappLink').removeAttribute('href');
+      document.getElementById('shareFacebookLink').removeAttribute('href');
+      document.getElementById('shareNoticiaLink').removeAttribute('href');
+      document.getElementById('shareTituloHeader').textContent = noticia.titulo || '';
+      document.getElementById('shareImagenPreview').style.display = 'none';
+      document.getElementById('shortLinkTelegram').textContent = 'Generando...';
+      document.getElementById('shortLinkWhatsapp').textContent = 'Generando...';
+      panel.style.display = 'block';
 
-      const baseUrl = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
+      const baseUrl = `https://nicaraguainformate.com/noticias/${encodeURIComponent(noticia.slug)}`;
       const urlFacebook = `${baseUrl}?utm_source=facebook&utm_medium=social`;
       const url = baseUrl;
       const titulo = noticia.titulo || '';
@@ -2015,23 +2050,8 @@ sin texto ni marcas de agua, composición periodística"
       const emoji = emojiCat[categoria] || '📰';
 
       // Hashtag principal (solo 1 para no saturar)
-      const hashtagPrincipal = `#${categoria.replace(/\s+/g,'')} #Nicaragua`;
-
       // Descripción ultra-corta: máximo 1-2 líneas (120 chars max)
-      let descripcionCorta = '';
-      const textoLimpio = (noticia.resumen || noticia.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-      if (textoLimpio) {
-        const primeraOracion = textoLimpio.match(/^[^.!?]+[.!?]+/);
-        if (primeraOracion) {
-          descripcionCorta = primeraOracion[0].trim();
-          if (descripcionCorta.length > 100) {
-            descripcionCorta = descripcionCorta.substring(0, 97).trim() + '...';
-          }
-        } else {
-          descripcionCorta = textoLimpio.length > 100 ? textoLimpio.substring(0, 97).trim() + '...' : textoLimpio;
-        }
-      }
-      if (!descripcionCorta) descripcionCorta = 'Más detalles en el link:';
+      const copyPromise = solicitarCopySocial(noticia);
 
       // ─── LINKS CORTOS FORENSES ───
       // Generar links cortos para rastreo server-side (imposible de bloquear)
@@ -2040,59 +2060,33 @@ sin texto ni marcas de agua, composición periodística"
       let urlWhatsapp = baseUrl + '?utm_source=whatsapp&utm_medium=social';
       try {
         const [tgResp, waResp] = await Promise.all([
-          fetch('/api/admin/shortlink', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug: noticia.slug, titulo, categoria, source: 'telegram' }) }),
-          fetch('/api/admin/shortlink', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug: noticia.slug, titulo, categoria, source: 'whatsapp' }) })
+          fetch('/api/admin/shortlink', { method: 'POST', signal: AbortSignal.timeout(8000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug: noticia.slug, titulo, categoria, source: 'telegram' }) }),
+          fetch('/api/admin/shortlink', { method: 'POST', signal: AbortSignal.timeout(8000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slug: noticia.slug, titulo, categoria, source: 'whatsapp' }) })
         ]);
         const tgData = await tgResp.json().catch(() => ({}));
         const waData = await waResp.json().catch(() => ({}));
-        if (tgData.shortUrl) urlTelegram = tgData.shortUrl;
-        if (waData.shortUrl) urlWhatsapp = waData.shortUrl;
+        if (version !== _shareVersion) return;
+        const validShort = value => typeof value === 'string' && /^https:\/\/nicaraguainformate\.com\/l\/[\w-]+$/.test(value);
+        if (tgResp.ok && validShort(tgData.shortUrl)) urlTelegram = tgData.shortUrl;
+        if (waResp.ok && validShort(waData.shortUrl)) urlWhatsapp = waData.shortUrl;
         // Mostrar links cortos en el panel forense
         const elTg = document.getElementById('shortLinkTelegram');
         const elWa = document.getElementById('shortLinkWhatsapp');
-        if (elTg) elTg.textContent = tgData.shortUrl || urlTelegram;
-        if (elWa) elWa.textContent = waData.shortUrl || urlWhatsapp;
+        if (elTg) elTg.textContent = urlTelegram;
+        if (elWa) elWa.textContent = urlWhatsapp;
       } catch (e) {
+        if (version !== _shareVersion) return;
         console.warn('[mostrarPanelCompartir] Error generando links cortos:', e);
         document.getElementById('shortLinkTelegram').textContent = urlTelegram;
         document.getElementById('shortLinkWhatsapp').textContent = urlWhatsapp;
       }
 
       // ─── CONTEXTO TELEGRAM: 1-2 oraciones cortas ───
-      let contextoTelegram = '';
-      const oracionesTg = textoLimpio.match(/[^.!?]+[.!?]+/g) || [];
-      for (const oracion of oracionesTg) {
-        const limpia = oracion.trim();
-        if (contextoTelegram.length + limpia.length + 1 > 180 && contextoTelegram.length > 0) break;
-        contextoTelegram += (contextoTelegram ? ' ' : '') + limpia;
-        if (contextoTelegram.length >= 180) break;
-      }
-      if (!contextoTelegram) contextoTelegram = descripcionCorta;
-
       // ─── FORMATO TELEGRAM ───
-      const textoTelegram = `<b>${emoji} ${titulo}</b>\n\n${contextoTelegram}...\n\n🔗 <a href="${urlTelegram}">Leer noticia completa</a>\n\n#NicaraguaInformate`;
-
       // ─── FORMATO FACEBOOK (plantilla base, se mejora con IA abajo) ───
       // Extraer oraciones cortas del texto para formato punchy
-      const oracionesFb = [];
-      const textoLimpioFb = (noticia.resumen || noticia.contenido || '').replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-      if (textoLimpioFb) {
-        const parts = textoLimpioFb.split(/[.!?]+/).map(s => s.trim()).filter(s => s.length >= 15 && s.length <= 140);
-        oracionesFb.push(...parts.slice(0, 4));
-      }
-      let cuerpoFacebook = '';
-      if (oracionesFb.length >= 2) {
-        const p1 = oracionesFb[0] + '.';
-        const p2 = oracionesFb.slice(1, 3).join('. ') + '.';
-        const p3 = oracionesFb[3] ? oracionesFb[3] + '.' : '';
-        cuerpoFacebook = [p1, p2, p3].filter(Boolean).join('\n\n');
-      } else {
-        cuerpoFacebook = oracionesFb[0] ? oracionesFb[0] + '.' : descripcionCorta;
-      }
-      const textoFacebook = `${emoji} ${titulo}\n\n${cuerpoFacebook}\n\n👉 Nota completa:\n${urlFacebook}\n\n${hashtagPrincipal}`;
-
       // ─── FORMATO WHATSAPP ───
-      const textoWhatsapp = `${emoji} *${titulo}*\n\n${descripcionCorta}\n\n👉 ${urlWhatsapp}\n\n${hashtagPrincipal}`;
+      _shareLinks = { telegram: urlTelegram, whatsapp: urlWhatsapp };
 
       document.getElementById('shareEmoji').textContent = emoji;
       document.getElementById('shareTituloHeader').textContent = titulo;
@@ -2112,10 +2106,6 @@ sin texto ni marcas de agua, composición periodística"
         }
       }
 
-      document.getElementById('shareTextoTelegram').value = textoTelegram;
-      document.getElementById('shareTextoFacebook').value = textoFacebook;
-      document.getElementById('shareTextoCompleto').value = textoWhatsapp;
-      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(textoWhatsapp)}`;
       document.getElementById('shareFacebookLink').href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(urlFacebook)}`;
       document.getElementById('shareNoticiaLink').href = url;
       cambiarTabRedes('telegram');
@@ -2123,41 +2113,61 @@ sin texto ni marcas de agua, composición periodística"
       panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       // ─── COPY FACEBOOK CON IA (reemplaza el flujo manual de ChatGPT) ───
-      generarCopyFacebookIA(noticia, urlFacebook, categoria, textoFacebook);
+      await generarCopyFacebookIA(noticia, version, copyPromise);
     }
+    window.mostrarPanelCompartir = mostrarPanelCompartir;
 
     // Genera el copy de Facebook usando IA (Groq) y lo coloca en el textarea.
     // Si falla, conserva la plantilla base. No bloquea el flujo de publicación.
-    async function generarCopyFacebookIA(noticia, url, categoria, fallbackTexto) {
-      const fbTextarea = document.getElementById('shareTextoFacebook');
-      const fbBtn = document.querySelector('#tabRedes_facebook button');
-      const prevPlaceholder = fbTextarea ? fbTextarea.value : '';
+    async function solicitarCopySocial(noticia) {
       try {
-        if (fbTextarea) fbTextarea.value = '✨ Generando copy con IA...';
         const resp = await fetch('/api/admin/copy-social', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(20000),
           body: JSON.stringify({
+            slug: noticia.slug,
             titulo: noticia.titulo || '',
             resumen: noticia.resumen || '',
             contenido: noticia.contenido || '',
-            categoria: categoria || 'Noticias',
-            url: url,
+            metaDescription: noticia.metaDescription || noticia.descripcion || '',
+            categoria: noticia.categoria || 'Noticias',
           }),
         });
         const data = await resp.json().catch(() => ({}));
-        if (data.success && data.copy && fbTextarea) {
-          fbTextarea.value = data.copy;
-          if (data.source === 'ia' && fbBtn) {
-            showToast('Copy de Facebook generado con IA ✨', 'success');
-          }
-        } else if (fbTextarea) {
-          fbTextarea.value = fallbackTexto || prevPlaceholder;
-        }
-      } catch (e) {
-        console.error('Copy IA error:', e);
-        if (fbTextarea) fbTextarea.value = fallbackTexto || prevPlaceholder;
+        return resp.ok && data.success ? data : null;
+      } catch {
+        return null;
       }
+    }
+
+    async function generarCopyFacebookIA(noticia, version, pending) {
+      const request = ++_copyRequest;
+      const btn = document.getElementById('btnRegenerarCopyFb');
+      btn.disabled = true;
+      const data = await (pending || solicitarCopySocial(noticia));
+      if (version !== _shareVersion || request !== _copyRequest) return;
+      btn.disabled = false;
+      const status = document.getElementById('shareCopyStatus');
+      if (!data || !data.facebookPost || !data.firstComment || !data.analysis || !data.urls || typeof data.telegramText !== 'string' || typeof data.whatsappText !== 'string') {
+        status.textContent = 'No se pudo obtener el análisis. Reintentá; si ya había un texto, se conserva sin cambios.';
+        ['shareTextoTelegram', 'shareTextoFacebook', 'shareTextoCompleto', 'sharePrimerComentario'].forEach(id => document.getElementById(id).placeholder = 'Texto no disponible. Reintentá la generación.');
+        return;
+      }
+      const telegram = data.telegramText.replace(data.urls.telegram, _shareLinks.telegram || data.urls.telegram);
+      const whatsapp = data.whatsappText.replace(data.urls.whatsapp, _shareLinks.whatsapp || data.urls.whatsapp);
+      document.getElementById('shareTextoTelegram').value = telegram;
+      document.getElementById('shareTextoCompleto').value = whatsapp;
+      document.getElementById('shareTextoFacebook').value = data.facebookPost;
+      document.getElementById('sharePrimerComentario').value = data.firstComment;
+      document.getElementById('shareWhatsappLink').href = `https://wa.me/?text=${encodeURIComponent(whatsapp)}`;
+      const reasons = { sin_ia: 'IA no configurada', limite: 'límite de IA activo', sin_alternativas: 'sin alternativas suficientes para usar IA', no_disponible: 'IA no disponible', respuesta_invalida: 'selección de IA rechazada' };
+      status.textContent = (data.source === 'ia' ? 'Selección editorial asistida por IA' : 'Análisis automático por reglas: ' + (reasons[data.validation] || 'respaldo editorial')) + (data.cached ? ' · resultado reutilizado' : '');
+      document.getElementById('shareCopyDetails').style.display = 'block';
+      document.getElementById('shareCopyAngle').textContent = 'Enfoque: ' + data.analysis.enfoque;
+      document.getElementById('shareCopyReason').textContent = data.analysis.motivo;
+      document.getElementById('shareCopyEvidence').textContent = 'Evidencia en la nota: ' + data.analysis.evidencia;
+      document.getElementById('shareCopyTone').textContent = 'Tono: ' + data.analysis.tono;
     }
 
     window.regenerarCopyFacebook = async function() {
@@ -2165,14 +2175,9 @@ sin texto ni marcas de agua, composición periodística"
         showToast('No hay noticia activa para generar copy', 'warning');
         return;
       }
-      const btn = document.getElementById('btnRegenerarCopyFb');
-      const noticia = _noticiaCompartirActual;
-      const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
-      const categoria = noticia.categoria || 'Noticias';
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...'; }
+      if (document.getElementById('btnRegenerarCopyFb').disabled) return;
       cambiarTabRedes('facebook');
-      await generarCopyFacebookIA(noticia, url, categoria, document.getElementById('shareTextoFacebook').value);
-      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i> Regenerar con IA'; }
+      await generarCopyFacebookIA(_noticiaCompartirActual, _shareVersion);
     };
 
     window.invalidarCacheFacebook = async function() {
@@ -3891,9 +3896,7 @@ sin texto ni marcas de agua, composición periodística"
       const publicadas = noticias.filter(esPublicadaAdmin).slice(0, 5);
       const aMostrar = publicadas.length > 0 ? publicadas : noticias.slice(0, 5);
 
-      container.innerHTML = aMostrar.map(n => {
-        const tituloEsc = (n.titulo || '(Sin título)').replace(/'/g, '&#39;');
-        const resumenEsc = (n.resumen || '').replace(/'/g, '&#39;');
+      container.innerHTML = aMostrar.map((n, index) => {
         return `<div class="news-item" style="padding: 10px 0;">
           <img src="${n.imagen || 'https://picsum.photos/seed/10/80/60'}" class="news-thumb" alt="" onerror="this.src='https://picsum.photos/seed/10/80/60'">
           <div class="news-content">
@@ -3905,10 +3908,13 @@ sin texto ni marcas de agua, composición periodística"
             </div>
           </div>
           <div class="news-actions" style="opacity:1;">
-            <button class="btn-icon share" onclick="mostrarPanelCompartir({slug:'${n.slug||''}', titulo:'${tituloEsc}', categoria:'${n.categoria||'Noticias'}', resumen:'${resumenEsc}', contenido:'${resumenEsc}'})" data-tooltip="Compartir con tracking forense"><i class="fas fa-share-alt"></i></button>
+            <button class="btn-icon share" data-share-index="${index}" data-tooltip="Compartir con tracking forense"><i class="fas fa-share-alt"></i></button>
           </div>
         </div>`;
       }).join('');
+      container.querySelectorAll('[data-share-index]').forEach(button => {
+        button.addEventListener('click', () => mostrarPanelCompartir(aMostrar[Number(button.dataset.shareIndex)]));
+      });
     }
 
     async function postToApi(endpoint, payload) {
@@ -4523,7 +4529,7 @@ sin texto ni marcas de agua, composición periodística"
             btnShare.className = 'btn-icon share';
             btnShare.innerHTML = '<i class="fas fa-share-alt"></i>';
             btnShare.title = 'Compartir en redes (con tracking forense)';
-            btnShare.onclick = function() { mostrarPanelCompartir({ slug: n.slug || '', titulo: n.titulo || '', categoria: n.categoria || 'Noticias', resumen: n.resumen || '', contenido: n.contenido || n.resumen || '' }); };
+            btnShare.onclick = function() { mostrarPanelCompartir(n); };
             actions.appendChild(btnShare);
             // Botón corregir SEO quirúrgico
             const btnFix = document.createElement('button');

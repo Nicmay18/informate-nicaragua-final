@@ -79,7 +79,7 @@ async function sendDigestMessage(token: string, chatId: string, mensaje: string)
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: chatId,
-          text: mensaje.slice(0, 4096),
+          text: mensaje,
           parse_mode: 'HTML',
           disable_web_page_preview: true,
         }),
