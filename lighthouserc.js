@@ -49,6 +49,9 @@ module.exports = {
         'render-blocking-resources': 'warn',
         'unminified-css': 'warn',
         'unminified-javascript': 'warn',
+        // El LCP de la home es texto (h1), no imagen: el audit devuelve
+        // N/A y minScore no es una assertion válida sobre él.
+        'lcp-lazy-loaded': 'warn',
       },
     },
     upload: {

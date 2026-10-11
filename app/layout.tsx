@@ -29,9 +29,12 @@ import { getCspNonce } from '@/lib/nonce';
 import { Suspense } from 'react';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: true });
-const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'swap', preload: false });
-const spectral = Spectral({ weight: ['400', '500', '600', '700'], subsets: ['latin'], variable: '--font-spectral', display: 'swap', preload: false });
-const ibmPlexMono = IBM_Plex_Mono({ weight: ['400', '500'], subsets: ['latin'], variable: '--font-ibm-plex-mono', display: 'swap', preload: false });
+// display:'optional' en fuentes no críticas: si no llegan a tiempo el
+// navegador conserva el fallback en vez de intercambiar → evita el
+// layout shift por font-swap tardío (CLS ~0.10 medido en Lighthouse CI).
+const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'optional', preload: false });
+const spectral = Spectral({ weight: ['400', '500', '600', '700'], subsets: ['latin'], variable: '--font-spectral', display: 'optional', preload: false });
+const ibmPlexMono = IBM_Plex_Mono({ weight: ['400', '500'], subsets: ['latin'], variable: '--font-ibm-plex-mono', display: 'optional', preload: false });
 
 /* ─── CONFIGURACIÓN next/font/local (cuando tengas los .woff2) ───
  * 1. Descarga Inter y Merriweather como .woff2
