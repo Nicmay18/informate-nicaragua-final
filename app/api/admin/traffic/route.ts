@@ -16,6 +16,9 @@ import {
   realtimeSnapshot,
   rehydrateTrafficEvents,
   buildSuggestedActions,
+  buildAlerts,
+  buildExecutiveSummary,
+  sameHoursComparison,
   siteTrend,
   split6hWindows,
   windowedArticleCounts,
@@ -293,6 +296,7 @@ export async function GET(request: NextRequest) {
         h1: w.h1,
         h6: w.h6,
         h24: w.h24,
+        vistasPeriodo: period === '24h' ? w.h24 : (pv?.views ?? w.h24),
         total: meta?.vistas ?? 0,
         trend,
         deltaPct,
@@ -326,13 +330,34 @@ export async function GET(request: NextRequest) {
     // Tendencias + insights deterministas
     const site = siteTrend(daily);
     const insights = buildInsights({ articles: articulos, categories: categorias, hours, site });
+    const totalPeriod = filteredEvents.length + Object.values(sourcesPeriod).reduce((s2, v) => s2 + v, 0);
+    // Centro de control profesional: comparativas, alertas y resumen narrado.
+    const sameHours = sameHoursComparison(hourly, now);
+    const alertas = buildAlerts({
+      realtime,
+      hourly,
+      articles: articulos,
+      total24h: period === '24h' ? filteredEvents.length : events24h.length,
+      sameHours,
+      now,
+    });
+    const resumenEjecutivo = buildExecutiveSummary({
+      period,
+      totalPeriod,
+      articles: articulos,
+      categories: categorias,
+      sources: sourcesPeriod,
+      site,
+      hours,
+      realtime,
+    });
     const accionesSugeridas = buildSuggestedActions({
       articles: articulos,
       sources: sourcesPeriod,
       hours,
       site,
       realtimeActive: realtime.events,
-      totalPeriod: filteredEvents.length + Object.values(sourcesPeriod).reduce((s2, v) => s2 + v, 0),
+      totalPeriod,
     });
 
     // ---- Shape legacy (compatibilidad con panel existente) ----------------
@@ -368,6 +393,11 @@ export async function GET(request: NextRequest) {
       realtime,
       insights,
       accionesSugeridas,
+      alertas,
+      resumenEjecutivo,
+      comparativas: {
+        hoyVsAyer: sameHours,
+      },
       tendencias: { site },
       horarios: hours,
       meta: {

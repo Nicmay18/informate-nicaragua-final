@@ -2,22 +2,27 @@ import { describe, it, expect } from 'vitest';
 import {
   aggregateSources,
   bucketViewsByHour,
+  buildAlerts,
+  buildExecutiveSummary,
   buildHeatmapDays,
   buildInsights,
   buildSuggestedActions,
   classifyTrend,
   dailySeries,
   hourSummary,
+  managuaDayKey,
   managuaHourKey,
   normalizeSource,
   parsePeriod,
   periodMs,
   realtimeSnapshot,
   rehydrateTrafficEvents,
+  sameHoursComparison,
   siteTrend,
   split6hWindows,
   windowedArticleCounts,
   MANAGUA_TZ,
+  type HourBucket,
   type TrafficLogEvent,
 } from '@/lib/analytics/traffic-insights';
 
@@ -435,5 +440,206 @@ describe('buildSuggestedActions — solo datos reales, nunca inventados', () => 
     for (let i = 1; i < out.length; i++) {
       expect(rank[out[i].prioridad]).toBeGreaterThanOrEqual(rank[out[i - 1].prioridad]);
     }
+  });
+});
+
+describe('sameHoursComparison — hoy vs ayer a la misma hora', () => {
+  // NOW = 18:00Z = 12:00 Managua del 2026-10-01
+  const bucket = (day: string, h: number, views: number): HourBucket => ({
+    key: `${day}T${String(h).padStart(2, '0')}`,
+    label: `${String(h).padStart(2, '0')}:00`,
+    views,
+  });
+
+  it('cuenta hoy completo y ayer solo hasta la hora actual', () => {
+    const buckets = [
+      bucket('2026-09-30', 10, 20),  // ayer 10:00 — cuenta
+      bucket('2026-09-30', 15, 50),  // ayer 15:00 > 12:00 — NO cuenta
+      bucket('2026-10-01', 8, 5),    // hoy — cuenta
+      bucket('2026-10-01', 11, 10),  // hoy — cuenta
+    ];
+    const c = sameHoursComparison(buckets, NOW);
+    expect(c.today).toBe(15);
+    expect(c.yesterday).toBe(20);
+    expect(c.deltaPct).toBe(-25);
+    expect(c.cutoffHour).toBe('12:00');
+  });
+
+  it('deltaPct null cuando ayer no tuvo tráfico en esas horas', () => {
+    const c = sameHoursComparison([bucket('2026-10-01', 9, 10)], NOW);
+    expect(c.today).toBe(10);
+    expect(c.yesterday).toBe(0);
+    expect(c.deltaPct).toBeNull();
+  });
+
+  it('managuaDayKey coincide con el prefijo del bucket horario', () => {
+    expect(managuaDayKey(NOW)).toBe('2026-10-01');
+  });
+});
+
+describe('buildAlerts — solo alertas con evidencia medida', () => {
+  const hourBuckets = (views: number[]): HourBucket[] =>
+    views.map((v, i) => ({ key: `2026-10-01T${String(i).padStart(2, '0')}`, label: `${i}:00`, views: v }));
+  const noSH = { today: 0, yesterday: 0, deltaPct: null, cutoffHour: '12:00' };
+
+  it('sin tráfico ni base → ninguna alerta', () => {
+    const out = buildAlerts({
+      realtime: { events: 0, distinctSlugs: 0 },
+      hourly: hourBuckets(new Array(24).fill(0)),
+      articles: [],
+      total24h: 0,
+      sameHours: noSH,
+    });
+    expect(out).toEqual([]);
+  });
+
+  it('pico en vivo muy sobre el promedio → TRAFICO_ELEVADO (alta)', () => {
+    const hourly = hourBuckets(new Array(24).fill(10)); // 240 total, avg 10/h, 2.5/15min
+    const out = buildAlerts({
+      realtime: { events: 30, distinctSlugs: 3 },
+      hourly,
+      articles: [],
+      total24h: 240,
+      sameHours: noSH,
+    });
+    const a = out.find(x => x.code === 'TRAFICO_ELEVADO');
+    expect(a).toBeDefined();
+    expect(a!.nivel).toBe('alta');
+    expect(a!.detalle).toContain('15min');
+  });
+
+  it('pico pequeño sin base suficiente → no alerta TRAFICO_ELEVADO', () => {
+    const out = buildAlerts({
+      realtime: { events: 4, distinctSlugs: 1 },
+      hourly: hourBuckets(new Array(24).fill(1)),
+      articles: [],
+      total24h: 24,
+      sameHours: noSH,
+    });
+    expect(out.some(a => a.code === 'TRAFICO_ELEVADO')).toBe(false);
+  });
+
+  it('silencio con sitio activo → SIN_TRAFICO_AHORA', () => {
+    const out = buildAlerts({
+      realtime: { events: 0, distinctSlugs: 0 },
+      hourly: hourBuckets(new Array(24).fill(5)),
+      articles: [],
+      total24h: 120,
+      sameHours: noSH,
+    });
+    expect(out.some(a => a.code === 'SIN_TRAFICO_AHORA')).toBe(true);
+  });
+
+  it('artículo que concentra ≥50% de la hora → ARTICULO_CALIENTE', () => {
+    const hourly = hourBuckets(new Array(23).fill(2).concat([10]));
+    const out = buildAlerts({
+      realtime: { events: 6, distinctSlugs: 1 },
+      hourly,
+      articles: [{
+        slug: 'x', titulo: 'Nota caliente', categoria: 'Sucesos',
+        h1: 7, h6: 9, h24: 9, total: 9, trend: 'nuevo' as const, deltaPct: null,
+      }],
+      total24h: 56,
+      sameHours: noSH,
+    });
+    const a = out.find(x => x.code === 'ARTICULO_CALIENTE');
+    expect(a).toBeDefined();
+    expect(a!.titulo).toContain('Nota caliente');
+  });
+
+  it('caída brusca hora a hora → CAIDA_HORA', () => {
+    const hourly = hourBuckets(new Array(22).fill(5).concat([20, 4])); // 20 → 4 = -80%
+    const out = buildAlerts({
+      realtime: { events: 4, distinctSlugs: 1 },
+      hourly,
+      articles: [],
+      total24h: 134,
+      sameHours: noSH,
+    });
+    expect(out.some(a => a.code === 'CAIDA_HORA')).toBe(true);
+  });
+
+  it('día muy por debajo de ayer → DIA_PEOR_AYER (alta)', () => {
+    const out = buildAlerts({
+      realtime: { events: 1, distinctSlugs: 1 },
+      hourly: hourBuckets(new Array(24).fill(2)),
+      articles: [],
+      total24h: 48,
+      sameHours: { today: 10, yesterday: 40, deltaPct: -75, cutoffHour: '12:00' },
+    });
+    const a = out.find(x => x.code === 'DIA_PEOR_AYER');
+    expect(a).toBeDefined();
+    expect(a!.nivel).toBe('alta');
+  });
+});
+
+describe('buildExecutiveSummary — el análisis habla con datos reales', () => {
+  it('narra totales, fuentes, top artículo y estado en vivo', () => {
+    const out = buildExecutiveSummary({
+      period: '24h',
+      totalPeriod: 945,
+      articles: [{
+        slug: 'a', titulo: 'Electrocutados en San Carlos', categoria: 'Sucesos',
+        h1: 129, h6: 129, h24: 129, total: 152, trend: 'nuevo' as const, deltaPct: null,
+      }],
+      categories: [{ categoria: 'Sucesos', views: 323, pct: 34 }],
+      sources: { facebook: 706, directo: 184, google: 33 },
+      site: { direction: 'up', deltaPct: 25 },
+      hours: { peakHour: '23:00', lowHour: '01:00' },
+      realtime: { events: 71, distinctSlugs: 4 },
+    });
+    expect(out.some(s => s.includes('945'))).toBe(true);
+    expect(out.some(s => s.includes('alza'))).toBe(true);
+    expect(out.some(s => s.includes('Facebook') && s.includes('76%'))).toBe(true);
+    expect(out.some(s => s.includes('Electrocutados en San Carlos'))).toBe(true);
+    expect(out.some(s => s.includes('23:00'))).toBe(true);
+    expect(out.some(s => s.includes('15 minutos'))).toBe(true);
+  });
+
+  it('dependencia de canal ≥60% se dice explícitamente', () => {
+    const out = buildExecutiveSummary({
+      period: '7d',
+      totalPeriod: 100,
+      articles: [],
+      categories: [],
+      sources: { facebook: 80, google: 20 },
+      site: { direction: 'flat', deltaPct: null },
+      hours: { peakHour: null, lowHour: null },
+      realtime: { events: 0, distinctSlugs: 0 },
+    });
+    expect(out.some(s => s.includes('depende de un solo canal'))).toBe(true);
+  });
+
+  it('usa vistasPeriodo cuando existe (7d/30d)', () => {
+    const out = buildExecutiveSummary({
+      period: '7d',
+      totalPeriod: 500,
+      articles: [{
+        slug: 'a', titulo: 'Top de la semana', categoria: 'Nacionales',
+        h1: 0, h6: 2, h24: 10, vistasPeriodo: 350, total: 400,
+        trend: 'estable' as const, deltaPct: 5,
+      }],
+      categories: [],
+      sources: {},
+      site: { direction: 'flat', deltaPct: null },
+      hours: { peakHour: null, lowHour: null },
+      realtime: { events: 0, distinctSlugs: 0 },
+    });
+    const topLine = out.find(s => s.includes('Top de la semana'));
+    expect(topLine).toContain('350');
+  });
+
+  it('sin datos → resumen vacío, nunca inventado', () => {
+    const out = buildExecutiveSummary({
+      period: '24h',
+      totalPeriod: 0,
+      articles: [],
+      categories: [],
+      sources: {},
+      site: { direction: 'insufficient', deltaPct: null },
+      hours: { peakHour: null, lowHour: null },
+      realtime: { events: 0, distinctSlugs: 0 },
+    });
+    expect(out).toEqual([]);
   });
 });

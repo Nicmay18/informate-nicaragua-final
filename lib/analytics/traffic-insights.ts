@@ -50,6 +50,8 @@ export interface ArticleWindowStats {
   h1: number;
   h6: number;
   h24: number;
+  /** Vistas del período seleccionado (7d/30d desde traffic_daily); = h24 en 24h. */
+  vistasPeriodo?: number;
   total: number; // noticias.vistas (lifetime canónico) cuando se provee
   trend: 'acelerando' | 'perdiendo' | 'estable' | 'nuevo';
   deltaPct: number | null; // últimas 6h vs 6h previas
@@ -126,6 +128,11 @@ export function managuaHourKey(d: Date): string {
   const p = managuaParts(d);
   const pad = (n: number) => String(n).padStart(2, '0');
   return `${p.y}-${pad(p.mo)}-${pad(p.da)}T${pad(p.h)}`;
+}
+
+/** Clave de día calendario en Managua: 'YYYY-MM-DD' */
+export function managuaDayKey(d: Date): string {
+  return managuaHourKey(d).split('T')[0];
 }
 
 // ---------- Agregaciones puras ----------
@@ -519,4 +526,260 @@ export function buildSuggestedActions(input: {
 
   const rank = { alta: 0, media: 1, info: 2 };
   return out.sort((a, b) => rank[a.prioridad] - rank[b.prioridad]).slice(0, 5);
+}
+
+// ─────────────────────────────────────────────────────────────
+// Comparativas profesionales — hoy vs ayer a la misma hora
+// ─────────────────────────────────────────────────────────────
+
+export interface SameHoursComparison {
+  /** Visitas de hoy (día calendario Managua) dentro de la ventana 24h. */
+  today: number;
+  /** Visitas de ayer hasta la misma hora Managua — comparación justa. */
+  yesterday: number;
+  /** (today - yesterday) / yesterday · null si ayer no tuvo tráfico medido. */
+  deltaPct: number | null;
+  /** Hora Managua hasta la cual se comparó, p.ej. '23:00'. */
+  cutoffHour: string;
+}
+
+/**
+ * Compara el tráfico de HOY vs AYER contando solo las horas ya transcurridas.
+ * Así "hoy a las 15:00" se compara con "ayer hasta las 15:00", no con el día
+ * completo de ayer — comparar contra el total del día anterior sería
+ * sistemáticamente injusto con el día en curso.
+ * Fuente: los buckets horarios Managua de las últimas 24h (cubren ambos días).
+ */
+export function sameHoursComparison(buckets: HourBucket[], now: Date = new Date()): SameHoursComparison {
+  const todayKey = managuaDayKey(now);
+  // UTC-6 fijo sin DST: hace 24h es la misma hora Managua de ayer.
+  const yesterdayKey = managuaDayKey(new Date(now.getTime() - 24 * 3600 * 1000));
+  const curHour = managuaParts(now).h;
+
+  let today = 0;
+  let yesterday = 0;
+  for (const b of buckets) {
+    const [day, hh] = b.key.split('T');
+    const h = Number(hh);
+    if (day === todayKey) today += b.views;
+    else if (day === yesterdayKey && h <= curHour) yesterday += b.views;
+  }
+  return {
+    today,
+    yesterday,
+    deltaPct: yesterday > 0 ? Math.round(((today - yesterday) / yesterday) * 100) : null,
+    cutoffHour: `${String(curHour).padStart(2, '0')}:00`,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────
+// Alertas en vivo — reglas deterministas con evidencia medida
+// ─────────────────────────────────────────────────────────────
+
+export interface TrafficAlert {
+  code: string;
+  nivel: 'alta' | 'media' | 'info';
+  /** Titular corto de la alerta. */
+  titulo: string;
+  /** Evidencia medida que la justifica. */
+  detalle: string;
+}
+
+/**
+ * ALERTAS del centro de control. Cada regla dispara solo cuando el dato
+ * medido lo sostiene; si la base es insuficiente, la alerta no existe.
+ * No se emiten alertas sobre métricas estimadas ni inventadas.
+ */
+export function buildAlerts(input: {
+  realtime: { events: number; distinctSlugs: number };
+  /** Buckets horarios Managua de las últimas 24h (terminan en la hora actual). */
+  hourly: HourBucket[];
+  /** Artículos con ventanas h1/h6/h24. */
+  articles: ArticleWindowStats[];
+  /** Total de eventos de las últimas 24h (base para promedios honestos). */
+  total24h: number;
+  /** Comparación hoy-vs-ayer precalculada con sameHoursComparison. */
+  sameHours: SameHoursComparison;
+  now?: Date;
+}): TrafficAlert[] {
+  const out: TrafficAlert[] = [];
+  const rt = input.realtime;
+  const total = input.total24h;
+  const avgPerHour = input.hourly.length > 0 ? total / input.hourly.length : 0;
+  const avgPer15 = avgPerHour / 4;
+
+  // 1) Pico en vivo: 15min muy por encima del ritmo medio de las 24h.
+  if (total >= 40 && rt.events >= Math.max(8, Math.ceil(avgPer15 * 2))) {
+    const x = avgPer15 > 0 ? Math.round((rt.events / avgPer15) * 10) / 10 : 0;
+    out.push({
+      code: 'TRAFICO_ELEVADO',
+      nivel: 'alta',
+      titulo: `Tráfico elevado ahora: ${rt.events} visitas en 15 min`,
+      detalle: `≈${x}× el ritmo medio de las últimas 24h (${Math.round(avgPer15)}/15min). Conviene impulsar en redes.`,
+    });
+  }
+
+  // 2) Artículo caliente: concentra la última hora.
+  const lastHourViews = input.hourly.length > 0 ? input.hourly[input.hourly.length - 1].views : 0;
+  const hot = input.articles.filter(a => a.h1 >= 5).sort((a, b) => b.h1 - a.h1)[0];
+  if (hot && lastHourViews > 0 && hot.h1 >= Math.ceil(lastHourViews * 0.5)) {
+    const pct = Math.round((hot.h1 / lastHourViews) * 100);
+    out.push({
+      code: 'ARTICULO_CALIENTE',
+      nivel: 'media',
+      titulo: `"${hot.titulo}" concentra el tráfico`,
+      detalle: `${hot.h1} visitas en la última hora (${pct}% del total de la hora).`,
+    });
+  }
+
+  // 3) Silencio inusual: el sitio suele tener tráfico y ahora no hay nada.
+  if (rt.events === 0 && total >= 24) {
+    out.push({
+      code: 'SIN_TRAFICO_AHORA',
+      nivel: 'media',
+      titulo: 'Sin visitas en los últimos 15 min',
+      detalle: `El sitio promedia ${Math.round(avgPerHour)} visitas/hora en 24h. Revisar difusión o posible caída del tracking.`,
+    });
+  }
+
+  // 4) Caída hora a hora: hora actual vs hora anterior con volumen real.
+  const n = input.hourly.length;
+  if (n >= 2) {
+    const prev = input.hourly[n - 2].views;
+    const cur = input.hourly[n - 1].views;
+    if (prev >= 10 && cur <= prev * 0.4) {
+      const drop = Math.round(((cur - prev) / prev) * 100);
+      out.push({
+        code: 'CAIDA_HORA',
+        nivel: 'media',
+        titulo: `La última hora cayó ${drop}%`,
+        detalle: `${cur} visitas en la hora en curso vs ${prev} en la hora anterior.`,
+      });
+    }
+  }
+
+  // 5) Hora récord del período (la hora en curso es el máximo medido).
+  if (n > 0) {
+    const cur = input.hourly[n - 1];
+    const max = Math.max(...input.hourly.map(b => b.views));
+    if (cur.views >= 10 && cur.views === max && input.hourly.filter(b => b.views === max).length === 1) {
+      out.push({
+        code: 'HORA_RECORD',
+        nivel: 'info',
+        titulo: `Hora récord en curso: ${cur.views} visitas`,
+        detalle: 'Es el máximo de las últimas 24h medidas.',
+      });
+    }
+  }
+
+  // 6) Hoy vs ayer a la misma hora — solo si ayer tiene base suficiente.
+  const sh = input.sameHours;
+  if (sh.yesterday >= 20 && sh.deltaPct !== null) {
+    if (sh.deltaPct >= 30) {
+      out.push({
+        code: 'DIA_MEJOR_AYER',
+        nivel: 'info',
+        titulo: `Hoy va +${sh.deltaPct}% vs ayer a esta hora`,
+        detalle: `${sh.today} visitas hoy vs ${sh.yesterday} de ayer hasta las ${sh.cutoffHour} (hora Nicaragua).`,
+      });
+    } else if (sh.deltaPct <= -40) {
+      out.push({
+        code: 'DIA_PEOR_AYER',
+        nivel: 'alta',
+        titulo: `Hoy va ${sh.deltaPct}% vs ayer a esta hora`,
+        detalle: `${sh.today} visitas hoy vs ${sh.yesterday} de ayer hasta las ${sh.cutoffHour}. Reforzar publicación y difusión.`,
+      });
+    }
+  }
+
+  const rank = { alta: 0, media: 1, info: 2 };
+  return out.sort((a, b) => rank[a.nivel] - rank[b.nivel]).slice(0, 6);
+}
+
+// ─────────────────────────────────────────────────────────────
+// Resumen ejecutivo — el análisis "habla" en lenguaje editorial
+// ─────────────────────────────────────────────────────────────
+
+const PERIOD_LABEL: Record<TrafficPeriod, string> = {
+  '24h': 'las últimas 24 horas',
+  '7d': 'los últimos 7 días',
+  '30d': 'los últimos 30 días',
+};
+
+const SOURCE_DISPLAY: Record<string, string> = {
+  facebook: 'Facebook', telegram: 'Telegram', google: 'Google',
+  whatsapp: 'WhatsApp', twitter: 'Twitter/X', directo: 'tráfico directo',
+  otro: 'otras fuentes', desconocido: 'fuentes sin identificar',
+};
+
+/**
+ * Resumen ejecutivo narrado: 3–5 frases que explican qué pasó, qué está
+ * pasando y hacia dónde va el sitio. Determinista — cada frase se apoya
+ * en una métrica medida; sin datos, la frase no se emite.
+ */
+export function buildExecutiveSummary(input: {
+  period: TrafficPeriod;
+  totalPeriod: number;
+  /** Artículos ordenados por vistas del período (desc). */
+  articles: ArticleWindowStats[];
+  categories: { categoria: string; views: number; pct?: number }[];
+  sources: Record<string, number>;
+  site: { direction: string; deltaPct: number | null };
+  hours: { peakHour: string | null; lowHour: string | null };
+  realtime: { events: number; distinctSlugs: number };
+}): string[] {
+  const s: string[] = [];
+  const label = PERIOD_LABEL[input.period] || 'el período';
+
+  if (input.totalPeriod > 0) {
+    const nArts = input.articles.length;
+    s.push(
+      `En ${label} el sitio registró ${input.totalPeriod.toLocaleString('es')} visitas` +
+      (nArts > 0 ? ` repartidas en ${nArts} artículo${nArts === 1 ? '' : 's'}.` : '.'),
+    );
+  }
+
+  if (input.site.direction === 'up' && input.site.deltaPct !== null) {
+    s.push(`El ritmo viene en alza: la segunda mitad del período creció ${input.site.deltaPct}% frente a la primera.`);
+  } else if (input.site.direction === 'down' && input.site.deltaPct !== null) {
+    s.push(`El ritmo viene en caída: la segunda mitad del período bajó ${Math.abs(input.site.deltaPct)}% frente a la primera.`);
+  } else if (input.site.direction === 'flat' && input.totalPeriod > 0) {
+    s.push('El ritmo del sitio se mantiene estable respecto a la mitad previa del período.');
+  }
+
+  const srcEntries = Object.entries(input.sources).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+  if (srcEntries.length > 0) {
+    const total = srcEntries.reduce((acc, [, v]) => acc + v, 0);
+    const [topK, topV] = srcEntries[0];
+    const pct = Math.round((topV / total) * 100);
+    const topName = SOURCE_DISPLAY[topK] || topK;
+    if (pct >= 60) {
+      s.push(`${topName} aporta el ${pct}% de las visitas: el sitio depende de un solo canal.`);
+    } else {
+      const top3 = srcEntries.slice(0, 3).map(([k, v]) => `${SOURCE_DISPLAY[k] || k} (${Math.round((v / total) * 100)}%)`).join(', ');
+      s.push(`El tráfico llega diversificado: ${top3}.`);
+    }
+  }
+
+  const top = input.articles[0];
+  if (top) {
+    const v = top.vistasPeriodo ?? top.h24;
+    const trendTxt =
+      top.trend === 'acelerando' ? ' y sigue acelerando' :
+      top.trend === 'perdiendo' ? ', aunque ya pierde ritmo' :
+      top.trend === 'nuevo' ? ', recién publicada' : '';
+    s.push(`La nota con más tráfico es "${top.titulo}" (${v} visitas${trendTxt}).`);
+  }
+
+  if (input.hours.peakHour) {
+    s.push(`La audiencia es más activa hacia las ${input.hours.peakHour} y más floja hacia las ${input.hours.lowHour} (hora Nicaragua).`);
+  }
+
+  if (input.realtime.events > 0) {
+    s.push(`Ahora mismo hay ${input.realtime.events} visitas en los últimos 15 minutos sobre ${input.realtime.distinctSlugs} artículo${input.realtime.distinctSlugs === 1 ? '' : 's'}.`);
+  } else if (input.totalPeriod > 0) {
+    s.push('En este momento no hay visitas registradas en los últimos 15 minutos.');
+  }
+
+  return s.slice(0, 6);
 }
