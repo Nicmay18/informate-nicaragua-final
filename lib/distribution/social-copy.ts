@@ -14,7 +14,8 @@
  * - UTM canónico por canal: ?utm_source=<canal>&utm_medium=social
  * - Tono sobrio automático cuando la noticia es grave.
  */
-import { extractEditorialAngle, type AngleInput, type EditorialAngle } from './editorial-angle';
+import { extractEditorialAngle, type AngleInput } from './editorial-angle';
+import { z } from 'zod';
 
 const SITE = 'https://nicaraguainformate.com';
 
@@ -30,18 +31,6 @@ export function buildArticleUrl(slug: string, canal: 'telegram' | 'facebook' | '
 
 // ── CTAs con variación determinista (por slug, no aleatorio) ──
 
-const CTAS_FACEBOOK = [
-  'Todos los detalles en el primer comentario.',
-  'La información completa está en el primer comentario.',
-  'Conocé qué ocurrió y todos los detalles en el primer comentario.',
-  'La nota completa, con todos los datos, en el primer comentario.',
-];
-
-const CTAS_FACEBOOK_GRAVE = [
-  'Todos los detalles del caso en el primer comentario.',
-  'La información completa está en el primer comentario.',
-];
-
 const CTAS_WHATSAPP = [
   'Leer la noticia:',
   'Nota completa aquí:',
@@ -54,27 +43,99 @@ function pickBySlug<T>(opciones: T[], slug: string): T {
   return opciones[h % opciones.length];
 }
 
+export interface SocialAnalysis {
+  enfoque: string;
+  evidencia: string;
+  tono: string;
+  motivo: string;
+}
+
+interface AngleRule {
+  enfoque: string;
+  pattern: RegExp;
+  pregunta: string;
+  categoria?: string;
+}
+
+const ANGLE_RULES: AngleRule[] = [
+  { enfoque: 'Dictamen forense', pattern: /dictamen forense|peritaje forense/i, pregunta: '¿Qué se conoce sobre el dictamen forense de este caso?' },
+  { enfoque: 'Evaluación médica', pattern: /medicina legal|causa de muerte|diagnóstico|informe médico/i, pregunta: '¿Qué información médica recoge la nota?' },
+  { enfoque: 'Caso judicial', pattern: /fiscalía|ministerio público|proceso penal|acusad[ao]|juzgado/i, pregunta: '¿Qué se conoce del proceso judicial?' },
+  { enfoque: 'Repatriación', pattern: /repatriar|repatriación|trasladar sus restos/i, pregunta: '¿Qué se sabe sobre la repatriación?' },
+  { enfoque: 'Trámite o servicio', pattern: /requisitos?|trámites?|apostill|récord policial/i, pregunta: '¿Qué información sobre este trámite recoge la nota?' },
+  { enfoque: 'Beneficio anunciado', pattern: /convocatoria|becas?|beneficio|gratuit[ao]/i, pregunta: '¿Qué se informa sobre este beneficio?' },
+  { enfoque: 'Resultado deportivo', pattern: /venció|ganó|empató|medalla|resultado|campeón|lidera/i, categoria: 'Deportes', pregunta: '¿Cómo fue el resultado deportivo?' },
+  { enfoque: 'Fenómeno natural', pattern: /sismo|terremoto|tsunami|depresión tropical|huracán/i, pregunta: '¿Qué se ha informado sobre este fenómeno?' },
+  { enfoque: 'Impacto familiar', pattern: /familia(?:res)?|sobreviviente/i, pregunta: '¿Qué se conoce de la situación de la familia?' },
+  { enfoque: 'Anuncio público', pattern: /anunció|anuncia|informó|comunicado/i, pregunta: '¿Qué información recoge el anuncio?' },
+];
+
+const sentenceSegmenter = new Intl.Segmenter('es', { granularity: 'sentence' });
+
+function plainText(texto: string): string {
+  return (texto || '')
+    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&amp;/gi, '&')
+    .replace(/\s+/g, ' ').trim();
+}
+
+function supportedAngles(noticia: SocialArticle) {
+  const sentences = [noticia.contenido, noticia.resumen, noticia.metaDescription].flatMap(text =>
+    Array.from(sentenceSegmenter.segment(plainText(text || '')), s => s.segment.trim()),
+  ).filter(s => s.length <= 500 && /[.!?][”"»')]*$/.test(s) && !/\.{2,}|…|https?:\/\//i.test(s));
+  sentences.push(plainText(noticia.titulo));
+  const angles = ANGLE_RULES.flatMap(rule => {
+    if (rule.categoria && rule.categoria !== noticia.categoria) return [];
+    const evidencia = sentences.find(s => rule.pattern.test(s));
+    return evidencia ? [{ enfoque: rule.enfoque, evidencia, pregunta: rule.pregunta }] : [];
+  });
+  return angles.length ? angles : [{ enfoque: 'Titular', evidencia: plainText(noticia.titulo), pregunta: '' }];
+}
+
+export function analyzeSocialArticle(noticia: SocialArticle, preferredIndex?: number): SocialAnalysis {
+  const a = extractEditorialAngle(noticia);
+  const tono = a.grave ? 'Sobrio y respetuoso' : 'Claro e informativo';
+  const opciones = supportedAngles(noticia);
+  const i = Number.isInteger(preferredIndex) && preferredIndex! >= 0 && preferredIndex! < opciones.length
+    ? preferredIndex! : 0;
+  const { enfoque, evidencia } = opciones[i];
+  const motivo = enfoque === 'Titular'
+    ? 'No se detectó un enfoque específico con evidencia suficiente; se conserva el titular.'
+    : `La nota menciona este tema en el fragmento citado. La pregunta se limita a esa información.`;
+  return { enfoque, evidencia, tono, motivo };
+}
+
 // ── Frase de apertura (hook) por tipo — framing, nunca afirmación ──
 
-function hookFacebook(a: EditorialAngle, titulo: string): string {
-  const lugar = a.lugar ? ` en ${a.lugar}` : '';
-  switch (a.kind) {
-    case 'suceso':
-      return a.grave
-        ? `Una noticia que conmociona${lugar}.`
-        : `Un hecho que mantiene la atención${lugar}.`;
-    case 'historia_humana':
-      return `Una historia que está tocando a muchas familias${lugar}.`;
-    case 'nacional':
-      return `Hay novedad en Nicaragua${lugar}: esto es lo que se sabe.`;
-    case 'deporte':
-      return `Nicaragua tiene nuevo resultado deportivo.`;
-    case 'internacional':
-      return `Ocurrió${lugar || ' a nivel internacional'} y puede tener efectos más allá de sus fronteras.`;
-    case 'utilidad':
-      return `Información útil para los nicaragüenses${lugar}.`;
-    default:
-      return titulo;
+export function getSocialOptions(noticia: SocialArticle) {
+  const context = telegramContext(noticia);
+  return {
+    angles: supportedAngles(noticia),
+    openings: Array.from(new Set([plainText(noticia.titulo), context].filter(Boolean))),
+  };
+}
+
+const selectionSchema = z.object({
+  angleIndex: z.number().int().nonnegative(),
+  openingIndex: z.number().int().nonnegative(),
+}).strict();
+
+export type SocialSelection = z.infer<typeof selectionSchema>;
+
+export function validateSocialSelection(raw: string, noticia: SocialArticle): SocialSelection | null {
+  try {
+    const parsed = selectionSchema.safeParse(JSON.parse(raw));
+    if (!parsed.success) return null;
+    const options = getSocialOptions(noticia);
+    return parsed.data.angleIndex < options.angles.length && parsed.data.openingIndex < options.openings.length
+      ? parsed.data : null;
+  } catch {
+    return null;
   }
 }
 
@@ -86,6 +147,7 @@ export interface FacebookCopy {
   /** Comentario sugerido con el enlace (primer comentario) */
   firstComment: string;
   hashtags: string[];
+  analysis: SocialAnalysis;
 }
 
 /**
@@ -94,24 +156,23 @@ export interface FacebookCopy {
  * viaja como `link` en el post (card clickeable) — el comentario es
  * complemento de alcance.
  */
-export function buildFacebookCopy(noticia: SocialArticle): FacebookCopy {
+export function buildFacebookCopy(noticia: SocialArticle, preferredIndex?: number, openingIndex = 0): FacebookCopy {
   const a = extractEditorialAngle(noticia);
-  const titulo = noticia.titulo.trim();
+  const analysis = analyzeSocialArticle(noticia, preferredIndex);
+  const options = getSocialOptions(noticia);
+  const opening = options.openings[openingIndex] || options.openings[0];
   const url = buildArticleUrl(noticia.slug, 'facebook');
-
-  const lineas: string[] = [`${a.emoji} ${titulo}`, ''];
-
-  if (a.contexto) lineas.push(a.contexto, '');
+  const lineas: string[] = [`${a.emoji} ${opening}`, ''];
+  const context = telegramContext(noticia);
+  if (context && context !== opening && openingIndex === 0) lineas.push(context, '');
 
   // Segunda capa: ángulo + pregunta (no siempre — grave reduce adorno)
-  if (!a.grave) {
-    lineas.push(hookFacebook(a, titulo), a.pregunta, '');
-  } else {
-    lineas.push('Esto es lo que se conoce hasta el momento.', '');
-  }
-
-  const cta = pickBySlug(a.grave ? CTAS_FACEBOOK_GRAVE : CTAS_FACEBOOK, noticia.slug);
-  lineas.push(`👉 ${cta}`);
+  const question = options.angles.find(option => option.enfoque === analysis.enfoque)?.pregunta;
+  if (question) lineas.push(question, '');
+  lineas.push('📰 La información completa está publicada en nuestra página web oficial.', '');
+  lineas.push('👇 ENLACE DIRECTO A LA NOTA EN EL PRIMER COMENTARIO.', '');
+  lineas.push('🔎 Verificá que el enlace te dirija al sitio oficial de Nicaragua Informate.', '');
+  lineas.push('Nicaragua Informate | Información responsable y verificable.');
 
   const hashtags = ['#NicaraguaInformate', `#${(noticia.categoria || 'Noticias').replace(/[^a-zA-ZáéíóúñÁÉÍÓÚÑ]/g, '')}`];
   lineas.push('', hashtags.join(' '));
@@ -119,8 +180,9 @@ export function buildFacebookCopy(noticia: SocialArticle): FacebookCopy {
   return {
     text: lineas.join('\n').replace(/\n{3,}/g, '\n\n').trim(),
     url,
-    firstComment: `📰 ${url}`,
+    firstComment: `📰 Nota completa en el sitio oficial de Nicaragua Informate: ${url}`,
     hashtags,
+    analysis,
   };
 }
 
@@ -136,10 +198,8 @@ export function buildWhatsAppCopy(noticia: SocialArticle): string {
   const cta = pickBySlug(CTAS_WHATSAPP, noticia.slug);
 
   const lineas: string[] = [`${a.emoji} *${noticia.titulo.trim()}*`, ''];
-  if (a.contexto) {
-    const ctx = a.contexto.length > 160 ? a.contexto.substring(0, 157).trimEnd() + '…' : a.contexto;
-    lineas.push(ctx, '');
-  }
+  const context = telegramContext(noticia);
+  if (context) lineas.push(context, '');
   lineas.push(`🔗 ${cta}`, url);
   return lineas.join('\n');
 }
@@ -159,15 +219,50 @@ export interface TelegramItem {
   slug: string;
 }
 
+const telegramSentences = new Intl.Segmenter('es', { granularity: 'sentence' });
+
+function telegramContext(noticia: SocialArticle): string {
+  for (const source of [noticia.resumen, noticia.metaDescription, noticia.contenido]) {
+    const text = (source || '')
+      .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '')
+      .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;|&apos;/gi, "'")
+      .replace(/&amp;/gi, '&')
+      .replace(/\s+/g, ' ').trim();
+    const first = Array.from(telegramSentences.segment(text))[0]?.segment.trim() || '';
+    if (first.length <= 260 && /[.!?][”"»')]*$/.test(first) && !/\.{2,}|…/.test(first)) {
+      return first === noticia.titulo.trim() ? '' : first;
+    }
+  }
+  return '';
+}
+
 export function buildTelegramItem(noticia: SocialArticle): TelegramItem {
   const a = extractEditorialAngle(noticia);
   return {
     emoji: a.emoji,
     categoria: noticia.categoria || 'General',
     titulo: noticia.titulo.trim(),
-    contexto: a.contexto.length > 170 ? a.contexto.substring(0, 167).trimEnd() + '…' : a.contexto,
+    contexto: telegramContext(noticia),
     url: buildArticleUrl(noticia.slug, 'telegram'),
     slug: noticia.slug,
+  };
+}
+
+export function buildSocialCopies(noticia: SocialArticle, selection?: SocialSelection | null) {
+  const facebook = buildFacebookCopy(noticia, selection?.angleIndex, selection?.openingIndex);
+  const telegram = buildTelegramItem(noticia);
+  return {
+    copy: facebook.text,
+    facebookPost: facebook.text,
+    firstComment: facebook.firstComment,
+    analysis: facebook.analysis,
+    telegramText: [`${telegram.emoji} ${telegram.titulo}`, telegram.contexto, `Leer la noticia:\n${telegram.url}`, '#NicaraguaInformate'].filter(Boolean).join('\n\n'),
+    whatsappText: buildWhatsAppCopy(noticia),
+    urls: { facebook: facebook.url, telegram: telegram.url, whatsapp: buildArticleUrl(noticia.slug, 'whatsapp') },
   };
 }
 
@@ -210,26 +305,29 @@ export function buildTelegramDigest(items: TelegramItem[], fechaLegible: string)
   const esc = (s: string) =>
     String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
-  let cuerpo = '';
-  let categoriaActual = '';
-
+  const sections = new Map<string, TelegramItem[]>();
   for (const item of items) {
-    if (item.categoria !== categoriaActual) {
-      categoriaActual = item.categoria;
-      cuerpo += `\n${item.emoji} <b>${esc(categoriaActual.toUpperCase())}</b>\n\n`;
-    }
-    cuerpo += `<b>${esc(item.titulo.substring(0, 120))}</b>\n`;
-    if (item.contexto) cuerpo += `${esc(item.contexto)}\n`;
-    cuerpo += `🔗 <a href="${item.url.replace(/&/g, '&amp;')}">Leer la noticia</a>\n\n`;
+    const category = item.categoria.trim() || 'General';
+    sections.set(category, [...(sections.get(category) || []), item]);
   }
+  const header = `<b>BUENOS DÍAS, NICARAGUA</b>\n${esc(fechaLegible)}\n` +
+    `<i>Resumen de la mañana · Nicaragua Informate</i>\n\n`;
+  const footer = `\nMás noticias y actualizaciones en <a href="${SITE}">nicaraguainformate.com</a>\n#NicaraguaInformate`;
+  const contexts = new Set(items.filter(item => item.contexto));
+  const render = () => header + Array.from(sections, ([category, news]) =>
+    `<b>${esc(category.toUpperCase())}</b>\n\n` + news.map(item =>
+      `<b>${esc(item.titulo)}</b>\n` +
+      (contexts.has(item) ? `${esc(item.contexto)}\n` : '') +
+      `<a href="${esc(buildArticleUrl(item.slug, 'telegram'))}">Leer la noticia</a>\n`,
+    ).join('\n'),
+  ).join('\n') + footer;
 
-  return (
-    `🌅 <b>BUENOS DÍAS, NICARAGUA</b>\n` +
-    `🗓️ ${esc(fechaLegible)}\n\n` +
-    `Estas son las noticias que marcan la jornada:\n` +
-    cuerpo +
-    `━━━━━━━━━━━━━━\n\n` +
-    `📰 Más información en <a href="${SITE}">nicaraguainformate.com</a>\n` +
-    `#NicaraguaInformate`
-  );
+  let message = render();
+  for (const item of [...contexts].sort((a, b) => esc(b.contexto).length - esc(a.contexto).length)) {
+    if (message.length <= 4096) break;
+    contexts.delete(item);
+    message = render();
+  }
+  if (message.length > 4096) throw new Error('El boletín supera el límite de Telegram sin resúmenes');
+  return message;
 }

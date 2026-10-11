@@ -56,16 +56,16 @@ const EMOJI_BY_KIND: Record<NewsKind, string> = {
 };
 
 const GRAVE_RE =
-  /\b(muere|murió|murio|fallec|homicidio|asesinat|asesinado|asesinada|víctima|victima|cadáver|accidente fatal|tragedia|sepultar|repatriar|velorio|luto)\b/i;
+  /(?:^|[^\p{L}])(?:muere[n]?|murió|murio|murieron|muert[eo]s?|fallec\p{L}*|homicidios?|asesin\p{L}*|víctimas?|victimas?|cadáver\p{L}*|accidente fatal|tragedia|sepultar|repatriar|velorio|luto|sin vida)(?=$|[^\p{L}])/iu;
 
 const HISTORIA_HUMANA_RE =
-  /\b(familia|familiares|repatriar|repatriación|ayuda|solidaridad|recaudar|rescatad[oa]s?|sobreviviente|historia)\b/i;
+  /(?:^|[^\p{L}])(?:familia|familiares|repatriar|repatriación|ayuda|solidaridad|recaudar|rescatad[oa]s?|sobreviviente|historia)(?=$|[^\p{L}])/iu;
 
 const UTILIDAD_RE =
-  /\b(trámite|tramite|requisito|precio|costo|salario|boleto|horario|feria|vacuna|campaña|subsidio|pensión|cómo|guía)\b/i;
+  /(?:^|[^\p{L}])(?:trámite|tramite|requisito|precio|costo|salario|boleto|horario|feria|vacuna|campaña|subsidio|pensión|cómo|guía)(?=$|[^\p{L}])/iu;
 
 const DEPORTE_RESULT_RE =
-  /\b(ganó|gano|venció|vencio|empató|clasific|campeón|campeona|medalla|récord|record|título|titulo|derrot)\b/i;
+  /(?:^|[^\p{L}])(?:ganó|gano|venció|vencio|empató|clasific\p{L}*|campeón|campeona|medalla|récord|record|título|titulo|derrot\p{L}*)(?=$|[^\p{L}])/iu;
 
 /** Lugares frecuentes en cobertura: departamentos/capitales NI + países vecinos. */
 const LUGARES: string[] = [
