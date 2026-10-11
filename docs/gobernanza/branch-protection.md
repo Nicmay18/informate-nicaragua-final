@@ -70,6 +70,7 @@ nios-command-center, meni-premerge-review). Si se exige este check hoy,
 (`docs/testing-baseline.md`). Decisión del administrador:
 
 - Opción A (recomendada): requerir `Lint & TypeScript`, `Build Next.js` y
-  `CI Summary` ahora; activar el check de tests cuando la línea base esté en 0.
+  `CI Summary` y `Unit & Integration Tests` — la línea base ya está en 0
+  fallos (PR #5), así que ambos checks pueden exigirse desde ya.
 - Opción B: permitir el check de tests solo informativo (`continue-on-error`)
   temporalmente — **no recomendado**: normaliza el rojo.
