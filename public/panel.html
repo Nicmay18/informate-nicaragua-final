@@ -600,7 +600,7 @@
             <div class="stat-change" id="statSemanaChange"><i class="fas fa-clock"></i><span>Ritmo de publicación</span></div>
           </div>
           <div class='stat-card'>
-            <div class='stat-header'><div><div class='stat-value' id='statPendientes'>0</div><div class='stat-label'>Contenido pendiente</div></div><div class='stat-icon red'><i class='fas fa-clock'></i></div></div>
+            <div class='stat-header'><div><div class='stat-value' id='statPendientes'>0</div><div class='stat-label'>Sin publicar (archivadas)</div></div><div class='stat-icon red'><i class='fas fa-archive'></i></div></div>
             <div class='stat-change' id='statPendientesChange'><i class='fas fa-edit'></i><span>No publicado aún</span></div>
           </div>
         </div>
@@ -3741,8 +3741,8 @@ sin texto ni marcas de agua, composición periodística"
         document.querySelector('#statNoticiasChange span').textContent = `${totalNoticias.toLocaleString()} noticias en total`;
         document.getElementById('statPendientes').textContent = pendientes.toLocaleString();
         const penEl = document.getElementById('statPendientesChange');
-        if (pendientes === 0) { penEl.innerHTML = '<i class="fas fa-check"></i><span>Sin notas pendientes</span>'; penEl.className = 'stat-change'; }
-        else { penEl.innerHTML = '<i class="fas fa-edit"></i><span>' + pendientes.toLocaleString() + ' por publicar</span>'; penEl.className = 'stat-change negative'; }
+        if (pendientes === 0) { penEl.innerHTML = '<i class="fas fa-check"></i><span>Sin notas archivadas</span>'; penEl.className = 'stat-change'; }
+        else { penEl.innerHTML = '<i class="fas fa-archive"></i><span>' + pendientes.toLocaleString() + ' archivadas o despublicadas</span>'; penEl.className = 'stat-change negative'; }
 
         const conteo = {}; categorias.forEach(c => conteo[c.id] = 0);
         let totalPalabras = 0;
@@ -3780,7 +3780,7 @@ sin texto ni marcas de agua, composición periodística"
           let saludHtml = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><i class="fas fa-check-circle" style="color:var(--success);"></i><strong>Sitio operativo</strong> — publicación y base de datos responden.</div>';
           saludHtml += '<ul style="margin:0;padding-left:18px;font-size:12px;color:var(--gray-500);">';
           saludHtml += '<li>' + publicadas.toLocaleString() + ' noticias publicadas</li>';
-          saludHtml += '<li>' + pendientes.toLocaleString() + ' noticias pendientes</li>';
+          saludHtml += '<li>' + pendientes.toLocaleString() + ' noticias archivadas o despublicadas</li>';
           saludHtml += '<li>' + publicadasSemana.toLocaleString() + ' publicadas esta semana</li>';
           saludHtml += '</ul>';
           saludEl.innerHTML = saludHtml;
