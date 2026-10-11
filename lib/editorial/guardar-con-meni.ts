@@ -106,6 +106,29 @@ export async function guardarConMeni(
   const finalContenido = stripAICitationMarkers(meni.articulo?.contenido || cleanInput.contenido || '');
   const finalResumen = stripAICitationMarkers(meni.articulo?.resumen || cleanInput.resumen || '');
 
+  // Barrera de integridad: nunca aprobar una nota sin cuerpo real. La
+  // validación de rutas solo exige `contenido` truthy, así que strings
+  // como '' o '   </p>' pasaban — hubo 2 notas publicadas en producción
+  // con contenido vacío (auditoría AdSense, oct-2026).
+  const contenidoTexto = stripHtml(finalContenido).trim();
+  if (contenidoTexto.length < 50) {
+    meni.aprobado = false;
+    meni.blockingIssues = [
+      {
+        code: 'CONTENIDO_VACIO',
+        module: 'integrity',
+        severity: 'BLOCKER',
+        title: 'Contenido vacío o insuficiente',
+        description: 'El cuerpo de la nota está vacío o tiene menos de 50 caracteres de texto.',
+        currentValue: contenidoTexto.length,
+        expectedValue: '>= 50 caracteres de texto',
+        howToFix: 'Escribe el cuerpo del artículo antes de guardar.',
+        field: 'contenido',
+      },
+      ...(meni.blockingIssues || []),
+    ];
+  }
+
   const palabras = stripHtml(finalContenido).split(/\s+/).filter(Boolean).length;
   const { fuente, fuentesComplementarias } = extractFuente(finalContenido, input.resumen || '');
 
