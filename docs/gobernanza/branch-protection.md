@@ -5,7 +5,9 @@ sin credenciales admin — no se pudo leer la configuración actual. Los último
 commits (`fbe92034`, `71d650e5`, `f496c81b`…) fueron **pushes directos a
 `master`**, lo que demuestra que hoy la rama acepta pushes sin PR ni revisión.
 
-**Acción pendiente de administrador** — aplicar esta configuración en
+**Aplicada y verificada (2026-10-11)** — la protección de `master` está
+activa con la configuración descrita abajo. Esta página documenta la
+configuración vigente; cualquier cambio futuro se hace en
 GitHub → Settings → Branches → Add rule para `master`:
 
 ```json
