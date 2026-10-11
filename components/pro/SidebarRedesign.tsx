@@ -9,13 +9,13 @@ import CategoriasSidebar from '@/components/pro/CategoriasSidebar';
 // Widgets client-only: sin reserva de espacio su montaje post-hidratación
 // empuja los paneles de abajo y produce CLS (~0.10 medido en Lighthouse CI).
 // Los placeholders fijan una altura aproximada para estabilizar el rail.
-const widgetPlaceholder = (minHeight: number) => () => (
-  <div style={{ minHeight }} aria-hidden="true" />
-);
-const RadioPlayer = dynamic(() => import('@/components/RadioPlayer'), { ssr: false, loading: widgetPlaceholder(72) });
-const EconomicBar = dynamic(() => import('@/components/EconomicBar'), { ssr: false, loading: widgetPlaceholder(160) });
-const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false, loading: widgetPlaceholder(190) });
-const WorldClock = dynamic(() => import('@/components/WorldClock'), { ssr: false, loading: widgetPlaceholder(150) });
+function WidgetPlaceholder({ minHeight }: { minHeight: number }) {
+  return <div style={{ minHeight }} aria-hidden="true" />;
+}
+const RadioPlayer = dynamic(() => import('@/components/RadioPlayer'), { ssr: false, loading: () => <WidgetPlaceholder minHeight={72} /> });
+const EconomicBar = dynamic(() => import('@/components/EconomicBar'), { ssr: false, loading: () => <WidgetPlaceholder minHeight={160} /> });
+const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false, loading: () => <WidgetPlaceholder minHeight={190} /> });
+const WorldClock = dynamic(() => import('@/components/WorldClock'), { ssr: false, loading: () => <WidgetPlaceholder minHeight={150} /> });
 
 interface SidebarRedesignProps {
   masLeidas: Noticia[];
