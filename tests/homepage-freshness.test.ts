@@ -11,8 +11,9 @@ function makeNoticia(overrides: Partial<Noticia>): Noticia {
   return {
     id: 'test-' + Math.random().toString(36).slice(2),
     slug: 'test-slug',
-    titulo: 'Test',
+    titulo: 'Test de noticia publicada',
     resumen: '',
+    contenido: '<p>Contenido suficiente para ser renderizable como página pública.</p>',
     categoria: 'Nacionales',
     imagen: '/test.jpg',
     fecha: new Date().toISOString(),

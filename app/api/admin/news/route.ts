@@ -219,6 +219,9 @@ export async function POST(request: NextRequest) {
       fecha: new Date().toISOString(),
       imagen: imagen || undefined,
       slug,
+      // Keywords enviadas por el editor ganan sobre las autogeneradas.
+      palabrasClave: Array.isArray(body.palabrasClave) ? body.palabrasClave : undefined,
+      keywords: body.keywords || undefined,
     };
 
     const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData, canonical, attemptId } = await guardarConMeni(noticiaInput, db);

@@ -132,7 +132,7 @@ export default function HomePagePro({ data }: HomePageProProps) {
             </article>
 
             <aside className="rd-en-portada">
-              <div className="rd-rail-title">En portada</div>
+              <h2 className="rd-rail-title">En portada</h2>
               {enPortada.map((n) => (
                 <div key={n.id} className="rd-portada-item">
                   <span className={`rd-eyebrow ${n.categoria === 'Sucesos' ? 'is-sucesos' : ''} ${n.categoria === 'Deportes' ? 'is-deportes' : ''}`}>

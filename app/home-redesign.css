@@ -115,7 +115,7 @@
   text-transform: uppercase;
   color: var(--rd-ink);
   padding-bottom: 10px;
-  margin-bottom: 14px;
+  margin: 0 0 14px;
   border-bottom: 1.5px solid var(--rd-ink);
 }
 .rd-portada-item {

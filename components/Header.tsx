@@ -97,7 +97,7 @@ function Header() {
           <NoPrefetchLink href="/" className="ni-logo" aria-label="Nicaragua Informate — Ir a la portada">
             <Image
               src="/logo.webp"
-              alt="Nicaragua Informate"
+              alt=""
               width={128}
               height={128}
               sizes="128px"

@@ -69,6 +69,11 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         fecha: existingData.fecha?.toDate ? existingData.fecha.toDate().toISOString() : new Date().toISOString(),
         imagen: body.imagen || existingData.imagen || undefined,
         slug: existingData.slug || '',
+        // Preservar keywords editoriales existentes; las del body ganan.
+        palabrasClave: Array.isArray(body.palabrasClave)
+          ? body.palabrasClave
+          : (Array.isArray(existingData.palabrasClave) ? existingData.palabrasClave : undefined),
+        keywords: body.keywords ?? existingData.keywords,
       };
 
       const { ok: meniOk, meni, supervisor, supervisorApproved, updateData: meniUpdateData } = await guardarConMeni(noticiaInput, db);

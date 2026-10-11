@@ -26,6 +26,7 @@ function noticia(i: number, overrides: Partial<Noticia> = {}): Noticia {
     fecha: '2026-08-01T10:00:00.000Z',
     autor: 'Redacción Nicaragua Informate',
     estado: 'publicado',
+    publicado: true,
     vistas: 20,
     palabras: 500,
     ...overrides,

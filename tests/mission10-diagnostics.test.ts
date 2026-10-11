@@ -171,6 +171,7 @@ describe('Misión 10 — Diagnóstico, repair plan y CEO operativo', () => {
       tags: [],
       related_links: [],
       estado: 'publicado',
+      publicado: true,
     } as Noticia;
 
     const realZeroGsc = {

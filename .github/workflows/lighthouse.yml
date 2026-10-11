@@ -10,6 +10,13 @@ jobs:
   lighthouse:
     name: Lighthouse CI
     runs-on: ubuntu-latest
+    # El paso "Comment PR" escribe en el PR: sin pull-requests:write el
+    # GITHUB_TOKEN por defecto devuelve "Resource not accessible by
+    # integration" y el job marca failure aunque Lighthouse pase.
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4

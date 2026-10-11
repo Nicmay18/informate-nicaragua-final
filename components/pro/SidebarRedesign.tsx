@@ -6,10 +6,16 @@ import type { Noticia } from '@/lib/types';
 
 import CategoriasSidebar from '@/components/pro/CategoriasSidebar';
 
-const RadioPlayer = dynamic(() => import('@/components/RadioPlayer'), { ssr: false });
-const EconomicBar = dynamic(() => import('@/components/EconomicBar'), { ssr: false });
-const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
-const WorldClock = dynamic(() => import('@/components/WorldClock'), { ssr: false });
+// Widgets client-only: sin reserva de espacio su montaje post-hidratación
+// empuja los paneles de abajo y produce CLS (~0.10 medido en Lighthouse CI).
+// Los placeholders fijan una altura aproximada para estabilizar el rail.
+function WidgetPlaceholder({ minHeight }: { minHeight: number }) {
+  return <div style={{ minHeight }} aria-hidden="true" />;
+}
+const RadioPlayer = dynamic(() => import('@/components/RadioPlayer'), { ssr: false, loading: () => <WidgetPlaceholder minHeight={72} /> });
+const EconomicBar = dynamic(() => import('@/components/EconomicBar'), { ssr: false, loading: () => <WidgetPlaceholder minHeight={160} /> });
+const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false, loading: () => <WidgetPlaceholder minHeight={190} /> });
+const WorldClock = dynamic(() => import('@/components/WorldClock'), { ssr: false, loading: () => <WidgetPlaceholder minHeight={150} /> });
 
 interface SidebarRedesignProps {
   masLeidas: Noticia[];
@@ -70,9 +76,9 @@ export default function SidebarRedesign({ masLeidas }: SidebarRedesignProps) {
                   </span>
                   <span style={{ fontSize: 11, color: 'var(--rd-muted)' }} suppressHydrationWarning>{timeAgo(n.fecha)}</span>
                 </div>
-                <h4 style={{ fontFamily: 'var(--rd-serif)', fontSize: 14.5, lineHeight: 1.35, fontWeight: 600, margin: 0 }}>
+                <h3 style={{ fontFamily: 'var(--rd-serif)', fontSize: 14.5, lineHeight: 1.35, fontWeight: 600, margin: 0 }}>
                   <Link href={`/noticias/${n.slug}`} style={{ color: 'var(--rd-ink)', textDecoration: 'none' }}>{n.titulo}</Link>
-                </h4>
+                </h3>
               </li>
             ))}
           </ol>
@@ -110,7 +116,7 @@ export default function SidebarRedesign({ masLeidas }: SidebarRedesignProps) {
       <CategoriasSidebar />
 
       <div style={{ background: 'var(--rd-accent-soft)', border: '1px solid #B9DAD6', borderRadius: 'var(--rd-radius)', padding: 20 }}>
-        <h3 style={{ fontFamily: 'var(--rd-serif)', fontSize: 17, margin: '0 0 6px' }}>Boletín matutino</h3>
+        <h2 style={{ fontFamily: 'var(--rd-serif)', fontSize: 17, margin: '0 0 6px' }}>Boletín matutino</h2>
         <p style={{ fontSize: 13, color: '#0B3D3A', margin: '0 0 14px', lineHeight: 1.45 }}>
           Recibe las noticias más importantes de Nicaragua cada mañana, directo a tu correo.
         </p>

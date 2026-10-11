@@ -11,13 +11,19 @@ vi.mock('@/lib/analizador-duplicados', () => ({
   detectarDuplicadoAdmin: vi.fn(async () => ({ esDuplicado: true, similitud: 72 })),
 }));
 
+// Query encadenable: la query canónica publishedArticlesQuery encadena
+// collection.where('publicado','==',true).where('estado','==','publicado'),
+// así que cada método debe devolver un objeto con la misma interfaz.
+const fakeQuery: any = {
+  where: () => fakeQuery,
+  orderBy: () => fakeQuery,
+  limit: () => fakeQuery,
+  select: () => fakeQuery,
+  get: async () => ({ docs: [], empty: true }),
+};
 const fakeDb = {
   collection: () => ({
-    where: () => ({
-      orderBy: () => ({
-        limit: () => ({ get: async () => ({ docs: [] }) }),
-      }),
-    }),
+    ...fakeQuery,
     doc: () => ({ get: async () => ({ exists: false, data: () => null }) }),
   }),
 } as any;

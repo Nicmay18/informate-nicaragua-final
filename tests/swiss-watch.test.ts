@@ -33,6 +33,7 @@ function makeNoticia(overrides: Partial<Noticia> = {}): Noticia {
     imagen: '/images/a.webp',
     fecha: '2026-09-05',
     estado: 'publicado',
+    publicado: true,
     autor: 'Redaccion',
     metaDescription: 'Meta',
     fuente: 'Fuente oficial',
