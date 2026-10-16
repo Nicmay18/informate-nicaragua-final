@@ -1,9 +1,16 @@
 import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
 import withBundleAnalyzer from '@next/bundle-analyzer';
-
 const nextConfig: NextConfig = {
   trailingSlash: false,
+  // Metadata bloqueante para todas las UAs: en Next 15.5 las rutas dinámicas
+  // streamean <title>/<meta> al <body> si generateMetadata resuelve tras el
+  // flush inicial — raza detectada: el meta description caía en <body> y
+  // Lighthouse/Google lo reportan ausente (Google exige meta en <head>).
+  // El costo es esperar generateMetadata antes del primer byte; las páginas
+  // dinámicas ya esperan los mismos datos para renderizar, así que el impacto
+  // en TTFB es marginal y a cambio el meta siempre va en <head>.
+  htmlLimitedBots: /.*/,
   eslint: {
     ignoreDuringBuilds: false,
   },

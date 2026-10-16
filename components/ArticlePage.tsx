@@ -576,7 +576,7 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
                     </div>
                     <div style={{ padding: 14 }}>
                       <h3 style={{ margin: 0, fontWeight: 700, color: '#111827', fontSize: 14.5, lineHeight: 1.4 }}>{item.titulo}</h3>
-                      <time style={{ fontSize: 11, color: '#9ca3af', marginTop: 8, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
+                      <time style={{ fontSize: 11, color: '#6b7280', marginTop: 8, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
                     </div>
                   </Link>
                 );
