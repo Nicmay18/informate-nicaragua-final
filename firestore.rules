@@ -70,13 +70,11 @@ service cloud.firestore {
     }
 
     // ========== VIEWS ==========
+    // Las vistas se incrementan via server action (trackViewAction → Admin SDK,
+    // que ignora estas reglas). Ningún cliente SDK lee ni escribe esta colección:
+    // la regla pública anterior permitía inflar contadores +1 por request.
     match /views/{slug} {
-      allow read: if true;
-      allow create: if request.resource.data.keys().hasOnly(['count','createdAt','updatedAt'])
-          && request.resource.data.count == 1;
-      allow update: if request.resource.data.keys().hasOnly(['count','updatedAt'])
-          && request.resource.data.count == resource.data.count + 1;
-      allow delete: if false;
+      allow read, write: if isAdmin();
     }
 
     // ========== CONFIGURACIÓN ==========
@@ -152,7 +150,7 @@ service cloud.firestore {
     match /traffic_daily/{date} {
       allow read: if isAdmin();
       allow create, update: if isAdmin()
-          && request.resource.data.keys().hasOnly(['updatedAt']);
+          && request.resource.data.keys().hasOnly(['updatedAt','views','countries']);
       allow delete: if false;
 
       match /articles/{slug} {

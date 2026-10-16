@@ -61,16 +61,14 @@ export async function generateMetadata({
 
   // 404 REAL: página fuera de rango debe abortar en metadata, antes de que
   // el streaming comprometa el status 200.
-  {
-    let totalCount = 0;
-    try {
-      totalCount = await getCategoryCount(catName);
-    } catch {
-      totalCount = 0;
-    }
-    if (resolvePage(sp.page, totalCount, PAGE_SIZE).status === 'not_found') {
-      notFound();
-    }
+  let totalCount = 0;
+  try {
+    totalCount = await getCategoryCount(catName);
+  } catch {
+    totalCount = 0;
+  }
+  if (resolvePage(sp.page, totalCount, PAGE_SIZE).status === 'not_found') {
+    notFound();
   }
 
   const meta = CATEGORIA_META[slugLower] || {
@@ -79,12 +77,7 @@ export async function generateMetadata({
   };
 
   const canonicalUrl = `${SITE_URL}/categoria/${slugLower}`;
-  let hasContent = true;
-  try {
-    hasContent = (await getCategoryCount(catName)) > 0;
-  } catch {
-    hasContent = false;
-  }
+  const hasContent = totalCount > 0;
 
   return {
     title: meta.titulo,

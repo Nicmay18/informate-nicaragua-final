@@ -35,7 +35,9 @@ export async function trackViewAction(slug: string, referrer?: string, utmSource
     }
 
     const safeSessionId = typeof sessionId === 'string' ? sessionId.slice(0, 100) : undefined;
-    const result = await incrementViewsBySlug(slug, referrer, utmSource, userAgent, safeSessionId);
+    // País aproximado vía edge de Vercel (código ISO, sin IP persistida).
+    const country = (h.get('x-vercel-ip-country') || '').slice(0, 8) || undefined;
+    const result = await incrementViewsBySlug(slug, referrer, utmSource, userAgent, safeSessionId, country);
 
     if (result === null) {
       logger.error('[track-view] incrementViewsBySlug returned null:', { ip, slug });
