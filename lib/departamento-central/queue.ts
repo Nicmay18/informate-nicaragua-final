@@ -74,16 +74,20 @@ export async function claimNextJob(): Promise<DeptoJob | null> {
   const db = getAdminDb();
   const now = new Date().toISOString();
 
+  // Filtrar por estado EN LA QUERY: los jobs completados nunca se borran y
+  // conservan su scheduledFor antiguo, por lo que una ventana de los N más
+  // viejos por scheduledFor se satura de completados y los pending nunca
+  // entraban al filtro en memoria (cola congelada en producción).
+  // 'in' es un filtro de igualdad: no requiere índice compuesto ni orderBy.
   const snap = await db
     .collection(JOBS)
-    .where('scheduledFor', '<=', now)
-    .orderBy('scheduledFor', 'asc')
-    .limit(50)
+    .where('status', 'in', ['pending', 'retry'])
+    .limit(200)
     .get();
 
   const candidates = snap.docs
     .map((d) => ({ id: d.id, ...d.data() } as DeptoJob))
-    .filter((j) => ['pending', 'retry'].includes(j.status))
+    .filter((j) => (j.scheduledFor ?? '') <= now)
     .sort((a, b) => {
       const pa = PRIORITY_RANK[a.priority] ?? 99;
       const pb = PRIORITY_RANK[b.priority] ?? 99;

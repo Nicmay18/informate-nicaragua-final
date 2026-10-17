@@ -28,6 +28,13 @@ export function getExpectedInterval(component: string): number {
 // staleness por tiempo y se reportan según su último status real.
 const EVENT_DRIVEN_COMPONENTS = new Set(['article-pipeline']);
 
+// Componentes retirados conscientemente del scheduler (ver scheduler.ts):
+// sus workers quedan solo para drenar jobs históricos. Como ya nadie les
+// encola trabajo ni escribe heartbeat periódico, la detección de staleness
+// los marcaría CRITICAL para siempre con falsos positivos. Se reportan por
+// su último status real, igual que los componentes disparados por eventos.
+const RETIRED_COMPONENTS = new Set(['growth', 'growth-check', 'monetization-check']);
+
 export async function writeHeartbeat(
   component: DeptoHeartbeat['component'],
   status: DeptoHeartbeat['status'],
@@ -112,7 +119,7 @@ export async function getDepartmentHealth(): Promise<{
   for (const doc of snap.docs) {
     const h = doc.data() as DeptoHeartbeat;
 
-    if (EVENT_DRIVEN_COMPONENTS.has(h.component)) {
+    if (EVENT_DRIVEN_COMPONENTS.has(h.component) || RETIRED_COMPONENTS.has(h.component)) {
       if (h.status === 'down') {
         components[h.component] = 'CRITICAL';
         worst = 'CRITICAL';

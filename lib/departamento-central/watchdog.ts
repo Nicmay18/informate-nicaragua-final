@@ -1,6 +1,6 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
-import { openIncident } from './incidents';
+import { openIncident, resolveIncident } from './incidents';
 import { recordLearning } from './learning';
 import { getDepartmentHealth, writeHeartbeat } from './heartbeat';
 import { enqueueJob } from './queue';
@@ -31,29 +31,39 @@ export async function runWatchdog(): Promise<{
   const stale: string[] = [];
 
   for (const [component, status] of Object.entries(components)) {
-    if (status === 'CRITICAL') {
-      stale.push(component);
-      await openIncident({
-        type: 'infrastructure',
-        severity: 'critical',
-        title: `Heartbeat crítico: ${component}`,
-        status: 'active',
-        detectedAt: now.toISOString(),
+    // Cierre simétrico: si un componente con incidente de heartbeat recuperó
+    // su latido, el incidente se resuelve. Sin esto los incidentes quedaban
+    // 'active' para siempre aunque el componente volviera a healthy.
+    if (status !== 'CRITICAL') {
+      await resolveIncident(`Heartbeat crítico: ${component}`, {
+        diagnosis: `El componente volvió a reportar heartbeat (${status}).`,
+        correction: 'Recuperación automática verificada por watchdog.',
+        verification: `getDepartmentHealth reporta ${status}.`,
+        learning: 'Heartbeat recuperado sin intervención manual.',
       });
-      if (component !== 'watchdog' && RECOVERABLE_COMPONENTS.has(component)) {
-        const hourBucket = new Date().toISOString().slice(0, 13);
-        await enqueueJob({
-          type: 'watchdog',
-          priority: 'P0',
-          source: 'watchdog',
-          payload: { component },
-          dedupKey: `watchdog:recovery:${component}:${hourBucket}`,
-        });
-        actions.push(`recovery-job-for-${component}`);
-      } else if (component !== 'watchdog') {
-        logger.warn('[depto-watchdog] Componente crítico sin recuperación automática disponible', { component });
-        actions.push(`no-recovery-available-for-${component}`);
-      }
+      continue;
+    }
+    stale.push(component);
+    await openIncident({
+      type: 'infrastructure',
+      severity: 'critical',
+      title: `Heartbeat crítico: ${component}`,
+      status: 'active',
+      detectedAt: now.toISOString(),
+    });
+    if (component !== 'watchdog' && RECOVERABLE_COMPONENTS.has(component)) {
+      const hourBucket = new Date().toISOString().slice(0, 13);
+      await enqueueJob({
+        type: 'watchdog',
+        priority: 'P0',
+        source: 'watchdog',
+        payload: { component },
+        dedupKey: `watchdog:recovery:${component}:${hourBucket}`,
+      });
+      actions.push(`recovery-job-for-${component}`);
+    } else if (component !== 'watchdog') {
+      logger.warn('[depto-watchdog] Componente crítico sin recuperación automática disponible', { component });
+      actions.push(`no-recovery-available-for-${component}`);
     }
   }
 
@@ -82,14 +92,45 @@ export async function runWatchdog(): Promise<{
   ]);
   const pendingCount = (pendingCountSnap.data().count || 0) + (retryCountSnap.data().count || 0);
   if (pendingCount > PENDING_QUEUE_LIMIT) {
+    // Título estable (sin el contador): el dedup de incidentes usa el slug del
+    // título; embeber N generaba un incidente nuevo por día del mismo evento.
     await openIncident({
       type: 'infrastructure',
       severity: 'warning',
-      title: `Cola de trabajos acumulada: ${pendingCount} pendientes`,
+      title: 'Cola de trabajos acumulada',
       status: 'active',
       detectedAt: now.toISOString(),
+      diagnosis: `${pendingCount} trabajos en estado pending/retry`,
     });
     actions.push('queue-backlog-warning');
+  } else {
+    await resolveIncident('Cola de trabajos acumulada', {
+      diagnosis: `Cola dentro del límite (${pendingCount}/${PENDING_QUEUE_LIMIT}).`,
+      correction: 'El drenaje de scheduler/watchdog procesó el backlog.',
+      verification: `pending+retry=${pendingCount}.`,
+      learning: 'Backlog normalizado.',
+    });
+    // Variantes históricas con el contador embebido en el título (p.ej.
+    // "Cola de trabajos acumulada: 188 pendientes") tienen otro slug y no las
+    // alcanza resolveIncident; se cierran por prefijo una vez que la cola
+    // está realmente dentro del límite.
+    const legacyBacklog = await db
+      .collection('depto_incidents')
+      .where('status', 'in', ['active', 'monitoring'])
+      .get();
+    for (const doc of legacyBacklog.docs) {
+      const title = String(doc.data().title || '');
+      if (!title.startsWith('Cola de trabajos acumulada')) continue;
+      await doc.ref.update({
+        status: 'resolved',
+        resolvedAt: now.toISOString(),
+        diagnosis: `Cola dentro del límite (${pendingCount}/${PENDING_QUEUE_LIMIT}).`,
+        correction: 'Backlog drenado; incidente histórico duplicado cerrado.',
+        verification: `pending+retry=${pendingCount}.`,
+        learning: 'Backlog normalizado.',
+        updatedAt: now.toISOString(),
+      });
+    }
   }
 
   // Alertas operativas reales → nios_alerts (dedup + cooldown internos).
