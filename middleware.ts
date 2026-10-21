@@ -121,7 +121,20 @@ function buildForwardedHeaders(request: NextRequest): Headers {
   return h;
 }
 
-function requireAdminAuth(request: NextRequest): NextResponse | null {
+// Rutas admin cuyo propio handler acepta credencial de cron
+// (verifyAdminOrCronToken/verifyAdminOrCleanupToken con x-cron-secret).
+// Fuera de esta lista el secreto de cron NO abre /api/admin/*: antes
+// cualquier endpoint admin era accesible con la credencial operativa de
+// los crons, más privilegio del que sus handlers declaran.
+const ADMIN_CRON_ROUTES = [
+  '/api/admin/departamento/ejecutar',
+  '/api/admin/nios/loop',
+  '/api/admin/nios-collect',
+  '/api/admin/reindexar-google',
+  '/api/admin/watch',
+];
+
+function requireAdminAuth(request: NextRequest, allowCron = true): NextResponse | null {
   // Header y cookie se evalúan por separado: un header inválido/stale
   // (p.ej. el marcador 'session-cookie' del panel) NO debe impedir que
   // la cookie HttpOnly válida autentique.
@@ -136,7 +149,7 @@ function requireAdminAuth(request: NextRequest): NextResponse | null {
 
   const isValidAdmin = validAdminKey.length > 0 &&
     (timingSafeCompare(headerToken, validAdminKey) || verifySessionToken(cookieToken));
-  const isValidCron = validCronSecret.length > 0 && timingSafeCompare(cronSecret, validCronSecret);
+  const isValidCron = allowCron && validCronSecret.length > 0 && timingSafeCompare(cronSecret, validCronSecret);
 
   if (!isValidAdmin && !isValidCron) {
     return NextResponse.json(
@@ -160,7 +173,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname.startsWith('/api/admin/')) {
-    const PUBLIC_ADMIN_ROUTES = ['/api/admin/session', '/api/admin/estado', '/api/admin/config'];
+    const PUBLIC_ADMIN_ROUTES = ['/api/admin/session', '/api/admin/estado'];
     if (PUBLIC_ADMIN_ROUTES.includes(pathname)) {
       const pubResponse = NextResponse.next();
       pubResponse.headers.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -169,7 +182,7 @@ export function middleware(request: NextRequest) {
       return pubResponse;
     }
 
-    const unauthorized = requireAdminAuth(request);
+    const unauthorized = requireAdminAuth(request, ADMIN_CRON_ROUTES.includes(pathname));
     if (unauthorized) return unauthorized;
 
     const response = NextResponse.next({ request: { headers: buildForwardedHeaders(request) } });

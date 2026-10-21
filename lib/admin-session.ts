@@ -16,7 +16,8 @@ function timingSafeCompare(a: string, b: string): boolean {
  *
  * SHA-256/HMAC en JS puro: el middleware corre en Edge runtime donde
  * node:crypto no existe y crypto.subtle es asíncrono (la verificación
- * aquí debe ser síncrona). Validado contra vectores RFC 4231.
+ * aquí debe ser síncrona). Comparado con node:crypto en tests, incluyendo
+ * límites de bloque y secretos mayores de 64 bytes.
  */
 
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24h — igual que el Max-Age anterior
@@ -34,7 +35,9 @@ const K256 = [
 
 function sha256Hex(msg: Uint8Array): string {
   const bitLen = msg.length * 8;
-  const padded = new Uint8Array(((msg.length + 8 + 63) >> 6) << 6);
+  // +9: el byte 0x80 también ocupa espacio; con +8 un mensaje de
+  // longitud ≡56 (mod 64) perdía el 0x80 bajo el campo de longitud.
+  const padded = new Uint8Array(((msg.length + 9 + 63) >> 6) << 6);
   padded.set(msg);
   padded[msg.length] = 0x80;
   const dv = new DataView(padded.buffer);
@@ -91,12 +94,13 @@ function hexToBytes(hex: string): Uint8Array {
 }
 
 function b64encode(s: string): string {
-  return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  // UTF-8 safe: btoa solo acepta Latin-1 y un email unicode rompería el login.
+  return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
 function b64decode(s: string): string {
   const b = s.replace(/-/g, '+').replace(/_/g, '/');
-  return atob(b + '='.repeat((4 - (b.length % 4)) % 4));
+  return decodeURIComponent(escape(atob(b + '='.repeat((4 - (b.length % 4)) % 4))));
 }
 
 function sessionSecret(): string {
@@ -117,7 +121,7 @@ export function verifySessionToken(token: string | null | undefined): boolean {
   if (parts.length !== 3) return false;
   const [expStr, emailB64, sig] = parts;
   const exp = Number(expStr);
-  if (!Number.isFinite(exp) || exp < Date.now()) return false;
+  if (!Number.isFinite(exp) || exp <= Date.now()) return false;
   const payload = `${expStr}.${emailB64}`;
   if (!timingSafeCompare(sig, hmacSha256Hex(sessionSecret(), payload))) return false;
   try {
