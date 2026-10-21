@@ -134,6 +134,10 @@ export const metadata: Metadata = {
     ...(process.env.NEXT_PUBLIC_BING_VERIFICATION && { other: { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION } }),
   },
   other: {
+    // Verificación de sitio para AdSense: el bot de revisión necesita ver el
+    // publisher ID en el HTML inicial; el script se carga diferido en cliente
+    // y no es detectable sin JS. ads.txt ya está correcto en producción.
+    'google-adsense-account': 'ca-pub-4115203339551838',
     'publisher': 'Nicaragua Informate',
     'msapplication-TileColor': '#0A192F',
     'msapplication-TileImage': '/icon-192x192.webp',

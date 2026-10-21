@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ZodError } from 'zod';
+import { verifySessionToken } from './admin-session';
 
 /**
  * Constant-time string comparison to prevent timing attacks.
@@ -65,7 +66,10 @@ export function isAdminRequest(request: Request): boolean {
     request.headers.get('x-admin-key') ||
     '';
   if (verifyAdminToken(token)) return true;
-  return verifyAdminToken(readAdminSessionCookie(request));
+  const cookie = readAdminSessionCookie(request);
+  // Cookie legada (valor = ADMIN_API_KEY) ya no autentica: solo tokens
+  // opacos emitidos por /api/admin/session con firma + expiración.
+  return verifySessionToken(cookie);
 }
 
 export function unauthorized(): NextResponse {

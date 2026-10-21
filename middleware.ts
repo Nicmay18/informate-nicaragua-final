@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { isToxicSlug } from './lib/seo-toxic';
 import { timingSafeCompare } from './lib/auth';
+import { verifySessionToken } from './lib/admin-session';
 
 function generateNonce(): string {
   const arr = new Uint8Array(16);
@@ -112,11 +113,11 @@ function buildForwardedHeaders(request: NextRequest): Headers {
   const needsInjection =
     !!cookieToken &&
     !!key &&
-    timingSafeCompare(cookieToken, key) &&
+    verifySessionToken(cookieToken) &&
     !timingSafeCompare(headerToken, key);
   if (!needsInjection) return request.headers;
   const h = new Headers(request.headers);
-  h.set('x-admin-token', cookieToken);
+  h.set('x-admin-token', key);
   return h;
 }
 
@@ -134,7 +135,7 @@ function requireAdminAuth(request: NextRequest): NextResponse | null {
   const validCronSecret = process.env.CRON_SECRET_TOKEN || process.env.CRON_SECRET || '';
 
   const isValidAdmin = validAdminKey.length > 0 &&
-    (timingSafeCompare(headerToken, validAdminKey) || timingSafeCompare(cookieToken, validAdminKey));
+    (timingSafeCompare(headerToken, validAdminKey) || verifySessionToken(cookieToken));
   const isValidCron = validCronSecret.length > 0 && timingSafeCompare(cronSecret, validCronSecret);
 
   if (!isValidAdmin && !isValidCron) {

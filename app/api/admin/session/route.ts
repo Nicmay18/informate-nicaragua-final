@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminAuth } from '@/lib/firebase-admin';
+import { issueSessionToken } from '@/lib/admin-session';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
     }
 
     const cookieOptions = [
-      `admin_session=${encodeURIComponent(apiKey)}`,
+      `admin_session=${encodeURIComponent(issueSessionToken(email))}`,
       'HttpOnly',
       'SameSite=Strict',
       'Path=/',
