@@ -77,10 +77,14 @@ deduplicación, auditoría y límites de pilotos.
 
 Todos los nombres, importes y referencias de estas imágenes son sintéticos.
 El importe US$10 del panel **no representa un pago ni ingreso real**.
+Las capturas se entregan empaquetadas en
+[evidencia/negocios-evidencia-local.zip](evidencia/negocios-evidencia-local.zip)
+(el workflow de compresión de imágenes del repo reempaqueta cualquier PNG
+del PR y corta los checks del último SHA; el zip evita ese ciclo):
 
-- [Directorio](evidencia/directorio-local.png)
-- [Perfil móvil](evidencia/perfil-movil-local.png)
-- [Campañas y pago simulado en el panel](evidencia/panel-campanas-local.png)
+- `directorio-local.png` — directorio con búsqueda
+- `perfil-movil-local.png` — perfil aprobado en móvil, etiqueta PATROCINADO
+- `panel-campanas-local.png` — campaña con referencia `SIMULADO-NO-ES-UN-PAGO`
 
 ## Pendiente para una puesta en producción
 
