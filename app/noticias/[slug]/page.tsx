@@ -18,6 +18,7 @@ import { logger } from '@/lib/logger';
 import { getCspNonce } from '@/lib/nonce';
 import { unstable_cache } from 'next/cache';
 import type { RelatedLink } from '@/lib/article-links';
+import { getAuspiciadorPublico } from '@/lib/ads/server';
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -197,6 +198,9 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
     ? { ...noticia, related_links: internalLinks }
     : noticia;
 
+  // Auspiciador vigente (publicidad directa) — null si no hay campaña activa
+  const sponsor = await getAuspiciadorPublico('articulo');
+
   const url = `https://nicaraguainformate.com/noticias/${noticia.slug}`;
 
   const wordCount = noticia.contenido
@@ -212,7 +216,7 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
       <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildWebSiteJsonLdEnhanced()) }} />
       <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildNewsArticleJsonLdEnhanced(noticia, url, readingTime)) }} />
       <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLdEnhanced(noticia.categoria, noticia.slug, noticia.titulo)) }} />
-      <ArticlePage noticia={noticiaWithLinks} related={related} />
+      <ArticlePage noticia={noticiaWithLinks} related={related} sponsor={sponsor} />
     </>
   );
 }

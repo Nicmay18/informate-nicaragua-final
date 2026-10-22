@@ -57,7 +57,8 @@ export async function incrementViewsBySlug(
   referrer?: string,
   utmSource?: string,
   userAgent?: string,
-  sessionId?: string
+  sessionId?: string,
+  country?: string
 ): Promise<number | null> {
   if (!isValidSlug(slug)) {
     logger.error('[homepage.ts] Slug rechazado por validación:', slug);
@@ -109,10 +110,11 @@ export async function incrementViewsBySlug(
         timestamp: FieldValue.serverTimestamp(),
         expiresAt: trafficLogExpiresAt(),
         ...(sessionId ? { sessionId } : {}),
+        ...(country ? { country } : {}),
       });
 
       const device = detectarDispositivo(userAgent);
-      await incrementTrafficDaily(db, slug, detectarFuente(referrer, utmSource, userAgent), device);
+      await incrementTrafficDaily(db, slug, detectarFuente(referrer, utmSource, userAgent), device, country);
     } catch (trafficErr) {
       logger.error('[homepage.ts] No se pudo registrar traffic_log:', trafficErr);
     }

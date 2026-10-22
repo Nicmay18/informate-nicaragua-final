@@ -872,12 +872,12 @@
   margin-bottom: var(--spacing-sm);
 }
 
-.ni-cat-card__pill--sucesos { background: #fee2e2; color: #dc2626; }
-.ni-cat-card__pill--nacionales { background: #ffedd5; color: #ea580c; }
-.ni-cat-card__pill--deportes { background: #d1fae5; color: #059669; }
-.ni-cat-card__pill--internacionales { background: #cffafe; color: #0891b2; }
-.ni-cat-card__pill--tecnologia { background: #dbeafe; color: #2563eb; }
-.ni-cat-card__pill--espectaculos { background: #fce7f3; color: #db2777; }
+.ni-cat-card__pill--sucesos { background: #fee2e2; color: #b91c1c; }
+.ni-cat-card__pill--nacionales { background: #ffedd5; color: #c2410c; }
+.ni-cat-card__pill--deportes { background: #d1fae5; color: #047857; }
+.ni-cat-card__pill--internacionales { background: #cffafe; color: #0e7490; }
+.ni-cat-card__pill--tecnologia { background: #dbeafe; color: #1d4ed8; }
+.ni-cat-card__pill--espectaculos { background: #fce7f3; color: #be185d; }
 
 .ni-cat-card__title {
   font-size: 18px;
@@ -924,10 +924,28 @@
   margin-top: var(--spacing-md);
   padding: var(--spacing-sm) var(--spacing-md);
   background: var(--accent);
-  color: var(--primary);
+  color: #FFFFFF;
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
+}
+
+.ni-pagination__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.ni-pagination__link--active {
+  background: var(--surface-3);
+  border-color: var(--text-light);
 }
 
 .ni-cat-page__footer {
