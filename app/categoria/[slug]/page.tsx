@@ -78,7 +78,13 @@ export async function generateMetadata({
     description: `Últimas noticias de ${catName} en Nicaragua Informate.`,
   };
 
-  const canonicalUrl = `${SITE_URL}/categoria/${slugLower}`;
+  // Paginación: página 1 canonical al hub; páginas >1 self-canonical +
+  // noindex,follow — misma política que /noticias (consolida señales en
+  // la página 1 sin duplicar páginas paginadas en el índice).
+  const pageNum = Math.max(1, parseInt(sp.page ?? '1', 10) || 1);
+  const canonicalUrl = pageNum > 1
+    ? `${SITE_URL}/categoria/${slugLower}?page=${pageNum}`
+    : `${SITE_URL}/categoria/${slugLower}`;
   let hasContent = true;
   try {
     hasContent = (await getCategoryCount(catName)) > 0;
@@ -90,7 +96,7 @@ export async function generateMetadata({
     title: meta.titulo,
     description: meta.description,
     alternates: { canonical: canonicalUrl },
-    robots: hasContent ? { index: true, follow: true } : { index: false, follow: true },
+    robots: hasContent && pageNum === 1 ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: {
       type: 'website',
       locale: 'es_NI',

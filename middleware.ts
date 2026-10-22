@@ -214,7 +214,15 @@ export function middleware(request: NextRequest) {
     response.headers.set('Cache-Control', 'no-store, must-revalidate, max-age=0');
     response.headers.set('CDN-Cache-Control', 'no-store');
     response.headers.set('Pragma', 'no-cache');
-    // No aplicar CSP a panel.html para permitir scripts de Firebase
+    // No aplicar CSP a panel.html para permitir scripts de Firebase,
+    // pero sí el resto del bloque de seguridad: la consola admin era
+    // clickjackable (X-Frame-Options ausente) y se sirve al público.
+    response.headers.set('X-Content-Type-Options', 'nosniff');
+    response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
+    response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), interest-cohort=()');
+    response.headers.delete('X-Powered-By');
     return response;
   }
 
