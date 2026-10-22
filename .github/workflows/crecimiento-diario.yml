@@ -14,9 +14,13 @@ jobs:
       - name: Generar reporte de crecimiento
         run: |
           echo "🚀 Solicitando reporte de crecimiento..."
+          # /api/admin/* exige auth en middleware: sin x-cron-secret el
+          # workflow fallaba 401 a diario. Requiere el secret CRON_SECRET
+          # (o CRON_SECRET_TOKEN) configurado en el repo.
           HTTP_CODE=$(curl -s -o /tmp/crecimiento.json -w "%{http_code}" \
             "https://nicaraguainformate.com/api/admin/crecimiento" \
             -H "Cache-Control: no-cache" \
+            -H "x-cron-secret: ${{ secrets.CRON_SECRET }}" \
             --max-time 60)
           
           if [ "$HTTP_CODE" = "200" ]; then
