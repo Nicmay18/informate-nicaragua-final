@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import LegalPageShell from '@/components/LegalPageShell';
+import NegocioShell from '@/components/NegocioShell';
 import NegocioContacto from '@/components/NegocioContacto';
 import NegocioVista from '@/components/NegocioVista';
 import { getNegocioPublicoBySlug } from '@/lib/negocios/datos';
@@ -54,7 +54,7 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
   };
 
   return (
-    <LegalPageShell title={n.nombre}>
+    <NegocioShell title={n.nombre}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: escapeJsonLd(localBusinessLd) }}
@@ -106,6 +106,6 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
           {n.piloto ? 'Piloto gratuito por tiempo limitado: no representa un pago recibido.' : 'Perfil patrocinado: contenido comercial identificado.'} Independiente de la cobertura editorial.
         </p>
       )}
-    </LegalPageShell>
+    </NegocioShell>
   );
 }

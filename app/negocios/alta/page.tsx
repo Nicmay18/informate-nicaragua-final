@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import LegalPageShell from '@/components/LegalPageShell';
+import NegocioShell from '@/components/NegocioShell';
 import NegocioAltaForm from '@/components/NegocioAltaForm';
 
 export const metadata: Metadata = {
@@ -12,13 +12,13 @@ export const metadata: Metadata = {
 export default async function NegocioAltaPage({ searchParams }: { searchParams: Promise<{ corregir?: string; nombre?: string }> }) {
   const params = await searchParams;
   return (
-    <LegalPageShell title="Registrá tu negocio">
+    <NegocioShell title="Registrá tu negocio">
       <p style={{ color: '#475569', lineHeight: 1.7, marginBottom: '1.25rem' }}>
         Completá el formulario y nuestro equipo revisará la información antes de
         publicar el perfil. También podés usarlo para solicitar correcciones a un
         perfil existente.
       </p>
       <NegocioAltaForm negocioId={params.corregir || ''} nombre={params.nombre || ''} />
-    </LegalPageShell>
+    </NegocioShell>
   );
 }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import LegalPageShell from '@/components/LegalPageShell';
+import NegocioShell from '@/components/NegocioShell';
 import { listarNegociosPublicos } from '@/lib/negocios/datos';
 import { CATEGORIAS_NEGOCIO, DEPARTAMENTOS_NI, type PublicNegocio } from '@/lib/negocios/modelo';
 import { MapPin, Search, Store } from 'lucide-react';
@@ -72,7 +72,7 @@ export default async function NegociosPage({
   };
 
   return (
-    <LegalPageShell title="Negocios en Nicaragua">
+    <NegocioShell title="Negocios en Nicaragua">
       <p style={{ color: '#475569', lineHeight: 1.7, marginBottom: '1.25rem' }}>
         Directorio de negocios y servicios con perfiles revisados antes de publicarse.
         Los perfiles marcados como <strong>patrocinados</strong> son contenido comercial,
@@ -128,6 +128,6 @@ export default async function NegociosPage({
         ¿Tenés un negocio? <Link href="/negocios/alta" style={{ color: 'var(--accent, #0369a1)', fontWeight: 600 }}>Dalo de alta</Link> o
         revisá los <Link href="/publicidad" style={{ color: 'var(--accent, #0369a1)', fontWeight: 600 }}>planes comerciales</Link>.
       </p>
-    </LegalPageShell>
+    </NegocioShell>
   );
 }

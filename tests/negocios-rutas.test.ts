@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { NextRequest } from 'next/server';
+import { createFakeDb } from './fixtures/negocios-db';
 
 /**
  * Pruebas de rutas del módulo Negocios contra un Firestore en memoria.
@@ -9,82 +10,6 @@ import { NextRequest } from 'next/server';
  */
 
 type Doc = Record<string, unknown>;
-type Filter = [string, string, unknown];
-
-function createFakeDb() {
-  const store = new Map<string, Map<string, Doc>>();
-  const col = (name: string) => {
-    if (!store.has(name)) store.set(name, new Map());
-    return store.get(name)!;
-  };
-  let autoId = 0;
-  const resolveInc = (v: unknown, prev: unknown): unknown =>
-    (v && typeof v === 'object' && '__inc' in v) ? (Number(prev) || 0) + (v as { __inc: number }).__inc : v;
-  const mergeDeep = (base: Doc, patch: Doc): Doc => {
-    const out: Doc = { ...base };
-    for (const [k, v] of Object.entries(patch)) {
-      out[k] = (v && typeof v === 'object' && !Array.isArray(v) && !('__inc' in v))
-        ? mergeDeep((out[k] as Doc) ?? {}, v as Doc) : resolveInc(v, out[k]);
-    }
-    return out;
-  };
-  const docRef = (name: string, id?: string): Record<string, unknown> => {
-    const refId = id ?? `auto-${++autoId}`;
-    const ref = {
-      id: refId,
-      get: async () => {
-        const d = col(name).get(refId);
-        return { id: refId, ref, exists: d !== undefined, data: () => d };
-      },
-      set: async (data: Doc, opts?: { merge?: boolean }) => {
-        const c = col(name);
-        c.set(refId, opts?.merge ? mergeDeep(c.get(refId) ?? {}, data) : { ...data });
-      },
-    };
-    return ref;
-  };
-  const runQuery = (name: string, filters: Filter[], lim: number, sel?: string[]) => {
-    let docs = [...col(name).entries()].filter(([, d]) =>
-      filters.every(([f, op, v]) => (op === 'in' ? (v as unknown[]).includes(d?.[f]) : d?.[f] === v)));
-    if (lim) docs = docs.slice(0, lim);
-    return {
-      docs: docs.map(([id, d]) => ({ id, exists: true, data: () => (sel ? Object.fromEntries(sel.map((k) => [k, d?.[k]])) : d) })),
-      size: docs.length,
-    };
-  };
-  const query = (name: string, filters: Filter[] = [], lim = 0, sel?: string[]): Record<string, unknown> => ({
-    where: (f: string, op: string, v: unknown) => query(name, [...filters, [f, op, v]], lim, sel),
-    limit: (n: number) => query(name, filters, n, sel),
-    select: (...f: string[]) => query(name, filters, lim, f),
-    get: async () => runQuery(name, filters, lim, sel),
-  });
-  const db: Record<string, unknown> = {
-    collection: (name: string) => ({
-      doc: (id?: string) => docRef(name, id),
-      where: (f: string, op: string, v: unknown) => query(name, [[f, op, v]]),
-      limit: (n: number) => query(name, [], n),
-      select: (...f: string[]) => query(name, [], 0, f),
-      add: async (data: Doc) => { const r = docRef(name); await (r.set as (d: Doc) => Promise<void>)(data); return r; },
-      get: async () => runQuery(name, [], 0),
-    }),
-    runTransaction: async (fn: (tx: unknown) => Promise<unknown>) => {
-      const writes: (() => Promise<void>)[] = [];
-      const result = await fn({
-        get: (x: { get: () => Promise<unknown> }) => {
-          if (writes.length) throw new Error('Lectura después de escritura en transacción');
-          return x.get();
-        },
-        set: (ref: { set: (d: Doc, o?: unknown) => Promise<void> }, data: Doc, opts?: unknown) => {
-          writes.push(() => ref.set(data, opts));
-        },
-      });
-      for (const write of writes) await write();
-      return result;
-    },
-    _store: store,
-  };
-  return db as typeof db & { collection: (name: string) => any };
-}
 
 vi.mock('firebase-admin/firestore', () => ({
   FieldValue: { increment: (n: number) => ({ __inc: n }) },
@@ -131,6 +56,8 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ['Date'] });
   vi.setSystemTime(new Date('2026-10-21T12:00:00Z'));
   vi.stubEnv('ADMIN_API_KEY', ADMIN);
+  vi.stubEnv('CRON_SECRET_TOKEN', 'cron-prueba');
+  vi.stubEnv('CLEANUP_TOKEN', 'cleanup-prueba');
   db = createFakeDb();
   getAdminDbMock.mockReturnValue(db);
 });
@@ -182,7 +109,8 @@ describe('rutas — administración de perfiles', () => {
     ['negocios-auditoria', ['GET']],
   ] as const;
   it.each(endpoints)('%s protege cada método incluso sin middleware', async (path, methods) => {
-    const route = await import(`@/app/api/admin/${path}/route`);
+    const modulePath = `@/app/api/admin/${path}/route`;
+    const route = await import(modulePath);
     for (const method of methods) {
       for (const headers of [{}, { cookie: 'admin_session=falso' }, { 'x-admin-token': 'falso' },
         { 'x-cron-secret': 'cron-prueba' }, { 'x-admin-key': 'cleanup-prueba' }, { 'x-role': 'admin' }]) {
