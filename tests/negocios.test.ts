@@ -15,7 +15,7 @@ import {
   ctrPct,
   campanaVigente,
   type Negocio,
-} from '@/lib/negocios/modelo';
+} from '../lib/negocios/modelo';
 
 const baseNegocio = {
   nombre: 'Pupusería Doña Ana',
