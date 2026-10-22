@@ -57,6 +57,20 @@ const EXTRA = {
     // "la persona afectada" = el hombre que recibió "una descarga eléctrica mortal".
     ['la persona afectada se encontraba realizando labores', 'el fallecido se encontraba realizando labores'],
   ],
+  'dos-muertos-y-dos-heridos-en-accidentes-laborales-en-nicaragua': [
+    // Resumen limpio: "fallecieron y dos resultaron gravemente heridos" → el par se mapea 1:1.
+    // Obrero de Sebaco: "permanecía bajo atención médica especializada" → sobrevivió.
+    ['resultó gravemente afectado tras recibir una fuerte descarga', 'resultó gravemente herido tras recibir una fuerte descarga'],
+    // López Pérez (El Riguero): el mismo caso que muere en el lugar en el doc hermano
+    // (accidente-laboral-deja-un-fallecido-y-un-lesionado). Es el 2º fallecido del resumen.
+    ['resultó gravemente afectado tras sufrir una caída', 'falleció tras sufrir una caída'],
+    // José Aguilera (Estelí): trasladado al Hospital San Juan de Dios → herido.
+    ['resultó gravemente afectado al caer desde el segundo piso', 'resultó herido al caer desde el segundo piso'],
+  ],
+  'lluvias-vientos-y-rayos-dejan-danos-y-dos-fallecidos': [
+    // Kevin Pérez Hernández = el segundo fallecido por descarga eléctrica (La Paz Centro).
+    ['La persona afectada fue identificada como Kevin Fabricio Pérez Hernández', 'El segundo fallecido fue identificado como Kevin Fabricio Pérez Hernández'],
+  ],
 };
 
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

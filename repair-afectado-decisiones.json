@@ -1,5 +1,5 @@
 {
- "generado": "2026-10-22T16:33:14.133Z",
+ "generado": "2026-10-22T16:40:10.925Z",
  "total": 47,
  "distribucion": {
   "CONFIRMADO_HERIDA": 7,
@@ -10,122 +10,122 @@
   "0gGqzH1RBUeVTGHWkuvl": {
    "sha256": "d9413c1ffc80ba82e66ec2147ece61a08bcd0357fdae34dbbe0b9b7e1ac584a2",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:07.679Z"
+   "capturado": "2026-10-22T16:40:05.459Z"
   },
   "0tmiH8fXJTVXNmiM0W5U": {
    "sha256": "239d44677c82863a4cc014977b806eaf7a89f51654a1e24ce375114bc92e4d60",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:08.260Z"
+   "capturado": "2026-10-22T16:40:05.802Z"
   },
   "1mbnf5QypQTXYmHcbw9u": {
    "sha256": "9d74af7541b63181c2a8afe41a1544a5dfaa88caa1cd38695636dfd1e276fc0b",
    "requiresReevaluation": false,
-   "capturado": "2026-10-22T16:33:08.425Z"
+   "capturado": "2026-10-22T16:40:05.990Z"
   },
   "28a2yKj9NN9k4au0xJ6q": {
    "sha256": "3da6ed486b0b0c987e8c2931ba07806fcf5d2f1963172c4cacd8006ed9bf4dda",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:08.652Z"
+   "capturado": "2026-10-22T16:40:06.220Z"
   },
   "2LRMqTFV3a6XPkdfoEjh": {
    "sha256": "b2e548547936ef31cc7e7804506c298699bb88596773220ee173d5f30be67dd5",
    "requiresReevaluation": false,
-   "capturado": "2026-10-22T16:33:08.857Z"
+   "capturado": "2026-10-22T16:40:06.472Z"
   },
   "5ygMPBWB8ukF4W5m7uoG": {
    "sha256": "bfdb9eb7f43dcb8139d0306c89b747d67ff8c8dfc4f5eb7d3365fbf421c3cf17",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:09.203Z"
+   "capturado": "2026-10-22T16:40:06.770Z"
   },
   "81UQk1YkWPpF7BzIdaDo": {
    "sha256": "4763920d7eef3e690422181be3310a95a78653a8b9cfc2983ea99411b8200e93",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:09.433Z"
+   "capturado": "2026-10-22T16:40:07.012Z"
   },
   "8NaG866DTKEaUCHkivrd": {
    "sha256": "9a8a5e2cd9c5941974ca83cfeb16e685370442e5d8aa7410a47a04f605503eec",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:09.821Z"
+   "capturado": "2026-10-22T16:40:07.227Z"
   },
   "9xCHaZO7JEwhyRpdHHJY": {
    "sha256": "90f69df60b486f08229ca007d932cb646a280d04e1a6f83804a73bf2b6bd49e9",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:10.070Z"
+   "capturado": "2026-10-22T16:40:07.462Z"
   },
   "BU0PX0EqHO5ewLCH7Coo": {
    "sha256": "a6192077b44afc340b07fe33f90c38340144d88ac5f2777e71975bb73b412ba2",
    "requiresReevaluation": false,
-   "capturado": "2026-10-22T16:33:10.351Z"
+   "capturado": "2026-10-22T16:40:07.676Z"
   },
   "C1UJ83ospxOXOtNGLwgr": {
    "sha256": "5220f1c9f0070d67e02500375e6df5fcd17a894998161ff8a06b11c88efb9994",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:10.884Z"
+   "capturado": "2026-10-22T16:40:07.845Z"
   },
   "CaWgYAduswmwk6mj0zW2": {
    "sha256": "5d5dc5560b43062ef652af1fe2f01c518833f92313497cdedd4dd7f1e1fe2ba0",
    "requiresReevaluation": false,
-   "capturado": "2026-10-22T16:33:11.050Z"
+   "capturado": "2026-10-22T16:40:07.977Z"
   },
   "JtTY1tfzHmkOVNJjCZJX": {
    "sha256": "ff8e4845d44c0b5b2bc2d8f64527963b9674954f85e6064b1d9d17a7d588bb68",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:11.312Z"
+   "capturado": "2026-10-22T16:40:08.325Z"
   },
   "NTa3Gb797l9FINZ2E7RU": {
    "sha256": "3ff9517d3dcd3507b864daba44ad9eb1f235843d03efcbffc8d41d90a0453231",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:11.577Z"
+   "capturado": "2026-10-22T16:40:08.556Z"
   },
   "RCjqgw3ea2K6cZHXmbRV": {
    "sha256": "7a762f9c75c60f37d57794f72242a54ba8fbaf1803007fabaaaf8ab6261f9e6b",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:11.809Z"
+   "capturado": "2026-10-22T16:40:09.046Z"
   },
   "gXTkMry6uueR9BxXcTdF": {
    "sha256": "cde72c7430d67c9b73441071e5e469575942c7fea73dec5ec983dd1b8bf3d955",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:12.044Z"
+   "capturado": "2026-10-22T16:40:09.248Z"
   },
   "o6W17EHiyx17VgcpbB5N": {
    "sha256": "b5407ba7f6c28ed4081fb6a4b19f9b1f3499b5af0ea74019892300571d76f860",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:12.406Z"
+   "capturado": "2026-10-22T16:40:09.497Z"
   },
   "phUuAtrQ4H3qV4heuZlH": {
    "sha256": "df8a573af9d188a1d8b9ea0bec8cc11107561c3540d7b65165566a418ad4a6a5",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:12.671Z"
+   "capturado": "2026-10-22T16:40:09.710Z"
   },
   "sgysqhqcvwAMBJZSxNVL": {
    "sha256": "536a0784db5e168b7fefb92d384293f4ec4521e2be77364d64a98ad8aad5f92f",
    "requiresReevaluation": false,
-   "capturado": "2026-10-22T16:33:12.844Z"
+   "capturado": "2026-10-22T16:40:09.907Z"
   },
   "spoz8oqZQ8Wer7c1GSXp": {
    "sha256": "aec6b2623ec9937a0e79ca6ffe0e6130c95ce7a00bf2b89878a19bd0e4304a2d",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:13.106Z"
+   "capturado": "2026-10-22T16:40:10.131Z"
   },
   "uJ076MyMZhQIJYTa1qOW": {
    "sha256": "d328d668cd9dea57cf83126625fd50fba279343b199e100765d9ff582939aaf9",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:13.363Z"
+   "capturado": "2026-10-22T16:40:10.321Z"
   },
   "v0gwsceiaZQeNSLPHmee": {
    "sha256": "71952ff25c72ced31c1501112dd22a18a64ded1ec196b726725c79ef38860b13",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:13.576Z"
+   "capturado": "2026-10-22T16:40:10.508Z"
   },
   "w5XzTjYCWTJRDX9NIPng": {
    "sha256": "70b9fe75741db6e84a9c7b7101fbad981bc8c01e67c317fb3d98f4c10062ea7f",
    "requiresReevaluation": false,
-   "capturado": "2026-10-22T16:33:13.869Z"
+   "capturado": "2026-10-22T16:40:10.724Z"
   },
   "yys8SiF01IpoXTkoaqXo": {
    "sha256": "7ddd3f365ee2e63a9446ca2878744fba5dc9334e03161137099e24763d97501a",
    "requiresReevaluation": true,
-   "capturado": "2026-10-22T16:33:14.133Z"
+   "capturado": "2026-10-22T16:40:10.925Z"
   }
  },
  "fichas": [
@@ -159,10 +159,10 @@
    "clasificacion": "CONFIRMADO_MUERTE",
    "correccion": "falleció en una colisión frontal",
    "find": "resultó gravemente afectado en una colisión frontal",
-   "evidencia": "Yorlan Sáenz (27): motociclista en Managua — el resumen cuenta 4 fallecidos en moto en Managua/Chontales/CCN; él es el caso de Managua.",
+   "evidencia": "Yorlan Sáenz (27): motociclista en Managua — el resumen cuenta 4 fallecidos en moto en Managua/Chontales/CCN; él es el único caso Managua+moto. INCERTIDUMBRE RESIDUAL: el cuerpo dice \"trasladado para intervención quirúrgica\" (vivo al traslado) — su muerte depende de la cifra del resumen (4+1), que contradice titular (5) y slug (6).",
    "fuente": "resumen + cuerpo del documento",
-   "confianza": "ALTA",
-   "riesgo": "bajo",
+   "confianza": "MEDIA",
+   "riesgo": "medio: correcto si el resumen es el dato bueno; si la cifra real es otra, este parche queda mal",
    "accion": "APLICAR (tras aprobación)"
   },
   {
@@ -517,12 +517,12 @@
    "textoOriginal": "resultó gravemente afectado",
    "propuestaAutomatica": "murió",
    "clasificacion": "CONFIRMADO_MUERTE",
-   "correccion": "Dos trabajadores murieron y otros dos resultaron heridos",
+   "correccion": "Dos trabajadores fallecieron y otros dos resultaron gravemente heridos",
    "find": "Dos trabajadores resultaron afectados y otros dos resultaron gravemente afectados",
-   "evidencia": "El eufemismo mapeó DOS niveles: \"afectados\" = los muertos y \"gravemente afectados\" = los heridos (Bonilla murió \"de forma inmediata\"; el titular dice 2 muertos + 2 heridos). El par se reescribe completo para no confundir los grupos.",
-   "fuente": "titular + cuerpo (\"le provocó la muerte de forma inmediata\")",
+   "evidencia": "RESUMEN limpio del mismo doc: \"Dos trabajadores fallecieron y dos resultaron gravemente heridos\" — mapea 1:1 el par del cuerpo. Identidades verificadas: Bonilla (\"muerte de forma inmediata\") y López Pérez (muerte en el lugar, doc hermano) = fallecidos; Sebaco y Aguilera (hospitalizados) = heridos. Orden DEMOSTRADO.",
+   "fuente": "resumen + cuerpo del documento + doc hermano",
    "confianza": "ALTA",
-   "riesgo": "medio: depende de que el orden de la frase sea muertos-primero — consistente con el caso Bonilla narrado después",
+   "riesgo": "bajo",
    "accion": "APLICAR (tras aprobación)"
   },
   {
@@ -537,10 +537,10 @@
    "clasificacion": "CONFIRMADO_HERIDA",
    "correccion": null,
    "find": null,
-   "evidencia": "Segunda mitad del par: \"otros dos resultaron gravemente afectados\" = los dos HERIDOS (no muertos) — cubierto por el parche combinado del ítem previo.",
+   "evidencia": "Segunda mitad del par: \"otros dos resultaron gravemente afectados\" = los dos HERIDOS (Sebaco + Aguilera, hospitalizados) — cubierto por el parche combinado del ítem previo.",
    "fuente": "documento mismo",
    "confianza": "ALTA",
-   "riesgo": "medio (cubierto por parche combinado)",
+   "riesgo": "bajo (cubierto por parche combinado)",
    "accion": "APLICAR (tras aprobación)"
   },
   {
