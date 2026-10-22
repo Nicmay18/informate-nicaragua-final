@@ -38,7 +38,12 @@ export const CATEGORIAS_NEGOCIO = [
 ] as const;
 
 export type NegocioEstado = 'borrador' | 'pendiente' | 'aprobado' | 'rechazado' | 'suspendido';
-export type PagoEstado = 'pendiente' | 'pagado' | 'vencido' | 'cancelado';
+export type PagoEstado = 'pendiente' | 'piloto' | 'pagado' | 'vencido' | 'cancelado';
+
+/** Piloto gratuito: período corto para que un negocio evalúe el producto.
+ * No es ingreso: nunca cuenta como cobrado ni pendiente de cobro. */
+export const PILOTO_MAX_DIAS = 45;
+export const PILOTOS_MAX_ACTIVOS = 3;
 export type ProspectoEstado = 'nuevo' | 'contactado' | 'interesado' | 'negociacion' | 'ganado' | 'perdido';
 export type SolicitudTipo = 'alta' | 'correccion';
 export type SolicitudEstado = 'pendiente' | 'procesada' | 'descartada';
@@ -107,6 +112,7 @@ export type Negocio = z.infer<typeof negocioSchema> & {
   createdAt?: string;
   updatedAt?: string;
   patrocinado?: boolean;
+  piloto?: boolean;
 };
 
 export const planSchema = z.object({
@@ -130,13 +136,24 @@ export const campanaSchema = z.object({
   precioAcordadoUsd: z.number().min(0).max(10000),
   fechaInicio: ISO_DATE,
   fechaVencimiento: ISO_DATE,
-  estadoPago: z.enum(['pendiente', 'pagado', 'vencido', 'cancelado']).default('pendiente'),
+  estadoPago: z.enum(['pendiente', 'piloto', 'pagado', 'vencido', 'cancelado']).default('pendiente'),
   referenciaPago: z.string().trim().max(120).optional().default(''),
   pagoConfirmado: z.boolean().default(false),
   renovacionDe: documentId.or(z.literal('')).default(''),
   notas: z.string().max(500).optional().default(''),
 }).superRefine((c, ctx) => {
   if (c.fechaVencimiento < c.fechaInicio) ctx.addIssue({ code: 'custom', path: ['fechaVencimiento'], message: 'Vigencia invertida' });
+  const dias = 1 + (new Date(`${c.fechaVencimiento}T00:00:00Z`).getTime() - new Date(`${c.fechaInicio}T00:00:00Z`).getTime()) / 86_400_000;
+  if (c.estadoPago === 'piloto') {
+    // Piloto gratuito: sin pago, sin referencia, sin renovación, duración acotada.
+    if (c.pagoConfirmado || c.referenciaPago.trim()) ctx.addIssue({ code: 'custom', path: ['estadoPago'], message: 'Un piloto no lleva pago ni referencia' });
+    if (c.precioAcordadoUsd !== 0) ctx.addIssue({ code: 'custom', path: ['precioAcordadoUsd'], message: 'El piloto gratuito tiene importe cero' });
+    if (c.renovacionDe) ctx.addIssue({ code: 'custom', path: ['renovacionDe'], message: 'Un piloto no puede renovar otra campaña' });
+    if (dias > PILOTO_MAX_DIAS) ctx.addIssue({ code: 'custom', path: ['fechaVencimiento'], message: `Un piloto dura máximo ${PILOTO_MAX_DIAS} días` });
+  }
+  if (c.estadoPago !== 'pagado' && (c.pagoConfirmado || c.referenciaPago.trim())) {
+    ctx.addIssue({ code: 'custom', path: ['estadoPago'], message: 'La evidencia de pago requiere estado pagado' });
+  }
   if (c.estadoPago === 'pagado' && (!c.pagoConfirmado || !c.referenciaPago.trim() || c.precioAcordadoUsd <= 0)) {
     ctx.addIssue({ code: 'custom', path: ['pagoConfirmado'], message: 'Confirmá el pago recibido, su referencia y un importe mayor a cero' });
   }
@@ -176,7 +193,7 @@ export const eventoMetricaSchema = z.object({
   tipo: z.enum(['vista', 'whatsapp', 'telefono', 'web']),
   slug: z.string().trim().max(200).optional(),
   sessionId: z.string().regex(/^[a-zA-Z0-9_-]{8,100}$/),
-});
+}).strict();
 
 export function slugifyNegocio(nombre: string): string {
   return nombre
@@ -219,16 +236,21 @@ export function toPublicNegocio(id: string, n: Negocio) {
     plan: n.plan,
     destacado: n.destacado === true,
     patrocinado: n.patrocinado === true,
+    piloto: n.piloto === true,
   };
 }
 export type PublicNegocio = ReturnType<typeof toPublicNegocio>;
 
+/** Vigencia de publicación: fecha-corta cubre el día completo (UTC). */
+export function isNegocioVigente(vigenteHasta: string | undefined | null, now: Date = new Date()): boolean {
+  if (!vigenteHasta) return true;
+  const fin = new Date(/T/.test(vigenteHasta) ? vigenteHasta : `${vigenteHasta}T23:59:59.999Z`);
+  return !Number.isNaN(fin.getTime()) && now <= fin;
+}
+
 /** Un perfil solo es público si está aprobado y su vigencia no expiró. */
 export function isNegocioPublicable(n: Pick<Negocio, 'estado' | 'vigenteHasta'>, now: Date = new Date()): boolean {
-  if (n.estado !== 'aprobado') return false;
-  if (!n.vigenteHasta) return true;
-  const fin = new Date(/T/.test(n.vigenteHasta) ? n.vigenteHasta : `${n.vigenteHasta}T23:59:59.999Z`);
-  return !Number.isNaN(fin.getTime()) && now <= fin;
+  return n.estado === 'aprobado' && isNegocioVigente(n.vigenteHasta, now);
 }
 
 export function diasParaVencer(fecha: string, now: Date = new Date()): number {
@@ -244,7 +266,7 @@ export function ctrPct(impresiones: number, clics: number): number {
 
 export function campanaVigente(c: Record<string, unknown>, now = new Date()): boolean {
   const day = now.toISOString().slice(0, 10);
-  return c.estadoPago === 'pagado' && c.pagoConfirmado === true
-    && !!c.verificadoAt && !!c.referenciaPago
-    && String(c.fechaInicio) <= day && String(c.fechaVencimiento) >= day;
+  const activa = c.estadoPago === 'piloto'
+    || (c.estadoPago === 'pagado' && c.pagoConfirmado === true && !!c.verificadoAt && !!c.referenciaPago);
+  return activa && String(c.fechaInicio) <= day && String(c.fechaVencimiento) >= day;
 }

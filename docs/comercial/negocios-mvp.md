@@ -53,18 +53,39 @@ Verificado 2026-10-21. **Son candidatos a prospectar, no clientes ni anunciantes
 
 ## Experimento: 3 pilotos en 14 días
 
-Objetivo: **3 negocios que paguen**, no 3 perfiles gratis — gratis no valida
-disposición a pagar.
+Objetivo: **3 pilotos gratuitos → conversión a pago**. El piloto existe para
+que el negocio vea el reporte de contactos reales; no valida disposición a
+pagar por sí solo, por eso está acotado en código.
 
-1. **Día 1–2**: el propietario elige 3–5 negocios de la tabla (prioridad: los que
-   ya conoce personalmente). Registrar como prospectos en el panel.
-2. **Día 2–7**: propuesta directa y simple: "Perfil revisado + medición de
-   contactos reales por US$10/mes". El primer mes puede ofrecerse como piloto
-   con descuento, pero el reporte del mes 1 debe vender la renovación a precio
-   completo.
-3. **Día 7–14**: al recibir pago, registrar campaña con referencia real del
-   pago (transferencia, efectivo, etc.) y `pagoConfirmado`. Generar el CSV a los
-   30 días y usarlo como argumento de renovación.
+### Reglas del piloto gratuito (forzadas en `campanaSchema` + `saveCommercial`)
+
+- `estadoPago = 'piloto'`: **importe cero**, sin `referenciaPago`, sin
+  `pagoConfirmado`, sin `renovacionDe` — es un período de prueba, no ingreso.
+- **Duración máxima**: 45 días naturales inclusive (fechaInicio → fechaVencimiento).
+- **Cupo**: máximo `PILOTOS_MAX_ACTIVOS = 3` campañas `piloto` vigentes en toda
+  la plataforma (transacción serializada por `negocios_control/campanas`).
+- **Debe iniciar hoy o estar vigente** al registrarse.
+- Al activarlo, el perfil recibe `vigenteHasta = min(vigente actual, fin del
+  piloto)`: **el perfil caduca solo cuando termina el piloto**.
+- El perfil muestra la etiqueta **PILOTO GRATUITO** (no "PATROCINADO") y la nota
+  aclara que no representa un pago recibido.
+- Nunca suma a `cobradoUsd` ni `pendienteUsd`; aparece como `pilotosActivos`.
+- Es estado final: no se edita ni se convierte en `pagado`. La continuidad es
+  una campaña nueva — puede marcarse `renovacionDe` desde un piloto.
+- No puede solaparse con otra campaña activa (pagada o piloto) del mismo negocio.
+
+### Operación
+
+1. **Día 1–2**: el propietario elige 3 negocios de la tabla (prioridad: los que
+   ya conoce personalmente). Prospectos en el panel → crear perfil → aprobar →
+   campaña `piloto` (30–45 días, importe 0).
+2. **Durante**: el negocio ve clics reales en su perfil. Al día ~20, enviarle
+   el CSV de contactos (panel → "Reporte CSV").
+3. **Conversión**: proponer Básico US$10/mes. Si paga, campaña nueva `pagado`
+   con `renovacionDe` = piloto + referencia real + `pagoConfirmado`, y revisar
+   la vigencia del perfil. Si no paga, el perfil expira solo.
+
+
 
 ## Tareas que requieren acción humana
 

@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 
 const getCachedNegocios = listarNegociosPublicos;
 
-function Badge() {
+function Badge({ piloto }: { piloto: boolean }) {
   return (
     <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.06em', color: '#92400e', background: '#fef3c7', border: '1px solid #fde68a', borderRadius: 6, padding: '2px 6px' }}>
-      PATROCINADO
+      {piloto ? 'PILOTO GRATUITO' : 'PATROCINADO'}
     </span>
   );
 }
@@ -32,7 +32,7 @@ function Card({ n }: { n: PublicNegocio }) {
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
         <h2 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>{n.nombre}</h2>
-        {n.patrocinado && <Badge />}
+        {n.patrocinado && <Badge piloto={n.piloto} />}
       </div>
       <p style={{ color: '#475569', fontSize: '.88rem', lineHeight: 1.55, margin: '8px 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
         {n.descripcion}

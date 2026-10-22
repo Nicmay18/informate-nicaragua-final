@@ -8,8 +8,11 @@ import { getAllEvergreen } from '@/lib/evergreen';
 import { getAllTemaSlugs } from '@/lib/topics';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
+import { isNegocioPublicable, type Negocio } from '@/lib/negocios/modelo';
 
-export const revalidate = 3600;
+// Las noticias mantienen su caché propia; la moderación y la caducidad
+// comercial se comprueban en cada solicitud de sitemap.
+export const dynamic = 'force-dynamic';
 
 const baseUrl = 'https://nicaraguainformate.com';
 
@@ -39,33 +42,24 @@ const cachedGetEntitySlugs = unstable_cache(
   { revalidate: 3600, tags: ['sitemap-entities'] }
 );
 
-const cachedGetNegocioSlugs = unstable_cache(
-  async () => {
+async function getNegocioSlugs() {
     try {
       const { getAdminDb } = await import('@/lib/firebase-admin');
       const snap = await getAdminDb()
         .collection('negocios')
         .where('estado', '==', 'aprobado')
-        .select('slug', 'vigenteHasta')
+        .select('slug', 'estado', 'vigenteHasta')
         .limit(500)
         .get();
       const now = new Date();
       return snap.docs
-        .filter((d) => {
-          const v = d.data().vigenteHasta as string | undefined;
-          if (!v) return true;
-          const fin = new Date(/T/.test(v) ? v : `${v}T23:59:59.999Z`);
-          return !Number.isNaN(fin.getTime()) && now <= fin;
-        })
+        .filter((d) => isNegocioPublicable(d.data() as Negocio, now))
         .map((d) => d.data().slug)
         .filter(Boolean) as string[];
     } catch {
       return [];
     }
-  },
-  ['sitemap-negocios'],
-  { revalidate: 3600, tags: ['sitemap-negocios'] },
-);
+}
 
 export function safeDate(value: unknown): Date {
   if (!value) return new Date();
@@ -161,7 +155,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Perfiles de negocios aprobados: contenido comercial identificado,
   // indexable por sí mismo (LocalBusiness), no altera prioridades editoriales.
-  const negocioUrls: MetadataRoute.Sitemap = (await cachedGetNegocioSlugs()).map((slug) => ({
+  const negocioUrls: MetadataRoute.Sitemap = (await getNegocioSlugs()).map((slug) => ({
     url: `${baseUrl}/negocios/${slug}`,
     changeFrequency: 'weekly',
     priority: 0.4,

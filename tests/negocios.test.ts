@@ -14,6 +14,7 @@ import {
   diasParaVencer,
   ctrPct,
   campanaVigente,
+  isNegocioVigente,
   type Negocio,
 } from '../lib/negocios/modelo';
 
@@ -108,6 +109,17 @@ describe('negocios — regla comercial de pago', () => {
     expect(campanaSchema.safeParse({ ...camp, fechaVencimiento: '2026-09-01' }).success).toBe(false);
     expect(campanaSchema.safeParse({ ...camp, fechaInicio: '2026-02-30' }).success).toBe(false);
   });
+
+  it('piloto gratuito: sin pago, sin referencia, sin renovación, máx 45 días', () => {
+    const piloto = { ...camp, estadoPago: 'piloto', precioAcordadoUsd: 0 };
+    expect(campanaSchema.safeParse({ ...piloto, fechaVencimiento: '2026-11-14' }).success).toBe(true);
+    expect(campanaSchema.safeParse({ ...piloto, fechaVencimiento: '2026-11-15' }).success).toBe(false);
+    expect(campanaSchema.safeParse({ ...piloto, precioAcordadoUsd: 10 }).success).toBe(false);
+    expect(campanaSchema.safeParse({ ...piloto, pagoConfirmado: true }).success).toBe(false);
+    expect(campanaSchema.safeParse({ ...piloto, referenciaPago: 'X' }).success).toBe(false);
+    expect(campanaSchema.safeParse({ ...piloto, renovacionDe: 'c1' }).success).toBe(false);
+    expect(campanaSchema.safeParse({ ...piloto, fechaVencimiento: '2026-12-01' }).success).toBe(false); // >45d
+  });
 });
 
 describe('negocios — publicación', () => {
@@ -172,6 +184,20 @@ describe('negocios — vencimiento de campaña', () => {
     expect(campanaVigente(c, new Date('2026-11-01T00:00:00Z'))).toBe(false);
     expect(campanaVigente(c, new Date('2026-09-30T23:59:59Z'))).toBe(false);
     expect(campanaVigente({ ...c, verificadoAt: null }, new Date('2026-10-10'))).toBe(false);
+  });
+
+  it('piloto activa patrocinio solo dentro de fechas; nunca exige pago', () => {
+    const p = { estadoPago: 'piloto', fechaInicio: '2026-10-01', fechaVencimiento: '2026-11-15' };
+    expect(campanaVigente(p, new Date('2026-10-15'))).toBe(true);
+    expect(campanaVigente(p, new Date('2026-11-16'))).toBe(false);
+    expect(campanaVigente({ ...p, estadoPago: 'pendiente' }, new Date('2026-10-15'))).toBe(false);
+  });
+
+  it('isNegocioVigente: sin fecha siempre vigente; el día de corte cubre 23:59 UTC', () => {
+    expect(isNegocioVigente('', new Date('2026-10-21'))).toBe(true);
+    expect(isNegocioVigente('2026-10-21', new Date('2026-10-21T23:00:00Z'))).toBe(true);
+    expect(isNegocioVigente('2026-10-21', new Date('2026-10-22T00:00:01Z'))).toBe(false);
+    expect(isNegocioVigente('fecha-rota', new Date('2026-10-21'))).toBe(false);
   });
   it('diasParaVencer negativo si venció', () => {
     expect(diasParaVencer('2026-10-01', new Date('2026-10-21'))).toBeLessThan(0);

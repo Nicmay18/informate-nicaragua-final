@@ -65,7 +65,7 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
         <span style={{ background: '#f1f5f9', borderRadius: 6, padding: '3px 8px' }}>{n.categoria}</span>
         {n.patrocinado && (
           <span style={{ background: '#fef3c7', border: '1px solid #fde68a', color: '#92400e', borderRadius: 6, padding: '3px 8px', fontWeight: 700 }}>
-            PATROCINADO
+            {n.piloto ? 'PILOTO GRATUITO' : 'PATROCINADO'}
           </span>
         )}
       </div>
@@ -103,7 +103,7 @@ export default async function NegocioPage({ params }: { params: Promise<{ slug: 
       </p>
       {n.patrocinado && (
         <p style={{ fontSize: '.78rem', color: '#94a3b8', marginTop: 8 }}>
-          Perfil patrocinado: contenido comercial identificado, independiente de la cobertura editorial.
+          {n.piloto ? 'Piloto gratuito por tiempo limitado: no representa un pago recibido.' : 'Perfil patrocinado: contenido comercial identificado.'} Independiente de la cobertura editorial.
         </p>
       )}
     </LegalPageShell>

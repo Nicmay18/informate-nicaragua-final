@@ -1,9 +1,11 @@
 import { z } from 'zod';
+import { FieldValue } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { actor, adminGuard, privateJson, readBody } from './seguridad';
 import {
   NEGOCIOS_COLLECTION, NEGOCIOS_AUDIT_COLLECTION, PLANES_COLLECTION,
   CAMPANAS_COLLECTION, documentId, negocioSchema, campanaSchema, diasParaVencer,
+  campanaVigente, PILOTOS_MAX_ACTIVOS,
 } from './modelo';
 
 export class CommercialError extends Error {
@@ -28,28 +30,59 @@ export async function saveCommercial(request: Request, collection: string, id: s
       negocioSchema.parse({ ...before, ...data });
     }
     if (collection === CAMPANAS_COLLECTION) {
+      // Serializa altas concurrentes: las consultas vacías no bastan para
+      // proteger el cupo de pilotos o los períodos de campañas nuevas.
+      const control = db.collection('negocios_control').doc('campanas');
+      await tx.get(control);
       const c = campanaSchema.parse(data);
       const business = await tx.get(db.collection(NEGOCIOS_COLLECTION).doc(c.negocioId));
       const plan = await tx.get(db.collection(PLANES_COLLECTION).doc(c.planId));
       if (!business.exists || !plan.exists) throw new CommercialError('Negocio o plan no encontrado', 404);
       if (!plan.data()?.activo) throw new CommercialError('El plan está inactivo');
       if (!creating && (before.negocioId !== c.negocioId || before.planId !== c.planId)) throw new CommercialError('Creá una nueva campaña para cambiar negocio o plan');
-      if (before.estadoPago === 'pagado' || before.estadoPago === 'cancelado') throw new CommercialError('Campaña cerrada: registrá la renovación por separado', 409);
+      // pagado/cancelado/piloto son estados finales: continuidad solo vía campaña nueva.
+      if (['pagado', 'cancelado', 'piloto'].includes(String(before.estadoPago))) throw new CommercialError('Campaña cerrada: registrá la renovación por separado', 409);
+      if (c.estadoPago === 'piloto') {
+        const pilots = await tx.get(db.collection(CAMPANAS_COLLECTION).where('estadoPago', '==', 'piloto'));
+        const today = timestamp.slice(0, 10);
+        const active = pilots.docs.filter((d) => d.id !== id && String(d.data().fechaVencimiento) >= today);
+        if (active.length >= PILOTOS_MAX_ACTIVOS) throw new CommercialError(`Máximo ${PILOTOS_MAX_ACTIVOS} pilotos activos a la vez`, 409);
+      }
       if (c.renovacionDe) {
         if (c.renovacionDe === id) throw new CommercialError('Renovación inválida');
         const previous = await tx.get(db.collection(CAMPANAS_COLLECTION).doc(c.renovacionDe));
-        if (!previous.exists || previous.data()?.negocioId !== c.negocioId || !previous.data()?.pagoConfirmado) throw new CommercialError('La renovación requiere una campaña pagada del mismo negocio');
+        const prev = previous.data();
+        if (!prev || prev.negocioId !== c.negocioId
+          || !(prev.estadoPago === 'piloto' || (prev.estadoPago === 'pagado' && prev.pagoConfirmado && prev.verificadoAt && prev.referenciaPago))) {
+          throw new CommercialError('La continuidad requiere un piloto o campaña pagada del mismo negocio');
+        }
       }
-      if (c.estadoPago === 'pagado') {
+      if (c.estadoPago === 'pagado' || c.estadoPago === 'piloto') {
         const siblings = await tx.get(db.collection(CAMPANAS_COLLECTION).where('negocioId', '==', c.negocioId));
-        if (siblings.docs.some((d) => d.id !== id && d.data().estadoPago === 'pagado'
+        if (siblings.docs.some((d) => d.id !== id && ['pagado', 'piloto'].includes(String(d.data().estadoPago))
           && d.data().fechaInicio <= c.fechaVencimiento && d.data().fechaVencimiento >= c.fechaInicio)) {
-          throw new CommercialError('Existe otra campaña pagada para ese período', 409);
+          throw new CommercialError('Existe otra campaña activa para ese período', 409);
         }
       }
       data.planNombre = plan.data()?.nombre;
       data.verificadoAt = c.estadoPago === 'pagado' ? timestamp : null;
       data.verificadoPor = c.estadoPago === 'pagado' ? who : null;
+      // Un piloto caduca también como perfil. Una conversión posterior
+      // requiere revisión editorial de la nueva vigencia del perfil.
+      if (c.estadoPago === 'piloto') {
+        const profile = business.data()!;
+        if (c.fechaInicio > timestamp.slice(0, 10) || c.fechaVencimiento < timestamp.slice(0, 10)) {
+          throw new CommercialError('El piloto debe comenzar hoy o estar vigente');
+        }
+        const end = profile.vigenteHasta && profile.vigenteHasta < c.fechaVencimiento ? profile.vigenteHasta : c.fechaVencimiento;
+        tx.set(business.ref, { vigenteHasta: end, updatedAt: timestamp }, { merge: true });
+        tx.set(db.collection(NEGOCIOS_AUDIT_COLLECTION).doc(), {
+          entidad: NEGOCIOS_COLLECTION, entidadId: c.negocioId, accion: 'vigencia-piloto',
+          actor: who, timestamp, campos: ['vigenteHasta'],
+          diff: { vigenteHasta: { antes: profile.vigenteHasta || null, despues: end } },
+        });
+      }
+      tx.set(control, { revision: FieldValue.increment(1) }, { merge: true });
     }
     const after = { ...before, ...data, updatedAt: timestamp, ...(creating ? { createdAt: timestamp } : {}) };
     tx.set(ref, after);
@@ -88,10 +121,12 @@ export function commercialRoutes(collection: string, schema: z.ZodTypeAny) {
 export function campaignSummary(items: Record<string, unknown>[], now = new Date()) {
   const paid = items.filter((c) => c.estadoPago === 'pagado' && c.pagoConfirmado === true && c.verificadoAt && c.referenciaPago);
   return {
+    // Pilotos nunca entran a cobradoUsd ni pendienteUsd: no son ingreso.
     cobradoUsd: paid.reduce((s, c) => s + Number(c.precioAcordadoUsd || 0), 0),
     pendienteUsd: items.filter((c) => c.estadoPago === 'pendiente').reduce((s, c) => s + Number(c.precioAcordadoUsd || 0), 0),
+    pilotosActivos: items.filter((c) => c.estadoPago === 'piloto' && campanaVigente(c, now)).length,
     renovaciones: paid.filter((c) => c.renovacionDe).length,
-    porVencer14d: paid.filter((c) => { const days = diasParaVencer(String(c.fechaVencimiento), now); return days >= 0 && days <= 14; }).length,
+    porVencer14d: items.filter((c) => campanaVigente(c, now) && diasParaVencer(String(c.fechaVencimiento), now) <= 14).length,
   };
 }
 export const solicitudReviewSchema = z.object({

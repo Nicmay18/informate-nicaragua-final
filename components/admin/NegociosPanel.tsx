@@ -39,7 +39,7 @@ const fields: Record<Section, Field[]> = {
     { key: 'precioAcordadoUsd', label: 'Importe acordado USD (no cobrado todavía)', type: 'number', required: true },
     { key: 'fechaInicio', label: 'Inicio', type: 'date', required: true },
     { key: 'fechaVencimiento', label: 'Fin inclusive (UTC)', type: 'date', required: true },
-    { key: 'estadoPago', label: 'Estado de pago', options: ['pendiente', 'pagado', 'vencido', 'cancelado'] },
+    { key: 'estadoPago', label: 'Estado de pago', options: ['pendiente', 'piloto', 'pagado', 'vencido', 'cancelado'] },
     { key: 'referenciaPago', label: 'Referencia del pago verificado' },
     { key: 'pagoConfirmado', label: 'Confirmé personalmente que el dinero fue recibido', type: 'checkbox' },
     { key: 'renovacionDe', label: 'ID de campaña anterior (solo renovación)' },
@@ -150,11 +150,13 @@ export default function NegociosPanel() {
       <p>Pendiente <strong>US${(summary.pendienteUsd || 0).toFixed(2)}</strong></p>
       <p>Vencen en 14 días <strong>{summary.porVencer14d || 0}</strong></p>
       <p>Renovaciones pagadas <strong>{summary.renovaciones || 0}</strong></p>
+      <p>Pilotos gratuitos activos <strong>{summary.pilotosActivos || 0}/3</strong></p>
     </div>}
     {message && <p role="status" className="negocios-message">{message}</p>}
     {truncated && <p role="alert">Se muestran 500 registros; los totales son parciales. Reducí el volumen antes de usar este resumen para contabilidad.</p>}
     {editing && <form onSubmit={save} className="negocios-editor">
       <h3>{editing.id ? 'Editar' : 'Nuevo'} · {labels[section]}</h3>
+      {section === 'campanas' && <p>Piloto gratuito: importe cero, sin pago ni referencia, máximo 45 días inclusive y tres activos. Al finalizar caduca el perfil; para continuar, registrá una campaña nueva y revisá la vigencia del perfil.</p>}
       {fields[section].map((f) => {
         const choices = f.key === 'negocioId' ? businesses : f.key === 'planId' ? plans : null;
         return <label key={f.key}>{f.label}
@@ -188,13 +190,13 @@ export default function NegociosPanel() {
           <p>{diasParaVencer(text(row, 'fechaVencimiento')) < 0 ? 'Vencida' : `Vence en ${diasParaVencer(text(row, 'fechaVencimiento'))} días`}</p>
           <p>Referencia: {text(row, 'referenciaPago') || 'Sin pago confirmado'}</p>
           <a href={`/api/admin/negocios-reporte?negocioId=${row.negocioId}&campanaId=${row.id}&dias=90`}>Reporte de campaña CSV (90 días)</a>
-          <button onClick={() => setEditing({ ...row, id: undefined, renovacionDe: row.id, fechaInicio: '', fechaVencimiento: '', referenciaPago: '', estadoPago: 'pendiente', pagoConfirmado: false })}>Preparar renovación</button>
+          {['pagado', 'piloto'].includes(text(row, 'estadoPago')) && <button onClick={() => setEditing({ ...row, id: undefined, renovacionDe: row.id, fechaInicio: '', fechaVencimiento: '', referenciaPago: '', estadoPago: 'pendiente', pagoConfirmado: false })}>Preparar renovación</button>}
         </>}
         {section === 'planes' && <p>US${Number(row.precioUsd).toFixed(2)}/mes · {row.activo ? 'Activo' : 'Inactivo'}</p>}
         {section === 'prospectos' && <><p>{text(row, 'contacto')} · {text(row, 'canal')}</p><p>Seguimiento: {text(row, 'proximoSeguimiento') || 'Sin fecha'} {text(row, 'proximoSeguimiento') && text(row, 'proximoSeguimiento') <= new Date().toISOString().slice(0, 10) && !['ganado', 'perdido'].includes(text(row, 'estado')) ? '· Pendiente de atender' : ''}</p></>}
         {section === 'solicitudes' && <><pre>{JSON.stringify(row.datos, null, 2)}</pre>{row.tipo === 'alta' && <button onClick={() => fromRequest(row)}>Preparar perfil para revisión</button>}<p>Las correcciones se aplican editando el perfil y volviéndolo a aprobar.</p></>}
         {section === 'auditoria' && <><p>{text(row, 'timestamp')} · {text(row, 'actor')}</p><pre>{JSON.stringify(row.diff, null, 2)}</pre><p>Campos: {Array.isArray(row.campos) ? row.campos.join(', ') : ''}</p></>}
-        {section !== 'auditoria' && !(section === 'campanas' && ['pagado', 'cancelado'].includes(text(row, 'estadoPago'))) && <button onClick={() => setEditing({ ...row })}>Editar</button>}
+        {section !== 'auditoria' && !(section === 'campanas' && ['pagado', 'cancelado', 'piloto'].includes(text(row, 'estadoPago'))) && <button onClick={() => setEditing({ ...row })}>Editar</button>}
       </article>)}
     </div>}
   </main>;
