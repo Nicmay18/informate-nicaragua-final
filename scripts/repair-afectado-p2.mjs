@@ -94,6 +94,7 @@ if (!getApps().length) initializeApp({ credential: cert(JSON.parse(Buffer.from(b
 const db = getFirestore();
 
 const sim = [];
+const backup = [];
 for (const [id, info] of Object.entries(byDoc)) {
   const snap = await db.collection('noticias').doc(id).get();
   if (!snap.exists) { sim.push({ slug: info.slug, estado: 'DOC_NO_EXISTE' }); continue; }
@@ -121,10 +122,26 @@ for (const [id, info] of Object.entries(byDoc)) {
   if (hits) console.log(`${APPLY ? 'aplicar' : 'simular'}: ${info.slug} → ${entry.campos.join('+')} (${info.patches.length} parches)`);
 
   if (APPLY && hits) {
+    // Respaldo verificable del estado inmediatamente anterior
+    backup.push({
+      id, slug: info.slug,
+      shaAntes: now,
+      valores: { titulo: cur.titulo, resumen: cur.resumen, contenido: cur.contenido },
+      reparacionForenseAntes: cur.reparacionForense || null,
+      requiresReevaluationAntes: cur.requiresReevaluation || false,
+    });
     update.requiresReevaluation = true;
     update['reparacionForense.fase2'] = { fecha: new Date().toISOString(), regla: 'afectado-revision-47-CONFIRMADOS', parches: info.patches.length, ocurrencias: info.ocurrencias };
     await db.collection('noticias').doc(id).update(update);
-    entry.estado = 'APLICADO';
+    // Verificación post-lectura: el contenido almacenado debe ser exactamente
+    // el esperado; si no, marcar VERIFICACION-FALLIDA (no compensar).
+    const post = (await db.collection('noticias').doc(id).get()).data();
+    const postSha = sha({ t: post.titulo, r: post.resumen, c: post.contenido });
+    const ok = ['titulo', 'resumen', 'contenido'].every((f) => !update[f] || String(post[f]) === String(update[f]));
+    entry.estado = ok ? 'APLICADO+VERIFICADO' : 'VERIFICACION-FALLIDA';
+    entry.shaDespues = postSha;
+    backup[backup.length - 1].shaDespues = postSha;
+    if (!ok) console.log('VERIFICACION-FALLIDA', info.slug);
   }
 }
 
@@ -140,5 +157,6 @@ const resumen = {
   detalle: sim,
 };
 writeFileSync('.audit/repair-afectado-p2-simulacion.json', JSON.stringify(resumen, null, 1));
+if (APPLY) writeFileSync('.audit/repair-afectado-p2-backup.json', JSON.stringify({ fecha: new Date().toISOString(), docs: backup }, null, 1));
 console.log(JSON.stringify({ ...resumen, detalle: undefined }, null, 1));
 process.exit(0);
