@@ -41,6 +41,15 @@ El diagnóstico NIOS la reporta como `DISABLED_BY_SCOPE` (no hay collector de Ad
 habituales son contenido insuficiente de valor propio o navegación/políticas; el sitio
 ya cumple con política de privacidad, consentimiento, `ads.txt` y páginas legales.
 
+### Estado de la solicitud (registrado por el propietario, 22-oct-2026)
+
+- Sexto rechazo consecutivo por **"Contenido de poco valor"**.
+- Google no permite otra revisión antes del **29 de octubre de 2026**.
+- **Decisión del propietario: canal en pausa.** No se harán más cambios destinados
+  a la aprobación de AdSense ni nuevas solicitudes. La prioridad pasa a ser la
+  monetización directa (sección 4). La integración técnica existente (ads.txt,
+  AdsenseUnit, Consent Mode) se mantiene intacta sin tocarla.
+
 ---
 
 ## 2. Google Ad Manager — No recomendado actualmente
@@ -73,9 +82,17 @@ termina la búsqueda.
 
 ---
 
-## 4. Auspiciadores directos — canal comercial propio (funcionando)
+## 4. Auspiciadores directos — canal comercial propio (código listo, pendiente de deploy)
 
-- Panel `/panel/ads`: alta, edición, activar/desactivar, fechas, posición, logo, enlace.
+- Panel `/panel.html` → pestaña **Publicidad**: alta, edición, activar/desactivar, fechas, posición, logo, enlace.
+- **Estado de despliegue (verificado 22-oct-2026):** el módulo completo vive en
+  `feat/auspiciadores-directos` (PR #10, abierto, head `dbefa4d1`). **No está en
+  `master` ni en producción**: `/api/telemetry/ads` responde 404 en el sitio en
+  vivo y el panel publicado no tiene el formulario. Requisito para vender:
+  mergear PR #10 a `master` y desplegar.
+- **Limitación conocida:** la posición `portada`/`ambos` existe en el modelo y
+  en el formulario, pero ningún código renderiza banner en la portada — hoy solo
+  se puede entregar la posición `articulo`.
 - Render `components/SponsorBanner.tsx`: rotación por día entre campañas vigentes,
   `rel="sponsored noopener"`, altura reservada (sin CLS), no renderiza nada sin campaña.
 - Telemetría `/api/telemetry/ads` → `auspiciadores.{impresiones,clics}` + `ads_daily`

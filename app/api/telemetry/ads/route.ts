@@ -3,6 +3,7 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { z } from 'zod';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
+import { RateLimiter } from '@/lib/rate-limit';
 import { AUSPICIADORES_COLLECTION, ADS_DAILY_COLLECTION, adsDailyId } from '@/lib/ads/auspiciadores';
 
 export const dynamic = 'force-dynamic';
@@ -27,6 +28,11 @@ const eventSchema = z.object({
 const seen = new Map<string, number>();
 const DEDUP_MS = 10 * 60 * 1000;
 
+// Endpoint público → límite best-effort por IP para que un actor no infle
+// los contadores comerciales con POSTs arbitrarios (autopsia P0). La IP solo
+// vive en memoria, igual que el dedup — nunca se persiste.
+const limiter = new RateLimiter({ intervalMs: 60_000, maxRequests: 60 });
+
 function dedupe(key: string): boolean {
   const now = Date.now();
   const prev = seen.get(key);
@@ -39,6 +45,11 @@ function dedupe(key: string): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+  if (!limiter.check(ip).allowed) {
+    return NextResponse.json({ ok: false, error: 'rate_limit' }, { status: 429 });
+  }
+
   let body: unknown;
   try {
     body = await request.json();
