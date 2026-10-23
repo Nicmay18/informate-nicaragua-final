@@ -1,109 +1,58 @@
-# AUDITORÍA FORENSE FINAL — Nicaragua Informate
-Fecha: 2026-10 · Evidencia: código + producción + tests reproducidos
+# AUDITORIA_FORENSE_FINAL.md — revisión 360° (sin confiar en informes previos)
 
-## 1. CLASIFICACIÓN DE SUBSISTEMAS
+Fecha: 22-oct-2026 · Método: re-verificación independiente (Firestore fresco, sondas HTTP a producción, inspección de código, npm audit, escaneo completo del corpus). Los informes anteriores se trataron como hipótesis a re-probar, no como verdad.
 
-| Subsistema | Estado | Evidencia |
-|---|---|---|
-| **Next.js App Router** (app/) | ACTIVE | Producción sirve todas las rutas |
-| **MENI core** (lib/meni/) | ACTIVE | runMeni llamado por guardar-directo + evaluar; 152 archivos, pipeline brain→DNA→QG→diagnostics→supervisor |
-| **Editorial** (lib/editorial/) | ACTIVE | factuality-signals, trust, extractor, profiles — llamados en el flujo de guardado |
-| **Supervisor** (lib/supervisor/ + lib/meni/supervisor) | ACTIVE | veredicto final PUBLICAR/REVISAR/BLOQUEAR |
-| **Quality Gate** (lib/meni/quality-gate/) | ACTIVE | métricas dentro de runMeni |
-| **Distribución** (lib/distribution/, /api/admin/distribuir) | ACTIVE | telegram sender endurecido, FB sender, idempotencia distribuciones_envios |
-| **NIOS** (lib/nios/ — 143 archivos) | ACTIVE/MEMORY mixto | crons nios-collect + nios-ceo-loop activos; partes MEMORY (growth, mission-center con pocos callers) |
-| **Departamento Central** (lib/departamento-central/) | ACTIVE | 3 crons + heartbeat/recordCronHeartbeat usado por resumen-diario |
-| **Panel admin** (public/panel.html — ~9k líneas) | ACTIVE | usa 38 endpoints; override REVISAR implementado |
-| **Analytics** (/api/admin/traffic, metricas, NIOS collectors) | ACTIVE | panel + crons |
-| **Caché/revalidación** (unstable_cache, ISR, /api/revalidate) | ACTIVE | producción |
-| **AdSense** | ACTIVE | ads.txt pub-4115…, componentes de slots |
-| **Firestire** | ACTIVE | noticias, distribuciones, distribuciones_envios, resumenes_diarios, config |
+Este documento consolida y referencia — no duplica los archivos detallados existentes.
 
-## 2. MAPA DE RUTAS API (114 rutas)
+## 1. NUEVOS HALLAZGOS — "lo que no vimos antes" (obligatorio)
 
-| Clasificación | Nº | Detalle |
-|---|---|---|
-| CRON (vercel.json) | 10 | nios-collect, resumen-diario, departamento-central/-daily/-watchdog, nios-ceo-loop, supervisor-watch, traffic-cleanup, distribuciones-retry, meni-learning-cycle |
-| PANEL | 31 | guardar-directo, analizar, meni/evaluar, distribuir, copy-social, config, traffic, metricas, upload-image, session… |
-| PÚBLICA | 5 | /api/articles, /api/rss, /api/feed-xml, /api/top-noticias, /api/admin/clean-backlog* |
-| INTERNA | 16 | llamadas por componentes (Header, EconomicBar, WeatherWidget…) u otras rutas |
-| SIN REFERENCIA (verificar) | 52 | ver §4 |
+| ID | Severidad | Hallazgo | Evidencia | Estado |
+|---|---|---|---|---|
+| N1 | **P1** | **~18-20 enlaces 404 reales** embebidos en bloques "Te puede interesar" de artículos publicados (docs despublicados/borrados: oklahoma, costanera, windows-11, frutinovelas, canal-panamá, larreynaga-afectados, miami-consulado, florinda-meza, taylor-swift, modric, zidane, sawe…). Otros ~8-10 links viejos redirigen correctamente (sufijo `-mxxxxxxx` / slug renombrado) | `curl -sL` 404 verificado por link; `.audit/dead-links.json` | DETECTADO — requiere barrido de enlaces embebidos o regeneración del bloque |
+| N2 | P2 | **109 docs con espaciado tipográfico roto** ("Managua , Chontales", "delaFinca") | regex sobre corpus completo | DETECTADO — corregible por lote con backup |
+| N3 | P2 | **11 docs con `<strong>` desbalanceado** en HTML almacenado | regex anidado | DETECTADO — impacto visual menor |
+| N4 | **P1** | **CVEs de producción**: `next` ≤15.5.27 (crítico), `@sentry/nextjs` alfa (crítico), grpc-js, busboy, node-forge, brace-expansion (altos), prosemirror-view (moderado) | `npm audit --omit=dev` | CORREGIDO EN RAMA — PR #14 (`fix/deps-audit`, next 15.5.28) sin mergear |
+| N5 | P2 | **`dateModified` obsoleto** en los ~45 docs reparados: muestra "Actualizado: agosto" para contenido editado el 22-oct — señal de frescura incorrecta para buscadores | HTML artículo: `dateModified 2026-08-08` | DETECTADO — decidir si las reparaciones deben registrar fechaModificacion |
+| N6 | P2 | **Autoría inconsistente**: 356 artículos firmados por Maycol (128) y José Luis (228) cuyas bios son técnicas ("Ingeniero en Sistemas… infraestructura/operación"), no periodísticas. + 2 docs firmados "Directora Editorial" (rol, no persona) | `lib/authors.ts` + corpus | REQUIERE HUMANO — ¿escriben realmente o el byline es asignación automática? |
+| N7 | P1 | **Lote-3 de eufemismo** (~50-60 ocurrencias, 14-15 docs) formalizado: heridos / muertos-mezcla / damnificados + títulos corruptos congelados en bloques relacionados | `INCIDENTES_FACTUALES.md` §3 + snapshot fresco | REQUIERE AUTORIZACIÓN (lote no aprobado) |
+| N8 | P2 | **`el persona gravemente afectada`** residual ubicado exactamente: comerciante-rosita, motocicleta, diriomo | grep corpus fresco | dentro de N7 |
 
-\* `/api/admin/clean-backlog` marcada pública solo por match de nombre — revisar auth.
+## 2. Reparaciones anteriores re-verificadas
 
-## 3. HALLAZGOS CONFIRMADOS (con corrección aplicada)
+- **P2 (22 docs / 56 reemplazos)**: APLICADO+VERIFICADO por re-lectura post-escritura. Backup + rollback selectivo existen y respetan cambios posteriores.
+- **contentHash stale en docs reparados**: **CONSISTENTE POR DISEÑO** (`mutation-policy.ts:85` — edición post-aprobación invalida aprobación; `requiresReevaluation:true` es la señal prevista). NO es un defecto; confirma que el sistema detecta exactamente estas ediciones.
+- **Enlaces de autoría**: FALSO POSITIVO corregido — los bylines reales resuelven `/autor/maycol-nicaragua` y `/autor/jose-lopez` (200) vía mapa por nombre; mis 404 eran slugs construidos manualmente.
 
-### F1 — Cron 6 a.m. (resumen-diario) — CAUSA REAL
-`app/api/cron/resumen-diario/route.ts` leía `db.collection('noticias').limit(120)` **sin orderBy** → Firestore devuelve los primeros 120 docs por orden de inserción (los más viejos). Con 400+ artículos, ninguno caía en 30h → `skipped: 'No hay noticias recientes'` permanente. **No era auth ni schedule** — era la query.
-✅ Fix: `orderBy('fecha','desc').limit(120)` aplicado.
+## 3. Matriz maestra de hallazgos
 
-### F2 — Nota lluvias — cadena real reproducida en test
-`tests/meni-lluvias-repro.test.ts` (queda como regresión):
-- MENI: `aprobado:true`, score 90, `PUBLICAR_CON_CAMBIOS`, 0 bloqueantes
-- Supervisor: `INVESTIGAR_MAS` por `NO_ATTRIBUTION` — la nota reporta "14 viviendas afectadas" sin nombrar ninguna fuente. **Revisión legítima, no falso positivo**
-- Compuerta: `SUPERVISOR_BLOCKED` + `needsEditorConfirm` → el panel ya ofrece «Confirmar como Editor Jefe» (`confirmarPublicacionEditor`, panel.html:7009)
-- **Defecto real**: `normalizarDiagnosticoBloqueo` aplanaba TODOS los issues del Supervisor en `blockingIssues` → se mostraban bajo "🔴 BLOQUEANTES" aunque fuesen IMPORTANT/WARNING.
-✅ Fix: separación por severidad (CRITICAL→bloqueantes, IMPORTANT/WARNING→advertencias, resto→recomendaciones).
+| Área | Estado real |
+|---|---|
+| Corpus (597) | A131/B361/C67/D35/E3 + lote-3 residual ~50-60 ocurrencias |
+| Factual | Eufemismo principal reparado (92 reemplazos verificados); residuo menor pendiente de lote; contradicción accidentes-viales documentada |
+| SEO técnico | Fixes en rama (canonical/404s); canonicals+JSON-LD+sitemaps verificados en producción |
+| Seguridad | panel fabricación+headers (rama), rate-limit telemetría (PR#10), endpoints sospechosos confirmados protegidos por middleware + rate-limit propio + SSRF-guard; CVEs deps → PR#14 |
+| Autoría | estructura 3 personas coherente; bios vs volumen de firmas = REQUIERE HUMANO; slugs de perfil funcionan |
+| Enlaces internos | ~18-20 404 embebidos (N1) + títulos congelados corruptos |
+| Ads.txt/AdSense | VERIFICADO (pub-id en HTML, ads.txt, CSP) |
+| Producción | sirve caché pre-reparación (eufemismo aún visible públicamente) |
+| CI/CD | E2E gate real en rama; vitest 118/1482 PASS local; tsc limpio |
+| NIOS/cron | auth crecimiento corregida en rama; jobs internos NO auditados en profundidad esta pasada |
+| Performance/móvil/a11y | parcial: lighthouse/axe no ejecutados esta sesión — NO VERIFICADO en profundidad |
+| Firestore reglas | auditadas de lectura; sin despliegue propuesto |
 
-### F3 — Distribución por canal — textos débiles
-`lib/distribution.ts` generaba textos casi idénticos por canal ("Leer más:", "👉 url"). El envío automático real usa senders endurecidos (telegram.ts con caption propio, channels.ts para FB) — esos están bien.
-✅ Fix: `generateDistribution` ahora produce voz editorial por canal (FB=hook+CTA engagement, WA=formato comunidad, newsletter=HTML jerárquico, push=alerta ≤90c). Determinista, nunca inventa.
+## 4. Pruebas ejecutadas
 
-### F4 — Contrato keywords panel↔API
-El panel envía `keywords`; `guardar-directo` lee `body.palabrasClave || []` → "No se definieron keywords" falso positivo en algunas notas. El extractor ya acepta ambos; la ruta no normalizaba. **Verificar y normalizar en la ruta** (pendiente FASE 3).
+- `tsc --noEmit` PASS · `vitest run` 118/1482 PASS · `npm audit` (2 críticos documentados) · sonda producción 784 URLs · simulación/apply+post-verify P2 · 5 curls verificativos de 404/redirect/author.
+- NO ejecutado: Playwright E2E local, Lighthouse, axe, penetración de endpoints.
 
-### F5 — Métricas Originalidad/Diferencia/Transcripción (de auditoría anterior, ya corregido)
-- `sourceOfTruth.originalidad` venía de Editorial Difference (mislabeling)
-- Quality Gate no recibía `fuenteOriginal` → transcripción real no medida
-- DNA transcription caía a fallback de Editorial Difference
-**Verificado en código** — quedó la mejora aplicada en sesiones previas; el test lluvias muestra `transc:100` (sin fuente = no-transcribida por diseño).
+## 5. Estado por dominio (síntesis)
 
-## 4. CANDIDATOS A DEAD — REQUIEREN VERIFICACIÓN ANTES DE BORRAR
+🟢 CORRECTO: corpus clasificado completo, eufemismo principal reparado y verificado en DB, causa raíz eliminada (en rama), ads.txt/pub-id, autoría por nombre→slug, seguridad de endpoints sospechosos, tests verdes, rollback selectivo.
 
-52 rutas sin referrer en código. NO borrar automáticamente:
+🟡 PENDIENTE: purga de caché (reparaciones invisibles al público), lote-3 (~60 occ), 3 E, merges de PRs (8+4 ramas), dateModified, 109 typos, 11 `<strong>`, cifras /publicidad, backfill isPublicArticle.
 
-| Ruta | Probable estado | Razón |
-|---|---|---|
-| /api/l/[id] | ACTIVE | shortlinks en mensajes distribuidos (caller externo) |
-| /api/telegram, /api/whatsapp, /api/facebook | ACTIVE? | webhooks externos |
-| /api/onesignal-sw | ACTIVE | service worker push |
-| /api/indexnow | LEGACY | canal indexación alternativo |
-| /api/admin/kb-backfill, repair-fechas, redistribuir-autores, rescribir-sucesos | SUPPORT | herramientas one-off de mantenimiento |
-| /api/admin/meni-learning, /api/admin/meni/registry*, /api/admin/meni/arquitectura | EXPERIMENTAL? | dashboards MENI alternos |
-| /api/nios/brief, /api/nios/growth, /api/nios/journey, /api/nios/lifecycle, /api/nios/swiss-watch | EXPERIMENTAL/MEMORY | endpoints NIOS sin UI |
-| /api/transform, /api/expandir-7, /api/auditor-wordcount, /api/check-content, /api/count-news, /api/list-empty, /api/listar-categoria, /api/entity, /api/panel, /api/radio-proxy | LEGACY? | utilidades sueltas |
-| /api/admin/auditor-*, auditoria-taxonomia, ceo-agent/*, departamento/*, health, linkedin, medium, nota-trust, portada-intel, push-notificar, research, social-conversion, stats, story, trafico, twitter, watch, whatsapp | VERIFICAR | mezcla de tools internos y experimentos |
-| /api/webhooks/departamento | ACTIVE? | webhook interno dept-central |
+🔴 CRÍTICO (con resolución preparada): CVEs next/sentry en deps de producción — PR #14 sin mergear. Nada activamente explotable confirmado en endpoints.
 
-### Directorios raíz (clasificación)
-| Dir | Estado | Nota |
-|---|---|---|
-| appx/ | LEGACY — candidato a archivo | ¿duplicado de app/? verificar |
-| articulos-generados/, articulos-seo/, revisadas/ | MEMORY | outputs históricos |
-| meni-output/ | MEMORY | salidas de evaluaciones |
-| reports/, docs/ (auditorías viejas) | MEMORY | ~20 docs de auditorías históricas — conservar pero separar de docs operativos |
-| scripts/ | SUPPORT | mantenimiento one-off |
-| test-results/, playwright-report/ | DEAD-candidate | artefactos de CI regenerables |
-| assets/, content/, data/, locales/, policies/, types/, utils/, browser/, bigquery/, bin/ | VERIFICAR | mezcla memory/support/dead |
-| .audit/, .agents/, .devin/ | SUPPORT | configs de agente |
+🆕 DESCUBIERTO: N1-N8 de §1 — especialmente los ~18-20 404 embebidos y las CVEs críticas de producción.
 
-## 5. LO QUE FUNCIONA BIEN (no tocar)
-- Cadena MENI→Supervisor→Editor Jefe con override REVISAR — correcta por diseño
-- Idempotencia distribución (claim atómico distribuciones_envios)
-- Idempotencia resumen-diario (doc por día)
-- Escape HTML Telegram + resumen con fallback determinista
-- recordCronHeartbeat → observabilidad de crons
-- Severidades unificadas en editorialVerdict.hallazgos (BLOCKER/WARNING/RECOMMENDATION/INFO con badges correctos)
-
-## 6. DEUDAS REALES (prioridad)
-1. 52 rutas sin referrer → verificar cada una vs logs/externals antes de borrar (FASE 2)
-2. appx/ y duplicaciones por confirmar (FASE 2)
-3. keywords panel→route (FASE 3, §F4)
-4. Costos: 10 crons diarios + NIOS 143 archivos + analytics — medir invocaciones/reads reales (FASE 6)
-5. Docs históricos en raíz confunden — separar operativos de auditorías viejas (FASE 2)
-
-## 7. DOCTRINA CONFIRMADA EN CÓDIGO
-- `!meniOk` sin override → bloqueo duro (correcto: menores de auto-aprobación)
-- `REVISAR` + `editorOverride` → publica (Editor Jefe humano decide)
-- `BLOQUEAR` → nunca publica
-- Recomendaciones nunca bloquean (`NO BLOQUEA PUBLICACIÓN` badge)
+**No declarado "terminado"**: quedan P1 abiertos (lote-3 sin autorización, 404 embebidos, deps sin merge, caché sin purga, 3 E sin decisión).
