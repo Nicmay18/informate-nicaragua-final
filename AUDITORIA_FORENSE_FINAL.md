@@ -16,12 +16,18 @@ Este documento consolida y referencia — no duplica los archivos detallados exi
 | N6 | P2 | **Autoría inconsistente**: 356 artículos firmados por Maycol (128) y José Luis (228) cuyas bios son técnicas ("Ingeniero en Sistemas… infraestructura/operación"), no periodísticas. + 2 docs firmados "Directora Editorial" (rol, no persona) | `lib/authors.ts` + corpus | REQUIERE HUMANO — ¿escriben realmente o el byline es asignación automática? |
 | N7 | P1 | **Lote-3 de eufemismo** (~50-60 ocurrencias, 14-15 docs) formalizado: heridos / muertos-mezcla / damnificados + títulos corruptos congelados en bloques relacionados | `INCIDENTES_FACTUALES.md` §3 + snapshot fresco | REQUIERE AUTORIZACIÓN (lote no aprobado) |
 | N8 | P2 | **`el persona gravemente afectada`** residual ubicado exactamente: comerciante-rosita, motocicleta, diriomo | grep corpus fresco | dentro de N7 |
+| N9 | **P1** | **18 títulos almacenados truncados con "…" literal** — el lector ve "…termina con un…" en `<title>`, `og:title` y `<h1>` en producción HOY. Incluye artículos ya reparados ("Estudiante… muere tras golpe en escuela de…"). Causa probable: generador que recorta a ~65 caracteres. Texto completo recuperable del slug/cuerpo | verificado en Firestore fresco (18/18 TRUNC) + curl HTML | DETECTADO — lista lista para lote editorial |
+| N10 | P2 | **`fecha` con tipos mixtos** en colección: 211 docs string ISO + 392 Timestamp — `orderBy(fecha)` puro ordena mal (strings > timestamps) | scan completo colección (603 docs) | YA MITIGADO en `lib/data.ts:212` (split query + merge) — deuda de consistencia de datos |
+| N11 | P3 | **Corpus creció a 603 publicados** (6 nuevos desde el snapshot de auditoría) — los artefactos `.audit/corpus.json` ya no reflejan el corpus completo | conteo fresco | NOTA metodológica |
 
 ## 2. Reparaciones anteriores re-verificadas
 
 - **P2 (22 docs / 56 reemplazos)**: APLICADO+VERIFICADO por re-lectura post-escritura. Backup + rollback selectivo existen y respetan cambios posteriores.
 - **contentHash stale en docs reparados**: **CONSISTENTE POR DISEÑO** (`mutation-policy.ts:85` — edición post-aprobación invalida aprobación; `requiresReevaluation:true` es la señal prevista). NO es un defecto; confirma que el sistema detecta exactamente estas ediciones.
 - **Enlaces de autoría**: FALSO POSITIVO corregido — los bylines reales resuelven `/autor/maycol-nicaragua` y `/autor/jose-lopez` (200) vía mapa por nombre; mis 404 eran slugs construidos manualmente.
+- **"Fecha futura" en news-sitemap**: FALSO POSITIVO — verificado hoy 24-oct: el artículo `ejercito-informa-…` es de 23-oct (ayer). El escaneo completo confirma 0 publicados con fecha futura.
+- **Orden cronológico por `fecha`**: ya mitigado en código (`lib/data.ts:212` — split query por tipo + merge-sort). Los `despublicado`/`archivado` (17) devuelven 404 correctamente.
+- **XSS almacenado**: 0 docs con `<script>`/`on*`/`javascript:` en `contenido`.
 
 ## 3. Matriz maestra de hallazgos
 
