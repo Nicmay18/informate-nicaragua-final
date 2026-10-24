@@ -7,8 +7,9 @@ Actualizado: 22-oct-2026 · Estados: `BLOQUEADO POR AUTORIZACIÓN` / `PENDIENTE 
 | # | Asunto | Estado | Evidencia | Acción requerida |
 |---|---|---|---|---|
 | 1 | Lote-3 de eufemismo (~50–60 ocurrencias, 14–15 docs) | BLOQUEADO POR AUTORIZACIÓN | `INCIDENTES_FACTUALES.md` §3 + snapshot residual | Aprobar lote → repito proceso P2: matriz, simulación, diff, apply con backup |
+| 1b | **Lote títulos truncados "…" (18 docs)** | LISTO — BLOQUEADO POR AUTORIZACIÓN | `MATRIZ_TITULOS_TRUNCADOS.csv` + `scripts/repair-titulos-truncados.mjs` — simulación 18/18 APLICABLE, 0 DRIFT | Aprobar lote → `--apply` (backup + fingerprint + post-lectura, mismo protocolo P2) |
 | 2 | Cifra de `accidentes-viales` (4+1 vs 5 vs 6) | NO VERIFICADO | contradicción interna documentada | Verificar con fuente externa; luego decidir titular/slug |
-| 3 | 3 artículos E (párrafo ×42) | PENDIENTE DE REVISIÓN | fichas en FORENSIC_ARTICLE_AUTOPSY.md | Decidir: deduplicar párrafo o retirar (procedimiento autorizado) |
+| 3 | 3 artículos E (párrafo ×42 + 63 oraciones dup) | PENDIENTE DE REVISIÓN — **recomendación preparada**: deduplicar el párrafo plantilla a 1 copia (mecánico, reversible, backup por doc): investigaciones-bluefields, tres-ataques-pitbull, dos-fallecidos-matagalpa-wiwili | fichas en FORENSIC_ARTICLE_AUTOPSY.md | Autorizar deduplicación o decidir retirar |
 | 4 | 67 artículos C (revisión editorial) | PENDIENTE DE REVISIÓN | CSV matriz | Revisión humana por lote; no son retirables por score |
 | 5 | Resumen truncado de `tres-fallecidos` | PENDIENTE DE REVISIÓN | "res personas… figura." | Reescritura editorial del resumen |
 | 6 | Cifras de audiencia en /publicidad | NO VERIFICADO | publicadas sin respaldo | Confirmar datos reales o aceptar la corrección de PR #10 (quita/marketing honesto) |
@@ -18,6 +19,7 @@ Actualizado: 22-oct-2026 · Estados: `BLOQUEADO POR AUTORIZACIÓN` / `PENDIENTE 
 | # | Asunto | Estado | Acción requerida |
 |---|---|---|---|
 | 7 | Purga de caché Cloudflare | BLOQUEADO POR AUTORIZACIÓN | Las 22+23 reparaciones ya están en DB pero producción sirve HTML viejo. Sin purga, los lectores siguen viendo el eufemismo. Alternativa: esperar TTL (observado ~36min+ o regla CF que fija caché) |
+| 7b | Enlaces muertos embebidos (~18-20 404 en "Te puede interesar") | BLOQUEADO POR AUTORIZACIÓN | `.audit/dead-links.json` — docs renombrados redirigen OK; despublicados dan 404 real | Opciones: barrido en DB quitando links a docs inexistentes, o filtro en render. Requiere decisión + lote de escritura |
 | 8 | Merge PR #10 (auspiciadores) | BLOQUEADO POR AUTORIZACIÓN | Requiere revisión humana; ahora incluye rate-limit en telemetría. Conflictos esperables con master en rutas editadas |
 | 9 | Merge PR #15 vs #10 (solapamiento comercial) | PENDIENTE DE REVISIÓN | Dos productos comerciales solapados — elegir antes de mergear |
 | 10 | Merge `fix/estabilizacion-forense` (PR por crear) | BLOQUEADO POR AUTORIZACIÓN | Contiene fixes de panel, headers, canonical, 404s + artefactos de auditoría |
