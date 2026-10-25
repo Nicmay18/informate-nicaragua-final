@@ -84,8 +84,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       : (titleValidation.score >= 70 ? seoTitleResult : noticia.titulo);
 
     if (finalTitle.length > 60) {
-      const cutAt = finalTitle.lastIndexOf(' ', 57);
-      finalTitle = cutAt > 0 ? finalTitle.slice(0, cutAt) + '…' : finalTitle.slice(0, 57) + '…';
+      const cutAt = finalTitle.lastIndexOf(' ', 65);
+      const recortado = (cutAt > 0 ? finalTitle.slice(0, cutAt) : finalTitle.slice(0, 60))
+        .replace(/\s+(de|del|en|la|el|los|las|un|una|y|o|con|por|para|a)$/i, '');
+      finalTitle = recortado + '…';
     }
 
     const { description, keywords, imageAlt } = resolveEffectiveSeo(noticia);

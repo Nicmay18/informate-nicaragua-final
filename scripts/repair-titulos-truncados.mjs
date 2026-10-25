@@ -27,7 +27,7 @@ const REPARACIONES = [
   { slug: 'bluefields-celebra-el-palo-de-mayo-con-musica-y-tradicion-caribena', actual: 'Bluefields celebra el Palo de Mayo con música y tradición…', nuevo: 'Bluefields celebra el Palo de Mayo con música y tradición caribeña' },
   { slug: 'brigada-medica-realiza-cirugia-cardiacas-gratuitas-en-hospital-de-leon', actual: 'Brigada médica realiza cirugía cardíacas gratuitas en hospital…', nuevo: 'Brigada médica realiza cirugías cardíacas gratuitas en hospital de León' },
   { slug: 'modernizan-aeropuerto-de-bluefields-con-inversion-de-us-10-millones', actual: 'Modernizan aeropuerto de Bluefields con inversión de US$10…', nuevo: 'Modernizan aeropuerto de Bluefields con inversión de US$10 millones' },
-  { slug: 'rosita-nicaragua-lagunas-turismo-cultura', actual: 'Rosita, Nicaragua: lagunas, cultura Mayangna y turismo de…', nuevo: 'Rosita, Nicaragua: lagunas, cultura Mayangna y turismo' },
+  { slug: 'rosita-nicaragua-lagunas-turismo-cultura', actual: 'Rosita, Nicaragua: lagunas, cultura Mayangna y turismo de…', nuevo: 'Rosita, Nicaragua: lagunas, cultura Mayangna, turismo y gastronomía' },
   { slug: 'doctora-nicaraguense-muere-en-ataque-armado-en-poptun-peten', actual: 'Doctora nicaragüense muere en ataque armado en…', nuevo: 'Doctora nicaragüense muere en ataque armado en Poptún, Petén' },
   { slug: 'estudiante-de-13-anos-muere-tras-golpe-en-escuela-de-diriomo', actual: 'Estudiante de 13 años muere tras golpe en escuela de…', nuevo: 'Estudiante de 13 años muere tras golpe en escuela de Diriomo' },
   { slug: 'nicaraguenses-mueren-en-hechos-violentos-registrados-en-costa-rica', actual: 'Nicaragüenses mueren en hechos graves registrados…', nuevo: 'Nicaragüenses mueren en hechos graves registrados en Costa Rica' },
