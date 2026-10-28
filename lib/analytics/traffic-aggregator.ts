@@ -187,18 +187,33 @@ export async function incrementTrafficDaily(
   slug: string,
   source: string,
   device: 'mobile' | 'desktop' | 'tablet' | 'unknown',
+  country?: string,
 ): Promise<void> {
   const date = new Date().toISOString().split('T')[0];
   const dayRef = db.collection(TRAFFIC_DAILY).doc(date);
   const ref = dayRef.collection('articles').doc(slug);
   const normalizedSource = normalizeTrafficSource(source);
   const updatedAt = new Date().toISOString();
+  // Código ISO del país (x-vercel-ip-country) — agregado diario a nivel sitio,
+  // sin IP ni ubicación precisa. Limitado a caracteres de field-path seguros.
+  const safeCountry = country && /^[A-Za-z]{2,3}$/.test(country) ? country.toUpperCase() : undefined;
 
   try {
     const batch = db.batch();
     // Materializa el doc padre (ver saveTrafficDailySummary): evita que el
     // padre quede fantasma y la colección parezca vacía a nivel raíz.
-    batch.set(dayRef, { updatedAt }, { merge: true });
+    // Además agrega countries.{CC} para el resumen comercial por país.
+    batch.set(
+      dayRef,
+      safeCountry
+        ? {
+            updatedAt,
+            views: FieldValue.increment(1),
+            [`countries.${safeCountry}`]: FieldValue.increment(1),
+          }
+        : { updatedAt, views: FieldValue.increment(1) },
+      { merge: true },
+    );
     batch.set(
       ref,
       {

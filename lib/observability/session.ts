@@ -43,6 +43,40 @@ export function recordEvent(session: SessionHandle, event: JourneyEvent): Sessio
   };
 }
 
+const ANON_SESSION_STORAGE_KEY = 'ni_session_id';
+const ANON_SESSION_TIMESTAMP_KEY = 'ni_session_ts';
+const ANON_SESSION_TIMEOUT_MS = 30 * 60 * 1000; // 30 min
+
+/**
+ * ID de sesión anónimo compartido (cliente). Sin cookies ni PII: vive en
+ * sessionStorage y expira a los 30 min de inactividad. Usado por
+ * JourneyTracker y por la medición de impresiones de auspiciadores para
+ * deduplicar sin identificar personas.
+ */
+export function getOrCreateAnonymousSession(): string {
+  if (typeof window === 'undefined') return '';
+  try {
+    const now = Date.now();
+    const storedId = sessionStorage.getItem(ANON_SESSION_STORAGE_KEY);
+    const storedTs = sessionStorage.getItem(ANON_SESSION_TIMESTAMP_KEY);
+
+    if (storedId && storedTs && now - parseInt(storedTs, 10) < ANON_SESSION_TIMEOUT_MS) {
+      sessionStorage.setItem(ANON_SESSION_TIMESTAMP_KEY, now.toString());
+      return storedId;
+    }
+
+    const newId = typeof crypto !== 'undefined' && 'randomUUID' in crypto
+      ? crypto.randomUUID()
+      : `s-${now}-${Math.random().toString(36).slice(2, 9)}`;
+
+    sessionStorage.setItem(ANON_SESSION_STORAGE_KEY, newId);
+    sessionStorage.setItem(ANON_SESSION_TIMESTAMP_KEY, now.toString());
+    return newId;
+  } catch {
+    return `s-fallback-${Date.now()}`;
+  }
+}
+
 export function isSessionExpired(session: SessionHandle, now = Date.now()): boolean {
   const last = new Date(session.lastEventAt).getTime();
   return now - last > SESSION_IDLE_MS;

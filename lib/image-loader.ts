@@ -16,13 +16,13 @@ interface ImageLoaderProps {
 }
 
 export default function weservLoader({ src, width, quality = 80 }: ImageLoaderProps): string {
-  // URLs ya optimizadas o servidas por CDN confiable — no re-procesar
+  // URLs ya optimizadas o servidas por CDN con redimensionado propio — no re-procesar.
+  // cdn.jsdelivr.net / raw.githubusercontent.com NO redimensionan: sirven el
+  // archivo original (~240 KB por tarjeta); se proxyean por weserv como el resto.
   if (
     src.includes('images.weserv.nl') ||
     src.includes('cloudinary') ||
     src.includes('imgix') ||
-    src.includes('cdn.jsdelivr.net') ||
-    src.includes('raw.githubusercontent.com') ||
     src.includes('firebasestorage.googleapis.com') ||
     src.includes('storage.googleapis.com') ||
     src.startsWith('data:')

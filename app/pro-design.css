@@ -1402,7 +1402,10 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   font-family: 'Inter', sans-serif;
   font-size: 0.7rem;
   font-weight: 600;
-  color: #64748B;
+  /* bg explícito: la tarjeta ya es blanca; sin esto axe detecta el
+     fondo del .rd-panel navy y reporta falso contraste (y viceversa) */
+  background: #ffffff;
+  color: #475569;
   white-space: nowrap;
 }
 
