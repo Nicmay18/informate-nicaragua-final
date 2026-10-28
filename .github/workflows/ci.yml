@@ -100,7 +100,10 @@ jobs:
   # ─── E2E TESTS (Playwright) ────────────────────────────────────
   e2e:
     name: E2E Tests (Playwright)
-    runs-on: ubuntu-latest
+    # ubuntu-latest (26.04) aún no está soportado por Playwright 1.60:
+    # --with-deps falla al resolver paquetes del SO. 24.04 es estable y
+    # coincide con lo que el fixture local verifica.
+    runs-on: ubuntu-24.04
     needs: build
 
     steps:
