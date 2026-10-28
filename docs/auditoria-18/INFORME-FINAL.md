@@ -50,8 +50,8 @@ documento proviene de artefactos guardados en `docs/auditoria-18/` — no hay es
 
 | Sev | Hallazgo | Evidencia reproducible | Acción |
 |---|---|---|---|
-| P0 | Cloudflare sirve `/api/admin/*` cacheado sin credenciales pese a `cdn-cache-control: no-store` | `curl https://nicaraguainformate.com/api/admin/negocios` → `200 {"ok":true,"items":[]}` con `cf-cache-status: HIT`, `age:1033` | Regla de caché en Cloudflare + purga (§4.1) — **requiere propietario** |
-| P0/P1 | `/negocios` y `/api/telemetry/negocios` devuelven 404 congelado (`HIT`, `age`>3000) | `production.json` comparisons: `?audit18=1` → 200, canónica → 404 | Misma acción Cloudflare; purga inmediata |
+| P0 | Cloudflare sirvió `/api/admin/*` cacheado sin credenciales pese a `cdn-cache-control: no-store`; la regla "cache everything" sigue activa y **no hay bypass admin** (`/api/admin/estado` → HIT) | `curl` 04:05 → `200` HIT age:1033; 04:40 → `401` fresco pero `/api/admin/estado` y `/api/negocios` siguen cacheándose → la fuga puede repetirse | Regla de bypass en Cloudflare + purga (§4.1) — **requiere propietario** |
+| P0/P1 | `/negocios` devolvió 404 congelado (`HIT`, `age`>3000) | `production.json` comparisons: `?audit18=1` → 200; a las 04:40 la canónica ya responde 200 | Resuelto en hechos (la entrada expiró); la causa raíz es la misma regla CF del P0 |
 | P1 | `lastModified` evergreen fabricaba "hoy" | `app/sitemap.ts` usaba `safeDate()` → ahora `parseFechaReal` + omisión | Corregido + tests |
 | P1 | News sitemap devolvía 200+XML vacío en outage (confundible con cero noticias) | `app/news-sitemap.xml/route.ts` → 503 + `Retry-After` + `no-store` | Corregido + tests |
 | P1 | `getSitemapNews()` tragaba errores no-outage como `[]` | `lib/data.ts` → `throw err` | Corregido + tests |
@@ -95,6 +95,21 @@ mientras el origen ya devuelve 200).
 
 Riesgo: ninguno del lado del código — es configuración de CDN. Mientras no se
 haga, la mitigación ya desplegada (`CDN-Cache-Control: no-store`) no basta.
+
+**Segunda medición (28-oct ~04:40 UTC) — el mecanismo sigue activo:**
+
+| Sonda | Resultado | Lectura |
+|---|---|---|
+| `GET /api/admin/negocios` anónimo | `401` · `cf-cache-status: EXPIRED/MISS` | la entrada cacheada expiró o fue purgada; ya no se sirve el 200 filtrado |
+| `GET /api/admin/estado` anónimo ×3 | `200` → **HIT** (age crece) | ruta pública-por-diseño en `/api/admin/` se cachea → **no existe bypass para rutas admin** |
+| `GET /api/negocios?pk=x` ×2 | `200` → HIT | la regla "cache everything" sigue activa |
+| `GET /negocios` | `200` · HIT | el 404 congelado desapareció; la página buena ahora está cacheada |
+
+Conclusión: la fuga **ya no se reproduce ahora mismo** (los endpoints admin
+devuelven 401 fresco), pero la **causa raíz está intacta**: en cuanto una
+respuesta autenticada `200` de `/api/admin/*` pase por el edge (p. ej. al abrir
+el panel), Cloudflare la volverá a cachear y a servir a anónimos. Estado:
+**PENDIENTE — requiere la regla de bypass del propietario.**
 
 ### 4.2 Regla de publicación unificada
 
