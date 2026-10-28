@@ -22,7 +22,9 @@ documento proviene de artefactos guardados en `docs/auditoria-18/` — no hay es
   `cf-cache-status: HIT` con `age` >1000 s). Requiere acción del propietario en el
   panel de Cloudflare (§4.1). Ningún cambio de aplicación puede anular una regla
   de edge "Cache Everything".
-- NIOS: no recuperado. `pending=315, retry=2, completed=47` en dos mediciones
+- NIOS: no recuperado. `pending=315, retry=2, completed=47` en tres mediciones;
+  causa raíz del congelamiento ya verificada (claim viejo saturado por
+  completados; el código desplegado a las 03:23 UTC la corrige — §4.4)
   (03:59 y 04:09 UTC); el próximo tick de cron es diario. El safeguard nuevo
   convierte los 25 `article-pipeline` sin fecha en `skipped` para revisión.
 
@@ -144,6 +146,21 @@ partir el CSS/JS de componentes, fuera del criterio "pequeño y reversible".
 |---|---|---|---|---|---|
 | 03:59 UTC | 315 | 2 | 0 | 47 | 3 |
 | 04:09 UTC | 315 | 2 | 0 | 47 | 3 |
+| 04:46 UTC | 315 | 2 | 0 | 47 | 3 |
+
+**Causa raíz del congelamiento — verificada con sonda read-only
+(`.audit/claim-diagnostico.cjs`, 28-oct):** la lógica de claim **nueva**
+(código actual en master, desplegado 03:23 UTC) sí encontraría y reclamaría
+jobs: se replicó su selección sobre producción y el primer candidato
+(`muc14h16-86vhzp`, `operational-repair`, P0) existe, está `pending` y su
+docId=jobId — la transacción de claim tendría éxito. El "processed 0"
+histórico corresponde al claim **viejo** (pre-deploy): la ventana por
+`scheduledFor` se saturaba de jobs `completed` (nunca se borran) y los
+`pending` quedaban fuera del filtro en memoria — el propio código lo documenta
+en `queue.ts`. El próximo tick real (`departamento-central` ~01:58 UTC
+29-oct; última corrida 00:58 UTC pre-deploy) es la primera prueba del código
+corregido. `executeJob` es robusto por job (catch interno; tipos sin worker →
+`skipped`), por lo que ningún job individual puede matar el lote.
 
 - El scheduler corre por cron diario (`departamento-central` última vez 00:58 UTC,
   **antes** del deploy 03:23 UTC). La primera corrida con el código corregido es
