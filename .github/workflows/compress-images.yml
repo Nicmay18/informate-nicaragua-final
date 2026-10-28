@@ -42,7 +42,7 @@ jobs:
           jpegProgressive: true
           pngQuality: '80'
           webpQuality: '80'
-          ignorePaths: 'node_modules/**,build/**,.next/**,out/**'
+          ignorePaths: 'node_modules/**,build/**,.next/**,out/**,docs/auditoria-18/**'
 
       - name: Create Pull Request
         # En pull_request image-actions ya commitea al branch del PR; crear otro
