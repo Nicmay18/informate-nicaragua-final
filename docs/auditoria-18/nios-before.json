@@ -1,0 +1,296 @@
+{
+  "at": "2026-10-28T03:59:54.176Z",
+  "counts": {
+    "pending": 315,
+    "retry": 2,
+    "running": 0,
+    "completed": 47,
+    "dead-letter": 3
+  },
+  "pendingByType": {
+    "article-pipeline": 25,
+    "monetization-check": 1,
+    "operational-repair": 9,
+    "health-check": 36,
+    "daily-report": 36,
+    "watchdog": 210
+  },
+  "oldest": "2026-09-22T00:58:39.449Z",
+  "articlePipeline": [
+    {
+      "jobId": "mu7enk29-ydfjdo",
+      "articleId": "gPe3e3k6GAmgPpBJzGkX",
+      "scheduledFor": "2026-09-22T00:58:57.707Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mu7oiioc-4o5gz2",
+      "articleId": "H0f4AKPLcwVqXieTNp26",
+      "scheduledFor": "2026-09-22T01:04:35.255Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mubyu3y9-nz03ry",
+      "articleId": "hLsYH91Opw03mdvQVovL",
+      "scheduledFor": "2026-09-22T00:58:39.778Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mude9xmw-xeh4vt",
+      "articleId": "h4pxmnyovcIBMWAXc1Dh",
+      "scheduledFor": "2026-09-23T00:58:38.535Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "muetpsgx-1tsw5c",
+      "articleId": "AQiSAE7CeGLS9n5AvpzG",
+      "scheduledFor": "2026-09-24T00:58:38.745Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mug95n90-1juvd5",
+      "articleId": "gE9P2rHVhRM0rLqAlb2U",
+      "scheduledFor": "2026-09-25T00:58:38.894Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "muholhux-wmgq00",
+      "articleId": "zmwbyMcl38liOO7H5fEK",
+      "scheduledFor": "2026-09-26T00:58:38.829Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "muj41bj7-twn8w6",
+      "articleId": "FKDaPntsVqelCPD1ZwXQ",
+      "scheduledFor": "2026-09-27T00:58:37.512Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mut44azf-r3a0ra",
+      "articleId": "2qnr0lQGB9iqblWIOH8F",
+      "scheduledFor": "2026-10-04T00:58:38.546Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mut44b3p-nyhf3i",
+      "articleId": "bmtWkZKvbSNwBD84P4El",
+      "scheduledFor": "2026-10-04T00:58:38.703Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "muvz0020-g6qi5n",
+      "articleId": "AAkWiLNbjnZQRqoYaSjM",
+      "scheduledFor": "2026-10-06T00:58:38.104Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "muvz007v-mbm3wj",
+      "articleId": "Via0vVjhEeh6WRxkPIsf",
+      "scheduledFor": "2026-10-06T00:58:38.417Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "muxefu5p-b9x4xa",
+      "articleId": "H6qrHVVPitVSbxaIbCoM",
+      "scheduledFor": "2026-10-07T00:58:37.483Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mv3479r7-mbu5sl",
+      "articleId": "t50R3vaOBotnraKZojiG",
+      "scheduledFor": "2026-10-11T00:58:38.670Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mv3479zm-0jrbrl",
+      "articleId": "OdJSxv9KPs1z2RO1Hr6G",
+      "scheduledFor": "2026-10-11T00:58:38.920Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mv5z2yr1-ng3xxi",
+      "articleId": "QrqbeD0we6FaDXeUectq",
+      "scheduledFor": "2026-10-13T00:58:38.207Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mv8tynx7-34uiov",
+      "articleId": "7ElnuuxzUqAcwq0TqKTF",
+      "scheduledFor": "2026-10-15T00:58:38.026Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mva9eidx-6j290p",
+      "articleId": "9tnQErnvsopm4Z3UqFMo",
+      "scheduledFor": "2026-10-16T00:58:37.781Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mva9eii4-bmr5ti",
+      "articleId": "zLgFfzKVZePfJ1OtX6CN",
+      "scheduledFor": "2026-10-16T00:58:37.924Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mvfz5xbn-34a3nq",
+      "articleId": "Zdgq9QMxw54Gw8vMQYG5",
+      "scheduledFor": "2026-10-20T00:58:38.114Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mvloxbzk-l6v5di",
+      "articleId": "mRj1613tVMBj8lyraafi",
+      "scheduledFor": "2026-10-24T00:58:38.094Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mvn4d6oj-byvo00",
+      "articleId": "bJvc71Ya5oq7eVMd0cNr",
+      "scheduledFor": "2026-10-25T00:58:38.164Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mvpz8vqs-3q9hjz",
+      "articleId": "E5yX9MNORdzJzINvrdmw",
+      "scheduledFor": "2026-10-27T00:58:37.692Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mvpz8vw1-jseqgp",
+      "articleId": "Ntvzj8FoyjjTkyhJ6iwb",
+      "scheduledFor": "2026-10-27T00:58:37.974Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    },
+    {
+      "jobId": "mvreoqoa-mnylr0",
+      "articleId": "3IHjyLgyQPg0WTIlCJu0",
+      "scheduledFor": "2026-10-28T00:58:38.148Z",
+      "dateType": "undefined",
+      "sourceDate": null,
+      "needsReview": true
+    }
+  ],
+  "heartbeats": [
+    {
+      "component": "cron/api/cron/departamento-daily",
+      "lastRunAt": "2026-10-27T06:10:21.873Z",
+      "note": "Cron /api/cron/departamento-daily ejecutado"
+    },
+    {
+      "component": "daily-report",
+      "lastRunAt": "2026-09-22T00:58:56.909Z"
+    },
+    {
+      "component": "cron/api/cron/nios-collect",
+      "lastRunAt": "2026-10-27T08:49:49.281Z",
+      "note": "Cron /api/cron/nios-collect ejecutado"
+    },
+    {
+      "component": "cron/api/cron/resumen-diario",
+      "lastRunAt": "2026-10-27T12:52:58.748Z",
+      "note": "Resumen 2026-10-27 enviado (6 noticias)"
+    },
+    {
+      "component": "cron/api/cron/departamento-watchdog",
+      "lastRunAt": "2026-10-28T01:04:29.943Z",
+      "note": "Cron /api/cron/departamento-watchdog ejecutado"
+    },
+    {
+      "component": "growth",
+      "lastRunAt": "2026-09-22T01:04:37.130Z"
+    },
+    {
+      "component": "cron/api/cron/traffic-cleanup",
+      "lastRunAt": "2026-10-28T03:39:01.058Z",
+      "note": "Cron /api/cron/traffic-cleanup ejecutado"
+    },
+    {
+      "component": "cron/api/cron/supervisor-watch",
+      "lastRunAt": "2026-10-27T04:00:15.319Z",
+      "note": "Cron /api/cron/supervisor-watch ejecutado"
+    },
+    {
+      "component": "health-check",
+      "lastRunAt": "2026-09-22T00:58:48.762Z"
+    },
+    {
+      "component": "cron/api/cron/departamento-central",
+      "lastRunAt": "2026-10-28T00:58:42.683Z",
+      "note": "Cron /api/cron/departamento-central ejecutado"
+    },
+    {
+      "component": "monetization-check",
+      "lastRunAt": "2026-09-22T01:04:36.256Z"
+    },
+    {
+      "component": "scheduler",
+      "lastRunAt": "2026-10-28T00:58:42.481Z",
+      "note": "Enqueued 3, processed 0, workDone24h 0."
+    },
+    {
+      "component": "watchdog",
+      "lastRunAt": "2026-10-28T01:04:29.650Z"
+    },
+    {
+      "component": "cron/api/cron/nios-ceo-loop",
+      "lastRunAt": "2026-10-28T02:02:38.111Z",
+      "note": "Cron /api/cron/nios-ceo-loop ejecutado"
+    },
+    {
+      "component": "cron/api/cron/distribuciones-retry",
+      "lastRunAt": "2026-10-27T05:51:19.742Z",
+      "note": "Cron /api/cron/distribuciones-retry ejecutado"
+    }
+  ],
+  "incidents": {
+    "active": 56
+  }
+}

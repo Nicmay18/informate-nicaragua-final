@@ -146,7 +146,7 @@ export default function SupportMedium({
         <p
           style={{
             fontSize: 13.5,
-            color: '#94a3b8',
+            color: '#4b5563',
             margin: '20px 0 0',
             fontStyle: 'italic',
             lineHeight: 1.6,

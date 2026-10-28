@@ -818,9 +818,8 @@ const _cachedGetSitemapNews = unstable_cache(
         })
         .filter(Boolean) as Noticia[];
     } catch (err) {
-    if (err instanceof FirestoreOutageError) throw err;
-      logger.error('[data.ts] getSitemapNews error:', err instanceof Error ? err.message : String(err));
-      return [];
+      logger.error('[data.ts] getSitemapNews failed');
+      throw err;
     }
   },
   ['sitemap-news-full'],

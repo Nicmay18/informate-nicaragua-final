@@ -291,6 +291,17 @@ describe('FASE 0 — nios_memory: ciclo de vida de tareas', () => {
 // ─────────────────── 3. depto_jobs: lifecycle ───────────────────
 
 describe('FASE 0 — depto_jobs: ciclo de vida', () => {
+  it.each([undefined, 'invalid', '2020-01-01T00:00:00Z', '2099-01-01T00:00:00Z'])(
+    'no diagnostica artículos antiguos, futuros o sin fecha válida (%s)', async createdAt => {
+      await enqueueJob({ type: 'article-pipeline', source: 'test', payload: { articleId: 'protegido', createdAt } });
+      const job = await claimNextJob();
+      await executeJob(job!);
+      const after = await getJobStatus(job!.jobId);
+      expect(after!.status).toBe('completed');
+      expect(after!.result).toMatchObject({ skipped: true });
+      expect(store.get('meni_diagnosis')?.size ?? 0).toBe(0);
+    },
+  );
   it('PENDING → RUNNING → COMPLETED', async () => {
     await enqueueJob({ type: 'health-check', source: 'test', dedupKey: 'k1' });
     const job = await claimNextJob();
@@ -303,7 +314,7 @@ describe('FASE 0 — depto_jobs: ciclo de vida', () => {
   });
 
   it('PENDING → RUNNING → FAILED (error real)', async () => {
-    await enqueueJob({ type: 'article-pipeline', source: 'test', payload: { articleId: 'no-existe' }, dedupKey: 'k2' });
+    await enqueueJob({ type: 'article-pipeline', source: 'test', payload: { articleId: 'no-existe', createdAt: new Date().toISOString() }, dedupKey: 'k2' });
     const job = await claimNextJob();
     await executeJob(job!);
     const after = await getJobStatus(job!.jobId);
@@ -312,7 +323,7 @@ describe('FASE 0 — depto_jobs: ciclo de vida', () => {
   });
 
   it('retry válido: job en retry vuelve a ser reclamable', async () => {
-    await enqueueJob({ type: 'article-pipeline', source: 'test', payload: { articleId: 'no-existe' }, dedupKey: 'k3' });
+    await enqueueJob({ type: 'article-pipeline', source: 'test', payload: { articleId: 'no-existe', createdAt: new Date().toISOString() }, dedupKey: 'k3' });
     const j1 = await claimNextJob();
     await executeJob(j1!);
     const after = await getJobStatus(j1!.jobId);

@@ -113,6 +113,7 @@ export default function AdsenseUnit({
         borderRadius: 8,
         ...style,
       }}
+      role="complementary"
       aria-label="Publicidad"
     >
       <ins

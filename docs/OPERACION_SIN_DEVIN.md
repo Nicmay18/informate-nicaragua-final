@@ -127,3 +127,63 @@ middleware.ts   matriz de autorización de rutas
 vercel.json     crons + headers de caché
 firestore.rules reglas (default-deny; #10 propone cambios)
 ```
+
+## 12. Cloudflare (capa real frente a Vercel) — verificado 28-oct-2026
+
+El dominio pasa por Cloudflare antes de Vercel. Las cabeceras del origen **no**
+deciden solas lo que el visitante recibe: existe una regla de caché amplia que
+guarda HTML, JSON de APIs y errores 404 (`cf-cache-status: HIT`).
+
+**Comprobación rápida (hacerla tras cada deploy o si algo "no se ve"):**
+```bash
+curl -si https://nicaraguainformate.com/api/admin/negocios | grep -i 'HTTP/\|cf-cache-status\|age'
+# Correcto: 401 Unauthorized.
+# Si dice 200 con cf-cache-status: HIT → la caché está sirviendo datos admin a cualquiera. URGENTE.
+curl -si https://nicaraguainformate.com/negocios | grep -i 'HTTP/\|age'
+# Si una página nueva da 404 con age alto → caché congelada → purgar.
+```
+
+**Acciones (panel Cloudflare, sin código):**
+1. Login https://dash.cloudflare.com → `nicaraguainformate.com`.
+2. **Caching → Cache Rules**: crear regla *Bypass cache* ANTES de cualquier regla
+   amplia, para: `URI Path empieza con /api/` O `/admin/` O `Cookie contiene admin_session`.
+3. **Caching → Purge Cache → Purge Everything**: tras un deploy que cambia
+   contenido (o si una URL canónica muestra contenido viejo/404 falso).
+4. **Caching → Configuration**: Browser Cache TTL recomendado ≤30 min o
+   "Respect existing headers" — un valor de 4h retrasa correcciones del sitio.
+5. Regla mental: una URL con `?cualquier=parametro` no es la canónica — el
+   cache es por URL completa. "Me funciona con ?v=2 pero no sin" = caché vieja.
+
+## 13. Alertas recomendadas (gratis, 15 min)
+
+No hay sistema de alertas externo instalado. Configurar UN monitor de uptime
+(UptimeRobot/BetterStack/StatusCake — plan gratuito) con estas sondas:
+
+| URL | Criterio de alarma | Significado |
+|---|---|---|
+| `https://nicaraguainformate.com/` | != 200 | sitio caído |
+| `https://nicaraguainformate.com/news-sitemap.xml` | != 200 | **outage de datos** (la ruta devuelve 503 intencionalmente cuando falla Firestore) |
+| `https://nicaraguainformate.com/sitemap.xml` | != 200 o sin `<url>` | sitemap roto → riesgo SEO |
+| `https://nicaraguainformate.com/api/admin/negocios` | == 200 | fuga por caché CF (debe ser 401 siempre) |
+| `https://nicaraguainformate.com/api/telemetry/negocios` | 5xx | telemetría caída |
+
+Además: Vercel → proyecto → Notifications activa alertas de deploy fallido al
+correo; Sentry ya captura `logger.error` en producción.
+
+## 14. Checklist para persona no técnica
+
+**Diario (3 min):**
+- [ ] Abrir `nicaraguainformate.com` — ¿carga la portada con noticias de hoy?
+- [ ] Abrir una noticia — ¿título, fecha, imagen y texto completos?
+- [ ] Si algo viejo: anotar la URL y aplicar §12.3 (purge) o avisar.
+
+**Semanal (10 min):**
+- [ ] `/news-sitemap.xml` devuelve XML (si da error → la alerta debería haber sonado).
+- [ ] Login en `/login` funciona y el panel abre.
+- [ ] Search Console → Cobertura: sin errores nuevos; sitemaps "Correcto".
+- [ ] Revisar la cola NIOS (`node .audit/nios-cola-real.cjs` si hay acceso):
+      `pending` debe bajar semana a semana; si sube siempre, avisar.
+
+**No tocar nunca (§10 ampliado):** reglas de Cloudflare sin saber qué hacen,
+colecciones de Firestore, variables de Vercel, crons de `vercel.json`,
+`middleware.ts`, y cualquier deploy manual de reglas de seguridad.

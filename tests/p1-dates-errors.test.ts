@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 // Mocks antes de importar el módulo bajo prueba.
 let allFail = false;
 let emptyCorpus = false;
+let setupFails = false;
 
 const chainableQuery = (): any => {
   const q: any = {
@@ -31,7 +32,10 @@ const DOC = {
 };
 
 vi.mock('@/lib/firebase-admin', () => ({
-  adminDb: { collection: () => chainableQuery() },
+  adminDb: { collection: () => {
+    if (setupFails) throw new Error('query setup unavailable');
+    return chainableQuery();
+  } },
 }));
 vi.mock('next/cache', () => ({
   unstable_cache: (fn: any) => fn,
@@ -39,7 +43,7 @@ vi.mock('next/cache', () => ({
 }));
 
 import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
-import { getNews } from '@/lib/data';
+import { getNews, getSitemapNews } from '@/lib/data';
 
 describe('P1-17: safeIsoDate nunca fabrica fechas', () => {
   const baseArticle: any = {
@@ -65,7 +69,20 @@ describe('P1-17: safeIsoDate nunca fabrica fechas', () => {
 });
 
 describe('P1-08: ERROR ≠ EMPTY en fetchPublishedDocs', () => {
-  beforeEach(() => { allFail = false; emptyCorpus = false; });
+  beforeEach(() => { allFail = false; emptyCorpus = false; setupFails = false; });
+
+  it('sitemap propaga también errores anteriores a la consulta', async () => {
+    setupFails = true;
+    await expect(getSitemapNews()).rejects.toThrow('query setup unavailable');
+  });
+
+  it('sitemap distingue outage y corpus vacío', async () => {
+    allFail = true;
+    await expect(getSitemapNews()).rejects.toThrow(/queries fallaron|Firestore/);
+    allFail = false;
+    emptyCorpus = true;
+    await expect(getSitemapNews()).resolves.toEqual([]);
+  });
 
   it('todas las queries fallan → lanza ERROR (no devuelve [])', async () => {
     allFail = true;
