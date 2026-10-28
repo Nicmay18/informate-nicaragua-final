@@ -147,9 +147,18 @@ async function watchdogRecoveryWorker(job: DeptoJob): Promise<void> {
   await writeHeartbeat('watchdog', 'healthy');
 }
 
-function isFreshArticle(createdAt: string | undefined): boolean {
-  if (!createdAt) return true;
-  return Date.now() - new Date(createdAt).getTime() < MAX_ARTICLE_AGE_MS;
+/**
+ * Solo autoprocesa artículos con fecha verificable y <24h. Antes devolvía
+ * `true` cuando `payload.createdAt` faltaba, es decir: un job atrasado cuyo
+ * artículo no traía fecha se diagnosticaba igual. Sin fecha comprobable se
+ * salta para revisión editorial. Este worker genera diagnósticos, no publica.
+ */
+export function isFreshArticle(createdAt: string | undefined): boolean {
+  if (!createdAt) return false;
+  const t = new Date(createdAt).getTime();
+  if (isNaN(t)) return false;
+  const age = Date.now() - t;
+  return age >= 0 && age < MAX_ARTICLE_AGE_MS;
 }
 
 export async function executeJob(job: DeptoJob): Promise<void> {
@@ -166,7 +175,7 @@ export async function executeJob(job: DeptoJob): Promise<void> {
         break;
       case 'article-pipeline':
         if (!isFreshArticle(job.payload?.createdAt as string | undefined)) {
-          await completeJob(job.jobId, { skipped: true, reason: 'Artículo demasiado antiguo para autoprocesar.' });
+          await completeJob(job.jobId, { skipped: true, reason: 'Artículo antiguo o sin fecha válida; requiere revisión editorial.' });
         } else {
           await articlePipelineWorker(job);
         }

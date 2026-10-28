@@ -10,16 +10,24 @@ async function main() {
   const report = { at: new Date().toISOString() };
   const now = new Date().toISOString();
 
-  // pending/retry vencidos con comparación de string ISO
-  report.pendientesVencidos = (await db.collection('depto_jobs')
-    .where('status', 'in', ['pending', 'retry'])
-    .where('scheduledFor', '<', now).count().get().catch(e => ({ data: () => ({ count: 'ERR:' + e.message.slice(0, 120) }) }))).data().count;
-  report.pendientesNoVencidos = (await db.collection('depto_jobs')
-    .where('status', 'in', ['pending', 'retry'])
-    .where('scheduledFor', '>=', now).count().get().catch(e => ({ data: () => ({ count: 'ERR' }) }))).data().count;
+  report.counts = {};
+  for (const status of ['pending', 'retry', 'running', 'completed', 'dead-letter']) {
+    report.counts[status] = (await db.collection('depto_jobs').where('status', '==', status).count().get()).data().count;
+  }
 
   // distribución por tipo entre los pending
   const pend = await db.collection('depto_jobs').where('status', 'in', ['pending', 'retry']).get();
+  // Reusar la lectura: no depende de un índice compuesto status+scheduledFor.
+  report.pendientesVencidos = pend.docs.filter(d => String(d.data().scheduledFor || '') < now).length;
+  report.pendientesNoVencidos = pend.size - report.pendientesVencidos;
+  report.articlePipeline = pend.docs.filter(d => d.data().type === 'article-pipeline').map(d => {
+    const x = d.data();
+    const createdAt = x.payload?.createdAt;
+    const date = typeof createdAt === 'string' ? new Date(createdAt) : createdAt?.toDate?.();
+    return { jobId: d.id, articleId: x.payload?.articleId, scheduledFor: x.scheduledFor,
+      dateType: typeof createdAt, sourceDate: date && !isNaN(date.getTime()) ? date.toISOString() : null,
+      needsReview: !date || isNaN(date.getTime()) || Date.now() - date.getTime() >= 86400000 || date.getTime() > Date.now() };
+  });
   const tipos = {}; const prios = {}; const sources = {}; let masAntiguo = null, masNuevo = null;
   for (const d of pend.docs) {
     const x = d.data();

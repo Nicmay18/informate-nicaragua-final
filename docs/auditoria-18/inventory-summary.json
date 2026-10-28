@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-28T03:50:41.527Z",
+  "sha": "add6cbba8cdacb1a2a7545914cf7ad1d9414c40e",
+  "count": 1643,
+  "areas": {
+    ".agents": 1,
+    ".audit": 184,
+    ".devin": 5,
+    "(root)": 290,
+    ".githooks": 1,
+    ".github": 5,
+    "app": 243,
+    "appx": 2,
+    "articulos-generados": 1,
+    "articulos-seo": 10,
+    "assets": 3,
+    "bigquery": 1,
+    "bin": 2,
+    "components": 101,
+    "content": 2,
+    "docs": 49,
+    "hooks": 4,
+    "lib": 465,
+    "locales": 55,
+    "policies": 1,
+    "public": 38,
+    "reports": 11,
+    "scripts": 31,
+    "tests": 134,
+    "types": 2,
+    "utils": 2
+  },
+  "exactDuplicates": [
+    [
+      ".audit/cierre-lint.log",
+      ".audit/cierre-tsc.log",
+      ".audit/vercel-logs.jsonl",
+      "cdc551c",
+      "console.log(`[${i+1}]"
+    ],
+    [
+      ".audit/meni-after.json",
+      ".audit/meni-final.json"
+    ],
+    [
+      ".node-version",
+      ".nvmrc"
+    ],
+    [
+      "DATA_SEMANTICS_CONTRACT.md",
+      "DATA_UNIVERSE_CONTRACT.md"
+    ],
+    [
+      "app/admin/correcciones/page.tsx",
+      "app/admin/distribute/page.tsx",
+      "app/admin/editor/page.tsx",
+      "app/admin/trafico/page.tsx"
+    ],
+    [
+      "assets/logo.png",
+      "public/logo-ni.png",
+      "public/logo.png"
+    ],
+    [
+      "public/autores/keyling-rivera.jpg",
+      "public/keyling-rivera.jpg"
+    ],
+    [
+      "public/favicon.svg",
+      "public/icons/favicon.svg"
+    ]
+  ]
+}

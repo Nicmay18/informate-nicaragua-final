@@ -61,29 +61,9 @@ async function getNegocioSlugs() {
     }
 }
 
-export function safeDate(value: unknown): Date {
-  if (!value) return new Date();
-  if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
-    try {
-      const d = (value as any).toDate();
-      return d instanceof Date && !isNaN(d.getTime()) ? d : new Date();
-    } catch { return new Date(); }
-  }
-  if (typeof value === 'object' && value !== null && '_seconds' in value) {
-    try {
-      const sec = Number((value as any)._seconds);
-      const ns = Number((value as any)._nanoseconds || 0);
-      const d = new Date(sec * 1000 + ns / 1_000_000);
-      return !isNaN(d.getTime()) ? d : new Date();
-    } catch { return new Date(); }
-  }
-  const d = typeof value === 'string' ? new Date(value) : value instanceof Date ? value : new Date();
-  return isNaN(d.getTime()) ? new Date() : d;
-}
-
-/** Variante honesta: devuelve null cuando no hay fecha interpretable.
- *  safeDate fabrica 'now' en inválidas — aceptable como fallback de UI, pero
- *  jamás como lastmod/publication_date de sitemap (fecha falsa = defecto §XVII). */
+/** Devuelve null cuando no hay fecha interpretable.
+ *  Nunca fabricar 'now' como lastmod/publication_date de sitemap: una fecha
+ *  falsa le miente a Google sobre la frescura real del contenido (§XVII). */
 export function parseFechaReal(value: unknown): Date | null {
   if (!value) return null;
   if (typeof value === 'object' && value !== null && 'toDate' in value && typeof (value as any).toDate === 'function') {
@@ -99,6 +79,21 @@ export function parseFechaReal(value: unknown): Date | null {
   }
   const d = typeof value === 'string' ? new Date(value) : value instanceof Date ? value : null;
   return d && !isNaN(d.getTime()) ? d : null;
+}
+
+/**
+ * Entrada evergreen del sitemap. `lastModified` solo se emite con una fecha
+ * real (parseFechaReal): una fecha inventada como "hoy" le miente a Google
+ * sobre la frescura de la guía — antes usaba safeDate(), que fabricaba now().
+ */
+export function evergreenSitemapEntry(article: { slug: string; updatedDate?: unknown }): MetadataRoute.Sitemap[number] {
+  const lastModified = parseFechaReal(article.updatedDate);
+  return {
+    url: `${baseUrl}/guia/${article.slug}`,
+    ...(lastModified ? { lastModified } : {}),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  };
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -132,12 +127,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const evergreen = getAllEvergreen();
-  const evergreenUrls: MetadataRoute.Sitemap = evergreen.map((article) => ({
-    url: `${baseUrl}/guia/${article.slug}`,
-    lastModified: safeDate(article.updatedDate),
-    changeFrequency: 'monthly',
-    priority: 0.6,
-  }));
+  const evergreenUrls: MetadataRoute.Sitemap = evergreen.map(evergreenSitemapEntry);
 
   const temaSlugs = getAllTemaSlugs();
   const temaUrls: MetadataRoute.Sitemap = temaSlugs.map((slug) => ({

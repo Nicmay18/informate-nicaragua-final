@@ -1,0 +1,3328 @@
+[
+  {
+    "at": "2026-10-28T03:57:53.961Z",
+    "url": "https://nicaraguainformate.com/",
+    "width": 360,
+    "status": 200,
+    "layout": {
+      "viewport": 360,
+      "scrollWidth": 360,
+      "h1": [
+        "Estudiante de León gana oro en salto de longitud"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "INPUT",
+        "text": "Buscar noticias",
+        "outline": "rgb(30, 41, 59) none 3px",
+        "boxShadow": "rgba(201, 169, 110, 0.1) 0px 0px 0px 3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Buscar noticias",
+        "outline": "rgb(255, 255, 255) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menú",
+        "outline": "rgb(0, 0, 0) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Estudiante de León gana oro en salto de longitud",
+        "outline": "rgb(30, 41, 59) solid 3px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-0-360.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 22
+        }
+      ],
+      "passes": 27
+    }
+  },
+  {
+    "at": "2026-10-28T03:57:58.705Z",
+    "url": "https://nicaraguainformate.com/noticias/estudiante-de-leon-gana-oro-en-salto-de-longitud",
+    "width": 360,
+    "status": 200,
+    "layout": {
+      "viewport": 360,
+      "scrollWidth": 360,
+      "h1": [
+        "Estudiante de León gana oro en salto de longitud"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "INPUT",
+        "text": "Buscar noticias",
+        "outline": "rgb(30, 41, 59) none 3px",
+        "boxShadow": "rgba(201, 169, 110, 0.1) 0px 0px 0px 3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Buscar noticias",
+        "outline": "rgb(255, 255, 255) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menú",
+        "outline": "rgb(0, 0, 0) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Inicio",
+        "outline": "rgb(107, 114, 128) solid 3px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-1-360.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag111",
+            "EN-301-549",
+            "EN-9.1.1.1",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "description": "Ensure every ARIA progressbar node has an accessible name",
+          "help": "ARIA progressbar nodes must have an accessible name",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-progressbar-name?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "aria-label",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute does not exist or is empty"
+                },
+                {
+                  "id": "aria-labelledby",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+                },
+                {
+                  "id": "non-empty-title",
+                  "data": {
+                    "messageKey": "noAttr"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element has no title attribute"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;background-color:#e5e5e5\"><div style=\"height:100%;background-color:#991b1b;width:0%;transition:width 0.15s ease-out\"></div></div>",
+              "target": [
+                "div[role=\"progressbar\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        },
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag412",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "RGAAv4",
+            "RGAA-7.1.1"
+          ],
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-prohibited-attr?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: flex; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 24px auto; max-width: 336px; justify-content: center;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(3)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 32px 0px;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(6)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 40px 0px 0px;\">",
+              "target": [
+                "article > div[aria-label=\"Publicidad\"]"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#9ca3af",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.53,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px\">Estudiante de León gana oro en salto de longitud</span>",
+              "target": [
+                "span:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#16a34a",
+                    "contrastRatio": 3.29,
+                    "fontSize": "8.3pt (11px)",
+                    "fontWeight": "bold",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<span style=\"display:inline-block;padding:5px 14px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fff;border-radius:9999px;margin-bottom:12px;background-color:#16a34a\" itemprop=\"articleSection\">Deportes</span>",
+                      "target": [
+                        "span[itemprop=\"articleSection\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"display:inline-block;padding:5px 14px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fff;border-radius:9999px;margin-bottom:12px;background-color:#16a34a\" itemprop=\"articleSection\">Deportes</span>",
+              "target": [
+                "span[itemprop=\"articleSection\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.56,
+                    "fontSize": "9.4pt (12.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div style=\"font-size:12.5px;color:#94a3b8\">Director de Operaciones<!-- --> · <!-- -->Deportes</div>",
+              "target": [
+                "div:nth-child(4) > div > div"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#6b7280",
+                    "bgColor": "#fef3c7",
+                    "contrastRatio": 4.34,
+                    "fontSize": "9.0pt (12px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<div style=\"margin: 24px 0px; padding: 20px; background-color: rgb(254, 243, 199); border: 1px solid rgb(253, 230, 138); border-radius: 12px;\">",
+                      "target": [
+                        "section:nth-child(4) > div:nth-child(1)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"margin: 2px 0px 0px; font-size: 12px; color: rgb(107, 114, 128);\">Lectura en voz alta disponible</p>",
+              "target": [
+                "div:nth-child(1) > div > div > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#1877f2",
+                    "contrastRatio": 4.23,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Facebook</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#128c7e",
+                    "contrastRatio": 4.13,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://wa.me/?text=...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>WhatsApp</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#0088cc",
+                    "contrastRatio": 3.89,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://t.me/share/u...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Telegram</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#fafbfc",
+                    "contrastRatio": 2.47,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<section aria-label=\"Apoya el periodismo\" style=\"margin-top:40px;padding:32px 28px;background-color:#fafbfc;border-top:3px solid #0f4c81;border-bottom:1px solid #e2e8f0;border-radius:4px 4px 12px 12px\">",
+                      "target": [
+                        "section[aria-label=\"Apoya el periodismo\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"font-size:13.5px;color:#94a3b8;margin:20px 0 0;font-style:italic;line-height:1.6\">Gracias por ser parte de una comunidad que valora el periodismo responsable.</p>",
+              "target": [
+                "p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 6
+        }
+      ],
+      "passes": 26
+    }
+  },
+  {
+    "at": "2026-10-28T03:58:04.638Z",
+    "url": "https://nicaraguainformate.com/noticias/ineter-informa-sobre-lluvias-y-tormentas-electricas-en-nicaragua",
+    "width": 360,
+    "status": 200,
+    "layout": {
+      "viewport": 360,
+      "scrollWidth": 360,
+      "h1": [
+        "INETER informa sobre lluvias y tormentas eléctricas en Nicaragua"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "INPUT",
+        "text": "Buscar noticias",
+        "outline": "rgb(30, 41, 59) none 3px",
+        "boxShadow": "rgba(201, 169, 110, 0.1) 0px 0px 0px 3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Buscar noticias",
+        "outline": "rgb(255, 255, 255) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Menú",
+        "outline": "rgb(0, 0, 0) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Inicio",
+        "outline": "rgb(107, 114, 128) solid 3px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-2-360.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag111",
+            "EN-301-549",
+            "EN-9.1.1.1",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "description": "Ensure every ARIA progressbar node has an accessible name",
+          "help": "ARIA progressbar nodes must have an accessible name",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-progressbar-name?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "aria-label",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute does not exist or is empty"
+                },
+                {
+                  "id": "aria-labelledby",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+                },
+                {
+                  "id": "non-empty-title",
+                  "data": {
+                    "messageKey": "noAttr"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element has no title attribute"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;background-color:#e5e5e5\"><div style=\"height:100%;background-color:#991b1b;width:0%;transition:width 0.15s ease-out\"></div></div>",
+              "target": [
+                "div[role=\"progressbar\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        },
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag412",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "RGAAv4",
+            "RGAA-7.1.1"
+          ],
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-prohibited-attr?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div style=\"display:flex;text-align:center;overflow:hidden;min-height:250px;max-height:600px;background-color:#f8fafc;border-radius:8px;margin:24px auto;max-width:336px;justify-content:center\" aria-label=\"Publicidad\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(3)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div style=\"display:block;text-align:center;overflow:hidden;min-height:250px;max-height:600px;background-color:#f8fafc;border-radius:8px;margin:32px 0\" aria-label=\"Publicidad\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(6)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div style=\"display:block;text-align:center;overflow:hidden;min-height:250px;max-height:600px;background-color:#f8fafc;border-radius:8px;margin:40px 0 0\" aria-label=\"Publicidad\">",
+              "target": [
+                "article > div[aria-label=\"Publicidad\"]"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#9ca3af",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.53,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px\">INETER informa sobre lluvias y tormentas eléctricas en Nicaragua</span>",
+              "target": [
+                "span:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.56,
+                    "fontSize": "9.4pt (12.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div style=\"font-size:12.5px;color:#94a3b8\">Director de Operaciones<!-- --> · <!-- -->Nacionales</div>",
+              "target": [
+                "div:nth-child(4) > div > div"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#6b7280",
+                    "bgColor": "#fef3c7",
+                    "contrastRatio": 4.34,
+                    "fontSize": "9.0pt (12px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<div style=\"margin:24px 0;padding:20px;background-color:#fef3c7;border:1px solid #fde68a;border-radius:12px\">",
+                      "target": [
+                        "section:nth-child(4) > div:nth-child(1)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"margin:2px 0 0;font-size:12px;color:#6b7280\">Lectura en voz alta disponible</p>",
+              "target": [
+                "div:nth-child(1) > div > div > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#1877f2",
+                    "contrastRatio": 4.23,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Facebook</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#128c7e",
+                    "contrastRatio": 4.13,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://wa.me/?text=...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>WhatsApp</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#0088cc",
+                    "contrastRatio": 3.89,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://t.me/share/u...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Telegram</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#fafbfc",
+                    "contrastRatio": 2.47,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<section aria-label=\"Apoya el periodismo\" style=\"margin-top:40px;padding:32px 28px;background-color:#fafbfc;border-top:3px solid #0f4c81;border-bottom:1px solid #e2e8f0;border-radius:4px 4px 12px 12px\">",
+                      "target": [
+                        "section[aria-label=\"Apoya el periodismo\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"font-size:13.5px;color:#94a3b8;margin:20px 0 0;font-style:italic;line-height:1.6\">Gracias por ser parte de una comunidad que valora el periodismo responsable.</p>",
+              "target": [
+                "p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 4
+        }
+      ],
+      "passes": 25
+    }
+  },
+  {
+    "at": "2026-10-28T03:58:13.528Z",
+    "url": "https://nicaraguainformate.com/",
+    "width": 768,
+    "status": 200,
+    "layout": {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "h1": [
+        "Estudiante de León gana oro en salto de longitud"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sobre Nosotros",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "EN VIVO",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "INPUT",
+        "text": "Buscar noticias",
+        "outline": "rgb(30, 41, 59) none 3px",
+        "boxShadow": "rgba(201, 169, 110, 0.1) 0px 0px 0px 3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Buscar noticias",
+        "outline": "rgb(255, 255, 255) solid 3px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-0-768.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 28
+        }
+      ],
+      "passes": 27
+    }
+  },
+  {
+    "at": "2026-10-28T03:58:19.769Z",
+    "url": "https://nicaraguainformate.com/noticias/estudiante-de-leon-gana-oro-en-salto-de-longitud",
+    "width": 768,
+    "status": 200,
+    "layout": {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "h1": [
+        "Estudiante de León gana oro en salto de longitud"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sobre Nosotros",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "EN VIVO",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "INPUT",
+        "text": "Buscar noticias",
+        "outline": "rgb(30, 41, 59) none 3px",
+        "boxShadow": "rgba(201, 169, 110, 0.1) 0px 0px 0px 3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Buscar noticias",
+        "outline": "rgb(255, 255, 255) solid 3px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-1-768.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag111",
+            "EN-301-549",
+            "EN-9.1.1.1",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "description": "Ensure every ARIA progressbar node has an accessible name",
+          "help": "ARIA progressbar nodes must have an accessible name",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-progressbar-name?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "aria-label",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute does not exist or is empty"
+                },
+                {
+                  "id": "aria-labelledby",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+                },
+                {
+                  "id": "non-empty-title",
+                  "data": {
+                    "messageKey": "noAttr"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element has no title attribute"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;background-color:#e5e5e5\"><div style=\"height:100%;background-color:#991b1b;width:0%;transition:width 0.15s ease-out\"></div></div>",
+              "target": [
+                "div[role=\"progressbar\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        },
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag412",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "RGAAv4",
+            "RGAA-7.1.1"
+          ],
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-prohibited-attr?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: flex; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 24px auto; max-width: 336px; justify-content: center;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(3)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 32px 0px;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(6)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 40px 0px 0px;\">",
+              "target": [
+                "article > div[aria-label=\"Publicidad\"]"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#9ca3af",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.53,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px\">Estudiante de León gana oro en salto de longitud</span>",
+              "target": [
+                "span:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#16a34a",
+                    "contrastRatio": 3.29,
+                    "fontSize": "8.3pt (11px)",
+                    "fontWeight": "bold",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<span style=\"display:inline-block;padding:5px 14px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fff;border-radius:9999px;margin-bottom:12px;background-color:#16a34a\" itemprop=\"articleSection\">Deportes</span>",
+                      "target": [
+                        "span[itemprop=\"articleSection\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"display:inline-block;padding:5px 14px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fff;border-radius:9999px;margin-bottom:12px;background-color:#16a34a\" itemprop=\"articleSection\">Deportes</span>",
+              "target": [
+                "span[itemprop=\"articleSection\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.56,
+                    "fontSize": "9.4pt (12.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div style=\"font-size:12.5px;color:#94a3b8\">Director de Operaciones<!-- --> · <!-- -->Deportes</div>",
+              "target": [
+                "div:nth-child(4) > div > div"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#6b7280",
+                    "bgColor": "#fef3c7",
+                    "contrastRatio": 4.34,
+                    "fontSize": "9.0pt (12px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<div style=\"margin: 24px 0px; padding: 20px; background-color: rgb(254, 243, 199); border: 1px solid rgb(253, 230, 138); border-radius: 12px;\">",
+                      "target": [
+                        "section:nth-child(4) > div:nth-child(1)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"margin: 2px 0px 0px; font-size: 12px; color: rgb(107, 114, 128);\">Lectura en voz alta disponible</p>",
+              "target": [
+                "div:nth-child(1) > div > div > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#1877f2",
+                    "contrastRatio": 4.23,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Facebook</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#128c7e",
+                    "contrastRatio": 4.13,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://wa.me/?text=...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>WhatsApp</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#0088cc",
+                    "contrastRatio": 3.89,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://t.me/share/u...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Telegram</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#fafbfc",
+                    "contrastRatio": 2.47,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<section aria-label=\"Apoya el periodismo\" style=\"margin-top:40px;padding:32px 28px;background-color:#fafbfc;border-top:3px solid #0f4c81;border-bottom:1px solid #e2e8f0;border-radius:4px 4px 12px 12px\">",
+                      "target": [
+                        "section[aria-label=\"Apoya el periodismo\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"font-size:13.5px;color:#94a3b8;margin:20px 0 0;font-style:italic;line-height:1.6\">Gracias por ser parte de una comunidad que valora el periodismo responsable.</p>",
+              "target": [
+                "p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 5
+        }
+      ],
+      "passes": 26
+    }
+  },
+  {
+    "at": "2026-10-28T03:58:26.503Z",
+    "url": "https://nicaraguainformate.com/noticias/ineter-informa-sobre-lluvias-y-tormentas-electricas-en-nicaragua",
+    "width": 768,
+    "status": 200,
+    "layout": {
+      "viewport": 768,
+      "scrollWidth": 768,
+      "h1": [
+        "INETER informa sobre lluvias y tormentas eléctricas en Nicaragua"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sobre Nosotros",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "EN VIVO",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "INPUT",
+        "text": "Buscar noticias",
+        "outline": "rgb(30, 41, 59) none 3px",
+        "boxShadow": "rgba(201, 169, 110, 0.1) 0px 0px 0px 3px"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "Buscar noticias",
+        "outline": "rgb(166, 191, 247) solid 2px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-2-768.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag111",
+            "EN-301-549",
+            "EN-9.1.1.1",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "description": "Ensure every ARIA progressbar node has an accessible name",
+          "help": "ARIA progressbar nodes must have an accessible name",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-progressbar-name?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "aria-label",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute does not exist or is empty"
+                },
+                {
+                  "id": "aria-labelledby",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+                },
+                {
+                  "id": "non-empty-title",
+                  "data": {
+                    "messageKey": "noAttr"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element has no title attribute"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;background-color:#e5e5e5\"><div style=\"height:100%;background-color:#991b1b;width:0%;transition:width 0.15s ease-out\"></div></div>",
+              "target": [
+                "div[role=\"progressbar\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        },
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag412",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "RGAAv4",
+            "RGAA-7.1.1"
+          ],
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-prohibited-attr?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: flex; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 24px auto; max-width: 336px; justify-content: center;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(3)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 32px 0px;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(6)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 40px 0px 0px;\">",
+              "target": [
+                "article > div[aria-label=\"Publicidad\"]"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#9ca3af",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.53,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px\">INETER informa sobre lluvias y tormentas eléctricas en Nicaragua</span>",
+              "target": [
+                "span:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.56,
+                    "fontSize": "9.4pt (12.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div style=\"font-size:12.5px;color:#94a3b8\">Director de Operaciones<!-- --> · <!-- -->Nacionales</div>",
+              "target": [
+                "div:nth-child(4) > div > div"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#6b7280",
+                    "bgColor": "#fef3c7",
+                    "contrastRatio": 4.34,
+                    "fontSize": "9.0pt (12px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<div style=\"margin: 24px 0px; padding: 20px; background-color: rgb(254, 243, 199); border: 1px solid rgb(253, 230, 138); border-radius: 12px;\">",
+                      "target": [
+                        "section:nth-child(4) > div:nth-child(1)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"margin: 2px 0px 0px; font-size: 12px; color: rgb(107, 114, 128);\">Lectura en voz alta disponible</p>",
+              "target": [
+                "div:nth-child(1) > div > div > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#1877f2",
+                    "contrastRatio": 4.23,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Facebook</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#128c7e",
+                    "contrastRatio": 4.13,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://wa.me/?text=...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>WhatsApp</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#0088cc",
+                    "contrastRatio": 3.89,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://t.me/share/u...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Telegram</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#fafbfc",
+                    "contrastRatio": 2.47,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<section aria-label=\"Apoya el periodismo\" style=\"margin-top:40px;padding:32px 28px;background-color:#fafbfc;border-top:3px solid #0f4c81;border-bottom:1px solid #e2e8f0;border-radius:4px 4px 12px 12px\">",
+                      "target": [
+                        "section[aria-label=\"Apoya el periodismo\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"font-size:13.5px;color:#94a3b8;margin:20px 0 0;font-style:italic;line-height:1.6\">Gracias por ser parte de una comunidad que valora el periodismo responsable.</p>",
+              "target": [
+                "p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 4
+        }
+      ],
+      "passes": 26
+    }
+  },
+  {
+    "at": "2026-10-28T03:58:33.427Z",
+    "url": "https://nicaraguainformate.com/",
+    "width": 1440,
+    "status": 200,
+    "layout": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "h1": [
+        "Estudiante de León gana oro en salto de longitud"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sobre Nosotros",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Inicio",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sucesos",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Nacionales",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-0-1440.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 21
+        }
+      ],
+      "passes": 27
+    }
+  },
+  {
+    "at": "2026-10-28T03:58:40.768Z",
+    "url": "https://nicaraguainformate.com/noticias/estudiante-de-leon-gana-oro-en-salto-de-longitud",
+    "width": 1440,
+    "status": 200,
+    "layout": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "h1": [
+        "Estudiante de León gana oro en salto de longitud"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sobre Nosotros",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Inicio",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sucesos",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Nacionales",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-1-1440.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag111",
+            "EN-301-549",
+            "EN-9.1.1.1",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "description": "Ensure every ARIA progressbar node has an accessible name",
+          "help": "ARIA progressbar nodes must have an accessible name",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-progressbar-name?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "aria-label",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute does not exist or is empty"
+                },
+                {
+                  "id": "aria-labelledby",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+                },
+                {
+                  "id": "non-empty-title",
+                  "data": {
+                    "messageKey": "noAttr"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element has no title attribute"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;background-color:#e5e5e5\"><div style=\"height:100%;background-color:#991b1b;width:0%;transition:width 0.15s ease-out\"></div></div>",
+              "target": [
+                "div[role=\"progressbar\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        },
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag412",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "RGAAv4",
+            "RGAA-7.1.1"
+          ],
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-prohibited-attr?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: flex; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 24px auto; max-width: 336px; justify-content: center;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(3)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 32px 0px;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(6)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 40px 0px 0px;\">",
+              "target": [
+                "article > div[aria-label=\"Publicidad\"]"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#9ca3af",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.53,
+                    "fontSize": "8.3pt (11px)",
+                    "fontWeight": "bold",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;writing-mode:vertical-rl\">Compartir</span>",
+              "target": [
+                ".share-floating-desktop > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#9ca3af",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.53,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px\">Estudiante de León gana oro en salto de longitud</span>",
+              "target": [
+                "span:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#16a34a",
+                    "contrastRatio": 3.29,
+                    "fontSize": "8.3pt (11px)",
+                    "fontWeight": "bold",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<span style=\"display:inline-block;padding:5px 14px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fff;border-radius:9999px;margin-bottom:12px;background-color:#16a34a\" itemprop=\"articleSection\">Deportes</span>",
+                      "target": [
+                        "span[itemprop=\"articleSection\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"display:inline-block;padding:5px 14px;font-size:11px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:#fff;border-radius:9999px;margin-bottom:12px;background-color:#16a34a\" itemprop=\"articleSection\">Deportes</span>",
+              "target": [
+                "span[itemprop=\"articleSection\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.29 (foreground color: #ffffff, background color: #16a34a, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.56,
+                    "fontSize": "9.4pt (12.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div style=\"font-size:12.5px;color:#94a3b8\">Director de Operaciones<!-- --> · <!-- -->Deportes</div>",
+              "target": [
+                "div:nth-child(4) > div > div"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#6b7280",
+                    "bgColor": "#fef3c7",
+                    "contrastRatio": 4.34,
+                    "fontSize": "9.0pt (12px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<div style=\"margin: 24px 0px; padding: 20px; background-color: rgb(254, 243, 199); border: 1px solid rgb(253, 230, 138); border-radius: 12px;\">",
+                      "target": [
+                        "section:nth-child(4) > div:nth-child(1)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"margin: 2px 0px 0px; font-size: 12px; color: rgb(107, 114, 128);\">Lectura en voz alta disponible</p>",
+              "target": [
+                "div:nth-child(1) > div > div > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#1877f2",
+                    "contrastRatio": 4.23,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Facebook</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#128c7e",
+                    "contrastRatio": 4.13,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://wa.me/?text=...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>WhatsApp</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#0088cc",
+                    "contrastRatio": 3.89,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://t.me/share/u...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Telegram</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#fafbfc",
+                    "contrastRatio": 2.47,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<section aria-label=\"Apoya el periodismo\" style=\"margin-top:40px;padding:32px 28px;background-color:#fafbfc;border-top:3px solid #0f4c81;border-bottom:1px solid #e2e8f0;border-radius:4px 4px 12px 12px\">",
+                      "target": [
+                        "section[aria-label=\"Apoya el periodismo\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"font-size:13.5px;color:#94a3b8;margin:20px 0 0;font-style:italic;line-height:1.6\">Gracias por ser parte de una comunidad que valora el periodismo responsable.</p>",
+              "target": [
+                "p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 6
+        }
+      ],
+      "passes": 26
+    }
+  },
+  {
+    "at": "2026-10-28T03:58:47.445Z",
+    "url": "https://nicaraguainformate.com/noticias/ineter-informa-sobre-lluvias-y-tormentas-electricas-en-nicaragua",
+    "width": 1440,
+    "status": 200,
+    "layout": {
+      "viewport": 1440,
+      "scrollWidth": 1440,
+      "h1": [
+        "INETER informa sobre lluvias y tormentas eléctricas en Nicaragua"
+      ],
+      "brokenImages": []
+    },
+    "focus": [
+      {
+        "tag": "A",
+        "text": "Saltar al contenido principal",
+        "outline": "rgb(180, 83, 9) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sobre Nosotros",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Contacto",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Privacidad",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "NICARAGUA INFORMATE",
+        "outline": "rgb(15, 23, 42) solid 3px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Inicio",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Sucesos",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      },
+      {
+        "tag": "A",
+        "text": "Nacionales",
+        "outline": "rgb(37, 99, 235) solid 2px",
+        "boxShadow": "none"
+      }
+    ],
+    "errors": [],
+    "screenshot": "screen-2-1440.png",
+    "axe": {
+      "version": "4.11.4",
+      "violations": [
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag111",
+            "EN-301-549",
+            "EN-9.1.1.1",
+            "RGAAv4",
+            "RGAA-11.1.1"
+          ],
+          "description": "Ensure every ARIA progressbar node has an accessible name",
+          "help": "ARIA progressbar nodes must have an accessible name",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-progressbar-name?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "aria-label",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute does not exist or is empty"
+                },
+                {
+                  "id": "aria-labelledby",
+                  "data": null,
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty"
+                },
+                {
+                  "id": "non-empty-title",
+                  "data": {
+                    "messageKey": "noAttr"
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "Element has no title attribute"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"100\" style=\"position:fixed;top:0;left:0;right:0;height:3px;z-index:9999;background-color:#e5e5e5\"><div style=\"height:100%;background-color:#991b1b;width:0%;transition:width 0.15s ease-out\"></div></div>",
+              "target": [
+                "div[role=\"progressbar\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute"
+            }
+          ]
+        },
+        {
+          "id": "aria-prohibited-attr",
+          "impact": "serious",
+          "tags": [
+            "cat.aria",
+            "wcag2a",
+            "wcag412",
+            "EN-301-549",
+            "EN-9.4.1.2",
+            "RGAAv4",
+            "RGAA-7.1.1"
+          ],
+          "description": "Ensure ARIA attributes are not prohibited for an element's role",
+          "help": "Elements must only use permitted ARIA attributes",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/aria-prohibited-attr?application=axeAPI",
+          "nodes": [
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: flex; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 24px auto; max-width: 336px; justify-content: center;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(3)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 32px 0px;\">",
+              "target": [
+                "div[aria-label=\"Publicidad\"]:nth-child(6)"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            },
+            {
+              "any": [],
+              "all": [],
+              "none": [
+                {
+                  "id": "aria-prohibited-attr",
+                  "data": {
+                    "role": null,
+                    "nodeName": "div",
+                    "messageKey": "noRoleSingular",
+                    "prohibited": [
+                      "aria-label"
+                    ]
+                  },
+                  "relatedNodes": [],
+                  "impact": "serious",
+                  "message": "aria-label attribute cannot be used on a div with no valid role attribute."
+                }
+              ],
+              "impact": "serious",
+              "html": "<div aria-label=\"Publicidad\" style=\"display: block; text-align: center; overflow: hidden; min-height: 250px; max-height: 600px; background-color: rgb(248, 250, 252); border-radius: 8px; margin: 40px 0px 0px;\">",
+              "target": [
+                "article > div[aria-label=\"Publicidad\"]"
+              ],
+              "failureSummary": "Fix all of the following:\n  aria-label attribute cannot be used on a div with no valid role attribute."
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143",
+            "TTv5",
+            "TT13.c",
+            "EN-301-549",
+            "EN-9.1.4.3",
+            "ACT",
+            "RGAAv4",
+            "RGAA-3.2.1"
+          ],
+          "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+          "help": "Elements must meet minimum color contrast ratio thresholds",
+          "helpUrl": "https://dequeuniversity.com/rules/axe/4.11/color-contrast?application=axeAPI",
+          "nodes": [
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#9ca3af",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.53,
+                    "fontSize": "8.3pt (11px)",
+                    "fontWeight": "bold",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:1px;writing-mode:vertical-rl\">Compartir</span>",
+              "target": [
+                ".share-floating-desktop > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#9ca3af",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.53,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span style=\"color:#9ca3af;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px\">INETER informa sobre lluvias y tormentas eléctricas en Nicaragua</span>",
+              "target": [
+                "span:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.53 (foreground color: #9ca3af, background color: #ffffff, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#ffffff",
+                    "contrastRatio": 2.56,
+                    "fontSize": "9.4pt (12.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<body class=\"ni-body\">",
+                      "target": [
+                        "body"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<div style=\"font-size:12.5px;color:#94a3b8\">Director de Operaciones<!-- --> · <!-- -->Nacionales</div>",
+              "target": [
+                "div:nth-child(4) > div > div"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.56 (foreground color: #94a3b8, background color: #ffffff, font size: 9.4pt (12.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#6b7280",
+                    "bgColor": "#fef3c7",
+                    "contrastRatio": 4.34,
+                    "fontSize": "9.0pt (12px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<div style=\"margin: 24px 0px; padding: 20px; background-color: rgb(254, 243, 199); border: 1px solid rgb(253, 230, 138); border-radius: 12px;\">",
+                      "target": [
+                        "section:nth-child(4) > div:nth-child(1)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"margin: 2px 0px 0px; font-size: 12px; color: rgb(107, 114, 128);\">Lectura en voz alta disponible</p>",
+              "target": [
+                "div:nth-child(1) > div > div > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.34 (foreground color: #6b7280, background color: #fef3c7, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#1877f2",
+                    "contrastRatio": 4.23,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://www.facebook...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Facebook</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(2) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.23 (foreground color: #ffffff, background color: #1877f2, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#128c7e",
+                    "contrastRatio": 4.13,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://wa.me/?text=...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>WhatsApp</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(3) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 4.13 (foreground color: #ffffff, background color: #128c7e, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#ffffff",
+                    "bgColor": "#0088cc",
+                    "contrastRatio": 3.89,
+                    "fontSize": "10.5pt (14px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<a href=\"https://t.me/share/u...\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"display:inline-flex;...\">",
+                      "target": [
+                        "div:nth-child(7) > div > a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4)"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<span>Telegram</span>",
+              "target": [
+                "a[rel=\"noopener noreferrer\"][target=\"_blank\"]:nth-child(4) > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.89 (foreground color: #ffffff, background color: #0088cc, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+            },
+            {
+              "any": [
+                {
+                  "id": "color-contrast",
+                  "data": {
+                    "fgColor": "#94a3b8",
+                    "bgColor": "#fafbfc",
+                    "contrastRatio": 2.47,
+                    "fontSize": "10.1pt (13.5px)",
+                    "fontWeight": "normal",
+                    "messageKey": null,
+                    "expectedContrastRatio": "4.5:1"
+                  },
+                  "relatedNodes": [
+                    {
+                      "html": "<section aria-label=\"Apoya el periodismo\" style=\"margin-top:40px;padding:32px 28px;background-color:#fafbfc;border-top:3px solid #0f4c81;border-bottom:1px solid #e2e8f0;border-radius:4px 4px 12px 12px\">",
+                      "target": [
+                        "section[aria-label=\"Apoya el periodismo\"]"
+                      ]
+                    }
+                  ],
+                  "impact": "serious",
+                  "message": "Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+                }
+              ],
+              "all": [],
+              "none": [],
+              "impact": "serious",
+              "html": "<p style=\"font-size:13.5px;color:#94a3b8;margin:20px 0 0;font-style:italic;line-height:1.6\">Gracias por ser parte de una comunidad que valora el periodismo responsable.</p>",
+              "target": [
+                "p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.47 (foreground color: #94a3b8, background color: #fafbfc, font size: 10.1pt (13.5px), font weight: normal). Expected contrast ratio of 4.5:1"
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "count": 5
+        }
+      ],
+      "passes": 26
+    }
+  }
+]

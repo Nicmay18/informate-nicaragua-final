@@ -1,13 +1,15 @@
 // lib/constants.ts
 // FUENTE ÚNICA DE VERDAD - No duplicar en ningún componente
 
+// `color` = identidad de marca (bordes, acentos). `a11yColor` = variante con
+// contraste AA (>=4.5:1) para texto blanco sobre el badge — WCAG 1.4.3.
 export const CATEGORIES = [
-  { name: 'Nacionales', slug: 'nacionales', color: '#1d4ed8', description: 'Noticias nacionales de Nicaragua: política, economía, infraestructura, educación, salud y desarrollo social desde Managua.' },
-  { name: 'Sucesos', slug: 'sucesos', color: '#dc2626', description: 'Reportes de sucesos en Nicaragua: accidentes de tránsito, hechos policiales, emergencias y seguridad ciudadana en tiempo real.' },
-  { name: 'Internacionales', slug: 'internacionales', color: '#7c3aed', description: 'Noticias internacionales relevantes para Nicaragua: Centroamérica, Estados Unidos, Europa y eventos globales.' },
-  { name: 'Deportes', slug: 'deportes', color: '#16a34a', description: 'Resultados, fichajes y noticias del deporte nicaragüense. Liga Primera, selección nacional, béisbol, boxeo y atletismo.' },
-  { name: 'Tecnología', slug: 'tecnologia', color: '#0ea5e9', description: 'Avances tecnológicos en Nicaragua: internet, telecomunicaciones, startups, transformación digital y redes sociales.' },
-  { name: 'Espectáculos', slug: 'espectaculos', color: '#db2777', description: 'Farándula, música, cine, televisión y eventos culturales de Nicaragua y el mundo del entretenimiento.' },
+  { name: 'Nacionales', slug: 'nacionales', color: '#1d4ed8', a11yColor: '#1d4ed8', description: 'Noticias nacionales de Nicaragua: política, economía, infraestructura, educación, salud y desarrollo social desde Managua.' },
+  { name: 'Sucesos', slug: 'sucesos', color: '#dc2626', a11yColor: '#dc2626', description: 'Reportes de sucesos en Nicaragua: accidentes de tránsito, hechos policiales, emergencias y seguridad ciudadana en tiempo real.' },
+  { name: 'Internacionales', slug: 'internacionales', color: '#7c3aed', a11yColor: '#7c3aed', description: 'Noticias internacionales relevantes para Nicaragua: Centroamérica, Estados Unidos, Europa y eventos globales.' },
+  { name: 'Deportes', slug: 'deportes', color: '#16a34a', a11yColor: '#15803d', description: 'Resultados, fichajes y noticias del deporte nicaragüense. Liga Primera, selección nacional, béisbol, boxeo y atletismo.' },
+  { name: 'Tecnología', slug: 'tecnologia', color: '#0ea5e9', a11yColor: '#0369a1', description: 'Avances tecnológicos en Nicaragua: internet, telecomunicaciones, startups, transformación digital y redes sociales.' },
+  { name: 'Espectáculos', slug: 'espectaculos', color: '#db2777', a11yColor: '#db2777', description: 'Farándula, música, cine, televisión y eventos culturales de Nicaragua y el mundo del entretenimiento.' },
 ] as const;
 
 export type CategorySlug = typeof CATEGORIES[number]['slug'];

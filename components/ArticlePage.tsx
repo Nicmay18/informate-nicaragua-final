@@ -226,7 +226,7 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
     color: '#fff',
     borderRadius: 9999,
     marginBottom: 12,
-    backgroundColor: category.color,
+    backgroundColor: category.a11yColor,
   };
 
   const fontBtnStyle: React.CSSProperties = {
@@ -291,7 +291,7 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
           <span>/</span>
           <Link href={`/categoria/${category.slug}`} style={{ color: '#6b7280', textDecoration: 'none' }}>{category.name}</Link>
           <span>/</span>
-          <span style={{ color: '#9ca3af', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 }}>{noticia.titulo}</span>
+          <span style={{ color: '#4b5563', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 }}>{noticia.titulo}</span>
         </nav>
 
         <header>
@@ -315,7 +315,7 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
           {authorPhoto ? (
             <img src={authorPhoto} alt={noticia.autor || 'Redacción'} width={42} height={42} style={{ width: 42, height: 42, borderRadius: '50%', objectFit: 'contain', border: `2px solid ${category.color}` }} />
           ) : (
-            <span style={{ width: 42, height: 42, borderRadius: '50%', background: category.color, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16, flexShrink: 0 }}>
+            <span style={{ width: 42, height: 42, borderRadius: '50%', background: category.a11yColor, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 16, flexShrink: 0 }}>
               {(noticia.autor || 'R').trim().charAt(0).toUpperCase()}
             </span>
           )}
@@ -327,7 +327,7 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
             ) : (
               <div style={{ fontSize: 14.5, fontWeight: 700, color: '#1e293b' }}>{noticia.autor || 'Redacción Nicaragua Informate'}</div>
             )}
-            <div style={{ fontSize: 12.5, color: '#94a3b8' }}>{autorData?.role || 'Redacción'} · {category.name}</div>
+            <div style={{ fontSize: 12.5, color: '#4b5563' }}>{autorData?.role || 'Redacción'} · {category.name}</div>
           </div>
         </div>
 
@@ -338,7 +338,7 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
             <time dateTime={noticia.fecha} itemProp="datePublished">{formatDateES(noticia.fecha)}</time>
             {noticia.fechaActualizacion && (
               <>
-                <span style={{ color: '#9ca3af' }}>·</span>
+                <span style={{ color: '#4b5563' }}>·</span>
                 <time dateTime={noticia.fechaActualizacion} itemProp="dateModified" style={{ color: '#991b1b', fontWeight: 500 }}>
                   Actualizado {formatDateES(noticia.fechaActualizacion)}
                 </time>
@@ -388,7 +388,7 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
             {pieDeFoto && (
               <figcaption style={captionStyle}>
                 <span style={{ fontWeight: 500 }}>{pieDeFoto}</span>
-                <span style={{ color: '#9ca3af', marginLeft: 4 }}>| Nicaragua Informate</span>
+                <span style={{ color: '#4b5563', marginLeft: 4 }}>| Nicaragua Informate</span>
               </figcaption>
             )}
           </figure>

@@ -1,14 +1,15 @@
 ﻿import { getSitemapNews } from '@/lib/data';
-import { unstable_cache } from 'next/cache';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { parseFechaReal } from '@/app/sitemap';
 import { logger } from '@/lib/logger';
+import { isRenderableArticle, shouldIndexArticle } from '@/lib/editorial/canonical';
+import { isToxicSlug } from '@/lib/seo-toxic';
 
 const SITE_URL = 'https://nicaraguainformate.com';
 
 // Google News Sitemap: solo noticias de las últimas 48 horas
 // Requisitos: https://support.google.com/news/publisher-center/answer/74245
-export const revalidate = 1800; // Regenerar cada 30 min — noticias frescas
+export const dynamic = 'force-dynamic';
 
 function escapeXml(str: string): string {
   return String(str || '')
@@ -19,12 +20,14 @@ function escapeXml(str: string): string {
 }
 
 async function fetchNewsSitemapRaw() {
-  const cutoffMs = Date.now() - 48 * 60 * 60 * 1000; // 48 horas — Google News sitemap spec
+  const now = Date.now();
+  const cutoffMs = now - 48 * 60 * 60 * 1000;
   const articles = await getSitemapNews();
   return articles
     .filter((a) => {
       const d = parseFechaReal(a.fecha);
-      return d !== null && d.getTime() >= cutoffMs;
+      return isRenderableArticle(a) && shouldIndexArticle(a) && !isToxicSlug(a.slug)
+        && d !== null && d.getTime() >= cutoffMs && d.getTime() <= now;
     })
     .map((a) => ({
       slug: a.slug,
@@ -34,14 +37,11 @@ async function fetchNewsSitemapRaw() {
     }));
 }
 
-const cachedFetchNewsSitemap = unstable_cache(fetchNewsSitemapRaw, ['news-sitemap'], {
-  revalidate: 1800,
-  tags: ['news-sitemap'],
-});
-
 export async function GET() {
   try {
-    const articles = await cachedFetchNewsSitemap();
+    // La capa de datos conserva su caché. Evaluar la ventana de 48h en cada
+    // petición evita mantener artículos vencidos en una segunda caché.
+    const articles = await fetchNewsSitemapRaw();
 
     // Google News Sitemap XML format
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -57,7 +57,7 @@ ${articles.map((article) => {
   const publicationLanguage = 'es';
   
   return `  <url>
-    <loc>${SITE_URL}/noticias/${encodeURI(article.slug)}</loc>
+    <loc>${SITE_URL}/noticias/${escapeXml(encodeURIComponent(article.slug))}</loc>
     <lastmod>${publicationDate}</lastmod>
     <news:news>
       <news:publication>
@@ -76,22 +76,25 @@ ${articles.map((article) => {
     return new Response(xml, {
       headers: {
         'Content-Type': 'application/xml',
-        'Cache-Control': 'public, max-age=3600',
+        'Cache-Control': 'public, max-age=0, s-maxage=1800',
+        'CDN-Cache-Control': 'public, s-maxage=1800',
       },
     });
-  } catch (error) {
-    logger.error('[News Sitemap] Error:', error);
-    
-    // Fallback: sitemap vacío si hay error
-    const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
-</urlset>`;
-    
-    return new Response(fallbackXml, {
+  } catch {
+    logger.error('[News Sitemap] Data unavailable');
+
+    // Un fallo de datos NO es "cero noticias": devolver un urlset vacío con
+    // 200 le decía a Google "no hay nada nuevo" y ocultaba el incidente.
+    // 503 + Retry-After es la señal correcta: error transitorio, reintentar.
+    // Además cualquier monitor externo (uptime check sobre esta URL) alerta.
+    return new Response('News sitemap temporarily unavailable', {
+      status: 503,
       headers: {
-        'Content-Type': 'application/xml',
-        'Cache-Control': 'public, max-age=300',
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'no-store',
+        'CDN-Cache-Control': 'no-store',
+        'Cloudflare-CDN-Cache-Control': 'no-store',
+        'Retry-After': '300',
       },
     });
   }

@@ -1,44 +1,15 @@
 {
-  "at": "2026-10-28T01:54:39.868Z",
+  "at": "2026-10-28T03:50:41.159Z",
   "user": "Nicmay18",
-  "master": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+  "master": "add6cbba8cdacb1a2a7545914cf7ad1d9414c40e",
   "protection": {
     "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection",
-    "required_status_checks": {
-      "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/required_status_checks",
-      "strict": true,
-      "contexts": [
-        "Lint & TypeScript",
-        "Unit & Integration Tests",
-        "Build Next.js",
-        "CI Summary"
-      ],
-      "contexts_url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/required_status_checks/contexts",
-      "checks": [
-        {
-          "context": "Lint & TypeScript",
-          "app_id": 15368
-        },
-        {
-          "context": "Unit & Integration Tests",
-          "app_id": 15368
-        },
-        {
-          "context": "Build Next.js",
-          "app_id": 15368
-        },
-        {
-          "context": "CI Summary",
-          "app_id": 15368
-        }
-      ]
-    },
     "required_pull_request_reviews": {
       "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/required_pull_request_reviews",
       "dismiss_stale_reviews": true,
       "require_code_owner_reviews": false,
       "require_last_push_approval": false,
-      "required_approving_review_count": 1
+      "required_approving_review_count": 0
     },
     "required_signatures": {
       "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/required_signatures",
@@ -61,7 +32,7 @@
       "enabled": false
     },
     "required_conversation_resolution": {
-      "enabled": true
+      "enabled": false
     },
     "lock_branch": {
       "enabled": false
@@ -77,6 +48,12 @@
     }
   ],
   "deployments": [
+    {
+      "id": 7376309485,
+      "sha": "add6cbba8cdacb1a2a7545914cf7ad1d9414c40e",
+      "environment": "Production",
+      "created_at": "2026-10-28T03:23:39Z"
+    },
     {
       "id": 7002084664,
       "sha": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
@@ -100,12 +77,6 @@
       "sha": "d567e66cb5d26a601990db0e4a719543786d4522",
       "environment": "Production",
       "created_at": "2026-10-11T20:31:45Z"
-    },
-    {
-      "id": 6991474238,
-      "sha": "08313a1b911d78e64ecee48b3725d3b0e70a9c44",
-      "environment": "Production",
-      "created_at": "2026-10-11T05:37:08Z"
     }
   ],
   "prs": [
@@ -147,7 +118,7 @@
       "branch": "fix/meni-evidence-profile-source-20261002",
       "base": "55398ab11d918caf9ef325c7ee0dc8725528797a",
       "mergeable": true,
-      "mergeable_state": "behind",
+      "mergeable_state": "unstable",
       "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/4",
       "requested_reviewers": [],
       "reviews": [],
@@ -217,14 +188,14 @@
     },
     {
       "number": 10,
-      "state": "open",
-      "merged": false,
+      "state": "closed",
+      "merged": true,
       "author": "Nicmay18",
       "head": "ebf9ade1c6c75718b2b282ab70705f3500c15d58",
       "branch": "feat/auspiciadores-directos",
       "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
       "mergeable": true,
-      "mergeable_state": "blocked",
+      "mergeable_state": "clean",
       "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/10",
       "requested_reviewers": [],
       "reviews": [],
@@ -294,14 +265,14 @@
     },
     {
       "number": 11,
-      "state": "open",
-      "merged": false,
+      "state": "closed",
+      "merged": true,
       "author": "Nicmay18",
       "head": "1df25d1b897168002f92b33d9d66a153da39961f",
       "branch": "fix/depto-cola-bloqueada",
       "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
-      "mergeable": true,
-      "mergeable_state": "blocked",
+      "mergeable": null,
+      "mergeable_state": "unknown",
       "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/11",
       "requested_reviewers": [],
       "reviews": [],
@@ -371,14 +342,14 @@
     },
     {
       "number": 12,
-      "state": "open",
-      "merged": false,
+      "state": "closed",
+      "merged": true,
       "author": "Nicmay18",
       "head": "6e196bb305a067336f60c39efbd7058688165c16",
       "branch": "fix/seo-tecnico",
       "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
       "mergeable": true,
-      "mergeable_state": "blocked",
+      "mergeable_state": "clean",
       "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/12",
       "requested_reviewers": [],
       "reviews": [],
@@ -448,14 +419,14 @@
     },
     {
       "number": 13,
-      "state": "open",
-      "merged": false,
+      "state": "closed",
+      "merged": true,
       "author": "Nicmay18",
       "head": "3908093e9d4b383cae4dfd37692e6586a69c368b",
       "branch": "fix/admin-session-opaca",
       "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
       "mergeable": true,
-      "mergeable_state": "blocked",
+      "mergeable_state": "clean",
       "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/13",
       "requested_reviewers": [],
       "reviews": [],
@@ -525,14 +496,14 @@
     },
     {
       "number": 14,
-      "state": "open",
-      "merged": false,
+      "state": "closed",
+      "merged": true,
       "author": "Nicmay18",
       "head": "5f7792800c50cc6643277ac8b547f610f68d2486",
       "branch": "fix/deps-audit",
       "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
       "mergeable": true,
-      "mergeable_state": "blocked",
+      "mergeable_state": "clean",
       "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/14",
       "requested_reviewers": [],
       "reviews": [],
@@ -602,14 +573,14 @@
     },
     {
       "number": 15,
-      "state": "open",
-      "merged": false,
+      "state": "closed",
+      "merged": true,
       "author": "Nicmay18",
       "head": "ea669a05a2509aef2eee994e13adab0e88148566",
       "branch": "feat/negocios-mvp",
       "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
       "mergeable": true,
-      "mergeable_state": "blocked",
+      "mergeable_state": "clean",
       "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/15",
       "requested_reviewers": [],
       "reviews": [],
@@ -679,14 +650,14 @@
     },
     {
       "number": 16,
-      "state": "open",
-      "merged": false,
+      "state": "closed",
+      "merged": true,
       "author": "Nicmay18",
       "head": "54e8180869957fe21b41deb871e40e25de2cc5f9",
       "branch": "docs/entrega-final",
       "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
       "mergeable": true,
-      "mergeable_state": "blocked",
+      "mergeable_state": "unstable",
       "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/16",
       "requested_reviewers": [],
       "reviews": [],
@@ -751,6 +722,83 @@
           "context": "Vercel",
           "state": "success",
           "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/5tSK8esRf2gehXUxW9gpWMobVDgs"
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "state": "closed",
+      "merged": true,
+      "author": "Nicmay18",
+      "head": "35ad164d241650a5f8daaefe71f05cbf7849456e",
+      "branch": "release/cierre-final",
+      "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/17",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40621218067/job/122598736322"
+        },
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40621218067/job/122597317893"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40621218067/job/122597315338"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40621218067/job/122597315319"
+        },
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/122597225364"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40621218067/job/122596493669"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40621218067/job/122595825577"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40621218067/job/122595456735"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40621217936/job/122595455892"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/5MckKmCh4xLQF78tujhgc4vMAXoL"
         }
       ]
     }

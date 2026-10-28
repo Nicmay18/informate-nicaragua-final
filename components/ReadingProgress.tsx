@@ -32,6 +32,7 @@ export default function ReadingProgress() {
   return (
     <div
       role="progressbar"
+      aria-label="Progreso de lectura"
       aria-valuenow={Math.round(progress)}
       aria-valuemin={0}
       aria-valuemax={100}

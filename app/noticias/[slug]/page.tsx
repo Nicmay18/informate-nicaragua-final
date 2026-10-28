@@ -1,8 +1,8 @@
 import ArticlePage from '@/components/ArticlePage';
 import { getNewsBySlug, getRelatedNews } from '@/lib/data';
-import { notFound, permanentRedirect } from 'next/navigation';
+import { notFound, permanentRedirect, unstable_rethrow } from 'next/navigation';
 import type { Metadata } from 'next';
-import { isPublicArticle } from '@/lib/editorial/canonical';
+import { isRenderableArticle } from '@/lib/editorial/canonical';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   try {
     const { slug } = await params;
     const noticia = await getCachedNewsBySlug(slug);
-    if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim() || noticia.estado === 'borrador' || noticia.estado === 'archivado') {
+    if (!noticia || !isRenderableArticle(noticia)) {
       notFound();
     }
 
@@ -149,8 +149,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       },
     };
   } catch (err) {
-    logger.error('[article-metadata] Error generando metadata:', err);
-    notFound();
+    unstable_rethrow(err);
+    logger.error('[article-metadata] Data unavailable');
+    throw err;
   }
 }
 
@@ -163,11 +164,11 @@ export default async function NewsPage({ params }: { params: Promise<{ slug: str
   try {
     noticia = await getCachedNewsBySlug(slug);
   } catch (error) {
-    logger.error('Error cargando noticia:', error);
-    notFound();
+    logger.error('[article-page] Data unavailable');
+    throw error;
   }
 
-  if (!noticia || !noticia.titulo?.trim() || !noticia.contenido?.trim() || !isPublicArticle(noticia)) return notFound();
+  if (!noticia || !isRenderableArticle(noticia)) return notFound();
 
   if (noticia.slug && noticia.slug !== slug) {
     permanentRedirect(`/noticias/${noticia.slug}`);
