@@ -172,6 +172,11 @@ export function normalizeEditorialTitle(title: string): string {
   return title
     .replace(/\s*-\s*Managua\s*$/i, '')
     .replace(/\s*-\s*[A-Z]\s*$/i, '')
+    // Artefactos de truncamiento almacenados en Firestore: títulos que
+    // terminan en ",…", "…" o puntuación colgante se servían literalmente
+    // como <title> a Google. Nunca es un cierre legítimo de titular.
+    .replace(/[\s,;:—–-]*…[\s,;:—–-]*$/, '')
+    .replace(/[,;:—–-]+\s*$/, '')
     .trim()
     .replace(
       // Concordancia: sujeto femenino plural + participio masculino → femenino.
