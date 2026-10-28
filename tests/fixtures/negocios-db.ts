@@ -25,15 +25,31 @@ export function createFakeDb() {
       col(name).set(id, mergeDeep(opts?.merge ? col(name).get(id) ?? {} : {}, data));
     },
   });
-  const query = (name: string, filters: Filter[] = [], lim = 0, sel?: string[]): any => ({
-    where: (f: string, op: string, v: unknown) => query(name, [...filters, [f, op, v]], lim, sel),
-    limit: (n: number) => query(name, filters, n, sel),
-    select: (...f: string[]) => query(name, filters, lim, f),
+  const query = (name: string, filters: Filter[] = [], lim = 0, sel?: string[], order?: [string, string]): any => ({
+    where: (f: string, op: string, v: unknown) => query(name, [...filters, [f, op, v]], lim, sel, order),
+    limit: (n: number) => query(name, filters, n, sel, order),
+    select: (...f: string[]) => query(name, filters, lim, f, order),
+    orderBy: (f: string, direction = 'asc') => query(name, filters, lim, sel, [f, direction]),
     get: async () => {
-      let entries = [...col(name)].filter(([, d]) => filters.every(([f, op, v]) =>
-        op === 'in' ? (v as unknown[]).includes(d[f]) : d[f] === v));
+      let entries = [...col(name)].filter(([, d]) => filters.every(([f, op, v]) => {
+        const value = d[f] as any;
+        if (op === 'in') return (v as unknown[]).includes(value);
+        if (op === '==') return value === v;
+        if (op === '>') return value > (v as any);
+        if (op === '>=') return value >= (v as any);
+        if (op === '<') return value < (v as any);
+        if (op === '<=') return value <= (v as any);
+        throw new Error(`Operador no implementado en fixture: ${op}`);
+      }));
+      if (order) {
+        const [field, direction] = order;
+        entries = entries.filter(([, d]) => d[field] !== undefined);
+        entries.sort(([, a], [, b]) =>
+          (a[field] === b[field] ? 0 : (a[field] as any) < (b[field] as any) ? -1 : 1) *
+          (direction === 'desc' ? -1 : 1));
+      }
       if (lim) entries = entries.slice(0, lim);
-      return { size: entries.length, docs: entries.map(([id, data]) => ({
+      return { empty: entries.length === 0, size: entries.length, docs: entries.map(([id, data]) => ({
         id, exists: true, ref: docRef(name, id),
         data: () => sel ? Object.fromEntries(sel.map(k => [k, data[k]])) : data,
       })) };

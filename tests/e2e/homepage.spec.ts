@@ -16,10 +16,6 @@ test.describe('Homepage', () => {
     await page.waitForLoadState('networkidle').catch(() => {});
 
     const articles = page.locator('article');
-    // Skip honesto: en CI la base de datos de prueba puede estar vacía.
-    // No es un fallo del sitio — el reporte debe distinguir "sin datos" de "roto".
-    test.skip((await articles.count()) === 0, 'El entorno de prueba no tiene artículos publicados');
-
     const count = await articles.count();
     expect(count).toBeGreaterThan(0);
   });
@@ -29,15 +25,15 @@ test.describe('Homepage', () => {
     await page.waitForLoadState('networkidle').catch(() => {});
 
     const articleLink = page.locator('article a').first();
-    test.skip((await page.locator('article').count()) === 0, 'El entorno de prueba no tiene artículos publicados');
-
+    const expectedPath = new URL(await articleLink.getAttribute('href') || '', page.url()).pathname;
+    expect(expectedPath).not.toBe('/');
     await articleLink.click();
 
     // Check we're on article page
     await expect(page.locator('h1')).toBeVisible();
 
     // URL should have changed
-    expect(page.url()).not.toContain('/');
+    await expect(page).toHaveURL(new RegExp(`${expectedPath}$`));
   });
 
   test('should have accessible navigation', async ({ page }) => {
@@ -48,7 +44,7 @@ test.describe('Homepage', () => {
     await expect(skipLink).toHaveAttribute('class', /skip/i);
 
     // Check nav has proper aria labels
-    const nav = page.locator('nav');
+    const nav = page.locator('header nav').first();
     await expect(nav).toHaveAttribute('aria-label', /navigation|main|Navegación/i);
   });
 

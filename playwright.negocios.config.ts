@@ -5,7 +5,8 @@ import { defineConfig, devices } from '@playwright/test';
 process.env.NEGOCIOS_TEST_FIXTURE = '1';
 export default defineConfig({
   testDir: './tests/e2e',
-  testMatch: 'negocios.spec.ts',
+  testMatch: ['negocios.spec.ts', 'homepage.spec.ts'],
+  forbidOnly: !!process.env.CI,
   workers: 1,
   retries: 0,
   reporter: [['list'], ['html', { outputFolder: 'playwright-report/negocios', open: 'never' }]],

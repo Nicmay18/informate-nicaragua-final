@@ -13,9 +13,20 @@ for (const name of fs.readdirSync(root).filter(n => n.startsWith('.env'))) {
 }
 process.env.ADMIN_API_KEY = 'negocios-local-fixture-only';
 process.env.ADMIN_SESSION_SECRET = 'negocios-local-signing-only';
+process.env.ADMIN_EMAILS = 'admin@example.test';
 require('tsx/cjs');
 const { createFakeDb } = require('./negocios-db.ts');
 const db = createFakeDb();
+// Noticias sintéticas: la portada y el detalle se prueban sin omitir recorridos.
+const fecha = new Date().toISOString();
+db._store.set('noticias', new Map([['noticia-e2e-local', {
+  slug: 'noticia-e2e-local', titulo: 'Noticia sintética para verificar la navegación local',
+  resumen: 'Contenido de prueba que solo existe en la base local en memoria.',
+  contenido: '<p>Esta noticia sintética permite comprobar la portada y el detalle. No describe un hecho real y nunca se publica en producción.</p>',
+  categoria: 'Nacionales', estado: 'publicado', publicado: true, aprobadoMeni: true,
+  archived: false, noindex: false, fecha, publishedAt: fecha, vistas: 1,
+  imagen: '/logo.png',
+}]]));
 const firestore = require('firebase-admin/firestore');
 const app = require('firebase-admin/app');
 // También cubre los wrappers ESM de firebase-admin, que leen exports del caché.

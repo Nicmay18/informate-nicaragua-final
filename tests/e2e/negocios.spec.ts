@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { createHmac } from 'node:crypto';
 
 test('formulario público y acceso administrativo protegido', async ({ page, request }) => {
   await page.goto('/negocios/alta');
@@ -34,7 +35,9 @@ test('solicitud → moderación → pago → contacto → reporte (base local en
   const pending = requests.items.find((r: any) => r.datos.nombre === name);
   expect(pending.estado).toBe('pendiente');
 
-  await context.addCookies([{ name: 'admin_session', value: 'negocios-local-fixture-only', url: 'http://localhost:3000', httpOnly: true, sameSite: 'Strict' }]);
+  const payload = `${Date.now() + 60_000}.${Buffer.from('admin@example.test').toString('base64url')}`;
+  const signedSession = `${payload}.${createHmac('sha256', 'negocios-local-signing-only').update(payload).digest('hex')}`;
+  await context.addCookies([{ name: 'admin_session', value: signedSession, url: 'http://localhost:3000', httpOnly: true, sameSite: 'Strict' }]);
   await page.goto('/admin/negocios');
   await page.getByRole('button', { name: 'Solicitudes', exact: true }).click();
   const card = page.locator('.negocios-records article').filter({ hasText: name });
