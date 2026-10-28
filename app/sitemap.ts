@@ -8,8 +8,11 @@ import { getAllEvergreen } from '@/lib/evergreen';
 import { getAllTemaSlugs } from '@/lib/topics';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
+import { isNegocioPublicable, type Negocio } from '@/lib/negocios/modelo';
 
-export const revalidate = 3600;
+// Las noticias mantienen su caché propia; la moderación y la caducidad
+// comercial se comprueban en cada solicitud de sitemap.
+export const dynamic = 'force-dynamic';
 
 const baseUrl = 'https://nicaraguainformate.com';
 
@@ -38,6 +41,25 @@ const cachedGetEntitySlugs = unstable_cache(
   ['sitemap-entities'],
   { revalidate: 3600, tags: ['sitemap-entities'] }
 );
+
+async function getNegocioSlugs() {
+    try {
+      const { getAdminDb } = await import('@/lib/firebase-admin');
+      const snap = await getAdminDb()
+        .collection('negocios')
+        .where('estado', '==', 'aprobado')
+        .select('slug', 'estado', 'vigenteHasta')
+        .limit(500)
+        .get();
+      const now = new Date();
+      return snap.docs
+        .filter((d) => isNegocioPublicable(d.data() as Negocio, now))
+        .map((d) => d.data().slug)
+        .filter(Boolean) as string[];
+    } catch {
+      return [];
+    }
+}
 
 export function safeDate(value: unknown): Date {
   if (!value) return new Date();
@@ -94,6 +116,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/nosotros`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/contacto`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/publicidad`, changeFrequency: 'monthly', priority: 0.4 },
+    { url: `${baseUrl}/negocios`, changeFrequency: 'weekly', priority: 0.6 },
+    { url: `${baseUrl}/negocios/alta`, changeFrequency: 'monthly', priority: 0.3 },
     { url: `${baseUrl}/privacidad`, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${baseUrl}/terminos`, changeFrequency: 'monthly', priority: 0.4 },
     { url: `${baseUrl}/politica-editorial`, changeFrequency: 'monthly', priority: 0.4 },
@@ -125,6 +149,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entitySlugs = await cachedGetEntitySlugs();
   const entityUrls: MetadataRoute.Sitemap = entitySlugs.map((slug) => ({
     url: `${baseUrl}/entidad/${slug}`,
+    changeFrequency: 'weekly',
+    priority: 0.4,
+  }));
+
+  // Perfiles de negocios aprobados: contenido comercial identificado,
+  // indexable por sí mismo (LocalBusiness), no altera prioridades editoriales.
+  const negocioUrls: MetadataRoute.Sitemap = (await getNegocioSlugs()).map((slug) => ({
+    url: `${baseUrl}/negocios/${slug}`,
     changeFrequency: 'weekly',
     priority: 0.4,
   }));
@@ -174,9 +206,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return activeCategorySlugs.has(catSlug);
     });
 
-    return [...filteredStaticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls, ...articleUrls];
+    return [...filteredStaticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls, ...negocioUrls, ...articleUrls];
   } catch (error) {
     logger.error('[Sitemap] Error fetching articles:', error);
-    return [...staticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls];
+    return [...staticUrls, ...authorUrls, ...evergreenUrls, ...temaUrls, ...entityUrls, ...negocioUrls];
   }
 }

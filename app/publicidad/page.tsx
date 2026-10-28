@@ -50,6 +50,12 @@ const POLICY = [
 export default function PublicidadPage() {
   return (
     <LegalPageShell title="Publicidad y alianzas comerciales">
+      <section style={{ padding: 20, border: '1px solid #c4d8ce', borderRadius: 12, marginBottom: 24 }}>
+        <h2>Tu negocio en Nicaragua Informate</h2>
+        <p>Perfil comercial revisado, contacto directo y reporte de clics. Solicitar el alta no implica contratar ni pagar. Acordamos precio, período y prestaciones antes de activar una campaña.</p>
+        <Link href="/negocios/alta">Solicitar un perfil comercial →</Link>{' · '}
+        <Link href="/negocios">Ver el directorio</Link>
+      </section>
       {/* Hero stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: '1.5rem' }}>
         {STATS.map((s) => (
