@@ -63,7 +63,7 @@ export default function NoticiasList({ noticias }: NoticiasListProps) {
                     fontSize: 10,
                     fontWeight: 700,
                     color: '#fff',
-                    background: cat.color,
+                    background: `linear-gradient(rgba(0,0,0,0.28),rgba(0,0,0,0.28)), ${cat.color}`,
                     padding: '2px 8px',
                     borderRadius: 9999,
                     textTransform: 'uppercase',
@@ -94,7 +94,7 @@ export default function NoticiasList({ noticias }: NoticiasListProps) {
                   </p>
                 )}
                 <time
-                  style={{ fontSize: 11, color: '#9ca3af', marginTop: 'auto', display: 'block' }}
+                  style={{ fontSize: 11, color: '#6b7280', marginTop: 'auto', display: 'block' }}
                   dateTime={n.fecha}
                 >
                   {formatDateES(n.fecha)}

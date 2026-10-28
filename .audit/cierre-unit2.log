@@ -1,0 +1,769 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90mE:/PROYECTO/informate-nicaragua-final[39m
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/admin-session.test.ts[2m > [22m[2mhandler de login — Firebase y allowlist[2m > [22m[2mrechaza ID token expirado
+[22m[39m[session] Error: auth/id-token-expired
+
+[90mstderr[2m | tests/admin-session.test.ts[2m > [22m[2mhandler de login — Firebase y allowlist[2m > [22m[2mrechaza allowlist vacía
+[22m[39m[session] ADMIN_EMAILS no configurado; acceso denegado
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/mission9-real-sources.test.ts
+[22m[39m◇ injected env (49) from .env.local // tip: ⌘ suppress logs { quiet: true }
+
+[90mstdout[2m | tests/mission9-real-sources.test.ts[2m > [22m[2mMisión 9 — Activación real de fuentes (end-to-end)[2m > [22m[2mGSC real connection with sc-domain property
+[22m[39m[gsc-collector] Collecting GSC data for sc-domain:nicaraguainformate.com from 2026-10-21 to 2026-10-28
+
+[90mstdout[2m | tests/forensic-regression.test.ts[2m > [22m[2mForensic regression — falsos negativos[2m > [22m[2mpipelineV4 detecta instituciones, cifras, citas y aporte propio
+[22m[39mEVIDENCE {
+  instituciones: [33m7[39m,
+  fuentes: [
+    [32m'Ministerio de Educación'[39m,
+    [32m'MINED'[39m,
+    [32m'Instituto Nicaragüense de Turismo'[39m,
+    [32m'INTUR'[39m,
+    [32m'Gobierno de Nicaragua'[39m,
+    [32m'Presidencia'[39m,
+    [32m'Ministerio de Economía Familiar'[39m
+  ],
+  datosConcretos: [33mtrue[39m,
+  citaEspecifica: [33mtrue[39m,
+  citaEstructurada: [33mtrue[39m,
+  fuentePropia: [33mtrue[39m,
+  cifras: { fechas: [33m5[39m, cifras: [33m10[39m, lugares: [33m1[39m, nombres: [33m6[39m },
+  categoria: [32m'Nacionales'[39m
+}
+
+[90mstdout[2m | tests/sala-redaccion.test.ts[2m > [22m[2mSala de Redacción — informe por especialista[2m > [22m[2mSucesos: produce informe con todos los roles + decisión
+[22m[39m
+===== INFORME Sucesos =====
+NOTA: Lluvias dejan viviendas afectadas en varios municipios -…
+MESA: sucesos (perfil: sucesos)
+
+MESA DE SUCESOS: APROBADO
+EDITOR DE ESTRUCTURA (5W+H): APROBADO
+EDITOR DE FUENTES Y CREDIBILIDAD: APROBADO
+EDITOR DE LENGUAJE Y CALIDAD: APROBADO
+EDITOR SEO / GOOGLE: APROBADO con sugerencias — Meta descripción muy corta (80 caracteres) · Faltan subtítulos H2 en el contenido · Pocos elementos de énfasis (strong)
+EDITOR DE EXPERIENCIA DEL LECTOR: APROBADO con sugerencias — Contenido con solo 65 palabras (mínimo recomendado: 300) · El título tiene señales de clickbait
+EDITOR DE REDES SOCIALES: PENDIENTE — Se genera al publicar.
+
+JEFE DE REDACCIÓN: APROBADO — 6 especialistas aprobaron sin hallazgos que requieran acción. Todo está correcto — publicar.
+SUPERVISOR: SIN_DATOS (requiere revisión)
+
+DECISIÓN: PUBLICAR — LISTA PARA PUBLICAR — aprobada con 7 sugerencia(s) editorial(es) opcionales.
+CAMBIOS REALIZADOS: Ninguno
+RECOMENDACIONES: Meta descripción muy corta (80 caracteres); Faltan subtítulos H2 en el contenido; Pocos elementos de énfasis (strong); No se definieron keywords; No se detectó imagen destacada; Contenido con solo 65 palabras (mínimo recomendado: 300); El título tiene señales de clickbait
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/meni-lluvias-repro.test.ts[2m > [22m[2mDIAGNÓSTICO nota lluvias — cadena de bloqueo[2m > [22m[2mtraza señales → MENI → Supervisor → decisión de publicación
+[22m[39m
+=== SEÑALES FACTUALIDAD ===
+ IMPORTANT NO_ATTRIBUTION: afirmaciones factuales sin atribución, fuentes ni research
+
+=== TRUST ===
+ factores: ninguno
+ fuentes: El Tuma, La Dalia | nivel: ALTA
+
+=== MENI ===
+ aprobado: [33mtrue[39m | score: [33m90[39m | tier: NOTICIA
+ blockingIssues: ninguno
+ warnings: ninguno
+ dna: {"adn":90,"excl":97,"wow":90,"transc":100}
+ veredicto: PUBLICAR | LISTA PARA PUBLICAR — aprobada con 2 sugerencia(s) editorial(es) opcionales.
+
+=== SUPERVISOR ===
+ verdict: INVESTIGAR_MAS | state: RESEARCHING
+
+=== COMPUERTA guardar-directo ===
+ meniOk: [33mtrue[39m | decision: PUBLICAR
+ canOverride si editorOverride=true: [33mfalse[39m
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/sala-redaccion.test.ts[2m > [22m[2mSala de Redacción — informe por especialista[2m > [22m[2mDeportes: produce informe con todos los roles + decisión
+[22m[39m
+===== INFORME Deportes =====
+NOTA: Rivas y Granada disputarán la final del Pomares 2026 -…
+MESA: deportes (perfil: deportes)
+
+MESA DE DEPORTES: APROBADO
+EDITOR DE ESTRUCTURA (5W+H): APROBADO
+EDITOR DE FUENTES Y CREDIBILIDAD: APROBADO
+EDITOR DE LENGUAJE Y CALIDAD: APROBADO
+EDITOR SEO / GOOGLE: APROBADO con sugerencias — Faltan subtítulos H2 en el contenido · Pocos elementos de énfasis (strong) · No se detectó imagen destacada
+EDITOR DE EXPERIENCIA DEL LECTOR: APROBADO con sugerencias — No se detectaron fuentes oficiales · Contenido con solo 58 palabras (mínimo recomendado: 300) · CHECK LEAD 5W: MEJORAR — el lead podría dejar más claros qué, dónde y cuándo.
+EDITOR DE REDES SOCIALES: PENDIENTE — Se genera al publicar.
+
+JEFE DE REDACCIÓN: APROBADO — 6 especialistas aprobaron; 9 sugerencia(s) no bloquean. Publicar y considerar las mejoras.
+SUPERVISOR: SIN_DATOS (requiere revisión)
+
+DECISIÓN: PUBLICAR_CON_CAMBIOS — PUBLICAR CON CAMBIOS — 9 recomendación(es) editorial(es) que NO impiden publicar.
+CAMBIOS REALIZADOS: Resumen ajustado a 160 caracteres.; Añadidos énfasis automáticos en entidades clave.; Keywords completadas automáticamente.
+RECOMENDACIONES: Faltan subtítulos H2 en el contenido; Pocos elementos de énfasis (strong); No se detectaron fuentes oficiales; No se detectó imagen destacada; Contenido con solo 58 palabras (mínimo recomendado: 300); CHECK LEAD 5W: MEJORAR — el lead podría dejar más claros qué, dónde y cuándo.; Responder: Donde y cuando ocurre u ocurrio el evento?; Quienes participan o son protagonistas?; Cual fue el resultado del juego?; Cuantas carreras y quienes se destacaron?; Cual es el proximo juego o compromiso?; Explicar: Qué ocurrió; Por qué es importante; Qué contexto necesita; El título tiene señales de clickbait
+
+[33m[39m[32m·[39m[90mstdout[2m | tests/forensic-regression.test.ts[2m > [22m[2mForensic regression — falsos negativos[2m > [22m[2mrunMeni no reporta falsos negativos en instituciones, cifras, citas ni aporte propio
+[22m[39mRUNMENI {
+  scoreFinal: [33m90[39m,
+  aprobado: [33mtrue[39m,
+  calificacion: [32m'PUBLICABLE'[39m,
+  puntosPerdidos: [
+    { concepto: [32m'Qué significa'[39m, puntos: [33m2[39m },
+    { concepto: [32m'Cómo funciona'[39m, puntos: [33m2[39m },
+    { concepto: [32m'Qué sigue'[39m, puntos: [33m2[39m },
+    { concepto: [32m'Cómo acceder'[39m, puntos: [33m2[39m }
+  ],
+  recomendaciones: [],
+  forense: {
+    score: [33m100[39m,
+    nivel: [32m'VERDE'[39m,
+    adjetivosEmocionales: [],
+    riesgosLegales: [],
+    recomendaciones: [],
+    evidencias: [
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m, [36m[Object][39m,
+      [36m[Object][39m
+    ]
+  }
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/sala-redaccion.test.ts[2m > [22m[2mSala de Redacción — informe por especialista[2m > [22m[2mNacionales: produce informe con todos los roles + decisión
+[22m[39m
+===== INFORME Nacionales =====
+NOTA: MINSA inaugura nueva sala de emergencias en hospital…
+MESA: nacionales (perfil: nacionales)
+
+MESA DE NACIONALES: APROBADO
+EDITOR DE ESTRUCTURA (5W+H): APROBADO
+EDITOR DE FUENTES Y CREDIBILIDAD: APROBADO
+EDITOR DE LENGUAJE Y CALIDAD: APROBADO
+EDITOR SEO / GOOGLE: APROBADO con sugerencias — Faltan subtítulos H2 en el contenido · No se detectó imagen destacada
+EDITOR DE EXPERIENCIA DEL LECTOR: APROBADO con sugerencias — Contenido con solo 52 palabras (mínimo recomendado: 300) · Responder: Que cambia?; A quien beneficia?; Que significa para Nicaragua?; Que sigue ahora? · Explicar: Qué enfermedad o problema es; Cuántos casos hay y dónde; Cómo se transmite
+EDITOR DE REDES SOCIALES: PENDIENTE — Se genera al publicar.
+
+JEFE DE REDACCIÓN: APROBADO — 6 especialistas aprobaron; 5 sugerencia(s) no bloquean. Publicar y considerar las mejoras.
+SUPERVISOR: SIN_DATOS (requiere revisión)
+
+DECISIÓN: PUBLICAR_CON_CAMBIOS — PUBLICAR CON CAMBIOS — 5 recomendación(es) editorial(es) que NO impiden publicar.
+CAMBIOS REALIZADOS: Resumen ajustado a 159 caracteres.; Añadidos énfasis automáticos en entidades clave.; Keywords completadas automáticamente.
+RECOMENDACIONES: Faltan subtítulos H2 en el contenido; No se detectó imagen destacada; Contenido con solo 52 palabras (mínimo recomendado: 300); Responder: Que cambia?; A quien beneficia?; Que significa para Nicaragua?; Que sigue ahora?; Explicar: Qué enfermedad o problema es; Cuántos casos hay y dónde; Cómo se transmite
+
+[90mstdout[2m | tests/sala-redaccion.test.ts[2m > [22m[2mSala de Redacción — informe por especialista[2m > [22m[2mInternacionales: produce informe con todos los roles + decisión
+[22m[39m
+===== INFORME Internacionales =====
+NOTA: Huracán toca tierra en Florida y deja miles…
+MESA: internacional (perfil: internacional)
+
+MESA DE INTERNACIONAL: APROBADO
+EDITOR DE ESTRUCTURA (5W+H): APROBADO
+EDITOR DE FUENTES Y CREDIBILIDAD: APROBADO
+EDITOR DE LENGUAJE Y CALIDAD: APROBADO
+EDITOR SEO / GOOGLE: APROBADO con sugerencias — Meta descripción muy corta (69 caracteres) · Faltan subtítulos H2 en el contenido · Pocos elementos de énfasis (strong)
+EDITOR DE EXPERIENCIA DEL LECTOR: APROBADO con sugerencias — Contenido con solo 48 palabras (mínimo recomendado: 300) · El título tiene señales de clickbait
+EDITOR DE REDES SOCIALES: PENDIENTE — Se genera al publicar.
+
+JEFE DE REDACCIÓN: APROBADO — 6 especialistas aprobaron sin hallazgos que requieran acción. Todo está correcto — publicar.
+SUPERVISOR: SIN_DATOS (requiere revisión)
+
+DECISIÓN: PUBLICAR — LISTA PARA PUBLICAR — aprobada con 7 sugerencia(s) editorial(es) opcionales.
+CAMBIOS REALIZADOS: Ninguno
+RECOMENDACIONES: Meta descripción muy corta (69 caracteres); Faltan subtítulos H2 en el contenido; Pocos elementos de énfasis (strong); No se definieron keywords; No se detectó imagen destacada; Contenido con solo 48 palabras (mínimo recomendado: 300); El título tiene señales de clickbait
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/mission10-diagnostics.test.ts[2m > [22m[2mMisión 10 — Diagnóstico, repair plan y CEO operativo[2m > [22m[2mdata-merger diferencia REAL + 0 de ACCESS_BLOCKED
+[22m[39m[data-merger] Fused 1 articles: 1 with GSC data, 0 with GA4 data
+[data-merger] Fused 1 articles: 0 with GSC data, 0 with GA4 data
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/meni-quality-audit-corpus.test.ts[2m > [22m[2mCorpus real — métricas sistémicas MENI[2m > [22m[2mreporte de métricas (informativo)
+[22m[39m
+╔══ MENI QUALITY AUDIT — corpus 30 noticias reales ══╗
+║ DUPLICATE_REC:        0/30 notas
+║ ALREADY_SATISFIED:    0/30 notas
+║ PROFILE_INCOHERENCE:  0/30 notas
+║ MODULE_CONTRADICTION: 0/30 notas
+╚══ Total recs: 92 | VE warnings: 7 ══╝
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/social-distribution.test.ts[2m > [22m[2mTelegram — envío: timeout, errores, retry, idempotencia[2m > [22m[2merror parse → nonRetryable, sin reintento
+[22m[39m[telegram] envío falló {
+  slug: [32m'medicina-legal-dictamen-ticuantepe'[39m,
+  error: [32m"Bad Request: can't parse entities"[39m,
+  errorCode: [32m'PARSE'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/admin-news-hotfix.test.ts[2m > [22m[2madmin/news hotfix — noticias recién publicadas deben aparecer[2m > [22m[2mun fallo de lectura no se convierte en una lista parcial exitosa
+[22m[39m[admin/news GET] Error: lectura fallida
+    at Object.get [90m(E:\PROYECTO\informate-nicaragua-final\[39mtests\admin-news-hotfix.test.ts:78:47[90m)[39m
+    at fetchAdminDocs [90m(E:\PROYECTO\informate-nicaragua-final\[39mapp\api\admin\news\route.ts:66:77[90m)[39m
+    at listNews [90m(E:\PROYECTO\informate-nicaragua-final\[39mapp\api\admin\news\route.ts:109:24[90m)[39m
+    at GET [90m(E:\PROYECTO\informate-nicaragua-final\[39mapp\api\admin\news\route.ts:149:10[90m)[39m
+    at [90mE:\PROYECTO\informate-nicaragua-final\[39mtests\admin-news-hotfix.test.ts:83:23
+[90m    at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+    at [90mfile:///E:/PROYECTO/informate-nicaragua-final/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:20
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/publish-edit-flow.test.ts[2m > [22m[2mEditar nota publicada → el cambio llega a Firestore y se revalida todo[2m > [22m[2meditar una palabra del contenido actualiza Firestore y revalida artículo + categoría + índices
+[22m[39m[admin/news PUT] Correction tracking falló (no bloqueante): TypeError: db.collection(...).add is not a function
+    at registerCorrection [90m(E:\PROYECTO\informate-nicaragua-final\[39mlib\meni\editor-jefe\correction-tracker.ts:76:35[90m)[39m
+    at PUT [90m(E:\PROYECTO\informate-nicaragua-final\[39mapp\api\admin\news\[id]\route.ts:190:17[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+    at [90mE:\PROYECTO\informate-nicaragua-final\[39mtests\publish-edit-flow.test.ts:134:17
+    at [90mfile:///E:/PROYECTO/informate-nicaragua-final/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:20
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/social-distribution.test.ts[2m > [22m[2mTelegram — envío: timeout, errores, retry, idempotencia[2m > [22m[2m429 → retryable; si el retry también falla, ok=false
+[22m[39m[telegram] envío falló {
+  slug: [32m'medicina-legal-dictamen-ticuantepe'[39m,
+  error: [32m'Too Many Requests'[39m,
+  errorCode: [32m'TELEGRAM_API'[39m
+}
+
+[90mstderr[2m | tests/social-distribution.test.ts[2m > [22m[2mTelegram — envío: timeout, errores, retry, idempotencia[2m > [22m[2mUnauthorized → nonRetryable, sin retry
+[22m[39m[telegram] envío falló {
+  slug: [32m'medicina-legal-dictamen-ticuantepe'[39m,
+  error: [32m'Unauthorized'[39m,
+  errorCode: [32m'UNAUTHORIZED'[39m
+}
+
+[90mstderr[2m | tests/social-distribution.test.ts[2m > [22m[2mTelegram — envío: timeout, errores, retry, idempotencia[2m > [22m[2mimagen falla por URL → fallback a sendMessage
+[22m[39m[telegram] sendPhoto falló por imagen, fallback a sendMessage
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[2m[90m-[39m[22m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/mission9-real-sources.test.ts[2m > [22m[2mMisión 9 — Activación real de fuentes (end-to-end)[2m > [22m[2mGSC real connection with sc-domain property
+[22m[39m[gsc-collector] Collection failed: GSC_TIMEOUT 
+
+[90mstderr[2m | tests/mission9-real-sources.test.ts[2m > [22m[2mMisión 9 — Activación real de fuentes (end-to-end)[2m > [22m[2mGA4 real connection returns 1, 7 and 30 day active users
+[22m[39m[ga4-collector] No GA4 property ID configured
+
+[90mstderr[2m | tests/mission9-real-sources.test.ts[2m > [22m[2mMisión 9 — Activación real de fuentes (end-to-end)[2m > [22m[2mGA4 real connection returns 1, 7 and 30 day active users
+[22m[39m[ga4-collector] No GA4 property ID configured
+
+[90mstderr[2m | tests/mission9-real-sources.test.ts[2m > [22m[2mMisión 9 — Activación real de fuentes (end-to-end)[2m > [22m[2mGA4 real connection returns 1, 7 and 30 day active users
+[22m[39m[ga4-collector] No GA4 property ID configured
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/publish-edit-flow.test.ts[2m > [22m[2mEditar nota publicada → el cambio llega a Firestore y se revalida todo[2m > [22m[2meditar solo el resumen pasa por MENI y NO se descarta silenciosamente
+[22m[39m[admin/news PUT] Correction tracking falló (no bloqueante): TypeError: db.collection(...).add is not a function
+    at registerCorrection [90m(E:\PROYECTO\informate-nicaragua-final\[39mlib\meni\editor-jefe\correction-tracker.ts:76:35[90m)[39m
+    at PUT [90m(E:\PROYECTO\informate-nicaragua-final\[39mapp\api\admin\news\[id]\route.ts:190:17[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+    at [90mE:\PROYECTO\informate-nicaragua-final\[39mtests\publish-edit-flow.test.ts:164:17
+    at [90mfile:///E:/PROYECTO/informate-nicaragua-final/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-hooks.js:752:20
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/p1-dates-errors.test.ts[2m > [22m[2mP1-08: ERROR ≠ EMPTY en fetchPublishedDocs[2m > [22m[2mtodas las queries fallan → lanza ERROR (no devuelve [])
+[22m[39m[data.ts] query fecha-timestamp falló: UNAVAILABLE: Firestore caído (mock)
+[data.ts] query fecha-string falló: UNAVAILABLE: Firestore caído (mock)
+
+[90mstderr[2m | tests/p1-dates-errors.test.ts[2m > [22m[2mP1-08: ERROR ≠ EMPTY en fetchPublishedDocs[2m > [22m[2mtodas las queries fallan → lanza ERROR (no devuelve [])
+[22m[39m[data.ts] query publishedAt-indexed falló: UNAVAILABLE: Firestore caído (mock)
+
+[90mstderr[2m | tests/p1-dates-errors.test.ts[2m > [22m[2mP1-08: ERROR ≠ EMPTY en fetchPublishedDocs[2m > [22m[2mtodas las queries fallan → lanza ERROR (no devuelve [])
+[22m[39m[data.ts] query publishedAt-single-field falló: UNAVAILABLE: Firestore caído (mock)
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/mission10-integrity.test.ts[2m > [22m[2mConsumer Integrity[2m > [22m[2m6. growth expone métricas canónicas con definición
+[22m[39m[growth] No se pudieron agregar fuentes de tráfico: Cannot convert undefined or null to object
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/meni-motor-trace.test.ts[2m > [22m[2mTRACE — motor real MENI sobre Nuevo Carnic[2m > [22m[2mvolcado completo de la decisión
+[22m[39m
+══════════ TRACE MENI — NUEVO CARNIC ══════════
+TÍTULO: {"needsInvestigation":false,"hasNewsVerb":true,"missingData":["cuándo ocurrió"],"verdict":"PUBLICAR_CON_CAMBIOS"}
+
+TRUST: {
+ "factores": [],
+ "nivel": "ALTA",
+ "riesgos": [],
+ "provisionales": 0,
+ "atribuciones": 5,
+ "fuentes": 7,
+ "requiereRevisionHumana": false
+}
+
+FACTUALITY SIGNALS: []
+
+MENI: {
+ "scoreFinal": 89,
+ "aprobado": false,
+ "recomendacion": "mejorar",
+ "calificacion": "MEJORAR",
+ "blockingIssues": [],
+ "warnings": [
+  "MENI_SCORE_THRESHOLD"
+ ]
+}
+
+SUPERVISOR: {
+ "verdict": "PUBLICAR_CON_CAMBIOS",
+ "resultingState": "READY",
+ "reason": "El Supervisor pide ajustes menores antes de publicar.",
+ "issues": [
+  "WARNING[IMAGEN] Artículo sin imagen destacada"
+ ]
+}
+
+VEREDICTO FINAL: {
+ "decision": "PUBLICAR_CON_CAMBIOS",
+ "counts": {
+  "blockers": 0,
+  "warnings": 0,
+  "recommendations": 8,
+  "info": 1
+ },
+ "resumen": "PUBLICAR CON CAMBIOS — 8 recomendación(es) editorial(es) que NO impiden publicar.",
+ "hallazgos": [
+  "RECOMMENDATION[FALTAN_H2] Faltan subtítulos H2 en el contenido",
+  "RECOMMENDATION[SIN_IMAGEN] No se detectó imagen destacada",
+  "RECOMMENDATION[SIN_FECHA_PUBLICACION] Falta fecha de publicación",
+  "RECOMMENDATION[CONTENIDO_CORTO] Contenido con solo 102 palabras (mínimo recomendado: 300)",
+  "RECOMMENDATION[RECOMENDACION_EDITORIAL] CHECK LEAD 5W: MEJORAR — el lead podría dejar más claros qué, dónde y cuándo.",
+  "RECOMMENDATION[RECOMENDACION_EDITORIAL] Responder: Que ocurrio?; Esta confirmado?; Que investiga la Policia?; Que falta por conocer?; Como afecta a la comunidad?; Que antecedentes tiene?; Hay informacion de utilidad para el lector?",
+  "RECOMMENDATION[RECOMENDACION_EDITORIAL] Explicar: Qué ocurrió; Por qué es importante; Cómo le afecta",
+  "RECOMMENDATION[SUPERVISOR_IMAGEN] Artículo sin imagen destacada",
+  "INFO[MENI_SCORE_THRESHOLD] Score por debajo del umbral de aprobación automática"
+ ]
+}
+═══════════════════════════════════════════════
+
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mlanza error en transición inválida
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mlanza error en transición inválida
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=1, Aprobaciones=0, Memoria=0, Patrones=0'[39m
+}
+
+[90mstderr[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mlanza error en transición inválida
+[22m[39m[operational-loop] Transición inválida de RESOLVED a RUNNING para incidente doc-1793153590941-1
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mprocesa conflicto auto-reparable: crea incidente, job, verificación y RESOLVED
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mprocesa conflicto auto-reparable: crea incidente, job, verificación y RESOLVED
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=1, Aprobaciones=0, Memoria=0, Patrones=0'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mfalla verificación después del máximo de intentos y escala
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mfalla verificación después del máximo de intentos y escala
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=1, Aprobaciones=0, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mNO_DATA externo y MENI_FORENSE se clasifican como BLOCKED_EXTERNAL, no como humanos
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mNO_DATA externo y MENI_FORENSE se clasifican como BLOCKED_EXTERNAL, no como humanos
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=2, Incidentes=2, Jobs=0, Aprobaciones=2, Memoria=0, Patrones=0'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2maprueba una aprobación y pasa el incidente a RUNNING
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2maprueba una aprobación y pasa el incidente a RUNNING
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=0, Aprobaciones=1, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mrechaza una aprobación y escala el incidente a ESCALATED
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mrechaza una aprobación y escala el incidente a ESCALATED
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=0, Aprobaciones=1, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mflujo end-to-end controlado: DETECTED → RESOLVED
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mflujo end-to-end controlado: DETECTED → RESOLVED
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=1, Aprobaciones=0, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mreprocesar un conflicto persistente con incidente ya en ACTION_REQUIRED no lanza error ni lo reinicia
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mreprocesar un conflicto persistente con incidente ya en ACTION_REQUIRED no lanza error ni lo reinicia
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=0, Aprobaciones=1, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mreprocesar un conflicto persistente con incidente ya en ACTION_REQUIRED no lanza error ni lo reinicia
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mreprocesar un conflicto persistente con incidente ya en ACTION_REQUIRED no lanza error ni lo reinicia
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=0, Aprobaciones=0, Memoria=0, Patrones=0'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mreconcileOperationalApprovals marca aprobaciones externas como BLOCKED_EXTERNAL
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m1[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mclasifica MENI_FORENSE y REPAIR_FAILURE como BLOCKED_EXTERNAL, no pendientes humanos
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mclasifica MENI_FORENSE y REPAIR_FAILURE como BLOCKED_EXTERNAL, no pendientes humanos
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=2, Incidentes=2, Jobs=0, Aprobaciones=2, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mmantiene aprobación humana real para DATA_CONFLICT no auto-reparable
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mmantiene aprobación humana real para DATA_CONFLICT no auto-reparable
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=0, Aprobaciones=1, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2midempotencia: tres corridas con los mismos conflictos no aumentan pending
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2midempotencia: tres corridas con los mismos conflictos no aumentan pending
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=3, Incidentes=3, Jobs=0, Aprobaciones=3, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2midempotencia: tres corridas con los mismos conflictos no aumentan pending
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m1[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2midempotencia: tres corridas con los mismos conflictos no aumentan pending
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=3, Incidentes=3, Jobs=0, Aprobaciones=0, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2midempotencia: tres corridas con los mismos conflictos no aumentan pending
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m1[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2midempotencia: tres corridas con los mismos conflictos no aumentan pending
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=3, Incidentes=3, Jobs=0, Aprobaciones=0, Memoria=0, Patrones=0'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mresuelve incidentes stale cuando el conflicto deja de detectarse
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mresuelve incidentes stale cuando el conflicto deja de detectarse
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=2, Incidentes=2, Jobs=0, Aprobaciones=2, Memoria=0, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mresuelve incidentes stale cuando el conflicto deja de detectarse
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m1[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/nios-operational-loop.test.ts[2m > [22m[2mNIOS Operational Loop[2m > [22m[2mresuelve incidentes stale cuando el conflicto deja de detectarse
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=1, Incidentes=1, Jobs=0, Aprobaciones=0, Memoria=0, Patrones=0'[39m
+}
+
+[33m[39m[32m·[39m[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST A — data stale: detect, repair and verify snapshot inconsistency
+[22m[39m[repair-engine] Repaired snapshot 2026-05-20 with 2 articles
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST A — data stale: detect, repair and verify snapshot inconsistency
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST A — data stale: detect, repair and verify snapshot inconsistency
+[22m[39m[depto-queue] Trabajo encolado {
+  jobId: [32m'mvrhcmn2-bk1nke'[39m,
+  type: [32m'operational-repair'[39m,
+  priority: [32m'P0'[39m
+}
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST A — data stale: detect, repair and verify snapshot inconsistency
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=12, Incidentes=12, Jobs=1, Aprobaciones=10, Memoria=1, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST B — new article collected and counted
+[22m[39m[repair-engine] Repaired snapshot 2026-05-20 with 1 articles
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST B — new article collected and counted
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST B — new article collected and counted
+[22m[39m[depto-queue] Trabajo encolado {
+  jobId: [32m'mvrhcmot-t8hrwn'[39m,
+  type: [32m'operational-repair'[39m,
+  priority: [32m'P0'[39m
+}
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST B — new article collected and counted
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=12, Incidentes=12, Jobs=1, Aprobaciones=10, Memoria=1, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST C — cache stale: detect, refresh and verify
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST C — cache stale: detect, refresh and verify
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=11, Incidentes=11, Jobs=0, Aprobaciones=10, Memoria=1, Patrones=0'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST E — repair failure is not reported as success
+[22m[39m[repair-engine] repairAdminCache failed: Error: cache unreachable
+    at [90mE:\PROYECTO\informate-nicaragua-final\[39mtests\ceo-agent-final.test.ts:237:13
+    at mockCall [90m(file:///E:/PROYECTO/informate-nicaragua-final/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:96:15[90m)[39m
+    at spy [90m(file:///E:/PROYECTO/informate-nicaragua-final/[39mnode_modules/[4mtinyspy[24m/dist/index.js:47:80[90m)[39m
+    at [90mE:\PROYECTO\informate-nicaragua-final\[39mlib\nios\repair-engine.ts:318:25
+    at Array.forEach (<anonymous>)
+    at invalidateNiosAdminCaches [90m(E:\PROYECTO\informate-nicaragua-final\[39mlib\nios\repair-engine.ts:318:8[90m)[39m
+    at repairAdminCache [90m(E:\PROYECTO\informate-nicaragua-final\[39mlib\nios\repair-engine.ts:333:37[90m)[39m
+    at executeRepair [90m(E:\PROYECTO\informate-nicaragua-final\[39mlib\nios\repair-engine.ts:386:26[90m)[39m
+    at runRepairEngine [90m(E:\PROYECTO\informate-nicaragua-final\[39mlib\nios\repair-engine.ts:467:67[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:105:5)[39m
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST E — repair failure is not reported as success
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST E — repair failure is not reported as success
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=12, Incidentes=12, Jobs=0, Aprobaciones=11, Memoria=1, Patrones=0'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST G — NIOS remembers the outcome (learnings persisted)
+[22m[39m[repair-engine] Repaired snapshot 2026-05-20 with 2 articles
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST G — NIOS remembers the outcome (learnings persisted)
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST G — NIOS remembers the outcome (learnings persisted)
+[22m[39m[depto-queue] Trabajo encolado {
+  jobId: [32m'mvrhcmwy-cov2wx'[39m,
+  type: [32m'operational-repair'[39m,
+  priority: [32m'P0'[39m
+}
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST G — NIOS remembers the outcome (learnings persisted)
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=12, Incidentes=12, Jobs=1, Aprobaciones=10, Memoria=1, Patrones=0'[39m
+}
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST H — repairs do not modify editorial content
+[22m[39m[repair-engine] Repaired snapshot 2026-05-20 with 2 articles
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST H — repairs do not modify editorial content
+[22m[39m[operational-loop] Aprobaciones reconciliadas { pending: [33m0[39m, blockedExternal: [33m0[39m, orphanTerminal: [33m0[39m, duplicate: [33m0[39m }
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST H — repairs do not modify editorial content
+[22m[39m[depto-queue] Trabajo encolado {
+  jobId: [32m'mvrhcmz0-51jzs8'[39m,
+  type: [32m'operational-repair'[39m,
+  priority: [32m'P0'[39m
+}
+
+[90mstdout[2m | tests/ceo-agent-final.test.ts[2m > [22m[2mCEO AGENT FINAL MISSION — fire tests[2m > [22m[2mTEST H — repairs do not modify editorial content
+[22m[39m[operational-loop] Procesamiento de conflictos completado {
+  summary: [32m'Conflictos=12, Incidentes=12, Jobs=1, Aprobaciones=10, Memoria=1, Patrones=0'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | lib/ceo-agent.test.ts[2m > [22m[2mReal article integration[2m > [22m[2manaliza artículos reales sin inventar datos
+[22m[39m[REAL] Credenciales no encontradas: G:\RESPALDO\ESCRITORIO\fb-key-base64.txt
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/factuality-barrier.test.ts[2m > [22m[2mcontenido canónico en guardarConMeni[2m > [22m[2mupdateData.contenido = textoCorregido de MENI, no el input crudo
+[22m[39m[decision-log] no se pudo escribir la bitácora {
+  attemptId: [32m'att_1793153600147_z8abu1'[39m,
+  error: [32m'TypeError: db.collection is not a function'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/factuality-barrier.test.ts[2m > [22m[2mcontenido canónico en guardarConMeni[2m > [22m[2msin articulo.contenido, canónico = input limpio (nunca crudo con artefactos)
+[22m[39m[decision-log] no se pudo escribir la bitácora {
+  attemptId: [32m'att_1793153600159_qrkh4m'[39m,
+  error: [32m'TypeError: db.collection is not a function'[39m
+}
+
+[90mstderr[2m | tests/factuality-barrier.test.ts[2m > [22m[2mregresión: caso iPhone Duo[2m > [22m[2mel detector produce señales de riesgo sobre esta clase de contenido
+[22m[39m[decision-log] no se pudo escribir la bitácora {
+  attemptId: [32m'att_1793153600164_gu494o'[39m,
+  error: [32m'TypeError: db.collection is not a function'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/factuality-barrier.test.ts[2m > [22m[2mregresión: caso iPhone Duo[2m > [22m[2mla autoridad editorial NO aprueba la publicación de esta clase
+[22m[39m[decision-log] no se pudo escribir la bitácora {
+  attemptId: [32m'att_1793153600169_tl2rg3'[39m,
+  error: [32m'TypeError: db.collection is not a function'[39m
+}
+
+[90mstderr[2m | tests/factuality-barrier.test.ts[2m > [22m[2mregresión: caso iPhone Duo[2m > [22m[2mel contenido persistido no contiene el artefacto aunque el input lo traiga
+[22m[39m[decision-log] no se pudo escribir la bitácora {
+  attemptId: [32m'att_1793153600174_pso665'[39m,
+  error: [32m'TypeError: db.collection is not a function'[39m
+}
+
+[90mstderr[2m | tests/factuality-barrier.test.ts[2m > [22m[2mauditoría final: atribución vaga y confianza[2m > [22m[2mconfianza BAJA + 0 fuentes ya no sale con PUBLICAR limpio
+[22m[39m[decision-log] no se pudo escribir la bitácora {
+  attemptId: [32m'att_1793153600183_woeg4s'[39m,
+  error: [32m'TypeError: db.collection is not a function'[39m
+}
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/fire-test.test.ts[2m > [22m[2mPrueba de fuego — Noticia real atravesando el flujo[2m > [22m[2mEtapa 8: Resumen del flujo completo[2m > [22m[2mDebe imprimir el resumen del flujo completo
+[22m[39m
+═══════════════════════════════════════════════════════════════
+PRUEBA DE FUEGO — RESUMEN DEL FLUJO COMPLETO
+═══════════════════════════════════════════════════════════════
+Título: Policía Nacional captura a líder de banda de narcotráfico en Managua tras operación de 6 meses
+Etapa 1 (evaluateRawTitle): PUBLICAR_CON_CAMBIOS
+Etapa 2 (profile): sucesos | categoría: Sucesos
+Etapa 3 (Supervisor): PUBLICAR | state: READY
+Etapa 3 (confidence): [33m0.5[39m
+Etapa 3 (issues): [33m0[39m issues
+Etapa 4 (gate): APROBADO
+═══════════════════════════════════════════════════════════════
+RESULTADO: La noticia atravesó todo el flujo editorial correctamente.
+═══════════════════════════════════════════════════════════════
+
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-intelligence.test.ts[2m > [22m[2mData Merger[2m > [22m[2mshould merge Firestore, GSC and GA4 data correctly
+[22m[39m[data-merger] Fused 2 articles: 1 with GSC data, 1 with GA4 data
+
+[90mstdout[2m | tests/nios-intelligence.test.ts[2m > [22m[2mData Merger[2m > [22m[2mshould handle null GSC and GA4
+[22m[39m[data-merger] Fused 1 articles: 0 with GSC data, 0 with GA4 data
+
+[90mstdout[2m | tests/nios-intelligence.test.ts[2m > [22m[2mData Merger[2m > [22m[2mM15: excluye borrador/archivado y docs con ciclo de vida ambiguo (universo canónico)
+[22m[39m[data-merger] Fused 1 articles: 0 with GSC data, 0 with GA4 data
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-intelligence.test.ts[2m > [22m[2mMisión 14 — Source Status & Forensic Coherence[2m > [22m[2mdata-merger marks matched, no_traffic and no_data correctly
+[22m[39m[data-merger] Fused 2 articles: 1 with GSC data, 0 with GA4 data
+[data-merger] Fused 2 articles: 0 with GSC data, 0 with GA4 data
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/mission17-production-observability.test.ts[2m > [22m[2mMission 17 — Production Observability & Control Center[2m > [22m[2m1. GSC CONFIG_REQUIRED cuando no hay siteUrl
+[22m[39m[gsc-collector] No GSC site URL configured
+
+[90mstderr[2m | tests/mission17-production-observability.test.ts[2m > [22m[2mMission 17 — Production Observability & Control Center[2m > [22m[2m4. GA4 CONFIG_REQUIRED cuando no hay propertyId
+[22m[39m[ga4-collector] No GA4 property ID configured
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/mission7-data-status.test.ts[2m > [22m[2mMisión 7 — el sistema no miente con ceros[2m > [22m[2mA) gsc ACCESS_BLOCKED => gscImpressions no se interpreta como 0 real
+[22m[39m[data-merger] Fused 1 articles: 0 with GSC data, 0 with GA4 data
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/mission7-data-status.test.ts[2m > [22m[2mMisión 7 — el sistema no miente con ceros[2m > [22m[2mF) mergeArticleData con snapshots nulos reporta NO_DATA en lugar de inventar 0
+[22m[39m[data-merger] Fused 1 articles: 0 with GSC data, 0 with GA4 data
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/audit-context.test.ts[2m > [22m[2mAUDITORIA CONTEXT SCORE[2m > [22m[2mimprime desglose
+[22m[39mPerfil detectado: violencia_genero (confianza 63%)
+
+Antecedentes .................. 20/20
+  evidencia encontrada: ciclo
+  evidencia faltante: (ninguna)
+  regla aplicada: detector de coincidencias semánticas (signals) para antecedentes
+  archivo y línea: lib/meni/contextualiza.ts:107-188 (definición), lib/meni/contextualiza.ts:211-225 (cálculo)
+Marco legal ................... 20/20
+  evidencia encontrada: ley 779, ley, femicidio, legal
+  evidencia faltante: (ninguna)
+  regla aplicada: detector de coincidencias semánticas (signals) para marco_legal
+  archivo y línea: lib/meni/contextualiza.ts:107-188 (definición), lib/meni/contextualiza.ts:211-225 (cálculo)
+Datos verificables ............ 20/20
+  evidencia encontrada: segun, según, de acuerdo con, años, numero de, número de
+  evidencia faltante: (ninguna)
+  regla aplicada: detector de coincidencias semánticas (signals) para datos_verificables
+  archivo y línea: lib/meni/contextualiza.ts:107-188 (definición), lib/meni/contextualiza.ts:211-225 (cálculo)
+Contexto temporal ............. 10/10
+  evidencia encontrada: este, a las
+  evidencia faltante: (ninguna)
+  regla aplicada: detector de coincidencias semánticas (signals) para contexto_temporal
+  archivo y línea: lib/meni/contextualiza.ts:107-188 (definición), lib/meni/contextualiza.ts:211-225 (cálculo)
+Contexto geográfico ........... 10/10
+  evidencia encontrada: municipio, departamento, lugar, zona, municipio de
+  evidencia faltante: (ninguna)
+  regla aplicada: detector de coincidencias semánticas (signals) para contexto_geografico
+  archivo y línea: lib/meni/contextualiza.ts:107-188 (definición), lib/meni/contextualiza.ts:211-225 (cálculo)
+Instituciones ................. 15/15
+  evidencia encontrada: policia nacional, policía nacional, autoridades, comisaría, comisaria
+  evidencia faltante: (ninguna)
+  regla aplicada: detector de coincidencias semánticas (signals) para instituciones
+  archivo y línea: lib/meni/contextualiza.ts:107-188 (definición), lib/meni/contextualiza.ts:211-225 (cálculo)
+Impacto social ................ 15/15
+  evidencia encontrada: familiares, víctimas, muerte
+  evidencia faltante: (ninguna)
+  regla aplicada: detector de coincidencias semánticas (signals) para impacto_social
+  archivo y línea: lib/meni/contextualiza.ts:107-188 (definición), lib/meni/contextualiza.ts:211-225 (cálculo)
+Fuentes ....................... 20/20
+  evidencia encontrada: información preliminar, extraoficial, de manera extraoficial, según especialistas, según la propia, coinciden en que, recomiendan, describen, hipótesis, especialistas, según, segun, de acuerdo con
+  evidencia faltante: (ninguna)
+  regla aplicada: detector de coincidencias semánticas (signals) para fuentes
+  archivo y línea: lib/meni/contextualiza.ts:107-188 (definición), lib/meni/contextualiza.ts:211-225 (cálculo)
+
+TOTAL contextualiza: 130/130 = 100.0%
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-batch-scaling.test.ts[2m > [22m[2mNIOS snapshot — escalabilidad del batch[2m > [22m[2m501 artículos → guarda sin exceder límite de batch
+[22m[39m[nios-store] Saved 501 articles to subcollection for 2026-10-28
+[nios-store] Saved daily snapshot for 2026-10-28 (501 articles)
+
+[90mstdout[2m | tests/nios-batch-scaling.test.ts[2m > [22m[2mNIOS snapshot — escalabilidad del batch[2m > [22m[2m1000 artículos → guarda sin exceder límite de batch
+[22m[39m[nios-store] Saved 1000 articles to subcollection for 2026-10-28
+[nios-store] Saved daily snapshot for 2026-10-28 (1000 articles)
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/mission14-readiness.test.ts[2m > [22m[2mMission 14 — NIOS Production Readiness[2m > [22m[2m7. Firebase health reporta AUTH_FAILED si getAdminDb falla
+[22m[39m[firebase-health] Auth failed: auth/revoked
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mlee traffic_daily correctamente
+[22m[39m[traffic-reader] fetchTrafficForDate { date: [32m'2026-08-06'[39m, hasDaily: [33mtrue[39m, dailyCount: [33m2[39m }
+[traffic-reader] returning traffic_daily { date: [32m'2026-08-06'[39m, views: [33m200[39m, articleCount: [33m2[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mfallback funciona cuando traffic_daily está vacío
+[22m[39m[traffic-reader] fetchTrafficForDate { date: [32m'2026-08-06'[39m, hasDaily: [33mfalse[39m, dailyCount: [33m0[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mfallback funciona cuando traffic_daily está vacío
+[22m[39m[traffic-reader] fallback traffic_log { date: [32m'2026-08-06'[39m, views: [33m3[39m, articleCount: [33m2[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mcache no rompe datos: source consistente
+[22m[39m[traffic-reader] fetchTrafficForDate { date: [32m'2026-08-06'[39m, hasDaily: [33mtrue[39m, dailyCount: [33m1[39m }
+[traffic-reader] returning traffic_daily { date: [32m'2026-08-06'[39m, views: [33m10[39m, articleCount: [33m1[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mcache no rompe datos: source consistente
+[22m[39m[traffic-reader] fetchTrafficForDate { date: [32m'2026-08-06'[39m, hasDaily: [33mtrue[39m, dailyCount: [33m1[39m }
+[traffic-reader] returning traffic_daily { date: [32m'2026-08-06'[39m, views: [33m10[39m, articleCount: [33m1[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mausencia de datos devuelve estado seguro
+[22m[39m[traffic-reader] fetchTrafficForDate { date: [32m'2026-08-06'[39m, hasDaily: [33mfalse[39m, dailyCount: [33m0[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mausencia de datos devuelve estado seguro
+[22m[39m[traffic-reader] fallback traffic_log { date: [32m'2026-08-06'[39m, views: [33m0[39m, articleCount: [33m0[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mgetTrafficMigrationStatus refleja daily source
+[22m[39m[traffic-reader] fetchTrafficForDate { date: [32m'2026-08-06'[39m, hasDaily: [33mtrue[39m, dailyCount: [33m1[39m }
+[traffic-reader] returning traffic_daily { date: [32m'2026-08-06'[39m, views: [33m1[39m, articleCount: [33m1[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mgetTrafficPerformance distingue views24h, views7d y views30d sin mezclar períodos
+[22m[39m[traffic-reader] fetchTrafficForDate { date: [32m'2026-08-06'[39m, hasDaily: [33mfalse[39m, dailyCount: [33m0[39m }
+
+[90mstdout[2m | tests/traffic-reader.test.ts[2m > [22m[2mTraffic Reader (FASE 3.8)[2m > [22m[2mgetTrafficPerformance distingue views24h, views7d y views30d sin mezclar períodos
+[22m[39m[traffic-reader] fallback traffic_log { date: [32m'2026-08-06'[39m, views: [33m2[39m, articleCount: [33m1[39m }
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-fase25.test.ts[2m > [22m[2mAdSense Trust Checklist[2m > [22m[2mshould evaluate trust check and return status
+[22m[39m[adsense-trust-check] AdSense Trust Check: 71/100. Estado: MEJORAR ANTES DE SOLICITAR. Identidad 0, contenido 100, UX 100, confianza 71.
+
+[90mstdout[2m | tests/nios-fase25.test.ts[2m > [22m[2mAdSense Recovery Full Report[2m > [22m[2mshould answer all 6 questions
+[22m[39m[adsense-trust-check] AdSense Trust Check: 48/100. Estado: NO SOLICITAR TODAVÍA. Identidad 0, contenido 67, UX 75, confianza 44.
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/nios-repair-engine.test.ts[2m > [22m[2mNIOS Repair Engine[2m > [22m[2mauto-repairs snapshot inconsistency and reports VERIFIED
+[22m[39m[repair-engine] Repaired snapshot 2026-05-20 with 2 articles
+
+[90mstdout[2m | tests/nios-repair-engine.test.ts[2m > [22m[2mNIOS Repair Engine[2m > [22m[2mreports WAITING_HUMAN when GSC requires human configuration
+[22m[39m[repair-engine] Repaired snapshot 2026-05-20 with 2 articles
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/lib/env.test.ts[2m > [22m[2mEnvironment Validation[2m > [22m[2mshould validate required Firebase environment variables
+[22m[39m[env] All environment variables validated
+
+[90mstderr[2m | tests/lib/env.test.ts[2m > [22m[2mEnvironment Validation[2m > [22m[2mshould fail validation when required Firebase vars are missing
+[22m[39m[env] Environment validation failed:
+  • FIREBASE_PROJECT_ID: Missing FIREBASE_PROJECT_ID
+
+[90mstdout[2m | tests/lib/env.test.ts[2m > [22m[2mEnvironment Validation[2m > [22m[2mshould get validated environment variable
+[22m[39m[env] All environment variables validated
+[env] All environment variables validated
+
+[90mstdout[2m | tests/lib/env.test.ts[2m > [22m[2mEnvironment Validation[2m > [22m[2mshould throw on requireEnv if variable is not set
+[22m[39m[env] All environment variables validated
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstdout[2m | tests/mission16-closure.test.ts[2m > [22m[2mMission 16 — NIOS Production Closure[2m > [22m[2m4. emitMomentumAlerts no persiste duplicados en ventana corta
+[22m[39m[nios-alerts] Persisted 1 alerts
+
+[90mstdout[2m | tests/mission16-closure.test.ts[2m > [22m[2mMission 16 — NIOS Production Closure[2m > [22m[2m4. emitMomentumAlerts no persiste duplicados en ventana corta
+[22m[39m[nios-alerts] Alertas: 1 candidatas, 0 emitidas, 0 duplicadas suprimidas, 1 en cooldown.
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[90mstderr[2m | tests/observability.test.ts[2m > [22m[2mobservability — Fase 3[2m > [22m[2mpersistEvent does not throw on store failure
+[22m[39m[observability] failed to persist event: firestore down
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[2m[90m-[39m[22m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m
+
+[2m Test Files [22m [1m[32m126 passed[39m[22m[90m (126)[39m
+[2m      Tests [22m [1m[32m1677 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (1679)[39m
+[2m   Start at [22m 20:12:16
+[2m   Duration [22m 125.80s[2m (transform 16.02s, setup 124.58s, collect 189.54s, tests 88.03s, environment 326.01s, prepare 56.80s)[22m
+

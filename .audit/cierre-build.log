@@ -1,0 +1,266 @@
+   ▲ Next.js 15.5.28
+   - Environments: .env.local
+   - Experiments (use with caution):
+     ✓ scrollRestoration
+     · clientTraceMetadata
+     · webVitalsAttribution
+     · optimizePackageImports
+
+   Creating an optimized production build ...
+[@sentry/nextjs] Could not find `onRequestError` hook in instrumentation file. This indicates outdated configuration of the Sentry SDK. Use `Sentry.captureRequestError` to instrument the `onRequestError` hook: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#errors-from-nested-react-server-components
+[@sentry/nextjs] DEPRECATION WARNING: It is recommended renaming your `sentry.client.config.ts` file, or moving its content to `instrumentation-client.ts`. When using Turbopack `sentry.client.config.ts` will no longer work. Read more about the `instrumentation-client.ts` file: https://nextjs.org/docs/app/api-reference/file-conventions/instrumentation-client
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (132kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+<w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (139kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+ ✓ Compiled successfully in 5.4min
+   Linting and checking validity of types ...
+
+ ⚠ The Next.js plugin was not detected in your ESLint configuration. See https://nextjs.org/docs/app/api-reference/config/eslint#migrating-existing-config
+   Collecting page data ...
+ ⚠ Using edge runtime on a page currently disables static generation for that page
+   Generating static pages (0/103) ...
+   Generating static pages (25/103) 
+   Generating static pages (51/103) 
+   Generating static pages (77/103) 
+ ✓ Generating static pages (103/103)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                                 Size  First Load JS  Revalidate  Expire
+┌ ○ /                                                    7.42 kB         506 kB          1m      1y
+├ ○ /_not-found                                            527 B         482 kB
+├ ƒ /admin/ads                                             527 B         482 kB
+├ ƒ /admin/ceo-agent                                       527 B         482 kB
+├ ƒ /admin/command-center                                  527 B         482 kB
+├ ƒ /admin/correcciones                                    527 B         482 kB
+├ ƒ /admin/crecimiento                                     527 B         482 kB
+├ ƒ /admin/distribute                                      527 B         482 kB
+├ ƒ /admin/editor                                          527 B         482 kB
+├ ƒ /admin/entities                                        527 B         482 kB
+├ ƒ /admin/google-news                                     527 B         482 kB
+├ ƒ /admin/growth                                          527 B         482 kB
+├ ƒ /admin/knowledge-center                                527 B         482 kB
+├ ƒ /admin/meni                                            527 B         482 kB
+├ ƒ /admin/meni-dashboard                                  527 B         482 kB
+├ ƒ /admin/meni/arquitectura                               527 B         482 kB
+├ ƒ /admin/negocios                                      6.84 kB         503 kB
+├ ƒ /admin/nios                                            527 B         482 kB
+├ ƒ /admin/nios/adsense-recovery                           527 B         482 kB
+├ ƒ /admin/nios/adsense-report                             527 B         482 kB
+├ ƒ /admin/nios/google-intelligence                        527 B         482 kB
+├ ƒ /admin/nios/recovery                                   527 B         482 kB
+├ ƒ /admin/nios/reparaciones                               527 B         482 kB
+├ ƒ /admin/nios/weekly                                     527 B         482 kB
+├ ƒ /admin/portada                                         527 B         482 kB
+├ ƒ /admin/trafico                                         527 B         482 kB
+├ ƒ /api/admin/analizar                                    527 B         482 kB
+├ ƒ /api/admin/auditor-dashboard                           527 B         482 kB
+├ ƒ /api/admin/auditoria-completa                          527 B         482 kB
+├ ƒ /api/admin/auditoria-taxonomia                         527 B         482 kB
+├ ƒ /api/admin/auspiciadores                               527 B         482 kB
+├ ƒ /api/admin/auspiciadores/[id]                          527 B         482 kB
+├ ƒ /api/admin/cache-purge                                 527 B         482 kB
+├ ƒ /api/admin/centro-de-comando                           527 B         482 kB
+├ ƒ /api/admin/ceo-agent/analyze                           527 B         482 kB
+├ ƒ /api/admin/ceo-agent/daily                             527 B         482 kB
+├ ƒ /api/admin/clean-backlog                               527 B         482 kB
+├ ƒ /api/admin/comercial                                   527 B         482 kB
+├ ƒ /api/admin/config                                      527 B         482 kB
+├ ƒ /api/admin/copy-social                                 527 B         482 kB
+├ ƒ /api/admin/crecimiento                                 527 B         482 kB
+├ ƒ /api/admin/dashboard-calidad                           527 B         482 kB
+├ ƒ /api/admin/departamento/ejecutar                       527 B         482 kB
+├ ƒ /api/admin/departamento/resumen                        527 B         482 kB
+├ ƒ /api/admin/departamento/trabajos                       527 B         482 kB
+├ ƒ /api/admin/distribuir                                  527 B         482 kB
+├ ƒ /api/admin/eliminar-viejas                             527 B         482 kB
+├ ƒ /api/admin/enrich-links                                527 B         482 kB
+├ ƒ /api/admin/enrich-strong                               527 B         482 kB
+├ ƒ /api/admin/estado                                      527 B         482 kB
+├ ƒ /api/admin/exportar-sucesos                            527 B         482 kB
+├ ƒ /api/admin/facebook-rescrape                           527 B         482 kB
+├ ƒ /api/admin/guardar-directo                             527 B         482 kB
+├ ƒ /api/admin/health                                      527 B         482 kB
+├ ƒ /api/admin/index                                       527 B         482 kB
+├ ƒ /api/admin/kb-backfill                                 527 B         482 kB
+├ ƒ /api/admin/limpiar-noindex                             527 B         482 kB
+├ ƒ /api/admin/limpiar-sucesos                             527 B         482 kB
+├ ƒ /api/admin/linkedin                                    527 B         482 kB
+├ ƒ /api/admin/medium                                      527 B         482 kB
+├ ƒ /api/admin/meni-dashboard                              527 B         482 kB
+├ ƒ /api/admin/meni-learning                               527 B         482 kB
+├ ƒ /api/admin/meni-rating                                 527 B         482 kB
+├ ƒ /api/admin/meni/arquitectura                           527 B         482 kB
+├ ƒ /api/admin/meni/evaluar                                527 B         482 kB
+├ ƒ /api/admin/meni/generar                                527 B         482 kB
+├ ƒ /api/admin/meni/registry                               527 B         482 kB
+├ ƒ /api/admin/meni/registry/sync                          527 B         482 kB
+├ ƒ /api/admin/metricas                                    527 B         482 kB
+├ ƒ /api/admin/negocios                                    527 B         482 kB
+├ ƒ /api/admin/negocios-auditoria                          527 B         482 kB
+├ ƒ /api/admin/negocios-campanas                           527 B         482 kB
+├ ƒ /api/admin/negocios-planes                             527 B         482 kB
+├ ƒ /api/admin/negocios-prospectos                         527 B         482 kB
+├ ƒ /api/admin/negocios-reporte                            527 B         482 kB
+├ ƒ /api/admin/negocios-solicitudes                        527 B         482 kB
+├ ƒ /api/admin/negocios/[id]                               527 B         482 kB
+├ ƒ /api/admin/news                                        527 B         482 kB
+├ ƒ /api/admin/news/[id]                                   527 B         482 kB
+├ ƒ /api/admin/nios-collect                                527 B         482 kB
+├ ƒ /api/admin/nios-intelligence                           527 B         482 kB
+├ ƒ /api/admin/nios-queues                                 527 B         482 kB
+├ ƒ /api/admin/nios-telemetry                              527 B         482 kB
+├ ƒ /api/admin/nios/growth                                 527 B         482 kB
+├ ƒ /api/admin/nios/loop                                   527 B         482 kB
+├ ƒ /api/admin/nios/repair                                 527 B         482 kB
+├ ƒ /api/admin/nota-trust                                  527 B         482 kB
+├ ƒ /api/admin/portada                                     527 B         482 kB
+├ ƒ /api/admin/portada-intel                               527 B         482 kB
+├ ƒ /api/admin/push-notificar                              527 B         482 kB
+├ ƒ /api/admin/reindexar-google                            527 B         482 kB
+├ ƒ /api/admin/repair-fechas                               527 B         482 kB
+├ ƒ /api/admin/research                                    527 B         482 kB
+├ ƒ /api/admin/session                                     527 B         482 kB
+├ ƒ /api/admin/shortlink                                   527 B         482 kB
+├ ƒ /api/admin/social-conversion                           527 B         482 kB
+├ ƒ /api/admin/stats                                       527 B         482 kB
+├ ƒ /api/admin/story                                       527 B         482 kB
+├ ƒ /api/admin/traffic                                     527 B         482 kB
+├ ƒ /api/admin/trafico                                     527 B         482 kB
+├ ƒ /api/admin/twitter                                     527 B         482 kB
+├ ƒ /api/admin/upload-image                                527 B         482 kB
+├ ƒ /api/admin/verificar-telegram                          527 B         482 kB
+├ ƒ /api/admin/watch                                       527 B         482 kB
+├ ƒ /api/admin/whatsapp                                    527 B         482 kB
+├ ƒ /api/articles                                          527 B         482 kB
+├ ƒ /api/auditor                                           527 B         482 kB
+├ ƒ /api/auditor-wordcount                                 527 B         482 kB
+├ ƒ /api/check-content                                     527 B         482 kB
+├ ƒ /api/clean-seo                                         527 B         482 kB
+├ ƒ /api/count-news                                        527 B         482 kB
+├ ƒ /api/cron/departamento-central                         527 B         482 kB
+├ ƒ /api/cron/departamento-daily                           527 B         482 kB
+├ ƒ /api/cron/departamento-watchdog                        527 B         482 kB
+├ ƒ /api/cron/distribuciones-retry                         527 B         482 kB
+├ ƒ /api/cron/meni-learning-cycle                          527 B         482 kB
+├ ƒ /api/cron/nios-ceo-loop                                527 B         482 kB
+├ ƒ /api/cron/nios-collect                                 527 B         482 kB
+├ ƒ /api/cron/resumen-diario                               527 B         482 kB
+├ ƒ /api/cron/supervisor-watch                             527 B         482 kB
+├ ƒ /api/cron/traffic-cleanup                              527 B         482 kB
+├ ƒ /api/entity                                            527 B         482 kB
+├ ○ /api/exchange-rates                                    527 B         482 kB          1h      1y
+├ ƒ /api/expandir-7                                        527 B         482 kB
+├ ƒ /api/facebook                                          527 B         482 kB
+├ ƒ /api/feed-xml                                          527 B         482 kB
+├ ƒ /api/indexnow                                          527 B         482 kB
+├ ƒ /api/l/[id]                                            527 B         482 kB
+├ ƒ /api/list-all                                          527 B         482 kB
+├ ƒ /api/list-empty                                        527 B         482 kB
+├ ƒ /api/listar-categoria                                  527 B         482 kB
+├ ƒ /api/negocios                                          527 B         482 kB
+├ ƒ /api/negocios/solicitud                                527 B         482 kB
+├ ƒ /api/newsletter                                        527 B         482 kB
+├ ƒ /api/nios/brief                                        527 B         482 kB
+├ ƒ /api/nios/growth                                       527 B         482 kB
+├ ƒ /api/nios/journey                                      527 B         482 kB
+├ ƒ /api/nios/lifecycle                                    527 B         482 kB
+├ ƒ /api/nios/swiss-watch                                  527 B         482 kB
+├ ƒ /api/onesignal-sw                                      527 B         482 kB
+├ ƒ /api/panel                                             527 B         482 kB
+├ ƒ /api/pulir                                             527 B         482 kB
+├ ƒ /api/radio-proxy                                       527 B         482 kB
+├ ƒ /api/revalidate                                        527 B         482 kB
+├ ƒ /api/rss                                               527 B         482 kB
+├ ƒ /api/support/track                                     527 B         482 kB
+├ ƒ /api/telegram                                          527 B         482 kB
+├ ƒ /api/telemetry/ads                                     527 B         482 kB
+├ ƒ /api/telemetry/journey                                 527 B         482 kB
+├ ƒ /api/telemetry/negocios                                527 B         482 kB
+├ ƒ /api/top-noticias                                      527 B         482 kB
+├ ƒ /api/transform                                         527 B         482 kB
+├ ƒ /api/weather                                           527 B         482 kB
+├ ƒ /api/weather/all                                       527 B         482 kB
+├ ƒ /api/webhooks/departamento                             527 B         482 kB
+├ ƒ /autor/[slug]                                          477 B         489 kB
+├ ○ /autor/keyling-eliet-rivera-munoz                      527 B         482 kB
+├ ○ /autor/keyling-rivera                                6.45 kB         501 kB          1m      1y
+├ ○ /autores                                               477 B         489 kB
+├ ƒ /autoridad                                             477 B         489 kB
+├ ○ /biblioteca                                             1 kB         484 kB
+├ ƒ /buscar                                              1.22 kB         490 kB
+├ ○ /categoria                                              1 kB         484 kB          1h      1y
+├ ƒ /categoria/[slug]                                    1.86 kB         496 kB
+├ ○ /centro-confianza                                       1 kB         484 kB
+├ ○ /contacto                                              143 B         492 kB
+├ ○ /cookies                                               142 B         491 kB
+├ ƒ /correcciones                                          143 B         492 kB
+├ ƒ /entidad                                             1.43 kB         485 kB
+├ ƒ /entidad/[slug]                                      1.66 kB         485 kB
+├ ƒ /feed                                                  527 B         482 kB
+├ ○ /feed.json                                             527 B         482 kB          1d      1y
+├ ○ /feed.xml                                              527 B         482 kB          1d      1y
+├ ○ /guia                                                  176 B         483 kB          1d      1y
+├ ● /guia/[slug]                                         3.62 kB         498 kB
+├   ├ /guia/apostillar-documentos-nicaragua-2026
+├   ├ /guia/anular-recurso-policial-nicaragua-2026
+├   ├ /guia/turismo-nicaragua-2026-destinos-imperdibles
+├   └ [+9 more paths]
+├ ƒ /indexnow-key.txt                                      527 B         482 kB
+├ ○ /login                                               1.65 kB         483 kB
+├ ○ /mapa-del-sitio                                        143 B         492 kB
+├ ○ /metodologia-editorial                               3.29 kB         492 kB
+├ ƒ /negocios                                              986 B         484 kB
+├ ƒ /negocios/[slug]                                        2 kB         485 kB
+├ ƒ /negocios/alta                                       4.16 kB         500 kB
+├ ○ /news-sitemap.xml                                      527 B         482 kB         30m      1y
+├ ○ /newsletter                                          2.17 kB         485 kB          1m      1y
+├ ○ /nosotros                                               1 kB         484 kB
+├ ƒ /noticias                                            2.01 kB         491 kB
+├ ƒ /noticias/[slug]                                       19 kB         517 kB
+├ ƒ /opengraph-image                                       527 B         482 kB
+├ ƒ /panel                                                 527 B         482 kB
+├ ƒ /panel/ads                                           2.91 kB         486 kB
+├ ƒ /panel/centro-de-comando                             7.09 kB         490 kB
+├ ƒ /panel/crecimiento                                   3.08 kB         486 kB
+├ ƒ /panel/entities                                      2.84 kB         484 kB
+├ ƒ /panel/google-news                                      1 kB         484 kB
+├ ƒ /panel/knowledge-center                              2.35 kB         484 kB
+├ ƒ /panel/meni                                          7.58 kB         491 kB
+├ ƒ /panel/meni-dashboard                                3.06 kB         484 kB
+├ ƒ /panel/meni/arquitectura                             2.91 kB         486 kB
+├ ƒ /panel/nios                                          9.68 kB         493 kB
+├ ƒ /panel/nios/adsense-recovery                         1.95 kB         483 kB
+├ ƒ /panel/nios/adsense-report                           2.27 kB         484 kB
+├ ƒ /panel/nios/command-center                             527 B         482 kB
+├ ƒ /panel/nios/editorial-strategy                       2.14 kB         484 kB
+├ ƒ /panel/nios/google-intelligence                      4.01 kB         485 kB
+├ ƒ /panel/nios/performance                                527 B         482 kB
+├ ƒ /panel/nios/recovery                                 1.71 kB         483 kB
+├ ƒ /panel/nios/reparaciones                             1.85 kB         483 kB
+├ ƒ /panel/nios/weekly                                   2.11 kB         483 kB
+├ ƒ /panel/portada                                       7.79 kB         495 kB
+├ ○ /politica-editorial                                    142 B         491 kB
+├ ○ /privacidad                                            141 B         491 kB
+├ ○ /publicidad                                            143 B         492 kB
+├ ○ /radio                                               4.17 kB         487 kB
+├ ○ /robots.txt                                            527 B         482 kB
+├ ƒ /rss                                                   527 B         482 kB
+├ ƒ /rss.xml                                               527 B         482 kB
+├ ƒ /sitemap.xml                                           527 B         482 kB
+├ ƒ /tema/[slug]                                          3.2 kB         497 kB
+├ ○ /terminos                                              142 B         491 kB
+└ ○ /util                                                  197 B         483 kB
++ First Load JS shared by all                             481 kB
+  ├ chunks/4a7b0c69-aef2b53884ac395b.js                  39.1 kB
+  ├ chunks/4bd1b696-100b9d70ed4e49c1.js                  54.2 kB
+  ├ chunks/5738-3a8b1661b369a8b2.js                       167 kB
+  ├ chunks/ed9f2dc4-1b30afa125168b53.js                   217 kB
+  └ other shared chunks (total)                          3.99 kB
+
+
+ƒ Middleware                                              102 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+

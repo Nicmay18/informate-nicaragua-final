@@ -38,6 +38,8 @@ function getAnalyticsSessionId(): string | undefined {
 }
 import { getArticleMetricsAction } from '@/app/actions/get-article-metrics';
 import KeyPoints from './KeyPoints';
+import SponsorBanner from './SponsorBanner';
+import type { AuspiciadorPublico } from '@/lib/ads/auspiciadores';
 import { extractPuntosClave, buildDek, isTextoRotoPorCorte, extractoSeguro } from '@/lib/eeat-helpers';
 import ShareBar from './ShareBar';
 import AuthorCard from './AuthorCard';
@@ -60,9 +62,10 @@ const AdsenseUnit = lazy(() => import('./AdsenseUnit'));
 interface ArticlePageProps {
   noticia: Noticia;
   related?: Noticia[];
+  sponsor?: AuspiciadorPublico | null;
 }
 
-export default function ArticlePage({ noticia, related = [] }: ArticlePageProps) {
+export default function ArticlePage({ noticia, related = [], sponsor = null }: ArticlePageProps) {
   const FONT_STEPS = useMemo(() => [0.9, 1, 1.1, 1.2], []);
   const [fontIndex, setFontIndex] = useState(1); // índice 1 = tamaño normal (1em)
   const fontSize = FONT_STEPS[fontIndex];
@@ -391,6 +394,9 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
           </figure>
         )}
 
+        {/* Auspiciador — strip discreto, fuera del cuerpo editorial */}
+        {sponsor && <SponsorBanner sponsor={sponsor} slug={noticia.slug} />}
+
         <section>
         {/* Banner de calidad si el artículo está marcado para revisión editorial */}
         {(noticia as any).necesitaRevision === true && (
@@ -570,7 +576,7 @@ export default function ArticlePage({ noticia, related = [] }: ArticlePageProps)
                     </div>
                     <div style={{ padding: 14 }}>
                       <h3 style={{ margin: 0, fontWeight: 700, color: '#111827', fontSize: 14.5, lineHeight: 1.4 }}>{item.titulo}</h3>
-                      <time style={{ fontSize: 11, color: '#9ca3af', marginTop: 8, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
+                      <time style={{ fontSize: 11, color: '#6b7280', marginTop: 8, display: 'block' }} dateTime={item.fecha}>{formatDateES(item.fecha)}</time>
                     </div>
                   </Link>
                 );

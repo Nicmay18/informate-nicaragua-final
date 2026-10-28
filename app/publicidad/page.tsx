@@ -11,10 +11,10 @@ export const metadata: Metadata = {
 };
 
 const STATS = [
-  { icon: <Users size={20} />, label: 'Seguidores en comunidades de Facebook', val: '27,985' },
-  { icon: <Globe size={20} />, label: 'Visualizaciones en Facebook (últimos 28 días)', val: '~4.3 millones' },
-  { icon: <TrendingUp size={20} />, label: 'Espectadores registrados por Meta (últimos 28 días)', val: '~979 mil' },
-  { icon: <Megaphone size={20} />, label: 'Usuarios activos en el sitio (30 días)', val: '~17,000' },
+  { icon: <Users size={20} />, label: 'Comunidades activas en redes sociales', val: 'Audiencia' },
+  { icon: <Globe size={20} />, label: 'Distribución diaria en Facebook, WhatsApp y Telegram', val: 'Alcance' },
+  { icon: <TrendingUp size={20} />, label: 'Medio digital con crecimiento sostenido', val: 'Tráfico' },
+  { icon: <Megaphone size={20} />, label: 'Cobertura nacional e internacional desde Nicaragua', val: 'Cobertura' },
 ];
 
 const FORMATS = [
@@ -50,6 +50,12 @@ const POLICY = [
 export default function PublicidadPage() {
   return (
     <LegalPageShell title="Publicidad y alianzas comerciales">
+      <section style={{ padding: 20, border: '1px solid #c4d8ce', borderRadius: 12, marginBottom: 24 }}>
+        <h2>Tu negocio en Nicaragua Informate</h2>
+        <p>Perfil comercial revisado, contacto directo y reporte de clics. Solicitar el alta no implica contratar ni pagar. Acordamos precio, período y prestaciones antes de activar una campaña.</p>
+        <Link href="/negocios/alta">Solicitar un perfil comercial →</Link>{' · '}
+        <Link href="/negocios">Ver el directorio</Link>
+      </section>
       {/* Hero stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: '1.5rem' }}>
         {STATS.map((s) => (
@@ -61,16 +67,11 @@ export default function PublicidadPage() {
         ))}
       </div>
 
-      <p style={{ color: '#94a3b8', fontSize: '0.85rem', lineHeight: 1.55, marginBottom: '1rem' }}>
-        Datos de referencia recientes. No constituyen garantías de alcance futuro para ninguna campaña.
-      </p>
-
       <div style={{ color: '#475569', fontSize: '0.9rem', lineHeight: 1.7, marginBottom: '2rem' }}>
         <ul style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <li>Aproximadamente 4,700 usuarios activos durante los últimos 7 días.</li>
-          <li>Aproximadamente 22,000 page views.</li>
-          <li>Aproximadamente 13,000 usuarios de Nicaragua.</li>
-          <li>Audiencia adicional en Estados Unidos, Costa Rica, Guatemala, España y otros países.</li>
+          <li>Tráfico diario constante en el sitio, con audiencia mayoritariamente nicaragüense.</li>
+          <li>Lectoría en Nicaragua y audiencia adicional en Estados Unidos, Costa Rica, Guatemala, España y otros países.</li>
+          <li>Distribución diaria de contenido en Facebook, WhatsApp y Telegram.</li>
         </ul>
       </div>
 

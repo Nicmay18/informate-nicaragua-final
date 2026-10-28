@@ -41,7 +41,20 @@ export async function getActiveIncident(title: string): Promise<DepartamentoInci
 export async function openIncident(incident: Omit<DepartamentoIncident, 'id'>): Promise<string> {
   const db = getAdminDb();
   const existing = await getActiveIncident(incident.title);
-  if (existing) return existing.id as string;
+  if (existing) {
+    // Mismo incidente sigue abierto: refrescar evidencia (diagnóstico con el
+    // valor actual, p.ej. conteo de cola) en lugar de crear duplicados.
+    await db
+      .collection(COLLECTION)
+      .doc(existing.id as string)
+      .update({
+        detectedAt: incident.detectedAt,
+        severity: incident.severity,
+        ...(incident.diagnosis !== undefined ? { diagnosis: incident.diagnosis } : {}),
+        updatedAt: new Date().toISOString(),
+      });
+    return existing.id as string;
+  }
 
   const slug = slugify(incident.title);
   const ref = db.collection(COLLECTION).doc();

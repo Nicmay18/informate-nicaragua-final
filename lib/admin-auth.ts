@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { verifyAdminToken } from './auth';
+import { verifySessionToken } from './admin-session';
 
 export const ADMIN_SESSION_COOKIE = 'admin_session';
 
@@ -10,5 +10,5 @@ export async function getAdminSessionToken(): Promise<string | undefined> {
 
 export async function isAuthenticatedAdmin(): Promise<boolean> {
   const token = await getAdminSessionToken();
-  return verifyAdminToken(token);
+  return verifySessionToken(token);
 }

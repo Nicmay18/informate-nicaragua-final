@@ -138,10 +138,12 @@ describe('P0-7 traffic_daily — dual-write y doc padre', () => {
     expect((article.sources as DocData).facebook).toBe(1);
     expect((article.devices as DocData).mobile).toBe(1);
 
-    // El padre existe y solo contiene updatedAt (contrato de firestore.rules).
+    // El padre existe con updatedAt + agregados de nivel sitio (contrato de
+    // firestore.rules: updatedAt, views, countries). Sin país → sin countries.
     const parent = store.get(`traffic_daily/${TODAY}`)!;
     expect(parent).toBeDefined();
-    expect(Object.keys(parent)).toEqual(['updatedAt']);
+    expect(Object.keys(parent).sort()).toEqual(['updatedAt', 'views']);
+    expect(parent.views).toBe(1);
   });
 
   it('la raíz de la colección deja de reportar vacío tras el incremento', async () => {

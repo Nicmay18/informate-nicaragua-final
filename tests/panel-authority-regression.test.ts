@@ -25,6 +25,7 @@ vi.mock('@/lib/meni/profile-detector', async (importOriginal) => {
 
 import { resolveEditorialClassification } from '@/lib/editorial/canonical';
 import { isAdminRequest, verifyAdminToken } from '@/lib/auth';
+import { issueSessionToken } from '@/lib/admin-session';
 
 const HOTEL_MICHELIN = {
   titulo: 'Morgan’s Rock recibe una MICHELIN Key en Nicaragua.',
@@ -61,21 +62,30 @@ describe('Autoridad editorial — categoría', () => {
 describe('Auth — isAdminRequest cookie-aware', () => {
   beforeAll(() => {
     process.env.ADMIN_API_KEY = 'test-admin-secret-0123456789';
+    process.env.ADMIN_EMAILS = 'admin@test.com';
   });
 
   const req = (init: { headers?: Record<string, string> }) =>
     new Request('https://x.test/api/admin/config', init);
+
+  const sessionCookie = () => `admin_session=${encodeURIComponent(issueSessionToken('admin@test.com'))}`;
 
   it('acepta x-admin-token válido', () => {
     expect(isAdminRequest(req({ headers: { 'x-admin-token': 'test-admin-secret-0123456789' } }))).toBe(true);
   });
 
   it('acepta cookie admin_session válida sin header', () => {
-    expect(isAdminRequest(req({ headers: { cookie: 'admin_session=test-admin-secret-0123456789' } }))).toBe(true);
+    expect(isAdminRequest(req({ headers: { cookie: sessionCookie() } }))).toBe(true);
   });
 
   it('header marcador inválido + cookie válida → acepta (cookie no es enmascarada)', () => {
-    expect(isAdminRequest(req({ headers: { 'x-admin-token': 'session-cookie', cookie: 'admin_session=test-admin-secret-0123456789' } }))).toBe(true);
+    expect(isAdminRequest(req({ headers: { 'x-admin-token': 'session-cookie', cookie: sessionCookie() } }))).toBe(true);
+  });
+
+  it('cookie con la API key en claro (formato legado) → rechaza', () => {
+    // La cookie ya nunca porta la key: quien robe el valor obtiene un token
+    // opaco con expiración, no la credencial permanente.
+    expect(isAdminRequest(req({ headers: { cookie: 'admin_session=test-admin-secret-0123456789' } }))).toBe(false);
   });
 
   it('sin credenciales → 401 (fail-closed)', () => {

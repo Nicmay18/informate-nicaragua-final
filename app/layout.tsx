@@ -17,7 +17,6 @@ import {
 import { escapeJsonLd } from '@/lib/jsonld';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
-import Analytics from '@/components/Analytics';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -134,6 +133,10 @@ export const metadata: Metadata = {
     ...(process.env.NEXT_PUBLIC_BING_VERIFICATION && { other: { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION } }),
   },
   other: {
+    // Verificación de sitio para AdSense: el bot de revisión necesita ver el
+    // publisher ID en el HTML inicial; el script se carga diferido en cliente
+    // y no es detectable sin JS. ads.txt ya está correcto en producción.
+    'google-adsense-account': 'ca-pub-4115203339551838',
     'publisher': 'Nicaragua Informate',
     'msapplication-TileColor': '#0A192F',
     'msapplication-TileImage': '/icon-192x192.webp',
@@ -229,9 +232,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <CookieBanner />
         </Suspense>
         <ConsentScript />
-        <Suspense fallback={null}>
-          <Analytics />
-        </Suspense>
         <ThemeScript />
         <Suspense fallback={null}>
           <JourneyTracker />

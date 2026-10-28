@@ -1,0 +1,758 @@
+{
+  "at": "2026-10-28T01:54:39.868Z",
+  "user": "Nicmay18",
+  "master": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+  "protection": {
+    "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection",
+    "required_status_checks": {
+      "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/required_status_checks",
+      "strict": true,
+      "contexts": [
+        "Lint & TypeScript",
+        "Unit & Integration Tests",
+        "Build Next.js",
+        "CI Summary"
+      ],
+      "contexts_url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/required_status_checks/contexts",
+      "checks": [
+        {
+          "context": "Lint & TypeScript",
+          "app_id": 15368
+        },
+        {
+          "context": "Unit & Integration Tests",
+          "app_id": 15368
+        },
+        {
+          "context": "Build Next.js",
+          "app_id": 15368
+        },
+        {
+          "context": "CI Summary",
+          "app_id": 15368
+        }
+      ]
+    },
+    "required_pull_request_reviews": {
+      "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/required_pull_request_reviews",
+      "dismiss_stale_reviews": true,
+      "require_code_owner_reviews": false,
+      "require_last_push_approval": false,
+      "required_approving_review_count": 1
+    },
+    "required_signatures": {
+      "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/required_signatures",
+      "enabled": false
+    },
+    "enforce_admins": {
+      "url": "https://api.github.com/repos/Nicmay18/informate-nicaragua-final/branches/master/protection/enforce_admins",
+      "enabled": true
+    },
+    "required_linear_history": {
+      "enabled": false
+    },
+    "allow_force_pushes": {
+      "enabled": false
+    },
+    "allow_deletions": {
+      "enabled": false
+    },
+    "block_creations": {
+      "enabled": false
+    },
+    "required_conversation_resolution": {
+      "enabled": true
+    },
+    "lock_branch": {
+      "enabled": false
+    },
+    "allow_fork_syncing": {
+      "enabled": false
+    }
+  },
+  "collaborators": [
+    {
+      "login": "Nicmay18",
+      "role": "admin"
+    }
+  ],
+  "deployments": [
+    {
+      "id": 7002084664,
+      "sha": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "environment": "Production",
+      "created_at": "2026-10-11T21:30:33Z"
+    },
+    {
+      "id": 7001417416,
+      "sha": "e9d8ad81df1cf76495876ebe844908d4dfb08c2c",
+      "environment": "Production",
+      "created_at": "2026-10-11T20:35:03Z"
+    },
+    {
+      "id": 7001417408,
+      "sha": "3530ff4c01efc130e4eeb366c79c67bff99e932f",
+      "environment": "Production",
+      "created_at": "2026-10-11T20:35:03Z"
+    },
+    {
+      "id": 7001371864,
+      "sha": "d567e66cb5d26a601990db0e4a719543786d4522",
+      "environment": "Production",
+      "created_at": "2026-10-11T20:31:45Z"
+    },
+    {
+      "id": 6991474238,
+      "sha": "08313a1b911d78e64ecee48b3725d3b0e70a9c44",
+      "environment": "Production",
+      "created_at": "2026-10-11T05:37:08Z"
+    }
+  ],
+  "prs": [
+    {
+      "number": 2,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "22cbeb752fd2caaa8ebb70a95c13c0da2c68d74a",
+      "branch": "fix/vercel-runtime-errors",
+      "base": "3cad8dd886854d10662c876417f129fbf791003d",
+      "mergeable": null,
+      "mergeable_state": "unknown",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/2",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/107461895158"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/Er78TxXZJetmmi5xwZShmPxrZKLU"
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "19752fe73049d780faf5ea293ca6d2f982f00663",
+      "branch": "fix/meni-evidence-profile-source-20261002",
+      "base": "55398ab11d918caf9ef325c7ee0dc8725528797a",
+      "mergeable": true,
+      "mergeable_state": "behind",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/4",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/110962112037"
+        },
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/37043325031/job/110961006240"
+        },
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/37043325031/job/110961004030"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "failure",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/37043325031/job/110961003925"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "failure",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/37043325031/job/110961003893"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/37043325031/job/110959834993"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/37043325031/job/110959030203"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/37043325031/job/110958522172"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "failure",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/37043323940/job/110958519072"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/ESFNnvWi9PtwnuWp22zDSeNSjMfU"
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "ebf9ade1c6c75718b2b282ab70705f3500c15d58",
+      "branch": "feat/auspiciadores-directos",
+      "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "mergeable": true,
+      "mergeable_state": "blocked",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/10",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39811633766/job/119942334493"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39811633766/job/119942331684"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39811633766/job/119942331637"
+        },
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39811633766/job/119942331636"
+        },
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/119941740887"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39811633766/job/119940948623"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39811633766/job/119939942379"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39811633917/job/119939158485"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39811633766/job/119939158023"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/B4MdNEFfqEW1EeG5ZVW1cQQtRiA2"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "1df25d1b897168002f92b33d9d66a153da39961f",
+      "branch": "fix/depto-cola-bloqueada",
+      "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "mergeable": true,
+      "mergeable_state": "blocked",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/11",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39076713351/job/117526399645"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39076713351/job/117526399024"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39076713351/job/117526399007"
+        },
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39076713351/job/117526398981"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39076713351/job/117525834315"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39076713351/job/117525428458"
+        },
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/117525267446"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39076713351/job/117525257964"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39076713298/job/117525257776"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/Bis5ef9qJ7MGzrw9KHax8PXwYUoL"
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "6e196bb305a067336f60c39efbd7058688165c16",
+      "branch": "fix/seo-tecnico",
+      "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "mergeable": true,
+      "mergeable_state": "blocked",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/12",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/117831950464"
+        },
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39179916033/job/117831530425"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39179916033/job/117831528951"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39179916033/job/117831528937"
+        },
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39179916033/job/117831528910"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39179916033/job/117831015484"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39179916033/job/117830505028"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39179916043/job/117830278400"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39179916033/job/117830278292"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/BipFbVpUpgYvHrKxMSQtrE6Jmhcf"
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "3908093e9d4b383cae4dfd37692e6586a69c368b",
+      "branch": "fix/admin-session-opaca",
+      "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "mergeable": true,
+      "mergeable_state": "blocked",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/13",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39542950205/job/119036513292"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39542950205/job/119036511475"
+        },
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39542950205/job/119036511473"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39542950205/job/119036511443"
+        },
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/119036082532"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39542950205/job/119035504544"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39542950205/job/119035055969"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39542950302/job/119034617320"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39542950205/job/119034616405"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/3z5E2aPEvQLp5PSsZxrn5Jhgs4DV"
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "5f7792800c50cc6643277ac8b547f610f68d2486",
+      "branch": "fix/deps-audit",
+      "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "mergeable": true,
+      "mergeable_state": "blocked",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/14",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39534444366/job/119009881920"
+        },
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39534444366/job/119009880482"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39534444366/job/119009880468"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39534444366/job/119009880384"
+        },
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/119009114200"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39534444366/job/119008798741"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39534444366/job/119008169785"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39534444470/job/119007719190"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39534444366/job/119007718379"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/7eGL4oPeMvkWEjixiPosmfNp3Drt"
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "ea669a05a2509aef2eee994e13adab0e88148566",
+      "branch": "feat/negocios-mvp",
+      "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "mergeable": true,
+      "mergeable_state": "blocked",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/15",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39717971791/job/119626957330"
+        },
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39717971791/job/119626955562"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39717971791/job/119626955488"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39717971791/job/119626955460"
+        },
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/119626909254"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39717971791/job/119625731136"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39717971791/job/119624983659"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39717971791/job/119624555008"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/39717971753/job/119624554838"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/7uowQLw1gWDSScDSDkB27syeWLEq"
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "state": "open",
+      "merged": false,
+      "author": "Nicmay18",
+      "head": "54e8180869957fe21b41deb871e40e25de2cc5f9",
+      "branch": "docs/entrega-final",
+      "base": "5fa19c68aa2b6c98d4539afe5851cd9f651b0aff",
+      "mergeable": true,
+      "mergeable_state": "blocked",
+      "url": "https://github.com/Nicmay18/informate-nicaragua-final/pull/16",
+      "requested_reviewers": [],
+      "reviews": [],
+      "checks": [
+        {
+          "name": "Deploy to Vercel (Staging)",
+          "conclusion": "skipped",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40615076735/job/122577993018"
+        },
+        {
+          "name": "E2E Tests (Playwright)",
+          "conclusion": "failure",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40615076735/job/122577991414"
+        },
+        {
+          "name": "CI Summary",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40615076735/job/122577991396"
+        },
+        {
+          "name": "Lighthouse Performance",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40615076735/job/122577991350"
+        },
+        {
+          "name": "Vercel Preview Comments",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/runs/122577438585"
+        },
+        {
+          "name": "Build Next.js",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40615076735/job/122576718823"
+        },
+        {
+          "name": "Unit & Integration Tests",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40615076735/job/122576012832"
+        },
+        {
+          "name": "Lint & TypeScript",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40615076735/job/122575545288"
+        },
+        {
+          "name": "Lighthouse CI",
+          "conclusion": "success",
+          "status": "completed",
+          "url": "https://github.com/Nicmay18/informate-nicaragua-final/actions/runs/40615076743/job/122575545277"
+        }
+      ],
+      "statuses": [
+        {
+          "context": "Vercel",
+          "state": "success",
+          "url": "https://vercel.com/nicmay18s-projects/informate-nicaragua-nextjs/5tSK8esRf2gehXUxW9gpWMobVDgs"
+        }
+      ]
+    }
+  ]
+}
