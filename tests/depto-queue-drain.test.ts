@@ -124,3 +124,57 @@ describe('claimNextJob — la cola no puede quedar congelada por completados', (
     expect(await claim()).toBeNull();
   });
 });
+
+describe('completeJob — resultado con undefined no puede romper el update', () => {
+  // Producción: article-pipeline quedó en retry permanente porque
+  // `result.invalidScoreSource` era undefined y Firestore rechaza undefined
+  // en cualquier nivel ("Cannot use undefined as a Firestore value").
+  function strictDb() {
+    const store = new Map<string, DocData>([
+      ['job-undef', { jobId: 'job-undef', status: 'running' }],
+    ]);
+    const rejectUndefined = (v: unknown, path: string): void => {
+      if (v === undefined) throw new Error(`invalid Firestore value at ${path}`);
+      if (v && typeof v === 'object') {
+        for (const [k, val] of Object.entries(v)) rejectUndefined(val, `${path}.${k}`);
+      }
+    };
+    return {
+      collection: () => ({
+        doc: (id: string) => ({
+          update: async (patch: DocData) => {
+            for (const [k, v] of Object.entries(patch)) rejectUndefined(v, k);
+            store.set(id, { ...store.get(id), ...patch });
+          },
+        }),
+      }),
+      __store: store,
+    };
+  }
+
+  it('sanea campos undefined dentro de result antes de escribir', async () => {
+    const db = strictDb();
+    vi.doMock('@/lib/firebase-admin', () => ({ getAdminDb: () => db }));
+    vi.resetModules();
+    const { completeJob } = await import('@/lib/departamento-central/queue');
+
+    await expect(
+      completeJob('job-undef', { ok: true, invalidScoreSource: undefined, nota: 'x' }),
+    ).resolves.toBeUndefined();
+
+    const saved = db.__store.get('job-undef') as DocData;
+    expect(saved.status).toBe('completed');
+    expect((saved.result as DocData).invalidScoreSource).toBeUndefined();
+    expect((saved.result as DocData).nota).toBe('x');
+  });
+
+  it('omite result si no se pasa ninguno', async () => {
+    const db = strictDb();
+    vi.doMock('@/lib/firebase-admin', () => ({ getAdminDb: () => db }));
+    vi.resetModules();
+    const { completeJob } = await import('@/lib/departamento-central/queue');
+
+    await expect(completeJob('job-undef')).resolves.toBeUndefined();
+    expect((db.__store.get('job-undef') as DocData).status).toBe('completed');
+  });
+});
