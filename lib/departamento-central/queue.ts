@@ -124,11 +124,15 @@ export async function completeJob(
 ): Promise<void> {
   const db = getAdminDb();
   const now = new Date().toISOString();
-  await db.collection(JOBS).doc(jobId).update({
-    status: 'completed',
-    completedAt: now,
-    result,
-  });
+  // Firestore rechaza `undefined` en cualquier nivel del documento y un
+  // completeJob fallido deja el job en retry permanente (observado en prod:
+  // article-pipeline con `result.invalidScoreSource: undefined` reintentando
+  // desde septiembre). Mismo saneo JSON que enqueueJob.
+  const update: Record<string, unknown> = { status: 'completed', completedAt: now };
+  if (result !== undefined) {
+    update.result = JSON.parse(JSON.stringify(result));
+  }
+  await db.collection(JOBS).doc(jobId).update(update);
   logger.info('[depto-queue] Trabajo completado', { jobId });
 }
 
