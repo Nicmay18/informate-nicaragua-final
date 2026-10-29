@@ -22,9 +22,10 @@ documento proviene de artefactos guardados en `docs/auditoria-18/` — no hay es
   `cf-cache-status: HIT` con `age` >1000 s). Requiere acción del propietario en el
   panel de Cloudflare (§4.1). Ningún cambio de aplicación puede anular una regla
   de edge "Cache Everything".
-- NIOS: no recuperado. `pending=315, retry=2, completed=47` en tres mediciones;
-  causa raíz del congelamiento ya verificada (claim viejo saturado por
-  completados; el código desplegado a las 03:23 UTC la corrige — §4.4)
+- NIOS: **drenando** desde el primer tick post-merge (29-oct 00:58 UTC):
+  `pending 315→292, completed 47→72`. Causa raíz del congelamiento
+  verificada (claim viejo saturado por completados — §4.4). Recuperación
+  completa pendiente de sostenibilidad (~11 días al ritmo de 25/día).
   (03:59 y 04:09 UTC); el próximo tick de cron es diario. El safeguard nuevo
   convierte los 25 `article-pipeline` sin fecha en `skipped` para revisión.
 
@@ -144,9 +145,18 @@ partir el CSS/JS de componentes, fuera del criterio "pequeño y reversible".
 
 | Medición | pending | retry | running | completed | dead-letter |
 |---|---|---|---|---|---|
-| 03:59 UTC | 315 | 2 | 0 | 47 | 3 |
-| 04:09 UTC | 315 | 2 | 0 | 47 | 3 |
-| 04:46 UTC | 315 | 2 | 0 | 47 | 3 |
+| 28-oct 03:59 UTC | 315 | 2 | 0 | 47 | 3 |
+| 28-oct 04:09 UTC | 315 | 2 | 0 | 47 | 3 |
+| 28-oct 04:46 UTC | 315 | 2 | 0 | 47 | 3 |
+| **29-oct 01:13 UTC** | **292** ↓ | 2 | 0 | **72** ↑ | 3 |
+
+**Drenaje confirmado (primer ciclo post-fix):** tras el merge `a080e088`
+(deploy success 05:17 UTC 28-oct), el scheduler corrió 00:58 UTC 29-oct con
+`processed 15, jobsCompleted 15, jobsFailed 0` y el watchdog 01:04 drenó
+~10 más: `-23 pending, +25 completed` en 24 h — el límite teórico de
+15+10/día. El claim corregido funciona en producción. Sostenibilidad por
+confirmar en los próximos ciclos (faltan ~11 días a este ritmo);
+`retry:2` y `dead-letter:3` siguen sin diagnóstico individual.
 
 **Causa raíz del congelamiento — verificada con sonda read-only
 (`.audit/claim-diagnostico.cjs`, 28-oct):** la lógica de claim **nueva**

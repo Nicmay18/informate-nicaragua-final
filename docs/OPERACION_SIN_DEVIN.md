@@ -72,6 +72,11 @@ node .audit/nios-cola-real.cjs   # genera .audit/nios-cola-real.json
 - Cronograma real (vercel.json): departamento-central 00:00, watchdog 01:00, nios-ceo-loop 02:00, traffic-cleanup 03:00, supervisor-watch 04:00, departamento-daily 06:00, nios-collect 08:00, resumen-diario 12:00 (UTC).
 - **No tocar el estado de trabajos manualmente** ni lanzar pendientes en bloque: `article-pipeline` puede publicar, `operational-repair` puede reescribir datos.
 - Cola recuperada ≠ PR mergeado: tras el deploy, `completed` debe crecer y `pending` bajar en mediciones separadas por ≥24h.
+- **Ritmo esperado (verificado 29-oct):** ~25 jobs/día (scheduler 15 + watchdog 10). `pending` bajó 315→292 en el primer ciclo. Backlog ~300 → drena solo en ~12 días; no acelerar manualmente.
+- **retry y dead-letter (diagnosticados 29-oct, `.audit/retry-deadletter.cjs`):**
+  - `retry` article-pipeline: fallos permanentes de escritura (`undefined` en `result`, corregido en PR #21) o noticia inexistente → acabarán en `dead-letter` o `skipped`; no reejecutar a mano.
+  - `dead-letter` operational-repair: "Transición inválida RESOLVED→RUNNING" — incidentes ya resueltos; estado terminal correcto, se quedan ahí.
+- Si `pending` **sube** durante 3+ días o `retry`/`dead-letter` crecen, revisar `depto_heartbeat` y `lastError` antes de tocar nada.
 
 ## 7. SEO: verificación manual
 
@@ -154,10 +159,15 @@ curl -si https://nicaraguainformate.com/negocios | grep -i 'HTTP/\|age'
 5. Regla mental: una URL con `?cualquier=parametro` no es la canónica — el
    cache es por URL completa. "Me funciona con ?v=2 pero no sin" = caché vieja.
 
-## 13. Alertas recomendadas (gratis, 15 min)
+## 13. Alertas y monitoreo
 
-No hay sistema de alertas externo instalado. Configurar UN monitor de uptime
-(UptimeRobot/BetterStack/StatusCake — plan gratuito) con estas sondas:
+**Ya instalado (PR #21):** el workflow `.github/workflows/salud-produccion.yml`
+corre estas sondas cada 6 h y falla → GitHub envía correo a quien tenga
+"Watch → All Activity" en el repo. Sin costo ni servicios externos. Para
+recibirlo: repo → Watch → Custom → marcar "Actions".
+
+Recomendado además: un monitor de uptime externo (UptimeRobot/BetterStack —
+plan gratuito) por si GitHub Actions está caído, con estas sondas:
 
 | URL | Criterio de alarma | Significado |
 |---|---|---|
