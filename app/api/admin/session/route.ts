@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { NO_STORE_401_HEADERS } from '@/lib/auth';
 import { getAdminAuth } from '@/lib/firebase-admin';
 import { issueSessionToken } from '@/lib/admin-session';
 import { logger } from '@/lib/logger';
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
     const decoded = await auth.verifyIdToken(idToken);
 
     if (!decoded.email) {
-      return NextResponse.json({ error: 'Token sin email asociado' }, { status: 401 });
+      return NextResponse.json({ error: 'Token sin email asociado' }, { status: 401, headers: NO_STORE_401_HEADERS });
     }
 
     // Fail-closed: sin allowlist configurada nadie puede obtener la API key
@@ -72,7 +73,7 @@ export async function POST(request: NextRequest) {
     logger.error('[session] Error:', err.message);
     return NextResponse.json(
       { error: 'Token inválido o expirado' },
-      { status: 401 }
+      { status: 401, headers: NO_STORE_401_HEADERS }
     );
   }
 }

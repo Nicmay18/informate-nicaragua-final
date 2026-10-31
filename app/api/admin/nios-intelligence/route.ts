@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCleanupToken } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 
 export const maxDuration = 60;
@@ -41,7 +41,7 @@ function isAuthorized(request: NextRequest): boolean {
  */
 export async function GET(request: NextRequest) {
   if (!isAuthorized(request)) {
-    return respond({ error: 'No autorizado' }, { status: 401 });
+    return respond({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   try {

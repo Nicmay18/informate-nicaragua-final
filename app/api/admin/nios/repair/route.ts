@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCleanupToken } from '@/lib/auth';
 import { runRepairEngine } from '@/lib/nios/repair-engine';
 
 export const maxDuration = 60;
@@ -12,7 +12,7 @@ function isAuthorized(request: NextRequest): boolean {
 
 export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   try {

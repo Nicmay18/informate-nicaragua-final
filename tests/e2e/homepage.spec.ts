@@ -27,13 +27,13 @@ test.describe('Homepage', () => {
     const articleLink = page.locator('article a').first();
     const expectedPath = new URL(await articleLink.getAttribute('href') || '', page.url()).pathname;
     expect(expectedPath).not.toBe('/');
-    await articleLink.click();
+    await Promise.all([
+      page.waitForURL(new RegExp(`${expectedPath}$`)),
+      articleLink.click(),
+    ]);
 
     // Check we're on article page
     await expect(page.locator('h1')).toBeVisible();
-
-    // URL should have changed
-    await expect(page).toHaveURL(new RegExp(`${expectedPath}$`));
   });
 
   test('should have accessible navigation', async ({ page }) => {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { enqueueJob } from '@/lib/departamento-central/queue';
 import type { DeptoJobType, DeptoPriority } from '@/lib/departamento-central/types';
 import { logger } from '@/lib/logger';
@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
   const secret = request.headers.get('x-cron-secret') || '';
   if (!verifyAdminOrCronToken(secret)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   try {

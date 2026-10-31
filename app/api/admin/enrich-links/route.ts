@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { logger } from '@/lib/logger';
@@ -25,7 +25,7 @@ interface EnrichRequest {
  */
 export async function POST(request: NextRequest) {
   if (!verificarAuth(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
   try {
     const body: EnrichRequest = await request.json();

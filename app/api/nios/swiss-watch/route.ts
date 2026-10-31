@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { getSwissWatchBoard } from '@/lib/nios/swiss-watch';
 import { logger } from '@/lib/logger';
 
@@ -31,7 +31,7 @@ function isAuthorized(request: NextRequest): boolean {
 
 export async function GET(request: NextRequest) {
   if (!isAuthorized(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   try {

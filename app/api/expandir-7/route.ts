@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { revalidatePath } from 'next/cache';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { applySubstantiveMutation } from '@/lib/editorial/mutation-policy';
 
 const expansiones: Record<string, string> = {
@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   // existentes — requiere autenticación (antes era pública).
   const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
   if (!verifyAdminOrCronToken(token)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
   try {
     const db = getAdminDb();

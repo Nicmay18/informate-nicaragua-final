@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { runDepartamentoCentralCycle } from '@/lib/departamento-central/cycle';
 import { saveDepartamentoReport } from '@/lib/departamento-central/store';
 import { logger } from '@/lib/logger';
@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   const secret = searchParams.get('secret') || request.headers.get('x-cron-secret');
 
   if (!verifyAdminOrCronToken(secret)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   const started = Date.now();

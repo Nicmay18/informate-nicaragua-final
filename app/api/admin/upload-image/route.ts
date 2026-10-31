@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { verifyAdminToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminToken } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 export const maxDuration = 30;
 
@@ -21,7 +21,7 @@ function isAuthorized(request: NextRequest): boolean {
 }
 
 export async function POST(request: NextRequest) {
-  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   try {
     const body = await request.json();
     const { image, filename } = body;
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     if (!token) {
       return NextResponse.json(
         { success: false, error: 'Token de GitHub no configurado' },
-        { status: 401 }
+        { status: 401, headers: NO_STORE_401_HEADERS }
       );
     }
 
