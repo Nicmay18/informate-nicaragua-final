@@ -161,8 +161,11 @@ function behaviorFor(
       if (mode === 'gastronomia' || mode === 'general') return 'OPCIONAL';
       return 'REQUERIDO';
     case 'citaDirecta':
-      if (mode === 'politica_nacional') return 'REQUERIDO';
-      if (mode === 'nacionales_tematico' || mode === 'gastronomia' || mode === 'turismo_guia' || mode === 'turismo_cobertura' || mode === 'economia' || mode === 'salud') return 'OPCIONAL';
+      // MENI 2.1.1 §5 — la cita textual no es evidencia obligatoria en
+      // coberturas nacionales/institucionales: atribución clara, paráfrasis
+      // fiel y datos verificables documentan igual. Forzar una cita que la
+      // fuente no contiene incentiva fabricarla.
+      if (mode === 'nacionales_tematico' || mode === 'gastronomia' || mode === 'turismo_guia' || mode === 'turismo_cobertura' || mode === 'economia' || mode === 'salud' || mode === 'politica_nacional') return 'OPCIONAL';
       return 'NO_APLICA';
     case 'precios':
       if (mode === 'economia') return 'REQUERIDO';
@@ -279,7 +282,9 @@ function buildForensicChecks(input: NoticiaInput, mode: ForensicMode, perfilLabe
       return { tipo: EVIDENCIA_LABELS[tipo], estado: 'OK', mensaje: 'Evidencia presente en el texto.' };
     }
     if (behavior === 'OPCIONAL') {
-      return { tipo: EVIDENCIA_LABELS[tipo], estado: 'NO_APLICA', mensaje: 'Elemento opcional para este perfil.' };
+      // §1/§7 — la ausencia de un elemento opcional es una limitación de
+      // la fuente, no una deficiencia editorial: se reporta como válido.
+      return { tipo: EVIDENCIA_LABELS[tipo], estado: 'NO_APLICA', mensaje: 'La fuente no especifica este elemento.' };
     }
     return { tipo: EVIDENCIA_LABELS[tipo], estado: 'FALTANTE', mensaje: `Se esperaba esta evidencia para el perfil "${perfilLabel}".` };
   });

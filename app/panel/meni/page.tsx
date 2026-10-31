@@ -442,11 +442,26 @@ export default function MeniPage() {
                     </div>
                     {result.editorialDecision.acciones.length > 0 && (
                       <div className="pt-2">
-                        <p className="text-xs font-semibold text-yellow-600 mb-2">Acciones requeridas</p>
+                        <p className="text-xs font-semibold text-yellow-600 mb-2">Acciones y avisos</p>
                         <ul className="space-y-1">
-                          {result.editorialDecision.acciones.map((a, i) => (
-                            <li key={i} className="text-slate-700">• {a}</li>
-                          ))}
+                          {result.editorialDecision.acciones.map((a, i) => {
+                            // §18 MENI 2.1.1 — distinguir corrección editorial
+                            // de sugerencia cosmética (checks deterministas) y
+                            // del estado "lista para publicar".
+                            const esEstado = a === 'Lista para publicar';
+                            const esSugerencia = /^CHECK\b/.test(a) || /SUGERENCIA/i.test(a);
+                            const chip = esEstado
+                              ? { label: 'Cumple', cls: 'bg-emerald-100 text-emerald-700' }
+                              : esSugerencia
+                              ? { label: 'Sugerencia', cls: 'bg-slate-100 text-slate-600' }
+                              : { label: 'Revisar', cls: 'bg-amber-100 text-amber-700' };
+                            return (
+                              <li key={i} className="flex items-start gap-2 text-slate-700">
+                                <span className={`mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${chip.cls}`}>{chip.label}</span>
+                                <span>{a}</span>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     )}
