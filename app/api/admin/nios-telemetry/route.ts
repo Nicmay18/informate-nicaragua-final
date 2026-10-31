@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCleanupToken } from '@/lib/auth';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -15,7 +15,7 @@ function isAuthorized(request: NextRequest): boolean {
  */
 export async function GET(request: NextRequest): Promise<NextResponse> {
   if (!isAuthorized(request)) {
-    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   try {

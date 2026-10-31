@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { calcularScoreEditorial } from '@/utils/scoring';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
-import { verifyAdminToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminToken } from '@/lib/auth';
 import { applySubstantiveMutation, applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { logger } from '@/lib/logger';
 
@@ -99,7 +99,7 @@ function verificarAuth(request: NextRequest): boolean {
 export async function POST(request: NextRequest) {
   // ─── 1. AUTENTICACION ───
   if (!verificarAuth(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   const { searchParams } = new URL(request.url);

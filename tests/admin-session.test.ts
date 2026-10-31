@@ -177,10 +177,19 @@ describe('middleware — autorización real, sin mocks de auth', () => {
       { 'x-cron-secret': 'test-old-cron-key' },
     ];
     for (const headers of invalid) {
-      expect(middleware(request(path, headers)).status).toBe(401);
+      const res = middleware(request(path, headers));
+      expect(res.status).toBe(401);
+      // Todo rechazo de autenticación es no-cacheable (401 no-cacheable
+      // en edge: ver describe "401 nunca cacheable").
+      expect(res.headers.get('Cache-Control')).toBe('private, no-cache, no-store, must-revalidate');
+      expect(res.headers.get('CDN-Cache-Control')).toBe('no-store');
+      expect(res.headers.get('Cloudflare-CDN-Cache-Control')).toBe('no-store');
     }
-    expect(middleware(request(path, { 'x-cron-secret': 'test-cron-key' })).status)
-      .toBe(cronRoutes.includes(path) ? 200 : 401);
+    const cronRes = middleware(request(path, { 'x-cron-secret': 'test-cron-key' }));
+    expect(cronRes.status).toBe(cronRoutes.includes(path) ? 200 : 401);
+    if (!cronRoutes.includes(path)) {
+      expect(cronRes.headers.get('Cloudflare-CDN-Cache-Control')).toBe('no-store');
+    }
     const response = middleware(request(path, {
       cookie: `admin_session=${issueSessionToken('admin@example.com')}`,
       'x-admin-token': 'session-cookie',
@@ -196,6 +205,93 @@ describe('middleware — autorización real, sin mocks de auth', () => {
   });
   it.each(retired)('%s permanece retirado incluso con credenciales', (path) => {
     expect(middleware(request(path, { 'x-admin-token': 'test-admin-key' })).status).toBe(410);
+  });
+});
+
+describe('middleware — 401 nunca cacheable (pulido Cache-Control)', () => {
+  // Producción 2026-10-31: /api/count-news devolvía 401 con
+  // `Cache-Control: public, max-age=0, must-revalidate` y CF-Cache-Status
+  // DYNAMIC — bajo la regla "Cache Everything" un rechazo podía quedar
+  // almacenado en edge. Todo 401 debe llevar no-store explícito.
+  beforeEach(() => {
+    vi.stubEnv('ADMIN_API_KEY', 'test-admin-key');
+    vi.stubEnv('ADMIN_EMAILS', 'admin@example.com');
+    vi.stubEnv('ADMIN_SESSION_SECRET', 'test-signing-secret');
+    vi.stubEnv('CRON_SECRET_TOKEN', 'test-cron-key');
+    vi.stubEnv('CRON_SECRET', 'test-old-cron-key');
+    vi.stubEnv('CLEANUP_TOKEN', 'test-cleanup-key');
+  });
+  afterEach(() => vi.unstubAllEnvs());
+  const request = (path: string, headers: Record<string, string> = {}) =>
+    new NextRequest(`https://example.com${path}`, { headers });
+
+  const NO_STORE_HEADERS: [string, string][] = [
+    ['Cache-Control', 'private, no-cache, no-store, must-revalidate'],
+    ['CDN-Cache-Control', 'no-store'],
+    ['Cloudflare-CDN-Cache-Control', 'no-store'],
+  ];
+
+  it.each(['/api/count-news', '/api/admin/negocios', '/api/nios'])(
+    '%s sin credenciales → 401 con los tres headers no-store',
+    async (path) => {
+      const res = middleware(request(path));
+      expect(res.status).toBe(401);
+      for (const [name, value] of NO_STORE_HEADERS) {
+        expect(res.headers.get(name), name).toBe(value);
+      }
+      expect(await res.json()).toEqual({ error: 'Unauthorized', code: 'INVALID_AUTH' });
+    },
+  );
+
+  it('credenciales inválidas → 401 con no-store (no solo sin credenciales)', () => {
+    for (const headers of [
+      { 'x-admin-token': 'clave-falsa' },
+      { cookie: 'admin_session=token-falso' },
+      { 'x-cron-secret': 'cron-falso' },
+    ]) {
+      const res = middleware(request('/api/count-news', headers));
+      expect(res.status).toBe(401);
+      expect(res.headers.get('Cache-Control')).toBe('private, no-cache, no-store, must-revalidate');
+      expect(res.headers.get('Cloudflare-CDN-Cache-Control')).toBe('no-store');
+    }
+  });
+
+  it('el secreto de cron viejo también devuelve 401 no cacheable', () => {
+    const res = middleware(request('/api/admin/nios-collect', { 'x-cron-secret': 'test-old-cron-key' }));
+    expect(res.status).toBe(401);
+    expect(res.headers.get('Cloudflare-CDN-Cache-Control')).toBe('no-store');
+  });
+
+  it('autenticación válida NO se altera: header, cookie y cron siguen pasando', () => {
+    // Header ADMIN_API_KEY en ruta sensible
+    expect(middleware(request('/api/count-news', { 'x-admin-token': 'test-admin-key' })).status).toBe(200);
+    // Cookie de sesión válida en ruta admin (con marcador del panel)
+    const cookieRes = middleware(request('/api/admin/negocios', {
+      cookie: `admin_session=${issueSessionToken('admin@example.com')}`,
+      'x-admin-token': 'session-cookie',
+    }));
+    expect(cookieRes.status).toBe(200);
+    // Cron solo en rutas autorizadas
+    expect(middleware(request('/api/admin/nios-collect', { 'x-cron-secret': 'test-cron-key' })).status).toBe(200);
+    expect(middleware(request('/api/admin/negocios', { 'x-cron-secret': 'test-cron-key' })).status).toBe(401);
+  });
+
+  it('cookie válida por sí sola autentica (sin header adicional)', () => {
+    const res = middleware(request('/api/admin/negocios', {
+      cookie: `admin_session=${issueSessionToken('admin@example.com')}`,
+    }));
+    expect(res.status).toBe(200);
+    // La respuesta autenticada sigue siendo no-cacheable (misma política).
+    expect(res.headers.get('Cache-Control')).toContain('no-store');
+  });
+
+  it('unauthorized() de lib/auth (defensa en profundidad de handlers) también es no-store', async () => {
+    const { unauthorized } = await import('@/lib/auth');
+    const res = unauthorized();
+    expect(res.status).toBe(401);
+    expect(res.headers.get('Cache-Control')).toBe('private, no-cache, no-store, must-revalidate');
+    expect(res.headers.get('CDN-Cache-Control')).toBe('no-store');
+    expect(res.headers.get('Cloudflare-CDN-Cache-Control')).toBe('no-store');
   });
 });
 

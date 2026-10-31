@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
     "lint:fix": "eslint . --ext .ts,.tsx --fix",
-    "type-check": "tsc --noEmit",
+    "type-check": "cross-env NODE_OPTIONS=--max-old-space-size=4096 tsc --noEmit",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
@@ -56,9 +56,9 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@vitejs/plugin-react": "^4.3.1",
-    "@vitest/coverage-v8": "^2.0.5",
-    "@vitest/ui": "^2.0.5",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/coverage-v8": "^5.0.5",
+    "@vitest/ui": "^5.0.5",
     "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
     "eslint": "^9.0.0",
@@ -66,7 +66,8 @@
     "jsdom": "^24.1.1",
     "tsx": "^4.23.13",
     "typescript": "^5",
-    "vitest": "^3.2.7"
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   },
   "repository": {
     "type": "git",

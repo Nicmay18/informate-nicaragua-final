@@ -16,7 +16,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { runSupervisorWatchCycle, checkMediumHealth, applySafeAutoFixes } from '@/lib/supervisor';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { logger } from '@/lib/logger';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -28,7 +28,7 @@ export async function GET(request: Request) {
   const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
 
   if (!verifyAdminOrCronToken(secret) && !verifyAdminOrCronToken(bearer)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   const startedAt = Date.now();

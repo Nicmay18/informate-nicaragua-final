@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runDepartamentoCentralCycle } from '@/lib/departamento-central/cycle';
 import { saveDepartamentoReport } from '@/lib/departamento-central/store';
@@ -14,7 +14,7 @@ export async function GET(request: Request) {
   const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
 
   if (!verifyAdminOrCronToken(secret) && !verifyAdminOrCronToken(bearer)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   const started = Date.now();

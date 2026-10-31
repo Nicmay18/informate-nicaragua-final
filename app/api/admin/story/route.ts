@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminToken } from '@/lib/auth';
 import { runStoryEditor } from '@/lib/editorial/story-editor';
 import type { ResearchResult } from '@/lib/research/types';
 import { logger } from '@/lib/logger';
@@ -12,7 +12,7 @@ function isAuthorized(request: NextRequest): boolean {
 
 export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   try {

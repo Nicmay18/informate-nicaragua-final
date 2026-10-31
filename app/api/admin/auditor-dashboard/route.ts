@@ -1,5 +1,5 @@
 import { getAdminDb } from '@/lib/firebase-admin';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { getTrafficPerformance } from '@/lib/analytics/traffic-reader';
 import {
   getMetricDefinition,
@@ -18,7 +18,7 @@ function verificarAuth(request: NextRequest): boolean {
 /** Auditor Dashboard — El "Periodista Senior" que valora todo el trabajo */
 export async function GET(request: NextRequest) {
   if (!verificarAuth(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
   try {
     const db = getAdminDb();
