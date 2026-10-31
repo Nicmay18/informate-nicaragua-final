@@ -72,8 +72,27 @@ export function isAdminRequest(request: Request): boolean {
   return verifySessionToken(cookie);
 }
 
+/**
+ * Headers de todo rechazo de autenticación: un 401 nunca debe
+ * almacenarse en CDN ni navegador (Cloudflare corre con regla
+ * "Cache Everything" que ya demostró cachear 200s autenticados).
+ * Los handlers con respuestas 401 propias deben reutilizarla.
+ */
+export const NO_STORE_401_HEADERS = {
+  'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+  'CDN-Cache-Control': 'no-store',
+  'Cloudflare-CDN-Cache-Control': 'no-store',
+} as const;
+
 export function unauthorized(): NextResponse {
-  return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  // Mismo endurecimiento que el 401 del middleware: hoy estas rutas están
+  // detrás de requireAdminAuth (defensa en profundidad), pero si un
+  // handler llegara a responder 401 directamente tampoco debe ser
+  // cacheable en edge ni navegador.
+  return NextResponse.json(
+    { error: 'No autorizado' },
+    { status: 401, headers: NO_STORE_401_HEADERS },
+  );
 }
 
 export function badRequest(message: string, issues?: ZodError['issues']): NextResponse {
