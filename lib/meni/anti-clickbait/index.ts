@@ -57,6 +57,23 @@ const INFINITIVOS_NOTICIOSOS = new Set([
   'convocar', 'designar', 'destituir', 'extraditar', 'enjuiciar', 'decomisar',
   'intervenir', 'ocurrir', 'suceder', 'sucumbir', 'trasladar', 'ingresar', 'egresar',
   'despedir', 'ascender', 'premiar', 'homenajear', 'inscribir', 'habilitar',
+  // Pulido 2.1.1 — verbos periodisticos frecuentes que seguian generando
+  // el falso positivo "sin verbo noticioso" (casos auditados: S&P "eleva",
+  // GRUN "llama", titulares con "insta" y "reconoce").
+  'elevar', 'llamar', 'instar', 'reconocer', 'exhortar', 'urgir', 'convocar',
+  'solicitar', 'pedir', 'senalar', 'indicar', 'afirmar', 'asegurar', 'reiterar',
+  'exigir', 'alertar', 'invitar', 'calificar', 'ratificar', 'instalar',
+  'implementar', 'pronosticar', 'proyectar', 'estimar', 'prever', 'aclarar',
+  'prometer', 'otorgar', 'conceder', 'posponer', 'aplazar', 'postergar',
+  'modificar', 'regular', 'sancionar', 'multar', 'evaluar', 'degradar',
+  'nombrar', 'renunciar', 'asumir', 'juramentar', 'reanudar', 'reabrir',
+  'clausurar', 'distribuir', 'donar', 'rehabilitar', 'abordar', 'expulsar',
+  'deportar', 'movilizar', 'desplegar', 'activar', 'acordar', 'documentar',
+  'divulgar', 'difundir', 'abogar', 'promover', 'impulsar', 'fomentar',
+  'establecer', 'integrar', 'incorporar', 'condonar', 'exonerar', 'gravar',
+  'incrementar', 'repuntar', 'sostener', 'mantener', 'lamentar', 'rendir',
+  'emprender', 'demandar', 'recurrir', 'apelar', 'admitir', 'mostrar',
+  'exhibir', 'demostrar', 'evidenciar', 'reflejar', 'batir', 'responder',
 ]);
 
 const RAICES_EXTRA = new Set(['mur', 'obtuv', 'consigu', 'consig', 'compit', 'detuv', 'tuv', 'hub', 'huv']);

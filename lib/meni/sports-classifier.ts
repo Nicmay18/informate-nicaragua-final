@@ -56,6 +56,7 @@ export type EventType =
   | 'etapa'
   | 'final'
   | 'previa'
+  | 'instalacion'
   | 'general';
 
 export interface SportStructure {
@@ -278,8 +279,15 @@ export function classifySports(titulo: string, contenido: string, resumen = ''):
   };
 
   // Tipo de evento según disciplina + texto.
+  // MENI 2.1.1 — 'instalacion': nota sobre infraestructura o tecnología
+  // deportiva (p.ej. "instalan TrackMan V3 en los estadios"), NO un
+  // partido. Debe evaluarse antes que partido/serie/torneo porque esas
+  // palabras pueden aparecer como contexto.
+  const senalInstalacion = rx('\\b(?:instalaci[oó]n|instala(?:n|r|r[aá]n?|r[eé]n?|ron|do|da)|implementa(?:n|cion|r|da)|equipa(?:n|r|do|da)|incorpora(?:n|r|cion)|dota(?:n|r|cion)|moderniza(?:n|r|cion))\\b').test(t);
+  const senalTecnologia = rx('\\b(?:track\\s*man|hawk-?eye|sistema\\s+de\\s+\\w+|tecnolog[ií]a|radar|c[aá]maras?|sensores?|var\\b|video\\s*arbitraje|software|hardware|anal[ií]tica\\s+de\\s+datos|datos\\s+biomec[aá]nicos)\\b').test(t);
   let tipoEvento: EventType = 'general';
-  if (rx('\\bprevia\\b').test(t)) tipoEvento = 'previa';
+  if (senalInstalacion && senalTecnologia) tipoEvento = 'instalacion';
+  else if (rx('\\bprevia\\b').test(t)) tipoEvento = 'previa';
   else if (rx('\\bfinal\\b').test(t)) tipoEvento = 'final';
   else if (rx('\\b(?:pelea|combate|cartelera)\\b').test(t) && (disciplina === 'boxeo' || disciplina === 'artes_marciales')) tipoEvento = 'pelea';
   else if (rx('\\b(?:carrera|fecha|jornada)\\b').test(t) && (disciplina === 'motocross' || disciplina === 'automovilismo' || disciplina === 'motociclismo' || disciplina === 'deportes_motor' || disciplina === 'ciclismo')) tipoEvento = rx('\\bcarrera\\b').test(t) ? 'carrera' : 'fecha';
@@ -612,6 +620,19 @@ export interface SportsQuestionsSelection {
  * `noAplicables` registra preguntas evaluadas y descartadas (transparencia):
  * incluye la plantilla genérica de fútbol cuando la disciplina no es fútbol.
  */
+// MENI 2.1.1 — Instalación tecnológica / infraestructura deportiva:
+// preguntas del caso TrackMan V3 (tecnología, lugar, función, alcance,
+// instituciones, contexto deportivo, impacto respaldado). Nunca preguntas
+// de partido, jugadores, pitchers, enfrentamientos o resultados.
+const INSTALACION_QUESTIONS: string[] = [
+  'Que tecnologia o sistema se instala?',
+  'Donde se instala y cual es su alcance?',
+  'Para que sirve y que mide o mejora?',
+  'Que instituciones o ligas participan?',
+  'En que contexto deportivo se enmarca?',
+  'Que impacto espera generar, segun la fuente?',
+];
+
 export function selectSportsQuestions(
   clasificacion: SportsClassification,
   plantillaGenericaDeportes: string[],
@@ -628,6 +649,16 @@ export function selectSportsQuestions(
   }
   if (etapa === 'analisis' || etapa === 'perfil') {
     candidatas.push(...(bank.perfil || []), ...bank.previa, ...bank.posterior.slice(0, 2));
+  }
+
+  // MENI 2.1.1 — instalación tecnológica/infraestructura: las preguntas
+  // de partido/resultado quedan registradas como NO APLICABLES (no se
+  // exigen ni penalizan) y se usa el checklist de tecnología.
+  if (clasificacion.tipoEvento === 'instalacion') {
+    const noAplicables = [
+      ...new Set([...candidatas.map(c => c.q), ...plantillaGenericaDeportes]),
+    ];
+    return { aplicables: INSTALACION_QUESTIONS, noAplicables };
   }
 
   const aplicables: string[] = [];

@@ -44,6 +44,13 @@ type HumanEditorCheck = {
   ok: boolean;
   critical: boolean;
   message: string;
+  /**
+   * §13 MENI 2.1.1 — las SUGERENCIAS (estilo, SEO cosmético, preferencias)
+   * son avisos visibles pero nunca mueven el veredicto a 'mejorar' ni
+   * computan como acción editorial. Solo `esSugerencia === false` puede
+   * afectar la recomendación.
+   */
+  esSugerencia?: boolean;
 };
 
 function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
@@ -67,10 +74,35 @@ function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
   const hasWhen = /\b(hoy|ayer|anoche|esta manana|este martes|este miercoles|este jueves|este viernes|este sabado|este domingo|este lunes|martes|miercoles|jueves|viernes|sabado|domingo|lunes|enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre|20\d{2}|temporada|fin de semana|feriado|vacaciones|verano|invierno|semana santa|navidad|ano nuevo|este ano|este mes|proxima semana|proximo mes|\d{1,2} de [a-z]+|\d{1,2}\/\d{1,2}\/\d{2,4}|\d{1,2}:\d{2}|madrugada|manana|tarde|noche|horas?)\b/i.test(lowerLead);
 
   const leadOk = hasWhat && hasWhere && hasWhen;
-  const titleOk = title.length >= 30 && title.length <= 65;
+
+  // Longitud del titular — bandas graduales (MENI 2.1.1, §4):
+  //   40–70  óptimo       35–39  aceptable     71–90  advertencia SEO
+  //   30–34  advertencia  <30 o >90  problema SEO real
+  // La longitud es una señal SEO, no un defecto editorial: las bandas
+  // intermedias solo producen SUGERENCIA y nunca alteran el veredicto.
+  const titleLen = title.length;
+  const titleBand: 'optimo' | 'aceptable' | 'advertencia' | 'problema' =
+    titleLen >= 40 && titleLen <= 70 ? 'optimo'
+    : (titleLen >= 35 && titleLen <= 39) ? 'aceptable'
+    : (titleLen >= 30 && titleLen <= 34) || (titleLen >= 71 && titleLen <= 90) ? 'advertencia'
+    : 'problema';
+  const titleOk = titleBand === 'optimo' || titleBand === 'aceptable';
+  const titleEsSugerencia = titleBand === 'advertencia';
+  const titleBandLabel =
+    titleBand === 'optimo' ? `óptimo (${titleLen} caracteres, rango 40–70)`
+    : titleBand === 'aceptable' ? `aceptable (${titleLen} caracteres)`
+    : titleBand === 'advertencia' ? `advertencia SEO (${titleLen} caracteres; objetivo 40–70)`
+    : `problema SEO (${titleLen} caracteres; un titular legible necesita 30–70)`;
+
+  // §8 MENI 2.1.1 — conectores evaluados en contexto, no por presencia
+  // aislada: "sin embargo" usado una vez es gramática correcta. Solo se
+  // avisa por uso repetitivo (mismo conector ≥2 veces o ≥3 en total).
   const aiTransitions = ['ademas', 'no obstante', 'sin embargo', 'por otro lado', 'en este sentido'];
-  const transitionHits = aiTransitions.filter(t => body.toLowerCase().includes(t));
-  const transitionsOk = transitionHits.length === 0;
+  const bodyLower = body.toLowerCase();
+  const transitionCounts = aiTransitions.map(t => ({ t, n: bodyLower.split(t).length - 1 }));
+  const transitionRepetidos = transitionCounts.filter(x => x.n >= 2).map(x => x.t);
+  const transitionTotal = transitionCounts.reduce((s, x) => s + x.n, 0);
+  const transitionsOk = transitionRepetidos.length === 0 && transitionTotal < 3;
 
   const fillerPatterns = [
     /\btragedia que estremece\b/i,
@@ -84,7 +116,15 @@ function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
     /\bno podia creer\b/i,
     /\buna historia que conmueve\b/i,
   ];
-  const fillerHits = fillerPatterns.filter(p => p.test(body)).length;
+  // §10 MENI 2.1.1 — el lenguaje emocional citado o atribuido a la fuente
+  // (p.ej. "Suprema Urgencia" en un documento oficial entrecomillado) no es
+  // redacción del periodista: se excluye del análisis de relleno emocional.
+  const bodySinCitas = body
+    .replace(/"[^"]{3,600}"/g, ' ')
+    .replace(/«[^»]{3,600}»/g, ' ')
+    .replace(/“[^”]{3,600}”/g, ' ')
+    .replace(/[‘'][^'’]{3,600}['’]/g, ' ');
+  const fillerHits = fillerPatterns.filter(p => p.test(bodySinCitas)).length;
 
   return [
     {
@@ -99,17 +139,20 @@ function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
       id: 'title_length',
       ok: titleOk,
       critical: false,
+      esSugerencia: titleEsSugerencia,
       message: titleOk
-        ? `CHECK TITULAR: OK (${title.length} caracteres).`
-        : `CHECK TITULAR: MEJORAR — ${title.length} caracteres; objetivo editorial 30–65.`,
+        ? `CHECK TITULAR: OK — ${titleBandLabel}.`
+        : titleBand === 'advertencia'
+        ? `CHECK TITULAR: SUGERENCIA — ${titleBandLabel}.`
+        : `CHECK TITULAR: MEJORAR — ${titleBandLabel}.`,
     },
     {
       id: 'ai_transitions',
       ok: transitionsOk,
       critical: false,
       message: transitionsOk
-        ? 'CHECK TRANSICIONES: OK — no detecta conectores-IA de la lista de control.'
-        : `CHECK TRANSICIONES: MEJORAR — detectados: ${transitionHits.join(', ')}.`,
+        ? 'CHECK TRANSICIONES: OK — uso contextual correcto de conectores.'
+        : `CHECK TRANSICIONES: SUGERENCIA — uso repetitivo: ${[...transitionRepetidos, ...(transitionTotal >= 3 && transitionRepetidos.length === 0 ? aiTransitions.filter(t => bodyLower.includes(t)) : [])].join(', ')}.`,
     },
     {
       id: 'emotional_filler',
@@ -216,16 +259,16 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   const humanChecks = runHumanEditorChecks(input);
   const humanCriticalIssues = humanChecks.filter(c => c.critical && !c.ok);
   // Checks que sí pueden cambiar el veredicto a 'mejorar'.
-  // El lead 5W y los conectores de transición son avisos editoriales,
-  // no fallos de publicabilidad: "sin embargo", "además", etc. son
-  // construcciones periodísticas legítimas y su mera presencia no prueba
-  // escritura de IA.
+  // El lead 5W, los conectores de transición y las SUGERENCIAS (§13: SEO
+  // cosmético, preferencias de estilo) son avisos editoriales, no fallos
+  // de publicabilidad: "sin embargo" es una construcción legítima y la
+  // banda 'advertencia' del titular es una preferencia de longitud.
   const humanCheckActions = humanChecks
-    .filter(c => !c.ok && c.id !== 'lead_5w' && c.id !== 'ai_transitions')
+    .filter(c => !c.ok && c.id !== 'lead_5w' && c.id !== 'ai_transitions' && !c.esSugerencia)
     .map(c => c.message);
   // Avisos informativos: visibles en acciones/queFalta, sin efecto en veredicto.
   const humanCheckNotices = humanChecks
-    .filter(c => !c.ok && (c.id === 'lead_5w' || c.id === 'ai_transitions'))
+    .filter(c => !c.ok && (c.id === 'lead_5w' || c.id === 'ai_transitions' || c.esSugerencia))
     .map(c => c.message);
 
   // Recomendación editorial — un lead 5W roto nunca publica.
@@ -827,15 +870,23 @@ function construirJournalistChecklist(
     }
   };
 
-  // Datos universales que toda nota debería poder responder
-  add('edad confirmada', '¿Qué edad tenía?', 'años', 'año', 'de edad');
-  add('identidad confirmada', '¿Quién era?', 'identificado', 'identificada', 'se trata de', 'nombre es', 'llamado', 'llamada');
-  add('versión oficial', '¿Qué dicen las autoridades?', 'policia', 'policía', 'ministerio publico', 'autoridades', 'fiscalía', 'fiscalia', 'comisionado', 'comisionada');
-  add('detenidos', '¿Hay detenidos?', 'detenido', 'detenidos', 'arrestado', 'arrestados', 'capturado', 'capturados');
-  add('móvil del hecho', '¿Qué motivó el hecho?', 'motivo', 'móvil', 'provocó', 'ocasionó', 'razón');
-  add('antecedentes', '¿Hay antecedentes?', 'antecedente', 'antecedentes', 'historial', 'registro', 'pasado');
-  add('consecuencias', '¿Qué consecuencias tiene?', 'consecuencia', 'impacto', 'afectó', 'provocó', 'resultó', 'dejó');
-  add('siguiente paso', '¿Qué sigue?', 'investigación', 'próximo', 'proximo', 'siguiente', 'continúa', 'continua', 'se investiga');
+  // MENI 2.1.1 §2/§9 — la plantilla de suceso/persona no es universal.
+  // Preguntar "¿Qué edad tenía?", "¿Hay detenidos?" o "¿Qué motivó el
+  // hecho?" a un comunicado institucional (llamado GRUN, calificación
+  // S&P, instalación tecnológica) producía preguntas imposibles que
+  // obligaban a inventar. Solo aplican cuando la nota trata sobre un
+  // incidente o protagonista humano.
+  const esNotaDePersonaOIncidente = /victima|fallecid|herid|detenid|arrestad|capturad|persona|hombre|mujer|adolescente|menor\s+de\s+edad|accidente|incendio|siniestro|choque|criatura|niñ[oa]|ancian|joven/.test(lower);
+  if (esNotaDePersonaOIncidente) {
+    add('edad confirmada', '¿Qué edad tenía?', 'años', 'año', 'de edad');
+    add('identidad confirmada', '¿Quién era?', 'identificado', 'identificada', 'se trata de', 'nombre es', 'llamado', 'llamada');
+    add('versión oficial', '¿Qué dicen las autoridades?', 'policia', 'policía', 'ministerio publico', 'autoridades', 'fiscalía', 'fiscalia', 'comisionado', 'comisionada');
+    add('detenidos', '¿Hay detenidos?', 'detenido', 'detenidos', 'arrestado', 'arrestados', 'capturado', 'capturados');
+    add('móvil del hecho', '¿Qué motivó el hecho?', 'motivo', 'móvil', 'provocó', 'ocasionó', 'razón');
+    add('antecedentes', '¿Hay antecedentes?', 'antecedente', 'antecedentes', 'historial', 'registro', 'pasado');
+    add('consecuencias', '¿Qué consecuencias tiene?', 'consecuencia', 'impacto', 'afectó', 'provocó', 'resultó', 'dejó');
+    add('siguiente paso', '¿Qué sigue?', 'investigación', 'próximo', 'proximo', 'siguiente', 'continúa', 'continua', 'se investiga');
+  }
 
   const cat = categoria.toLowerCase();
   if (cat.includes('suceso')) {
