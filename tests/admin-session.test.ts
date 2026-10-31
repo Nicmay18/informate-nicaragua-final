@@ -177,10 +177,19 @@ describe('middleware — autorización real, sin mocks de auth', () => {
       { 'x-cron-secret': 'test-old-cron-key' },
     ];
     for (const headers of invalid) {
-      expect(middleware(request(path, headers)).status).toBe(401);
+      const res = middleware(request(path, headers));
+      expect(res.status).toBe(401);
+      // Todo rechazo de autenticación es no-cacheable (401 no-cacheable
+      // en edge: ver describe "401 nunca cacheable").
+      expect(res.headers.get('Cache-Control')).toBe('private, no-cache, no-store, must-revalidate');
+      expect(res.headers.get('CDN-Cache-Control')).toBe('no-store');
+      expect(res.headers.get('Cloudflare-CDN-Cache-Control')).toBe('no-store');
     }
-    expect(middleware(request(path, { 'x-cron-secret': 'test-cron-key' })).status)
-      .toBe(cronRoutes.includes(path) ? 200 : 401);
+    const cronRes = middleware(request(path, { 'x-cron-secret': 'test-cron-key' }));
+    expect(cronRes.status).toBe(cronRoutes.includes(path) ? 200 : 401);
+    if (!cronRoutes.includes(path)) {
+      expect(cronRes.headers.get('Cloudflare-CDN-Cache-Control')).toBe('no-store');
+    }
     const response = middleware(request(path, {
       cookie: `admin_session=${issueSessionToken('admin@example.com')}`,
       'x-admin-token': 'session-cookie',
@@ -256,7 +265,7 @@ describe('middleware — 401 nunca cacheable (pulido Cache-Control)', () => {
   it('autenticación válida NO se altera: header, cookie y cron siguen pasando', () => {
     // Header ADMIN_API_KEY en ruta sensible
     expect(middleware(request('/api/count-news', { 'x-admin-token': 'test-admin-key' })).status).toBe(200);
-    // Cookie de sesión válida en ruta admin
+    // Cookie de sesión válida en ruta admin (con marcador del panel)
     const cookieRes = middleware(request('/api/admin/negocios', {
       cookie: `admin_session=${issueSessionToken('admin@example.com')}`,
       'x-admin-token': 'session-cookie',
@@ -265,6 +274,24 @@ describe('middleware — 401 nunca cacheable (pulido Cache-Control)', () => {
     // Cron solo en rutas autorizadas
     expect(middleware(request('/api/admin/nios-collect', { 'x-cron-secret': 'test-cron-key' })).status).toBe(200);
     expect(middleware(request('/api/admin/negocios', { 'x-cron-secret': 'test-cron-key' })).status).toBe(401);
+  });
+
+  it('cookie válida por sí sola autentica (sin header adicional)', () => {
+    const res = middleware(request('/api/admin/negocios', {
+      cookie: `admin_session=${issueSessionToken('admin@example.com')}`,
+    }));
+    expect(res.status).toBe(200);
+    // La respuesta autenticada sigue siendo no-cacheable (misma política).
+    expect(res.headers.get('Cache-Control')).toContain('no-store');
+  });
+
+  it('unauthorized() de lib/auth (defensa en profundidad de handlers) también es no-store', async () => {
+    const { unauthorized } = await import('@/lib/auth');
+    const res = unauthorized();
+    expect(res.status).toBe(401);
+    expect(res.headers.get('Cache-Control')).toBe('private, no-cache, no-store, must-revalidate');
+    expect(res.headers.get('CDN-Cache-Control')).toBe('no-store');
+    expect(res.headers.get('Cloudflare-CDN-Cache-Control')).toBe('no-store');
   });
 });
 

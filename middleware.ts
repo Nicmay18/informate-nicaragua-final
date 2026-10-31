@@ -156,10 +156,13 @@ function requireAdminAuth(request: NextRequest, allowCron = true): NextResponse 
       { error: 'Unauthorized', code: 'INVALID_AUTH' },
       {
         status: 401,
-        // El 401 sin headers explícitos llegaba con
-        // `Cache-Control: public, max-age=0` y bajo la regla "Cache
-        // Everything" de Cloudflare un rechazo quedaba servible en edge.
-        // Un 401 nunca debe almacenarse: ni en CDN ni en navegador.
+        // Endurecimiento preventivo (no un incidente observado: el 31-oct
+        // producción devolvió el 401 con `CF-Cache-Status: DYNAMIC` y sin
+        // header explícito, heredando `public, max-age=0` del default de
+        // NextResponse.json). Bajo la regla "Cache Everything" — que ya
+        // demostró cachear respuestas 200 autenticadas — un 401 sin
+        // no-store queda expuesto a la misma decisión de edge. Un rechazo
+        // de autenticación nunca debe almacenarse: ni en CDN ni navegador.
         headers: {
           'Cache-Control': 'private, no-cache, no-store, must-revalidate',
           'CDN-Cache-Control': 'no-store',
