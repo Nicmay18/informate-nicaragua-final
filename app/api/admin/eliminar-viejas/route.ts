@@ -1,6 +1,6 @@
 import { getAdminDb } from '@/lib/firebase-admin';
 import { NextRequest, NextResponse } from 'next/server';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { logger } from '@/lib/logger';
 
@@ -9,13 +9,10 @@ export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization') || '';
-    const secretFromHeader = authHeader.replace(/^Bearer\s+/i, '');
-
-    const { searchParams } = new URL(request.url);
-    const secretFromQuery = searchParams.get('secret');
-
-    const providedSecret = secretFromHeader || secretFromQuery;
+    const { token: providedSecret, via } = extractRequestSecret(request);
+    if (via === 'query') {
+      logger.warn(`[admin/eliminar-viejas] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+    }
 
     if (!verifyAdminOrCronToken(providedSecret)) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });

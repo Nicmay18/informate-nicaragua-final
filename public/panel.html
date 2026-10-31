@@ -5656,7 +5656,7 @@ window.batchRestore = async function() {
       if (!token) { statusDiv.style.display = 'block'; statusDiv.innerHTML = '<span style="color:var(--danger);"><i class="fas fa-exclamation-circle"></i> Configurá el Admin API Key en Configuración > APIs y Tokens</span>'; return; }
       btn.disabled = true; statusDiv.style.display = 'block'; statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando caché del sitio...';
       try {
-        const res = await fetch('/api/admin/cache-purge?token=' + encodeURIComponent(token), { method: 'POST' });
+        const res = await fetch('/api/admin/cache-purge', { headers: { 'x-admin-token': token } });
         if (res.ok) {
           const data = await res.json();
           statusDiv.innerHTML = '<span style="color:var(--success);"><i class="fas fa-check-circle"></i> ✓ ' + (data.mensaje || 'Caché purgada') + ' Refrescá el sitio (F5) para ver los cambios.</span>';
@@ -5814,7 +5814,7 @@ window.batchRestore = async function() {
       if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Procesando...</span>'; }
       try {
         // force=1 permite re-enviar el resumen de hoy para probarlo manualmente
-        const res = await fetch('/api/cron/resumen-diario?secret=manual-run&force=1');
+        const res = await fetch('/api/cron/resumen-diario?force=1', { headers: { 'x-admin-token': sessionStorage.getItem('admin_api_key') || '' } });
         const data = await res.json();
         if (!data.success) throw new Error(data.error || data.details || 'Error desconocido');
 
@@ -8259,9 +8259,9 @@ VERIFICACIÓN FINAL
       showLoading(true, 'Limpiando noticias de sucesos...');
       try {
         const secret = sessionStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/limpiar-sucesos?secret=' + encodeURIComponent(secret), {
+        const res = await fetch('/api/admin/limpiar-sucesos', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': secret },
           body: JSON.stringify({ forzar: true })
         });
         const data = await res.json();
@@ -8332,9 +8332,9 @@ VERIFICACIÓN FINAL
       showLoading(true, 'Exportando noticias de sucesos...');
       try {
         const secret = sessionStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/exportar-sucesos?secret=' + encodeURIComponent(secret), {
+        const res = await fetch('/api/admin/exportar-sucesos', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', 'x-admin-token': secret },
           body: JSON.stringify({})
         });
         const data = await res.json();
@@ -8798,7 +8798,7 @@ VERIFICACIÓN FINAL
       showLoading(true, 'Eliminando noticias viejas...');
       try {
         const secret = sessionStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/eliminar-viejas?secret=' + encodeURIComponent(secret), { method: 'POST' });
+        const res = await fetch('/api/admin/eliminar-viejas', { method: 'POST', headers: { 'x-admin-token': secret } });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error desconocido');
         showToast(`Se eliminaron ${data.eliminadas} noticias viejas`, 'success');
@@ -9006,7 +9006,7 @@ VERIFICACIÓN FINAL
       showLoading(true, 'Enviando noticias a Google...');
       try {
         const secret = sessionStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/reindexar-google?secret=' + encodeURIComponent(secret), { method: 'POST' });
+        const res = await fetch('/api/admin/reindexar-google', { method: 'POST', headers: { 'x-admin-token': secret } });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error desconocido');
         showToast(`Enviadas ${data.enviadas} URLs a Google. Exitosas: ${data.exitosas}, Fallidas: ${data.fallidas}`, 'success');

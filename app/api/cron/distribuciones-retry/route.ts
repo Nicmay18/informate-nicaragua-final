@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 import {
@@ -35,12 +35,10 @@ const SENDERS: Record<string, (n: Noticia, db: ReturnType<typeof getAdminDb>) =>
 
 export async function GET(request: NextRequest) {
   const startedAt = Date.now();
-  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
-  const token =
-    request.headers.get('x-cron-secret') ||
-    request.headers.get('x-admin-token') ||
-    bearer ||
-    new URL(request.url).searchParams.get('token');
+  const { token, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[cron/distribuciones-retry] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
   if (!verifyAdminOrCronToken(token)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }

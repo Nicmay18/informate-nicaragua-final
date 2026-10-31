@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { cleanupTrafficLog, trafficLogTTLDays } from '@/lib/analytics/traffic-ttl';
 import { logger } from '@/lib/logger';
@@ -9,11 +9,11 @@ export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
 function isAuthorized(request: NextRequest): boolean {
-  const auth = request.headers.get('authorization') || '';
-  const bearer = auth.replace(/^Bearer\s+/i, '');
-  const cronSecret = request.headers.get('x-cron-secret');
-  const token = new URL(request.url).searchParams.get('token');
-  return verifyAdminOrCronToken(token) || verifyAdminOrCronToken(cronSecret) || verifyAdminOrCronToken(bearer);
+  const { token, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[cron/traffic-cleanup] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
+  return verifyAdminOrCronToken(token);
 }
 
 export async function GET(request: NextRequest) {

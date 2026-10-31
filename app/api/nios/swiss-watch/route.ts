@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { getSwissWatchBoard } from '@/lib/nios/swiss-watch';
 import { logger } from '@/lib/logger';
 
@@ -18,15 +18,11 @@ export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
 
 function isAuthorized(request: NextRequest): boolean {
-  const auth = request.headers.get('authorization') || '';
-  const bearer = auth.replace(/^Bearer\s+/i, '');
-  const cronSecret = request.headers.get('x-cron-secret');
-  const token = new URL(request.url).searchParams.get('token');
-  return (
-    verifyAdminOrCronToken(token) ||
-    verifyAdminOrCronToken(cronSecret) ||
-    verifyAdminOrCronToken(bearer)
-  );
+  const { token, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[nios/swiss-watch] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
+  return verifyAdminOrCronToken(token);
 }
 
 export async function GET(request: NextRequest) {

@@ -16,18 +16,20 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { runSupervisorWatchCycle, checkMediumHealth, applySafeAutoFixes } from '@/lib/supervisor';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { logger } from '@/lib/logger';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 export async function GET(request: Request) {
-  // Auth por CRON_SECRET (query param o header)
-  const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret') || request.headers.get('x-cron-secret');
-  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
+  // Auth por CRON_SECRET — headers primero; query string es transporte
+  // legado que se registra sin exponer el valor.
+  const { token: secret, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[cron/supervisor-watch] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
 
-  if (!verifyAdminOrCronToken(secret) && !verifyAdminOrCronToken(bearer)) {
+  if (!verifyAdminOrCronToken(secret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 

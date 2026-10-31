@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
+import { logger } from '@/lib/logger';
 import { runCEOLoop } from '@/lib/nios/ceo-loop';
 import { getNiosExecutiveData } from '@/lib/nios/executive-center';
 import { buildNiosBrief } from '@/lib/nios/nios-speaks';
@@ -11,11 +12,12 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret') || request.headers.get('x-cron-secret');
-  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
+  const { token: secret, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[cron/nios-ceo-loop] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
 
-  if (!verifyAdminOrCronToken(secret ?? '') && !verifyAdminOrCronToken(bearer)) {
+  if (!verifyAdminOrCronToken(secret)) {
     return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 

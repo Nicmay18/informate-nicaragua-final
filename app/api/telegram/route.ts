@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 import { sendTelegramArticle } from '@/lib/distribution/telegram';
 
 export async function POST(request: NextRequest) {
-  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
-  const token =
-    request.headers.get('x-admin-token') ||
-    request.headers.get('x-admin-key') ||
-    new URL(request.url).searchParams.get('secret');
-  if (!verifyAdminOrCronToken(token) && !verifyAdminOrCronToken(bearer)) {
+  const { token, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[telegram] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
+  if (!verifyAdminOrCronToken(token)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
