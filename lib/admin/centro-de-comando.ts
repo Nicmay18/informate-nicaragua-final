@@ -71,6 +71,7 @@ export interface CentroDeComandoData {
   jobs: DeptoJob[];
   deadLetter: DeptoJob[];
   incidents: DepartamentoIncident[];
+  resolvedIncidents: DepartamentoIncident[];
   pendingActions: PendingAction[];
   learnings: LearningItem[];
   content: ContentHealth | null;
@@ -310,7 +311,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     }),
     getIncidentsSummary().catch((e) => {
       logger.error('[centro-de-comando] Incidentes fallaron:', e);
-      return { active: 0, resolved24h: 0, items: [] as DepartamentoIncident[] };
+      return { active: 0, resolved24h: 0, items: [] as DepartamentoIncident[], resolvedItems: [] as DepartamentoIncident[] };
     }),
     getLatestHeartbeatTime(),
     getPendingActions(),
@@ -339,7 +340,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
   const health = healthResult.status === 'fulfilled' ? healthResult.value : { overall: 'HEALTHY' as const, components: {} as Record<string, 'HEALTHY' | 'DEGRADED' | 'CRITICAL' | 'UNKNOWN'> };
   const incidents = incidentsResult.status === 'fulfilled'
     ? incidentsResult.value
-    : { active: 0, resolved24h: 0, items: [] as DepartamentoIncident[] };
+    : { active: 0, resolved24h: 0, items: [] as DepartamentoIncident[], resolvedItems: [] as DepartamentoIncident[] };
   const lastHeartbeatAt = heartbeatResult.status === 'fulfilled' ? heartbeatResult.value : null;
   const pendingActions = pendingActionsResult.status === 'fulfilled' ? pendingActionsResult.value : [];
   const learnings = learningsResult.status === 'fulfilled' ? learningsResult.value : [];
@@ -380,6 +381,7 @@ export async function getCentroDeComandoData(): Promise<CentroDeComandoData> {
     jobs,
     deadLetter,
     incidents: incidents.items,
+    resolvedIncidents: incidents.resolvedItems,
     pendingActions,
     learnings,
     content,

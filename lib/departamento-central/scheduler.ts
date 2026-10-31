@@ -80,7 +80,28 @@ function timeBucket(periodMs: number): string {
   return String(Math.floor(Date.now() / periodMs));
 }
 
+async function hasOpenJob(type: DeptoJobType): Promise<boolean> {
+  const db = getAdminDb();
+  try {
+    // Misma técnica que hasRecentJob: filtro de igualdad simple + filtro en
+    // memoria. 'in' sobre status además del filtro por type exigiría un
+    // índice compuesto que no existe.
+    const snap = await db.collection('depto_jobs').where('type', '==', type).limit(200).get();
+    return snap.docs.some((d) => {
+      const s = (d.data() as { status?: string }).status || '';
+      return s === 'pending' || s === 'retry' || s === 'running';
+    });
+  } catch (err) {
+    logger.error('[depto-scheduler] Error consultando trabajos abiertos:', err);
+    return false;
+  }
+}
+
 async function maybeEnqueueHealthCheck(): Promise<string | null> {
+  // Un job abierto sin ejecutar ya cubre el chequeo pendiente: encolar otro
+  // solo acumula backlog (así se formaron los P0 duplicados durante la
+  // congelación de la cola).
+  if (await hasOpenJob('health-check')) return null;
   if (await hasRecentJob('health-check', 4.5 * 60 * 1000)) return null;
   const bucket = timeBucket(5 * 60 * 1000);
   return enqueueJob({
@@ -91,16 +112,11 @@ async function maybeEnqueueHealthCheck(): Promise<string | null> {
   });
 }
 
-async function maybeEnqueueDailyReport(): Promise<string | null> {
-  const today = new Date().toISOString().slice(0, 10);
-  if (await hasRecentJob('daily-report', 23 * 60 * 60 * 1000)) return null;
-  return enqueueJob({
-    type: 'daily-report',
-    priority: 'P1',
-    source: 'scheduler',
-    dedupKey: dedup('daily-report', today, today),
-  });
-}
+// daily-report ya no se encola: el cron dedicado /api/cron/departamento-daily
+// (06:00 UTC) genera el reporte y escribe el heartbeat 'daily-report'. Los
+// jobs encolados se acumulaban detrás del backlog P0 sin ejecutarse (heartbeat
+// vencido → falsa alarma crítica). Los pendientes históricos se drenan como
+// skipped desde dailyReportWorker, que aún sirve de respaldo si el cron falla.
 
 // growth-check y monetization-check fueron retirados conscientemente: contaban
 // documentos en colecciones sin productor (nios_growth_opportunities=0,
@@ -155,9 +171,6 @@ export async function runScheduler(): Promise<{
   let enqueued = 0;
   const healthJob = await maybeEnqueueHealthCheck();
   if (healthJob) enqueued++;
-
-  const dailyJob = await maybeEnqueueDailyReport();
-  if (dailyJob) enqueued++;
 
   const articles = await enqueueNewArticles();
   enqueued += articles;
