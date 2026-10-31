@@ -1,4 +1,5 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
+import { after } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
 import { generateSlug } from '@/lib/slug';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
@@ -150,24 +151,27 @@ export async function POST(request: NextRequest) {
 
     // REGLA: Usar el publication-pipeline canonico en lugar de fetch sueltos.
     // El pipeline ejecuta Telegram + Facebook + IndexNow + Push + social copy.
-    try {
-      const { runPublicationPipeline } = await import('@/lib/meni/publication-pipeline');
-      // No bloquea la respuesta: corre en background
-      runPublicationPipeline({
-        db: adminDb,
-        articleId,
-        slug: finalSlug,
-        titulo,
-        resumen: canonical.resumen || '',
-        contenido: canonical.contenido,
-        categoria: finalCategoria,
-        imagen: imagen || undefined,
-        autor: autor || 'Redacción Nicaragua Informate',
-        story: body.story,
-      }).catch((e) => logger.warn('[articles] publication-pipeline error (non-blocking):', e));
-    } catch (e) {
-      logger.warn('[articles] No se pudo importar publication-pipeline:', e);
-    }
+    // after(): trabajo post-respuesta garantizado por Next.js — el runtime
+    // serverless congela fire-and-forget sueltos al enviar la respuesta.
+    after(async () => {
+      try {
+        const { runPublicationPipeline } = await import('@/lib/meni/publication-pipeline');
+        await runPublicationPipeline({
+          db: adminDb,
+          articleId,
+          slug: finalSlug,
+          titulo,
+          resumen: canonical.resumen || '',
+          contenido: canonical.contenido,
+          categoria: finalCategoria,
+          imagen: imagen || undefined,
+          autor: autor || 'Redacción Nicaragua Informate',
+          story: body.story,
+        });
+      } catch (e) {
+        logger.error('[articles] publication-pipeline error (background):', e);
+      }
+    });
 
     // REGLA: Toda noticia publicada entra en WATCH automaticamente.
     try {
@@ -193,7 +197,9 @@ export async function POST(request: NextRequest) {
     try {
       const { invalidateFirestoreCache } = await import('@/lib/data');
       invalidateFirestoreCache();
-    } catch (e) { /* noop */ }
+    } catch (e) {
+      logger.warn('[articles] invalidateFirestoreCache falló (caché quedará obsoleto):', e);
+    }
 
     // CAUSA RAÍZ: esta ruta (publicación automatizada) nunca revalidaba rutas
     // públicas — solo revalidateTag. Las notas publicadas por automatización
@@ -213,11 +219,16 @@ export async function POST(request: NextRequest) {
       logger.warn('[articles] revalidatePath error (non-blocking):', e);
     }
 
-    // Notificar a Google Indexing API (no bloquea la respuesta)
+    // Notificar a Google Indexing API (post-respuesta, errores visibles)
     const articleUrl = `https://nicaraguainformate.com/noticias/${finalSlug}`;
-    import('@/lib/google-indexing').then(({ notifyGoogleIndexing }) => {
-      notifyGoogleIndexing(articleUrl).catch(() => {});
-    }).catch(() => {});
+    after(async () => {
+      try {
+        const { notifyGoogleIndexing } = await import('@/lib/google-indexing');
+        await notifyGoogleIndexing(articleUrl);
+      } catch (e) {
+        logger.warn('[articles] Google Indexing API falló (indexación queda a sitemap/IndexNow):', e);
+      }
+    });
 
     return NextResponse.json({
       success: true,

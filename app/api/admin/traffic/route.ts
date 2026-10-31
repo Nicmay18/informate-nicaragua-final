@@ -120,6 +120,10 @@ const _cachedDailyTotals = unstable_cache(
       dayIds = docs.map(d => d.id).sort();
     } catch (err) {
       logger.warn('[admin/traffic] listDocuments traffic_daily falló:', err);
+      // Re-lanzar: unstable_cache no cachea rejections — sin el throw un
+      // fallo transitorio quedaría cacheado 5 min como "sin datos" y el
+      // dashboard confundiría error de servicio con ausencia real.
+      throw err;
     }
 
     const totals: Record<string, number> = {};
@@ -132,8 +136,10 @@ const _cachedDailyTotals = unstable_cache(
           let v = 0;
           for (const doc of snap.docs) v += (doc.data().views as number) || 0;
           totals[date] = v;
-        } catch {
-          // si falla un día, queda fuera de totals → hasData solo si el doc existe
+        } catch (err) {
+          // un día fallido queda fuera de totals (hasData solo con doc real),
+          // pero el error debe ser visible — no se convierte en "día sin tráfico"
+          logger.warn(`[admin/traffic] traffic_daily/${date} no legible:`, err);
         }
       }));
     }
@@ -221,7 +227,15 @@ export async function GET(request: NextRequest) {
     const periodDays = period === '30d' ? 30 : period === '7d' ? 7 : 1;
     const perf = await getTrafficPerformance(db, periodDays, 50);
     const daily = dailySeries(perf.performance?.dailyGrowth || {}, Math.max(periodDays, 7), now);
-    const heatmapData = await fetchHeatmapData(db, now, perf.performance?.dailyGrowth || {});
+    let heatmapData: { days: HeatmapDay[]; first: string | null; last: string | null };
+    try {
+      heatmapData = await fetchHeatmapData(db, now, perf.performance?.dailyGrowth || {});
+    } catch (e) {
+      // Fallo de Firestore en el heatmap: respuesta sin heatmap para ESTA
+      // request (no cacheado) en vez de 5 min de "sin datos" falsos.
+      logger.error('[admin/traffic] heatmap falló:', e);
+      heatmapData = { days: [], first: null, last: null };
+    }
 
     // ---- Mapa slug → noticia (título/categoría/vistas) --------------------
     const slugFreq = new Map<string, number>();

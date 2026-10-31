@@ -28,6 +28,7 @@ import {
   logMeni,
   logTime,
 } from './diagnostics';
+import { logger } from '@/lib/logger';
 import { runEditorBrain, ingestPublishedArticle, type EditorBrainResult } from '@/lib/meni/editor-brain';
 import { runEditorialBrain } from '@/lib/meni/editorial-brain';
 import { detectTier, TIER_THRESHOLDS, type EditorialTier } from '@/lib/meni/editorial-tiers';
@@ -540,7 +541,9 @@ export async function runMeniAsync(
       const { loadActiveAdjustments } = await import('@/lib/meni/learning-engine/learning-adapter');
       activeAdjustments = await loadActiveAdjustments(options.db);
       logMeni('Learning Engine adjustments loaded', { source: activeAdjustments.source });
-    } catch {
+    } catch (e) {
+      // Sin ajustes por ausencia de datos ≠ fallo: esto último debe verse.
+      logger.warn('[MENI] learning-engine no cargó ajustes (evalúa sin aprendizaje):', e);
       activeAdjustments = undefined;
     }
   }
@@ -557,7 +560,7 @@ export async function runMeniAsync(
     const patternsTask = import('@/lib/meni/editor-jefe/correction-tracker')
       .then(({ loadEditorPatterns }) => loadEditorPatterns(options.db))
       .then(patterns => { if (patterns.length > 0) editorJefe!.editorPatterns = patterns; })
-      .catch(() => {});
+      .catch((e) => logger.warn('[MENI] falló carga de patrones del editor:', e));
     tasks.push(patternsTask);
 
     // Fase 2: datos de portada para saturación (universo canónico PUBLICADO)
@@ -572,7 +575,7 @@ export async function runMeniAsync(
         }));
         if (portadaData.length > 0) editorJefe!.portadaData = portadaData;
       })
-      .catch(() => {});
+      .catch((e) => logger.warn('[MENI] falló query de portada para saturación:', e));
     tasks.push(portadaTask);
 
     // Fase 3: query de Knowledge Base
@@ -581,14 +584,14 @@ export async function runMeniAsync(
         options.db, input.titulo, input.contenido, input.categoria || 'General',
       ))
       .then(query => { if (query.totalArticles > 0) editorJefe!.knowledgeQuery = query; })
-      .catch(() => {});
+      .catch((e) => logger.warn('[MENI] falló query de knowledge-base:', e));
     tasks.push(kbTask);
 
     // Learning 4.0 (FASE 6): solo predicciones ya validadas contra realidad.
     const predictionsTask = import('@/lib/meni/learning-engine/prediction-context')
       .then(({ loadPredictionContext }) => loadPredictionContext(options.db))
       .then(ctx => { if (ctx) editorJefe!.predictionContext = ctx; })
-      .catch(() => {});
+      .catch((e) => logger.warn('[MENI] falló carga de prediction-context:', e));
     tasks.push(predictionsTask);
 
     await Promise.all(tasks);
@@ -614,7 +617,8 @@ export async function runMeniAsync(
         contenido: input.contenido,
         categoria: base.categoria,
       });
-    } catch {
+    } catch (e) {
+      logger.warn('[MENI] editor-brain falló (evalúa sin contexto editorial):', e);
       editorBrain = undefined;
     }
   }
@@ -679,7 +683,9 @@ export async function runMeniAsync(
           };
         }
       }
-    } catch { /* el aprendizaje nunca rompe la evaluación */ }
+    } catch (e) { /* el aprendizaje nunca rompe la evaluación, pero se registra */
+      logger.warn('[MENI] memoria de falsos positivos no cargó:', e);
+    }
   }
 
   if (options.skipDuplicateCheck) {
