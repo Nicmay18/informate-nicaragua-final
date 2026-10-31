@@ -130,6 +130,18 @@ describe('MENI 2.1.1 — Caso TrackMan V3 (instalación tecnológica)', () => {
     expect(c.tipoEvento).toBe('instalacion');
   });
 
+  it('reconoce instalación narrada en pasado/presente (instaló / instala)', () => {
+    // Redacción real: el cuerpo suele decir "la liga instaló el sistema"
+    // o "el estadio instala radar" — no solo "instalación/instalan".
+    for (const cuerpo of [
+      'La liga instaló el sistema TrackMan V3 en los estadios para medir lanzamientos y batazos con tecnología de radar.',
+      'El estadio instala cámaras y sensores TrackMan como parte del programa de tecnología deportiva.',
+    ]) {
+      const c = classifySports('TrackMan en estadios de beisbol', cuerpo, '');
+      expect(c.tipoEvento).toBe('instalacion');
+    }
+  });
+
   it('preguntas de tecnología/alcance/instituciones, no de partido', () => {
     const c = classifySports(TITULO_TRACKMAN, CUERPO_TRACKMAN, '');
     const sel = selectSportsQuestions(c, deportesProfile.preguntasEditor);

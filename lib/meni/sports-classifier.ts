@@ -283,7 +283,10 @@ export function classifySports(titulo: string, contenido: string, resumen = ''):
   // deportiva (p.ej. "instalan TrackMan V3 en los estadios"), NO un
   // partido. Debe evaluarse antes que partido/serie/torneo porque esas
   // palabras pueden aparecer como contexto.
-  const senalInstalacion = rx('\\b(?:instalaci[oó]n|instala(?:n|r|r[aá]n?|r[eé]n?|ron|do|da)|implementa(?:n|cion|r|da)|equipa(?:n|r|do|da)|incorpora(?:n|r|cion)|dota(?:n|r|cion)|moderniza(?:n|r|cion))\\b').test(t);
+  // 'instala' a secas ("el estadio instala radar") y 'instaló' ("la liga
+  // instaló el sistema") son las formas más comunes en redacción; sin ellas
+  // una crónica en pasado de una instalación real caía a 'general'.
+  const senalInstalacion = rx('\\b(?:instalaci[oó]n|instal(?:a(?:n|r|r[aá]n?|r[eé]n?|ron|do|da)?|[oó])|implementa(?:n|cion|r|da)|equipa(?:n|r|do|da)|incorpora(?:n|r|cion)|dota(?:n|r|cion)|moderniza(?:n|r|cion))\\b').test(t);
   const senalTecnologia = rx('\\b(?:track\\s*man|hawk-?eye|sistema\\s+de\\s+\\w+|tecnolog[ií]a|radar|c[aá]maras?|sensores?|var\\b|video\\s*arbitraje|software|hardware|anal[ií]tica\\s+de\\s+datos|datos\\s+biomec[aá]nicos)\\b').test(t);
   let tipoEvento: EventType = 'general';
   if (senalInstalacion && senalTecnologia) tipoEvento = 'instalacion';
