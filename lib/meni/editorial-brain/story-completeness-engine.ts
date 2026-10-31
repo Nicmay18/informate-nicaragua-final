@@ -44,9 +44,13 @@ function preguntaAplicaATipo(pregunta: string, tipo: StoryType): boolean {
   return true;
 }
 
-function detectarRespuestasFaltantes(contenidoHtml: string, texto: string, preguntas: ReaderQuestionsDecision, tipo: StoryType): string[] {
+function detectarRespuestasFaltantes(contenidoHtml: string, texto: string, preguntas: ReaderQuestionsDecision, tipo: StoryType, fuente?: string): { faltantes: string[]; fuenteNoEspecifica: string[] } {
   const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const t = norm(texto);
+  // §7 MENI 2.1.1 — si la fuente tampoco contiene la respuesta, su ausencia
+  // es una limitación del material origen ("La fuente no especifica este
+  // elemento"), no un fallo editorial: se reporta y no penaliza.
+  const fuenteNorm = fuente ? norm(stripHtml(fuente)) : '';
   // Estructura real del artículo: H2 en formato pregunta y listas de servicio
   // también responden preguntas del lector (ej. "¿Qué llevar?" + <ul>).
   const h2s = Array.from(contenidoHtml.matchAll(/<h2[^>]*>([\s\S]*?)<\/h2>/gi))
@@ -57,6 +61,7 @@ function detectarRespuestasFaltantes(contenidoHtml: string, texto: string, pregu
   const h2Acceso = h2s.some(h => /(donde|ubicad|llegar|acceder|distancia|direccion)/.test(h));
 
   const faltantes: string[] = [];
+  const fuenteNoEspecifica: string[] = [];
   for (const p of preguntas.preguntasObligatorias) {
     if (!preguntaAplicaATipo(p, tipo)) continue;
     const pn = norm(p);
@@ -70,9 +75,14 @@ function detectarRespuestasFaltantes(contenidoHtml: string, texto: string, pregu
     if (/(recomendaciones?|consejos?|practicas?|llevar|documentos?|requisitos?|que\s+hacer|preparar|visitante)/.test(pn) && (tieneListas || h2Servicio)) continue;
     if (/(cuanto|cuesta|costo|precio|tarifa|presupuesto|pagar)/.test(pn) && h2Costo) continue;
     if (/(donde|ubicad|llegar|acceder|distancia|direccion)/.test(pn) && h2Acceso) continue;
+    // §7 — si la fuente tampoco da la respuesta, es limitación del origen.
+    if (fuenteNorm && palabrasClave.length > 0 && palabrasClave.every(w => !fuenteNorm.includes(w))) {
+      fuenteNoEspecifica.push(`La fuente no especifica este elemento: ${p}`);
+      continue;
+    }
     faltantes.push(p);
   }
-  return faltantes;
+  return { faltantes, fuenteNoEspecifica };
 }
 
 function perfilEs(contexto: string | undefined, perfiles: Set<string>): boolean {
@@ -141,11 +151,11 @@ export function runStoryCompletenessEngine(
   const texto = stripHtml(`${input.titulo} ${input.contenido}`);
   const tipo = detectarTipoNoticia(texto);
 
-  const respuestasFaltantes = readerQuestions
-    ? detectarRespuestasFaltantes(input.contenido || '', texto, readerQuestions, tipo)
-    : [];
+  const { faltantes: respuestasFaltantes, fuenteNoEspecifica } = readerQuestions
+    ? detectarRespuestasFaltantes(input.contenido || '', texto, readerQuestions, tipo, input.fuente)
+    : { faltantes: [], fuenteNoEspecifica: [] };
   const contextoFaltante = detectarContextoFaltante(texto, tipo, input.perfil || input.categoria);
-  const dudasPendientes = detectarDudasPendientes(texto);
+  const dudasPendientes = [...detectarDudasPendientes(texto), ...fuenteNoEspecifica];
 
   const totalFaltantes = respuestasFaltantes.length + contextoFaltante.length;
   const cerrada = totalFaltantes === 0;

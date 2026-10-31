@@ -1,7 +1,6 @@
 ﻿import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { Inter, Merriweather, Spectral, IBM_Plex_Mono } from 'next/font/google';
-// import localFont from 'next/font/local'; // Descomenta cuando agregues los archivos .woff2
+import localFont from 'next/font/local';
 import './styles/globals.css';
 import './styles/components.css';
 import './styles/responsive.css';
@@ -27,45 +26,46 @@ import { criticalCss } from '@/lib/critical-css';
 import { getCspNonce } from '@/lib/nonce';
 import { Suspense } from 'react';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: true });
+// Fuentes autoalojadas (public/fonts/) — next/font/local elimina el
+// fetch a Google Fonts en build-time, cuya respuesta fallida causaba el
+// crash `Cannot read properties of null (reading '1')` en Vercel.
+const inter = localFont({
+  src: '../public/fonts/Inter-Variable.woff2',
+  variable: '--font-inter',
+  weight: '100 900',
+  display: 'swap',
+  preload: true,
+});
 // display:'optional' en fuentes no críticas: si no llegan a tiempo el
 // navegador conserva el fallback en vez de intercambiar → evita el
 // layout shift por font-swap tardío (CLS ~0.10 medido en Lighthouse CI).
-const merriweather = Merriweather({ weight: ['400', '700', '900'], subsets: ['latin'], variable: '--font-merri', display: 'optional', preload: false });
-const spectral = Spectral({ weight: ['400', '500', '600', '700'], subsets: ['latin'], variable: '--font-spectral', display: 'optional', preload: false });
-const ibmPlexMono = IBM_Plex_Mono({ weight: ['400', '500'], subsets: ['latin'], variable: '--font-ibm-plex-mono', display: 'optional', preload: false });
-
-/* ─── CONFIGURACIÓN next/font/local (cuando tengas los .woff2) ───
- * 1. Descarga Inter y Merriweather como .woff2
- * 2. Colócalos en public/fonts/:
- *      public/fonts/Inter-Regular.woff2
- *      public/fonts/Inter-Bold.woff2
- *      public/fonts/Merriweather-Regular.woff2
- *      public/fonts/Merriweather-Bold.woff2
- * 3. Descomenta las líneas siguientes y elimina los imports de next/font/google arriba.
- *
- * const interLocal = localFont({
- *   src: [
- *     { path: '../public/fonts/Inter-Regular.woff2', weight: '400', style: 'normal' },
- *     { path: '../public/fonts/Inter-Bold.woff2', weight: '700', style: 'normal' },
- *   ],
- *   variable: '--font-inter',
- *   display: 'swap',
- *   preload: true,
- * });
- *
- * const merriweatherLocal = localFont({
- *   src: [
- *     { path: '../public/fonts/Merriweather-Regular.woff2', weight: '400', style: 'normal' },
- *     { path: '../public/fonts/Merriweather-Bold.woff2', weight: '700', style: 'normal' },
- *   ],
- *   variable: '--font-merri',
- *   display: 'swap',
- *   preload: true,
- * });
- *
- * Luego reemplaza en <html className={`${interLocal.variable} ${merriweatherLocal.variable}`}>
- */
+const merriweather = localFont({
+  src: '../public/fonts/Merriweather-var.woff2',
+  variable: '--font-merri',
+  weight: '300 900',
+  display: 'optional',
+  preload: false,
+});
+const spectral = localFont({
+  src: [
+    { path: '../public/fonts/Spectral-400.woff2', weight: '400', style: 'normal' },
+    { path: '../public/fonts/Spectral-500.woff2', weight: '500', style: 'normal' },
+    { path: '../public/fonts/Spectral-600.woff2', weight: '600', style: 'normal' },
+    { path: '../public/fonts/Spectral-700.woff2', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-spectral',
+  display: 'optional',
+  preload: false,
+});
+const ibmPlexMono = localFont({
+  src: [
+    { path: '../public/fonts/IBMPlexMono-400.woff2', weight: '400', style: 'normal' },
+    { path: '../public/fonts/IBMPlexMono-500.woff2', weight: '500', style: 'normal' },
+  ],
+  variable: '--font-ibm-plex-mono',
+  display: 'optional',
+  preload: false,
+});
 
 export const viewport: Viewport = {
   width: 'device-width',
