@@ -5,6 +5,7 @@ import { recordLearning } from './learning';
 import { getDepartmentHealth, writeHeartbeat } from './heartbeat';
 import { enqueueJob } from './queue';
 import { emitOperationalAlerts } from './ops-alerts';
+import { resolveHeartbeatAlerts } from '@/lib/nios/intelligence/alerts';
 import { expireStaleActions } from '@/lib/nios/action-engine';
 import { reconcileCeoTasks } from '@/lib/nios/ceo-memory';
 
@@ -41,6 +42,10 @@ export async function runWatchdog(): Promise<{
         verification: `getDepartmentHealth reporta ${status}.`,
         learning: 'Heartbeat recuperado sin intervención manual.',
       });
+      // Cierre simétrico en nios_alerts: el incidente se resolvía pero la
+      // alerta persistida quedaba activa para siempre (falsos críticos en el
+      // Command Center). No borra el registro; solo marca resolved.
+      await resolveHeartbeatAlerts(db, component);
       continue;
     }
     stale.push(component);
@@ -91,6 +96,21 @@ export async function runWatchdog(): Promise<{
     db.collection('depto_jobs').where('status', '==', 'retry').count().get(),
   ]);
   const pendingCount = (pendingCountSnap.data().count || 0) + (retryCountSnap.data().count || 0);
+
+  // Variantes históricas con el contador embebido en el título (p.ej.
+  // "Cola de trabajos acumulada: 188 pendientes") tienen otro slug: el dedup
+  // de openIncident no las alcanza y cada día creaba un incidente nuevo del
+  // MISMO evento. Se consolidan en el incidente canónico (título estable):
+  // se resuelven como duplicadas conservando su historial, nunca se borran.
+  const legacyBacklogSnap = await db
+    .collection('depto_incidents')
+    .where('status', 'in', ['active', 'monitoring'])
+    .get();
+  const legacyVariants = legacyBacklogSnap.docs.filter((d) => {
+    const title = String(d.data().title || '');
+    return title.startsWith('Cola de trabajos acumulada') && title !== 'Cola de trabajos acumulada';
+  });
+
   if (pendingCount > PENDING_QUEUE_LIMIT) {
     // Título estable (sin el contador): el dedup de incidentes usa el slug del
     // título; embeber N generaba un incidente nuevo por día del mismo evento.
@@ -103,6 +123,19 @@ export async function runWatchdog(): Promise<{
       diagnosis: `${pendingCount} trabajos en estado pending/retry`,
     });
     actions.push('queue-backlog-warning');
+    // El backlog sigue activo pero se representa por UN solo incidente
+    // canónico; las variantes numeradas son duplicados históricos.
+    for (const doc of legacyVariants) {
+      await doc.ref.update({
+        status: 'resolved',
+        resolvedAt: now.toISOString(),
+        diagnosis: `Condición consolidada en el incidente canónico (backlog real: ${pendingCount}).`,
+        correction: 'Duplicado histórico cerrado; el incidente canónico sigue activo.',
+        verification: `pending+retry=${pendingCount}.`,
+        learning: 'Un mismo evento no debe abrir un incidente por valor de contador.',
+        updatedAt: now.toISOString(),
+      });
+    }
   } else {
     await resolveIncident('Cola de trabajos acumulada', {
       diagnosis: `Cola dentro del límite (${pendingCount}/${PENDING_QUEUE_LIMIT}).`,
@@ -110,17 +143,8 @@ export async function runWatchdog(): Promise<{
       verification: `pending+retry=${pendingCount}.`,
       learning: 'Backlog normalizado.',
     });
-    // Variantes históricas con el contador embebido en el título (p.ej.
-    // "Cola de trabajos acumulada: 188 pendientes") tienen otro slug y no las
-    // alcanza resolveIncident; se cierran por prefijo una vez que la cola
-    // está realmente dentro del límite.
-    const legacyBacklog = await db
-      .collection('depto_incidents')
-      .where('status', 'in', ['active', 'monitoring'])
-      .get();
-    for (const doc of legacyBacklog.docs) {
-      const title = String(doc.data().title || '');
-      if (!title.startsWith('Cola de trabajos acumulada')) continue;
+    // La cola está dentro del límite: todas las variantes se cierran.
+    for (const doc of legacyVariants) {
       await doc.ref.update({
         status: 'resolved',
         resolvedAt: now.toISOString(),

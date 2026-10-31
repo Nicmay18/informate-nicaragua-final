@@ -88,7 +88,12 @@ export async function resolveIncident(
   logger.info('[departamento-incidents] Incidente resuelto', { title, id: existing.id });
 }
 
-export async function getIncidentsSummary(): Promise<{ active: number; resolved24h: number; items: DepartamentoIncident[] }> {
+export async function getIncidentsSummary(): Promise<{
+  active: number;
+  resolved24h: number;
+  items: DepartamentoIncident[];
+  resolvedItems: DepartamentoIncident[];
+}> {
   const db = getAdminDb();
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
@@ -104,11 +109,20 @@ export async function getIncidentsSummary(): Promise<{ active: number; resolved2
     .filter((d) => d.status === 'active' || d.status === 'monitoring')
     .slice(0, 10);
 
-  const resolved24h = resolvedSnap.docs.filter((d) => (d.data() as { status?: string }).status === 'resolved').length;
+  // Resueltos recientes: el panel los necesita para "Lo que resolví" — antes
+  // solo viajaban activos y esa tarjeta quedaba vacía para siempre.
+  const resolvedItems = resolvedSnap.docs
+    .map((d) => ({ id: d.id, ...d.data() }) as DepartamentoIncident)
+    .filter((d) => d.status === 'resolved')
+    .sort((a, b) => String(b.resolvedAt || '').localeCompare(String(a.resolvedAt || '')))
+    .slice(0, 5);
+
+  const resolved24h = resolvedItems.length;
 
   return {
     active: (activeSnap.data().count || 0) + (monitoringSnap.data().count || 0),
     resolved24h,
     items,
+    resolvedItems,
   };
 }

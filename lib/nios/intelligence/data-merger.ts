@@ -172,6 +172,8 @@ export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Pro
       'tags',
       'related_links',
       'estado',
+      'publicado',
+      'archived',
       'resumen',
       'imagen',
     )
@@ -198,6 +200,8 @@ export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Pro
         tags: d.tags || [],
         related_links: d.related_links || [],
         estado,
+        publicado: d.publicado === true,
+        archived: d.archived === true,
       } as Noticia;
     })
     .filter((n) => isPublishedArticle(n));

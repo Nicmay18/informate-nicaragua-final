@@ -1,3 +1,4 @@
+import { FieldPath } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 import type { DeptoJob, DeptoJobType, DeptoPriority, DeptoJobStatus } from './types';
@@ -79,21 +80,43 @@ export async function claimNextJob(): Promise<DeptoJob | null> {
   // viejos por scheduledFor se satura de completados y los pending nunca
   // entraban al filtro en memoria (cola congelada en producción).
   // 'in' es un filtro de igualdad: no requiere índice compuesto ni orderBy.
-  const snap = await db
-    .collection(JOBS)
-    .where('status', 'in', ['pending', 'retry'])
-    .limit(200)
-    .get();
+  //
+  // Paginación por documentId: la ventana sin orden de limit(200) devuelve
+  // siempre el mismo subconjunto arbitrario — los jobs fuera de la ventana
+  // eran invisibles para siempre (en producción: 48 jobs fuera de la ventana,
+  // incluidos daily-report P1). Se escanean páginas estables hasta cubrir
+  // toda la cola abierta (tope defensivo).
+  const PAGE = 500;
+  const MAX_PAGES = 6;
+  const candidatos: DeptoJob[] = [];
+  let cursor: FirebaseFirestore.QueryDocumentSnapshot | undefined;
+  for (let page = 0; page < MAX_PAGES; page++) {
+    let q = db
+      .collection(JOBS)
+      .where('status', 'in', ['pending', 'retry'])
+      .orderBy(FieldPath.documentId())
+      .limit(PAGE);
+    if (cursor) q = q.startAfter(cursor);
+    const snap = await q.get();
+    for (const d of snap.docs) {
+      const j = { id: d.id, ...d.data() } as DeptoJob;
+      if ((j.scheduledFor ?? '') <= now) candidatos.push(j);
+    }
+    if (snap.size < PAGE) break;
+    cursor = snap.docs[snap.size - 1];
+    if (page === MAX_PAGES - 1) {
+      logger.warn('[depto-queue] Backlog abierto excede el escaneo de claim', {
+        scanned: MAX_PAGES * PAGE,
+      });
+    }
+  }
 
-  const candidates = snap.docs
-    .map((d) => ({ id: d.id, ...d.data() } as DeptoJob))
-    .filter((j) => (j.scheduledFor ?? '') <= now)
-    .sort((a, b) => {
-      const pa = PRIORITY_RANK[a.priority] ?? 99;
-      const pb = PRIORITY_RANK[b.priority] ?? 99;
-      if (pa !== pb) return pa - pb;
-      return (a.scheduledFor ?? '').localeCompare(b.scheduledFor ?? '');
-    });
+  const candidates = candidatos.sort((a, b) => {
+    const pa = PRIORITY_RANK[a.priority] ?? 99;
+    const pb = PRIORITY_RANK[b.priority] ?? 99;
+    if (pa !== pb) return pa - pb;
+    return (a.scheduledFor ?? '').localeCompare(b.scheduledFor ?? '');
+  });
 
   const next = candidates[0];
   if (!next) return null;
