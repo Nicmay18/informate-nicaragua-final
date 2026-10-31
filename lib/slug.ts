@@ -52,6 +52,76 @@ export async function ensureUniqueSlug(
 }
 
 /**
+ * Claim atómico de slug.
+ *
+ * Las comprobaciones check-then-create (`where slug == X` fuera de
+ * transacción) dejan una ventana en la que dos POSTs concurrentes con el
+ * mismo título crean slugs duplicados. Las transacciones de Firestore solo
+ * detectan conflicto sobre el MISMO documento, así que la primitiva correcta
+ * es un doc-claim por slug: `tx.create()` falla si el doc ya existe y el
+ * retry ve el claim tomado.
+ *
+ * La colección `slug_claims` actúa como registry durable. Un claim huérfano
+ * (publicación que falla después del claim) solo reserva el slug — costo
+ * aceptable vs duplicados.
+ */
+type TxDb = {
+  collection: (name: string) => FirebaseFirestore.CollectionReference;
+  runTransaction: <T>(fn: (tx: FirebaseFirestore.Transaction) => Promise<T>) => Promise<T>;
+};
+
+type TxLike = {
+  get: FirebaseFirestore.Transaction['get'];
+  create: FirebaseFirestore.Transaction['create'];
+};
+
+/**
+ * Variante para usar DENTRO de la transacción que crea el artículo —
+ * claim y create quedan en el mismo commit (sin ventana entre ambos).
+ * true = claim ganado; false = slug ya tomado (por claim o por artículo real).
+ */
+export async function claimSlugInTx(tx: TxLike, db: Pick<TxDb, 'collection'>, slug: string): Promise<boolean> {
+  const claimRef = db.collection('slug_claims').doc(slug);
+  const [claimSnap, existing] = await Promise.all([
+    tx.get(claimRef),
+    tx.get(db.collection('noticias').where('slug', '==', slug).limit(1)),
+  ]);
+  if (claimSnap.exists || !existing.empty) return false;
+  tx.create(claimRef, { slug, claimedAt: new Date().toISOString() });
+  return true;
+}
+
+/** Igual que ensureUniqueSlug pero atómica, para usar dentro de una tx. */
+export async function claimUniqueSlugInTx(
+  tx: TxLike,
+  db: Pick<TxDb, 'collection'>,
+  titulo: string,
+): Promise<string> {
+  const baseSlug = generateSlug(titulo);
+  for (let counter = 0; counter <= 999; counter++) {
+    const suffix = counter === 0 ? '' : `-${counter}`;
+    const slug = counter === 0 ? baseSlug : baseSlug.substring(0, 100 - suffix.length) + suffix;
+    if (await claimSlugInTx(tx, db, slug)) return slug;
+  }
+  const fallback = `${baseSlug.substring(0, 85)}-${Date.now()}`;
+  tx.create(db.collection('slug_claims').doc(fallback), { slug: fallback, claimedAt: new Date().toISOString() });
+  return fallback;
+}
+
+/** true = claim ganado; false = slug ya tomado (por claim o por artículo real). */
+export async function claimSlug(db: TxDb, slug: string): Promise<boolean> {
+  return db.runTransaction((tx) => claimSlugInTx(tx, db, slug));
+}
+
+/**
+ * Variante atómica de ensureUniqueSlug: reserva el primer candidato libre
+ * dentro de la transacción (-1, -2…) con las mismas reglas de truncado.
+ */
+export async function claimUniqueSlug(db: TxDb, titulo: string): Promise<string> {
+  return db.runTransaction((tx) => claimUniqueSlugInTx(tx, db, titulo));
+}
+
+/**
  * Compara un slug de params contra el slug generado desde el título.
  */
 export function slugMatches(title: string, slugParam: string): boolean {

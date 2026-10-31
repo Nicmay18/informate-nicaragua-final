@@ -226,8 +226,10 @@ export async function proposeActionsFromOpportunities(opportunities: NiosGrowthO
 export async function expireStaleActions(maxAgeDays = 7): Promise<{ expired: number; superseded: number; kept: number }> {
   // PENDING (propuestas sin aprobar), PREPARED y QUEUED (GrowthAction /
   // acciones solo preparadas en colas sin consumidor) también acumulan
-  // ciclo de vida pendiente: deben expirar igual.
-  const snap = await db().collection('nios_actions').where('status', 'in', ['PENDING', 'PREPARED', 'QUEUED']).limit(300).get();
+  // ciclo de vida pendiente: deben expirar igual. RUNNING se incluye porque
+  // un claim de ejecución puede quedar huérfano si el proceso muere antes
+  // de escribir el estado terminal.
+  const snap = await db().collection('nios_actions').where('status', 'in', ['PENDING', 'PREPARED', 'QUEUED', 'RUNNING']).limit(300).get();
   if (snap.empty) return { expired: 0, superseded: 0, kept: 0 };
 
   const pending = snap.docs.map((d) => d.data() as NiosAction);
@@ -292,9 +294,25 @@ export async function getActions(limit = 50): Promise<NiosAction[]> {
 export async function approveAndExecuteAction(actionId: string, user?: string): Promise<NiosAction> {
   const ref = db().collection('nios_actions').doc(actionId);
   const now = new Date().toISOString();
-  await ref.update({ status: 'APPROVED', approvedAt: now, user: user || null });
 
-  await ref.update({ status: 'RUNNING', executedAt: now });
+  // Claim atómico PENDING/FAILED → RUNNING. Sin esto, dos aprobaciones
+  // concurrentes ejecutaban la acción dos veces (doble item en cola de
+  // distribución → doble mensaje a Telegram). Estados terminales
+  // (COMPLETED/REJECTED/EXPIRED) y RUNNING/QUEUED quedan protegidos.
+  const claim = await db().runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists) return { ok: false as const, error: 'not_found' };
+    const current = (snap.data() as NiosAction).status;
+    if (current !== 'PENDING' && current !== 'FAILED') {
+      return { ok: false as const, status: current };
+    }
+    tx.update(ref, { status: 'RUNNING', approvedAt: now, executedAt: now, user: user || null });
+    return { ok: true as const };
+  });
+  if (!claim.ok) {
+    if (claim.error === 'not_found') throw new Error(`Acción ${actionId} no encontrada`);
+    throw new Error(`La acción ${actionId} está en estado ${claim.status}; solo PENDING/FAILED puede aprobarse/ejecutarse`);
+  }
 
   try {
     const action = (await ref.get()).data() as NiosAction;
@@ -319,12 +337,28 @@ export async function approveAndExecuteAction(actionId: string, user?: string): 
 export async function rejectAction(actionId: string, reason?: string, user?: string): Promise<NiosAction> {
   const ref = db().collection('nios_actions').doc(actionId);
   const now = new Date().toISOString();
-  await ref.update({
-    status: 'REJECTED',
-    rejectedAt: now,
-    user: user || null,
-    rejectionReason: reason || null,
+
+  // Solo se rechaza desde estados vivos; un COMPLETED/FAILED/REJECTED
+  // terminal no puede ser pisado por un clic tardío o doble submit.
+  const claim = await db().runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists) return { ok: false as const, error: 'not_found' };
+    const current = (snap.data() as NiosAction).status;
+    if (!['PENDING', 'APPROVED', 'QUEUED', 'FAILED'].includes(current)) {
+      return { ok: false as const, status: current };
+    }
+    tx.update(ref, {
+      status: 'REJECTED',
+      rejectedAt: now,
+      user: user || null,
+      rejectionReason: reason || null,
+    });
+    return { ok: true as const };
   });
+  if (!claim.ok) {
+    if (claim.error === 'not_found') throw new Error(`Acción ${actionId} no encontrada`);
+    throw new Error(`La acción ${actionId} está en estado ${claim.status}; no puede rechazarse`);
+  }
 
   // Guardar rechazo como memoria para no insistir
   await db().collection('nios_memory').add({

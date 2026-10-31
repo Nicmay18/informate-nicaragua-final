@@ -165,7 +165,7 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
 export async function POST(request: NextRequest) {
   if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   try {
-    const [{ normalizarTitulo }, { ensureUniqueSlug }, { guardarConMeni, mapMeniScoreToNivel }, { updateDecisionLog }] = await Promise.all([
+    const [{ normalizarTitulo }, { ensureUniqueSlug, claimUniqueSlugInTx }, { guardarConMeni, mapMeniScoreToNivel }, { updateDecisionLog }] = await Promise.all([
       import('@/lib/meni/titulo'),
       import('@/lib/slug'),
       import('@/lib/editorial/guardar-con-meni'),
@@ -203,7 +203,10 @@ export async function POST(request: NextRequest) {
     const tituloLimpio = normalizarTitulo(titulo);
 
     const db = getAdminDb();
-    const slug = await ensureUniqueSlug(tituloLimpio, async (s) => {
+    // Slug candidato para la entrada de MENI; el definitivo se reserva
+    // atómicamente junto al create (claimUniqueSlugInTx) para evitar
+    // duplicados bajo publicaciones concurrentes.
+    const slugCandidato = await ensureUniqueSlug(tituloLimpio, async (s) => {
       const existing = await db.collection('noticias').where('slug', '==', s).limit(1).get();
       return !existing.empty;
     });
@@ -218,7 +221,7 @@ export async function POST(request: NextRequest) {
       autor: autor || 'Nicaragua Informate',
       fecha: new Date().toISOString(),
       imagen: imagen || undefined,
-      slug,
+      slug: slugCandidato,
       // Keywords enviadas por el editor ganan sobre las autogeneradas.
       palabrasClave: Array.isArray(body.palabrasClave) ? body.palabrasClave : undefined,
       keywords: body.keywords || undefined,
@@ -285,14 +288,19 @@ export async function POST(request: NextRequest) {
 
     const finalCategoria = (meniUpdateData.categoria as string) || 'Nacionales';
     const relatedLinks = await getRelatedLinks(db, finalCategoria, docRef.id);
-    await docRef.set({
+    // Claim del slug + create del artículo en la misma transacción: bajo
+    // concurrencia el segundo POST obtiene un sufijo nuevo en vez de un
+    // slug duplicado (check-then-create fuera de tx tenía esa ventana).
+    const slug = await db.runTransaction(async (tx) => {
+      const claimed = await claimUniqueSlugInTx(tx, db, tituloLimpio);
+      tx.set(docRef, {
       ...meniUpdateData,
       id: docRef.id,
       titulo: tituloLimpio,
       // resumen/contenido canónicos vienen de meniUpdateData (textoCorregido);
       // nunca persistir el input crudo por encima de la versión evaluada.
       imagen: imagen || '',
-      slug,
+      slug: claimed,
       autor: autor || 'Nicaragua Informate',
       destacada: !!destacada,
       vistas: 0,
@@ -315,6 +323,8 @@ export async function POST(request: NextRequest) {
           supervisorVerdict: supervisor.verdict,
         },
       } : {}),
+      });
+      return claimed;
     });
     await updateDecisionLog(db, attemptId, { result: 'SAVED', savedArticleId: docRef.id });
 
