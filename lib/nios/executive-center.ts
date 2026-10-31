@@ -209,7 +209,12 @@ const buildExecutiveData = async (): Promise<NiosExecutiveData> => {
     ? Math.max(0, Math.round((now.getTime() - new Date(lastRunAt).getTime()) / 36e5))
     : null;
   const stale = dataAgeHours === null || dataAgeHours > 25;
-  const diagnostics = generateNiosDiagnostics(snapshot?.gsc ?? null, snapshot?.ga4 ?? null, lastCacheInvalidationAt);
+  const diagnostics = generateNiosDiagnostics(
+    snapshot?.gsc ?? null,
+    snapshot?.ga4 ?? null,
+    lastCacheInvalidationAt,
+    snapshot?.collectedAt ?? null,
+  );
 
   const data: CeoVerdictInput = {
     snapshot,

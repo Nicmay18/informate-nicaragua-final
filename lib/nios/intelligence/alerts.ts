@@ -196,6 +196,54 @@ export async function emitAlerts(
 }
 
 /**
+ * Resuelve alertas de heartbeat de un componente que recuperó su latido.
+ * Las alertas 'Heartbeat crítico: X' persistían resolved=false para siempre:
+ * emitAlerts solo escribe y nadie cerraba el ciclo cuando el componente
+ * volvía a reportar. El watchdog la invoca en la misma rama donde cierra el
+ * incidente de depto_incidents, manteniendo ambos ciclos de vida simétricos.
+ * No borra documentos: marca resolved=true y conserva el historial.
+ */
+export async function resolveHeartbeatAlerts(
+  db: Firestore,
+  component: string,
+): Promise<number> {
+  try {
+    const snap = await db
+      .collection(ALERTS_COLLECTION)
+      .where('resolved', '==', false)
+      .limit(300)
+      .get();
+
+    const now = new Date().toISOString();
+    const batch = db.batch();
+    let matched = 0;
+
+    for (const doc of snap.docs) {
+      const a = doc.data() as NiosAlert;
+      const comp = a.metadata?.component as string | undefined;
+      const isHeartbeatAlert = a.message.startsWith('Heartbeat crítico:');
+      const matches = isHeartbeatAlert && (comp ? comp === component : a.message.includes(component));
+      if (!matches) continue;
+      batch.update(doc.ref, {
+        resolved: true,
+        resolvedAt: now,
+        resolutionNote: 'Heartbeat recuperado; verificado por watchdog.',
+      });
+      matched++;
+    }
+
+    if (matched > 0) {
+      await batch.commit();
+      logger.info(`[nios-alerts] ${matched} alerta(s) de heartbeat resueltas para ${component}`);
+    }
+    return matched;
+  } catch (err) {
+    logger.error('[nios-alerts] Failed to resolve heartbeat alerts:', err);
+    return 0;
+  }
+}
+
+/**
  * Lee alertas activas (no resueltas) de los últimos N días.
  */
 export async function getActiveAlerts(

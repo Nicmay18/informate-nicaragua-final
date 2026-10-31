@@ -173,6 +173,7 @@ type Data = {
   jobs: DeptoJob[];
   deadLetter: DeptoJob[];
   incidents: Incident[];
+  resolvedIncidents?: Incident[];
   pendingActions: PendingAction[];
   learnings: Learning[];
   content: ContentHealth | null;
@@ -212,6 +213,15 @@ function fmtAgo(iso?: string | null) {
 function n(n: number | null | undefined) {
   if (n === null || n === undefined) return '—';
   return n.toLocaleString('es-NI');
+}
+
+/** Métrica sin fuente: nunca mostrar 0 (falso dato) ni '—' sin contexto. */
+function insufficient(source: unknown): boolean {
+  return source === null || source === undefined;
+}
+
+function InsufficientData() {
+  return <span className="text-sm font-medium text-slate-400">Datos insuficientes</span>;
 }
 
 function pct(x: number | null | undefined) {
@@ -323,7 +333,7 @@ export default function CentroDeComandoPage() {
   const pendingJobs = jobs.filter((j) => j.status === 'pending');
   const failedJobs = jobs.filter((j) => j.status === 'failed');
   const activeIncidents = incidents.filter((i) => i.status === 'active' || i.status === 'monitoring');
-  const resolvedIncidents = incidents.filter((i) => i.status === 'resolved');
+  const resolvedIncidents = data.resolvedIncidents ?? incidents.filter((i) => i.status === 'resolved');
   const recentCompletedJobs = completedJobs.slice(0, 10);
 
   return (
@@ -499,7 +509,7 @@ export default function CentroDeComandoPage() {
                 </div>
                 <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
                   <div className="text-slate-500">📰 Artículos analizados</div>
-                  <div className="text-xl font-bold text-slate-900">{n(content?.total ?? nios?.articlesCount ?? 0)}</div>
+                  <div className="text-xl font-bold text-slate-900">{insufficient(content) && insufficient(nios) ? <InsufficientData /> : n(content?.total ?? nios?.articlesCount ?? 0)}</div>
                 </div>
                 <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
                   <div className="text-slate-500">🛠️ Problemas detectados</div>
@@ -621,19 +631,19 @@ export default function CentroDeComandoPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="bg-slate-50 rounded-xl p-3 border border-slate-100">
               <div className="text-xs text-slate-500 uppercase">Notas revisadas</div>
-              <div className="text-xl font-bold text-slate-900">{n(content?.total ?? nios?.articlesCount ?? 0)}</div>
+              <div className="text-xl font-bold text-slate-900">{insufficient(content) && insufficient(nios) ? <InsufficientData /> : n(content?.total ?? nios?.articlesCount ?? 0)}</div>
             </div>
             <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-100">
               <div className="text-xs text-emerald-700 uppercase">Aprobadas</div>
-              <div className="text-xl font-bold text-emerald-700">{n(content?.approved ?? 0)}</div>
+              <div className="text-xl font-bold text-emerald-700">{insufficient(content) ? <InsufficientData /> : n(content?.approved ?? 0)}</div>
             </div>
             <div className="bg-amber-50 rounded-xl p-3 border border-amber-100">
               <div className="text-xs text-amber-700 uppercase">Requieren revisión</div>
-              <div className="text-xl font-bold text-amber-700">{n(content?.pendingReview ?? 0)}</div>
+              <div className="text-xl font-bold text-amber-700">{insufficient(content) ? <InsufficientData /> : n(content?.pendingReview ?? 0)}</div>
             </div>
             <div className="bg-blue-50 rounded-xl p-3 border border-blue-100">
               <div className="text-xs text-blue-700 uppercase">Con oportunidades</div>
-              <div className="text-xl font-bold text-blue-700">{n(content?.withOpportunities ?? nios?.contentOpportunity?.opportunities.length ?? 0)}</div>
+              <div className="text-xl font-bold text-blue-700">{insufficient(content) && insufficient(nios?.contentOpportunity) ? <InsufficientData /> : n(content?.withOpportunities ?? nios?.contentOpportunity?.opportunities.length ?? 0)}</div>
             </div>
           </div>
           {nios?.meniLearning?.summary && (

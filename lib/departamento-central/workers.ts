@@ -9,7 +9,7 @@ import { recordLearning } from './learning';
 import { completeJob, failJob } from './queue';
 import { runDepartamentoCentralCycle } from './cycle';
 import { saveDepartamentoReport } from './store';
-import { writeHeartbeat } from './heartbeat';
+import { writeHeartbeat, getLatestHeartbeat } from './heartbeat';
 import type { DeptoJob, DeptoJobType } from './types';
 
 const MAX_ARTICLE_AGE_MS = 24 * 60 * 60 * 1000;
@@ -41,8 +41,24 @@ async function healthCheckWorker(job: DeptoJob): Promise<void> {
   });
 }
 
+const DAILY_REPORT_FRESH_MS = 20 * 60 * 60 * 1000;
+
 async function dailyReportWorker(job: DeptoJob): Promise<void> {
   const started = Date.now();
+
+  // El cron /api/cron/departamento-daily (06:00 UTC) genera el reporte diario
+  // y escribe el heartbeat 'daily-report'. Los jobs encolados son históricos:
+  // ejecutarlos repetiría un ciclo completo ya realizado. Si el reporte del
+  // día ya existe (heartbeat fresco), el job se completa como skipped.
+  const last = await getLatestHeartbeat('daily-report');
+  if (last?.lastRunAt && Date.now() - new Date(last.lastRunAt).getTime() < DAILY_REPORT_FRESH_MS) {
+    await completeJob(job.jobId, {
+      skipped: true,
+      reason: `Reporte diario ya generado (${last.lastRunAt}); job histórico drenado.`,
+    });
+    return;
+  }
+
   const report = await runDepartamentoCentralCycle();
   await saveDepartamentoReport(report);
 

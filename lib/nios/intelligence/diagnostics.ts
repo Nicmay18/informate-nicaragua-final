@@ -341,29 +341,38 @@ function ga4Diagnostic(snapshot: GA4Snapshot | null): NiosDiagnostic {
   };
 }
 
-function niosDiagnostic(lastCacheInvalidationAt?: string | null): NiosDiagnostic {
+function niosDiagnostic(
+  lastCacheInvalidationAt?: string | null,
+  latestSnapshotCollectedAt?: string | null,
+): NiosDiagnostic {
   const now = Date.now();
   const invalidatedAt = lastCacheInvalidationAt ? new Date(lastCacheInvalidationAt).getTime() : 0;
-  const cacheFresh = lastCacheInvalidationAt && now - invalidatedAt < 5 * 60 * 1000;
+  const collectedAt = latestSnapshotCollectedAt ? new Date(latestSnapshotCollectedAt).getTime() : 0;
   const dataAgeHours = lastCacheInvalidationAt
     ? Math.max(0, Math.round((now - invalidatedAt) / 36e5))
     : null;
 
-  if (cacheFresh) {
+  // Frescura honesta: la caché solo puede estar stale si existe data NUEVA
+  // posterior a la última invalidación. Comparar la invalidación con "ahora"
+  // marcaba STALE de forma permanente a las 5 minutos de cada recolección,
+  // aunque ninguna lectura hubiera podido cachear datos viejos.
+  const cacheCoversLatestData = invalidatedAt > 0 && (!collectedAt || invalidatedAt >= collectedAt);
+
+  if (cacheCoversLatestData) {
     return {
       id: 'nios-cache-refresh',
       severity: 'low',
       source: 'NIOS',
       status: 'REAL' as NiosDataStatus,
-      problem: 'La caché de los dashboards administrativos fue invalidada recientemente.',
-      cause: `Next.js unstable_cache se invalidó a las ${lastCacheInvalidationAt}; la próxima petición recalculará desde Firestore.`,
-      impact: 'Los datos actualizados estarán disponibles tras la siguiente carga del panel.',
-      recommendedAction: 'Ninguna; la caché se encuentra dentro de la ventana de invalidación.',
+      problem: 'La caché de los dashboards administrativos cubre el snapshot más reciente.',
+      cause: `La última invalidación (${lastCacheInvalidationAt}) es posterior a la colección del snapshot (${latestSnapshotCollectedAt ?? 'desconocida'}); cualquier valor cacheado refleja los datos más recientes.`,
+      impact: 'El panel muestra datos posteriores a la última recolección.',
+      recommendedAction: 'Ninguna; la caché cubre los datos más recientes.',
       action: 'NO_ACTION',
       autoFixAvailable: false,
       requiresHuman: false,
-      expectedResult: 'El dashboard reflejará los datos más recientes en la siguiente petición.',
-      lastAttemptAt: lastCacheInvalidationAt,
+      expectedResult: 'El dashboard refleja el snapshot más reciente.',
+      lastAttemptAt: lastCacheInvalidationAt ?? new Date().toISOString(),
       dataAgeHours,
       confidence: 90,
     };
@@ -374,9 +383,11 @@ function niosDiagnostic(lastCacheInvalidationAt?: string | null): NiosDiagnostic
     severity: 'low',
     source: 'NIOS',
     status: 'STALE' as NiosDataStatus,
-    problem: 'La caché de los dashboards administrativos puede estar stale tras la recolección diaria.',
-    cause: 'Next.js unstable_cache retiene snapshots en memoria/disco; los datos de hoy pueden no verse hasta el TTL.',
-    impact: 'El panel administrativo puede mostrar métricas de ayer después de que NIOS recolectó nuevos datos.',
+    problem: 'La caché de los dashboards administrativos puede no cubrir el snapshot más reciente.',
+    cause: latestSnapshotCollectedAt
+      ? `El snapshot se recolectó (${latestSnapshotCollectedAt}) después de la última invalidación de caché${lastCacheInvalidationAt ? ` (${lastCacheInvalidationAt})` : ' registrada'}; una lectura cacheada previa puede contener datos anteriores.`
+      : 'No se encontró registro de invalidación de caché; no se puede garantizar que el panel lea el snapshot más reciente.',
+    impact: 'El panel administrativo puede mostrar métricas anteriores a la última recolección hasta la próxima lectura fresca.',
     recommendedAction: 'Invalidar etiquetas de caché del dashboard-calidad y métricas.',
     action: 'INVALIDATE_CACHE',
     autoFixAvailable: true,
@@ -405,7 +416,7 @@ function adSenseDiagnostic(): NiosDiagnostic {
     cause: hasClientId
       ? 'Existe GOOGLE_ADSENSE_CLIENT_ID pero el módulo de recolección de AdSense API no está implementado en este alcance.'
       : 'GOOGLE_ADSENSE_CLIENT_ID no está configurada; la integración AdSense API está desactivada por alcance.',
-    impact: 'No bloquea NIOS; no se reportan ingresos reales de AdSense. El resto de NIOS funciona sin AdSense.',
+    impact: 'No bloquea NIOS; no se reportan ingresos reales de AdSense. El resto de NIOS funciona sin AdSense. Este estado no es un rechazo de Google: indica ausencia de integración API, no una decisión de AdSense sobre el sitio.',
     recommendedAction: hasClientId
       ? 'Implementar lib/nios/intelligence/adsense-collector.ts si se prioriza AdSense; de lo contrario, quitar la variable.'
       : 'Si se requiere AdSense API, configurar GOOGLE_ADSENSE_CLIENT_ID e implementar collector. Mientras tanto, NIOS operará sin datos de AdSense.',
@@ -422,6 +433,7 @@ export function generateNiosDiagnostics(
   gsc: GSCSnapshot | null,
   ga4: GA4Snapshot | null,
   lastCacheInvalidationAt?: string | null,
+  latestSnapshotCollectedAt?: string | null,
 ): NiosDiagnostic[] {
-  return [gscDiagnostic(gsc), ga4Diagnostic(ga4), adSenseDiagnostic(), niosDiagnostic(lastCacheInvalidationAt)];
+  return [gscDiagnostic(gsc), ga4Diagnostic(ga4), adSenseDiagnostic(), niosDiagnostic(lastCacheInvalidationAt, latestSnapshotCollectedAt)];
 }
