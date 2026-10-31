@@ -1,5 +1,5 @@
 import { getAdminDb } from '@/lib/firebase-admin';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { applySubstantiveMutation, applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
@@ -251,7 +251,7 @@ export async function POST(request: NextRequest) {
   try {
     const token = request.headers.get('authorization')?.replace('Bearer ', '').trim() || request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
   if (!verifyAdminOrCronToken(token)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
     const db = getAdminDb();

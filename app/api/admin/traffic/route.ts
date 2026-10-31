@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { unstable_cache } from 'next/cache';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { getTrafficPerformance } from '@/lib/analytics/traffic-reader';
 import {
@@ -183,7 +183,7 @@ function toEvent(data: FirebaseFirestore.DocumentData): TrafficLogEvent | null {
 
 export async function GET(request: NextRequest) {
   if (!verificarAuth(request)) {
-    return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
   try {
     const db = getAdminDb();

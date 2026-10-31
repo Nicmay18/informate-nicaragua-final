@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminToken } from '@/lib/auth';
 import { revalidateTag, revalidatePath } from 'next/cache';
 
 export const maxDuration = 30;
@@ -68,7 +68,7 @@ async function fetchAdminDocs(db: FirebaseFirestore.Firestore) {
 }
 
 async function listNews(request: NextRequest) {
-  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   try {
     const db = getAdminDb();
     const { searchParams } = new URL(request.url);
@@ -163,7 +163,7 @@ async function getRelatedLinks(db: any, categoriaLinks: string, excludeId: strin
 }
 
 export async function POST(request: NextRequest) {
-  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!isAuthorized(request)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   try {
     const [{ normalizarTitulo }, { ensureUniqueSlug }, { guardarConMeni, mapMeniScoreToNivel }, { updateDecisionLog }] = await Promise.all([
       import('@/lib/meni/titulo'),

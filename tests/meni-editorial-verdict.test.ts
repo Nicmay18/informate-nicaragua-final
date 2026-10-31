@@ -359,7 +359,7 @@ describe('I — auto-corrección defectuosa se revierte', () => {
     const { runMeni: runMeniMocked } = await import('@/lib/meni');
     const notaBaja = Array(4).fill('Texto breve sin datos suficientes para aprobación.').join(' ');
     const r = runMeniMocked(inputBase(notaBaja));
-    vi.unmock('@/lib/meni/autocorrect');
+    vi.doUnmock('@/lib/meni/autocorrect');
     vi.resetModules();
     // La corrección que introduce el defecto fue revertida
     expect(r.autoCorrected).toBe(false);

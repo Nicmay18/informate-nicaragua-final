@@ -15,7 +15,7 @@
  * reales, no borradores). dryRun: true cuenta sin escribir.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { FieldPath } from 'firebase-admin/firestore';
 import { ingestArticle } from '@/lib/meni/knowledge-base';
@@ -27,7 +27,7 @@ const MAX_BATCH = 100;
 
 export async function POST(request: NextRequest) {
   if (!verifyAdminOrCleanupToken(request.headers.get('x-admin-token'))) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   const body = await request.json().catch(() => ({}));
