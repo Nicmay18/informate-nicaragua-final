@@ -23,7 +23,7 @@ import type {
   CostGuardStatus,
 } from './types';
 import { SUPERVISOR_MODEL_VERSION } from './types';
-import { canCallLLM, recordCall, detectWastefulCalls } from './cost-guard';
+import { canCallLLM, detectWastefulCalls } from './cost-guard';
 import { logger } from '@/lib/logger';
 import { resolvePublicCategory } from '@/lib/editorial/canonical';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
@@ -182,7 +182,7 @@ export function makeEditorialDecision(ctx: ArticleContext): SupervisorDecision {
         description: 'Investigar fuentes reales antes de redactar',
         priority: 'IMMEDIATE',
         execution: 'AUTO',
-        handler: 'runResearch',
+        handler: 'manual-investigation',
       });
     } else {
       // Fase post-redaccion: el titulo es debil pero ya hay contenido.
@@ -618,7 +618,6 @@ export async function checkMediumHealth(db: Firestore): Promise<MediumHealth> {
     totalWithoutPublishedAt: 0,
     totalWithInvalidCategory: 0,
     totalWithoutImage: 0,
-    geminiConfigured: !!process.env.GEMINI_API_KEY,
     telegramConfigured: !!process.env.TG_TOKEN && !!process.env.TG_CHAT_ID,
     facebookConfigured: !!process.env.FB_PAGE_ACCESS_TOKEN && !!process.env.FB_PAGE_ID,
     cronActive: !!(process.env.CRON_SECRET_TOKEN || process.env.CRON_SECRET),
@@ -694,18 +693,6 @@ export async function checkMediumHealth(db: Firestore): Promise<MediumHealth> {
     indicators.totalAbandoned = abandoned.length;
 
     // Config
-    if (!indicators.geminiConfigured) {
-      issues.push({
-        severity: 'IMPORTANT',
-        domain: 'INFRAESTRUCTURA',
-        problem: 'GEMINI_API_KEY no configurada',
-        impact: 'Research, optimización y MENI generativo no funcionan',
-        cause: 'Variable de entorno faltante en Vercel',
-        action: 'Configurar GEMINI_API_KEY en Vercel → Environment Variables',
-        autoFixable: false,
-      });
-    }
-
     if (!indicators.telegramConfigured) {
       issues.push({
         severity: 'WARNING',
@@ -898,126 +885,6 @@ export async function applySafeAutoFixes(
 
   logger.info('[supervisor] Auto-fix aplicado:', { fixed, skipped });
   return { fixed, skipped, details };
-}
-
-// ═══════════════════════════════════════════════════════════════
-// 6. CICLO DE VIGILANCIA AUTOMÁTICA
-// ═══════════════════════════════════════════════════════════════
-
-/**
- * Ejecuta un ciclo de vigilancia sobre noticias publicadas.
- * Detecta actualizaciones, conflictos y noticias que necesitan atención.
- */
-export async function runSupervisorWatchCycle(
-  db: Firestore,
-  options?: { limit?: number }
-): Promise<{
-  checked: number;
-  updatesDetected: number;
-  conflicts: number;
-  costBlocked: number;
-  results: Array<{ articleId: string; titulo: string; hasUpdates: boolean; error?: string }>;
-}> {
-  const limit = Math.min(options?.limit || 5, 20);
-  const results: Array<{ articleId: string; titulo: string; hasUpdates: boolean; error?: string }> = [];
-  let updatesDetected = 0;
-  let conflicts = 0;
-  let costBlocked = 0;
-
-  try {
-    // Priorizar noticias BREAKING (menos de 6h) y DEVELOPING (menos de 48h)
-    const snap = await db.collection('noticias')
-      .where('publicado', '==', true)
-      .where('estado', '==', 'publicado')
-      .limit(limit * 3) // Pedir más para filtrar por antigüedad
-      .get();
-
-    const now = Date.now();
-    const articles = snap.docs
-      .map(d => ({ id: d.id, data: d.data() }))
-      .filter(a => {
-        const fecha = a.data.fecha?.toDate ? a.data.fecha.toDate() : new Date(a.data.fecha || 0);
-        const ageHours = (now - fecha.getTime()) / 3600000;
-        return ageHours < 168; // Solo vigilar noticias de menos de 7 días
-      })
-      .sort((a, b) => {
-        const fa = a.data.fecha?.toDate ? a.data.fecha.toDate().getTime() : 0;
-        const fb = b.data.fecha?.toDate ? b.data.fecha.toDate().getTime() : 0;
-        return fb - fa; // Más recientes primero
-      })
-      .slice(0, limit);
-
-    for (const article of articles) {
-      const data = article.data;
-      const fecha = data.fecha?.toDate ? data.fecha.toDate().toISOString() : data.fecha || new Date().toISOString();
-
-      // Verificar cost guard antes de investigar
-      const costCheck = await canCallLLM(db);
-      if (!costCheck.allowed) {
-        costBlocked++;
-        results.push({
-          articleId: article.id,
-          titulo: data.titulo || '',
-          hasUpdates: false,
-          error: `Cost guard: ${costCheck.reason}`,
-        });
-        continue;
-      }
-
-      try {
-        const { runWatchCycle, persistWatchResult } = await import('@/lib/news-watch');
-        const result = await runWatchCycle(
-          {
-            id: article.id,
-            titulo: data.titulo || '',
-            contenido: data.contenido || '',
-            resumen: data.resumen || '',
-            categoria: data.categoria || 'General',
-            fecha,
-            perfil: data.perfil,
-          },
-          { db }
-        );
-
-        await recordCall(db);
-        await persistWatchResult(db, article.id, result);
-
-        if (result.hasUpdates) {
-          updatesDetected++;
-          const hasConflict = result.updates.some(u => u.recommendedAction === 'BLOCKED_BY_CONFLICT');
-          if (hasConflict) conflicts++;
-
-          // Persistir actualizaciones detectadas para revisión
-          if (result.updates.length > 0) {
-            await db.collection('supervisor_updates').add({
-              articleId: article.id,
-              titulo: data.titulo || '',
-              detectedAt: new Date().toISOString(),
-              updates: result.updates,
-              reviewed: false,
-            });
-          }
-        }
-
-        results.push({
-          articleId: article.id,
-          titulo: data.titulo || '',
-          hasUpdates: result.hasUpdates,
-        });
-      } catch (e) {
-        results.push({
-          articleId: article.id,
-          titulo: data.titulo || '',
-          hasUpdates: false,
-          error: e instanceof Error ? e.message : 'Error',
-        });
-      }
-    }
-  } catch (e) {
-    logger.error('[supervisor] Watch cycle error:', e);
-  }
-
-  return { checked: results.length, updatesDetected, conflicts, costBlocked, results };
 }
 
 // ═══════════════════════════════════════════════════════════════

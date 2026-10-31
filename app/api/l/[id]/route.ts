@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { FieldValue } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
+import { alreadyCounted, anonymizeIp, dedupKey, isNonClickUserAgent, overRateLimit } from '@/lib/shortlink-guard';
 
 function getClientIP(req: Request): string {
   const xf = req.headers.get('x-forwarded-for');
@@ -69,45 +70,61 @@ export async function GET(
     const noticiaTitulo = linkData.titulo as string || '';
     const sourceParam = linkData.source as string || 'directo';
 
-    // 2. Extraer datos forenses del request (server-side, imposible de bloquear)
+    // 2. Extraer datos del request (server-side)
     const ip = getClientIP(request);
     const ua = getClientUA(request);
     const referer = getClientReferer(request);
     const source = detectSource(sourceParam, referer, ua);
 
-    // 3. Registrar el click en analytics_traffic (misma colección del panel)
-    try {
-      await db.collection('analytics_traffic').add({
-        slug: noticiaSlug,
-        titulo: noticiaTitulo,
-        categoria: linkData.categoria || 'Actualidad',
-        source,
-        referrer: referer,
-        ua,
-        ip,
-        timestamp: FieldValue.serverTimestamp(),
-        tipo: 'click_link_corto',
-        linkCortoId: id,
-      });
-    } catch (e) {
-      logger.error('[l/[id]] Error registrando analytics:', e);
+    // 3. Decidir si esta request es un CLIC CONTABLE.
+    //    - previews/bots (WhatsApp, Telegram, crawlers) nunca cuentan
+    //    - mismo visitante+link dentro de 6 h ya contó (cookie + dedup instancia)
+    //    - IP saturada deja de contar (pero SIEMPRE se redirige)
+    const cookieCounted = request.headers.get('cookie')?.includes(`ni_lc_${id}=1`) ?? false;
+    const countable =
+      !isNonClickUserAgent(ua) &&
+      !cookieCounted &&
+      !overRateLimit(ip) &&
+      !alreadyCounted(dedupKey(id, ip, ua));
+
+    // 4. Persistir solo clics contables: evento analytics + contador
+    if (countable) {
+      try {
+        await db.collection('analytics_traffic').add({
+          slug: noticiaSlug,
+          titulo: noticiaTitulo,
+          categoria: linkData.categoria || 'Actualidad',
+          source,
+          referrer: referer,
+          ua: ua.slice(0, 300),
+          ip: anonymizeIp(ip),
+          timestamp: FieldValue.serverTimestamp(),
+          tipo: 'click_link_corto',
+          linkCortoId: id,
+        });
+      } catch (e) {
+        logger.error('[l/[id]] Error registrando analytics:', e);
+      }
+
+      try {
+        await linkDoc.ref.update({
+          clicks: FieldValue.increment(1),
+          ultimoClick: FieldValue.serverTimestamp(),
+        });
+      } catch (e) {
+        logger.error('[l/[id]] Error incrementando clicks:', e);
+      }
     }
 
-    // 4. Incrementar contador del link
-    try {
-      await linkDoc.ref.update({
-        clicks: FieldValue.increment(1),
-        ultimoClick: FieldValue.serverTimestamp(),
-      });
-    } catch (e) {
-      logger.error('[l/[id]] Error incrementando clicks:', e);
-    }
-
-    // 5. Redirigir a la noticia con UTM
+    // 5. Redirigir a la noticia con UTM — la navegación nunca se bloquea
     const separator = targetUrl.includes('?') ? '&' : '?';
     const redirectUrl = `${targetUrl}${separator}utm_source=${encodeURIComponent(source)}&utm_medium=social`;
 
-    return NextResponse.redirect(redirectUrl, { status: 302 });
+    const res = NextResponse.redirect(redirectUrl, { status: 302 });
+    if (countable) {
+      res.headers.set('Set-Cookie', `ni_lc_${id}=1; Path=/; Max-Age=86400; SameSite=Lax; Secure; HttpOnly`);
+    }
+    return res;
 
   } catch (error) {
     logger.error('[l/[id]] Error:', error);

@@ -169,26 +169,6 @@ export async function POST(request: NextRequest) {
       logger.warn('[articles] No se pudo importar publication-pipeline:', e);
     }
 
-    // REGLA: Toda noticia publicada entra en WATCH automaticamente.
-    try {
-      const { runWatchCycle, persistWatchResult } = await import('@/lib/news-watch');
-      runWatchCycle(
-        {
-          id: articleId,
-          titulo,
-          contenido: canonical.contenido,
-          resumen: canonical.resumen || '',
-          categoria: finalCategoria,
-          fecha: now.toISOString(),
-        },
-        { db: adminDb }
-      )
-        .then((watchResult) => persistWatchResult(adminDb, articleId, watchResult))
-        .catch((e) => logger.warn('[articles] WATCH init error (non-blocking):', e));
-    } catch (e) {
-      logger.warn('[articles] No se pudo importar news-watch:', e);
-    }
-
     // Invalidar cache en memoria para que lecturas futuras vean la nueva noticia
     try {
       const { invalidateFirestoreCache } = await import('@/lib/data');

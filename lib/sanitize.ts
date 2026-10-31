@@ -127,7 +127,17 @@ function encodeHtmlEntities(input: string): string {
 }
 
 function isAllowedUrl(value: string): boolean {
-  const v = value.trim().toLowerCase();
+  // Los navegadores ignoran whitespace ASCII y caracteres de control dentro
+  // del esquema ("java\tscript:", "java\nscript:" ejecutan). Se eliminan
+  // antes de comparar, y se decodifica %XX una vez para cubrir "javascript%3a"
+  // y "%6aavascript:".
+  let v = value.replace(/[\x00-\x20\x7f]+/g, '');
+  try {
+    v = decodeURIComponent(v);
+  } catch {
+    // secuencia % inválida: comparar con el valor ya normalizado
+  }
+  v = v.replace(/[\x00-\x20\x7f]+/g, '').toLowerCase();
   return !v.startsWith('javascript:') && !v.startsWith('data:') && !v.startsWith('vbscript:');
 }
 

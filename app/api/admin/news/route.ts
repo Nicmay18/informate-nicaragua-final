@@ -339,24 +339,6 @@ export async function POST(request: NextRequest) {
         logger.warn('[admin/news POST] publication-pipeline error (non-blocking):', e);
       }
 
-      // REGLA: Toda noticia publicada entra en WATCH automaticamente.
-      try {
-        const { runWatchCycle, persistWatchResult } = await import('@/lib/news-watch');
-        const watchResult = await runWatchCycle(
-          {
-            id: docRef.id,
-            titulo: tituloLimpio,
-            contenido,
-            resumen: resumen || '',
-            categoria: finalCategoria,
-            fecha: new Date().toISOString(),
-          },
-          { db }
-        );
-        await persistWatchResult(db, docRef.id, watchResult);
-      } catch (e) {
-        logger.warn('[admin/news POST] WATCH init error (non-blocking):', e);
-      }
     }
 
     revalidateTag('noticias');

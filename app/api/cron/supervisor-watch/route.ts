@@ -13,7 +13,7 @@
 
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { runSupervisorWatchCycle, checkMediumHealth, applySafeAutoFixes } from '@/lib/supervisor';
+import { checkMediumHealth, applySafeAutoFixes } from '@/lib/supervisor';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { logger } from '@/lib/logger';
 import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
@@ -45,10 +45,7 @@ export async function GET(request: Request) {
       autoFixResult = await applySafeAutoFixes(db, autoFixable);
     }
 
-    // 3. Watch cycle — vigilar noticias recientes
-    const watchResult = await runSupervisorWatchCycle(db, { limit: 5 });
-
-    // 4. Persistir resumen del ciclo
+    // 3. Persistir resumen del ciclo
     const cycleSummary = {
       runAt: new Date().toISOString(),
       durationMs: Date.now() - startedAt,
@@ -59,12 +56,6 @@ export async function GET(request: Request) {
         optimization: health.optimization,
       },
       autoFix: autoFixResult ? { fixed: autoFixResult.fixed, skipped: autoFixResult.skipped } : null,
-      watch: {
-        checked: watchResult.checked,
-        updatesDetected: watchResult.updatesDetected,
-        conflicts: watchResult.conflicts,
-        costBlocked: watchResult.costBlocked,
-      },
     };
 
     try {
@@ -77,7 +68,6 @@ export async function GET(request: Request) {
     return NextResponse.json({
       success: true,
       ...cycleSummary,
-      watchResults: watchResult.results,
       autoFixDetails: autoFixResult?.details || [],
     });
   } catch (error) {

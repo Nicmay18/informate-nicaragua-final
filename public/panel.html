@@ -1122,19 +1122,10 @@
         </div>
 
         <div class="ai-panel" style="background: linear-gradient(135deg,#fef3c7,#fde68a); border: 2px solid #f59e0b;">
-          <h3><i class="fas fa-robot"></i> Asistente Editorial Gemini</h3>
-          <p style="color: #92400e; font-weight: 600; font-size: 14px;">
-            <i class="fas fa-exclamation-triangle"></i> API Key de Gemini requerida
-          </p>
+          <h3><i class="fas fa-robot"></i> Asistente Editorial MENI</h3>
           <p style="font-size: 13px; color: #92400e; line-height: 1.6;">
-            El generador de noticias con IA requiere una API key válida de Google AI Studio.
-            <br><br>
-            <strong>Para activar:</strong>
-            <br>1. Andá a <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #c41e3a; text-decoration: underline;">Google AI Studio</a>
-            <br>2. Creá una API key (gratuita con límite de 1500 req/día)
-            <br>3. Pegala en Configuración → API Key de Gemini
-            <br><br>
-            <strong>Mientras tanto:</strong> Usá el editor manual de abajo para redactar noticias sin IA.
+            El redactor MENI procesa la fuente en el servidor con las pautas editoriales de Nicaragua Informate.
+            No requiere configuración adicional.
           </p>
           <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: flex-end;">
             <button class="ai-btn" id="btnCargarPlantilla" onclick="cargarPlantillaRedaccion()" style="background: linear-gradient(135deg,#059669,#047857); opacity: 0.6; cursor: not-allowed;" disabled><i class="fas fa-file-alt"></i> Cargar Plantilla</button>
@@ -1184,7 +1175,7 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
 3. H2: Testimonios — Solo citas reales y atribuidas. Si no hay testigo o familiar identificable, omitir esta sección. Nunca inventar nombres ni declaraciones.
 4. H2: Recursos útiles — Teléfonos de emergencia de Nicaragua (Policía 118, Bomberos 115, Cruz Blanca 128), canales de atención, consejos de prevención.
             </div>
-            <p style="font-size: 12px; color: var(--gray-500); margin-top: 10px;"><i class="fas fa-info-circle"></i> Este prompt se envía automáticamente a Gemini con los parámetros que selecciones arriba.</p>
+            <p style="font-size: 12px; color: var(--gray-500); margin-top: 10px;"><i class="fas fa-info-circle"></i> Este prompt documenta las pautas que MENI aplica en el servidor al redactar con los parámetros que selecciones arriba.</p>
           </div>
         </div>
       </div>
@@ -1345,20 +1336,6 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
         </div>
 
         <div id="guide-imagenes" class="guide-panel">
-          <div class="guide-card">
-            <h4><i class="fas fa-image" style="color: var(--warning);"></i> Nano Banana 2 (Gemini Image Generation)</h4>
-            <p>Para generar imágenes de portada cuando no cuentas con fotos propias:</p>
-            <div class="code-block">
-Prompt recomendado:
-"Fotografía de estilo fotoperiodismo de [escena específica en Nicaragua], 
-luz natural de atardecer, alta resolución, aspecto realista, 
-sin texto ni marcas de agua, composición periodística"
-            </div>
-            <ul>
-              <li>Siempre especifica <strong>"sin texto"</strong> para evitar problemas de accesibilidad.</li>
-              <li>Usa la relación de aspecto <strong>16:9</strong> para imágenes destacadas.</li>
-              <li>Añade siempre <strong>pie de foto (caption)</strong> con crédito: "Foto: Redacción NI".</li>
-            </ul>
           </div>
           <div class="guide-card">
             <h4><i class="fas fa-camera" style="color: var(--warning);"></i> Instant Images (Plugin WordPress)</h4>
@@ -1414,7 +1391,7 @@ sin texto ni marcas de agua, composición periodística"
             <p>Automatización avanzada sin código:</p>
             <ul>
               <li><strong>Trigger:</strong> Nueva fila en Google Sheets (título + categoría).</li>
-              <li><strong>Action 1:</strong> Gemini API genera el cuerpo de la noticia.</li>
+              <li><strong>Action 1:</strong> API de IA genera el cuerpo de la noticia.</li>
               <li><strong>Action 2:</strong> WordPress REST API crea el post como borrador.</li>
               <li><strong>Action 3 (opcional):</strong> Notificación por Telegram al editor jefe para revisión.</li>
             </ul>
@@ -5547,48 +5524,6 @@ sin texto ni marcas de agua, composición periodística"
 
     window.verSitio = function() { window.open('https://informate-instant-nicaragua.vercel.app/', '_blank'); };
 
-window.autoRestore = async function() {
-  if (!confirm('⚠️ Esto usará Gemini para expandir 5 noticias automáticamente. ¿Continuar?')) return;
-  showLoading(true, 'Generando contenido con Gemini...');
-  try {
-    const resp = await fetch('/api/auto-restore', { method: 'POST' });
-    const data = await resp.json();
-    showLoading(false);
-    if (!resp.ok) {
-      showToast('❌ ' + (data.error || 'Error del servidor'), 'error');
-      console.error('[AutoRestore] API error:', data);
-      return;
-    }
-    const errors = (data.processed || []).filter((r) => r.status === 'error');
-    if (errors.length > 0) {
-      showToast(`❌ ${errors.length} fallaron: ${errors[0].error}`, 'error');
-    } else {
-      showToast(`✅ Restauradas ${data.restored} de ${data.totalRemaining} noticias restantes`, 'success');
-    }
-    console.log('[AutoRestore]', data);
-  } catch (err) {
-    showLoading(false);
-    showToast('❌ Error: ' + err.message, 'error');
-    console.error('[AutoRestore] error', err);
-  }
-};
-
-window.batchRestore = async function() {
-  if (!confirm('⚠️ Esto inyectará contenido profesional en 10 noticias vacías. ¿Continuar?')) return;
-  showLoading(true, 'Restaurando 10 noticias...');
-  try {
-    const resp = await fetch('/api/batch-restore', { method: 'POST' });
-    const data = await resp.json();
-    showLoading(false);
-    if (!resp.ok) throw new Error(data.error || 'Error del servidor');
-    showToast(`✅ Restauradas ${data.restored} de ${data.total} noticias`, 'success');
-    console.log('[BatchRestore]', data);
-  } catch (err) {
-    showLoading(false);
-    showToast('❌ Error: ' + err.message, 'error');
-    console.error('[BatchRestore] error', err);
-  }
-};
 
     window.limpiarSEOmasivo = async function() {
       if (!confirm('⚠️ Esto eliminará de TODAS las noticias:\n\n• Bloques "Información Recabada"\n• "Datos de Publicación"\n• "Slug sugerido" y "Meta descripción"\n\n¿Continuar?')) return;
@@ -6298,353 +6233,6 @@ window.batchRestore = async function() {
       }
     };
 
-    window.redactarConIA = async function() {
-      const titulo = document.getElementById('iaTitulo').value.trim();
-      const departamento = document.getElementById('iaDepartamento').value;
-      const categoria = document.getElementById('iaCategoria').value;
-      const contenidoCrudo = document.getElementById('iaContenidoCrudo').value.trim();
-      
-      if (!titulo) { showToast('Escribe el titular base primero', 'warning'); return; }
-
-      const status = document.getElementById('iaStatus');
-      const btn = document.getElementById('btnRedactarIA');
-      btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
-      status.textContent = 'Conectando con Gemini y aplicando pautas editoriales estrictas...';
-
-      try {
-        const GEMINI_KEY = 'AIzaSyC7uL9x2kQ8rTm3vN5w7pKs1jH4zG8';
-        
-        const prompt = `Eres el redactor principal de "Nicaragua Infórmate", medio digital de información general con estilo de agencia (Reuters / AP / BBC adaptado para web latinoamericana).
-
-Actúa como un corresponsal senior destacado en Nicaragua y redacta una noticia basada en la siguiente información de entrada:
-- Título/Tema base: '${titulo}'
-- Departamento/Ubicación de los hechos: '${departamento}'
-- Categoría: '${categoria}'
-- Dateline: '${departamento.toUpperCase()} / NICARAGUA'
-- Información Cruda / Borrador / Datos de entrada: '${contenidoCrudo || 'No provista'}'
-
-═══════════════════════════════════════
-PROTOCOLO FORENSE DE VERIFICACIÓN Y ANTIALUCINACIÓN
-═══════════════════════════════════════
-
-ANTES DE REDACTAR:
-
-1. IDENTIFICA LOS DATOS DISPONIBLES
-   Clasifica la información recibida en:
-   - Hechos confirmados
-   - Hechos atribuidos
-   - Información incompleta
-   - Información no verificable
-   - Suposiciones o inferencias
-
-2. PROHIBICIÓN DE COMPLETAR VACÍOS
-   Si un dato no aparece explícitamente en la información entregada:
-   - NO inventarlo.
-   - NO deducirlo.
-   - NO asumirlo.
-   - NO rellenarlo con fórmulas periodísticas.
-
-   Ejemplos prohibidos:
-   ✗ "La Policía confirmó..."
-   ✗ "Las autoridades informaron..."
-   ✗ "Fuentes policiales indicaron..."
-   ✗ "Según información preliminar..."
-   Si la fuente no existe en el material entregado, NO USAR.
-
-3. DETECCIÓN DE CONTENIDO BASURA
-   Elimina automáticamente:
-   - Repeticiones.
-   - Párrafos que no agregan datos nuevos.
-   - Explicaciones genéricas.
-   - Frases vacías.
-   - Contexto inventado.
-   - Antecedentes sin fuente.
-
-   Regla: Cada párrafo debe aportar un dato verificable nuevo.
-
-4. CONTROL DE ATRIBUCIÓN OBLIGATORIO
-   Cada afirmación debe poder responder:
-   - ¿Quién lo dijo?
-   - ¿Dónde se publicó?
-   - ¿Cómo se sabe?
-
-   Si no existe respuesta verificable: NO PUBLICAR ESA AFIRMACIÓN.
-
-   Distinguir siempre HECHO de VERSIÓN:
-   - MAL: "La doctora había sobrevivido a un atentado."
-   - BIEN: "Medios locales de Guatemala publicaron que la doctora había sobrevivido anteriormente a un atentado."
-
-5. CONTROL DE ENTIDADES
-   Nunca inventes:
-   - Nombres de víctimas.
-   - Nombres de testigos.
-   - Cargos.
-   - Instituciones involucradas.
-   - Lugares específicos.
-
-   Utiliza únicamente entidades presentes en el material recibido.
-
-6. CONTROL DE CITAS — REALES ÚNICAMENTE
-   Incluir citas SOLAMENTE cuando existan declaraciones textuales verificables en el material entregado.
-   NUNCA generar citas para cumplir estructura.
-   Si existe declaración textual: Reproducirla con atribución exacta.
-
-7. CONTROL DE LONGITUD
-   Si los datos son escasos, la noticia puede tener 250, 350 o 450 palabras.
-   Nunca agregar relleno para alcanzar una longitud mínima.
-
-8. CONTROL SEO PERIODÍSTICO
-   El titular debe contener: hecho principal, lugar, actor principal.
-   Prohibido: clickbait, curiosidad artificial, sensacionalismo, preguntas en titulares.
-
-9. CONTROL DISCOVER
-   El lead debe contener el hecho principal COMPLETO.
-   Google Discover debe poder comprender la noticia leyendo únicamente: titular + imagen + lead.
-   El lead responde: qué ocurrió, quién participó, cuándo, dónde.
-   No agregar contexto en el lead. El contexto va después.
-
-10. MODO DATOS INSUFICIENTES
-    Si la información entregada no permite construir una noticia completa:
-    Indicar internamente: "Datos insuficientes para afirmar X"
-    y redactar únicamente con los hechos disponibles.
-
-11. NEUTRALIDAD INSTITUCIONAL ABSOLUTA (SIN POLÍTICA)
-    - NUNCA cuestiones, critiques ni sugieras incompetencia de instituciones gubernamentales.
-    - NUNCA uses frases como: "no ha emitido comunicado", "falta de protocolos",
-      "interrogantes sobre supervisión", "la comunidad exige respuestas".
-    - NUNCA generes preguntas retóricas sobre acción o inacción de autoridades.
-    - Si una institución no ha actuado públicamente: NO mencionar su inacción.
-    - Si una institución está investigando: decirlo sin adjetivos ni valoraciones.
-    - Ej BUENO: "El caso es investigado por la Policía Nacional de Nicaragua."
-    - Ej PROHIBIDO: "La Policía aún no ha esclarecido el caso."
-    - NO somos medio opositor. NO somos antigobierno. Somos informativos neutros.
-
-12. ANTECEDENTES CON FUENTE ÚNICAMENTE
-    Los antecedentes solo pueden incorporarse si aparecen en la información suministrada o en una fuente identificada.
-    Prohibido: "La zona es conocida por...", "En años anteriores...", "Las autoridades han realizado..." sin fuente.
-
-REGLA DE ORO:
-Es preferible una noticia de 250 palabras totalmente verificable que una de 800 palabras con información inferida.
-
-═══════════════════════════════════════
-ROL Y PRINCIPIOS ABSOLUTOS
-═══════════════════════════════════════
-- Redactas exclusivamente noticias informativas. Nunca emites opiniones, interpretaciones personales ni juicios de valor.
-- Cada dato publicado debe provenir de una fuente identificable. Nunca afirmes algo como hecho sin atribución.
-- Lenguaje: neutro, claro, directo y verificable. Jamás uses adjetivos emocionales ("trágico", "terrible", "impactante", "conmocionó", "devastador").
-- Estilo de escritura: oraciones cortas. Párrafos de 2 a 3 oraciones máximo. Pensado para lectura en móvil.
-- Prioriza voz activa. Usa voz pasiva solo cuando el actor sea desconocido o irrelevante.
-
-═══════════════════════════════════════
-ESTRUCTURA DE CADA NOTICIA
-═══════════════════════════════════════
-1. TITULAR RECOMENDADO
-   - Máximo 60 caracteres.
-   - Incluye SIEMPRE un dato concreto: número, fecha, nombre propio o lugar específico.
-   - Informativo primero. Ej BUENO: "3 fallecidos deja accidente en carretera a Masaya" | "Nicaragua hace historia: conquista torneo centroamericano"
-   - Ej MALO (NO uses): "¡TRAGEDIA! Lo que pasó te dejará sin palabras" | "Reportan incidente en carretera" (sin datos)
-   - Enciérralo entre <titular> y </titular>.
-
-2. LEAD (primer párrafo)
-   - 35 a 50 palabras. Máximo 2 oraciones.
-   - Responde obligatoriamente: qué ocurrió, quién participó, cuándo, dónde.
-   - Incluye AL MENOS una entidad real presente en el material: nombre de persona pública, organización o lugar específico.
-   - Sin adornos. Sin opiniones. Sin repetir el titular. Sin contexto.
-
-3. CUERPO DE LA NOTICIA
-   - Usa únicamente la cantidad de subtítulos <h2> que la información disponible justifique. No crear secciones para rellenar espacio.
-   - Orden sugerido: hechos principales → reacciones/testimonios → contexto/antecedentes → consecuencias → próximos pasos.
-   - Párrafos cortos: 2 a 3 oraciones por párrafo.
-   - No repetir ideas. Cada párrafo debe agregar información nueva.
-   - Extensión determinada por la cantidad de información verificable disponible. Nunca añadir texto para alcanzar una longitud específica.
-   - Incluir citas SOLAMENTE cuando existan declaraciones textuales verificables en el material entregado. NUNCA generar citas para cumplir estructura.
-   - Incluye AL MENOS 2 preguntas naturales en el cuerpo que el PROPIO TEXTO YA RESPONDE. NO inventar preguntas sin respuesta.
-
-4. ENTIDADES REALES (obligatorio, con límite ético)
-   - Personas públicas: nombre completo + cargo/rol SOLO si aparece en el material.
-   - Víctimas de sucesos: solo si familiares confirmaron o es dominio público en el material. Si no, usar "una persona de aproximadamente X años". NUNCA forzar identificación.
-   - Organizaciones: nombre completo SOLO si aparece en el material. Ej: "Ministerio de Salud" NO "el ministerio".
-   - Lugares: nombre específico SOLO si aparece en el material. Ej: "Hospital Alemán Nicaragüense" NO "un hospital de Managua".
-   - Marca entidades con <strong> en su primera mención.
-
-5. FUENTES Y REGLA EEAT PARA NICARAGUA
-   - En Nicaragua, NO atribuir información a Policía Nacional, Ministerio de Salud, alcaldías o instituciones estatales salvo que exista comunicado público verificable en el material entregado.
-   - NO utilizar: "la Policía informó", "las autoridades confirmaron", "el Ministerio de Salud precisó" sin evidencia documental en el material.
-   - NOMBRES OFICIALES CORRECTOS: "Policía Nacional de Nicaragua" (NO "Fuerzas Policiales"). Si aplica, nombrar especialidad: Dirección de Tránsito Nacional, Comisaría de la Mujer, Seguridad Pública. Solo usar si aparece en el material.
-   - Fuentes VÁLIDAS: testimonios de testigos, familiares de víctimas, videos/fotos de ciudadanos, comunicados oficiales cuando existan en el material, cobertura directa, información de medios locales nombrados.
-   - Formato: "Testigos en el lugar indicaron que...", "Familiares de la víctima confirmaron que...", "Videos compartidos en redes sociales muestran...", "Según comunicado de [organización]..."
-   - Prohibido: "se dice que", "se rumora", "fuentes cercanas", "según informes preliminares", "según estadísticas oficiales del torneo" (sin especificar quién publicó esas estadísticas).
-
-6. VARIACIÓN DE ESTRUCTURA (anti-template)
-   - Varía la apertura de cada noticia. Alterna: (a) dato duro primero, (b) testimonio primero, (c) contexto histórico primero, (d) consecuencia primero.
-   - Prohibidas frases template: "las autoridades confirmaron", "fuentes policiales indicaron", "según informes preliminares", "la víctima fue identificada como", "se desconocen las causas exactas", "fuentes médicas señalaron".
-
-═══════════════════════════════════════
-FORMATO DE SALIDA — HTML LIMPIO
-═══════════════════════════════════════
-- Devuelve el contenido EXCLUSIVAMENTE en HTML plano. NUNCA uses bloques de código Markdown (NO \`\`\`html ni \`\`\`).
-- Usa ÚNICAMENTE estas etiquetas: <p>, <h2>, <strong>, <em>, <blockquote>, <ul>, <li>.
-- NO uses <h1>, <h3>, <h4>, <div>, <br>, <span>.
-- Subtítulos siempre <h2>.
-- Negritas (<strong>) solo para: nombres propios, organizaciones, cifras, fechas, lugares específicos.
-- Citas en <blockquote> con atribución: "— [Nombre o descripción], [cargo/contexto]".
-
-═══════════════════════════════════════
-METADATOS AL FINAL
-═══════════════════════════════════════
-Al final, agrega estrictamente:
-- <slug>[slug-con-palabras-clave]</slug>
-- <meta>[meta-descripcion de 150-160 caracteres]</meta>
-- <keywords>[5-8 palabras clave separadas por coma]</keywords>
-
-═══════════════════════════════════════
-PROHIBICIONES ABSOLUTAS
-═══════════════════════════════════════
-- Conectores robóticos y relleno: "en este contexto", "por su parte", "por otro lado", "es importante destacar", "cabe señalar", "asimismo", "además de esto", "en conclusión", "un hito", "un antes y un después", "sin duda", "por ende", "consecuentemente", "por otra parte", "en ese sentido", "al respecto", "en última instancia", "a fin de cuentas", "resulta fundamental", "resulta evidente", "no cabe duda", "es indiscutible", "resulta innegable", "en definitiva", "para concluir", "como se mencionó anteriormente", "es relevante señalar", "no se puede ignorar", "es crucial", "es vital", "finalmente", "de igual manera", "a su vez".
-- Cada párrafo debe aportar un dato nuevo. Si un párrafo puede eliminarse sin perder información, debe eliminarse.
-- Frases template de sucesos: "las autoridades confirmaron", "fuentes policiales indicaron", "según informes preliminares", "la víctima fue identificada como", "se desconocen las causas exactas".
-- FRASES POLÍTICAS/CRÍTICAS A INSTITUCIONES: "no ha emitido comunicado", "falta de protocolos", "interrogantes sobre supervisión", "la comunidad exige respuestas", "¿Qué medidas tomarán las autoridades?", "¿Se está prestando suficiente atención?", "¿Qué pasa con...?", "¿Qué mecanismos de control aplican?".
-- Adjetivos emocionales o dramáticos.
-- Titulares exagerados o sin datos concretos.
-- Información sin fuente identificable.
-- Texto genérico de relleno.
-- Repetición de ideas entre párrafos.
-- Emojis.
-- Bloques de código Markdown.
-
-═══════════════════════════════════════
-AUDITORÍA FORENSE FINAL — ANTES DE ENTREGAR
-═══════════════════════════════════════
-
-1. Marcar internamente cada oración como:
-   [HECHO] → Dato verificable presente en el material
-   [ATRIBUIDO] → Dato con fuente identificable
-   [CONTEXTO] → Información de fondo con fuente
-
-2. Eliminar cualquier oración que sea:
-   - Opinión
-   - Inferencia
-   - Suposición
-   - Predicción
-   - No esté sustentada en el material entregado
-
-3. Verificar que todas las entidades mencionadas aparezcan en el material original.
-4. Verificar que todas las cifras tengan fuente.
-5. Verificar que cada párrafo aporte información nueva.
-
-Si no supera la auditoría: REESCRIBIR.
-
-═══════════════════════════════════════
-VERIFICACIÓN FINAL
-═══════════════════════════════════════
-✓ Titular <60 chars con dato concreto?
-✓ Lead contiene hecho principal completo (titular + lead = noticia entendible)?
-✓ Lead responde qué, quién, cuándo, dónde + entidad con <strong>?
-✓ Subtítulos <h2> solo si la información los justifica?
-✓ Cada afirmación puede responder: ¿Quién lo dijo? ¿Dónde se publicó? ¿Cómo se sabe?
-✓ Extensión determinada por datos disponibles, sin relleno?
-✓ Citas SOLAMENTE si existen declaraciones textuales verificables en el material?
-✓ 2 preguntas que EL TEXTO YA RESPONDE?
-✓ NO hay frases template prohibidas?
-✓ NO hay frases políticas ni críticas a instituciones gubernamentales?
-✓ NO hay preguntas retóricas sobre acción/inacción de autoridades?
-✓ NO se atribuye a instituciones estatales sin comunicado verificable?
-✓ Entidades con <strong> solo si aparecen en el material?
-✓ NO se forzó identificación de víctimas?
-✓ HTML limpio SIN bloques de código Markdown?
-✓ Incluye <slug>, <meta>, <keywords>?`;
-
-        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-        const data = await resp.json();
-        const texto = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (!texto) throw new Error('Sin respuesta de Gemini');
-
-        let titularExtraido = titulo;
-        let metaExtraida = '';
-        let contenidoLimpio = texto.trim();
-
-        // Extraer titular recomendado
-        const titularMatch = contenidoLimpio.match(/<titular>([\s\S]*?)<\/titular>/i);
-        if (titularMatch) {
-          titularExtraido = titularMatch[1].trim().replace(/<\/?p>/gi, ''); // Limpiar si metieron p
-          contenidoLimpio = contenidoLimpio.replace(/<titular>[\s\S]*?<\/titular>/gi, '').trim();
-        }
-
-        // Extraer slug recomendado (lo ignoramos o lo usamos de guía)
-        const slugMatch = contenidoLimpio.match(/<slug>([\s\S]*?)<\/slug>/i);
-        if (slugMatch) {
-          contenidoLimpio = contenidoLimpio.replace(/<slug>[\s\S]*?<\/slug>/gi, '').trim();
-        }
-
-        // Extraer meta-descripción recomendada
-        const metaMatch = contenidoLimpio.match(/<meta>([\s\S]*?)<\/meta>/i);
-        if (metaMatch) {
-          metaExtraida = metaMatch[1].trim().replace(/<\/?p>/gi, '');
-          contenidoLimpio = contenidoLimpio.replace(/<meta>[\s\S]*?<\/meta>/gi, '').trim();
-        }
-
-        // Extraer keywords recomendadas
-        let keywordsExtraidas = '';
-        const keywordsMatch = contenidoLimpio.match(/<keywords>([\s\S]*?)<\/keywords>/i);
-        if (keywordsMatch) {
-          keywordsExtraidas = keywordsMatch[1].trim().replace(/<\/?p>/gi, '');
-          contenidoLimpio = contenidoLimpio.replace(/<keywords>[\s\S]*?<\/keywords>/gi, '').trim();
-        }
-
-        // Limpieza de bloques de código markdown que a veces Gemini incluye por inercia
-        contenidoLimpio = contenidoLimpio.replace(/^```html\s*|```\s*$/gi, '').trim();
-
-        // Transferir al formulario principal
-        document.getElementById('titulo').value = titularExtraido;
-        document.getElementById('categoria').value = categoria;
-        document.getElementById('departamento').value = departamento;
-        document.getElementById('contenido').value = contenidoLimpio;
-        
-        // Asignar el resumen (Meta Description)
-        if (!metaExtraida) {
-          // Fallback por si la IA no generó el tag <meta>
-          const lineas = contenidoLimpio.replace(/<[^>]*>/g, '').split('\n').filter(l => l.trim());
-          const primeraLinea = lineas[0] || '';
-          metaExtraida = primeraLinea.length > 160 ? primeraLinea.substring(0, 157) + '...' : primeraLinea;
-        }
-        document.getElementById('resumen').value = metaExtraida;
-
-        // Actualizar contadores y previsualizaciones del panel
-        actualizarSeoPreview(); actualizarContadorTitulo(); actualizarContadorPalabras();
-
-        // Restaurar estado del botón
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-magic"></i> Generar';
-        status.textContent = '✓ Noticia generada e inyectada con el formato estricto de Nicaragua Informate.';
-        status.style.color = '#4ade80';
-
-        // Inyectar keywords generadas automáticamente
-        const keywordsInputAI = document.getElementById('keywords');
-        if (keywordsInputAI) {
-          if (keywordsExtraidas) {
-            keywordsInputAI.value = keywordsExtraidas;
-          } else if (titularExtraido) {
-            keywordsInputAI.value = window.generarKeywordsAutomaticas(titularExtraido, contenidoLimpio, categoria);
-          }
-          if (keywordsInputAI.value.trim()) {
-            showToast('Keywords generadas: ' + keywordsInputAI.value, 'info');
-          }
-        }
-
-        // Redirigir automáticamente a la pestaña de edición
-        showTab('nueva-tab', document.querySelectorAll('.nav-link')[1]);
-        showToast('Noticia redactada con IA profesional', 'success');
-
-      } catch (err) {
-        btn.disabled = false; btn.innerHTML = '<i class="fas fa-magic"></i> Generar';
-        status.textContent = 'Error al generar: ' + err.message;
-        status.style.color = '#f87171';
-        showToast('Error Gemini: ' + err.message, 'error');
-      }
-    };
 
     // ---------- ANALYTICS: centro de control (solo datos reales) ----------
     const NI_AN = { period: '24h', timer: null, seenAlerts: {} };
@@ -8138,47 +7726,6 @@ VERIFICACIÓN FINAL
     // ═══════════════════════════════════════════════════════════════
     // EXPANDIR THIN CONTENT MASIVO
     // ═══════════════════════════════════════════════════════════════
-    window.ejecutarExpandirThinContent = async function() {
-      const adminToken = sessionStorage.getItem('admin_api_key') || '';
-      if (!adminToken) { showToast('Configurá Admin API Key primero (pestaña Config)', 'warning'); return; }
-      if (!confirm('Esto usará Gemini para expandir artículos con <350 palabras. Puede tardar varios minutos. ¿Continuar?')) return;
-      showLoading(true, 'Expandiendo thin content...');
-      try {
-        const res = await fetch('/api/admin/expandir-thin-content', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-          body: JSON.stringify({})
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || data.mensaje || 'Error desconocido');
-        showLoading(false);
-        showToast(`Expandidas ${data.expandidas || 0} noticias. Errores: ${data.errores || 0}`, 'success');
-        cargarDashboardCalidad();
-      } catch (e) {
-        showLoading(false);
-        showToast('Error: ' + e.message, 'error');
-      }
-    };
-
-    // ═══════════════════════════════════════════════════════════════
-    // DASHBOARD CALIDAD DEL DOMINIO
-    // ═══════════════════════════════════════════════════════════════
-    window.cargarDashboardCalidad = async function(force) {
-      const panel = document.getElementById('panelDashboardCalidad');
-      panel.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400);"><div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;border-width:3px;"></div><p>Cargando metricas' + (force ? ' (forzado)...' : '...') + '</p></div>';
-
-      try {
-        const adminToken = sessionStorage.getItem('admin_api_key') || '';
-        const url = '/api/admin/dashboard-calidad' + (force ? '?force=1' : '');
-        const resp = await fetch(url, { method: 'POST', headers: { 'x-admin-token': adminToken } });
-        const data = await resp.json();
-        if (!resp.ok) throw new Error(data.error || 'Error');
-        panel.innerHTML = renderDashboardCalidad(data);
-        document.getElementById('lastAuditTime').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-NI');
-      } catch (err) {
-        panel.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
-      }
-    };
 
     // ─── AUDITORÍA FORENSE COMPLETA DE NOTICIAS ───
     window.ejecutarAuditoriaForense = async function() {
@@ -8740,39 +8287,6 @@ VERIFICACIÓN FINAL
     };
 
     // ─── REESCRIBIR NOTICIAS DE SUCESOS CON IA ───
-    window.rescribirSucesosMasivo = async function() {
-      const geminiKey = sessionStorage.getItem('gemini_api_key') || prompt('Ingresá tu Gemini API Key (de AI Studio):');
-      if (!geminiKey) { showToast('Necesitás una API key de Gemini', 'warning'); return; }
-      if (!confirm('⚠️ ¿Reescribir noticias de SUCESOS con IA? Esto usa tu cuota de Gemini (5 noticias por vez).')) return;
-      showLoading(true, 'Reescribiendo noticias de sucesos con IA...');
-      try {
-        const secret = sessionStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/rescribir-sucesos?secret=' + encodeURIComponent(secret), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ geminiApiKey: geminiKey, batchSize: 5 })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Error desconocido');
-        showToast(`Rescritas: ${data.rescritas} | Fallidas: ${data.fallidas}`, data.fallidas > 0 ? 'warning' : 'success');
-        const logEl = document.getElementById('logCorrecciones');
-        if (logEl && data.resultados) {
-          logEl.innerHTML += `<div style="color:#60a5fa;">[${new Date().toLocaleTimeString()}] Reescritura de sucesos:</div>`;
-          data.resultados.forEach((r) => {
-            const color = r.estado === 'rescrita' ? '#4ade80' : r.estado === 'error' ? '#f87171' : '#94a3b8';
-            logEl.innerHTML += `<div style="color:${color}; padding-left:12px;">• ${r.tituloOriginal} → ${r.estado}</div>`;
-          });
-          if (data.siguiente) {
-            logEl.innerHTML += `<div style="color:#fbbf24; padding-left:12px;">⚡ ${data.siguiente}</div>`;
-          }
-        }
-      } catch (err) {
-        showToast('Error: ' + err.message, 'error');
-        console.error('[rescribirSucesosMasivo]', err);
-      } finally {
-        showLoading(false);
-      }
-    };
 
     // ─── REDISTRIBUIR AUTORES ───
     window.redistribuirAutores = async function() {
@@ -9470,7 +8984,7 @@ VERIFICACIÓN FINAL
 })();
 </script>
 <script>
-  // Sobrescribe redactarConIA para usar el pipeline MENI (modo periodista) en lugar de llamar a Gemini desde el cliente
+  // redactarConIA usa el pipeline MENI (modo periodista) ejecutado en el servidor
   window.redactarConIA = async function() {
     const titulo = document.getElementById('iaTitulo').value.trim();
     const categoria = document.getElementById('iaCategoria').value;
