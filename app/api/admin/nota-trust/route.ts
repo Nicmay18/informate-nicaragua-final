@@ -9,7 +9,7 @@
  * Read-only: no escribe nada.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { analyzeTrust } from '@/lib/editorial/trust';
 
@@ -17,7 +17,7 @@ export const maxDuration = 15;
 
 export async function GET(request: NextRequest) {
   if (!verifyAdminOrCleanupToken(request.headers.get('x-admin-token'))) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   const slug = request.nextUrl.searchParams.get('slug');

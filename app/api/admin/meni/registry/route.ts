@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCleanupToken } from '@/lib/auth';
 import { loadRegistry, loadLatestSnapshot } from '@/lib/meni/registry/registry-store';
 import { syncRegistry } from '@/lib/meni/registry/registry-sync';
 import { logger } from '@/lib/logger';
@@ -12,7 +12,7 @@ function verificarAuth(request: NextRequest): boolean {
 
 export async function GET(request: NextRequest) {
   if (!verificarAuth(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   try {

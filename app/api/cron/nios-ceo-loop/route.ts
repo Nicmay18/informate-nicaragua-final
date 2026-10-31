@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runCEOLoop } from '@/lib/nios/ceo-loop';
 import { getNiosExecutiveData } from '@/lib/nios/executive-center';
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
 
   if (!verifyAdminOrCronToken(secret ?? '') && !verifyAdminOrCronToken(bearer)) {
-    return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ ok: false, error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   const startedAt = Date.now();

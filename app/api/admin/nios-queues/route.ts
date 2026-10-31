@@ -20,7 +20,7 @@
  * Todo muta solo por acción explícita del operador — el GET no escribe.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminOrCleanupToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCleanupToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { getTelegramConfig } from '@/lib/telegram';
 import { logger } from '@/lib/logger';
@@ -44,7 +44,7 @@ async function sendTelegramMessage(text: string): Promise<{ ok: boolean; error?:
 
 export async function GET(request: NextRequest) {
   if (!verifyAdminOrCleanupToken(request.headers.get('x-admin-token'))) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
   const db = getAdminDb();
 
@@ -74,7 +74,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   if (!verifyAdminOrCleanupToken(request.headers.get('x-admin-token'))) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   const body = await request.json().catch(() => null);

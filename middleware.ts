@@ -154,7 +154,21 @@ function requireAdminAuth(request: NextRequest, allowCron = true): NextResponse 
   if (!isValidAdmin && !isValidCron) {
     return NextResponse.json(
       { error: 'Unauthorized', code: 'INVALID_AUTH' },
-      { status: 401 }
+      {
+        status: 401,
+        // Endurecimiento preventivo (no un incidente observado: el 31-oct
+        // producción devolvió el 401 con `CF-Cache-Status: DYNAMIC` y sin
+        // header explícito, heredando `public, max-age=0` del default de
+        // NextResponse.json). Bajo la regla "Cache Everything" — que ya
+        // demostró cachear respuestas 200 autenticadas — un 401 sin
+        // no-store queda expuesto a la misma decisión de edge. Un rechazo
+        // de autenticación nunca debe almacenarse: ni en CDN ni navegador.
+        headers: {
+          'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+          'CDN-Cache-Control': 'no-store',
+          'Cloudflare-CDN-Cache-Control': 'no-store',
+        },
+      }
     );
   }
   return null;

@@ -6,7 +6,7 @@ import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import type { NoticiaInput } from '@/lib/meni';
 import { logger } from '@/lib/logger';
 import { countWords } from '@/lib/utils/word-count';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 
 export const maxDuration = 30;
 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     searchParams.get('token') ||
     searchParams.get('secret');
   if (!verifyAdminOrCronToken(token) && !verifyAdminOrCronToken(bearer)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
   try {

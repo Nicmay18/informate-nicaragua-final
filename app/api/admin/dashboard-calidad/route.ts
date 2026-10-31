@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
@@ -416,7 +416,7 @@ const cachedDashboard = unstable_cache(computeDashboardMetrics, ['dashboard-cali
 
 export async function GET(request: NextRequest) {
   if (!verificarAuth(request)) {
-    return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
   try {
     const force = request.nextUrl.searchParams.get('force') === '1';
