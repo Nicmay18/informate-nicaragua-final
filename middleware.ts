@@ -154,7 +154,18 @@ function requireAdminAuth(request: NextRequest, allowCron = true): NextResponse 
   if (!isValidAdmin && !isValidCron) {
     return NextResponse.json(
       { error: 'Unauthorized', code: 'INVALID_AUTH' },
-      { status: 401 }
+      {
+        status: 401,
+        // El 401 sin headers explícitos llegaba con
+        // `Cache-Control: public, max-age=0` y bajo la regla "Cache
+        // Everything" de Cloudflare un rechazo quedaba servible en edge.
+        // Un 401 nunca debe almacenarse: ni en CDN ni en navegador.
+        headers: {
+          'Cache-Control': 'private, no-cache, no-store, must-revalidate',
+          'CDN-Cache-Control': 'no-store',
+          'Cloudflare-CDN-Cache-Control': 'no-store',
+        },
+      }
     );
   }
   return null;
