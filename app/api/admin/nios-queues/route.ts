@@ -89,9 +89,58 @@ export async function POST(request: NextRequest) {
   const db = getAdminDb();
   const collection = queue === 'distribution' ? 'nios_distribution_queue' : 'nios_seo_experiments';
   const ref = db.collection(collection).doc(id);
-  const doc = await ref.get();
-  if (!doc.exists) return NextResponse.json({ error: 'Item no encontrado' }, { status: 404 });
-  const item = doc.data()!;
+
+  // Claim atómico dentro de una transacción: sin esto, dos POSTs
+  // concurrentes leían PREPARED a la vez y enviaban Telegram dos veces.
+  // 'send' reclama a SENDING (estado intermedio); las acciones terminales
+  // (dismiss/done) se escriben directo en la misma tx.
+  type Claim =
+    | { ok: true; item: FirebaseFirestore.DocumentData }
+    | { ok: false; code: 404 | 409; status?: string };
+
+  const claimed: Claim = await db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists) return { ok: false, code: 404 as const };
+    const data = snap.data()!;
+    const now = new Date().toISOString();
+
+    if (queue === 'distribution') {
+      // Recuperación: un claim SENDING puede quedar huérfano si el proceso
+      // muere entre el claim y la escritura final (y quedaría invisible al
+      // GET, que solo lista PREPARED). TTL de 10 min permite reclamarlo.
+      const sendingAt = Date.parse(String(data.sendingAt ?? ''));
+      const staleClaim = data.status === 'SENDING' && (Number.isNaN(sendingAt) || Date.now() - sendingAt > 10 * 60 * 1000);
+      if (data.status !== 'PREPARED' && !staleClaim) {
+        return { ok: false, code: 409 as const, status: data.status };
+      }
+      if (action === 'send') {
+        tx.update(ref, { status: 'SENDING', sendingAt: now });
+        return { ok: true as const, item: data };
+      }
+      if (action === 'dismiss') {
+        tx.update(ref, { status: 'DISCARDED', discardedAt: now });
+        return { ok: true as const, item: data };
+      }
+      return { ok: false, code: 409 as const, status: `action ${action} no aplica a distribution` };
+    }
+
+    if (data.status !== 'pending_review') return { ok: false, code: 409 as const, status: data.status };
+    if (action === 'done') {
+      tx.update(ref, { status: 'applied_by_human', appliedAt: now });
+      return { ok: true as const, item: data };
+    }
+    if (action === 'dismiss') {
+      tx.update(ref, { status: 'discarded', discardedAt: now });
+      return { ok: true as const, item: data };
+    }
+    return { ok: false, code: 409 as const, status: `action ${action} no aplica a seo` };
+  });
+
+  if (!claimed.ok) {
+    if (claimed.code === 404) return NextResponse.json({ error: 'Item no encontrado' }, { status: 404 });
+    return NextResponse.json({ error: `Estado inválido para la acción: ${claimed.status}` }, { status: 409 });
+  }
+  const item = claimed.item;
 
   const closeParentAction = async (status: 'COMPLETED' | 'REJECTED', note: string) => {
     if (!item.actionId) return;
@@ -99,17 +148,18 @@ export async function POST(request: NextRequest) {
       status,
       completedAt: new Date().toISOString(),
       result: { ...(item as object), note },
-    }).catch(() => undefined);
+    }).catch((e) => {
+      logger.warn('[nios-queues] No se pudo cerrar la acción padre:', { actionId: item.actionId, error: String(e) });
+    });
   };
 
   if (queue === 'distribution') {
-    if (item.status !== 'PREPARED') {
-      return NextResponse.json({ error: `Estado inválido para la acción: ${item.status}` }, { status: 409 });
-    }
     if (action === 'send') {
       const sent = await sendTelegramMessage(String(item.message ?? ''));
       if (!sent.ok) {
-        await ref.update({ status: 'FAILED', error: sent.error, failedAt: new Date().toISOString() });
+        // Devolver a PREPARED permite reintentar; FAILED solo cuando el
+        // operador decida descartar (evita duplicado por doble envío).
+        await ref.update({ status: 'PREPARED', error: sent.error, lastFailedAt: new Date().toISOString() });
         return NextResponse.json({ ok: false, error: sent.error }, { status: 502 });
       }
       await ref.update({ status: 'SENT', sentAt: new Date().toISOString() });
@@ -117,21 +167,15 @@ export async function POST(request: NextRequest) {
       logger.info('[nios-queues] Distribución enviada', { id, slug: item.slug });
       return NextResponse.json({ ok: true, status: 'SENT' });
     }
-    await ref.update({ status: 'DISCARDED', discardedAt: new Date().toISOString() });
     await closeParentAction('REJECTED', 'Envío descartado por operador.');
     return NextResponse.json({ ok: true, status: 'DISCARDED' });
   }
 
-  // seo experiments
-  if (item.status !== 'pending_review') {
-    return NextResponse.json({ error: `Estado inválido para la acción: ${item.status}` }, { status: 409 });
-  }
+  // seo experiments (estado ya escrito en la tx)
   if (action === 'done') {
-    await ref.update({ status: 'applied_by_human', appliedAt: new Date().toISOString() });
     await closeParentAction('COMPLETED', 'Propuesta SEO aplicada por el editor.');
     return NextResponse.json({ ok: true, status: 'applied_by_human' });
   }
-  await ref.update({ status: 'discarded', discardedAt: new Date().toISOString() });
   await closeParentAction('REJECTED', 'Propuesta SEO descartada por el operador.');
   return NextResponse.json({ ok: true, status: 'discarded' });
 }

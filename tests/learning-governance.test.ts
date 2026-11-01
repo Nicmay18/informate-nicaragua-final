@@ -110,7 +110,15 @@ const fakeDb = {
     };
   },
   runTransaction: async (fn: (tx: any) => Promise<any>) =>
-    fn({ get: (r: any) => r.get(), set: (r: any, d: any) => r.set(d), update: (r: any, d: any) => r.update(d) }),
+    fn({
+      get: (r: any) => r.get(),
+      set: (r: any, d: any) => r.set(d),
+      update: (r: any, d: any) => r.update(d),
+      create: async (r: any, d: any) => {
+        if ((await r.get()).exists) throw new Error(`doc ${r.id} ya existe`);
+        return r.set(d);
+      },
+    }),
 } as unknown as Firestore;
 
 function seed(col: string, id: string, data: Record<string, any>) {

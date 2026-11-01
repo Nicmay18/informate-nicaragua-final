@@ -1,7 +1,7 @@
 ﻿import { NextRequest, NextResponse } from 'next/server';
 import { after } from 'next/server';
 import { adminDb } from '@/lib/firebase-admin';
-import { generateSlug } from '@/lib/slug';
+import { generateSlug, claimSlugInTx } from '@/lib/slug';
 import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import type { NoticiaInput } from '@/lib/meni';
@@ -126,25 +126,44 @@ export async function POST(request: NextRequest) {
 
     const articleRef = adminDb.collection('noticias').doc();
     const finalCategoria = (meniUpdateData.categoria as string) || categoria || 'General';
-    await articleRef.set({
-      ...meniUpdateData,
-      titulo,
-      slug: finalSlug,
-      // resumen/contenido canónicos vienen de meniUpdateData (textoCorregido);
-      // nunca persistir el input crudo por encima de la versión evaluada.
-      categoria: finalCategoria,
-      imagen: imagen || '',
-      autor: autor || 'Redacción Nicaragua Informate',
-      autorRol: finalCategoria === 'Deportes' ? 'Redacción Deportiva' : 'Nicaragua Informate',
-      fecha: now,
-      fechaActualizacion: now,
-      publishedAt: now,
-      dateModified: now,
-      vistas: 0,
-      publicado: true,
-      estado: 'publicado',
-      premium: premium === true,
+    // Claim del slug + create del artículo en la misma transacción: bajo
+    // concurrencia el segundo POST detecta el claim y responde duplicate
+    // en lugar de crear un segundo artículo con el mismo slug.
+    const claimed = await adminDb.runTransaction(async (tx) => {
+      const won = await claimSlugInTx(tx, adminDb, finalSlug);
+      if (!won) return false;
+      tx.set(articleRef, {
+        ...meniUpdateData,
+        titulo,
+        slug: finalSlug,
+        // resumen/contenido canónicos vienen de meniUpdateData (textoCorregido);
+        // nunca persistir el input crudo por encima de la versión evaluada.
+        categoria: finalCategoria,
+        imagen: imagen || '',
+        autor: autor || 'Redacción Nicaragua Informate',
+        autorRol: finalCategoria === 'Deportes' ? 'Redacción Deportiva' : 'Nicaragua Informate',
+        fecha: now,
+        fechaActualizacion: now,
+        publishedAt: now,
+        dateModified: now,
+        vistas: 0,
+        publicado: true,
+        estado: 'publicado',
+        premium: premium === true,
+      });
+      return true;
     });
+    if (!claimed) {
+      const existingNow = await adminDb.collection('noticias').where('slug', '==', finalSlug).limit(1).get();
+      return NextResponse.json({
+        success: true,
+        duplicate: true,
+        id: existingNow.empty ? null : existingNow.docs[0].id,
+        slug: finalSlug,
+        message: 'Ya existe una noticia con este titulo/slug. No se creo duplicado.',
+        url: `https://nicaraguainformate.com/noticias/${finalSlug}`,
+      });
+    }
     await updateDecisionLog(adminDb, attemptId, { result: 'SAVED', savedArticleId: articleRef.id });
 
     const articleId = articleRef.id;
