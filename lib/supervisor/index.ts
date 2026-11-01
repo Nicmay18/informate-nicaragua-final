@@ -3,7 +3,7 @@
  * Exporta la API pública del supervisor.
  */
 
-export { evaluateRawTitle, makeEditorialDecision, detectAbandonedArticles, checkMediumHealth, applySafeAutoFixes, runSupervisorWatchCycle, evaluateOperationCost } from './editorial-supervisor';
+export { evaluateRawTitle, makeEditorialDecision, detectAbandonedArticles, checkMediumHealth, applySafeAutoFixes, evaluateOperationCost } from './editorial-supervisor';
 export { canCallLLM, recordCall, detectWastefulCalls, getConfig, resetHourly } from './cost-guard';
 export { auditHomepage } from './homepage-audit';
 export type {

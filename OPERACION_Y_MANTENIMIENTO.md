@@ -19,7 +19,7 @@
 | Errores | Sentry (`@sentry/nextjs`) | sentry.io |
 | Publicidad | AdSense `ca-pub-4115203339551838` + Auspiciadores directos (propio) | adsense.google.com / `/panel/ads` |
 | Distribución | Telegram bot, Facebook Graph (tokens en Vercel) | Vercel → Environment Variables |
-| IA editorial (MENI) | Groq API (`GROQ_API_KEY`) y Gemini (`generativelanguage.googleapis.com`) | console.groq.com / ai.google.dev |
+| IA editorial (MENI) | Groq API (`GROQ_API_KEY`) | console.groq.com |
 
 ---
 

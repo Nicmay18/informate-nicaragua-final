@@ -116,16 +116,13 @@ Generado por `.audit/admin-matrix.py` (audit del 31-oct-2026). Regenerar con:
 | /api/admin/push-notificar | POST | admin|cookie | 0 | — |
 | /api/admin/reindexar-google | POST | admin|cron+cron | 1 | sí |
 | /api/admin/repair-fechas | GET,POST | admin-hdr+admin|cleanup | 2 | sí |
-| /api/admin/research | POST | admin+admin-hdr | 1 | sí |
 | /api/admin/session | POST | — | 2 | sí |
 | /api/admin/shortlink | GET,POST | admin|cookie | 0 | — |
 | /api/admin/social-conversion | GET | admin|cookie | 0 | — |
 | /api/admin/stats | GET | admin+admin-hdr | 1 | sí |
-| /api/admin/story | POST | admin+admin-hdr | 1 | sí |
 | /api/admin/traffic | GET,POST | admin-hdr+admin|cron | 1 | sí |
 | /api/admin/trafico | GET | admin-hdr+admin|cleanup | 1 | sí |
 | /api/admin/twitter | POST | admin|cookie | 0 | — |
 | /api/admin/upload-image | POST | admin+admin-hdr | 2 | sí |
 | /api/admin/verificar-telegram | POST | admin-hdr+admin|cleanup | 1 | sí |
-| /api/admin/watch | GET,POST | admin-hdr+admin|cleanup+admin|cron+cron | 2 | sí |
 | /api/admin/whatsroute.ts | POST | admin|cookie | 0 | — |

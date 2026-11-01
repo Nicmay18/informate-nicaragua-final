@@ -70,17 +70,6 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // 4. Configuración de Gemini
-    if (!process.env.GEMINI_API_KEY) {
-      issues.push({
-        severity: 'IMPORTANT',
-        problem: 'GEMINI_API_KEY no configurada',
-        impact: 'Research, optimización y MENI generativo no funcionan',
-        cause: 'Variable de entorno faltante en Vercel',
-        action: 'Configurar GEMINI_API_KEY en Vercel → Environment Variables',
-      });
-    }
-
     // 5. Telegram
     if (!process.env.TG_TOKEN || !process.env.TG_CHAT) {
       issues.push({

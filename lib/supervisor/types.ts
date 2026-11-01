@@ -225,7 +225,6 @@ export interface MediumHealth {
     totalWithoutPublishedAt: number;
     totalWithInvalidCategory: number;
     totalWithoutImage: number;
-    geminiConfigured: boolean;
     telegramConfigured: boolean;
     facebookConfigured: boolean;
     cronActive: boolean;

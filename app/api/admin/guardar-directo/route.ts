@@ -343,28 +343,6 @@ export async function POST(request: NextRequest) {
     await updateDecisionLog(db, attemptId, { result: 'SAVED', savedArticleId: articleDocId });
 
     // Invalidar cachés afectadas
-    // WATCH automatico - noticia viva
-    if (publicado) {
-      try {
-        const { runWatchCycle, persistWatchResult } = await import('@/lib/news-watch');
-        const watchResult = await runWatchCycle(
-          {
-            id: articleDocId!,
-            titulo: finalTitulo,
-            contenido: finalContenido,
-            resumen: finalResumen || '',
-            categoria: (meniUpdateData.categoria as string) || 'Nacionales',
-            fecha: (updateData.fecha as any)?.toDate ? (updateData.fecha as any).toDate().toISOString() : new Date().toISOString(),
-            perfil: (meniUpdateData.perfil as string),
-          },
-          { db }
-        );
-        await persistWatchResult(db, articleDocId!, watchResult);
-      } catch (watchError) {
-        logger.warn('[guardar-directo] Watch start failed (non-blocking):', watchError);
-      }
-    }
-
     revalidateTag('noticias');
     revalidateTag('latest-news');
     revalidateTag('trending-news');

@@ -131,7 +131,6 @@ const ADMIN_CRON_ROUTES = [
   '/api/admin/nios/loop',
   '/api/admin/nios-collect',
   '/api/admin/reindexar-google',
-  '/api/admin/watch',
 ];
 
 function requireAdminAuth(request: NextRequest, allowCron = true): NextResponse | null {
@@ -223,7 +222,10 @@ export function middleware(request: NextRequest) {
   }
 
   if (isSensitiveApiPath(pathname)) {
-    const unauthorized = requireAdminAuth(request);
+    // allowCron=false: el secreto operativo de los crons no abre endpoints
+    // de diagnóstico/transformación. Ningún caller legítimo usa x-cron-secret
+    // aquí (verificado: solo panel.html con sesión admin consume estas rutas).
+    const unauthorized = requireAdminAuth(request, false);
     if (unauthorized) return unauthorized;
   }
 

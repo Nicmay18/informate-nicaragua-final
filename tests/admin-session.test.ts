@@ -149,7 +149,7 @@ const publicRoutes = ['/api/admin/session', '/api/admin/estado'];
 const retired = ['/api/admin/clean-backlog', '/api/admin/eliminar-viejas',
   '/api/admin/limpiar-noindex', '/api/admin/limpiar-sucesos'];
 const cronRoutes = ['/api/admin/departamento/ejecutar', '/api/admin/nios/loop',
-  '/api/admin/nios-collect', '/api/admin/reindexar-google', '/api/admin/watch'];
+  '/api/admin/nios-collect', '/api/admin/reindexar-google'];
 const protectedRoutes = adminRoutes().filter((route) => !publicRoutes.includes(route) && !retired.includes(route));
 
 describe('middleware — autorización real, sin mocks de auth', () => {
