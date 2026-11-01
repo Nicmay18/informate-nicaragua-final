@@ -40,7 +40,7 @@ jobs:
         run: npm run lint -- --max-warnings 0
 
       - name: Ejecutar auditoría de 100 noticias
-        run: npx sucrase-node probar-jefe-ia.ts
+        run: npx tsx probar-jefe-ia.ts
         env:
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
