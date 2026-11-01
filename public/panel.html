@@ -5522,7 +5522,7 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
       document.getElementById('previewModal').style.display = 'block';
     };
 
-    window.verSitio = function() { window.open('https://informate-instant-nicaragua.vercel.app/', '_blank'); };
+    window.verSitio = function() { window.open('https://nicaraguainformate.com/', '_blank'); };
 
 
     window.limpiarSEOmasivo = async function() {
@@ -7727,6 +7727,26 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
     // EXPANDIR THIN CONTENT MASIVO
     // ═══════════════════════════════════════════════════════════════
 
+    // ═══════════════════════════════════════════════════════════════
+    // DASHBOARD CALIDAD DEL DOMINIO
+    // ═══════════════════════════════════════════════════════════════
+    window.cargarDashboardCalidad = async function(force) {
+      const panel = document.getElementById('panelDashboardCalidad');
+      panel.innerHTML = '<div style="text-align:center;padding:40px;color:var(--gray-400);"><div class="spinner" style="width:32px;height:32px;margin:0 auto 16px;border-width:3px;"></div><p>Cargando metricas' + (force ? ' (forzado)...' : '...') + '</p></div>';
+
+      try {
+        const adminToken = sessionStorage.getItem('admin_api_key') || '';
+        const url = '/api/admin/dashboard-calidad' + (force ? '?force=1' : '');
+        const resp = await fetch(url, { method: 'POST', headers: { 'x-admin-token': adminToken } });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'Error');
+        panel.innerHTML = renderDashboardCalidad(data);
+        document.getElementById('lastAuditTime').textContent = 'Actualizado: ' + new Date().toLocaleTimeString('es-NI');
+      } catch (err) {
+        panel.innerHTML = '<div style="padding:16px;color:#dc2626;background:#fee2e2;border-radius:8px;">Error: ' + err.message + '</div>';
+      }
+    };
+
     // ─── AUDITORÍA FORENSE COMPLETA DE NOTICIAS ───
     window.ejecutarAuditoriaForense = async function() {
       showLoading(true, 'Analizando noticias con reglas AdSense...');
@@ -7840,40 +7860,6 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
       }
     };
 
-    // ─── LIMPIAR PALABRAS SENSIBLES EN TODAS LAS NOTICIAS ───
-    window.limpiarPalabrasSensibles = async function() {
-      if (!confirm('🔍 Esto va a revisar TODAS las noticias (incluyendo las ya mejoradas) y reemplazar palabras sensibles en título, contenido y resumen.\n\nNO elimina noticias.\nNO agrega contexto genérico.\nSolo limpia palabras.\n\n¿Continuar?')) return;
-      showLoading(true, 'Revisando palabras sensibles en todas las noticias...');
-      try {
-        const secret = sessionStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/limpiar-palabras-sensibles?secret=' + encodeURIComponent(secret), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({})
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Error desconocido');
-
-        let msg = 'Revisadas: ' + (data.totalRevisadas || 0) + ' | Procesadas: ' + (data.procesadas?.cantidad || 0) + ' | Sin cambios: ' + (data.sinCambios?.cantidad || 0);
-        showToast(msg, 'success');
-
-        const logEl = document.getElementById('logCorrecciones');
-        if (logEl) {
-          logEl.innerHTML += '<div style="color:#818cf8;">[' + new Date().toLocaleTimeString() + '] Limpieza de Palabras Sensibles:</div>';
-          if (data.procesadas?.noticias) {
-            data.procesadas.noticias.forEach((n) => {
-              logEl.innerHTML += '<div style="color:#a5b4fc;padding-left:12px;">✏️ ' + n.titulo + ' → ' + n.cambios.join(', ') + '</div>';
-            });
-          }
-        }
-      } catch (err) {
-        showToast('Error: ' + err.message, 'error');
-        console.error('[limpiarPalabrasSensibles]', err);
-      } finally {
-        showLoading(false);
-      }
-    };
-
     // ─── EXPORTAR NOTICIAS DE SUCESOS ───
     window.exportarSucesos = async function() {
       showLoading(true, 'Exportando noticias de sucesos...');
@@ -7901,41 +7887,6 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
       } catch (err) {
         showToast('Error: ' + err.message, 'error');
         console.error('[exportarSucesos]', err);
-      } finally {
-        showLoading(false);
-      }
-    };
-
-    // ─── REDISTRIBUIR AUTORES ───
-    window.redistribuirAutores = async function() {
-      if (!confirm('👥 Esto va a mover 50% de las noticias de Keyling a Maycol y José para balancear la autoría.\n\n¿Continuar?')) return;
-      showLoading(true, 'Redistribuyendo autores...');
-      try {
-        const secret = sessionStorage.getItem('admin_api_key') || '';
-        const res = await fetch('/api/admin/redistribuir-autores?secret=' + encodeURIComponent(secret), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({})
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Error desconocido');
-
-        let msg = data.resumen || ('Redistribuidas: ' + data.redistribuidas);
-        showToast(msg, 'success');
-
-        const logEl = document.getElementById('logCorrecciones');
-        if (logEl) {
-          logEl.innerHTML += '<div style="color:#fbbf24;">[' + new Date().toLocaleTimeString() + '] Redistribución de Autores:</div>';
-          logEl.innerHTML += '<div style="color:#fcd34d;padding-left:12px;">' + data.resumen + '</div>';
-          if (data.actualizadas) {
-            data.actualizadas.forEach(function(n) {
-              logEl.innerHTML += '<div style="color:#fde68a;padding-left:24px;">→ ' + n.titulo.substring(0, 50) + '... a ' + n.nuevoAutor + '</div>';
-            });
-          }
-        }
-      } catch (err) {
-        showToast('Error: ' + err.message, 'error');
-        console.error('[redistribuirAutores]', err);
       } finally {
         showLoading(false);
       }
@@ -8287,24 +8238,6 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
     };
 
     // ─── REESCRIBIR NOTICIAS DE SUCESOS CON IA ───
-
-    // ─── REDISTRIBUIR AUTORES ───
-    window.redistribuirAutores = async function() {
-      if (!confirm('⚖️ ¿Redistribuir autores?\n\nMoverá 50% de las noticias de Keyling a Maycol y José Luis para que AdSense vea múltiples autores.\n\n¿Continuar?')) return;
-      showLoading(true, 'Redistribuyendo autores...');
-      try {
-        const res = await fetch('/api/admin/redistribuir-autores?secret=manual-run', { method: 'POST' });
-        const data = await res.json();
-        if (!data.success) throw new Error(data.error || 'Error desconocido');
-        showToast(data.resumen, 'success');
-        agregarLog(data.resumen, 'success');
-      } catch (err) {
-        showToast('Error: ' + err.message, 'error');
-        console.error('[redistribuirAutores]', err);
-      } finally {
-        showLoading(false);
-      }
-    };
 
     // ─── ELIMINAR 50 NOTICIAS MÁS VIEJAS ───
     window.eliminarNoticiasViejas = async function() {
