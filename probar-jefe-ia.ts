@@ -2,7 +2,8 @@ import { config } from 'dotenv';
 config({ path: '.env.local' });
 
 import { getAdminDb } from './lib/firebase-admin';
-import { analizarNoticia, type NoticiaInput } from './lib/analizador-noticias';
+import { runMeniAsync } from './lib/meni';
+import type { NoticiaInput } from './lib/meni/types';
 
 async function safeDate(value: unknown): Promise<Date | null> {
   if (!value) return null;
@@ -47,7 +48,7 @@ async function main() {
 
   const resultados: any[] = [];
 
-  console.log(`Últimas ${docs.length} noticias publicadas analizadas\n`);
+  console.log(`Últimas ${docs.length} noticias publicadas analizadas con MENI\n`);
   console.log('='.repeat(80));
 
   for (const doc of docs) {
@@ -63,6 +64,7 @@ async function main() {
       fecha: fechaDate ? fechaDate.toISOString() : '',
       slug: data.slug || doc.id,
       keywords: data.keywords || '',
+      imagen: data.imagen || '',
     };
 
     console.log(`\nTITULAR: ${input.titulo}`);
@@ -70,86 +72,59 @@ async function main() {
     console.log(`FECHA:   ${fechaDate ? fechaDate.toLocaleString('es-NI', { timeZone: 'America/Managua' }) : 'N/A'}`);
 
     try {
-      const r = await analizarNoticia(input);
-      const vpr = r.reporteVPR;
+      const r = await runMeniAsync(input, { db });
+      const blockers = r.blockingIssues ?? [];
 
-      if (!vpr) {
-        console.log('SIN REPORTE VPR (el analizador no generó el campo reporteVPR).');
-        console.log('Estructura del resultado:', Object.keys(r));
-        continue;
+      console.log(`SCORE:      ${r.scoreFinal ?? 'SIN SCORE'}`);
+      console.log(`VEREDICTO:  ${r.estadoFinal} (aprobado=${r.aprobado}, calificación=${r.calificacion})`);
+      console.log(`CATEGORÍA:  ${r.categoria} [${r.classificationStatus}] prioridad=${r.prioridad} riesgo=${r.riesgo}`);
+      console.log(`AUTO-CORRECCIONES: ${r.autoCorrections?.length ?? 0}`);
+      if (blockers.length) {
+        console.log(`ISSUES BLOQUEANTES:`);
+        blockers.forEach(i => console.log(`  - [${i.severidad}] ${i.categoria}: ${i.mensaje}`));
       }
+      const topRecs = (r.recomendaciones ?? []).slice(0, 3);
+      topRecs.forEach(rec => console.log(`  REC: ${rec.mensaje ?? JSON.stringify(rec)}`));
 
-      console.log(`PUNTUACIÓN: ${vpr.puntuacion}/${vpr.puntuacionMaxima}`);
-      console.log(`VEREDICTO:  ${vpr.veredicto}`);
-      console.log(`DECISIÓN:   ${vpr.decisionPortada}`);
-      console.log(`EXPLICACIÓN PORTADA: ${vpr.explicacionPortada}`);
-      console.log(`TIPO:       ${vpr.tipoArticulo} (${vpr.tipoNota})`);
-      console.log(`RAZÓN PARA REFERENCIA: ${vpr.razonReferenciaSiNo} — ${vpr.razonamientoReferencia}`);
-      console.log(`EVIDENCIA:  ${vpr.nivelEvidencia.map(e => `${e.criterio}: ${e.detectado} (${e.puntaje}/${e.maximo})`).join(' | ')}`);
-      console.log(`OPORTUNIDADES EDITORIALES:`);
-      vpr.oportunidadesEditoriales.forEach((s, i) => console.log(`  ${i + 1}. ${s.texto}`));
-      console.log(`CÓMO CONVERTIR EN REFERENCIA:`);
-      vpr.comoConvertirReferencia.forEach((s, i) => console.log(`  ${i + 1}. ${s.texto}`));
-      if (vpr.auditoriaInterna?.observaciones?.length) {
-        console.log(`OBSERVACIONES AUDITORÍA:`);
-        vpr.auditoriaInterna.observaciones.forEach(o => console.log(`  - ${o}`));
-      }
-      if (vpr.auditoriaInterna?.ajustesRealizados?.length) {
-        console.log(`AJUSTES REALIZADOS:`);
-        vpr.auditoriaInterna.ajustesRealizados.forEach(a => console.log(`  - ${a}`));
-      }
-
-      // Verificar posibles alucinaciones críticas
+      // Invariantes de consistencia del motor editorial
       const problemas: string[] = [];
-      if (vpr.puntuacion >= 85 && !vpr.nivelEvidencia.some(e => e.detectado === 'Sí' && e.puntaje > 0)) {
-        problemas.push('ALUCINACIÓN: puntaje alto sin evidencia detectada');
+      if (r.scoreFinal === null || r.score_status === 'INVALID') {
+        problemas.push(`EVALUACION INVALIDA: scoreFinal=${r.scoreFinal} source=${r.invalidScoreSource ?? 'desconocida'}`);
       }
-      if (vpr.veredicto === '★★★★★ Nota de referencia' && vpr.puntuacion < 90) {
-        problemas.push('INCONSISTENCIA: Nota de referencia con puntuación < 90');
+      if (r.aprobado && r.estadoFinal !== 'APROBADO') {
+        problemas.push(`INCONSISTENCIA: aprobado=true con estadoFinal=${r.estadoFinal}`);
       }
-      if (vpr.decisionPortada === 'Cobertura especial' && vpr.puntuacion < 95) {
-        problemas.push('INCONSISTENCIA: Cobertura especial con puntuación < 95');
+      if (r.aprobado && blockers.length > 0) {
+        problemas.push(`INCONSISTENCIA: aprobado con ${blockers.length} issues bloqueantes`);
       }
-      const sugerenciasProhibidas = /\b(entrevistar|entrevista\s+(?:a|con)|solicitar\s+(?:expediente|copia|ficha)|consultar\s+(?:hospital|medicina\s+legal|fiscal|policia|bomberos)|esperar\s+version\s+policial|en\s+el\s+lugar|presencial)\b/i;
-      const sugerenciasSospechosas = [
-        ...vpr.oportunidadesEditoriales,
-        ...vpr.comoConvertirReferencia,
-        ...vpr.nivel10_oportunidades,
-      ].filter(s => sugerenciasProhibidas.test(s.texto.toLowerCase()));
-      if (sugerenciasSospechosas.length) {
-        problemas.push(`SUGERENCIA NO REALIZABLE: ${sugerenciasSospechosas[0].texto}`);
+      if (r.estadoFinal === 'EVALUATION_ERROR') {
+        problemas.push('EVALUATION_ERROR declarado por el motor');
       }
-
-      // Verificar observaciones internas del motor editorial V2
-      if (vpr.auditoriaInterna?.observaciones?.some((o: string) => o.includes('CONTRADICCIÓN'))) {
-        problemas.push('CONTRADICCIÓN INTERNA: el motor editorial V2 detectó una inconsistencia.');
+      if (r.autoCorrections?.length && !r.autoCorrected) {
+        problemas.push('INCONSISTENCIA: correcciones reportadas sin autoCorrected=true');
       }
 
       if (problemas.length) {
         console.log(`PROBLEMAS DETECTADOS:`);
         problemas.forEach(p => console.log(`  ⚠ ${p}`));
       } else {
-        console.log('SIN ALUCINACIONES CRÍTICAS DETECTADAS EN ESTA PRUEBA.');
+        console.log('SIN INCONSISTENCIAS DETECTADAS EN ESTA PRUEBA.');
       }
 
       resultados.push({
         titulo: input.titulo,
         slug: input.slug,
         fecha: fechaDate ? fechaDate.toISOString() : null,
-        puntuacion: vpr.puntuacion,
-        veredicto: vpr.veredicto,
-        decisionPortada: vpr.decisionPortada,
-        explicacionPortada: vpr.explicacionPortada,
-        tipoArticulo: vpr.tipoArticulo,
-        tipoNota: vpr.tipoNota,
-        razonReferenciaSiNo: vpr.razonReferenciaSiNo,
-        razonamientoReferencia: vpr.razonamientoReferencia,
-        nivelEvidencia: vpr.nivelEvidencia,
-        oportunidadesEditoriales: vpr.oportunidadesEditoriales.map(s => s.texto),
-        comoConvertirReferencia: vpr.comoConvertirReferencia.map(s => s.texto),
-        nivel10_oportunidades: vpr.nivel10_oportunidades.map(s => s.texto),
-        observacionesAuditoria: vpr.auditoriaInterna?.observaciones || [],
-        ajustesRealizados: vpr.auditoriaInterna?.ajustesRealizados || [],
+        scoreFinal: r.scoreFinal,
+        estadoFinal: r.estadoFinal,
+        aprobado: r.aprobado,
+        calificacion: r.calificacion,
+        categoria: r.categoria,
+        classificationStatus: r.classificationStatus,
+        prioridad: r.prioridad,
+        riesgo: r.riesgo,
+        autoCorrections: r.autoCorrections?.length ?? 0,
+        blockingIssues: blockers.map(i => ({ severidad: i.severidad, categoria: i.categoria, mensaje: i.mensaje })),
         problemas,
       });
     } catch (err: any) {
@@ -178,7 +153,7 @@ async function main() {
     process.exit(1);
   }
 
-  console.log(`\n✅ PRUEBA APROBADA: ${resultados.length} notas sin contradicciones.`);
+  console.log(`\n✅ PRUEBA APROBADA: ${resultados.length} notas sin inconsistencias.`);
   console.log(`Resultados guardados en probar-jefe-ia-resultados.json (${resultados.length} notas).`);
 }
 
