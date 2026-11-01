@@ -156,15 +156,19 @@ describe('claimNextJob — paginación por documentId', () => {
 
   it('ordena por prioridad y luego por scheduledFor dentro de la cola completa', async () => {
     const docs: Record<string, DocData> = {};
+    // Fechas relativas — las absolutas ('2026-11-01') caducaron y el test
+    // empezó a fallar el día en que el P0 se volvió elegible.
+    const past = new Date(Date.now() - 864e5).toISOString();
+    const future = new Date(Date.now() + 30 * 864e5).toISOString();
     for (let i = 0; i < 3; i++) {
       docs[`p1-${i}`] = {
         jobId: `p1-${i}`, type: 'daily-report', priority: 'P1', status: 'pending',
-        scheduledFor: '2026-10-01T00:00:00.000Z', createdAt: '2026-10-01', attempts: 0,
+        scheduledFor: past, createdAt: past.slice(0, 10), attempts: 0,
       };
     }
     docs['p0-1'] = {
       jobId: 'p0-1', type: 'health-check', priority: 'P0', status: 'pending',
-      scheduledFor: '2026-11-01T00:00:00.000Z', createdAt: '2026-10-01', attempts: 0,
+      scheduledFor: future, createdAt: past.slice(0, 10), attempts: 0,
     };
     const db = fakeJobsDb(docs);
     vi.doMock('@/lib/firebase-admin', () => ({ getAdminDb: () => db }));
