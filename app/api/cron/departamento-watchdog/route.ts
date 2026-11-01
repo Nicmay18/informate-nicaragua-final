@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runWatchdog } from '@/lib/departamento-central/watchdog';
 import { processJobQueue, watchdogDrainLimit } from '@/lib/departamento-central/scheduler';
@@ -9,11 +9,12 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret') || request.headers.get('x-cron-secret');
-  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
+  const { token: secret, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[cron/departamento-watchdog] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
 
-  if (!verifyAdminOrCronToken(secret) && !verifyAdminOrCronToken(bearer)) {
+  if (!verifyAdminOrCronToken(secret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 

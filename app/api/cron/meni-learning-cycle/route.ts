@@ -12,7 +12,7 @@
  * requiere aprobación humana vía /api/admin/meni-learning.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { runLearningCycle } from '@/lib/meni/learning-engine';
 import { runExperienceHarvest } from '@/lib/meni/learning-engine/experience-harvest';
@@ -21,10 +21,10 @@ import { logger } from '@/lib/logger';
 export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {
-  const secret = request.headers.get('x-cron-secret')
-    || request.nextUrl.searchParams.get('secret')
-    || request.headers.get('x-admin-token')
-    || request.headers.get('authorization')?.replace('Bearer ', '');
+  const { token: secret, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[cron/meni-learning-cycle] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
   if (!verifyAdminOrCronToken(secret)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }

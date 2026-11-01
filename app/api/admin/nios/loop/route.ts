@@ -1,22 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { runCEOLoop } from '@/lib/nios/ceo-loop';
 import { getLatestCeoLoopRecord } from '@/lib/nios/ceo-memory';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 
 function isAuthorized(request: NextRequest): boolean {
-  const token = request.headers.get('x-admin-token') || request.headers.get('x-admin-key');
-  const secret = request.headers.get('x-cron-secret');
-  const { searchParams } = new URL(request.url);
-  const tokenParam = searchParams.get('token') || searchParams.get('secret');
-  return (
-    verifyAdminOrCronToken(token ?? '') ||
-    verifyAdminOrCronToken(secret ?? '') ||
-    verifyAdminOrCronToken(tokenParam ?? '')
-  );
+  const { token, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[admin/nios/loop] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
+  return verifyAdminOrCronToken(token);
 }
 
 export async function GET(request: NextRequest) {

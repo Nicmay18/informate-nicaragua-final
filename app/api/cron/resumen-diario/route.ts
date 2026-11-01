@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { isRenderableArticle } from '@/lib/editorial/canonical';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { logger } from '@/lib/logger';
@@ -99,11 +99,12 @@ async function sendDigestMessage(token: string, chatId: string, mensaje: string)
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret');
+  const { token: secret, via } = extractRequestSecret(request);
   const force = searchParams.get('force') === '1';
-  const authHeader = request.headers.get('authorization') || '';
-  const bearer = authHeader.replace(/^Bearer\s+/i, '');
-  if (!verifyAdminOrCronToken(secret) && !verifyAdminOrCronToken(bearer)) {
+  if (via === 'query') {
+    logger.warn(`[cron/resumen-diario] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
+  if (!verifyAdminOrCronToken(secret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 

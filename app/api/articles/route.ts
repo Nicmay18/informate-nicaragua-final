@@ -7,19 +7,16 @@ import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import type { NoticiaInput } from '@/lib/meni';
 import { logger } from '@/lib/logger';
 import { countWords } from '@/lib/utils/word-count';
-import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 
 export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const bearer = (request.headers.get('authorization') || '').replace(/^Bearer\s+/i, '');
-  const token =
-    request.headers.get('x-admin-token') ||
-    request.headers.get('x-admin-key') ||
-    searchParams.get('token') ||
-    searchParams.get('secret');
-  if (!verifyAdminOrCronToken(token) && !verifyAdminOrCronToken(bearer)) {
+  const { token, via } = extractRequestSecret(request);
+  if (via === 'query') {
+    logger.warn(`[articles] ${QUERY_SECRET_DEPRECATION_NOTE}`);
+  }
+  if (!verifyAdminOrCronToken(token)) {
     return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers: NO_STORE_401_HEADERS });
   }
 
