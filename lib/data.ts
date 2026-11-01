@@ -659,33 +659,45 @@ export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE
   }
 }
 
-export async function getNewsCount(): Promise<number> {
-  try {
-    const { adminDb } = await import('./firebase-admin');
-    const countSnap = await adminDb
-      .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .count()
-      .get();
-    return countSnap.data().count;
-  } catch (err) {
-    if (err instanceof FirestoreOutageError) throw err;
-    logger.warn('[data.ts] getNewsCount count() falló, usando get():', err instanceof Error ? err.message : String(err));
+// Sin esta capa cada request a /noticias (searchParams → render dinámico,
+// ISR no aplica) ejecutaba un count() de agregación contra Firestore en
+// generateMetadata + componente. Mismo tag 'noticias' → invalidado en cada
+// publicación/edición junto al listado.
+const _cachedGetNewsCount = unstable_cache(
+  async (): Promise<number> => {
     try {
       const { adminDb } = await import('./firebase-admin');
-      const snap = await adminDb
+      const countSnap = await adminDb
         .collection('noticias')
         .where('estado', '==', 'publicado')
-        .select()
-        .limit(5000)
+        .count()
         .get();
-      return snap.size;
-    } catch (err2) {
-      if (err2 instanceof FirestoreOutageError) throw err2;
-      logger.error('[data.ts] getNewsCount error:', err2 instanceof Error ? err2.message : String(err2));
-      return 0;
+      return countSnap.data().count;
+    } catch (err) {
+      if (err instanceof FirestoreOutageError) throw err;
+      logger.warn('[data.ts] getNewsCount count() falló, usando get():', err instanceof Error ? err.message : String(err));
+      try {
+        const { adminDb } = await import('./firebase-admin');
+        const snap = await adminDb
+          .collection('noticias')
+          .where('estado', '==', 'publicado')
+          .select()
+          .limit(5000)
+          .get();
+        return snap.size;
+      } catch (err2) {
+        if (err2 instanceof FirestoreOutageError) throw err2;
+        logger.error('[data.ts] getNewsCount error:', err2 instanceof Error ? err2.message : String(err2));
+        return 0;
+      }
     }
-  }
+  },
+  ['noticias-count'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
+export async function getNewsCount(): Promise<number> {
+  return _cachedGetNewsCount();
 }
 
 const _cachedGetCategoryPaginated = unstable_cache(
@@ -715,35 +727,46 @@ export async function getCategoryPaginated(categoria: string, page: number = 1, 
   }
 }
 
-export async function getCategoryCount(categoria: string): Promise<number> {
-  try {
-    const { adminDb } = await import('./firebase-admin');
-    const countSnap = await adminDb
-      .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .where('categoria', '==', categoria)
-      .count()
-      .get();
-    return countSnap.data().count;
-  } catch (err) {
-    if (err instanceof FirestoreOutageError) throw err;
-    logger.warn(`[data.ts] getCategoryCount count() falló para ${categoria}, usando get():`, err instanceof Error ? err.message : String(err));
+// Misma motivación que _cachedGetNewsCount: las páginas de categoría también
+// son dinámicas (searchParams) y sin caché ejecutaban count() por request.
+// La categoría es parte de la cache-key (args de unstable_cache).
+const _cachedGetCategoryCount = unstable_cache(
+  async (categoria: string): Promise<number> => {
     try {
       const { adminDb } = await import('./firebase-admin');
-      const snap = await adminDb
+      const countSnap = await adminDb
         .collection('noticias')
         .where('estado', '==', 'publicado')
         .where('categoria', '==', categoria)
-        .select()
-        .limit(5000)
+        .count()
         .get();
-      return snap.size;
-    } catch (err2) {
-      if (err2 instanceof FirestoreOutageError) throw err2;
-      logger.error(`[data.ts] getCategoryCount error ${categoria}:`, err2 instanceof Error ? err2.message : String(err2));
-      return 0;
+      return countSnap.data().count;
+    } catch (err) {
+      if (err instanceof FirestoreOutageError) throw err;
+      logger.warn(`[data.ts] getCategoryCount count() falló para ${categoria}, usando get():`, err instanceof Error ? err.message : String(err));
+      try {
+        const { adminDb } = await import('./firebase-admin');
+        const snap = await adminDb
+          .collection('noticias')
+          .where('estado', '==', 'publicado')
+          .where('categoria', '==', categoria)
+          .select()
+          .limit(5000)
+          .get();
+        return snap.size;
+      } catch (err2) {
+        if (err2 instanceof FirestoreOutageError) throw err2;
+        logger.error(`[data.ts] getCategoryCount error ${categoria}:`, err2 instanceof Error ? err2.message : String(err2));
+        return 0;
+      }
     }
-  }
+  },
+  ['categoria-count'],
+  { revalidate: 300, tags: ['noticias'] }
+);
+
+export async function getCategoryCount(categoria: string): Promise<number> {
+  return _cachedGetCategoryCount(categoria);
 }
 
 const MAX_SITEMAP_LIMIT = 1000;
