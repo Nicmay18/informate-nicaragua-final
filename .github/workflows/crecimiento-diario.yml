@@ -16,6 +16,7 @@ jobs:
           echo "🚀 Solicitando reporte de crecimiento..."
           HTTP_CODE=$(curl -s -o /tmp/crecimiento.json -w "%{http_code}" \
             "https://nicaraguainformate.com/api/admin/crecimiento" \
+            -H "x-admin-token: ${{ secrets.ADMIN_API_KEY }}" \
             -H "Cache-Control: no-cache" \
             --max-time 60)
           

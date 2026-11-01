@@ -8,8 +8,8 @@ on:
   push:
     branches: [master]
     paths:
-      - 'lib/editor-jefe/**'
-      - 'lib/analizador-noticias.ts'
+      - 'lib/meni/**'
+      - 'lib/editorial/**'
       - 'probar-jefe-ia.ts'
       - '.github/workflows/auditoria-editorial-diaria.yml'
 
@@ -18,7 +18,7 @@ env:
 
 jobs:
   auditoria-editorial:
-    name: Validar 100 noticias con Editor Jefe V2
+    name: Validar 100 noticias con MENI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
