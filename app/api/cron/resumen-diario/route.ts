@@ -205,7 +205,7 @@ export async function GET(request: Request) {
     // ── Enviar con reintentos controlados ──
     const { token: TG_TOKEN, chatId: TG_CHAT_ID } = await getTelegramConfig(db);
     if (!TG_TOKEN || !TG_CHAT_ID) {
-      if (!force) await docRef.set({ status: 'failed', error: 'no_credentials', enviadoEn: new Date().toISOString() }, { merge: true }).catch(() => {});
+      if (!force) await docRef.set({ status: 'failed', error: 'no_credentials', enviadoEn: new Date().toISOString() }, { merge: true }).catch((e) => logger.warn('[resumen-diario] no se pudo persistir estado failed:', e));
       await runLog('error', { reason: 'Faltan credenciales de Telegram' });
       await recordCronHeartbeat(cronPath, { status: 'down', durationMs: Date.now() - startedAt, note: 'Sin credenciales Telegram' });
       return NextResponse.json({ error: 'Faltan credenciales de Telegram' }, { status: 400 });
@@ -217,7 +217,7 @@ export async function GET(request: Request) {
       await docRef.set(
         { fecha: iso, status: 'failed', error: sent.error, enviadoEn: new Date().toISOString(), cantidad: seleccionadas.length, slugs: seleccionadas.map((n) => n.slug) },
         { merge: true },
-      ).catch(() => {});
+      ).catch((e) => logger.warn('[resumen-diario] no se pudo persistir estado failed:', e));
       await runLog('error', { reason: sent.error, status: sent.status, candidatas: seleccionadas.length });
       await recordCronHeartbeat(cronPath, { status: 'down', durationMs: Date.now() - startedAt, note: `Telegram falló: ${sent.error}` });
       return NextResponse.json({ error: 'Telegram API error', details: sent.error }, { status: 502 });

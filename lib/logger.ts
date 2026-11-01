@@ -40,7 +40,13 @@ export const logger = {
     if (!isSilent) console.info(...args);
   },
   warn: (...args: unknown[]) => {
-    if (!isSilent) console.warn(...args);
+    // warn siempre visible: un warn silenciado convierte fallos reales
+    // (Firestore, integraciones, rutas degradadas) en errores invisibles.
+    console.warn(...args);
+    if (isProd) {
+      const message = args.map(a => a instanceof Error ? a.message : String(a)).join(' ');
+      void captureSentry('warn', message);
+    }
   },
   error: (...args: unknown[]) => {
     console.error(...args);
