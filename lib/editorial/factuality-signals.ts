@@ -37,9 +37,12 @@ export interface FactualityInput {
   aiArtifactsRemoved?: boolean;
 }
 
-/** Marcadores de atribución observados en el corpus real. */
+/** Marcadores de atribución observados en el corpus real.
+ * Sin \b final: en JS \w es ASCII y `\b` tras una vocal acentuada
+ * (declaró, informó, señaló) jamás casa — escondía TODA la atribución
+ * verbal española y disparaba NO_ATTRIBUTION en notas bien atribuidas. */
 const ATTRIBUTION_RE =
-  /\b(según|de acuerdo (?:a|con)|conforme a|informó|informaron|indicó|indicaron|declaró|declararon|confirmó|confirmaron|dijo|dijeron|señaló|señalaron|reportó|reportaron|reveló|comunicado|fuente[s]?\s+(?:de|oficial|oficiales|policial|policiales|cercana|confiable)|agencia\s+(?:EFE|AFP|AP|Reuters)|\bEFE\b|\bAFP\b|\bAP\b|Reuters|portavoz|vocero|vocería|autoridad(?:es)?\s+(?:de|del|confirmaron|informaron)|según datos|reporte de|estudio (?:de|realizado))\b/i;
+  /\b(según|de acuerdo (?:a|con)|conforme a|informó|informaron|informe|indicó|indicaron|declaró|declararon|confirmó|confirmaron|dijo|dijeron|señaló|señalaron|reportó|reportaron|detalló|detallaron|precisó|precisaron|expresó|manifestó|explicó|comentó|relató|describió|sostuvo|agregó|aclaró|admitió|negó|estimó|anunció|anunciaron|reveló|ratificó|refirió|alertó|aseguró|afirmó|apuntó|argumentó|concluyó|consideró|destacó|mencionó|subrayó|en declaraciones|mediante (?:un )?comunicado|en rueda de prensa|en entrevista|a medios|a la prensa|comunicado|fuente[s]?\s+(?:de|oficial|oficiales|policial|policiales|cercana|confiable)|agencia\s+(?:EFE|AFP|AP|Reuters)|\bEFE\b|\bAFP\b|\bAP\b|Reuters|portavoz|vocero|vocería|autoridad(?:es)?\s+(?:de|del|confirmaron|informaron)|según datos|según consta|según (?:el|los) registro|según el parte|reporte de|estudio (?:de|realizado)|parte (?:policial|oficial|médico)|versión oficial|testimonio de|a través de|en sus redes)/i;
 
 /** Cifras materiales: cantidades, porcentajes, montos, specs. */
 const MATERIAL_FIGURE_RE =
@@ -108,6 +111,17 @@ function hasConcreteNamedSource(text: string): boolean {
     if (PROPER_NAME_START_RE.test(rest)) return true;
   }
   return false;
+}
+
+/** Rol institucional + entidad nombrada: «el entrenador de Real Estelí»,
+ * «la directora del INETER», «el vocero de la Policía». Es atribución
+ * indirecta verificable (el rol identifica a la persona), no vaga. */
+const ROLE_SOURCE_RE =
+  /\b(?:según|de acuerdo (?:a|con)|informó|declaró|dijo|confirmó|señaló|indicó|precisó|expresó|afirmó|aseguró|detalló|manifestó|comunicado de[l]?|declaraciones de|portavoz de|vocero de)?\s*(?:el|la|los|las)\s+(?:entrenador|t[eé]cnico|director\w*|presidente?\w*|portavoz|vocero|alcalde|alcaldesa|vicepresident\w*|ministro|ministra|viceministro|comisionado|comandante|doctor|doctora|perito|fiscal|juez|jueza|secretario|secretaria|subsecretario|coordinador|coordinadora|jefe|jefa|administrador|administradora|rector|rectora|gerente|presidenta)\s+(?:de|del|de la|de los|de las)\s+[A-ZÁÉÍÓÚÑ]/i;
+
+/** ¿Atribución indirecta: rol identificable dentro de una entidad nombrada? */
+function hasRoleAttribution(text: string): boolean {
+  return ROLE_SOURCE_RE.test(text);
 }
 
 /**
@@ -216,7 +230,7 @@ export function detectFactualitySignals(input: FactualityInput): FactualitySigna
   // trust.ts: solo la forma capitalizada cuenta como fuente nombrada; el
   // sustantivo común ("al hospital", "la policía") no desactiva la barrera.
   const hasConcreteSource =
-    OFFICIAL_SOURCE_CS_RE.test(text) || hasConcreteNamedSource(text);
+    OFFICIAL_SOURCE_CS_RE.test(text) || hasConcreteNamedSource(text) || hasRoleAttribution(text);
   if (makesFactualClaims && !hasAttribution && !hasExternalEvidence && !hasConcreteSource && text.length > 300) {
     signals.push({
       code: 'NO_ATTRIBUTION',
@@ -242,6 +256,7 @@ export function detectFactualitySignals(input: FactualityInput): FactualitySigna
     !hasExternalEvidence &&
     !CONCRETE_INSTITUTION_RE.test(text) &&
     !hasConcreteNamedSource(text) &&
+    !hasRoleAttribution(text) &&
     distinctFigures.size >= 2
   ) {
     if (hasFieldReport(text)) {

@@ -3,7 +3,8 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { runMeni } from '@/lib/meni';
 import { contieneVerboNoticioso, runAntiClickbait } from '@/lib/meni/anti-clickbait';
 import { clampMeta, ensureH2 } from '@/lib/meni/autocorrect';
-import { detectParagraphTranscription } from '@/lib/meni/quality-gate/transcription-detector';
+import { detectMeniFactuality } from '@/lib/meni/factual-consistency';
+import { analyzeTranscriptionByParagraph, detectParagraphTranscription } from '@/lib/meni/quality-gate/transcription-detector';
 import { article, contradictorySport, empirical, evaluationDate, police } from './fixtures/meni40';
 
 beforeAll(() => { vi.useFakeTimers(); vi.setSystemTime(new Date(evaluationDate)); });
@@ -80,5 +81,102 @@ describe('MENI 4.0 — contratos editoriales', () => {
       expect(r.publication_decision).toBe('NO_PUBLICAR');
       expect(r.editorialDecision?.veredictoEjecutivo?.publicar).not.toBe('SI');
     }
+  });
+});
+
+describe('MENI 4.0 — atribución: REVISAR, nunca BLOQUEANTE por ausencia', () => {
+  const signals = (body: string, title = 'Real Estelí vence 2-1 a Diriangén') =>
+    detectMeniFactuality({ titulo: title, contenido: body });
+  const codes = (body: string) => signals(body).map(s => `${s.code}:${s.severity}`);
+
+  it('a) fuente identificada → sin señales de atribución', () => {
+    const body = 'Real Estelí derrotó 2-1 a Diriangén la noche de este domingo, según el reporte oficial de la Liga Primera. Los goles fueron de Pérez al 34 y Gómez al 78, informó el organismo rector del fútbol nicaragüense. Con la victoria suma 27 puntos en el torneo.';
+    const sig = signals(body);
+    expect(sig.some(s => s.code === 'NO_ATTRIBUTION' || s.code === 'VAGUE_ATTRIBUTION' || s.code === 'UNSOURCED_MATERIAL_FIGURES')).toBe(false);
+  });
+
+  it('b) atribución indirecta (rol + entidad) → sin NO_ATTRIBUTION', () => {
+    const body = 'Real Estelí derrotó 2-1 a Diriangén en el Estadio Independencia. "Sabíamos que iba a ser un partido difícil", declaró el entrenador de Real Estelí al finalizar el compromiso. Los goles fueron de Pérez al 34 y Gómez al 78.';
+    expect(codes(body).some(c => c.startsWith('NO_ATTRIBUTION'))).toBe(false);
+  });
+
+  it('b2) formas lingüísticas variadas de atribución son reconocidas', () => {
+    for (const forma of [
+      'informó la Liga Primera',
+      'de acuerdo con la Liga Primera',
+      'mediante un comunicado de la federación',
+      'en declaraciones a la prensa',
+      'precisó el organismo',
+      'según el parte oficial',
+    ]) {
+      const body = `${forma}, Real Estelí derrotó 2-1 a Diriangén en el Estadio Independencia. Los goles fueron de Pérez al 34 y Gómez al 78 durante la jornada 12 del torneo.`;
+      const sig = signals(body);
+      expect(sig.some(s => s.code === 'NO_ATTRIBUTION'), `forma no reconocida: ${forma}`).toBe(false);
+    }
+  });
+
+  it('c) resultado sin atribución → REVISAR, no BLOQUEANTE', () => {
+    const body = 'Real Estelí derrotó 2-1 a Diriangén la noche de este domingo en el Estadio Independencia por la jornada 12. Los goles fueron de Pérez al 34, Gómez al 78 y Rodríguez descontó al 85. Con la victoria suma 27 unidades y se mantiene líder del campeonato nacional de apertura.';
+    const sig = signals(body);
+    // Si dispara, debe ser IMPORTANT (REVISAR) — nunca CRITICAL (BLOQUEANTE)
+    // por mera ausencia de atribución.
+    for (const s of sig) {
+      expect(s.severity, `señal demasiado severa: ${s.code}`).not.toBe('CRITICAL');
+    }
+  });
+
+  it('d) resultado contradictorio con el acta → CRITICAL (BLOQUEANTE)', () => {
+    const sig = signals(contradictorySport.contenido, contradictorySport.titulo);
+    expect(sig.some(s => s.code === 'INTERNAL_CONTRADICTION' && s.severity === 'CRITICAL')).toBe(true);
+  });
+
+  it('e) afirmación central sin evidencia → REVISAR (IMPORTANT)', () => {
+    const body = 'La empresa TecnoNicaragua presenta su nuevo satélite de comunicaciones que revolucionará la conectividad rural. El dispositivo promete cobertura total del territorio con velocidades de 500 Mbps y funcionará durante 15 años en órbita baja sin mantenimiento ni revisión técnica adicional alguna.';
+    const sig = signals(body, 'TecnoNicaragua presenta su primer satélite de comunicaciones');
+    expect(sig.length).toBeGreaterThan(0);
+    // La ausencia de respaldo exige revisión; no demuestra falsedad.
+    expect(sig.some(s => s.severity === 'CRITICAL' && s.code === 'INTERNAL_CONTRADICTION')).toBe(false);
+  });
+});
+
+describe('MENI 4.0 — transcripción: distinción por naturaleza de la coincidencia', () => {
+  const fuente = 'La Policía Nacional informó que un hombre de 34 años murió la madrugada de hoy tras un accidente de tránsito en el kilómetro 14 de la Carretera Norte, en Managua. La víctima conducía una motocicleta que colisionó contra un vehículo pesado. El conductor del camión permanece en el lugar. Las investigaciones continúan.';
+
+  it('coincidencias inevitables de datos → no genera copia sustancial', () => {
+    const contenido = '<p>Un motociclista de 34 años falleció la madrugada de este lunes en un siniestro vial ocurrido en el kilómetro 14 de la Carretera Norte, confirmó la Policía Nacional. El conductor del camión quedó en la escena mientras avanza la pesquisa oficial del caso.</p>';
+    const r = analyzeTranscriptionByParagraph(contenido, fuente);
+    expect(r.parrafos.every(p => p.veredicto !== 'REESCRIBIR')).toBe(true);
+    expect(r.similitudSustancialPromedio).toBeLessThan(40);
+  });
+
+  it('cita textual atribuida → no cuenta como copia', () => {
+    const contenido = '<p>Las autoridades explicaron el momento del impacto. "La víctima conducía una motocicleta que colisionó contra un vehículo pesado", señaló el comisionado encargado del informe policial de la jornada.</p>';
+    const r = analyzeTranscriptionByParagraph(contenido, fuente);
+    expect(r.parrafos.every(p => p.veredicto !== 'REESCRIBIR')).toBe(true);
+  });
+
+  it('fórmulas institucionales cortas → no cuentan como copia sustancial', () => {
+    const contenido = '<p>Tras el hecho, las investigaciones continúan para esclarecer lo sucedido esta madrugada en el sector norte de la capital según el informe preliminar.</p>';
+    const r = analyzeTranscriptionByParagraph(contenido, fuente);
+    expect(r.parrafos.every(p => p.veredicto === 'OK')).toBe(true);
+  });
+
+  it('párrafo copiado sustancialmente → REESCRIBIR con evidencia', () => {
+    const contenido = '<p>Un hombre de 34 años murió la madrugada de hoy tras un accidente de tránsito en el kilómetro 14 de la Carretera Norte, en Managua. La víctima conducía una motocicleta que colisionó contra un vehículo pesado.</p>';
+    const r = analyzeTranscriptionByParagraph(contenido, fuente);
+    expect(r.parrafosParaReescribir).toBeGreaterThan(0);
+    expect(r.parrafos.find(p => p.veredicto === 'REESCRIBIR')?.extracto).toBeTruthy();
+  });
+
+  it('reescritura periodística fiel → OK sin alerta de copia', () => {
+    const contenido = '<p>Un motociclista perdió la vida este lunes cuando su vehículo impactó contra un camión pesado en el kilómetro 14 de la Carretera Norte, en Managua, según el parte emitido por la Policía Nacional.</p>';
+    const r = analyzeTranscriptionByParagraph(contenido, fuente);
+    expect(r.parrafos.every(p => p.veredicto === 'OK')).toBe(true);
+  });
+
+  it('la coincidencia con fuente oficial jamás emite severidad blocking', () => {
+    const literal = `<p>${fuente}</p>`;
+    const r = detectParagraphTranscription(literal, fuente);
+    expect(r.issues.every(i => i.severidad !== 'blocking')).toBe(true);
   });
 });

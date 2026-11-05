@@ -155,6 +155,26 @@ export function similitudParrafo(parrafo: string, fuenteNormalizada: string): nu
   return medirSimilitud(parrafo, fuenteNormalizada).total;
 }
 
+/** Marcadores de atribución de una cita textual (verborrea editorial común). */
+const QUOTE_ATTRIBUTION_RE =
+  /\b(seg[uú]n|declar[oó]|dijo|señal[oó]|afirm[oó]|expres[oó]|manifest[oó]|indic[oó]|precis[oó]|inform[oó]|sostuvo|sentenci[oó]|advirti[oó]|coment[oó]|agreg[oó]|asegur[oó]|comunicado|parte|autoridad|fuentes?|testimonio|declaraciones)\b/i;
+
+/**
+ * Enmascara citas textuales ATRIBUIDAS: un fragmento entre comillas que el
+ * propio párrafo atribuye a una fuente es periodismo de cita, no copia.
+ * Las citas sin atribución ni contexto siguen contando como coincidencia.
+ */
+function maskCitasAtribuidas(texto: string): string {
+  return texto.replace(/["«“]([^"»”]{20,600})["»”]/g, (match, cita, offset: number) => {
+    // Contexto de atribución: ~120 caracteres antes o después de la cita.
+    const ctx = texto.slice(Math.max(0, offset - 120), Math.min(texto.length, offset + match.length + 120));
+    if (!QUOTE_ATTRIBUTION_RE.test(ctx)) return match;
+    const palabras = cita.split(/\s+/).filter(Boolean).length;
+    if (palabras < 5) return match;
+    return ' CITA_ATRIBUIDA ';
+  });
+}
+
 /**
  * Analiza el contenido párrafo por párrafo contra la fuente original.
  */
@@ -170,7 +190,8 @@ export function analyzeTranscriptionByParagraph(
     .filter((p) => p.split(/\s+/).filter(Boolean).length >= 8);
 
   const parrafos: ParagraphTranscription[] = parrafosRaw.map((p, i) => {
-    const { total, expresiva, sustancial } = medirSimilitud(p, fuenteNormalizada, factuales);
+    const pMedido = maskCitasAtribuidas(p);
+    const { total, expresiva, sustancial } = medirSimilitud(pMedido, fuenteNormalizada, factuales);
     // REESCRIBIR solo cuando hay copia EXPRESIVA SUSTANCIAL: rachas de
     // prosa calcada de la fuente. Coincidencias aisladas de 5 palabras
     // son terminología oficial/fórmulas, no plagio → nunca BLOQUEAR;
