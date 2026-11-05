@@ -32,6 +32,10 @@ import type { SupervisorDecision } from '@/lib/supervisor/types';
 import type { ExplainabilityItem } from '@/lib/editorial/core/types';
 
 export type FindingSeverity = 'BLOCKER' | 'WARNING' | 'RECOMMENDATION' | 'INFO';
+export type EditorialSeverity = 'CUMPLE' | 'SUGERENCIA' | 'REVISAR' | 'BLOQUEANTE';
+export const EDITORIAL_SEVERITY: Record<FindingSeverity, EditorialSeverity> = {
+  BLOCKER: 'BLOQUEANTE', WARNING: 'REVISAR', RECOMMENDATION: 'SUGERENCIA', INFO: 'SUGERENCIA',
+};
 export type EditorJefeDecision = 'PUBLICAR' | 'PUBLICAR_CON_CAMBIOS' | 'REVISAR' | 'BLOQUEAR';
 
 export interface FindingLocation {
@@ -69,6 +73,10 @@ export interface EditorialVerdict {
   /** Veredicto del Supervisor si la cadena completa corrió. */
   supervisorVerdict?: string;
   evaluatedAt: string;
+  /** Contrato aditivo: conserva severity legado y ofrece vocabulario uniforme. */
+  observaciones?: Array<{
+    code: string; estado: EditorialSeverity; motivo: string; evidencia: string; accion: string;
+  }>;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -165,7 +173,13 @@ function fromRevision(issue: RevisionEditorJefe, contenido: string): EditorialFi
 }
 
 function fromQualityGate(issue: QualityGateIssue, contenido: string): EditorialFinding {
-  const severity = QG_SEVERITY[issue.severidad] || 'INFO';
+  // MENI 4.0 — las observaciones de estilo corregibles (adjetivos
+  // sensacionalistas, muletillas) son SUGERENCIA, no verificación:
+  // no afectan un dato central y no deben forzar REVISAR por sí solas.
+  // Las frases bloqueantes ya llegan como severidad 'blocking'.
+  const esEstiloCorregible = issue.severidad === 'warning'
+    && (issue.categoria === 'sensacionalismo' || issue.categoria === 'lenguaje');
+  const severity = esEstiloCorregible ? 'RECOMMENDATION' : (QG_SEVERITY[issue.severidad] || 'INFO');
   return {
     code: `QG_${issue.categoria.toUpperCase()}`,
     severity,
@@ -203,7 +217,7 @@ function fromFactuality(signal: FactualitySignal, contenido: string): EditorialF
     howToFix: FACTUAL_FIX[signal.code] ?? 'VERIFICAR la afirmación contra fuentes antes de publicar.',
     bloquea: severity === 'BLOCKER',
     field: 'contenido',
-    location: locateEvidence(contenido, signal.evidence),
+    location: { ...locateEvidence(contenido, signal.evidence), cita: signal.evidence },
   };
 }
 
@@ -458,6 +472,18 @@ export function decideFromFindings(
     scoreFinal: opts.scoreFinal,
     supervisorVerdict: sv,
     evaluatedAt: new Date().toISOString(),
+    observaciones: [
+      ...merged.map(h => ({
+        code: h.code, estado: EDITORIAL_SEVERITY[h.severity],
+        motivo: `${h.title}. ${h.description}`,
+        evidencia: h.location?.cita || 'No se adjuntó un fragmento verificable; comprobar el criterio antes de modificar la nota.',
+        accion: h.howToFix,
+      })),
+      ...(opts.aciertos || []).map((acierto, index) => ({
+        code: `CUMPLE_${index}`, estado: 'CUMPLE' as const, motivo: acierto,
+        evidencia: acierto, accion: 'Conservar. Este acierto no certifica veracidad externa.',
+      })),
+    ],
   };
 }
 

@@ -4,7 +4,6 @@ import type { EntityMap } from './quality-gate/types';
 import { extractKeywords } from './utils/keywords';
 
 const DEFAULT_MAX_TITLE = 60;
-const MIN_META = 120;
 const MAX_META = 160;
 
 export interface AutoCorrection {
@@ -28,27 +27,37 @@ export function shortenTitle(title: string, max: number = DEFAULT_MAX_TITLE): st
   return shortened.replace(/[\s,;:]+$/g, '');
 }
 
-export function clampMeta(resumen: string, contenido: string): string {
+export function clampMeta(resumen: string, _contenido: string): string {
+  // MENI 4.0 — nunca se completa el resumen con fragmentos del cuerpo:
+  // inyectar texto del artículo para alcanzar un mínimo de caracteres
+  // incorpora contenido sin verificación de contexto ni atribución.
+  // Un resumen corto se reporta como sugerencia, no se "repara" fabricando.
   const text = resumen?.trim() ? stripHtml(resumen) : '';
-  if (!text) {
-    const first = stripHtml(contenido).split(/[.!?]/, 2).join('.').trim();
-    const fallback = first.length > 100 ? first : stripHtml(contenido).slice(0, 220);
-    return fallback.slice(0, MAX_META).trim();
-  }
+  if (!text) return '';
   if (text.length > MAX_META) {
     const slice = text.slice(0, MAX_META + 1);
     const lastSpace = slice.lastIndexOf(' ');
     const cut = lastSpace > 0 ? lastSpace : MAX_META;
     return text.slice(0, cut).trim().replace(/[\s,;:]+$/g, '');
   }
-  if (text.length < MIN_META) {
-    const plain = stripHtml(contenido);
-    const extra = plain.slice(0, MAX_META - text.length - 1).trim();
-    if (extra.length > 20) {
-      return `${text} ${extra}`.slice(0, MAX_META).trim();
-    }
-  }
   return text;
+}
+
+/** Hechos verificables extraíbles: cifras y nombres propios. */
+function hechosDe(texto: string): Set<string> {
+  const plain = stripHtml(texto);
+  const facts = new Set<string>();
+  for (const m of plain.matchAll(/\b\d[\d.,:%]*\b/g)) facts.add(m[0]);
+  for (const m of plain.matchAll(/\b[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,}(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñ]{2,})*/g)) {
+    facts.add(m[0].toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''));
+  }
+  return facts;
+}
+
+/** Hechos presentes en `despues` que no existían en `antes`. */
+export function hechosNuevos(antes: string, despues: string): string[] {
+  const a = hechosDe(antes);
+  return [...hechosDe(despues)].filter((f) => !a.has(f));
 }
 
 function countOccurrences(html: string, pattern: RegExp): number {
@@ -83,28 +92,11 @@ export function ensureStrongTags(html: string, entidades: EntityMap | undefined)
 }
 
 export function ensureH2(html: string, _categoria: string): string {
-  const h2Count = countOccurrences(html, /<h2\b/gi);
-  if (h2Count > 0) return html;
-
-  const parts = html.split(/<\/p>/i);
-  if (parts.length < 4) return html;
-
-  const headings = [
-    'Contexto',
-    'Detalles del hecho',
-    'Reacciones y antecedentes',
-    'Datos y fuentes',
-    'Lo que se sabe hasta ahora',
-  ];
-
-  const result: string[] = [];
-  for (let i = 0; i < parts.length; i++) {
-    if (i > 0 && i % 2 === 0 && i / 2 - 1 < headings.length) {
-      result.push(`<h2>${headings[i / 2 - 1]}</h2>`);
-    }
-    result.push(parts[i] + (i < parts.length - 1 ? '</p>' : ''));
-  }
-  return result.join('');
+  // MENI 4.0 — no se insertan encabezados genéricos ("Detalles del hecho",
+  // "Datos y fuentes", "Reacciones y antecedentes"): prometen contenido que
+  // el párrafo siguiente no necesariamente contiene. La estructura se
+  // recomienda al editor, no se fabrica.
+  return html;
 }
 
 export function buildKeywords(meni: MeniResult): string[] {
@@ -201,6 +193,21 @@ export function autoCorrectNoticia(input: NoticiaInput, meni: MeniResult): { inp
       descripcion: 'Añadidos subtítulos descriptivos para mejorar estructura.',
     });
     corrected.contenido = withH2;
+  }
+
+  // MENI 4.0 — validación de preservación factual: ninguna corrección
+  // puede introducir cifras o nombres propios que no existían en el
+  // original. Si el texto corregido añade hechos, se revierte el contenido
+  // y se reporta — el editor decide, el sistema no inventa datos.
+  const hechosAgregados = hechosNuevos(input.contenido || '', corrected.contenido || '');
+  if (hechosAgregados.length > 0) {
+    corrections.push({
+      campo: 'contenido',
+      antes: 'corrección aplicada',
+      despues: 'corrección revertida',
+      descripcion: `Corrección revertida: incorporaba datos sin respaldo (${hechosAgregados.slice(0, 5).join(', ')}).`,
+    });
+    corrected.contenido = input.contenido || '';
   }
 
   // Keywords
