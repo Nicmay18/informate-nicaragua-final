@@ -100,6 +100,32 @@ describe('MENI 4.0 — atribución: REVISAR, nunca BLOQUEANTE por ausencia', () 
     expect(codes(body).some(c => c.startsWith('NO_ATTRIBUTION'))).toBe(false);
   });
 
+  it('b3) rol sin entidad identificable → atribución vaga (REVISAR)', () => {
+    const body = 'Un equipo derrotó 2-1 a su rival anoche. "Fue difícil", declaró el entrenador al terminar. Los goles fueron al minuto 34 y al 78. Con la victoria suma 27 unidades y lleva 15 años invicto en casa durante el torneo local.';
+    const sig = signals(body);
+    expect(sig.some(s => s.code === 'VAGUE_ATTRIBUTION' || s.code === 'NO_ATTRIBUTION' || s.code === 'UNSOURCED_MATERIAL_FIGURES')).toBe(true);
+    expect(sig.every(s => s.severity !== 'CRITICAL')).toBe(true);
+  });
+
+  it('b4) cargo + institución sin verbo previo → fuente concreta', () => {
+    const body = 'La directora del INETER informó que el sismo de 4.2 grados se registró con 3 réplicas a 120 kilómetros de la costa, tras 15 años de monitoreo continuo en la zona pacífica del país centroamericano.';
+    const sig = signals(body, 'INETER reporta sismo de 4.2 grados en el Pacífico');
+    expect(sig.some(s => s.code === 'NO_ATTRIBUTION' || s.code === 'VAGUE_ATTRIBUTION')).toBe(false);
+  });
+
+  it('b5) «fuentes cercanas» → atribución vaga (REVISAR, nunca BLOQUEANTE)', () => {
+    const body = 'Fuentes cercanas afirmaron que el equipo ganó 2-1 anoche. Los goles fueron al minuto 34 y al 78. Con la victoria suma 27 unidades y lleva 15 años invicto en casa durante el torneo local de primera división.';
+    const sig = signals(body);
+    expect(sig.some(s => s.code === 'VAGUE_ATTRIBUTION' || s.code === 'NO_ATTRIBUTION' || s.code === 'UNSOURCED_MATERIAL_FIGURES')).toBe(true);
+    expect(sig.every(s => s.severity !== 'CRITICAL')).toBe(true);
+  });
+
+  it('b6) «según el acta oficial» → fuente documental, sin señal', () => {
+    const body = 'El equipo ganó 2-1 anoche, según el acta oficial del partido. Los goles fueron al minuto 34 y al 78. Con la victoria suma 27 unidades y lleva 15 años invicto en casa durante el torneo local de primera división.';
+    const sig = signals(body);
+    expect(sig.some(s => s.code === 'NO_ATTRIBUTION' || s.code === 'VAGUE_ATTRIBUTION' || s.code === 'UNSOURCED_MATERIAL_FIGURES')).toBe(false);
+  });
+
   it('b2) formas lingüísticas variadas de atribución son reconocidas', () => {
     for (const forma of [
       'informó la Liga Primera',
@@ -153,6 +179,26 @@ describe('MENI 4.0 — transcripción: distinción por naturaleza de la coincide
     const contenido = '<p>Las autoridades explicaron el momento del impacto. "La víctima conducía una motocicleta que colisionó contra un vehículo pesado", señaló el comisionado encargado del informe policial de la jornada.</p>';
     const r = analyzeTranscriptionByParagraph(contenido, fuente);
     expect(r.parrafos.every(p => p.veredicto !== 'REESCRIBIR')).toBe(true);
+  });
+
+  it('atribución antes de la cita en la misma oración → no cuenta como copia', () => {
+    const contenido = '<p>El comisionado señaló en su informe: "La víctima conducía una motocicleta que colisionó contra un vehículo pesado durante la madrugada de hoy lunes."</p>';
+    const r = analyzeTranscriptionByParagraph(contenido, fuente);
+    expect(r.parrafos[0]?.similitudSustancial ?? 100).toBeLessThan(15);
+  });
+
+  it('cita + verbo de atribución en ORACIÓN DISTINTA → sigue contando', () => {
+    // «expresó» está en otra oración sin relación con la cita: no basta
+    // la proximidad de caracteres, se exige relación lingüística.
+    const contenido = '<p>"La víctima conducía una motocicleta que colisionó contra un vehículo pesado en la Carretera Norte." El comisionado expresó su plena satisfacción institucional.</p>';
+    const r = analyzeTranscriptionByParagraph(contenido, fuente);
+    expect(r.parrafos[0]?.similitudSustancial ?? 0).toBeGreaterThan(15);
+  });
+
+  it('cita sin atribución → conservada en el análisis', () => {
+    const contenido = '<p>"La víctima conducía una motocicleta que colisionó contra un vehículo pesado durante la madrugada de hoy." El tránsito quedó interrumpido por horas.</p>';
+    const r = analyzeTranscriptionByParagraph(contenido, fuente);
+    expect(r.parrafos[0]?.similitudSustancial ?? 0).toBeGreaterThan(15);
   });
 
   it('fórmulas institucionales cortas → no cuentan como copia sustancial', () => {

@@ -156,21 +156,41 @@ export function similitudParrafo(parrafo: string, fuenteNormalizada: string): nu
 }
 
 /** Marcadores de atribución de una cita textual (verborrea editorial común). */
+// Lookahead en vez de \b final: \w es ASCII en JS — `\b` tras vocal
+// acentuada (señaló, declaró) no casa nunca. (?![a-záéíóúñü]) exige
+// borde de palabra real sin romper los verbos acentuados.
 const QUOTE_ATTRIBUTION_RE =
-  /\b(seg[uú]n|declar[oó]|dijo|señal[oó]|afirm[oó]|expres[oó]|manifest[oó]|indic[oó]|precis[oó]|inform[oó]|sostuvo|sentenci[oó]|advirti[oó]|coment[oó]|agreg[oó]|asegur[oó]|comunicado|parte|autoridad|fuentes?|testimonio|declaraciones)\b/i;
+  /\b(seg[uú]n|declar[oó]|dijo|señal[oó]|afirm[oó]|expres[oó]|manifest[oó]|indic[oó]|precis[oó]|inform[oó]|sostuvo|sentenci[oó]|advirti[oó]|coment[oó]|agreg[oó]|asegur[oó]|comunicado|parte|autoridad|fuentes?|testimonio|declaraciones)(?![a-záéíóúñü])/i;
 
 /**
  * Enmascara citas textuales ATRIBUIDAS: un fragmento entre comillas que el
  * propio párrafo atribuye a una fuente es periodismo de cita, no copia.
- * Las citas sin atribución ni contexto siguen contando como coincidencia.
+ * La relación debe ser lingüística: el marcador de atribución tiene que
+ * convivir con la cita en la misma oración («...», declaró X — o X dijo:
+ * «...»). Una cita sin atribución en su oración sigue contando como
+ * coincidencia, aunque haya verbos de atribución en oraciones vecinas.
  */
 function maskCitasAtribuidas(texto: string): string {
   return texto.replace(/["«“]([^"»”]{20,600})["»”]/g, (match, cita, offset: number) => {
-    // Contexto de atribución: ~120 caracteres antes o después de la cita.
-    const ctx = texto.slice(Math.max(0, offset - 120), Math.min(texto.length, offset + match.length + 120));
-    if (!QUOTE_ATTRIBUTION_RE.test(ctx)) return match;
     const palabras = cita.split(/\s+/).filter(Boolean).length;
     if (palabras < 5) return match;
+    // Oración que contiene la cita: el texto desde el último corte de
+    // oración antes de la cita hasta el próximo corte después de ella.
+    const antes = texto.slice(0, offset);
+    const despues = texto.slice(offset + match.length);
+    const inicioOracion = Math.max(
+      antes.lastIndexOf('. '), antes.lastIndexOf('! '), antes.lastIndexOf('? '),
+      antes.lastIndexOf('.\n'), antes.lastIndexOf(';\n'),
+    );
+    // La oración termina con .!? seguido de espacio, comilla de cierre o
+    // fin del párrafo («...cita." Seguido, X declaró...» son oraciones
+    // distintas aunque el punto vaya pegado a la comilla). Si la propia
+    // cita cierra con .!?, la oración termina en su comilla de cierre.
+    const corte = /[.!?](?=\s|["»”]|$)|\n/;
+    const resto = despues.match(corte);
+    const finOracion = /[.!?]\s*$/.test(cita) ? 0 : (resto?.index ?? despues.length);
+    const oracion = texto.slice(inicioOracion + 2, offset + match.length + finOracion);
+    if (!QUOTE_ATTRIBUTION_RE.test(oracion)) return match;
     return ' CITA_ATRIBUIDA ';
   });
 }
