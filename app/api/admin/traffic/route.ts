@@ -38,7 +38,14 @@ function verificarAuth(request: NextRequest): boolean {
 /** Máximo de documentos traffic_log leídos por request (control de costo). */
 const LOG_LIMIT_24H = 5000;
 const RECENT_LIMIT = 20;
-const CATMAP_SLUG_CAP = 90;
+/**
+ * Tope de seguridad para el mapa slug→noticia. La resolución va cacheada
+ * 5 min, así que el límite solo protege costo ante una explosión de
+ * slugs distintos — no debe recortar tráfico real (con 90 cap el tail
+ * del período caía en "Sin categoría" aunque el artículo existiera).
+ */
+const CATMAP_SLUG_CAP = 1500;
+const NOTICIA_META_CACHE_SECONDS = 300;
 /**
  * El panel hace polling cada 60s. Las AGREGACIONES 24h (horas, ventanas,
  * fuentes) se cachean 5 min — no necesitan frescura de segundos. La parte
@@ -70,31 +77,57 @@ const _cachedEvents24h = unstable_cache(
 
 interface NoticiaMeta { titulo: string; categoria: string; vistas: number; }
 
+/**
+ * Resolución slug→noticia cacheada 5 min. El panel hace polling cada 60s:
+ * sin cache, cada request releía el mapa completo; con la lista de slugs
+ * ordenada como clave, el estado estacionario pega en el mismo bucket.
+ * Se devuelve un array de pares (serializable por unstable_cache).
+ */
+const _cachedNoticiaMeta = unstable_cache(
+  async (slugsKey: string): Promise<Array<[string, NoticiaMeta]>> => {
+    const { getAdminDb } = await import('@/lib/firebase-admin');
+    const db = getAdminDb();
+    const slugs = slugsKey.split('\n').filter(Boolean);
+    const map = new Map<string, NoticiaMeta>();
+    const put = (key: string, d: FirebaseFirestore.DocumentData) => {
+      map.set(key, {
+        titulo: d.titulo || d.title || key,
+        categoria: d.categoria || 'General',
+        vistas: typeof d.vistas === 'number' ? d.vistas : 0,
+      });
+    };
+    for (let i = 0; i < slugs.length; i += 30) {
+      const chunk = slugs.slice(i, i + 30);
+      try {
+        const snap = await db.collection('noticias').where('slug', 'in', chunk).get();
+        for (const doc of snap.docs) {
+          const d = doc.data();
+          if (d.slug) put(d.slug, d);
+        }
+        // Fallback por docId: el tracking acepta documentId == slug aunque
+        // el campo `slug` del doc difiera o falte (datos históricos).
+        const missed = chunk.filter(s => !map.has(s));
+        if (missed.length) {
+          const idDocs = await db.getAll(...missed.map(s => db.collection('noticias').doc(s)));
+          for (const doc of idDocs) if (doc.exists) put(doc.id, doc.data() || {});
+        }
+      } catch (err) {
+        logger.warn('[admin/traffic] noticias meta chunk failed:', err);
+      }
+    }
+    return Array.from(map.entries());
+  },
+  ['traffic-noticia-meta'],
+  { revalidate: NOTICIA_META_CACHE_SECONDS },
+);
+
 async function fetchNoticiaMeta(
-  db: FirebaseFirestore.Firestore,
+  _db: FirebaseFirestore.Firestore,
   slugs: string[],
 ): Promise<Map<string, NoticiaMeta>> {
-  const map = new Map<string, NoticiaMeta>();
-  const unique = Array.from(new Set(slugs.filter(Boolean))).slice(0, CATMAP_SLUG_CAP);
-  for (let i = 0; i < unique.length; i += 30) {
-    const chunk = unique.slice(i, i + 30);
-    try {
-      const snap = await db.collection('noticias').where('slug', 'in', chunk).get();
-      for (const doc of snap.docs) {
-        const d = doc.data();
-        if (d.slug) {
-          map.set(d.slug, {
-            titulo: d.titulo || d.title || d.slug,
-            categoria: d.categoria || 'General',
-            vistas: typeof d.vistas === 'number' ? d.vistas : 0,
-          });
-        }
-      }
-    } catch (err) {
-      logger.warn('[admin/traffic] noticias meta chunk failed:', err);
-    }
-  }
-  return map;
+  const unique = Array.from(new Set(slugs.filter(Boolean))).slice(0, CATMAP_SLUG_CAP).sort();
+  const entries = await _cachedNoticiaMeta(unique.join('\n'));
+  return new Map(entries);
 }
 
 /**
