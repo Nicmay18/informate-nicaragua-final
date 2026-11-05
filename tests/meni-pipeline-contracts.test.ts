@@ -42,11 +42,15 @@ describe('A — contenido original sin fuente: transcripción no bloquea', () =>
   });
 });
 
-describe('B — copia casi literal: el mecanismo sí activa', () => {
-  it('transcriptionPercent alto → transcripcion bloquea', () => {
+describe('B — copia casi literal: la métrica mide, nunca veta', () => {
+  it('transcriptionPercent alto → score bajo + razón, pero SIN bloqueo (MENI 4.0)', () => {
     const dna = computeEditorialDNA({ decision: REPLICA_DECISION(80) as any, transcriptionPercent: 80 });
     expect(dna.transcripcion.score).toBe(20);
-    expect(dna.transcripcion.bloquear).toBe(true);
+    // La similitud con la fuente — incluso alta — no es por sí sola un
+    // BLOQUEANTE: emite dimensión baja + recomendación de revisión.
+    expect(dna.transcripcion.bloquear).toBe(false);
+    expect(dna.transcripcion.razon).toBeTruthy();
+    expect(dna.bloquear).toBe(false);
   });
 });
 

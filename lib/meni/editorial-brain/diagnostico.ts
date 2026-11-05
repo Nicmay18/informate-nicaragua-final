@@ -183,7 +183,6 @@ export function buildDiagnostico(params: {
   const queAprenderaElLector = utilityGate.queAprendeElLector;
   const explicacionFalta = [
     ...storyCompleteness.respuestasFaltantes,
-    ...storyCompleteness.dudasPendientes,
     ...readerJourney.brechaDeConocimiento.filter((b: string) => !readerJourney.queEntendera.includes(b)),
   ];
   const contextoFalta = [

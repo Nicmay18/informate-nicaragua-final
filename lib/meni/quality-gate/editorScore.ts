@@ -7,6 +7,7 @@
 import type { ExplanationIndex, QualityGateIssue } from './types';
 import { MAX_TRANSCRIPTION_PERCENT, MIN_ORIGINALITY_PERCENT } from './rules';
 import { getPerfilEditorial } from '../editorial-profiles';
+import { analyzeTranscriptionByParagraph } from './transcription-detector';
 
 function getPatronesCategoria(categoria: string, textoPlano: string) {
   return getPerfilEditorial(categoria, textoPlano);
@@ -25,19 +26,19 @@ export function computeExplanationIndex(textoPlano: string, fuenteOriginal?: str
   const lower = textoPlano.toLowerCase();
   const patrones = getPatronesCategoria(categoria || '', textoPlano);
 
-  let porcentajeTranscripcion = 0;
-  if (fuenteOriginal) {
-    const fuenteLower = fuenteOriginal.toLowerCase();
-    const palabras = lower.split(/\s+/).filter(Boolean);
-    const ventana = 5;
-    let coincidencias = 0;
-    for (let i = 0; i <= palabras.length - ventana; i++) {
-      const ngrama = palabras.slice(i, i + ventana).join(' ');
-      if (fuenteLower.includes(ngrama)) coincidencias++;
-    }
-    const total = Math.max(palabras.length - ventana, 1);
-    porcentajeTranscripcion = Math.round((coincidencias / total) * 100);
-  }
+  // MENI 4.0 — la "transcripción" mide copia EXPRESIVA, no coincidencia
+  // factual. Los n-gramas que contienen hechos de la fuente (cifras,
+  // fechas, nombres propios) son compartidos inevitablemente por
+  // cualquier nota fiel a su fuente oficial y no prueban plagio.
+  const reporteTranscripcion = fuenteOriginal
+    ? analyzeTranscriptionByParagraph(textoPlano, fuenteOriginal)
+    : null;
+  // La penalización de originalidad usa la copia SUSTANCIAL (rachas de
+  // prosa calcada), no la coincidencia de 5-gramas aislados: los hechos
+  // y fórmulas oficiales compartidos con la fuente no son plagio.
+  const porcentajeTranscripcion = reporteTranscripcion
+    ? reporteTranscripcion.similitudSustancialMaxima
+    : 0;
 
   const porcentajeContexto = calcularPorcentajePatrones(lower, patrones.contexto);
   const porcentajeExplicacion = calcularPorcentajePatrones(lower, patrones.explicacion);
@@ -103,9 +104,8 @@ export function computeEditorScore(
 
   if (explanationIndex.porcentajeTranscripcion > MAX_TRANSCRIPTION_PERCENT) {
     score -= 15;
-    motivosBloqueo.push(
-      `Transcripción muy alta (${explanationIndex.porcentajeTranscripcion}%, máximo permitido ${MAX_TRANSCRIPTION_PERCENT}%).`
-    );
+    // Una similitud alta necesita revisión de atribución/licencia/citas.
+    // Nunca demuestra por sí sola un defecto que impida publicar.
   }
 
   if (originalidadPorcentaje < MIN_ORIGINALITY_PERCENT) {

@@ -155,9 +155,8 @@ describe('Pre-merge MENI — cadena única de verdad', () => {
     expect(r.editorialDecision.veredictoEjecutivo.publicar).not.toBe('SI');
   });
 
-  it('CASO 5: transcripción vs fuente original → Quality Gate bloquea (motor autónomo)', () => {
+  it('CASO 5: transcripción vs fuente original → revisión con evidencia, nunca veto (MENI 4.0)', () => {
     const fuente = 'La Policía Nacional confirmó el decomiso de 120 armas de fuego en un operativo realizado en Managua. El comisionado general informó que las armas fueron encontradas en una vivienda del barrio Oriente durante un allanamiento autorizado por un juez. Los artefactos serán destruidos conforme al protocolo institucional.';
-    const copia = fuente + ' Según las autoridades, el operativo duró varias horas.';
     const qg = runQualityGate({
       titulo: 'Policía decomisa 120 armas en Managua',
       contenido: `<p>${fuente}</p><p>Según las autoridades, el operativo duró varias horas.</p>`,
@@ -165,12 +164,13 @@ describe('Pre-merge MENI — cadena única de verdad', () => {
       fuenteOriginal: fuente,
       stage: 'POST_LLM',
     });
-    // El párrafo copiado literal debe generar issue blocking
-    expect(
-      qg.issues.some(i => i.severidad === 'blocking') || qg.bloqueado,
-    ).toBe(true);
+    // MENI 4.0: la copia literal se reporta como WARNING con evidencia
+    // para revisión humana; la similitud por sí sola no bloquea.
+    const issuesTranscripcion = qg.issues.filter(i => i.categoria === 'originalidad');
+    expect(issuesTranscripcion.length).toBeGreaterThan(0);
+    expect(issuesTranscripcion.every(i => i.severidad === 'warning' && !!i.evidencia)).toBe(true);
     expect(qg.explanationIndex.porcentajeTranscripcion).toBeGreaterThan(50);
-    void copia;
+    expect(qg.transcriptionReport?.parrafosParaReescribir ?? 0).toBeGreaterThan(0);
   });
 
   it('CASO 6: score 95 + recomendacionMeni=mejorar → PUBLICAR_CON_CAMBIOS (nunca REVISION_HUMANA)', () => {

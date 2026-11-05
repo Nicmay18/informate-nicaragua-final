@@ -74,11 +74,20 @@ const INFINITIVOS_NOTICIOSOS = new Set([
   'incrementar', 'repuntar', 'sostener', 'mantener', 'lamentar', 'rendir',
   'emprender', 'demandar', 'recurrir', 'apelar', 'admitir', 'mostrar',
   'exhibir', 'demostrar', 'evidenciar', 'reflejar', 'batir', 'responder',
+  // MENI 4.0 — verbos que seguían produciendo el falso positivo
+  // «sin verbo noticioso» en titulares reales (caso «conquista»).
+  'conquistar', 'triunfar', 'coronar', 'celebrar', 'habitar', 'obsequiar',
+  // MENI 4.0 — verbos de resultado deportivo y-control de sucesos que
+  // seguían sin reconocerse («golea», «es controlado», «12 evacuadas»).
+  'golear', 'anotar', 'descontar', 'remontar', 'igualar', 'liderar',
+  'encabezar', 'presidir', 'controlar', 'despejar', 'resguardar',
+  'transmitir', 'programar', 'conmemorar', 'derivar', 'suspender',
 ]);
 
 const RAICES_EXTRA = new Set(['mur', 'obtuv', 'consigu', 'consig', 'compit', 'detuv', 'tuv', 'hub', 'huv']);
 
 const SUFIJOS_VERBALES = [
+  'ados', 'adas', 'idos', 'idas', 'ado', 'ada', 'ido', 'ida',
   'iendo', 'ando', 'isteis', 'asteis', 'ieron', 'aron', 'imos', 'amos', 'iste', 'aste',
   'emos', 'ábamos', 'íamos', 'abais', 'íais', 'áis', 'éis', 'aban', 'ían', 'an', 'as',
   'en', 'es', 'is', 'a', 'e', 'i', 'o', 'á', 'é', 'í', 'ó', 'ió', 'ar', 'er', 'ir',
@@ -121,12 +130,20 @@ const sinAcentos = (s: string) => s.normalize('NFD').replace(/[\u0300-\u036f]/g,
 
 export function contieneVerboNoticioso(titulo: string): boolean {
   const tokens = normalizarToken(titulo);
-  for (const token of tokens) {
+  for (const tokenRaw of tokens) {
+    // MENI 4.0 — el token se compara sin diacríticos: las conjugaciones
+    // acentuadas (-rá, -rán, -ó, -í) deben descomponerse igual que las
+    // no acentuadas («comenzarán» → comenzar + an → «comenzar»).
+    const token = sinAcentos(tokenRaw);
     if (INFINITIVOS_NOTICIOSOS.has(token)) return true;
     if (RAICES_NOTICIOSAS.has(token)) return true;
     for (const suf of SUFIJOS_VERBALES) {
-      if (token.length > suf.length + 1 && token.endsWith(suf)) {
-        const stem = sinAcentos(token.slice(0, -suf.length));
+      const sufNA = sinAcentos(suf);
+      if (token.length > sufNA.length + 1 && token.endsWith(sufNA)) {
+        const stem = token.slice(0, -sufNA.length);
+        // El stem puede ser ya el infinitivo («comenzarán»→«comenzar»)
+        // o la raíz («comenzó»→«comenz»): ambos son evidencia de verbo.
+        if (INFINITIVOS_NOTICIOSOS.has(stem)) return true;
         if (RAICES_NOTICIOSAS.has(stem)) return true;
         for (const ending of ['ar', 'er', 'ir']) {
           const inf = stem + ending;
