@@ -402,6 +402,16 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Archivados/mejorados cambian la portada: invalidar cachés públicas.
+    if (eliminadas.length > 0 || mejoradas.length > 0) {
+      try {
+        const { revalidateNoticiasSurfaces } = await import('@/lib/data');
+        revalidateNoticiasSurfaces();
+      } catch (e) {
+        logger.error('[limpiar-sucesos] revalidate falló — caché obsoleta hasta TTL:', e);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       totalProcesadas: snap.docs.length,

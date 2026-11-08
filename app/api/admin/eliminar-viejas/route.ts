@@ -120,6 +120,18 @@ export async function POST(request: NextRequest) {
       logger.warn('[eliminar-viejas] No se pudo escribir auditoria:', e);
     }
 
+    // Invalidar caché de portada/listados: archivar/eliminar cambia la
+    // visibilidad al instante. Sin esto, las notas seguían en portada hasta
+    // que expirara el ISR (~60s).
+    if (archivadas.length > 0 || eliminadas.length > 0) {
+      try {
+        const { revalidateNoticiasSurfaces } = await import('@/lib/data');
+        revalidateNoticiasSurfaces();
+      } catch (e) {
+        logger.error('[eliminar-viejas] revalidate falló — caché obsoleta hasta TTL:', e);
+      }
+    }
+
     return NextResponse.json({
       success: true,
       archivadas: archivadas.length,

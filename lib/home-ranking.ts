@@ -1,4 +1,5 @@
 import { isLutoNews, type Noticia } from '@/lib/types';
+import { isPublicArticle } from '@/lib/editorial/canonical';
 
 // Pesos orientativos: Nacionales 40%, Deportes 15%, Internacionales 15%,
 // Sucesos 15%, Tecnología 10%, Espectáculos 5%.
@@ -205,4 +206,122 @@ export function selectDestacada(noticias: Noticia[]): Noticia | null {
 
   scored.sort((a, b) => b.s - a.s);
   return scored[0]?.n ?? ranked[0] ?? null;
+}
+
+// ============================================================================
+// Selección de secciones de portada — actualidad primero, popularidad aparte.
+// ============================================================================
+
+export interface HomeSections {
+  hero: Noticia | null;
+  enPortada: Noticia[];
+  ultimas: Noticia[];
+  breaking: Noticia[];
+}
+
+/**
+ * Ventanas progresivas de actualidad para posiciones primarias (hero y
+ * En portada): 24h → 48h → 7 días. Si ninguna ventana cubre el mínimo de
+ * candidatas, se amplía a la siguiente; si el corpus entero está viejo, se
+ * muestra lo mejor disponible SIN fabricar recencia.
+ * Las visitas acumuladas y el score MENI histórico NO amplían la ventana:
+ * una nota de hace semanas con miles de vistas pertenece a «Más leídas»,
+ * no al titular.
+ */
+export const FRONT_WINDOWS_HOURS = [24, 48, 168] as const;
+const PORTADA_MIN_CANDIDATES = 6;
+const EN_PORTADA_LIMIT = 5;
+const EN_PORTADA_CAT_CAP = 2;
+const ULTIMAS_LIMIT = 8;
+const BREAKING_LIMIT = 4;
+const LAST_HOUR_HOURS = 24;
+
+/** Timestamp de publicación en ms (0 si la fecha es inválida). */
+function publicationMs(n: Noticia): number {
+  const t = new Date(n.fecha).getTime();
+  return Number.isNaN(t) ? 0 : t;
+}
+
+/**
+ * Selección pura de las secciones de portada a partir del pool `latest`
+ * (publicadas, ya filtradas por isPublicNews en la capa de datos).
+ *
+ * - hero / enPortada: solo noticias dentro de la ventana de actualidad.
+ * - ultimas: cronología estricta por fecha de publicación, descendente.
+ *   NO excluye notas por aparecer en secciones temáticas ni por popularidad;
+ *   solo omite el hero y duplicados por slug/id.
+ * - breaking («Última hora»): últimas 24h, sin repetir lo ya mostrado.
+ */
+export function selectHomeSections(latest: Noticia[], now: number = Date.now()): HomeSections {
+  // Defensa en profundidad: aunque la capa de datos ya filtra, la portada
+  // nunca debe mostrar borradores, archivadas ni no aprobadas por MENI.
+  const elegibles = latest.filter(n => isPublicArticle(n));
+  const ranked = rankNoticias(elegibles);
+  const age = (n: Noticia) => articleAgeHours(n, now);
+
+  const poolFor = (minCount: number): Noticia[] => {
+    let widest: Noticia[] = [];
+    for (const h of FRONT_WINDOWS_HOURS) {
+      const p = ranked.filter(n => age(n) <= h);
+      if (p.length > 0) widest = p;
+      if (p.length >= minCount) return p;
+    }
+    // Ninguna ventana cubre el mínimo: usar la más amplia con contenido
+    // (≤7d). Solo si TODO el corpus es más viejo se recurre al ranking
+    // completo — la portada nunca queda vacía, sin fabricar recencia.
+    return widest.length > 0 ? widest : ranked.slice(0, 50);
+  };
+
+  const heroPool = poolFor(1);
+  const hero = selectDestacada(heroPool.filter(n => !isLutoNews(n))) ?? heroPool[0] ?? null;
+
+  // EN PORTADA: ventana amplia lo justo para cubrir la sección; tope de
+  // categoría para variedad sin sacrificar frescura; nunca repite el hero.
+  const portadaPool = poolFor(PORTADA_MIN_CANDIDATES);
+  const enPortada: Noticia[] = [];
+  const catCounts: Record<string, number> = {};
+  for (const n of portadaPool) {
+    if (enPortada.length >= EN_PORTADA_LIMIT) break;
+    if (hero && n.id === hero.id) continue;
+    const c = catCounts[n.categoria] || 0;
+    if (c >= EN_PORTADA_CAT_CAP) continue;
+    enPortada.push(n);
+    catCounts[n.categoria] = c + 1;
+  }
+
+  // ÚLTIMAS NOTICIAS: flujo cronológico independiente. Orden por fecha de
+  // publicación real (desc); sin filtros de popularidad ni exclusiones por
+  // sección — una nota que encabeza el hero o una fila temática sigue
+  // apareciendo aquí porque el feed es la verdad cronológica de la portada.
+  // Dedup por slug (un doc puede existir con id ≠ slug).
+  const chrono = [...elegibles].sort((a, b) => publicationMs(b) - publicationMs(a));
+  const ultimas: Noticia[] = [];
+  const seenKeys = new Set<string>();
+  for (const n of chrono) {
+    if (ultimas.length >= ULTIMAS_LIMIT) break;
+    const key = n.slug || n.id;
+    if (seenKeys.has(key)) continue;
+    seenKeys.add(key);
+    ultimas.push(n);
+  }
+
+  // ÚLTIMA HORA: solo lo publicado en las últimas 24h que aún no se muestra.
+  const placed = new Set<string>([
+    ...(hero ? [hero.id] : []),
+    ...enPortada.map(n => n.id),
+    ...ultimas.map(n => n.id),
+  ]);
+  const breaking: Noticia[] = [];
+  const breakCat: Record<string, number> = {};
+  for (const n of chrono) {
+    if (breaking.length >= BREAKING_LIMIT) break;
+    if (placed.has(n.id)) continue;
+    if (age(n) > LAST_HOUR_HOURS) break; // cronológico desc: lo que sigue es más viejo
+    const c = breakCat[n.categoria] || 0;
+    if (n.categoria === 'Sucesos' && c >= 2) continue;
+    breaking.push(n);
+    breakCat[n.categoria] = c + 1;
+  }
+
+  return { hero, enPortada, ultimas, breaking };
 }

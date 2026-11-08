@@ -194,6 +194,16 @@ export async function POST(request: NextRequest) {
 
 
 
+    // Las mutaciones de backlog cambian visibilidad/orden de la portada.
+    if (!dryRun && modificadasCount > 0) {
+      try {
+        const { revalidateNoticiasSurfaces } = await import('@/lib/data');
+        revalidateNoticiasSurfaces();
+      } catch (e) {
+        logger.error('[clean-backlog] revalidate falló — caché obsoleta hasta TTL:', e);
+      }
+    }
+
     return NextResponse.json({
       estado: dryRun ? 'DRY-RUN (sin cambios)' : 'Exito',
       totalRevisadas: snapshot.docs.length,
