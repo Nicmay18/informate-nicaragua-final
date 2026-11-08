@@ -6,9 +6,8 @@ import { trafficLogExpiresAt } from '@/lib/analytics/traffic-ttl';
 import { FieldValue, FieldPath } from 'firebase-admin/firestore';
 import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { incrementView, flush } from '@/lib/view-counter';
-import { CATEGORIES, isLutoNews, type Noticia } from '@/lib/types';
-import { rankNoticias, selectDestacada, isFrontPageEligible } from '@/lib/home-ranking';
-import { getTrafficForDate } from '@/lib/analytics/traffic-reader';
+import { CATEGORIES, type Noticia } from '@/lib/types';
+import { selectHomeSections } from '@/lib/home-ranking';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
@@ -219,90 +218,21 @@ async function buildHomePageData(): Promise<HomePageData> {
     ...categoryNames.map(name => getNewsByCategory(name, 12)),
   ]);
 
-  // Actividad medida HOY (traffic_daily): única justificación para que una
-  // noticia de más de 48h ocupe una posición primaria (hero/Principales).
-  // Fail-open: si la lectura falla, el gate queda en 'solo recientes'.
-  const todayKey = new Date().toISOString().slice(0, 10);
-  let activeSlugs = new Set<string>();
-  try {
-    const todayTraffic = await getTrafficForDate(getAdminDb(), todayKey, 100);
-    activeSlugs = new Set(todayTraffic.articles.map(a => a.slug).filter(Boolean));
-  } catch (err) {
-    logger.warn('[homepage] traffic_daily de hoy no disponible para gate de portada:', err);
-  }
-
   const porCategoria: Record<string, Noticia[]> = {};
   categoryNames.forEach((name, i) => { porCategoria[name] = categoryResults[i] ?? []; });
 
-  const used = new Set<string>();
+  // Selección de portada: actualidad primero (ventanas 24h→48h→7d),
+  // «Últimas noticias» en cronología estricta sin exclusiones por sección.
+  const { hero, enPortada, ultimas, breaking } = selectHomeSections(latest);
 
-  // HERO + PRINCIPALES: posiciones primarias = 'noticia actual'. Solo
-  // entran noticias de <= 48h o con actividad medida hoy (activeSlugs).
-  // Fallback a `ranked` completo si el pool elegible quedara vacío
-  // (sin publicaciones recientes y sin tráfico hoy) — la portada nunca
-  // se queda vacía, pero en ese caso extremo se muestra lo mejor
-  // disponible, no se fabrica recencia.
-  const ranked = rankNoticias(latest);
-  const frontPool = ranked.filter(n => isFrontPageEligible(n, activeSlugs));
-  const eligible = frontPool.length > 0 ? frontPool : ranked;
-  const hero = selectDestacada(eligible.filter(n => !isLutoNews(n))) ?? eligible[0] ?? null;
-  if (hero) used.add(hero.id);
-
-  // SECCIONES POR CATEGORÍA: prioridad de frescura. Cada categoría muestra
-  // sus propias noticias más recientes, sin depender de que el carril
-  // general las haya reservado. Solo evitamos repetir el hero.
+  // SECCIONES POR CATEGORÍA: prioridad de frescura; solo se omite el
+  // titular principal para no repetirlo en su propia fila.
   categoryNames.forEach(name => {
     const limit = SECTION_LIMITS[name] ?? 4;
     porCategoria[name] = (porCategoria[name] || [])
-      .filter(n => !used.has(n.id))
+      .filter(n => !hero || n.id !== hero.id)
       .slice(0, limit);
-    porCategoria[name].forEach(n => used.add(n.id));
   });
-
-  // PRINCIPALES: diversidad deliberada desde lo que no ya fue reservado.
-  const principales: Noticia[] = [];
-  const principalCounts: Record<string, number> = {};
-  for (const n of eligible) {
-    if (principales.length >= 5) break;
-    if (used.has(n.id)) continue;
-    const cap = n.categoria === 'Sucesos' ? 2 : 2;
-    const count = principalCounts[n.categoria] || 0;
-    if (count >= cap) continue;
-    principales.push(n);
-    principalCounts[n.categoria] = count + 1;
-    used.add(n.id);
-  }
-  const enPortada = principales;
-
-  // ÚLTIMAS NOTICIAS: carril cronológico, con tope por categoría para no
-  // vaciar las secciones propias de contenido reciente.
-  const ultimas: Noticia[] = [];
-  const ultimasCatCounts: Record<string, number> = {};
-  for (const n of latest) {
-    if (ultimas.length >= 8) break;
-    if (used.has(n.id)) continue;
-    const count = ultimasCatCounts[n.categoria] || 0;
-    if (count >= 2) continue;
-    ultimas.push(n);
-    ultimasCatCounts[n.categoria] = count + 1;
-    used.add(n.id);
-  }
-
-  // ÚLTIMA HORA: solo artículos publicados en las últimas 24h.
-  const breaking: Noticia[] = [];
-  const breakingCatCounts: Record<string, number> = {};
-  const now = Date.now();
-  for (const n of latest) {
-    if (breaking.length >= 4) break;
-    if (used.has(n.id)) continue;
-    const t = new Date(n.fecha).getTime();
-    if (Number.isNaN(t) || now - t > 24 * 60 * 60 * 1000) continue;
-    const count = breakingCatCounts[n.categoria] || 0;
-    if (n.categoria === 'Sucesos' && count >= 2) continue;
-    breaking.push(n);
-    breakingCatCounts[n.categoria] = count + 1;
-    used.add(n.id);
-  }
 
   return { hero, ultimas, enPortada, breaking, porCategoria, masLeidas };
 }

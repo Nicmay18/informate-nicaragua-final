@@ -2,7 +2,7 @@ import { type Noticia, FALLBACK_IMAGE } from './types';
 import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 import { capitalizeFirst, normalizeEditorialTitle } from './formateo';
 import { logger } from './logger';
-import { unstable_cache, revalidateTag } from 'next/cache';
+import { unstable_cache, revalidateTag, revalidatePath } from 'next/cache';
 import { getEditorialDecision, isRenderableArticle, resolvePublicCategory, shouldIndexArticle } from './editorial/canonical';
 import { cleanArticleBody } from './sanitize';
 import { isToxicSlug } from './seo-toxic';
@@ -125,7 +125,8 @@ function validateCount(count: number, defaultCount: number): number {
   return count || defaultCount;
 }
 
-function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
+/** Exportada para tests de normalización de fechas (Timestamp→ISO). */
+export function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
   const data = d.data() as FirestoreNoticiaData;
   return {
     id: d.id,
@@ -186,6 +187,30 @@ export function invalidateFirestoreCache() {
   try {
     revalidateTag('noticias');
   } catch { /* runtime only */ }
+}
+
+/**
+ * Invalida todas las superficies públicas alimentadas por `noticias`:
+ * Data Cache (tags) + rutas ISR (portada, listado, feeds y sitemaps).
+ * Usar tras cualquier mutación que cambie visibilidad, fecha de
+ * publicación u orden de las noticias. Las rutas por artículo/categoría
+ * concretas las revalidan los endpoints que conocen el slug.
+ * El error se registra — nunca se oculta en un catch silencioso.
+ */
+export function revalidateNoticiasSurfaces() {
+  try {
+    revalidateTag('noticias');
+    revalidateTag('popular-news');
+    revalidateTag('latest-news');
+    revalidateTag('trending-news');
+    revalidatePath('/');
+    revalidatePath('/noticias');
+    revalidatePath('/feed.xml');
+    revalidatePath('/news-sitemap.xml');
+    revalidatePath('/sitemap.xml');
+  } catch (err) {
+    logger.error('[data.ts] revalidateNoticiasSurfaces falló:', err instanceof Error ? err.message : String(err));
+  }
 }
 
 /** Timestamp límite para partir el campo `fecha` por tipo (ver fetchPublishedDocs). */

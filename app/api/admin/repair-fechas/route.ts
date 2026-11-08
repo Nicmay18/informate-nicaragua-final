@@ -185,6 +185,17 @@ export async function POST(request: NextRequest) {
       if (r.applied) written++;
     }
 
+    // Las reparaciones de fecha cambian el orden cronológico de la portada:
+    // invalidar las cachés 'noticias' para que el nuevo orden se vea ya.
+    if (written > 0) {
+      try {
+        const { revalidateNoticiasSurfaces } = await import('@/lib/data');
+        revalidateNoticiasSurfaces();
+      } catch (e) {
+        logger.error('[repair-fechas] revalidate falló — caché obsoleta hasta TTL:', e);
+      }
+    }
+
     return NextResponse.json({
       mode: 'applied',
       scanned,
