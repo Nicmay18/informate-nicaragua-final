@@ -121,6 +121,12 @@ const CODE_META: Record<string, IssueMeta> = {
   },
 };
 
+// Categorías de estilo/servicio: sus warnings son SUGERENCIA editorial,
+// no verificación de un dato central. No deben forzar REVISAR solas.
+const STYLE_INFO_CATEGORIES = new Set([
+  'lenguaje', 'sensacionalismo', 'servicio', 'valor_diferencial', 'explicacion',
+]);
+
 function mapQualityGateIssue(issue: QualityGateIssue): MeniBlockingIssue {
   const meta = CODE_META[issue.categoria] || {
     code: `QUALITY_GATE_${issue.categoria.toUpperCase()}`,
@@ -130,10 +136,14 @@ function mapQualityGateIssue(issue: QualityGateIssue): MeniBlockingIssue {
     expected: 'Cumplir con los criterios editoriales',
   };
 
+  const severity = issue.severidad === 'warning' && STYLE_INFO_CATEGORIES.has(issue.categoria)
+    ? 'INFO'
+    : SEVERITY_MAP[issue.severidad] || 'INFO';
+
   return {
     code: meta.code,
     module: 'quality-gate',
-    severity: SEVERITY_MAP[issue.severidad] || 'INFO',
+    severity,
     title: meta.title,
     description: issue.mensaje,
     currentValue: issue.evidencia || 'Detectado',
@@ -234,15 +244,15 @@ export function buildMeniDiagnostics(opts: {
   if (!opts.aprobado && opts.qualityGate?.explanationIndex?.porcentajeTranscripcion && !blockingIssues.some(i => i.code === 'EDITORIAL_DNA_TRANSCRIPCION')) {
     const pct = opts.qualityGate.explanationIndex.porcentajeTranscripcion;
     if (pct > MAX_TRANSCRIPTION_PERCENT) {
-      blockingIssues.push({
+      warnings.push({
         code: 'QUALITY_GATE_TRANSCRIPCION',
         module: 'quality-gate',
-        severity: 'BLOCKER',
+        severity: 'WARNING',
         title: 'Alto porcentaje de transcripción',
         description: `El texto transcribe un ${pct}% de la fuente original.`,
         currentValue: `${pct}%`,
         expectedValue: `≤ ${MAX_TRANSCRIPTION_PERCENT}%`,
-        howToFix: 'Parafraseá la fuente y sumá análisis propio.',
+        howToFix: 'Comparar los fragmentos con la fuente y revisar atribución/citas; no añadir datos ni contexto sin respaldo.',
         field: 'contenido',
       });
     }
@@ -270,12 +280,12 @@ export function buildMeniDiagnostics(opts: {
         field: 'general',
       });
     } else {
-      blockingIssues.push({
+      warnings.push({
         code: 'MENI_SCORE_FLOOR',
         module: 'meni-core',
-        severity: 'BLOCKER',
+        severity: 'WARNING',
         title: 'Score final por debajo del piso de calidad',
-        description: `La nota obtuvo ${opts.scoreFinal} puntos, por debajo del mínimo publicable.`,
+        description: `La nota obtuvo ${opts.scoreFinal} puntos. El score requiere revisión editorial; por sí solo no demuestra un error factual.`,
         currentValue: opts.scoreFinal,
         expectedValue: `≥ ${NO_PUBLISH_FLOOR}`,
         howToFix: 'La nota presenta deficiencias sustantivas; revisar los hallazgos del diagnóstico.',

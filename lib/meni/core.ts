@@ -1,6 +1,8 @@
 import { pipelineV4 } from '@/lib/editorial';
+import { detectMeniFactuality } from './factual-consistency';
 import { publishedArticlesQuery } from '@/lib/nios/intelligence/metric-truth';
 import type { EvaluacionEditorial, NoticiaInput as EditorialNoticiaInput } from '@/lib/editorial';
+import { reconcileMeniResult } from './result-consistency';
 import { generarMetaDescription } from '@/lib/editorial/meta';
 import type { NoticiaInput, MeniResult, MeniRiesgoEditorial, MeniRecomendacion, RevisionEditorJefe } from './types';
 import { analyzeForensic } from './forensic';
@@ -176,7 +178,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     categoria: categoria,
     categoriaSugerida: categoria,
     perfil: perfilEvaluado,
-    fuente: input.contenido,
+    fuente: input.fuenteOriginal,
     fuenteOriginal: input.fuenteOriginal,
     tierThresholds: thresholds,
     evaluacion,
@@ -249,8 +251,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
 
   const tierQualityGateBloqueado = tierBlockingIssues.some((i) => i.severidad === 'blocking');
 
-  const adnTranscripcionBloquear =
-    (qualityGate.explanationIndex?.porcentajeTranscripcion ?? 0) > thresholds.maxTranscripcion;
+  const adnTranscripcionBloquear = false; // Similitud → revisión, nunca veto por porcentaje.
 
   // ═══════════════════════════════════════════════════════════
   // 4. DERIVAR TODO DE EDITORIAL DECISION
@@ -264,17 +265,31 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   const score_status: MeniResult['score_status'] = scoreIsValid ? 'VALID' : 'INVALID';
   const score: number | null = scoreFinal;
 
+  // MENI 4.0 — barrera factual dentro de runMeni (antes solo corría en
+  // guardarConMeni): una contradicción interna demostrada nunca se
+  // compensa con un score alto. IMPORTANT = WARNING → REVISAR.
+  const factualitySignals = detectMeniFactuality({
+    titulo: input.titulo,
+    resumen: input.resumen,
+    contenido: input.contenido || '',
+    research: input.research,
+    story: input.story,
+  });
+  const factualityCritical = factualitySignals.some((s) => s.severity === 'CRITICAL');
+
   const aprobadoFinal = scoreIsValid
     && scoreFinal! >= MIN_APPROVED_SCORE
     && !editorialDecision.bloquear
     && !tierQualityGateBloqueado
-    && !adnTranscripcionBloquear;
+    && !adnTranscripcionBloquear
+    && factualitySignals.length === 0;
 
   // Una sola verdad: si hay un bloqueo activo, la calificación no puede decir
   // PUBLICABLE/ORO aunque el score supere el umbral. Se anota el motivo.
   const motivoBloqueoPanel = editorialDecision.motivoBloqueo
+    || (factualityCritical ? `Contradicción factual interna: ${factualitySignals.find((s) => s.severity === 'CRITICAL')?.desc}` : null)
     || (tierQualityGateBloqueado ? tierBlockingIssues[0]?.mensaje : null)
-    || (adnTranscripcionBloquear ? `Transcripción supera el máximo del tier (${thresholds.maxTranscripcion}%)` : null);
+    || (adnTranscripcionBloquear ? `Copia expresiva supera el máximo del tier (${thresholds.maxTranscripcion}%)` : null);
   const calificacionBase = scoreIsValid ? scoreToGrade(scoreFinal!) : 'ERROR DE EVALUACIÓN';
   const calificacion = !aprobadoFinal && scoreIsValid && scoreFinal! >= MIN_APPROVED_SCORE
     ? `${calificacionBase} — BLOQUEADO${motivoBloqueoPanel ? `: ${motivoBloqueoPanel}` : ''}`
@@ -367,6 +382,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     recomendaciones: recomendacionesContextuales.map((r) => ({ area: r.area, mensaje: r.mensaje })),
     aciertos: forense.evidencias.filter((e) => e.estado === 'OK').map((e) => e.mensaje),
     antiClickbait: editorialDecision.antiClickbait,
+    factualitySignals,
   });
   logMeni('Quality gate result', {
     bloqueado: qualityGate.bloqueado,
@@ -391,9 +407,9 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   });
   logTime('runMeni', t0);
 
-  return {
+  const result: MeniResult = {
     version: '2.0',
-    meniVersion: '2.1.1-prod',
+    meniVersion: '4.0-incremental',
     estado: 'Activo',
     categoria,
     editorCategory: editorialClassification.editorCategory || undefined,
@@ -478,6 +494,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     editorialVerdict,
     tituloSugerido: editorialDecision.antiClickbait.tituloSugerido,
   };
+  return reconcileMeniResult(result);
 }
 
 /** Firma de defectos mecánicos bloqueantes del Quality Gate. */
@@ -760,7 +777,7 @@ export async function runMeniAsync(
   logMeni('=== runMeniAsync end ===', { aprobado, similitud: duplicado.similitud, blockingIssues: blockingIssues.length, warnings: warnings.length, tMs: Date.now() - t1 });
   logTime('runMeniAsync', t1);
 
-  return {
+  return reconcileMeniResult({
     ...base,
     aprobado,
     diagnostico,
@@ -770,7 +787,7 @@ export async function runMeniAsync(
     duplicado,
     editorBrain,
     editorialVerdict,
-  };
+  });
 }
 
 /**

@@ -73,11 +73,11 @@ export function runQualityGate(input: QualityGateInput, porQueLeerAqui?: string)
 
   // Detector de transcripción párrafo a párrafo (requiere fuente original)
   const transcription = detectParagraphTranscription(input.contenido, input.fuenteOriginal);
+  issues.push(...transcription.issues);
 
   if (input.stage === 'POST_LLM' && !useSource) {
     // Solo cuando no hay fuente de verdad editorial se evalúan estos criterios aquí.
     issues = [...issues, ...detectServiceValue(perfil, textoPlano)];
-    issues = [...issues, ...transcription.issues];
     if (porQueLeerAqui !== undefined) {
       issues = [...issues, ...detectDifferentialValue(porQueLeerAqui)];
     }

@@ -12,6 +12,7 @@
  */
 
 import { CONTRATO_GLOBAL } from '../editorial-contract';
+import { dedupeCriteria } from './dedupe-criteria';
 import type { EditorialBrainInput, EditorialDecision, LlmInstructions, RecomendacionEditorial, EstadoEditorial, EditorialRanking, VeredictoEditorJefe, PuntoPerdido, EvaluacionCategoria, AprendizajeContexto } from './types';
 import { MIN_APPROVED_SCORE } from '@/lib/meni/scoring';
 import { classifySports, isIndividualSport } from '../sports-classifier';
@@ -290,9 +291,6 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   if (humanCriticalIssues.length > 0) {
     motivosBloqueo.push(...humanCriticalIssues.map(c => c.message));
   }
-  if (utilityGate.recomendacionesEditoriales.length > 0) {
-    motivosBloqueo.push(...utilityGate.recomendacionesEditoriales);
-  }
   const motivoBloqueo = motivosBloqueo.length > 0 ? motivosBloqueo.join(' | ') : null;
 
   // El score final se calculará a partir del ADN NI (computeEditorialDNA) abajo.
@@ -365,8 +363,11 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
   // Transcripción real SOLO cuando existe fuente original (flujo
   // editor-autónomo). Sin fuente no hay qué comparar — la dimensión
   // no se alimenta de la diferencia editorial como proxy.
+  // MENI 4.0 — la dimensión transcripción mide copia EXPRESIVA (prosa
+  // calcada), no coincidencia factual: nombres, cifras y fechas de una
+  // fuente oficial no son plagio. Ver transcription-detector.ts.
   const transcriptionPct = input.fuenteOriginal
-    ? analyzeTranscriptionByParagraph(input.contenido, input.fuenteOriginal).similitudPromedio
+    ? analyzeTranscriptionByParagraph(input.contenido, input.fuenteOriginal).similitudSustancialMaxima
     : undefined;
 
   const editorialDna = computeEditorialDNA({
@@ -736,7 +737,7 @@ function calcularEvaluacionCategoria(
 
   const faltantes = [...ctx.faltantes, ...exp.faltantes, ...srvFaltantes];
   const cumplidos = [...ctx.cumplidos, ...exp.cumplidos, ...srvCumplidos];
-  const puntosPerdidos = [...ctx.perdidos, ...exp.perdidos, ...srvPerdidos];
+  const puntosPerdidos = dedupeCriteria([...ctx.perdidos, ...exp.perdidos, ...srvPerdidos]);
 
   return {
     categoria: categoriaFinal,
@@ -788,11 +789,12 @@ function calcularScoreEjecutivo(
     puntosPerdidos.push({ concepto: 'Aporte editorial inválido: SEO o redacción no son valor', puntos: 15 });
   }
 
-  let score = 100 - puntosPerdidos.reduce((s, p) => s + p.puntos, 0);
+  const unique = dedupeCriteria(puntosPerdidos);
+  let score = 100 - unique.reduce((s, p) => s + p.puntos, 0);
   // Si el DNA o problemas graves bloquean, el score no puede fingir aprobación.
   if (bloquear) score = Math.min(score, 74);
   score = Math.max(0, Math.min(100, Math.round(score)));
-  return { score, puntosPerdidos };
+  return { score, puntosPerdidos: unique };
 }
 
 function computarReaderLearning(

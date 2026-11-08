@@ -59,7 +59,7 @@ export interface ParagraphTranscriptionEntry {
   indice: number;
   extracto: string;
   similitud: number;
-  veredicto: 'OK' | 'REESCRIBIR';
+  veredicto: 'OK' | 'REVISAR' | 'REESCRIBIR';
 }
 
 export interface TranscriptionReportResult {

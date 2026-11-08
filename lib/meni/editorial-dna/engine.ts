@@ -140,8 +140,11 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   const transcripcion = makeDimension(
     transcripcionScore,
     minTranscripcion,
-    'Alto riesgo de transcripción: el texto se parece demasiado a la fuente original. Reescribí párrafo por párrafo aportando análisis propio.'
+    'Alto riesgo de copia expresiva: párrafos del texto reproducen la prosa de la fuente (no solo sus hechos). Reescribí con redacción propia manteniendo los datos oficiales.'
   );
+  // La métrica no acredita plagio: el detector aporta fragmentos para
+  // revisión humana. Se mantiene la dimensión de calidad, sin veto.
+  transcripcion.bloquear = false;
 
   // ═══════════════════════════════════════════════════════════════
   // MEMORIA: ¿tiene contexto de publicaciones anteriores?
@@ -181,7 +184,7 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   const recomendaciones: string[] = [];
   if (exclusividad.bloquear && exclusividad.razon) recomendaciones.push(exclusividad.razon);
   if (wow.bloquear && wow.razon) recomendaciones.push(wow.razon);
-  if (transcripcion.bloquear && transcripcion.razon) bloqueadores.push(transcripcion.razon);
+  if (transcripcion.razon) recomendaciones.push(transcripcion.razon);
 
   const bloquear = transcripcion.bloquear;
   const motivoBloqueo = bloqueadores.length > 0 ? bloqueadores.join(' | ') : null;

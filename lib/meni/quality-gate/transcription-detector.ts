@@ -12,14 +12,28 @@ export interface ParagraphTranscription {
   indice: number;
   extracto: string;
   similitud: number;
-  veredicto: 'OK' | 'REESCRIBIR';
+  /** Similitud solo expresiva: n-gramas compartidos que NO son hechos
+   *  (cifras, fechas, nombres propios). La coincidencia factual con la
+   *  fuente es esperable en periodismo basado en fuentes oficiales. */
+  similitudExpresiva: number;
+  /** % de n-gramas expresivos que forman rachas de ≥2 coincidencias
+   *  consecutivas (≥6 palabras seguidas calcadas). Es la métrica de
+   *  "copia sustancial": las coincidencias aisladas de 5 palabras son
+   *  normalmente terminología oficial o fórmulas de la fuente, no plagio. */
+  similitudSustancial: number;
+  veredicto: 'OK' | 'REVISAR' | 'REESCRIBIR';
 }
 
 export interface TranscriptionReport {
   parrafos: ParagraphTranscription[];
   parrafosParaReescribir: number;
+  parrafosParaRevisar: number;
   similitudPromedio: number;
   similitudMaxima: number;
+  similitudExpresivaPromedio: number;
+  similitudExpresivaMaxima: number;
+  similitudSustancialPromedio: number;
+  similitudSustancialMaxima: number;
 }
 
 const PARAGRAPH_SIMILARITY_THRESHOLD = Number(process.env.MENI_MAX_PARAGRAPH_SIMILARITY || '60');
@@ -40,23 +54,145 @@ function normalizar(texto: string): string {
 }
 
 /**
+ * MENI 4.0 — Tokens factuales de la fuente.
+ *
+ * Hechos objetivos cuya coincidencia con el artículo es inevitable y
+ * legítima: cifras, fechas, horas, porcentajes y nombres propios
+ * (personas, lugares, instituciones). Un n-grama que contiene un token
+ * factual compartido es "coincidencia factual", no copia expresiva.
+ *
+ * La extracción usa el texto ORIGINAL (con mayúsculas) para captar
+ * nombres propios, y la forma normalizada para comparar tokens.
+ */
+export function extraerTokensFactuales(fuenteOriginal: string): Set<string> {
+  const tokens = new Set<string>();
+  const normalizada = normalizar(stripHtml(fuenteOriginal));
+  // Cifras, fechas, horas y porcentajes
+  for (const m of normalizada.matchAll(/\b\d[\d.,:%]*/g)) {
+    tokens.add(m[0]);
+  }
+  // Nombres propios: secuencias capitalizadas del texto original.
+  // Se excluye la primera palabra de cada oración (posición tras '. ').
+  const plain = stripHtml(fuenteOriginal);
+  for (const m of plain.matchAll(/[A-ZÁÉÍÓÚÑ][a-záéíóúñü]{2,}(?:\s+[A-ZÁÉÍÓÚÑ][a-záéíóúñü]{2,})*/g)) {
+    const idx = m.index ?? 0;
+    const esInicioDeOracion = idx === 0 || /[.!?]\s*$/.test(plain.slice(0, idx));
+    const palabras = m[0].split(/\s+/);
+    // La primera palabra de una oración va capitalizada aunque sea común;
+    // solo se toma como nombre propio si el match tiene ≥2 capitalizadas.
+    if (esInicioDeOracion && palabras.length === 1) continue;
+    for (const w of palabras) tokens.add(normalizar(w));
+  }
+  return tokens;
+}
+
+/** ¿Un n-grama contiene algún token factual de la fuente? */
+function ngramaEsFactual(ngrama: string, factuales: Set<string>): boolean {
+  if (factuales.size === 0) return false;
+  for (const w of ngrama.split(' ')) {
+    if (factuales.has(w)) return true;
+  }
+  return false;
+}
+
+/**
  * Similitud por n-gramas de palabras: % de n-gramas del párrafo que
  * aparecen literalmente en la fuente.
+ * Devuelve total (incluye hechos) y expresiva (solo prosa compartida).
  */
-export function similitudParrafo(parrafo: string, fuenteNormalizada: string): number {
+function medirSimilitud(
+  parrafo: string,
+  fuenteNormalizada: string,
+  factuales?: Set<string>,
+): { total: number; expresiva: number; sustancial: number } {
   const palabras = normalizar(parrafo).split(' ').filter(Boolean);
   if (palabras.length < NGRAM_SIZE) {
-    // Párrafos muy cortos: comparar completo
     const p = palabras.join(' ');
-    return p.length > 0 && fuenteNormalizada.includes(p) ? 100 : 0;
+    const found = p.length > 0 && fuenteNormalizada.includes(p);
+    if (!found) return { total: 0, expresiva: 0, sustancial: 0 };
+    const factual = factuales ? ngramaEsFactual(p, factuales) : false;
+    const expresiva = factual ? 0 : 100;
+    return { total: 100, expresiva, sustancial: expresiva };
   }
-  let coincidencias = 0;
-  const total = palabras.length - NGRAM_SIZE + 1;
-  for (let i = 0; i < total; i++) {
+  const cantidad = palabras.length - NGRAM_SIZE + 1;
+  const matched: boolean[] = [];
+  const expresivo: boolean[] = [];
+  for (let i = 0; i < cantidad; i++) {
     const ngrama = palabras.slice(i, i + NGRAM_SIZE).join(' ');
-    if (fuenteNormalizada.includes(ngrama)) coincidencias++;
+    const ok = fuenteNormalizada.includes(ngrama);
+    matched.push(ok);
+    expresivo.push(ok && (!factuales || !ngramaEsFactual(ngrama, factuales)));
   }
-  return Math.round((coincidencias / total) * 100);
+  // Copia sustancial = racha de n-gramas consecutivos coincidentes que
+  // contiene al menos un n-grama no factual. Las rachas cuentan aunque
+  // algunos de sus n-gramas sean hechos (cifras/nombres): una frase
+  // calcada que incluye una cifra sigue siendo copia. Una racha hecha
+  // SOLO de hechos (fecha+lugar+cifra) no es copia expresiva.
+  const enRachaSustancial = new Array<boolean>(cantidad).fill(false);
+  let i = 0;
+  while (i < cantidad) {
+    if (!matched[i]) { i++; continue; }
+    let j = i;
+    while (j + 1 < cantidad && matched[j + 1]) j++;
+    // Racha mínima: ≥2 n-gramas consecutivos (≥6 palabras calcadas).
+    // Un 5-grama aislado es terminología/fórmula, no copia sustancial.
+    if (j > i && expresivo.slice(i, j + 1).some(Boolean)) {
+      for (let k = i; k <= j; k++) enRachaSustancial[k] = true;
+    }
+    i = j + 1;
+  }
+  const total = matched.filter(Boolean).length;
+  const expresiva = expresivo.filter(Boolean).length;
+  return {
+    total: Math.round((total / cantidad) * 100),
+    expresiva: Math.round((expresiva / cantidad) * 100),
+    sustancial: Math.round((enRachaSustancial.filter(Boolean).length / cantidad) * 100),
+  };
+}
+
+/** API 2.1.1: porcentaje literal, sin interpretación de plagio. */
+export function similitudParrafo(parrafo: string, fuenteNormalizada: string): number {
+  return medirSimilitud(parrafo, fuenteNormalizada).total;
+}
+
+/** Marcadores de atribución de una cita textual (verborrea editorial común). */
+// Lookahead en vez de \b final: \w es ASCII en JS — `\b` tras vocal
+// acentuada (señaló, declaró) no casa nunca. (?![a-záéíóúñü]) exige
+// borde de palabra real sin romper los verbos acentuados.
+const QUOTE_ATTRIBUTION_RE =
+  /\b(seg[uú]n|declar[oó]|dijo|señal[oó]|afirm[oó]|expres[oó]|manifest[oó]|indic[oó]|precis[oó]|inform[oó]|sostuvo|sentenci[oó]|advirti[oó]|coment[oó]|agreg[oó]|asegur[oó]|comunicado|parte|autoridad|fuentes?|testimonio|declaraciones)(?![a-záéíóúñü])/i;
+
+/**
+ * Enmascara citas textuales ATRIBUIDAS: un fragmento entre comillas que el
+ * propio párrafo atribuye a una fuente es periodismo de cita, no copia.
+ * La relación debe ser lingüística: el marcador de atribución tiene que
+ * convivir con la cita en la misma oración («...», declaró X — o X dijo:
+ * «...»). Una cita sin atribución en su oración sigue contando como
+ * coincidencia, aunque haya verbos de atribución en oraciones vecinas.
+ */
+function maskCitasAtribuidas(texto: string): string {
+  return texto.replace(/["«“]([^"»”]{20,600})["»”]/g, (match, cita, offset: number) => {
+    const palabras = cita.split(/\s+/).filter(Boolean).length;
+    if (palabras < 5) return match;
+    // Oración que contiene la cita: el texto desde el último corte de
+    // oración antes de la cita hasta el próximo corte después de ella.
+    const antes = texto.slice(0, offset);
+    const despues = texto.slice(offset + match.length);
+    const inicioOracion = Math.max(
+      antes.lastIndexOf('. '), antes.lastIndexOf('! '), antes.lastIndexOf('? '),
+      antes.lastIndexOf('.\n'), antes.lastIndexOf(';\n'),
+    );
+    // La oración termina con .!? seguido de espacio, comilla de cierre o
+    // fin del párrafo («...cita." Seguido, X declaró...» son oraciones
+    // distintas aunque el punto vaya pegado a la comilla). Si la propia
+    // cita cierra con .!?, la oración termina en su comilla de cierre.
+    const corte = /[.!?](?=\s|["»”]|$)|\n/;
+    const resto = despues.match(corte);
+    const finOracion = /[.!?]\s*$/.test(cita) ? 0 : (resto?.index ?? despues.length);
+    const oracion = texto.slice(inicioOracion + 2, offset + match.length + finOracion);
+    if (!QUOTE_ATTRIBUTION_RE.test(oracion)) return match;
+    return ' CITA_ATRIBUIDA ';
+  });
 }
 
 /**
@@ -67,29 +203,54 @@ export function analyzeTranscriptionByParagraph(
   fuenteOriginal: string,
 ): TranscriptionReport {
   const fuenteNormalizada = normalizar(stripHtml(fuenteOriginal));
+  const factuales = extraerTokensFactuales(fuenteOriginal);
   const parrafosRaw = contenidoHtml
-    .split(/<\/p>/i)
+    .split(/<\/p>|\n\s*\n/i)
     .map((p) => stripHtml(p))
     .filter((p) => p.split(/\s+/).filter(Boolean).length >= 8);
 
   const parrafos: ParagraphTranscription[] = parrafosRaw.map((p, i) => {
-    const similitud = similitudParrafo(p, fuenteNormalizada);
+    const pMedido = maskCitasAtribuidas(p);
+    const { total, expresiva, sustancial } = medirSimilitud(pMedido, fuenteNormalizada, factuales);
+    // REESCRIBIR solo cuando hay copia EXPRESIVA SUSTANCIAL: rachas de
+    // prosa calcada de la fuente. Coincidencias aisladas de 5 palabras
+    // son terminología oficial/fórmulas, no plagio → nunca BLOQUEAR;
+    // coincidencia factual alta → REVISAR para que el editor confirme.
+    const veredicto: ParagraphTranscription['veredicto'] =
+      sustancial > PARAGRAPH_SIMILARITY_THRESHOLD || (total >= 90 && p.split(/\s+/).length >= 40 && sustancial > 20)
+        ? 'REESCRIBIR'
+        : total > PARAGRAPH_SIMILARITY_THRESHOLD && (expresiva > 30 || sustancial > 10)
+        ? 'REVISAR'
+        : 'OK';
     return {
       indice: i + 1,
       extracto: p.length > 120 ? `${p.slice(0, 117)}...` : p,
-      similitud,
-      veredicto: similitud > PARAGRAPH_SIMILARITY_THRESHOLD ? 'REESCRIBIR' : 'OK',
+      similitud: total,
+      similitudExpresiva: expresiva,
+      similitudSustancial: sustancial,
+      veredicto,
     };
   });
 
   const similitudes = parrafos.map((p) => p.similitud);
+  const expresivas = parrafos.map((p) => p.similitudExpresiva);
+  const sustanciales = parrafos.map((p) => p.similitudSustancial);
   return {
     parrafos,
     parrafosParaReescribir: parrafos.filter((p) => p.veredicto === 'REESCRIBIR').length,
+    parrafosParaRevisar: parrafos.filter((p) => p.veredicto === 'REVISAR').length,
     similitudPromedio: similitudes.length
       ? Math.round(similitudes.reduce((a, b) => a + b, 0) / similitudes.length)
       : 0,
     similitudMaxima: similitudes.length ? Math.max(...similitudes) : 0,
+    similitudExpresivaPromedio: expresivas.length
+      ? Math.round(expresivas.reduce((a, b) => a + b, 0) / expresivas.length)
+      : 0,
+    similitudExpresivaMaxima: expresivas.length ? Math.max(...expresivas) : 0,
+    similitudSustancialPromedio: sustanciales.length
+      ? Math.round(sustanciales.reduce((a, b) => a + b, 0) / sustanciales.length)
+      : 0,
+    similitudSustancialMaxima: sustanciales.length ? Math.max(...sustanciales) : 0,
   };
 }
 
@@ -106,14 +267,24 @@ export function detectParagraphTranscription(
 
   const report = analyzeTranscriptionByParagraph(contenidoHtml, fuenteOriginal);
   const issues: QualityGateIssue[] = report.parrafos
-    .filter((p) => p.veredicto === 'REESCRIBIR')
-    .map((p) => ({
-      categoria: 'originalidad' as const,
-      severidad: 'blocking' as const,
-      mensaje: `Párrafo ${p.indice} es ${p.similitud}% igual a la fuente (máximo ${PARAGRAPH_SIMILARITY_THRESHOLD}%). REESCRIBIR con explicación y contexto propio.`,
-      evidencia: p.extracto,
-      corregible: false,
-    }));
+    .filter((p) => p.veredicto !== 'OK')
+    .map((p) =>
+      p.veredicto === 'REESCRIBIR'
+        ? {
+            categoria: 'originalidad' as const,
+            severidad: 'warning' as const,
+            mensaje: `REVISAR similitud sustancial en el párrafo ${p.indice}: ${p.similitud}% literal, ${p.similitudExpresiva}% fuera de tokens identificados como nombres o cifras. Comparar atribución, citas y extensión con la fuente. La coincidencia no demuestra plagio ni falsedad.`,
+            evidencia: p.extracto,
+            corregible: false,
+          }
+        : {
+            categoria: 'originalidad' as const,
+            severidad: 'warning' as const,
+            mensaje: `REVISAR el párrafo ${p.indice}: coincidencia literal ${p.similitud}% y coincidencia fuera de nombres/cifras ${p.similitudExpresiva}%. Verificar si son fórmulas factuales, cita atribuida o reproducción extensa. No es una verificación de originalidad.`,
+            evidencia: p.extracto,
+            corregible: false,
+          },
+    );
 
   return { issues, report };
 }
