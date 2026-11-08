@@ -125,7 +125,8 @@ function validateCount(count: number, defaultCount: number): number {
   return count || defaultCount;
 }
 
-function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
+/** Exportada para tests de normalización de fechas (Timestamp→ISO). */
+export function mapDocToNoticia(d: QueryDocumentSnapshot): Noticia {
   const data = d.data() as FirestoreNoticiaData;
   return {
     id: d.id,

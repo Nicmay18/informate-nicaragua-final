@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { selectHomeSections, FRONT_WINDOWS_HOURS } from '@/lib/home-ranking';
+import { selectHomeSections, FRONT_WINDOWS_HOURS, articleAgeHours } from '@/lib/home-ranking';
+import { mapDocToNoticia } from '@/lib/data';
+import { Timestamp } from 'firebase-admin/firestore';
 import type { Noticia } from '@/lib/types';
+import type { QueryDocumentSnapshot } from 'firebase-admin/firestore';
 
 const NOW = new Date('2026-11-07T18:00:00Z').getTime();
 const H = 3600 * 1000;
@@ -109,11 +112,94 @@ describe('Portada — actualidad primero (casos A–H)', () => {
     expect(slugs(s.ultimas)).toContain(reciente.slug);
   });
 
+  it('concentración por categoría: 6 notas de Nacionales en 24h → «En portada» se amplía a 48h/7d', () => {
+    // 6 notas frescas TODAS en Nacionales: con tope 2/categoría solo entran
+    // 2; la sección debe ampliarse a la ventana de 48h/7d para completar
+    // con categorías distintas — sin desplazar las recientes.
+    const nacionales = Array.from({ length: 6 }, (_, i) =>
+      noticia(1 + i, { categoria: 'Nacionales', scoreMeni: 90 }));
+    const deportes48 = Array.from({ length: 3 }, (_, i) =>
+      noticia(30 + i, { categoria: 'Deportes' }));
+    const sucesos7d = Array.from({ length: 3 }, (_, i) =>
+      noticia(100 + i, { categoria: 'Sucesos' }));
+    const s = selectHomeSections([...sucesos7d, ...deportes48, ...nacionales], NOW);
+
+    expect(s.enPortada.length).toBe(5);
+    const cats = s.enPortada.map(n => n.categoria);
+    expect(new Set(cats).size).toBeGreaterThan(1);
+    for (const n of s.enPortada) {
+      const cCount = s.enPortada.filter(x => x.categoria === n.categoria).length;
+      expect(cCount).toBeLessThanOrEqual(2);
+    }
+    // Las notas de 7d solo aparecen si la diversidad lo exige; ninguna
+    // supera la ventana máxima de 7 días.
+    for (const n of s.enPortada) {
+      expect(NOW - new Date(n.fecha).getTime()).toBeLessThanOrEqual(FRONT_WINDOWS_HOURS[2] * H + 1000);
+    }
+  });
+
   it('sin duplicados por slug en «Últimas noticias»', () => {
     const base = noticia(1, { slug: 'misma-nota' });
     const dup = { ...noticia(2), slug: 'misma-nota', id: 'otro-id' };
     const s = selectHomeSections([base, dup], NOW);
     expect(slugs(s.ultimas).filter(s => s === 'misma-nota').length).toBe(1);
+  });
+
+  it('recorrido real: Timestamp de Firestore → safeDateString → mapDocToNoticia → selectHomeSections', () => {
+    // Documento como lo devuelve Firestore: publishedAt Timestamp real,
+    // fecha como string ISO legacy VIEJA y dateModified Timestamp reciente.
+    // La fecha canónica debe ser publishedAt (30 min), NO dateModified
+    // ni la fecha string antigua.
+    const publishedAt = Timestamp.fromDate(new Date(NOW - 30 * 60 * 1000));
+    const dateModified = Timestamp.fromDate(new Date(NOW - 5 * 60 * 1000));
+    const fakeDoc = {
+      id: 'doc-timestamp',
+      data: () => ({
+        slug: 'nota-timestamp',
+        titulo: 'Nota con Timestamp real',
+        resumen: 'Resumen',
+        categoria: 'Nacionales',
+        estado: 'publicado',
+        publicado: true,
+        aprobadoMeni: true,
+        publishedAt,
+        dateModified,
+        fecha: '2026-01-01T00:00:00.000Z', // string legacy de hace meses
+        vistas: 3,
+      }),
+    } as unknown as QueryDocumentSnapshot;
+
+    const n = mapDocToNoticia(fakeDoc);
+    // Canonical: publishedAt gana sobre fecha string y dateModified.
+    expect(n.fecha).toBe(publishedAt.toDate().toISOString());
+    expect(articleAgeHours(n, NOW)).toBeLessThan(1);
+
+    const s = selectHomeSections([n], NOW);
+    expect(s.hero?.slug).toBe('nota-timestamp');
+    expect(slugs(s.ultimas)).toContain('nota-timestamp');
+  });
+
+  it('recorrido real: fecha como string ISO legacy ordena junto a Timestamps', () => {
+    const tsDoc = {
+      id: 'doc-ts',
+      data: () => ({
+        slug: 'nota-ts', titulo: 'Nueva', categoria: 'Deportes',
+        estado: 'publicado', publicado: true, aprobadoMeni: true,
+        publishedAt: Timestamp.fromDate(new Date(NOW - 2 * H)),
+      }),
+    } as unknown as QueryDocumentSnapshot;
+    const strDoc = {
+      id: 'doc-str',
+      data: () => ({
+        slug: 'nota-str', titulo: 'Vieja string', categoria: 'Nacionales',
+        estado: 'publicado', publicado: true, aprobadoMeni: true,
+        fecha: '2026-11-01T12:00:00.000Z', // ~6 días atrás, solo string
+      }),
+    } as unknown as QueryDocumentSnapshot;
+    const [nueva, vieja] = [mapDocToNoticia(tsDoc), mapDocToNoticia(strDoc)];
+    const s = selectHomeSections([vieja, nueva], NOW);
+    expect(slugs(s.ultimas)).toEqual([nueva.slug, vieja.slug]);
+    expect(articleAgeHours(vieja, NOW)).toBeGreaterThan(24);
   });
 
   it('«Últimas noticias» es cronología estricta aunque haya sección editorial', () => {

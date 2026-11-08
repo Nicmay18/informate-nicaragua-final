@@ -229,7 +229,6 @@ export interface HomeSections {
  * no al titular.
  */
 export const FRONT_WINDOWS_HOURS = [24, 48, 168] as const;
-const PORTADA_MIN_CANDIDATES = 6;
 const EN_PORTADA_LIMIT = 5;
 const EN_PORTADA_CAT_CAP = 2;
 const ULTIMAS_LIMIT = 8;
@@ -275,19 +274,36 @@ export function selectHomeSections(latest: Noticia[], now: number = Date.now()):
   const heroPool = poolFor(1);
   const hero = selectDestacada(heroPool.filter(n => !isLutoNews(n))) ?? heroPool[0] ?? null;
 
-  // EN PORTADA: ventana amplia lo justo para cubrir la sección; tope de
-  // categoría para variedad sin sacrificar frescura; nunca repite el hero.
-  const portadaPool = poolFor(PORTADA_MIN_CANDIDATES);
-  const enPortada: Noticia[] = [];
-  const catCounts: Record<string, number> = {};
-  for (const n of portadaPool) {
+  // EN PORTADA: la ventana se amplía según cuántas noticias REALMENTE
+  // entran tras el tope de diversidad (2 por categoría) — no por cuántas
+  // candidatas crudas tiene la ventana. Seis notas de Nacionales en 24h no
+  // bastan para llenar la sección: se amplía a 48h/7d buscando otras
+  // categorías. Se toma la ventana más pequeña que completa la sección;
+  // si ninguna la completa, la más amplia con contenido.
+  const fillPortada = (pool: Noticia[]): Noticia[] => {
+    const out: Noticia[] = [];
+    const counts: Record<string, number> = {};
+    for (const n of pool) {
+      if (out.length >= EN_PORTADA_LIMIT) break;
+      if (hero && n.id === hero.id) continue;
+      const c = counts[n.categoria] || 0;
+      if (c >= EN_PORTADA_CAT_CAP) continue;
+      out.push(n);
+      counts[n.categoria] = c + 1;
+    }
+    return out;
+  };
+
+  let enPortada: Noticia[] = [];
+  let sawWindow = false;
+  for (const h of FRONT_WINDOWS_HOURS) {
+    const p = ranked.filter(n => age(n) <= h);
+    if (p.length === 0) continue;
+    sawWindow = true;
+    enPortada = fillPortada(p);
     if (enPortada.length >= EN_PORTADA_LIMIT) break;
-    if (hero && n.id === hero.id) continue;
-    const c = catCounts[n.categoria] || 0;
-    if (c >= EN_PORTADA_CAT_CAP) continue;
-    enPortada.push(n);
-    catCounts[n.categoria] = c + 1;
   }
+  if (!sawWindow) enPortada = fillPortada(ranked.slice(0, 50));
 
   // ÚLTIMAS NOTICIAS: flujo cronológico independiente. Orden por fecha de
   // publicación real (desc); sin filtros de popularidad ni exclusiones por
