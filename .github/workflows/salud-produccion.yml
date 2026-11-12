@@ -1,0 +1,66 @@
+name: Salud de Producción
+
+# Sondas de solo lectura contra producción (docs/OPERACION_SIN_DEVIN.md §13).
+# Un fallo en un workflow programado genera notificación por correo a quien
+# tenga "watch" en el repo — alerta gratis sin servicios externos.
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # cada 6 horas
+  workflow_dispatch:
+
+jobs:
+  sondas:
+    name: Sondas read-only
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ejecutar sondas
+        run: |
+          BASE="https://nicaraguainformate.com"
+          FAIL=0
+
+          check_status() {
+            local url="$1" esperado="$2" desc="$3"
+            local code
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 "$url")
+            if [ "$code" = "$esperado" ]; then
+              echo "OK    $desc → $code"
+            else
+              echo "FAIL  $desc → $code (esperado $esperado)"
+              FAIL=1
+            fi
+          }
+
+          # Disponibilidad básica
+          check_status "$BASE/"                 200 "portada"
+          check_status "$BASE/noticias"         200 "listado noticias"
+          check_status "$BASE/negocios"         200 "directorio negocios"
+
+          # Sitemaps: news-sitemap devuelve 503 intencional ante outage de
+          # datos — una !=200 aquí indica incidente real, no "cero noticias".
+          check_status "$BASE/sitemap.xml"      200 "sitemap general"
+          check_status "$BASE/news-sitemap.xml" 200 "sitemap Google News"
+          check_status "$BASE/robots.txt"       200 "robots.txt"
+          check_status "$BASE/ads.txt"          200 "ads.txt"
+
+          # Fuga de caché Cloudflare (P0 histórico): rutas admin deben dar 401
+          # a peticiones anónimas — un 200 aquí significa que el edge vuelve a
+          # servir una respuesta autenticada cacheada.
+          check_status "$BASE/api/admin/negocios"      401 "admin/negocios sin sesión"
+          check_status "$BASE/api/admin/auspiciadores" 401 "admin/auspiciadores sin sesión"
+          check_status "$BASE/api/admin/config"        401 "admin/config sin sesión"
+
+          # Mecanismo CF (aviso, no fallo): /api/admin/estado es público por
+          # diseño; si queda en caché edge no existe bypass para /api/admin/.
+          ESTADO_HEADERS=$(curl -s -D - -o /dev/null --max-time 30 "$BASE/api/admin/estado")
+          sleep 2
+          ESTADO_HEADERS2=$(curl -s -D - -o /dev/null --max-time 30 "$BASE/api/admin/estado")
+          if echo "$ESTADO_HEADERS2" | grep -qi "cf-cache-status: HIT"; then
+            echo "WARN  /api/admin/estado servido desde caché CF → sigue sin bypass para /api/admin/* (ver INFORME-FINAL §4.1)"
+          else
+            echo "OK    /api/admin/estado no cacheado en edge"
+          fi
+
+          if [ "$FAIL" = "1" ]; then
+            echo "::error::Una o más sondas fallaron — revisar docs/OPERACION_SIN_DEVIN.md §13"
+            exit 1
+          fi
