@@ -1,13 +1,13 @@
 {
-  "at": "2026-10-28T04:09:47.547Z",
+  "at": "2026-10-29T02:23:50.405Z",
   "counts": {
-    "pending": 315,
+    "pending": 292,
     "retry": 2,
     "running": 0,
-    "completed": 47,
+    "completed": 72,
     "dead-letter": 3
   },
-  "pendientesVencidos": 317,
+  "pendientesVencidos": 294,
   "pendientesNoVencidos": 0,
   "articlePipeline": [
     {
@@ -214,34 +214,34 @@
   "pendientesPorTipo": {
     "article-pipeline": 25,
     "monetization-check": 1,
-    "operational-repair": 9,
-    "health-check": 36,
-    "daily-report": 36,
-    "watchdog": 210
+    "daily-report": 37,
+    "watchdog": 193,
+    "operational-repair": 5,
+    "health-check": 33
   },
   "porPrioridad": {
     "P2": 26,
-    "P0": 255,
-    "P1": 36
+    "P1": 37,
+    "P0": 231
   },
   "porFuente": {
     "firestore-noticia": 25,
-    "scheduler": 73,
-    "nios-operational-loop": 9,
-    "watchdog": 210
+    "scheduler": 71,
+    "watchdog": 193,
+    "nios-operational-loop": 5
   },
   "masAntiguo": "2026-09-22T00:58:39.449Z",
-  "masNuevo": "2026-10-28T01:04:27.351Z",
+  "masNuevo": "2026-10-29T00:58:38.067Z",
   "heartbeats": [
     {
       "id": "0wlpJpS6EflgdiCuKqMT",
       "component": "cron/api/cron/departamento-daily",
       "status": "healthy",
       "note": "Cron /api/cron/departamento-daily ejecutado",
-      "lastRunAt": "2026-10-27T06:10:21.873Z",
-      "nextExpectedAt": "2026-10-28T07:10:21.873Z",
-      "durationMs": 3663,
-      "updatedAt": "2026-10-27T06:10:21.873Z"
+      "lastRunAt": "2026-10-28T06:10:22.173Z",
+      "nextExpectedAt": "2026-10-29T07:10:22.173Z",
+      "durationMs": 4044,
+      "updatedAt": "2026-10-28T06:10:22.173Z"
     },
     {
       "id": "IDzmXKfKd5UtbNYMY1OT",
@@ -257,30 +257,30 @@
       "component": "cron/api/cron/nios-collect",
       "status": "healthy",
       "note": "Cron /api/cron/nios-collect ejecutado",
-      "lastRunAt": "2026-10-27T08:49:49.281Z",
-      "nextExpectedAt": "2026-10-28T09:49:49.281Z",
-      "durationMs": 32273,
-      "updatedAt": "2026-10-27T08:49:49.281Z"
+      "lastRunAt": "2026-10-28T08:49:48.223Z",
+      "nextExpectedAt": "2026-10-29T09:49:48.223Z",
+      "durationMs": 30422,
+      "updatedAt": "2026-10-28T08:49:48.223Z"
     },
     {
       "id": "S51U4LdCGh1c93ZyfcdD",
       "component": "cron/api/cron/resumen-diario",
-      "lastRunAt": "2026-10-27T12:52:58.748Z",
-      "nextExpectedAt": "2026-10-28T13:52:58.748Z",
-      "note": "Resumen 2026-10-27 enviado (6 noticias)",
-      "durationMs": 3195,
       "status": "healthy",
-      "updatedAt": "2026-10-27T12:52:58.748Z"
+      "lastRunAt": "2026-10-28T12:52:58.682Z",
+      "nextExpectedAt": "2026-10-29T13:52:58.682Z",
+      "note": "Resumen 2026-10-28 enviado (5 noticias)",
+      "durationMs": 3324,
+      "updatedAt": "2026-10-28T12:52:58.682Z"
     },
     {
       "id": "SeqRDTFx1y5AqOXDuZJk",
       "component": "cron/api/cron/departamento-watchdog",
       "status": "healthy",
       "note": "Cron /api/cron/departamento-watchdog ejecutado",
-      "lastRunAt": "2026-10-28T01:04:29.943Z",
-      "nextExpectedAt": "2026-10-29T02:04:29.943Z",
-      "durationMs": 3482,
-      "updatedAt": "2026-10-28T01:04:29.943Z"
+      "lastRunAt": "2026-10-29T01:04:42.987Z",
+      "nextExpectedAt": "2026-10-30T02:04:42.987Z",
+      "durationMs": 13694,
+      "updatedAt": "2026-10-29T01:04:42.987Z"
     },
     {
       "id": "WXxQLRIGrZZh4ChZaean",
@@ -314,20 +314,20 @@
       "id": "jHuSZ39yxAxi8ZRJCfu5",
       "component": "health-check",
       "status": "healthy",
-      "lastRunAt": "2026-09-22T00:58:48.762Z",
-      "nextExpectedAt": "2026-09-23T01:58:48.762Z",
-      "durationMs": 388,
-      "updatedAt": "2026-09-22T00:58:48.762Z"
+      "lastRunAt": "2026-10-29T01:04:42.707Z",
+      "nextExpectedAt": "2026-10-30T02:04:42.707Z",
+      "durationMs": 471,
+      "updatedAt": "2026-10-29T01:04:42.707Z"
     },
     {
       "id": "mw5aI2qE0WiT7nYQvdTZ",
       "component": "cron/api/cron/departamento-central",
       "status": "healthy",
       "note": "Cron /api/cron/departamento-central ejecutado",
-      "lastRunAt": "2026-10-28T00:58:42.683Z",
-      "nextExpectedAt": "2026-10-29T01:58:42.683Z",
-      "durationMs": 6156,
-      "updatedAt": "2026-10-28T00:58:42.683Z"
+      "lastRunAt": "2026-10-29T00:58:57.640Z",
+      "nextExpectedAt": "2026-10-30T01:58:57.640Z",
+      "durationMs": 21116,
+      "updatedAt": "2026-10-29T00:58:57.640Z"
     },
     {
       "id": "tovZ5P6vhhJwCM2qx0ul",
@@ -341,47 +341,48 @@
       "id": "uTgFEFEpPKPvCZ8lAiPH",
       "component": "scheduler",
       "status": "healthy",
-      "jobsCompleted": 0,
       "jobsFailed": 0,
-      "lastRunAt": "2026-10-28T00:58:42.481Z",
-      "nextExpectedAt": "2026-10-29T01:58:42.481Z",
-      "note": "Enqueued 3, processed 0, workDone24h 0.",
-      "durationMs": 5893,
-      "updatedAt": "2026-10-28T00:58:42.481Z"
+      "jobsCompleted": 15,
+      "lastRunAt": "2026-10-29T00:58:57.544Z",
+      "nextExpectedAt": "2026-10-30T01:58:57.544Z",
+      "note": "Enqueued 2, processed 15, workDone24h 15.",
+      "durationMs": 20970,
+      "updatedAt": "2026-10-29T00:58:57.544Z"
     },
     {
       "id": "wDNxGxO93FD4HF5hWrcK",
       "component": "watchdog",
-      "status": "degraded",
-      "lastRunAt": "2026-10-28T01:04:29.650Z",
-      "nextExpectedAt": "2026-10-29T02:04:29.650Z",
-      "updatedAt": "2026-10-28T01:04:29.650Z"
+      "status": "healthy",
+      "lastRunAt": "2026-10-29T01:04:42.876Z",
+      "nextExpectedAt": "2026-10-30T02:04:42.876Z",
+      "updatedAt": "2026-10-29T01:04:42.876Z"
     },
     {
       "id": "z7QwwURBs6fH8j9qw1r3",
       "component": "cron/api/cron/nios-ceo-loop",
       "status": "healthy",
       "note": "Cron /api/cron/nios-ceo-loop ejecutado",
-      "lastRunAt": "2026-10-28T02:02:38.111Z",
-      "nextExpectedAt": "2026-10-29T03:02:38.111Z",
-      "durationMs": 10435,
-      "updatedAt": "2026-10-28T02:02:38.111Z"
+      "lastRunAt": "2026-10-29T02:02:37.563Z",
+      "nextExpectedAt": "2026-10-30T03:02:37.563Z",
+      "durationMs": 9871,
+      "updatedAt": "2026-10-29T02:02:37.563Z"
     },
     {
       "id": "zl8jdRNYQf74PUQgsF28",
       "component": "cron/api/cron/distribuciones-retry",
       "status": "healthy",
       "note": "Cron /api/cron/distribuciones-retry ejecutado",
-      "lastRunAt": "2026-10-27T05:51:19.742Z",
-      "nextExpectedAt": "2026-10-28T06:51:19.742Z",
-      "durationMs": 474,
-      "updatedAt": "2026-10-27T05:51:19.742Z"
+      "lastRunAt": "2026-10-28T05:51:20.486Z",
+      "nextExpectedAt": "2026-10-29T06:51:20.486Z",
+      "durationMs": 563,
+      "updatedAt": "2026-10-28T05:51:20.486Z"
     }
   ],
   "incidentes": {
-    "total": 56,
+    "total": 57,
     "porEstado": {
-      "active": 56
+      "active": 52,
+      "resolved": 5
     },
     "duplicados": []
   }
