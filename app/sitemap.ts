@@ -107,6 +107,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/categoria/tecnologia`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${baseUrl}/categoria/espectaculos`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${baseUrl}/guia`, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${baseUrl}/util`, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${baseUrl}/entidad`, changeFrequency: 'weekly', priority: 0.6 },
     { url: `${baseUrl}/nosotros`, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${baseUrl}/contacto`, changeFrequency: 'monthly', priority: 0.5 },

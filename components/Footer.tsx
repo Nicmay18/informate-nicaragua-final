@@ -88,6 +88,8 @@ export default function Footer() {
               </li>
             ))}
             <li><NoPrefetchLink href="/noticias">Todas las noticias</NoPrefetchLink></li>
+            <li><NoPrefetchLink href="/guia">Guías y recursos</NoPrefetchLink></li>
+            <li><NoPrefetchLink href="/util">Nicaragua Informate Útil</NoPrefetchLink></li>
           </ul>
         </div>
 
