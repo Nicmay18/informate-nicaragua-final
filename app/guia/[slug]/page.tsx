@@ -75,7 +75,7 @@ function buildArticleJsonLd(article: ReturnType<typeof getEvergreenBySlug>) {
       url: 'https://nicaraguainformate.com',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.png',
+        url: 'https://nicaraguainformate.com/logo.webp',
       },
     },
     datePublished: article.publishedDate,

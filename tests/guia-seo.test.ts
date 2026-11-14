@@ -1,4 +1,6 @@
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { EVERGREEN_ARTICLES, evergreenSeoTitle, getEvergreenBySlug } from '@/lib/evergreen';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 
@@ -47,5 +49,15 @@ describe('Guías — enlaces oficiales en contenido sanitizado', () => {
       const html = sanitizeArticleHtml(g.content);
       expect(html, g.slug).not.toMatch(/href="(?:javascript|data|vbscript):/i);
     }
+  });
+});
+
+describe('Guías — consistencia de imagen de marca', () => {
+  // logo.webp = WebP 512×512 real; logo.png es un JPEG de 960×960 mal
+  // nombrado. Toda referencia pública debe usar logo.webp.
+  it('la página de guía no referencia logo.png en ningún metadato', () => {
+    const src = readFileSync(join(__dirname, '..', 'app', 'guia', '[slug]', 'page.tsx'), 'utf8');
+    expect(src).not.toContain('logo.png');
+    expect(src).toContain('logo.webp');
   });
 });
