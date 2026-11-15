@@ -17,6 +17,7 @@ import { escapeJsonLd } from '@/lib/jsonld';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
 import AdSenseGlobal from '@/components/AdSenseGlobal';
+import AdSenseRouteGuard from '@/components/AdSenseRouteGuard';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -238,6 +239,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <JourneyTracker />
         </Suspense>
         <AdSenseGlobal />
+        <AdSenseRouteGuard />
         <WebVitalsReporter />
       </body>
     </html>

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { isMonetizablePath, adsAllowed, isAdsenseSafePath } from '@/lib/editorial/adsense-safety';
 import { isSensitiveArticle } from '@/lib/editorial-cleanup';
 import { hasAnalyticsConsent } from '@/lib/observability/consent';
@@ -90,25 +90,52 @@ describe('isSensitiveArticle — clasificación por contenido (gate de anuncios)
   });
 });
 
-describe('lib/adsense/loader — carga única del script', () => {
+describe('lib/adsense/loader — carga única y reintento real', () => {
   beforeEach(() => {
     document.head.innerHTML = '';
     document.body.innerHTML = '';
+    vi.resetModules();
   });
 
   it('dos llamadas no duplican el <script>', async () => {
     const { loadAdsenseScript } = await import('@/lib/adsense/loader');
-    // Reset del estado de módulo no es posible sin recargar; probamos el
-    // comportamiento observable: una sola etiqueta con id único.
     const p1 = loadAdsenseScript();
     const p2 = loadAdsenseScript();
-    expect(p1).toBe(p2); // misma promesa compartida
+    expect(p1).toBe(p2); // misma promesa compartida mientras carga
     const scripts = document.head.querySelectorAll('script#ni-adsense-script');
     expect(scripts.length).toBe(1);
     const s = scripts[0] as HTMLScriptElement;
     expect(s.src).toContain('adsbygoogle.js?client=ca-pub-4115203339551838');
     expect(s.async).toBe(true);
     expect(s.crossOrigin).toBe('anonymous');
+    // Simular carga exitosa para no dejar promesa colgada.
+    s.dispatchEvent(new Event('load'));
+    await p1;
+  });
+
+  it('tras error, una segunda llamada crea una solicitud NUEVA', async () => {
+    const { loadAdsenseScript, adsenseLoadState } = await import('@/lib/adsense/loader');
+    const p1 = loadAdsenseScript();
+    const s1 = document.head.querySelector('script#ni-adsense-script') as HTMLScriptElement;
+    expect(s1).toBeTruthy();
+    s1.dispatchEvent(new Event('error'));
+    await p1;
+    expect(adsenseLoadState()).toBe('failed');
+    // La etiqueta rota debe haberse eliminado: si quedara, la siguiente
+    // llamada resolvería como si el script hubiera cargado (bug reportado).
+    expect(document.head.querySelector('script#ni-adsense-script')).toBeNull();
+
+    const p2 = loadAdsenseScript();
+    const s2 = document.head.querySelector('script#ni-adsense-script') as HTMLScriptElement;
+    expect(s2).toBeTruthy();
+    expect(s2).not.toBe(s1);
+    expect(adsenseLoadState()).toBe('loading');
+    s2.dispatchEvent(new Event('load'));
+    await p2;
+    expect(adsenseLoadState()).toBe('loaded');
+    // Una vez cargado, llamadas extra no crean más etiquetas.
+    await loadAdsenseScript();
+    expect(document.head.querySelectorAll('script#ni-adsense-script').length).toBe(1);
   });
 });
 

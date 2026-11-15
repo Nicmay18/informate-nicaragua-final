@@ -35,6 +35,20 @@ export async function GET(request: NextRequest) {
     const { runNIOSPipeline, NIOS_CONFIG } = await import('@/lib/nios/intelligence/orchestrator');
     const result = await runNIOSPipeline(db, NIOS_CONFIG);
 
+    // Heartbeat inmediato tras el pipeline: el CEO loop y la validación de
+    // tráfico pueden empujar la función más allá de maxDuration (60s) y el
+    // heartbeat al final nunca llegaba a escribirse — la señal quedaba
+    // "stale" aunque la recolección sí se ejecutara (evidencia: snapshots
+    // diarios frescos + telemetry completa, heartbeat congelado desde el
+    // 2026-10-31). El status refleja el resultado real del pipeline.
+    await recordCronHeartbeat('/api/cron/nios-collect', {
+      status: result.success ? 'healthy' : 'degraded',
+      durationMs: Date.now() - startedAt,
+      note: result.success
+        ? `Cron /api/cron/nios-collect ejecutado (${result.articlesAnalyzed ?? '?'} artículos)`
+        : `Pipeline con errores: ${(result.errors ?? []).slice(0, 3).join('; ') || 'ver telemetry'}`,
+    });
+
     // Invalidación directa: NIOS y el panel leen el snapshot nuevo sin esperar al CEO loop.
     if (result.success) {
       try {
@@ -69,7 +83,6 @@ export async function GET(request: NextRequest) {
       logger.error('[nios-collect] traffic validation failed:', err);
     }
 
-    await recordCronHeartbeat('/api/cron/nios-collect', { durationMs: Date.now() - startedAt });
     return NextResponse.json({
       success: result.success,
       date: result.date,
@@ -111,6 +124,13 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     logger.error('[cron/nios-collect] Error:', error);
+    // Fallo total del pipeline: registrar 'down' de inmediato para que la
+    // alerta no dependa de esperar a que el heartbeat quede stale.
+    await recordCronHeartbeat('/api/cron/nios-collect', {
+      status: 'down',
+      durationMs: Date.now() - startedAt,
+      note: `Error: ${error instanceof Error ? error.message.slice(0, 140) : 'desconocido'}`,
+    });
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error desconocido' },
       { status: 500 },
