@@ -178,34 +178,31 @@ export async function runCEOLoop(db: Firestore, trigger = 'cron/nios-collect'): 
   let repairError: string | null = null;
   let status: CEOLoopRecord['status'] = 'COMPLETE';
 
-  // OBSERVE
-  let observatory: CeoObservatoryResult;
-  try {
-    observatory = await observeCeoInputs(db);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    logger.error('[ceo-loop] observeCeoInputs failed:', err);
-    observatory = {
-      inputs: [],
-      commandCenter: null,
-      snapshotDate: null,
-      articlesFused: [],
-      gsc: null,
-      ga4: null,
-      trafficArticles: 0,
-      totalViews24h: 0,
-      errors: [message],
-    };
-  }
-
-  // LEARN (memoria previa)
-  let learningPatterns: CeoLearningPattern[] = [];
-  try {
-    learningPatterns = await loadCeoLearningPatterns(db, 50);
-  } catch (err) {
-    logger.error('[ceo-loop] loadCeoLearningPatterns failed:', err);
-    learningPatterns = [];
-  }
+  // OBSERVE + LEARN en paralelo: son independientes y juntos costaban ~25s
+  // secuenciales; en paralelo el más lento (~17s) marca el piso.
+  const [observatoryResult, learningResult] = await Promise.all([
+    observeCeoInputs(db).catch((err) => {
+      const message = err instanceof Error ? err.message : String(err);
+      logger.error('[ceo-loop] observeCeoInputs failed:', err);
+      return {
+        inputs: [] as CeoObservatoryResult['inputs'],
+        commandCenter: null,
+        snapshotDate: null,
+        articlesFused: [] as CeoObservatoryResult['articlesFused'],
+        gsc: null,
+        ga4: null,
+        trafficArticles: 0,
+        totalViews24h: 0,
+        errors: [message],
+      } satisfies CeoObservatoryResult;
+    }),
+    loadCeoLearningPatterns(db, 50).catch((err) => {
+      logger.error('[ceo-loop] loadCeoLearningPatterns failed:', err);
+      return [] as CeoLearningPattern[];
+    }),
+  ]);
+  const observatory = observatoryResult;
+  const learningPatterns = learningResult;
 
   // DIAGNOSE / PLAN técnicos
   try {

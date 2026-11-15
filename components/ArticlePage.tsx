@@ -153,8 +153,9 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
   // Limpieza editorial en render: dedup de oraciones exactas + muletillas.
   // La limpieza estructural (entrada=bajada) se omite en notas sensibles,
   // salvo los artículos clase C autorizados explícitamente.
+  const sensitiveArticle = isSensitiveArticle(noticia.titulo, noticia.resumen, noticia.contenido);
   const allowStructural =
-    !isSensitiveArticle(noticia.titulo, noticia.resumen, noticia.contenido) ||
+    !sensitiveArticle ||
     CLEANUP_ALLOWED_SLUGS.has(noticia.slug);
   const cleanedHtml = editorialCleanup(enhancedHtml || noticia.resumen || '', noticia.resumen, allowStructural);
 
@@ -417,16 +418,19 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
           <KeyPoints puntosClave={keyPoints} />
         )}
 
-        {/* AdSense 300x250 — inline entre contenido superior y cuerpo */}
-        <Suspense fallback={null}>
-          <AdsenseUnit
-            slot="4492386174"
-            format="rectangle"
-            responsive={true}
-            minHeight={250}
-            style={{ margin: '24px auto', maxWidth: 336, display: 'flex', justifyContent: 'center' }}
-          />
-        </Suspense>
+        {/* AdSense 300x250 — inline entre contenido superior y cuerpo.
+            Nunca en artículos sensibles (clasificación por contenido). */}
+        {!sensitiveArticle && (
+          <Suspense fallback={null}>
+            <AdsenseUnit
+              slot="4492386174"
+              format="rectangle"
+              responsive={true}
+              minHeight={250}
+              style={{ margin: '24px auto', maxWidth: 336, display: 'flex', justifyContent: 'center' }}
+            />
+          </Suspense>
+        )}
 
         {/* Tabla de contenidos (artículos largos) */}
         {showToc && (
@@ -448,14 +452,16 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
         <div className="article-body" style={contentStyle} itemProp="articleBody" dangerouslySetInnerHTML={{ __html: sanitizeArticleHtml(injectInternalLinks(cleanedHtml, inlineLinks)) }} />
 
         {/* In-article Ad — lazy-loaded para no afectar LCP */}
-        <Suspense fallback={null}>
-          <AdsenseUnit
-            slot="2957454965"
-            format="fluid"
-            layout="in-article"
-            style={{ margin: '32px 0' }}
-          />
-        </Suspense>
+        {!sensitiveArticle && (
+          <Suspense fallback={null}>
+            <AdsenseUnit
+              slot="2957454965"
+              format="fluid"
+              layout="in-article"
+              style={{ margin: '32px 0' }}
+            />
+          </Suspense>
+        )}
 
         {/* Pull Quote — lazy-loaded */}
         <Suspense fallback={null}>
@@ -616,13 +622,15 @@ export default function ArticlePage({ noticia, related = [], sponsor = null }: A
         </div>
 
         {/* Multiplex Ad — lazy-loaded para no bloquear LCP */}
-        <Suspense fallback={null}>
-          <AdsenseUnit
-            slot="7942423751"
-            format="autorelaxed"
-            style={{ margin: '40px 0 0' }}
-          />
-        </Suspense>
+        {!sensitiveArticle && (
+          <Suspense fallback={null}>
+            <AdsenseUnit
+              slot="7942423751"
+              format="autorelaxed"
+              style={{ margin: '40px 0 0' }}
+            />
+          </Suspense>
+        )}
       </article>
     </div>
   );

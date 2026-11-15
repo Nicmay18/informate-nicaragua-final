@@ -3,6 +3,7 @@ import { getNewsBySlug, getRelatedNews } from '@/lib/data';
 import { notFound, permanentRedirect, unstable_rethrow } from 'next/navigation';
 import type { Metadata } from 'next';
 import { isRenderableArticle } from '@/lib/editorial/canonical';
+import { isSensitiveArticle } from '@/lib/editorial-cleanup';
 import {
   buildNewsArticleJsonLdEnhanced,
   buildBreadcrumbJsonLdEnhanced,
@@ -146,6 +147,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         'article:published_time': noticia.fecha,
         'article:modified_time': noticia.fechaActualizacion || noticia.fecha,
         keywords: keywords.split(',').map((k: string) => k.trim()).filter(Boolean),
+        // Artículo sensible por CONTENIDO (muerte, violencia sexual, etc.):
+        // AdSenseGlobal no carga el script ni se montan unidades manuales.
+        ...(isSensitiveArticle(noticia.titulo, noticia.resumen, noticia.contenido)
+          ? { 'adsense-block': 'true' }
+          : {}),
       },
     };
   } catch (err) {

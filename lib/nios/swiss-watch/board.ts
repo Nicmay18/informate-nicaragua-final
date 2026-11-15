@@ -44,7 +44,11 @@ import type {
 
 /** Crons declarados en `vercel.json`. Fuente unica de verdad del schedule. */
 export const DECLARED_CRONS = [
-  { path: '/api/cron/nios-collect', schedule: '0 8 * * *' },
+  // NIOS se divide en 4 etapas reanudables (límite Hobby 60s por invocación).
+  { path: '/api/cron/nios-collect?stage=collect', schedule: '0 8 * * *' },
+  { path: '/api/cron/nios-collect?stage=analyze', schedule: '30 8 * * *' },
+  { path: '/api/cron/nios-collect?stage=ceo', schedule: '0 9 * * *' },
+  { path: '/api/cron/nios-collect?stage=finalize', schedule: '30 9 * * *' },
   { path: '/api/cron/resumen-diario', schedule: '0 12 * * *' },
   { path: '/api/cron/departamento-central', schedule: '0 0 * * *' },
   { path: '/api/cron/departamento-daily', schedule: '0 6 * * *' },
@@ -286,7 +290,7 @@ export function buildBoard(input: BoardInput, now = new Date()): SwissWatchBoard
       'Crons declarados en vercel.json',
       `${DECLARED_CRONS.length} cron(s) declarados con expresiones diarias`,
       'config',
-      DECLARED_CRONS.length === 10,
+      DECLARED_CRONS.length === 13,
     ),
     ...cronSecret.evidence,
   ];

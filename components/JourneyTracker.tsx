@@ -3,12 +3,17 @@
 import { useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { getOrCreateAnonymousSession } from '@/lib/observability/session';
+import { hasAnalyticsConsent } from '@/lib/observability/consent';
 
 const SESSION_STORAGE_KEY = 'ni_session_id';
 const SCROLL_DEBOUNCE_MS = 1000;
 const ENGAGEMENT_INTERVAL_MS = 1000;
 
 function sendEvent(payload: Record<string, unknown>): void {
+  // La telemetría de journey es analítica: solo se envía si el usuario
+  // aceptó analítica en el aviso de cookies (misma regla que GA4).
+  // Sin decisión registrada no se recopila nada.
+  if (!hasAnalyticsConsent()) return;
   try {
     if (typeof navigator !== 'undefined' && 'sendBeacon' in navigator) {
       const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
@@ -59,6 +64,8 @@ export default function JourneyTracker() {
   // Page view / article view / category view / search
   useEffect(() => {
     if (!pathname) return;
+    // Sin consentimiento de analítica no se crea ni se envía telemetría.
+    if (!hasAnalyticsConsent()) return;
     const fullPath = searchParams?.toString() ? `${pathname}?${searchParams.toString()}` : pathname;
     if (lastTrackedPath.current === fullPath) return;
     lastTrackedPath.current = fullPath;

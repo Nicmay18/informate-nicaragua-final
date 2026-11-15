@@ -24,7 +24,10 @@
     }
   ],
   "crons": [
-    { "path": "/api/cron/nios-collect", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/nios-collect?stage=collect", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/nios-collect?stage=analyze", "schedule": "30 8 * * *" },
+    { "path": "/api/cron/nios-collect?stage=ceo", "schedule": "0 9 * * *" },
+    { "path": "/api/cron/nios-collect?stage=finalize", "schedule": "30 9 * * *" },
     { "path": "/api/cron/resumen-diario", "schedule": "0 12 * * *" },
     { "path": "/api/cron/departamento-central", "schedule": "0 0 * * *" },
     { "path": "/api/cron/departamento-daily", "schedule": "0 6 * * *" },

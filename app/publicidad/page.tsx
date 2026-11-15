@@ -47,6 +47,34 @@ const POLICY = [
   'Nicaragua Informate se reserva el derecho de rechazar campañas que no sean compatibles con sus políticas o con la legislación aplicable.',
 ];
 
+const INVENTORY = [
+  {
+    title: 'Perfil en el directorio comercial (/negocios)',
+    desc: 'Presencia permanente en el directorio de empresas y negocios de Nicaragua Informate, con ficha revisada, datos de contacto y reporte de interacciones. Planes disponibles: Básico (perfil revisado, contactos medibles, reporte mensual), Destacado (posición destacada en el directorio) y Premium (perfil destacado, revisión mensual y reporte de seguimiento comercial). Los precios vigentes se confirman al momento de la contratación.',
+    href: '/negocios/alta',
+    cta: 'Solicitar perfil comercial',
+  },
+  {
+    title: 'Artículos patrocinados',
+    desc: 'Contenido desarrollado en coordinación con la marca, siempre identificado de forma visible como "Contenido patrocinado". La marca puede aportar texto, imágenes y enlaces; el medio conserva la revisión editorial y el estilo de la casa.',
+  },
+  {
+    title: 'Patrocinio de secciones',
+    desc: 'Presencia de marca asociada a una sección temática del sitio (por ejemplo Nacionales, Deportes, Tecnología, Trámites o Economía) mediante formatos acordados previamente: mención, tarjeta destacada o contenido vinculado. La disponibilidad y el formato se confirman según la sección y la temporada.',
+  },
+  {
+    title: 'Campañas digitales multicanal',
+    desc: 'Combinación de presencia en el sitio web y distribución en las comunidades digitales del medio (Facebook, WhatsApp y Telegram), con programación editorial y aprobación de materiales.',
+  },
+];
+
+const MEDIA_KIT_POINTS = [
+  'Secciones cubiertas: Nacionales, Sucesos, Internacionales, Deportes, Tecnología y Espectáculos, más el centro de utilidad con guías prácticas (/util).',
+  'Formatos: perfiles comerciales en /negocios, contenido patrocinado identificado, patrocinio de secciones, banners display y campañas multicanal.',
+  'Audiencia: readership principalmente nicaragüense con presencia adicional en Estados Unidos, Costa Rica, Guatemala, España y otros países.',
+  'Métricas de tráfico, alcance y resultados de campañas: disponibles bajo solicitud, con datos verificados de Google Analytics y Search Console.',
+];
+
 export default function PublicidadPage() {
   return (
     <LegalPageShell title="Publicidad y alianzas comerciales">
@@ -91,6 +119,36 @@ export default function PublicidadPage() {
             <div style={{ color: '#64748b', fontSize: '0.92rem', lineHeight: 1.6 }}>{f.desc}</div>
           </div>
         ))}
+      </div>
+
+      <h2 style={{ fontSize: '1.3rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '1.25rem', fontWeight: 700 }}>Inventario de espacios disponibles</h2>
+      <div style={{ display: 'grid', gap: 16, marginBottom: '2rem' }}>
+        {INVENTORY.map((f) => (
+          <div key={f.title} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 10, padding: '1rem 1.25rem' }}>
+            <div style={{ color: '#0f172a', fontWeight: 700, fontSize: '1rem', marginBottom: 6 }}>{f.title}</div>
+            <div style={{ color: '#64748b', fontSize: '0.92rem', lineHeight: 1.6 }}>{f.desc}</div>
+            {'href' in f && f.href && (
+              <Link href={f.href} style={{ display: 'inline-block', marginTop: 10, color: 'var(--accent, #0369a1)', fontWeight: 600, fontSize: '0.9rem' }}>
+                {f.cta} →
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <h2 style={{ fontSize: '1.3rem', color: '#0f172a', marginTop: '2.5rem', marginBottom: '1.25rem', fontWeight: 700 }}>Media kit</h2>
+      <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: '1.25rem', marginBottom: '2rem' }}>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {MEDIA_KIT_POINTS.map((item) => (
+            <li key={item} style={{ color: '#475569', fontSize: '0.92rem', lineHeight: 1.65, display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+              <CheckCircle size={16} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
+              {item}
+            </li>
+          ))}
+        </ul>
+        <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: 14, marginBottom: 0 }}>
+          Las cifras de audiencia y resultados se comparten en una propuesta comercial personalizada tras verificar los datos en las herramientas de analítica del medio. No publicamos estimaciones sin respaldo.
+        </p>
       </div>
 
       <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 12, padding: '1.25rem', marginBottom: '2rem' }}>

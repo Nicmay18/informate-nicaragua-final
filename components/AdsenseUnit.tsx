@@ -1,39 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { loadAdsenseScript } from '@/lib/adsense/loader';
 
 declare global {
   interface Window {
     adsbygoogle: unknown[];
-    adsbygoogleLoaded?: boolean;
   }
-}
-
-let globalScriptLoaded = false;
-
-function loadAdsenseScript(): Promise<void> {
-  return new Promise((resolve) => {
-    if (globalScriptLoaded || typeof window === 'undefined') {
-      resolve();
-      return;
-    }
-    if (window.adsbygoogleLoaded) {
-      globalScriptLoaded = true;
-      resolve();
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4115203339551838';
-    script.crossOrigin = 'anonymous';
-    script.async = true;
-    script.onload = () => {
-      globalScriptLoaded = true;
-      window.adsbygoogleLoaded = true;
-      resolve();
-    };
-    script.onerror = () => resolve(); // no bloquear si falla
-    document.head.appendChild(script);
-  });
 }
 
 interface AdsenseUnitProps {
