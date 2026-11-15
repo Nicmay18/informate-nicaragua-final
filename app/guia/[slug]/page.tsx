@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getEvergreenBySlug, getAllEvergreen } from '@/lib/evergreen';
+import { getEvergreenBySlug, getAllEvergreen, evergreenSeoTitle } from '@/lib/evergreen';
 import AuthorCard from '@/components/AuthorCard';
+import AdsenseUnit from '@/components/AdsenseUnit';
 import { getCspNonce } from '@/lib/nonce';
 import { escapeJsonLd } from '@/lib/jsonld';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+
+const SITE_URL = 'https://nicaraguainformate.com';
+const OG_IMAGE = `${SITE_URL}/logo.webp`;
 
 export async function generateStaticParams() {
   const articles = getAllEvergreen();
@@ -22,23 +26,32 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
 
+  const canonical = `${SITE_URL}/guia/${slug}`;
+  const seoTitle = evergreenSeoTitle(article);
+
   return {
-    title: article.title,
+    title: { absolute: seoTitle },
     description: article.description,
     alternates: {
-      canonical: `https://nicaraguainformate.com/guia/${slug}`,
+      canonical,
     },
     openGraph: {
       title: article.title,
       description: article.description,
-      url: `https://nicaraguainformate.com/guia/${slug}`,
+      url: canonical,
       siteName: 'Nicaragua Informate',
       locale: 'es_NI',
       type: 'article',
       publishedTime: article.publishedDate,
       modifiedTime: article.updatedDate,
       section: article.category,
-      images: [{ url: 'https://nicaraguainformate.com/logo.png', width: 1200, height: 630, alt: article.title }],
+      images: [{ url: OG_IMAGE, width: 512, height: 512, alt: article.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: article.title,
+      description: article.description,
+      images: [OG_IMAGE],
     },
   };
 }
@@ -62,7 +75,7 @@ function buildArticleJsonLd(article: ReturnType<typeof getEvergreenBySlug>) {
       url: 'https://nicaraguainformate.com',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://nicaraguainformate.com/logo.png',
+        url: 'https://nicaraguainformate.com/logo.webp',
       },
     },
     datePublished: article.publishedDate,
@@ -89,6 +102,18 @@ function buildFAQJsonLd(faqs: { question: string; answer: string }[]) {
   };
 }
 
+function buildBreadcrumbJsonLd(article: { title: string; slug: string }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Guías', item: `${SITE_URL}/guia` },
+      { '@type': 'ListItem', position: 3, name: article.title, item: `${SITE_URL}/guia/${article.slug}` },
+    ],
+  };
+}
+
 export default async function EvergreenPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const article = getEvergreenBySlug(slug);
@@ -99,6 +124,13 @@ export default async function EvergreenPage({ params }: { params: Promise<{ slug
 
   const nonce = await getCspNonce();
 
+  // Guías relacionadas: misma categoría primero, luego el resto — enlazado
+  // interno real donde el lector ya está en modo "trámite/utilidad".
+  const related = getAllEvergreen()
+    .filter((g) => g.slug !== article.slug)
+    .sort((a, b) => Number(b.category === article.category) - Number(a.category === article.category))
+    .slice(0, 4);
+
   return (
     <main className="article-page" style={{ paddingTop: 40 }}>
       {/* Schema.org Article */}
@@ -106,6 +138,9 @@ export default async function EvergreenPage({ params }: { params: Promise<{ slug
       
       {/* Schema.org FAQPage */}
       <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildFAQJsonLd(article.faqs) as Record<string, unknown>) }} />
+
+      {/* Schema.org BreadcrumbList — refleja el breadcrumb visual */}
+      <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: escapeJsonLd(buildBreadcrumbJsonLd(article)) }} />
 
       {/* Breadcrumbs */}
       <nav className="ni-breadcrumbs" aria-label="Miga de pan">
@@ -157,7 +192,51 @@ export default async function EvergreenPage({ params }: { params: Promise<{ slug
           publishedDate={article.publishedDate}
           updatedDate={article.updatedDate}
         />
+
+        {/* Publicidad — una sola unidad discreta al final del contenido;
+            las guías son la superficie de mayor tráfico orgánico del sitio */}
+        <div style={{ marginTop: 40 }}>
+          <AdsenseUnit
+            slot="4492386174"
+            format="auto"
+            responsive={true}
+            minHeight={100}
+          />
+        </div>
       </div>
+
+      {/* Guías relacionadas — enlazado interno entre recursos de utilidad */}
+      {related.length > 0 && (
+        <section aria-label="Guías relacionadas" style={{ maxWidth: 900, margin: '0 auto', padding: '0 20px 48px' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--ni-navy, #0f172a)', marginBottom: 16 }}>
+            Guías relacionadas
+          </h2>
+          <div style={{ display: 'grid', gap: 12, gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+            {related.map((g) => (
+              <Link
+                key={g.slug}
+                href={`/guia/${g.slug}`}
+                style={{
+                  display: 'block',
+                  padding: '16px 18px',
+                  background: 'var(--card-bg, #fff)',
+                  borderRadius: 10,
+                  border: '1px solid var(--border, #e5e7eb)',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                }}
+              >
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#1d4ed8', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                  {g.category}
+                </span>
+                <p style={{ fontSize: '0.95rem', fontWeight: 600, margin: '6px 0 0', lineHeight: 1.4, color: 'var(--text, #0f172a)' }}>
+                  {g.title}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid var(--border)', textAlign: 'center' }}>
         <Link href="/guia" style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>

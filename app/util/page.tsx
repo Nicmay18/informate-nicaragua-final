@@ -6,6 +6,24 @@ import { getAllEvergreen } from '@/lib/evergreen';
 export const metadata: Metadata = {
   title: 'Nicaragua Informate Útil — Trámites, economía y vida diaria',
   description: 'Centro de información útil para Nicaragua: trámites, economía, vida diaria, turismo, clima y calendarios.',
+  alternates: {
+    canonical: 'https://nicaraguainformate.com/util',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'es_NI',
+    url: 'https://nicaraguainformate.com/util',
+    siteName: 'Nicaragua Informate',
+    title: 'Nicaragua Informate Útil — Trámites, economía y vida diaria',
+    description: 'Centro de información útil para Nicaragua: trámites, economía, vida diaria, turismo, clima y calendarios.',
+    images: [{ url: 'https://nicaraguainformate.com/logo.webp', width: 512, height: 512, alt: 'Nicaragua Informate' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Nicaragua Informate Útil — Trámites, economía y vida diaria',
+    description: 'Centro de información útil para Nicaragua: trámites, economía, vida diaria, turismo, clima y calendarios.',
+    images: ['https://nicaraguainformate.com/logo.webp'],
+  },
 };
 
 const SECTIONS = [

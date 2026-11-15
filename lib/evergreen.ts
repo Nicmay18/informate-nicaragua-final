@@ -1,6 +1,8 @@
 export interface EvergreenArticle {
   slug: string;
   title: string;
+  /** Título SEO absoluto (sin sufijo de marca). Si se omite, se deriva de `title`. */
+  seoTitle?: string;
   description: string;
   category: string;
   author: string;
@@ -15,6 +17,7 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
   {
     slug: 'apostillar-documentos-nicaragua-2026',
     title: 'Guía completa para apostillar documentos desde Nicaragua en 2026',
+    seoTitle: 'Cómo apostillar documentos en Nicaragua: citas 2026',
     description: 'Requisitos, pasos, costos, tiempos y dónde apostillar documentos nicaragüenses para usarlos en el extranjero. Guía actualizada 2026.',
     category: 'Trámites',
     author: 'Keyling Elieth Rivera Muñoz',
@@ -29,7 +32,7 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
       <p>Los documentos deben estar vigentes y en buen estado físico. Algunos países de destino exigen que el documento sea reciente, generalmente emitido en los últimos 3 a 6 meses. Los documentos académicos (diplomas, títulos, certificados de notas) requieren autenticación previa por instituciones como el INATEC antes de poder apostillarse; ese paso previo tiene un costo de C$ 30, pagadero en cuenta de INATEC en Banpro.</p>
       <h2>Cómo agendar la cita en línea (actualizado)</h2>
       <p>Desde abril de 2025, la Cancillería digitalizó el proceso de citas para apostillado. Los pasos son:</p>
-      <ol><li>Ingresar a <strong>https://citas.cancilleria.gob.ni</strong></li><li>Seleccionar la institución, el departamento y la sede donde se desea ser atendido</li><li>Completar el formulario con datos personales: tipo y número de documento, nombre completo, fecha de nacimiento, sexo, nacionalidad, teléfono y correo electrónico</li><li>Verificar el correo con el código enviado</li><li>Descargar o guardar el comprobante de cita (también llega por correo)</li></ol>
+      <ol><li>Ingresar a <a href="https://citas.cancilleria.gob.ni" target="_blank" rel="noopener noreferrer">citas.cancilleria.gob.ni</a></li><li>Seleccionar la institución, el departamento y la sede donde se desea ser atendido</li><li>Completar el formulario con datos personales: tipo y número de documento, nombre completo, fecha de nacimiento, sexo, nacionalidad, teléfono y correo electrónico</li><li>Verificar el correo con el código enviado</li><li>Descargar o guardar el comprobante de cita (también llega por correo)</li></ol>
       <p>Para más información se puede llamar al 2244-8008.</p>
       <h2>La demora real del trámite en 2026</h2>
       <p>Aunque el sistema virtual eliminó las filas físicas frente a la Cancillería, no resolvió el cuello de botella de fondo: la demanda de citas supera la capacidad de atención. Un reporte de Despacho 505 verificó que, hasta el 13 de mayo de 2026, la cita más próxima disponible en la plataforma era para el 5 de julio, es decir, casi dos meses de espera solo para conseguir turno. Otros usuarios han reportado esperas de hasta 4 meses.</p>
@@ -54,6 +57,7 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
   {
     slug: 'anular-recurso-policial-nicaragua-2026',
     title: 'Cómo anular el récord policial en Nicaragua: requisitos y pasos 2026',
+    seoTitle: 'Anular récord policial en Nicaragua: requisitos 2026',
     description: 'Guía paso a paso para solicitar la anulación de antecedentes penales en Nicaragua. Requisitos, documentos necesarios y tiempos de espera.',
     category: 'Trámites',
     author: 'Keyling Elieth Rivera Muñoz',
@@ -67,7 +71,7 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
       <h3>Costo</h3>
       <p>El récord de policía cuesta <strong>C$80</strong> (antes C$30). El pago se hace de forma previa en una sucursal del Banco de la Producción (Banpro) o en un agente Banpro autorizado, que es la única entidad autorizada para recibir este pago.</p>
       <h3>Opción A: solicitud en línea</h3>
-      <p>En <strong>https://tramitesenlinea.policia.gob.ni/</strong>:</p>
+      <p>En <a href="https://tramitesenlinea.policia.gob.ni/" target="_blank" rel="noopener noreferrer">tramitesenlinea.policia.gob.ni</a>:</p>
       <ol><li>Crear un usuario con nombre completo, correo electrónico y número de cédula</li><li>Crear una nueva solicitud en la pestaña "Trámites", indicando el motivo (laboral, académico, migratorio)</li><li>Elegir el trámite "Certificado de conducta" y la forma de entrega: Correos de Nicaragua, en la delegación policial, o impresión directa</li><li>Si se elige entrega a domicilio por Correos de Nicaragua: C$10 adicionales para entrega en papel, C$30 para material PVC</li><li>Procesar el pago e ingresar los datos del vaucher</li></ol>
       <h3>Opción B: kioscos tecnológicos</h3>
       <p>Existen <strong>78 kioscos tecnológicos</strong> distribuidos en todos los municipios del país, disponibles las 24 horas, todos los días de la semana:</p>
@@ -362,6 +366,7 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
   {
     slug: 'salario-minimo-nicaragua-2026',
     title: 'Salario mínimo Nicaragua 2026: tabla completa por sector y categoría',
+    seoTitle: 'Salario mínimo Nicaragua 2026: tabla por sector',
     description: 'Cuánto es el salario mínimo en Nicaragua en 2026. Tabla actualizada por sector: agropecuario, servicios, industria, comercio, construcción y hogar.',
     category: 'Economía',
     author: 'Keyling Elieth Rivera Muñoz',
@@ -694,6 +699,16 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
     ],
   }
 ];
+
+/** Título absoluto ≤60 caracteres para SERP; `seoTitle` editorial tiene
+ *  prioridad y el `title` largo se recorta en límite de palabra. */
+export function evergreenSeoTitle(article: { title: string; seoTitle?: string }): string {
+  const raw = article.seoTitle?.trim() || article.title;
+  if (raw.length <= 60) return raw;
+  const cut = raw.slice(0, 57);
+  const lastSpace = cut.lastIndexOf(' ');
+  return (lastSpace > 30 ? cut.slice(0, lastSpace) : cut).trimEnd() + '…';
+}
 
 export function getEvergreenBySlug(slug: string): EvergreenArticle | undefined {
   return EVERGREEN_ARTICLES.find((article) => article.slug === slug);
