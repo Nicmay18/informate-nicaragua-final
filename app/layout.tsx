@@ -16,6 +16,7 @@ import {
 import { escapeJsonLd } from '@/lib/jsonld';
 import CookieBanner from '@/components/CookieBanner';
 import ConsentScript from '@/components/ConsentScript';
+import AdSenseGlobal from '@/components/AdSenseGlobal';
 import TopBar from '@/components/TopBar';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -204,10 +205,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             />
           </>
         )}
-        {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit — no duplicar en head */}
+        {/* AdSense: script único vía lib/adsense/loader — AdSenseGlobal lo
+            carga en rutas públicas elegibles; AdsenseUnit lo reutiliza. */}
         {/* Critical CSS inyectado de forma segura (string controlado en build-time) */}
         <style nonce={nonce} dangerouslySetInnerHTML={{ __html: criticalCss }} />
-        {/* AdSense script se carga lazy via IntersectionObserver en AdsenseUnit */}
         <link rel="alternate" type="application/rss+xml" title="RSS Nicaragua Informate" href="https://nicaraguainformate.com/feed.xml" />
         <link rel="alternate" type="application/feed+json" title="JSON Feed Nicaragua Informate" href="https://nicaraguainformate.com/feed.json" />
         {/* JSON-LD escapado para prevenir cierre prematuro de script */}
@@ -236,6 +237,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Suspense fallback={null}>
           <JourneyTracker />
         </Suspense>
+        <AdSenseGlobal />
         <WebVitalsReporter />
       </body>
     </html>

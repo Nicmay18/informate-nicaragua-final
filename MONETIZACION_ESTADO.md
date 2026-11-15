@@ -4,6 +4,15 @@ Documento de cierre. Solo contiene información contrastada con documentación o
 de cada plataforma o con el código del repositorio. Donde no existe fuente oficial
 suficiente se marca `NO VERIFICADO`. No contiene estimaciones de RPM, CPM ni ingresos.
 
+> **Actualización de estado (reportada por el propietario):** la cuenta AdSense
+> `pub-4115203339551838` está **aprobada**, con identidad y datos fiscales
+> verificados, anuncios automáticos (Auto ads) habilitados y ~US$0,52 estimados
+> en los últimos 7 días compartidos por el propietario — por debajo del umbral
+> de pago de US$100. Sin experimentos de optimización activos. Estos datos de
+> consola **no son verificables desde el repositorio**; se registran como
+> reportados, no como medición propia. El historial de rechazos de la sección 1
+> se conserva abajo por trazabilidad.
+
 Tráfico de referencia (GA4 propiedad 525672447, consulta real del 16-oct-2026,
 últimos 30 días, usuarios con consentimiento): **6,942 usuarios / 8,017 sesiones**.
 Por el modo opt-in del consentimiento, el tráfico real es mayor que lo que mide GA4.
@@ -26,8 +35,13 @@ GSC 7 días: 18,995 impresiones / 260 clics.
 ### Integración técnica en el repo (verificada)
 
 - `public/ads.txt`: `google.com, pub-4115203339551838, DIRECT, f08c47fec0942fa` — sirve 200 en producción.
-- `components/AdsenseUnit.tsx`: unidad con carga lazy (IntersectionObserver), cliente `ca-pub-4115203339551838`, montada en `components/ArticlePage.tsx`.
+- `lib/adsense/loader.ts`: cargador singleton del script `adsbygoogle.js` — una sola descarga por página aunque lo soliciten el loader global y las unidades manuales.
+- `components/AdSenseGlobal.tsx`: carga el script en todas las superficies públicas elegibles (portada, noticias, categorías, guías, /util, directorio, etc.) para que **Auto ads** pueda servir; antes el script solo existía cuando un `AdsenseUnit` manual entraba al viewport.
+- `lib/editorial/adsense-safety.ts`: allowlist de rutas monetizables + bloqueo de rutas privadas (admin, panel, login, api, feeds, búsqueda interna) + veto por artículo sensible.
+- Sensibilidad **por contenido** (`isSensitiveArticle`, no por nombre de categoría): `generateMetadata` de `/noticias/[slug]` emite `<meta name="adsense-block">` y `ArticlePage` no monta las 3 unidades manuales.
+- `components/AdsenseUnit.tsx`: unidades manuales (3 en artículos + 1 en guías) con carga lazy (IntersectionObserver), reutilizando el loader singleton.
 - Consent Mode: `ad_storage` sigue el banner; sin consentimiento se sirven anuncios no personalizados (compatible con AdSense).
+- Telemetría propia (`JourneyTracker`): solo envía eventos si el usuario aceptó analítica en el banner de cookies (misma regla que GA4); antes se disparaba al montar sin consultar consentimiento.
 - Variable `GOOGLE_ADSENSE_CLIENT_ID` solo alimenta el diagnóstico NIOS; no afecta a servir anuncios.
 
 ### Aprobación de la cuenta: `NO VERIFICADO` desde el código

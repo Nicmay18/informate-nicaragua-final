@@ -54,9 +54,15 @@ test.describe('Homepage', () => {
 
     await page.goto('/');
 
-    // El nav principal se oculta en móvil; la navegación vive tras el botón hamburguesa
+    // El nav principal se oculta en móvil; la navegación vive tras el botón hamburguesa.
+    // Esperar a que React hidrate: sin handlers adjuntos el click se pierde
+    // silenciosamente y el menú nunca abre (flake en máquinas lentas).
     const hamburger = page.locator('.ni-hamburger');
     await expect(hamburger).toBeVisible();
+    await page.waitForFunction(() => {
+      const el = document.querySelector('.ni-hamburger');
+      return !!el && Object.keys(el).some((k) => k.startsWith('__reactProps'));
+    });
     await hamburger.click();
     await expect(page.locator('.ni-mobile-menu__nav')).toBeVisible();
   });

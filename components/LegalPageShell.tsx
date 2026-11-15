@@ -57,7 +57,7 @@ export default function LegalPageShell({ children, title }: { children: React.Re
       </header>
 
       {/* Breadcrumb */}
-      <nav aria-label="Miga de pan" style={{ maxWidth: 800, margin: '0 auto', padding: '20px 20px 0', fontSize: 13, color: '#94a3b8' }}>
+      <nav aria-label="Miga de pan" style={{ maxWidth: 800, margin: '0 auto', padding: '20px 20px 0', fontSize: 13, color: '#64748b' }}>
         <Link href="/" style={{ color: '#64748b', textDecoration: 'none' }}>Inicio</Link>
         <span style={{ margin: '0 8px', color: '#cbd5e1' }}>/</span>
         <span style={{ color: '#0f172a', fontWeight: 600 }}>{title}</span>
@@ -87,7 +87,7 @@ export default function LegalPageShell({ children, title }: { children: React.Re
               <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {col.links.map((l) => {
                   if (!l.href) {
-                    return <li key={l.label} style={{ color: '#94a3b8', fontSize: 13 }}>{l.label}</li>;
+                    return <li key={l.label} style={{ color: '#64748b', fontSize: 13 }}>{l.label}</li>;
                   }
                   const isMail = l.href.startsWith('mailto:');
                   if (isMail) {
@@ -107,7 +107,7 @@ export default function LegalPageShell({ children, title }: { children: React.Re
             </div>
           ))}
         </div>
-        <div style={{ maxWidth: 1200, margin: '32px auto 0', padding: '20px 20px 0', borderTop: '1px solid #f1f5f9', textAlign: 'center', color: '#94a3b8', fontSize: 12 }} suppressHydrationWarning>
+        <div style={{ maxWidth: 1200, margin: '32px auto 0', padding: '20px 20px 0', borderTop: '1px solid #f1f5f9', textAlign: 'center', color: '#64748b', fontSize: 12 }} suppressHydrationWarning>
           © 2025-{currentYear} Nicaragua Informate. Todos los derechos reservados.
         </div>
       </footer>
