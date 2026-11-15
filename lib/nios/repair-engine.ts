@@ -476,7 +476,13 @@ export async function runRepairEngine(state: NiosRepairEngineState): Promise<Nio
     }
 
     // Releer estado después de cada reparación para verificación real.
-    system = await collectSystemState(state);
+    // Excepción: nios-cache-refresh solo invalida tags/caché — no muta
+    // noticias ni snapshots, así que el estado relevado sería idéntico.
+    // Saltarlo ahorra ~7s por ciclo (collectSystemState carga ~1000 docs
+    // + el snapshot completo) y era el mayor costo del CEO loop.
+    if (updatedAction.id === 'nios-snapshot-inconsistent') {
+      system = await collectSystemState(state);
+    }
 
     // Regenerar acciones con el nuevo estado; mantener histórico de acciones anteriores.
     const newActions = buildActions(system.diagnostics, system);

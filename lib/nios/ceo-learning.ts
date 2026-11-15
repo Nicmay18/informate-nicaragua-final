@@ -67,20 +67,24 @@ export function extractPatternsFromCeoMemory(doc: Record<string, unknown>): CeoL
 }
 
 export async function loadCeoLearningPatterns(db: Firestore, limit = 100): Promise<CeoLearningPattern[]> {
-  // Avoid composite-index requirement: filter by kind, then sort in memory.
+  // Antes: where(kind==ceo_loop).get() descargaba TODOS los registros
+  // históricos de nios_memory (crece a diario, docs pesados) y ordenaba en
+  // memoria — ~8s por corrida. Ahora: solo los 150 docs más recientes con
+  // los 3 campos necesarios, filtro de kind en memoria.
   const snap = await db
     .collection('nios_memory')
-    .where('kind', '==', 'ceo_loop')
+    .orderBy('timestamp', 'desc')
+    .limit(150)
+    .select('kind', 'id', 'timestamp', 'learnings')
     .get();
 
   const docs = snap.docs
-    .map((d) => d.data() as Record<string, unknown>)
-    .sort((a, b) => String(b.timestamp || '').localeCompare(String(a.timestamp || '')))
+    .filter((d) => d.data().kind === 'ceo_loop')
     .slice(0, limit);
 
   const patterns: CeoLearningPattern[] = [];
   for (const d of docs) {
-    patterns.push(...extractPatternsFromCeoMemory(d));
+    patterns.push(...extractPatternsFromCeoMemory(d.data() as Record<string, unknown>));
   }
   return patterns;
 }

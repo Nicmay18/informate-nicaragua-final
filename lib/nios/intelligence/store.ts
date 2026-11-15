@@ -27,7 +27,7 @@ const ARTICLES_SUBCOLLECTION = 'articles';
 const REPORTS_SUBCOLLECTION = 'reports';
 const SNAPSHOT_VERSION = '2.1';
 
-function removeUndefined(obj: unknown): unknown {
+export function removeUndefined(obj: unknown): unknown {
   if (obj === undefined) return null;
   if (obj === null || typeof obj !== 'object') return obj;
   if (Array.isArray(obj)) return obj.map(removeUndefined);
@@ -257,6 +257,9 @@ export async function getSnapshotByDate(db: Firestore, date: string): Promise<Da
  * Verifica cuántos días de datos históricos existen.
  */
 export async function getHistoricalDataDays(db: Firestore): Promise<number> {
-  const snap = await db.collection(COLLECTION).orderBy('date', 'desc').limit(365).get();
-  return snap.size;
+  // count() evita descargar hasta 365 documentos de snapshot completos
+  // (cada uno pesa ~100KB+); antes esta lectura era el mayor costo del
+  // analyze phase (~45s) y acercaba la función al límite de 60s de Vercel.
+  const snap = await db.collection(COLLECTION).count().get();
+  return snap.data().count;
 }

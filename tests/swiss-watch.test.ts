@@ -422,8 +422,8 @@ describe('Swiss Watch — tablero global', () => {
     }
   });
 
-  it('declara los 10 crons del protocolo', () => {
-    expect(DECLARED_CRONS).toHaveLength(10);
+  it('declara los 13 crons del protocolo', () => {
+    expect(DECLARED_CRONS).toHaveLength(13);
     DECLARED_CRONS.forEach((c) => {
       expect(c.path.startsWith('/api/cron/')).toBe(true);
       expect(c.schedule.split(' ')).toHaveLength(5);
@@ -447,7 +447,8 @@ describe('Swiss Watch — tablero global', () => {
 
   it('cada cron declarado tiene un route handler real en el repositorio', () => {
     DECLARED_CRONS.forEach((cron) => {
-      const routeFile = join(process.cwd(), 'app', `${cron.path}`, 'route.ts');
+      // El path puede incluir query string (?stage=...); el handler vive en la ruta base.
+      const routeFile = join(process.cwd(), 'app', cron.path.split('?')[0], 'route.ts');
       expect(existsSync(routeFile)).toBe(true);
     });
   });

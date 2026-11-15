@@ -44,17 +44,19 @@ export interface CeoObservatoryResult {
   errors: string[];
 }
 
-async function loadBusinessCommandCenter(db: Firestore): Promise<{ cc: BusinessCommandCenter | null; noticiasCount: number; errors: string[] }> {
-  const errors: string[] = [];
+async function loadBusinessCommandCenter(
+  noticias: Awaited<ReturnType<typeof loadNoticiasFromFirestore>>,
+  errors: string[],
+): Promise<{ cc: BusinessCommandCenter | null; noticiasCount: number }> {
   try {
-    const noticias = await loadNoticiasFromFirestore(db, 500);
     const guides = getAllEvergreen();
     const cc = buildCommandCenter(noticias, guides, errors);
-    return { cc, noticiasCount: noticias.length, errors };
+    return { cc, noticiasCount: noticias.length };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     logger.error('[ceo-observatory] loadBusinessCommandCenter failed:', err);
-    return { cc: null, noticiasCount: 0, errors: [message] };
+    errors.push(message);
+    return { cc: null, noticiasCount: 0 };
   }
 }
 
@@ -62,10 +64,13 @@ export async function observeCeoInputs(db: Firestore): Promise<CeoObservatoryRes
   const inputs: CeoDecisionInput[] = [];
   const errors: string[] = [];
 
-  const [ccResult, latestSnapshot] = await Promise.all([
-    loadBusinessCommandCenter(db).catch((err) => {
-      logger.error('[ceo-observatory] loadBusinessCommandCenter:', err);
-      return { cc: null as BusinessCommandCenter | null, noticiasCount: 0, errors: [String(err)] };
+  // Una sola carga de noticias: antes se descargaban 500 docs dos veces
+  // (command center y business brain) — ~8s duplicados por corrida.
+  const [noticiasResult, latestSnapshot] = await Promise.all([
+    loadNoticiasFromFirestore(db, 500).catch((err) => {
+      logger.error('[ceo-observatory] loadNoticiasFromFirestore:', err);
+      errors.push(String(err));
+      return [] as Awaited<ReturnType<typeof loadNoticiasFromFirestore>>;
     }),
     getLatestSnapshot(db).catch((err) => {
       logger.error('[ceo-observatory] getLatestSnapshot:', err);
@@ -73,13 +78,13 @@ export async function observeCeoInputs(db: Firestore): Promise<CeoObservatoryRes
     }),
   ]);
 
+  const ccResult = await loadBusinessCommandCenter(noticiasResult, errors);
   const { cc } = ccResult;
-  if (ccResult.errors.length) errors.push(...ccResult.errors);
 
   let businessBrain = null;
   if (cc) {
     try {
-      const n = (await loadNoticiasFromFirestore(db, 500)).filter((x) => isPublishedArticle(x));
+      const n = noticiasResult.filter((x) => isPublishedArticle(x));
       const g = getAllEvergreen();
       businessBrain = runBusinessBrain(n, g);
     } catch (err) {
