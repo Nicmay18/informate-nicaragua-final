@@ -7,6 +7,7 @@ import {
   yaDistribuido, type Noticia, type ChannelResult,
 } from '@/lib/distribution/channels';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
+import { normalizeTelegramSlug } from '@/lib/distribution/telegram';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -97,7 +98,7 @@ export async function GET(request: NextRequest) {
         // duplicaría. Requiere verificación humana vía /api/telegram resolve.
         if (canal === 'telegram') {
           try {
-            const claimSnap = await db.collection('distribuciones_envios').doc(`telegram_${p.slug}`).get();
+            const claimSnap = await db.collection('distribuciones_envios').doc(`telegram_${normalizeTelegramSlug(p.slug)}`).get();
             const claim = claimSnap.data();
             const claimStatus = claim?.status;
             const claimedAt = Date.parse(String(claim?.claimedAt || ''));

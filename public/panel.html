@@ -4589,48 +4589,12 @@ SUCESOS - ESTRUCTURA OBLIGATORIA (mínimo 4 bloques H2):
           progressBar.style.width = '100%';
         }
 
-        // ─── DISTRIBUCIÓN UNIFICADA (un solo envío por canal) ───
-        // Solo distribuir si la noticia está publicada
-        // En edición: también distribuir si pasó de borrador → publicado o si se marcó "Enviar a Telegram"
-        if (publicado && slug && (esNueva || pasoAPublicado || enviarTelegram)) {
-          const canalesDistribuir = [];
-          if (enviarTelegram || pasoAPublicado) canalesDistribuir.push('telegram');
-          canalesDistribuir.push('indexnow', 'push');
-          try {
-            document.getElementById('statusRedesTitulo').textContent = 'Distribuyendo...';
-            document.getElementById('statusRedesTexto').textContent = 'Enviando a canales...';
-            progressBar.style.width = '60%';
-            const adminToken = sessionStorage.getItem('admin_api_key') || '';
-            const distRes = await fetch('/api/admin/distribuir', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'x-admin-token': adminToken },
-              body: JSON.stringify({ slug, canales: canalesDistribuir })
-            });
-            const distData = await distRes.json().catch(() => ({}));
-            if (distData.success) {
-              const enviadosAhora = Object.entries(distData.resultados || {})
-                .filter(([, v]) => v && v.ok && !v.skipped)
-                .map(([k]) => k);
-              const yaEnviados = Object.entries(distData.resultados || {})
-                .filter(([, v]) => v && v.skipped)
-                .map(([k]) => k);
-              const failCanales = Object.entries(distData.resultados || {})
-                .filter(([, v]) => v && !v.ok && !v.skipped)
-                .map(([k, v]) => `${k}: ${(v && v.error) || 'Error'}`);
-              if (enviadosAhora.length) {
-                showToast('🚀 Distribuido a: ' + enviadosAhora.join(', '), 'success');
-                const tgStatusEl = document.getElementById('telegramStatus');
-                if (tgStatusEl && enviadosAhora.includes('telegram')) tgStatusEl.textContent = '✅ Enviado a Telegram';
-              }
-              if (yaEnviados.length) {
-                showToast('⏭️ Ya estaba distribuido en: ' + yaEnviados.join(', '), 'info');
-              }
-              if (failCanales.length) showToast('⚠️ Falló en: ' + failCanales.join('; '), 'warning');
-            }
-          } catch (e) {
-            console.warn('Distribución falló:', e);
-          }
-        }
+        // La distribución (Telegram/IndexNow/Push/Facebook) la ejecuta
+        // runPublicationPipeline dentro de /api/admin/guardar-directo.
+        // Antes el panel llamaba además a /api/admin/distribuir ~1s después,
+        // generando una segunda corrida por nota (raíz de los envíos
+        // duplicados históricos). Esa llamada se eliminó: el claim atómico
+        // en distribuciones_envios es la barrera, y esta ruta era redundante.
         limpiarFormulario();
         
         // Revalidar en Vercel para que los cambios se vean al instante (noticia nueva Y editada)
