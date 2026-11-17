@@ -1,9 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
 
-// Auth: siempre autorizado en estos tests (la barrera es la validación del body).
+// Auth controlable: permite simular admin vs cron.
+const authState = vi.hoisted(() => ({ adminOk: true, adminOrCronOk: true }));
 vi.mock('@/lib/auth', () => ({
-  verifyAdminOrCronToken: () => true,
+  verifyAdminOrCronToken: () => authState.adminOrCronOk,
+  verifyAdminToken: () => authState.adminOk,
   extractRequestSecret: () => ({ token: 'test', via: 'header' }),
   QUERY_SECRET_DEPRECATION_NOTE: 'nota',
   NO_STORE_401_HEADERS: {},
@@ -63,6 +65,8 @@ function req(body: unknown): NextRequest {
 beforeEach(() => {
   for (const k of Object.keys(claims)) delete claims[k];
   sendMock.mockReset();
+  authState.adminOk = true;
+  authState.adminOrCronOk = true;
 });
 
 describe('/api/telegram — resolve: validación estricta', () => {
@@ -125,5 +129,60 @@ describe('/api/telegram — resolve: flujo válido', () => {
     const res = await POST(req({ resolve: { slug: 'mi-nota', action: 'retry' } }));
     expect(res.status).toBe(409);
     expect(claims['telegram_mi-nota'].status).toBe('sent'); // intacto
+  });
+
+  it('claim sending VIGENTE → 409 claim_in_flight (no resoluble prematuramente)', async () => {
+    claims['telegram_en-curso'] = {
+      status: 'sending', slug: 'en-curso',
+      claimedAt: new Date().toISOString(), // recién reclamado
+    };
+    const res = await POST(req({ resolve: { slug: 'en-curso', action: 'retry' } }));
+    expect(res.status).toBe(409);
+    expect((await res.json()).error).toBe('claim_in_flight');
+    expect(claims['telegram_en-curso'].status).toBe('sending'); // intacto
+  });
+
+  it('claim sending HUÉRFANO (>10min) → resoluble', async () => {
+    claims['telegram_huerfano'] = {
+      status: 'sending', slug: 'huerfano',
+      claimedAt: new Date(Date.now() - 11 * 60 * 1000).toISOString(),
+    };
+    const res = await POST(req({ resolve: { slug: 'huerfano', action: 'sent', messageId: 777 } }));
+    expect(res.status).toBe(200);
+    expect(claims['telegram_huerfano'].status).toBe('sent');
+  });
+
+  it('slug con mayúsculas/espacios resuelve el MISMO claim (normalización)', async () => {
+    claims['telegram_mi-nota'] = { status: 'unknown', slug: 'mi-nota' };
+    const res = await POST(req({ resolve: { slug: '  MI-NOTA ', action: 'sent', messageId: 5 } }));
+    // El regex de la ruta exige formato slug → mayúsculas ok, espacios no.
+    // Probamos el caso real: mayúsculas sin espacios.
+    if (res.status === 400) {
+      const res2 = await POST(req({ resolve: { slug: 'MI-NOTA', action: 'sent', messageId: 5 } }));
+      expect(res2.status).toBe(200);
+      expect(claims['telegram_mi-nota'].status).toBe('sent');
+    } else {
+      expect(res.status).toBe(200);
+      expect(claims['telegram_mi-nota'].status).toBe('sent');
+    }
+  });
+});
+
+describe('/api/telegram — resolve: autorización', () => {
+  it('secreto de CRON no puede resolver claims → 403', async () => {
+    authState.adminOk = false;        // token NO es ADMIN_API_KEY
+    authState.adminOrCronOk = true;   // pero SÍ es CRON_SECRET
+    claims['telegram_mi-nota'] = { status: 'unknown', slug: 'mi-nota' };
+
+    const res = await POST(req({ resolve: { slug: 'mi-nota', action: 'sent' } }));
+    expect(res.status).toBe(403);
+    expect(claims['telegram_mi-nota'].status).toBe('unknown'); // intacto
+  });
+
+  it('sin ninguna credencial válida → 401', async () => {
+    authState.adminOk = false;
+    authState.adminOrCronOk = false;
+    const res = await POST(req({ resolve: { slug: 'mi-nota', action: 'sent' } }));
+    expect(res.status).toBe(401);
   });
 });

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
-import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
+import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken, verifyAdminToken } from '@/lib/auth';
 import { logger } from '@/lib/logger';
 import { sendTelegramArticle, resolveTelegramClaim } from '@/lib/distribution/telegram';
 
@@ -21,6 +21,11 @@ export async function POST(request: NextRequest) {
     // body: { resolve: { slug, action: 'sent'|'retry', messageId?, note? } }
     // Validación estricta: nada se coerciona — entrada inválida = 400.
     if (body?.resolve !== undefined) {
+      // Resolución de claims ambiguos = decisión humana de administrador.
+      // El secreto de cron NO autoriza esta acción: solo ADMIN_API_KEY.
+      if (!verifyAdminToken(token)) {
+        return NextResponse.json({ error: 'Resolución requiere credencial de administrador' }, { status: 403, headers: NO_STORE_401_HEADERS });
+      }
       const r = body.resolve;
       const bad = (msg: string) => NextResponse.json({ error: msg }, { status: 400 });
       if (!r || typeof r !== 'object') return bad('resolve inválido');

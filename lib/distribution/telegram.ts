@@ -228,6 +228,21 @@ const CLAIMS = 'distribuciones_envios';
 
 type ClaimState = 'available' | 'already_sent' | 'busy' | 'unknown' | 'claimed';
 
+/**
+ * Normalización canónica del slug para la clave de idempotencia.
+ * TODAS las vías (pipeline, manual, cron, /api/telegram, resolve) deben
+ * producir la misma clave: trim + lowercase. Sin esto, 'Mi-Nota' y
+ * 'mi-nota' crearían claims distintos y el mismo artículo podría
+ * distribuirse dos veces.
+ */
+export function normalizeTelegramSlug(slug: string): string {
+  return String(slug || '').trim().toLowerCase();
+}
+
+function claimDocId(slug: string): string {
+  return `telegram_${normalizeTelegramSlug(slug)}`;
+}
+
 /** Firestore rechaza `undefined` en cualquier nivel — sanear antes de escribir. */
 function stripUndefined<T>(value: T): T {
   if (Array.isArray(value)) return value.map(stripUndefined) as T;
@@ -251,11 +266,12 @@ async function claimSend(
   slug: string,
   forceRetry: boolean,
 ): Promise<{ state: ClaimState; ref?: FirebaseFirestore.DocumentReference }> {
-  if (!db || !slug) return { state: 'available' };
-  const ref = db.collection(CLAIMS).doc(`telegram_${slug}`);
+  const normSlug = normalizeTelegramSlug(slug);
+  if (!db || !normSlug) return { state: 'available' };
+  const ref = db.collection(CLAIMS).doc(claimDocId(normSlug));
   try {
     await ref.create({
-      slug,
+      slug: normSlug,
       channel: 'telegram',
       status: 'sending',
       attempts: 1,
@@ -347,7 +363,9 @@ export async function resolveTelegramClaim(
   slug: string,
   resolution: { action: 'sent' | 'retry'; messageId?: number; note?: string },
 ): Promise<{ ok: boolean; status?: string; error?: string }> {
-  const ref = db.collection(CLAIMS).doc(`telegram_${slug}`);
+  const normSlug = normalizeTelegramSlug(slug);
+  if (!normSlug) return { ok: false, error: 'invalid_slug' };
+  const ref = db.collection(CLAIMS).doc(claimDocId(normSlug));
   const action = resolution.action === 'sent' ? 'sent' : resolution.action === 'retry' ? 'retry' : null;
   if (!action) return { ok: false, error: 'invalid_action' };
   if (action === 'sent' && resolution.messageId !== undefined && !Number.isInteger(resolution.messageId)) {
@@ -364,6 +382,12 @@ export async function resolveTelegramClaim(
     const status = String(snap.data()?.status || '');
     if (!['sending', 'unknown', 'failed'].includes(status)) {
       return { ok: false, error: `claim_not_resolvable:${status}` };
+    }
+    // Un 'sending' vigente puede estar enviando en este momento: resolverlo
+    // a 'sent'/'failed' corrompería la garantía de envío único. Solo es
+    // resoluble cuando supera CLAIM_STALE_MS (envío interrumpido → huérfano).
+    if (status === 'sending' && claimAgeMs(snap.data() || {}) <= CLAIM_STALE_MS) {
+      return { ok: false, error: 'claim_in_flight' };
     }
     const resolvedAt = new Date().toISOString();
     const note = typeof resolution.note === 'string' ? resolution.note.slice(0, 500) : undefined;
@@ -479,7 +503,7 @@ export async function sendTelegramArticle(
   options?: { db?: Firestore; forceRetry?: boolean },
 ): Promise<TelegramSendResult> {
   const sentAt = new Date().toISOString();
-  const base: Omit<TelegramSendResult, 'ok'> = { channel: 'telegram', retryable: false, sentAt, distributionId: input.slug ? `telegram_${input.slug}` : undefined };
+  const base: Omit<TelegramSendResult, 'ok'> = { channel: 'telegram', retryable: false, sentAt, distributionId: input.slug ? `telegram_${normalizeTelegramSlug(input.slug)}` : undefined };
 
   if (!input.slug || !input.titulo) {
     return { ...base, ok: false, error: 'Faltan slug o título', errorCode: 'VALIDATION' };

@@ -262,6 +262,26 @@ describe('Telegram — envío: timeout, errores, retry, idempotencia', () => {
     expect(enviados).toBe(1); // exactamente un envío real
   });
 
+  it('normalización: slugs con distinto case/espacios comparten el mismo claim', async () => {
+    const db = makeDb();
+    const r1 = await sendTelegramArticle({ ...ART, slug: 'Mi-Nota-Prueba' }, { db });
+    expect(r1.ok).toBe(true);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    // Segunda vía con slug distinto en case → MISMO claim → skipped
+    const r2 = await sendTelegramArticle({ ...ART, slug: '  mi-nota-prueba ' }, { db });
+    expect(r2.skipped).toBe(true);
+    expect(r2.reason).toBe('already_sent');
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    // Y resolveTelegramClaim con case distinto resuelve el mismo doc
+    await sendTelegramArticle({ ...ART, slug: 'OTRA-Nota' }, { db });
+    fetchSpy.mockImplementationOnce(async () => { const e: any = new Error('timed out'); e.name = 'TimeoutError'; throw e; });
+    // forzar unknown directamente en store para probar resolve
+    db._store['telegram_otra-nota'].status = 'unknown';
+    const res = await resolveTelegramClaim(db, 'OTRA-NOTA', { action: 'sent', messageId: 42 });
+    expect(res.ok).toBe(true);
+    expect(db._store['telegram_otra-nota'].status).toBe('sent');
+  });
+
   it('retry forzado tras fallo definitivo funciona (forceRetry)', async () => {
     const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'failed', slug: ART.slug, channel: 'telegram' } });
     const r = await sendTelegramArticle(ART, { db, forceRetry: true });
