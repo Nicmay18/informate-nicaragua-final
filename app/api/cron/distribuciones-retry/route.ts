@@ -25,6 +25,15 @@ export const maxDuration = 60;
 const MAX_REINTENTOS = 1;
 const LEGACY_DAYS = 7;
 const BATCH = 20;
+// Estados terminales: nunca se reprocesan. Sin este filtro, un doc ya
+// resuelto volvía a entrar en la query (proximoIntento no se actualizaba)
+// y 'requiere_verificacion'/'procesado' se sobrescribían a
+// 'fallo_definitivo' en el siguiente tick — se perdía la señal humana.
+const TERMINAL_STATES = new Set([
+  'legacy', 'fallo_definitivo', 'requiere_verificacion',
+  'procesado', 'procesado_con_fallos', 'noticia_no_existe',
+]);
+const TERMINAL_RETRY_AT = '9999-12-31T00:00:00.000Z';
 
 const SENDERS: Record<string, (n: Noticia, db: ReturnType<typeof getAdminDb>) => Promise<ChannelResult>> = {
   // Telegram usa el claim atómico del sender; forceRetry solo permite
@@ -64,24 +73,30 @@ export async function GET(request: NextRequest) {
       const p = docSnap.data();
       const reintentos = typeof p.reintentos === 'number' ? p.reintentos : 0;
 
+      // Estado terminal → fuera de la ventana de la query, sin reprocesar.
+      if (TERMINAL_STATES.has(String(p.estado || ''))) {
+        await docSnap.ref.update({ proximoIntento: TERMINAL_RETRY_AT });
+        continue;
+      }
+
       // Históricos: clasificar LEGACY y sacarlos del retry automático.
       if (!p.fecha || p.fecha < legacyCutoff || p.estado === 'legacy') {
         if (p.estado !== 'legacy') {
-          await docSnap.ref.update({ estado: 'legacy' });
+          await docSnap.ref.update({ estado: 'legacy', proximoIntento: TERMINAL_RETRY_AT });
         }
         resultados.push({ slug: p.slug, estado: 'legacy' });
         continue;
       }
 
       if (reintentos >= MAX_REINTENTOS) {
-        await docSnap.ref.update({ estado: 'fallo_definitivo', resueltoAt: ahora.toISOString() });
+        await docSnap.ref.update({ estado: 'fallo_definitivo', proximoIntento: TERMINAL_RETRY_AT, resueltoAt: ahora.toISOString() });
         resultados.push({ slug: p.slug, estado: 'fallo_definitivo' });
         continue;
       }
 
       const noticiaSnap = await db.collection('noticias').where('slug', '==', p.slug).limit(1).get();
       if (noticiaSnap.empty) {
-        await docSnap.ref.update({ estado: 'fallo_definitivo', motivo: 'noticia_no_existe', resueltoAt: ahora.toISOString() });
+        await docSnap.ref.update({ estado: 'fallo_definitivo', motivo: 'noticia_no_existe', proximoIntento: TERMINAL_RETRY_AT, resueltoAt: ahora.toISOString() });
         resultados.push({ slug: p.slug, estado: 'noticia_no_existe' });
         continue;
       }
@@ -145,6 +160,7 @@ export async function GET(request: NextRequest) {
         estado,
         ultimoIntento: detalle,
         resueltoAt: ahora.toISOString(),
+        proximoIntento: TERMINAL_RETRY_AT,
       });
       resultados.push({ slug: p.slug, estado, detalle });
     }
