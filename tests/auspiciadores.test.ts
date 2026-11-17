@@ -93,6 +93,22 @@ describe('estadoAuspiciador — vigencia', () => {
   it('el día de vencimiento cubre el día completo (fecha corta)', () => {
     expect(estadoAuspiciador(base({ fechaVencimiento: '2026-10-15' }), NOW)).toBe('activo');
   });
+
+  it('TZ Managua: sigue activo a las 18:00 local del día de vencimiento', () => {
+    // 2026-10-16T00:30Z = 2026-10-15 18:30 en Managua (UTC-6).
+    // Con 'Z' el vencimiento caía a las 17:59:59 local → esto era 'vencido'.
+    const tarde = new Date('2026-10-16T00:30:00Z');
+    expect(estadoAuspiciador(base({ fechaVencimiento: '2026-10-15' }), tarde)).toBe('activo');
+  });
+
+  it('TZ Managua: vence al terminar el día local, no antes', () => {
+    // 2026-10-16T06:00:00Z = 2026-10-16 00:00 Managua → ya es otro día.
+    const despues = new Date('2026-10-16T06:00:00Z');
+    expect(estadoAuspiciador(base({ fechaVencimiento: '2026-10-15' }), despues)).toBe('vencido');
+    // Y el inicio también es medianoche local: 05:59Z del día de inicio aún es 'programado'.
+    const antesDelInicio = new Date('2026-10-01T05:59:00Z'); // 2026-09-30 23:59 Managua
+    expect(estadoAuspiciador(base({ fechaInicio: '2026-10-01', fechaVencimiento: '2026-12-31' }), antesDelInicio)).toBe('programado');
+  });
 });
 
 describe('seleccionarAuspiciador — rotación y posición', () => {

@@ -363,6 +363,15 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         { actor: 'admin/news DELETE', reason: 'Soft-delete de nota publicada' },
       );
 
+      // Cancelar reintentos pendientes: una nota archivada no debe volver
+      // a salir por la cola distribuciones_pendientes ni por reintentos.
+      if (slugBefore) {
+        try {
+          const { cancelarPendienteDistribucion } = await import('@/lib/distribution/channels');
+          await cancelarPendienteDistribucion(db, slugBefore, 'noticia_soft_delete');
+        } catch (e) { logger.warn('[admin/news DELETE] cancelar pendiente falló:', e); }
+      }
+
       // Registrar en auditoria de eliminaciones
       try {
         await db.collection('deletion_audit').add({
@@ -410,6 +419,14 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     await ref.delete();
     const after = await ref.get();
     const existsAfter = after.exists;
+
+    // Cancelar reintentos pendientes del slug eliminado.
+    if (slugBefore) {
+      try {
+        const { cancelarPendienteDistribucion } = await import('@/lib/distribution/channels');
+        await cancelarPendienteDistribucion(db, slugBefore, 'noticia_hard_delete');
+      } catch (e) { logger.warn('[admin/news DELETE] cancelar pendiente falló:', e); }
+    }
 
     try {
       await db.collection('deletion_audit').add({

@@ -48,6 +48,7 @@ function makeCollection(name: string) {
     },
     get: async () => ({ docs: [...col.values()].map(d => ({ id: d.id, data: () => d.data })) }),
     doc: (id: string) => ({
+      id,
       get: async () => ({ exists: col.has(id), data: () => col.get(id)?.data }),
       update: async (payload: Record<string, unknown>) => applySet(col.get(id)!.data, payload),
       set: async (payload: Record<string, unknown>, opts?: { merge?: boolean }) => {
@@ -55,8 +56,23 @@ function makeCollection(name: string) {
         applySet(d.data, payload);
         col.set(id, d);
       },
+      // create() atómico como Firestore real: falla si el doc existe.
+      create: async (payload: Record<string, unknown>) => {
+        if (col.has(id)) { const e: any = new Error('6 ALREADY_EXISTS'); e.code = 6; throw e; }
+        col.set(id, { id, data: { ...payload } });
+      },
     }),
-    where: () => ({ limit: () => ({ get: async () => ({ docs: [], empty: true }) }), get: async () => ({ docs: [] }) }),
+    where: (field: string, op: string, value: unknown) => ({
+      limit: (n: number) => ({
+        get: async () => ({
+          docs: [...col.values()]
+            .filter(d => op === '==' && d.data[field] === value)
+            .slice(0, n)
+            .map(d => ({ id: d.id, data: () => d.data })),
+        }),
+      }),
+      get: async () => ({ docs: [] }),
+    }),
   };
 }
 
@@ -131,6 +147,23 @@ describe('API admin auspiciadores — autorización y creación', () => {
   it('rechaza vencimiento anterior al inicio (400)', async () => {
     const res = await createPOST(req('/api/admin/auspiciadores', { ...VALID, fechaVencimiento: '2026-10-01' }));
     expect(res.status).toBe(400);
+  });
+
+  it('rechaza duplicado mismo nombre+URL (409) sin crear segundo doc', async () => {
+    await createSponsor();
+    const res = await createPOST(req('/api/admin/auspiciadores', VALID));
+    expect(res.status).toBe(409);
+    expect(store['auspiciadores'].size).toBe(1);
+  });
+
+  it('dos altas simultáneas del mismo auspiciador → solo una crea (create atómico)', async () => {
+    const [r1, r2] = await Promise.all([
+      createPOST(req('/api/admin/auspiciadores', VALID)),
+      createPOST(req('/api/admin/auspiciadores', VALID)),
+    ]);
+    const statuses = [r1.status, r2.status].sort();
+    expect(statuses).toEqual([201, 409]);
+    expect(store['auspiciadores'].size).toBe(1); // métricas nunca partidas
   });
 });
 

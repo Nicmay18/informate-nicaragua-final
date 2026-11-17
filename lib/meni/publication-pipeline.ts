@@ -231,12 +231,20 @@ export async function runPublicationPipeline(input: PipelineInput): Promise<Pipe
   } catch { /* non-blocking */ }
 
   // 3. Registrar distribución en Firestore
+  // (sin campos undefined: Firestore los rechaza y el catch los ocultaba)
+  const cleanChannel = (r: Record<string, unknown> | undefined) =>
+    r ? Object.fromEntries(Object.entries(r).filter(([, v]) => v !== undefined)) : r;
   try {
     await db.collection('distribuciones').add({
       slug: input.slug,
       titulo: input.titulo,
       canales: ['telegram', 'facebook', 'indexnow', 'push'],
-      resultados: { telegram, facebook, indexnow: indexNow, push },
+      resultados: {
+        telegram: cleanChannel(telegram as Record<string, unknown>),
+        facebook: cleanChannel(facebook as Record<string, unknown>),
+        indexnow: cleanChannel(indexNow as Record<string, unknown>),
+        push: cleanChannel(push as Record<string, unknown>),
+      },
       socialCopy: socialCopy.source !== 'none',
       fecha: new Date().toISOString(),
     });

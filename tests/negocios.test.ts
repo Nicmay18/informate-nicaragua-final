@@ -133,7 +133,10 @@ describe('negocios — publicación', () => {
   it('vigencia: fecha-corta cubre el día completo', () => {
     const n = { estado: 'aprobado' as const, vigenteHasta: '2026-10-21' };
     expect(isNegocioPublicable(n, new Date('2026-10-21T12:00:00Z'))).toBe(true);
-    expect(isNegocioPublicable(n, new Date('2026-10-22T00:00:01Z'))).toBe(false);
+    // 2026-10-22T00:00:01Z = 2026-10-21 18:00 Managua → aún el día 21.
+    expect(isNegocioPublicable(n, new Date('2026-10-22T00:00:01Z'))).toBe(true);
+    // 2026-10-22T06:00:01Z = medianoche Managua del 22 → vencido.
+    expect(isNegocioPublicable(n, new Date('2026-10-22T06:00:01Z'))).toBe(false);
   });
 
   it('vista pública no expone notas internas', () => {
@@ -181,7 +184,8 @@ describe('negocios — vencimiento de campaña', () => {
     const c = { estadoPago: 'pagado', pagoConfirmado: true, referenciaPago: 'PRUEBA',
       verificadoAt: '2026-10-01', fechaInicio: '2026-10-01', fechaVencimiento: '2026-10-31' };
     expect(campanaVigente(c, new Date('2026-10-31T23:59:59Z'))).toBe(true);
-    expect(campanaVigente(c, new Date('2026-11-01T00:00:00Z'))).toBe(false);
+    // 2026-11-01T06:00Z = medianoche del 1 en Managua → fuera de vigencia.
+    expect(campanaVigente(c, new Date('2026-11-01T06:00:00Z'))).toBe(false);
     expect(campanaVigente(c, new Date('2026-09-30T23:59:59Z'))).toBe(false);
     expect(campanaVigente({ ...c, verificadoAt: null }, new Date('2026-10-10'))).toBe(false);
   });
@@ -189,14 +193,19 @@ describe('negocios — vencimiento de campaña', () => {
   it('piloto activa patrocinio solo dentro de fechas; nunca exige pago', () => {
     const p = { estadoPago: 'piloto', fechaInicio: '2026-10-01', fechaVencimiento: '2026-11-15' };
     expect(campanaVigente(p, new Date('2026-10-15'))).toBe(true);
-    expect(campanaVigente(p, new Date('2026-11-16'))).toBe(false);
+    // 2026-11-16T06:00Z = medianoche del 16 en Managua → fuera de vigencia.
+    expect(campanaVigente(p, new Date('2026-11-16T06:00:00Z'))).toBe(false);
+    // 2026-11-15T23:00Z = 17:00 Managua del 15 → último día, aún vigente.
+    expect(campanaVigente(p, new Date('2026-11-15T23:00:00Z'))).toBe(true);
     expect(campanaVigente({ ...p, estadoPago: 'pendiente' }, new Date('2026-10-15'))).toBe(false);
   });
 
-  it('isNegocioVigente: sin fecha siempre vigente; el día de corte cubre 23:59 UTC', () => {
+  it('isNegocioVigente: sin fecha siempre vigente; el día de corte cubre hasta 23:59 Managua', () => {
     expect(isNegocioVigente('', new Date('2026-10-21'))).toBe(true);
-    expect(isNegocioVigente('2026-10-21', new Date('2026-10-21T23:00:00Z'))).toBe(true);
-    expect(isNegocioVigente('2026-10-21', new Date('2026-10-22T00:00:01Z'))).toBe(false);
+    // 2026-10-22T05:59Z = 2026-10-21 23:59 Managua → aún vigente.
+    expect(isNegocioVigente('2026-10-21', new Date('2026-10-22T05:59:59Z'))).toBe(true);
+    // 2026-10-22T06:00Z = medianoche Managua del 22 → vencido.
+    expect(isNegocioVigente('2026-10-21', new Date('2026-10-22T06:00:01Z'))).toBe(false);
     expect(isNegocioVigente('fecha-rota', new Date('2026-10-21'))).toBe(false);
   });
   it('diasParaVencer negativo si venció', () => {

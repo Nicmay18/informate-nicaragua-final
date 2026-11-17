@@ -52,15 +52,23 @@ export const auspiciadorSchema = z.object({
 });
 export type AuspiciadorInput = z.infer<typeof auspiciadorSchema>;
 
+// America/Managua = UTC-6 fijo (sin DST). Una fecha-corta 'YYYY-MM-DD'
+// significa ese día en hora local nicaragüense: inicio 00:00 y fin
+// 23:59:59.999 -06:00. Usar 'Z' vencía la campaña a las 17:59:59 local.
+const MANAGUA_OFFSET = '-06:00';
+
+function parseCampaignDate(value: string, endOfDay: boolean): Date {
+  if (value.includes('T')) return new Date(value);
+  return new Date(`${value}T${endOfDay ? '23:59:59.999' : '00:00:00.000'}${MANAGUA_OFFSET}`);
+}
+
 export function estadoAuspiciador(a: Pick<Auspiciador, 'activo' | 'fechaInicio' | 'fechaVencimiento'>, now: Date = new Date()): AuspiciadorEstado {
   if (!a.activo) return 'inactivo';
-  const ini = new Date(a.fechaInicio);
-  const fin = new Date(a.fechaVencimiento);
+  const ini = parseCampaignDate(a.fechaInicio, false);
+  const fin = parseCampaignDate(a.fechaVencimiento, true);
   if (Number.isNaN(ini.getTime()) || Number.isNaN(fin.getTime())) return 'inactivo';
   if (now < ini) return 'programado';
-  // El vencimiento de fecha-corta cubre el día completo, no el instante 00:00.
-  const finEfectivo = /T/.test(a.fechaVencimiento) ? fin : new Date(`${a.fechaVencimiento}T23:59:59.999Z`);
-  if (now > finEfectivo) return 'vencido';
+  if (now > fin) return 'vencido';
   return 'activo';
 }
 
@@ -112,7 +120,7 @@ export function toPublicAuspiciador(id: string, a: Auspiciador): AuspiciadorPubl
 
 /** Días hasta el vencimiento (negativo si ya venció). */
 export function diasParaVencer(fechaVencimiento: string, now: Date = new Date()): number {
-  const fin = new Date(/T/.test(fechaVencimiento) ? fechaVencimiento : `${fechaVencimiento}T23:59:59.999Z`);
+  const fin = parseCampaignDate(fechaVencimiento, true);
   if (Number.isNaN(fin.getTime())) return 0;
   return Math.ceil((fin.getTime() - now.getTime()) / 86_400_000);
 }

@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
 
     const archivadas: Array<{ id: string; titulo: string; fecha: string }> = [];
     const eliminadas: Array<{ id: string; titulo: string; fecha: string }> = [];
+    const slugsCancelados: string[] = [];
     const auditEntries: Array<Record<string, unknown>> = [];
 
     for (const doc of snap.docs) {
@@ -70,6 +71,7 @@ export async function POST(request: NextRequest) {
           { actor: 'eliminar-viejas', reason: 'Archivado automático por antigüedad' },
         );
         archivadas.push(entry);
+        if (data.slug) slugsCancelados.push(data.slug);
         auditEntries.push({
           articleId: doc.id,
           action: 'SOFT_DELETE',
@@ -90,6 +92,7 @@ export async function POST(request: NextRequest) {
         // Borrador: hard-delete permitido
         await doc.ref.delete();
         eliminadas.push(entry);
+        if (data.slug) slugsCancelados.push(data.slug);
         auditEntries.push({
           articleId: doc.id,
           action: 'HARD_DELETE',
@@ -106,6 +109,20 @@ export async function POST(request: NextRequest) {
             categoria: data.categoria || '',
           },
         });
+      }
+    }
+
+    // Cancelar reintentos pendientes de los slugs archivados/eliminados:
+    // sin esto, la cola distribuciones_pendientes los reenviaba a Telegram
+    // aunque el registro ya no existiera en el sitio.
+    if (slugsCancelados.length > 0) {
+      try {
+        const { cancelarPendienteDistribucion } = await import('@/lib/distribution/channels');
+        for (const s of slugsCancelados) {
+          await cancelarPendienteDistribucion(db, s, 'eliminacion_viejas');
+        }
+      } catch (e) {
+        logger.warn('[eliminar-viejas] cancelar pendientes falló:', e);
       }
     }
 

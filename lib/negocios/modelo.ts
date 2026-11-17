@@ -241,10 +241,20 @@ export function toPublicNegocio(id: string, n: Negocio) {
 }
 export type PublicNegocio = ReturnType<typeof toPublicNegocio>;
 
-/** Vigencia de publicación: fecha-corta cubre el día completo (UTC). */
+// America/Managua = UTC-6 fijo. Fecha-corta = día calendario local:
+// fin 23:59:59.999 -06:00 (con 'Z' vencía a las 17:59:59 hora local).
+const MANAGUA_OFFSET = '-06:00';
+function finDeDiaManagua(value: string): Date {
+  return new Date(value.includes('T') ? value : `${value}T23:59:59.999${MANAGUA_OFFSET}`);
+}
+function diaManagua(now: Date): string {
+  return new Date(now.getTime() - 6 * 3_600_000).toISOString().slice(0, 10);
+}
+
+/** Vigencia de publicación: fecha-corta cubre el día completo en Managua. */
 export function isNegocioVigente(vigenteHasta: string | undefined | null, now: Date = new Date()): boolean {
   if (!vigenteHasta) return true;
-  const fin = new Date(/T/.test(vigenteHasta) ? vigenteHasta : `${vigenteHasta}T23:59:59.999Z`);
+  const fin = finDeDiaManagua(vigenteHasta);
   return !Number.isNaN(fin.getTime()) && now <= fin;
 }
 
@@ -254,7 +264,7 @@ export function isNegocioPublicable(n: Pick<Negocio, 'estado' | 'vigenteHasta'>,
 }
 
 export function diasParaVencer(fecha: string, now: Date = new Date()): number {
-  const fin = new Date(/T/.test(fecha) ? fecha : `${fecha}T23:59:59.999Z`);
+  const fin = finDeDiaManagua(fecha);
   if (Number.isNaN(fin.getTime())) return 0;
   return Math.ceil((fin.getTime() - now.getTime()) / 86_400_000);
 }
@@ -265,7 +275,7 @@ export function ctrPct(impresiones: number, clics: number): number {
 }
 
 export function campanaVigente(c: Record<string, unknown>, now = new Date()): boolean {
-  const day = now.toISOString().slice(0, 10);
+  const day = diaManagua(now);
   const activa = c.estadoPago === 'piloto'
     || (c.estadoPago === 'pagado' && c.pagoConfirmado === true && !!c.verificadoAt && !!c.referenciaPago);
   return activa && String(c.fechaInicio) <= day && String(c.fechaVencimiento) >= day;

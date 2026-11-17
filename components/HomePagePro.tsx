@@ -10,17 +10,20 @@ import { getResponsiveImageUrl, getHeroImageUrl } from '@/lib/image-utils';
 import { FALLBACK_IMAGE } from '@/lib/types';
 import { RelativeTime, FullRelativeTime } from '@/components/ClientTime';
 import SidebarRedesign from '@/components/pro/SidebarRedesign';
+import SponsorBanner from '@/components/SponsorBanner';
+import type { AuspiciadorPublico } from '@/lib/ads/auspiciadores';
 import type { HomePageData } from '@/lib/db/homepage';
 
 interface HomePageProProps {
   data: HomePageData;
+  sponsor?: AuspiciadorPublico | null;
 }
 
 function sortByDate(noticias: Noticia[]): Noticia[] {
   return [...noticias].sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
 }
 
-export default function HomePagePro({ data }: HomePageProProps) {
+export default function HomePagePro({ data, sponsor }: HomePageProProps) {
   useEffect(() => {
     const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
     if (!nodes.length) return;
@@ -144,6 +147,15 @@ export default function HomePagePro({ data }: HomePageProProps) {
               ))}
             </aside>
           </section>
+        )}
+
+        {/* Auspiciador de portada — debajo del hero, antes del grid editorial.
+            Identificado como "Auspiciado por", rel="sponsored", telemetría
+            de impresión/clic ya incluida en SponsorBanner. */}
+        {sponsor && (
+          <div className="rd-home__container" style={{ paddingTop: 8 }}>
+            <SponsorBanner sponsor={sponsor} />
+          </div>
         )}
 
         {/* CONTENT GRID */}
