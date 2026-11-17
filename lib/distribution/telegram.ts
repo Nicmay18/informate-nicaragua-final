@@ -290,18 +290,26 @@ async function claimSend(
         return { state: 'busy' as ClaimState };
       }
 
-      if (status === 'unknown' || status === 'failed') {
-        // 'unknown' = ambiguo: solo forceRetry explícito (operador ya
-        // verificó en el canal). 'failed' = error confirmado por Telegram.
-        if (!forceRetry) {
-          return { state: (status === 'unknown' ? 'unknown' : 'busy') as ClaimState };
-        }
+      if (status === 'failed') {
+        // 'failed' = Telegram respondió explícitamente que NO entregó.
+        // forceRetry (cron/admin) puede reclamarlo — es seguro reintentar.
+        if (!forceRetry) return { state: 'busy' as ClaimState };
         tx.update(ref, {
           status: 'sending',
           claimedAt: now,
           attempts: (typeof data.attempts === 'number' ? data.attempts : 1) + 1,
         });
         return { state: 'claimed' as ClaimState, ref };
+      }
+
+      if (status === 'unknown') {
+        // 'unknown' = resultado ambiguo (Telegram pudo haber recibido).
+        // NUNCA se reclama por la vía de envío — ni con forceRetry.
+        // Solo resolveTelegramClaim('retry') lo pasa a 'failed' tras
+        // verificación humana, y recién ahí un reintento es seguro.
+        // La restricción vive aquí, dentro de la transacción: no depende
+        // de ninguna consulta previa que pueda quedar obsoleta.
+        return { state: 'unknown' as ClaimState };
       }
       return { state: 'busy' as ClaimState };
     });

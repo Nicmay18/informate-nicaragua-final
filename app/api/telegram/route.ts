@@ -19,12 +19,27 @@ export async function POST(request: NextRequest) {
     // Resolución manual de claims ambiguos ('unknown'/'sending' huérfano):
     // el operador verifica en el canal si el mensaje llegó y cierra el ciclo.
     // body: { resolve: { slug, action: 'sent'|'retry', messageId?, note? } }
-    if (body?.resolve?.slug && body?.resolve?.action) {
-      const db = getAdminDb();
-      const res = await resolveTelegramClaim(db, String(body.resolve.slug), {
-        action: body.resolve.action === 'sent' ? 'sent' : 'retry',
-        messageId: typeof body.resolve.messageId === 'number' ? body.resolve.messageId : undefined,
-        note: typeof body.resolve.note === 'string' ? body.resolve.note : undefined,
+    // Validación estricta: nada se coerciona — entrada inválida = 400.
+    if (body?.resolve !== undefined) {
+      const r = body.resolve;
+      const bad = (msg: string) => NextResponse.json({ error: msg }, { status: 400 });
+      if (!r || typeof r !== 'object') return bad('resolve inválido');
+      if (typeof r.slug !== 'string' || !/^[a-z0-9][a-z0-9-]{0,199}$/i.test(r.slug)) {
+        return bad('slug inválido');
+      }
+      if (r.action !== 'sent' && r.action !== 'retry') {
+        return bad("action debe ser 'sent' o 'retry'");
+      }
+      if (r.messageId !== undefined && (!Number.isInteger(r.messageId) || r.messageId <= 0)) {
+        return bad('messageId debe ser un entero positivo');
+      }
+      if (r.note !== undefined && typeof r.note !== 'string') {
+        return bad('note debe ser string');
+      }
+      const res = await resolveTelegramClaim(getAdminDb(), r.slug, {
+        action: r.action,
+        messageId: r.messageId,
+        note: r.note,
       });
       return NextResponse.json(res, { status: res.ok ? 200 : 409 });
     }

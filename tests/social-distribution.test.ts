@@ -171,17 +171,18 @@ describe('Telegram — envío: timeout, errores, retry, idempotencia', () => {
     expect(db._store[`telegram_${ART.slug}`].status).toBe('unknown');
   });
 
-  it('claim unknown bloquea reenvío automático; forceRetry explícito sí reintenta', async () => {
+  it('claim unknown NUNCA se reclama por la vía de envío (ni con forceRetry)', async () => {
+    // Ni el cron ni un forceRetry pueden reenviar un resultado ambiguo:
+    // la restricción está dentro de la transacción del claim.
     const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'unknown', slug: ART.slug, channel: 'telegram' } });
-    const r1 = await sendTelegramArticle(ART, { db });
-    expect(r1.skipped).toBe(true);
-    expect(r1.ambiguous).toBe(true);
+    for (const force of [false, true]) {
+      const r = await sendTelegramArticle(ART, { db, forceRetry: force });
+      expect(r.skipped).toBe(true);
+      expect(r.ambiguous).toBe(true);
+      expect(r.claimStatus).toBe('unknown');
+    }
     expect(fetchSpy).not.toHaveBeenCalled();
-
-    const r2 = await sendTelegramArticle(ART, { db, forceRetry: true });
-    expect(r2.ok).toBe(true);
-    expect(fetchSpy).toHaveBeenCalledTimes(1);
-    expect(db._store[`telegram_${ART.slug}`].status).toBe('sent');
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('unknown');
   });
 
   it('claim sending huérfano (>10min) → unknown, no reenvío automático', async () => {
@@ -298,14 +299,15 @@ describe('Telegram — envío: timeout, errores, retry, idempotencia', () => {
     expect(db._store[`telegram_${ART.slug}`].status).toBe('sent');
   });
 
-  it('dos forceRetry sobre claim unknown → solo uno reclama', async () => {
+  it('dos forceRetry sobre claim unknown → ninguno envía (permiso separado)', async () => {
     const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'unknown', slug: ART.slug } });
     const [a, b] = await Promise.all([
       sendTelegramArticle(ART, { db, forceRetry: true }),
       sendTelegramArticle(ART, { db, forceRetry: true }),
     ]);
-    expect([a, b].filter(r => r.ok && !r.skipped).length).toBe(1);
-    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect([a, b].every(r => r.skipped && r.claimStatus === 'unknown')).toBe(true);
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('unknown');
   });
 
   it('flujo completo: unknown → resolución manual retry → reintento explícito envía', async () => {
