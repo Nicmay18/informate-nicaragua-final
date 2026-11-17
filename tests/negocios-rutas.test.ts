@@ -206,7 +206,9 @@ describe('rutas — campañas y pago verificable', () => {
     const { listarNegociosPublicos } = await import('@/lib/negocios/datos');
     const items = await listarNegociosPublicos();
     expect(items.find((n) => n.slug === 'pupuseria-dona-ana')!.patrocinado).toBe(true);
-    vi.setSystemTime(new Date('2026-11-21T00:00:00Z'));
+    // 2026-11-21T06:00Z = medianoche del 21 en Managua (UTC-6): las campañas
+    // con fechaVencimiento '2026-11-20' ya vencieron en hora local.
+    vi.setSystemTime(new Date('2026-11-21T06:00:01Z'));
     expect((await listarNegociosPublicos()).map((n) => n.id)).toEqual(['n4']);
   });
 
