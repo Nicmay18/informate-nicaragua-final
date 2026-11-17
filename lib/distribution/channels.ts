@@ -16,7 +16,7 @@ export interface Noticia {
   fecha?: unknown;
 }
 
-export type ChannelResult = { ok: boolean; skipped?: boolean; error?: string };
+export type ChannelResult = { ok: boolean; skipped?: boolean; error?: string; ambiguous?: boolean; claimStatus?: string };
 
 /** Lee config de Telegram desde Firestore (igual que /api/admin/config) */
 export async function getTelegramConfig(db: Firestore) {
@@ -63,7 +63,7 @@ export async function yaDistribuido(
  * errores retryables e idempotencia por claim atomico. La firma publica
  * (Noticia -> ChannelResult) se conserva para todos los callers.
  */
-export async function enviarTelegram(noticia: Noticia, db: Firestore): Promise<ChannelResult> {
+export async function enviarTelegram(noticia: Noticia, db: Firestore, opts?: { forceRetry?: boolean }): Promise<ChannelResult> {
   const { sendTelegramArticle } = await import('@/lib/distribution/telegram');
   const r = await sendTelegramArticle(
     {
@@ -76,9 +76,9 @@ export async function enviarTelegram(noticia: Noticia, db: Firestore): Promise<C
       imagen: noticia.imagen,
       imagenRedes: noticia.imagenRedes,
     },
-    { db },
+    { db, forceRetry: opts?.forceRetry === true },
   );
-  return { ok: r.ok, skipped: r.skipped, error: r.error };
+  return { ok: r.ok, skipped: r.skipped, error: r.error, ambiguous: r.ambiguous, claimStatus: r.claimStatus };
 }
 /**
  * Envía a Facebook (si hay token). Copy generado por la capa editorial

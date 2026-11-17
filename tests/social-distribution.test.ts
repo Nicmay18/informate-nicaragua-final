@@ -6,6 +6,7 @@ import {
   extraerContexto,
   buildTelegramCaption,
   sendTelegramArticle,
+  resolveTelegramClaim,
 } from '@/lib/distribution/telegram';
 
 // ── Mock Firestore mínimo con claim atómico ─────────────────
@@ -147,16 +148,49 @@ describe('Telegram — envío: timeout, errores, retry, idempotencia', () => {
     expect(r.retryable).toBe(false);
   });
 
-  it('timeout → retryable, 1 reintento automático y éxito', async () => {
-    let calls = 0;
+  it('timeout tras posible recepción → unknown, SIN reintento ciego', async () => {
+    // Telegram pudo haber recibido el mensaje: reintentar duplicaría la nota.
     fetchSpy.mockImplementation(async () => {
-      calls++;
-      if (calls === 1) { const e: any = new Error('timed out'); e.name = 'TimeoutError'; throw e; }
-      return { ok: true, status: 200, json: async () => ({ ok: true, result: { message_id: 42 } }) };
+      const e: any = new Error('timed out'); e.name = 'TimeoutError'; throw e;
     });
-    const r = await sendTelegramArticle(ART, { db: makeDb() });
-    expect(r.ok).toBe(true);
-    expect(calls).toBe(2);
+    const db = makeDb();
+    const r = await sendTelegramArticle(ART, { db });
+    expect(r.ok).toBe(false);
+    expect(r.ambiguous).toBe(true);
+    expect(r.errorCode).toBe('AMBIGUOUS');
+    expect(r.claimStatus).toBe('unknown');
+    expect(fetchSpy).toHaveBeenCalledTimes(1); // jamás segundo intento
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('unknown');
+  });
+
+  it('claim unknown bloquea reenvío automático; forceRetry explícito sí reintenta', async () => {
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'unknown', slug: ART.slug, channel: 'telegram' } });
+    const r1 = await sendTelegramArticle(ART, { db });
+    expect(r1.skipped).toBe(true);
+    expect(r1.ambiguous).toBe(true);
+    expect(fetchSpy).not.toHaveBeenCalled();
+
+    const r2 = await sendTelegramArticle(ART, { db, forceRetry: true });
+    expect(r2.ok).toBe(true);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('sent');
+  });
+
+  it('claim sending huérfano (>10min) → unknown, no reenvío automático', async () => {
+    const viejo = new Date(Date.now() - 15 * 60 * 1000).toISOString();
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'sending', claimedAt: viejo } });
+    const r = await sendTelegramArticle(ART, { db });
+    expect(r.skipped).toBe(true);
+    expect(r.claimStatus).toBe('unknown');
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('unknown');
+  });
+
+  it('sin Firestore → envío rechazado (fail-closed, no hay idempotencia)', async () => {
+    const r = await sendTelegramArticle(ART, {});
+    expect(r.ok).toBe(false);
+    expect(r.errorCode).toBe('VALIDATION');
+    expect(fetchSpy).not.toHaveBeenCalled();
   });
 
   it('429 → retryable; si el retry también falla, ok=false', async () => {
@@ -231,6 +265,53 @@ describe('Telegram — envío: timeout, errores, retry, idempotencia', () => {
     const r = await sendTelegramArticle(ART, { db });
     expect(r.skipped).toBe(true);
     expect(fetchSpy).not.toHaveBeenCalled();
+  });
+
+  it('editar la noticia no genera segundo envío (mismo slug → already_sent)', async () => {
+    const db = makeDb();
+    await sendTelegramArticle(ART, { db });
+    // "Edición": mismo slug, contenido distinto → sigue siendo la misma nota
+    const editada = { ...ART, titulo: 'Medicina Legal determina estado mental de acusada en Managua (actualizado)', contenido: '<p>Editado.</p>' };
+    const r = await sendTelegramArticle(editada, { db });
+    expect(r.skipped).toBe(true);
+    expect(r.reason).toBe('already_sent');
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('error de API explícito (400) → failed recuperable con forceRetry', async () => {
+    fetchSpy.mockImplementation(async () => ({
+      ok: true, status: 400,
+      json: async () => ({ ok: false, description: 'Bad Request: message text is empty' }),
+    }));
+    const db = makeDb();
+    const r = await sendTelegramArticle(ART, { db });
+    expect(r.ok).toBe(false);
+    expect(r.claimStatus).toBe('failed');
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('failed');
+    expect(db._store[`telegram_${ART.slug}`].errorCode).toBe('TELEGRAM_API');
+  });
+});
+
+describe('Telegram — resolución manual de claims ambiguos', () => {
+  it('resolveTelegramClaim marca sent con messageId', async () => {
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'unknown', slug: ART.slug } });
+    const r = await resolveTelegramClaim(db, ART.slug, { action: 'sent', messageId: 555, note: 'verificado en canal' });
+    expect(r.ok).toBe(true);
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('sent');
+    expect(db._store[`telegram_${ART.slug}`].messageId).toBe(555);
+  });
+
+  it('resolveTelegramClaim retry devuelve a failed para reintento explícito', async () => {
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'unknown', slug: ART.slug } });
+    const r = await resolveTelegramClaim(db, ART.slug, { action: 'retry', note: 'no llegó' });
+    expect(r.ok).toBe(true);
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('failed');
+  });
+
+  it('no resuelve claims sent ni inexistentes', async () => {
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'sent' } });
+    expect((await resolveTelegramClaim(db, ART.slug, { action: 'retry' })).ok).toBe(false);
+    expect((await resolveTelegramClaim(db, 'no-existe', { action: 'sent' })).ok).toBe(false);
   });
 });
 

@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     const noticia = snap.docs[0].data() as Noticia;
-    const resultados: Record<string, { ok: boolean; skipped?: boolean; error?: string }> = {};
+    const resultados: Record<string, { ok: boolean; skipped?: boolean; error?: string; ambiguous?: boolean; claimStatus?: string }> = {};
 
     const promises: Promise<void>[] = [];
 
@@ -85,12 +85,17 @@ export async function POST(request: NextRequest) {
 
     await Promise.all(promises);
 
-    // Guardar registro de distribución
+    // Guardar registro de distribución (sanitizar undefined: Firestore los
+    // rechaza y un campo opcional ausente no debe tumbar el registro).
+    const clean = (o: Record<string, unknown>) =>
+      Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined));
     await db.collection('distribuciones').add({
       slug,
       titulo: noticia.titulo,
       canales,
-      resultados,
+      resultados: Object.fromEntries(
+        Object.entries(resultados).map(([k, v]) => [k, clean(v as Record<string, unknown>)]),
+      ),
       fecha: new Date().toISOString(),
     });
 

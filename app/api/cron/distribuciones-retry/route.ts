@@ -26,7 +26,10 @@ const LEGACY_DAYS = 7;
 const BATCH = 20;
 
 const SENDERS: Record<string, (n: Noticia, db: ReturnType<typeof getAdminDb>) => Promise<ChannelResult>> = {
-  telegram: (n, db) => enviarTelegram(n, db),
+  // Telegram usa el claim atómico del sender; forceRetry solo permite
+  // reclamar claims 'failed' (verificados). Claims 'unknown' se filtran
+  // antes de llegar aquí — nunca se reintentan ciegamente.
+  telegram: (n, db) => enviarTelegram(n, db, { forceRetry: true }),
   facebook: (n) => enviarFacebook(n),
   indexnow: (n) => enviarIndexNow(n),
   push: (n) => enviarPush(n),
@@ -88,14 +91,39 @@ export async function GET(request: NextRequest) {
         const sender = SENDERS[canal];
         if (!sender) { detalle[canal] = 'canal_desconocido'; continue; }
         if (await yaDistribuido(db, p.slug, canal)) { detalle[canal] = 'ya_enviado'; continue; }
+
+        // Telegram: resultados ambiguos no se reintentan automáticamente.
+        // claim 'unknown' = Telegram pudo haber recibido el mensaje →
+        // duplicaría. Requiere verificación humana vía /api/telegram resolve.
+        if (canal === 'telegram') {
+          try {
+            const claimSnap = await db.collection('distribuciones_envios').doc(`telegram_${p.slug}`).get();
+            const claim = claimSnap.data();
+            const claimStatus = claim?.status;
+            const claimedAt = Date.parse(String(claim?.claimedAt || ''));
+            if (claimStatus === 'unknown') {
+              detalle[canal] = 'requiere_verificacion';
+              continue;
+            }
+            if (claimStatus === 'sending' && Number.isFinite(claimedAt) && Date.now() - claimedAt < 10 * 60 * 1000) {
+              detalle[canal] = 'envio_en_curso';
+              continue;
+            }
+          } catch { /* el sender sigue siendo la barrera atómica */ }
+        }
+
         const r = await sender(noticia, db);
-        detalle[canal] = r.ok ? (r.skipped ? 'ya_enviado' : 'reenviado') : `fallo:${r.error || ''}`.slice(0, 120);
+        detalle[canal] = r.ok
+          ? (r.skipped ? 'ya_enviado' : 'reenviado')
+          : r.ambiguous
+            ? 'requiere_verificacion'
+            : `fallo:${r.error || ''}`.slice(0, 120);
         if (r.ok) {
           await db.collection('distribuciones').add({
             slug: p.slug,
             titulo: noticia.titulo,
             canales: [canal],
-            resultados: { [canal]: r },
+            resultados: { [canal]: { ok: r.ok, skipped: r.skipped, messageId: undefined } },
             fecha: ahora.toISOString(),
             origen: 'retry',
           });
@@ -103,13 +131,15 @@ export async function GET(request: NextRequest) {
       }
 
       const quedanFallos = Object.values(detalle).some((v) => String(v).startsWith('fallo'));
+      const requiereVerificacion = Object.values(detalle).some((v) => v === 'requiere_verificacion');
+      const estado = requiereVerificacion ? 'requiere_verificacion' : quedanFallos ? 'procesado_con_fallos' : 'procesado';
       await docSnap.ref.update({
         reintentos: reintentos + 1,
-        estado: quedanFallos ? 'procesado_con_fallos' : 'procesado',
+        estado,
         ultimoIntento: detalle,
         resueltoAt: ahora.toISOString(),
       });
-      resultados.push({ slug: p.slug, estado: quedanFallos ? 'procesado_con_fallos' : 'procesado', detalle });
+      resultados.push({ slug: p.slug, estado, detalle });
     }
 
     await recordCronHeartbeat('/api/cron/distribuciones-retry', { durationMs: Date.now() - startedAt });

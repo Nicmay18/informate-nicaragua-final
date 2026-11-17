@@ -22,6 +22,10 @@ const TG_TIMEOUT_MS = 8000;
 const CAPTION_LIMIT = 1024; // límite Telegram para sendPhoto
 const MESSAGE_LIMIT = 4096; // límite Telegram para sendMessage
 const RETRY_DELAY_MS = 1500;
+// Un claim 'sending' más viejo que esto se considera huérfano (la función
+// murió a mitad de envío). NO se reenvía solo: pasa a 'unknown' porque no
+// se puede saber si Telegram recibió el mensaje.
+const CLAIM_STALE_MS = 10 * 60 * 1000;
 
 const EMOJI_CAT: Record<string, string> = {
   Sucesos: '🚨',
@@ -58,7 +62,8 @@ export type TelegramErrorCode =
   | 'UNAUTHORIZED'
   | 'TELEGRAM_API'
   | 'NETWORK'
-  | 'CLAIM_BUSY';
+  | 'CLAIM_BUSY'
+  | 'AMBIGUOUS';
 
 export interface TelegramSendResult {
   ok: boolean;
@@ -68,6 +73,10 @@ export interface TelegramSendResult {
   error?: string;
   errorCode?: TelegramErrorCode;
   retryable: boolean;
+  /** true cuando el resultado es incierto: Telegram pudo haber recibido el mensaje. */
+  ambiguous?: boolean;
+  /** Estado del claim en distribuciones_envios tras la operación. */
+  claimStatus?: 'sent' | 'failed' | 'unknown' | 'sending';
   messageId?: number;
   distributionId?: string;
   sentAt: string;
@@ -210,12 +219,38 @@ export function buildTelegramCaption(input: TelegramArticleInput, url: string, l
 }
 
 // ── Idempotencia: claim atómico por (slug, canal) ───────────
+// Estados: sending → sent | failed | unknown.
+// 'unknown' = resultado ambiguo (timeout/red sin respuesta de Telegram):
+// el mensaje PUDO llegar. Nunca se reintenta automáticamente; requiere
+// verificación humana o forceRetry explícito.
 
 const CLAIMS = 'distribuciones_envios';
 
-type ClaimState = 'available' | 'already_sent' | 'busy' | 'claimed';
+type ClaimState = 'available' | 'already_sent' | 'busy' | 'unknown' | 'claimed';
 
-async function claimSend(db: Firestore | undefined, slug: string, forceRetry: boolean): Promise<{ state: ClaimState; ref?: FirebaseFirestore.DocumentReference }> {
+/** Firestore rechaza `undefined` en cualquier nivel — sanear antes de escribir. */
+function stripUndefined<T>(value: T): T {
+  if (Array.isArray(value)) return value.map(stripUndefined) as T;
+  if (value && typeof value === 'object') {
+    const out: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
+      if (v !== undefined) out[k] = stripUndefined(v);
+    }
+    return out as T;
+  }
+  return value;
+}
+
+function claimAgeMs(data: Record<string, unknown>): number {
+  const t = Date.parse(String(data.claimedAt || data.settledAt || ''));
+  return Number.isFinite(t) ? Date.now() - t : Infinity;
+}
+
+async function claimSend(
+  db: Firestore | undefined,
+  slug: string,
+  forceRetry: boolean,
+): Promise<{ state: ClaimState; ref?: FirebaseFirestore.DocumentReference }> {
   if (!db || !slug) return { state: 'available' };
   const ref = db.collection(CLAIMS).doc(`telegram_${slug}`);
   try {
@@ -223,32 +258,114 @@ async function claimSend(db: Firestore | undefined, slug: string, forceRetry: bo
       slug,
       channel: 'telegram',
       status: 'sending',
+      attempts: 1,
       claimedAt: new Date().toISOString(),
     });
     return { state: 'claimed', ref };
   } catch {
-    // Ya existe → inspeccionar estado
+    // Ya existe → inspeccionar estado real
     const snap = await ref.get();
     const data = snap.data() || {};
-    if (data.status === 'sent') return { state: 'already_sent' };
-    if (data.status === 'sending') return { state: 'busy' };
-    if (data.status === 'failed' && forceRetry) {
-      await ref.update({ status: 'sending', claimedAt: new Date().toISOString() });
+    const status = String(data.status || '');
+
+    if (status === 'sent') return { state: 'already_sent' };
+
+    if (status === 'sending') {
+      // Lease: un 'sending' fresco está en curso → busy. Uno viejo es un
+      // claim huérfano (función muerta a mitad de envío): el resultado es
+      // incierto → 'unknown', nunca reenvío automático.
+      if (claimAgeMs(data) > CLAIM_STALE_MS) {
+        await ref.update({
+          status: 'unknown',
+          unknownAt: new Date().toISOString(),
+          unknownReason: 'claim_huerfano: envio interrumpido, resultado no verificable',
+        }).catch(() => {});
+        return { state: 'unknown' };
+      }
+      return { state: 'busy' };
+    }
+
+    if (status === 'unknown') {
+      // Resultado ambiguo previo: solo un reintento humano explícito puede
+      // reclamarlo (el operador ya verificó en el canal de Telegram).
+      if (forceRetry) {
+        await ref.update({
+          status: 'sending',
+          claimedAt: new Date().toISOString(),
+          attempts: (typeof data.attempts === 'number' ? data.attempts : 1) + 1,
+        });
+        return { state: 'claimed', ref };
+      }
+      return { state: 'unknown' };
+    }
+
+    if (status === 'failed' && forceRetry) {
+      await ref.update({
+        status: 'sending',
+        claimedAt: new Date().toISOString(),
+        attempts: (typeof data.attempts === 'number' ? data.attempts : 1) + 1,
+      });
       return { state: 'claimed', ref };
     }
     return { state: 'busy' };
   }
 }
 
-async function settleClaim(ref: FirebaseFirestore.DocumentReference | undefined, ok: boolean, extra: Record<string, unknown>) {
+async function settleClaim(
+  ref: FirebaseFirestore.DocumentReference | undefined,
+  outcome: 'sent' | 'failed' | 'unknown',
+  extra: Record<string, unknown>,
+) {
   if (!ref) return;
   try {
-    await ref.update({
-      status: ok ? 'sent' : 'failed',
+    // stripUndefined: un `error: undefined` aquí hacía fallar TODO update
+    // en producción (Firestore rechaza undefined) → los 223 claims quedaron
+    // en 'sending' para siempre y la trazabilidad (messageId) se perdía.
+    await ref.update(stripUndefined({
+      status: outcome,
       settledAt: new Date().toISOString(),
       ...extra,
-    });
-  } catch { /* best effort */ }
+    }));
+  } catch (err) {
+    logger.error('[telegram] settleClaim failed:', err);
+  }
+}
+
+/**
+ * Resolución manual de un claim 'unknown'/'sending' huérfano.
+ * El operador verifica en el canal de Telegram si el mensaje llegó:
+ *  - markSent: registra messageId si lo conoce y cierra como enviado.
+ *  - markRetry: lo devuelve a 'failed' para permitir un reintento explícito.
+ */
+export async function resolveTelegramClaim(
+  db: Firestore,
+  slug: string,
+  resolution: { action: 'sent' | 'retry'; messageId?: number; note?: string },
+): Promise<{ ok: boolean; status?: string; error?: string }> {
+  const ref = db.collection(CLAIMS).doc(`telegram_${slug}`);
+  const snap = await ref.get();
+  if (!snap.exists) return { ok: false, error: 'claim_not_found' };
+  const status = String(snap.data()?.status || '');
+  if (!['sending', 'unknown', 'failed'].includes(status)) {
+    return { ok: false, error: `claim_not_resolvable:${status}` };
+  }
+  if (resolution.action === 'sent') {
+    await ref.update(stripUndefined({
+      status: 'sent',
+      resolvedAt: new Date().toISOString(),
+      resolvedBy: 'manual',
+      resolutionNote: resolution.note,
+      messageId: resolution.messageId,
+    }));
+    return { ok: true, status: 'sent' };
+  }
+  await ref.update({
+    status: 'failed',
+    resolvedAt: new Date().toISOString(),
+    resolvedBy: 'manual',
+    resolutionNote: resolution.note,
+  });
+  return { ok: true, status: 'failed' };
 }
 
 // ── Clasificación de errores ────────────────────────────────
@@ -294,7 +411,7 @@ async function attemptSend(
   caption: string,
   url: string,
   imagen: string | undefined,
-): Promise<{ ok: boolean; messageId?: number; errorCode?: TelegramErrorCode; retryable: boolean; error?: string }> {
+): Promise<{ ok: boolean; messageId?: number; errorCode?: TelegramErrorCode; retryable: boolean; ambiguous?: boolean; error?: string }> {
   const markup = { inline_keyboard: [[{ text: '📰 Leer noticia completa →', url }]] };
   try {
     if (imagen) {
@@ -326,7 +443,10 @@ async function attemptSend(
     return { ok: false, error: res.description, ...c };
   } catch (e) {
     const c = classifyFetchError(e);
-    return { ok: false, error: e instanceof Error ? e.message : 'Error', ...c };
+    // TIMEOUT/NETWORK = no hubo respuesta de Telegram → el mensaje PUDO
+    // llegar. Es el único caso verdaderamente ambiguo (exactly-once
+    // imposible de garantizar); se marca 'unknown', nunca reintento ciego.
+    return { ok: false, error: e instanceof Error ? e.message : 'Error', ...c, ambiguous: true };
   }
 }
 
@@ -358,28 +478,61 @@ export async function sendTelegramArticle(
   const imagenValida = imagen && !imagen.startsWith('data:') && imagen.startsWith('http') ? imagen : undefined;
 
   // Claim atómico: create() falla si el doc ya existe → no hay doble envío.
+  // Sin db NO hay idempotencia posible → se rechaza el envío (fail-closed).
+  if (!db) {
+    return { ...base, ok: false, error: 'Firestore no disponible: envío rechazado para no arriesgar duplicado', errorCode: 'VALIDATION' };
+  }
   const claim = await claimSend(db, input.slug, options?.forceRetry === true);
   if (claim.state === 'already_sent') {
-    return { ...base, ok: true, skipped: true, reason: 'already_sent' };
+    return { ...base, ok: true, skipped: true, reason: 'already_sent', claimStatus: 'sent' };
   }
   if (claim.state === 'busy') {
-    return { ...base, ok: false, skipped: true, reason: 'in_progress_or_failed', errorCode: 'CLAIM_BUSY' };
+    return { ...base, ok: false, skipped: true, reason: 'in_progress_or_failed', errorCode: 'CLAIM_BUSY', claimStatus: 'sending' };
+  }
+  if (claim.state === 'unknown') {
+    return { ...base, ok: false, skipped: true, reason: 'resultado_ambiguo_requiere_verificacion', errorCode: 'AMBIGUOUS', ambiguous: true, claimStatus: 'unknown' };
+  }
+  if (claim.state !== 'claimed') {
+    // 'available' no debería ocurrir (db verificado arriba), pero fail-closed.
+    return { ...base, ok: false, error: 'Claim de idempotencia no disponible', errorCode: 'VALIDATION' };
   }
 
   let attempt = await attemptSend(token, chatId, caption, url, imagenValida);
-  if (!attempt.ok && attempt.retryable) {
+  // Reintento automático SOLO para errores donde Telegram respondió
+  // explícitamente que NO entregó (429/5xx): reintentar es seguro.
+  // TIMEOUT/NETWORK son ambiguos → jamás reintento ciego (duplicaría).
+  if (!attempt.ok && attempt.retryable && !attempt.ambiguous) {
     await new Promise(r => setTimeout(r, RETRY_DELAY_MS));
     attempt = await attemptSend(token, chatId, caption, url, imagenValida);
   }
 
-  await settleClaim(claim.ref, attempt.ok, {
-    error: attempt.ok ? undefined : attempt.error,
-    errorCode: attempt.ok ? undefined : attempt.errorCode,
+  // Resultado final del claim:
+  //  ok        → sent (con messageId)
+  //  ambiguo   → unknown (Telegram pudo haber recibido; verificación humana)
+  //  resto     → failed (error explícito de la API o validación)
+  const outcome: 'sent' | 'failed' | 'unknown' = attempt.ok
+    ? 'sent'
+    : attempt.ambiguous ? 'unknown' : 'failed';
+  const errorCode = outcome === 'unknown' ? 'AMBIGUOUS' : attempt.errorCode;
+
+  await settleClaim(claim.ref, outcome, {
     messageId: attempt.messageId,
+    error: attempt.ok ? undefined : (outcome === 'unknown' ? `ambiguo: ${attempt.error}` : attempt.error),
+    errorCode,
+    outcomeReason: outcome === 'unknown' ? 'sin_respuesta_de_telegram' : undefined,
   });
 
   if (!attempt.ok) {
-    logger.error('[telegram] envío falló', { slug: input.slug, error: attempt.error, errorCode: attempt.errorCode });
+    logger.error('[telegram] envío falló', { slug: input.slug, error: attempt.error, errorCode, outcome });
   }
-  return { ...base, ok: attempt.ok, messageId: attempt.messageId, error: attempt.error, errorCode: attempt.errorCode, retryable: attempt.retryable };
+  return {
+    ...base,
+    ok: attempt.ok,
+    ambiguous: outcome === 'unknown' || undefined,
+    claimStatus: outcome,
+    messageId: attempt.messageId,
+    error: attempt.error,
+    errorCode,
+    retryable: attempt.retryable,
+  };
 }

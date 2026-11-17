@@ -14,6 +14,7 @@ import { logger } from '@/lib/logger';
 import { buildNewsArticleJsonLdEnhanced } from '@/lib/seo/schema';
 import { escapeJsonLd } from '@/lib/jsonld';
 import { getCspNonce } from '@/lib/nonce';
+import { getAuspiciadorPublico } from '@/lib/ads/server';
 
 // ============================================================================
 // ISR: Home regenerado cada 1 minuto para reflejar noticias nuevas de inmediato.
@@ -158,6 +159,10 @@ export default async function HomePage() {
 
   const nonce = await getCspNonce();
 
+  // Auspiciador de portada (posición 'portada'/'ambos'): rotación diaria
+  // determinista, cacheada 60s. null si no hay campaña vigente.
+  const sponsor = await getAuspiciadorPublico('portada').catch(() => null);
+
   return (
     <>
       {homeItemList && (
@@ -167,7 +172,9 @@ export default async function HomePage() {
           dangerouslySetInnerHTML={{ __html: escapeJsonLd(homeItemList) }}
         />
       )}
-      {data ? <HomePagePro data={data} /> : <HomePagePro data={{ hero: null, ultimas: [], enPortada: [], breaking: [], porCategoria: {}, masLeidas: [] }} />}
+      {data
+        ? <HomePagePro data={data} sponsor={sponsor} />
+        : <HomePagePro data={{ hero: null, ultimas: [], enPortada: [], breaking: [], porCategoria: {}, masLeidas: [] }} sponsor={sponsor} />}
     </>
   );
 }

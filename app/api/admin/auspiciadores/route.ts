@@ -63,7 +63,16 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const ref = await getAdminDb().collection(AUSPICIADORES_COLLECTION).add({
+    const db = getAdminDb();
+    // Anti-duplicados: mismo nombre + mismo destino ya registrado → 409.
+    // (Las métricas viven en el doc; duplicar partiría impresiones/clics.)
+    const dup = await db.collection(AUSPICIADORES_COLLECTION)
+      .where('nombre', '==', a.nombre).limit(10).get();
+    if (dup.docs.some((d) => (d.data() as Auspiciador).url === a.url)) {
+      return privateJson({ ok: false, error: 'Ya existe un auspiciador con ese nombre y destino' }, 409);
+    }
+
+    const ref = await db.collection(AUSPICIADORES_COLLECTION).add({
       ...a,
       bannerUrl: a.bannerUrl || null,
       notas: a.notas || '',
