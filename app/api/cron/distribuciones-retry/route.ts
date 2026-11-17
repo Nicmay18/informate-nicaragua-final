@@ -156,7 +156,9 @@ export async function GET(request: NextRequest) {
       const requiereVerificacion = Object.values(detalle).some((v) => v === 'requiere_verificacion');
       const estado = requiereVerificacion ? 'requiere_verificacion' : quedanFallos ? 'procesado_con_fallos' : 'procesado';
       await docSnap.ref.update({
-        reintentos: reintentos + 1,
+        // Una verificación humana pendiente no consume el contador de
+        // reintentos: no es un fallo del canal, es una decisión pendiente.
+        reintentos: estado === 'requiere_verificacion' ? reintentos : reintentos + 1,
         estado,
         ultimoIntento: detalle,
         resueltoAt: ahora.toISOString(),
