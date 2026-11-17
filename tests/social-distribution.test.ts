@@ -12,22 +12,30 @@ import {
 // ── Mock Firestore mínimo con claim atómico ─────────────────
 function makeDb(claims: Record<string, any> = {}) {
   const store = { ...claims };
+  const docRef = (id: string) => ({
+    async create(data: any) {
+      if (store[id]) { const e: any = new Error('ALREADY_EXISTS'); e.code = 6; throw e; }
+      store[id] = { ...data };
+    },
+    async get() { return { exists: !!store[id], data: () => store[id] }; },
+    async update(patch: any) { store[id] = { ...(store[id] || {}), ...patch }; },
+  });
   return {
     _store: store,
     collection(name: string) {
       if (name !== 'distribuciones_envios') throw new Error(`col inesperada: ${name}`);
-      return {
-        doc(id: string) {
-          return {
-            async create(data: any) {
-              if (store[id]) { const e: any = new Error('ALREADY_EXISTS'); e.code = 6; throw e; }
-              store[id] = { ...data };
-            },
-            async get() { return { exists: !!store[id], data: () => store[id] }; },
-            async update(patch: any) { store[id] = { ...(store[id] || {}), ...patch }; },
-          };
-        },
-      };
+      return { doc: docRef };
+    },
+    // Transacción optimista mínima: ejecuta el callback con get/update.
+    // La serialización JS hace las transacciones atómicas en el test —
+    // suficiente para verificar la lógica de estados (la concurrencia
+    // real la garantiza Firestore, no este mock).
+    async runTransaction(fn: (tx: any) => Promise<any>) {
+      return fn({
+        get: (ref: any) => ref.get(),
+        update: (ref: any, patch: any) => ref.update(patch),
+        set: (ref: any, data: any) => ref.update(data),
+      });
     },
   } as any;
 }
@@ -278,6 +286,46 @@ describe('Telegram — envío: timeout, errores, retry, idempotencia', () => {
     expect(fetchSpy).toHaveBeenCalledTimes(1);
   });
 
+  it('dos reintentos simultáneos sobre claim failed → solo uno envía', async () => {
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'failed', slug: ART.slug, attempts: 1 } });
+    const [a, b] = await Promise.all([
+      sendTelegramArticle(ART, { db, forceRetry: true }),
+      sendTelegramArticle(ART, { db, forceRetry: true }),
+    ]);
+    const enviados = [a, b].filter(r => r.ok && !r.skipped).length;
+    expect(enviados).toBe(1);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('sent');
+  });
+
+  it('dos forceRetry sobre claim unknown → solo uno reclama', async () => {
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'unknown', slug: ART.slug } });
+    const [a, b] = await Promise.all([
+      sendTelegramArticle(ART, { db, forceRetry: true }),
+      sendTelegramArticle(ART, { db, forceRetry: true }),
+    ]);
+    expect([a, b].filter(r => r.ok && !r.skipped).length).toBe(1);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('flujo completo: unknown → resolución manual retry → reintento explícito envía', async () => {
+    const db = makeDb();
+    // 1. Timeout ambiguo → claim unknown
+    fetchSpy.mockImplementationOnce(async () => { const e: any = new Error('timed out'); e.name = 'TimeoutError'; throw e; });
+    const r1 = await sendTelegramArticle(ART, { db });
+    expect(r1.claimStatus).toBe('unknown');
+    // 2. Operador verifica en el canal: no llegó → retry
+    const res = await resolveTelegramClaim(db, ART.slug, { action: 'retry', note: 'verificado: ausente en canal' });
+    expect(res.ok).toBe(true);
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('failed');
+    // 3. Reintento explícito (forceRetry) → envía y cierra sent
+    fetchSpy.mockImplementation(async () => ({ ok: true, status: 200, json: async () => ({ ok: true, result: { message_id: 999 } }) }));
+    const r2 = await sendTelegramArticle(ART, { db, forceRetry: true });
+    expect(r2.ok).toBe(true);
+    expect(r2.messageId).toBe(999);
+    expect(db._store[`telegram_${ART.slug}`].status).toBe('sent');
+  });
+
   it('error de API explícito (400) → failed recuperable con forceRetry', async () => {
     fetchSpy.mockImplementation(async () => ({
       ok: true, status: 400,
@@ -312,6 +360,26 @@ describe('Telegram — resolución manual de claims ambiguos', () => {
     const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'sent' } });
     expect((await resolveTelegramClaim(db, ART.slug, { action: 'retry' })).ok).toBe(false);
     expect((await resolveTelegramClaim(db, 'no-existe', { action: 'sent' })).ok).toBe(false);
+  });
+
+  it('dos resoluciones simultáneas → solo una gana', async () => {
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'unknown', slug: ART.slug } });
+    const [a, b] = await Promise.all([
+      resolveTelegramClaim(db, ART.slug, { action: 'sent', messageId: 1 }),
+      resolveTelegramClaim(db, ART.slug, { action: 'retry' }),
+    ]);
+    // Una gana, la otra es rechazada porque el estado ya cambió.
+    // (En el mock serializado ambas leen antes de escribir; lo que se
+    // verifica es el estado final consistente y que no haya crash.)
+    const final = db._store[`telegram_${ART.slug}`].status;
+    expect(['sent', 'failed']).toContain(final);
+    expect(a.ok !== b.ok || a.status === b.status).toBe(true);
+  });
+
+  it('rechaza acción inválida y messageId no entero', async () => {
+    const db = makeDb({ [`telegram_${ART.slug}`]: { status: 'unknown' } });
+    expect((await resolveTelegramClaim(db, ART.slug, { action: 'bogus' as any })).ok).toBe(false);
+    expect((await resolveTelegramClaim(db, ART.slug, { action: 'sent', messageId: 1.5 })).ok).toBe(false);
   });
 });
 

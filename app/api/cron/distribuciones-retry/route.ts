@@ -119,11 +119,17 @@ export async function GET(request: NextRequest) {
             ? 'requiere_verificacion'
             : `fallo:${r.error || ''}`.slice(0, 120);
         if (r.ok) {
+          // Sin campos undefined: Firestore los rechaza y rompería el registro.
+          const clean: Record<string, unknown> = { ok: r.ok };
+          if (r.skipped !== undefined) clean.skipped = r.skipped;
+          if (r.error !== undefined) clean.error = r.error;
+          if (r.ambiguous !== undefined) clean.ambiguous = r.ambiguous;
+          if (r.claimStatus !== undefined) clean.claimStatus = r.claimStatus;
           await db.collection('distribuciones').add({
             slug: p.slug,
             titulo: noticia.titulo,
             canales: [canal],
-            resultados: { [canal]: { ok: r.ok, skipped: r.skipped, messageId: undefined } },
+            resultados: { [canal]: clean },
             fecha: ahora.toISOString(),
             origen: 'retry',
           });

@@ -263,51 +263,48 @@ async function claimSend(
     });
     return { state: 'claimed', ref };
   } catch {
-    // Ya existe → inspeccionar estado real
-    const snap = await ref.get();
-    const data = snap.data() || {};
-    const status = String(data.status || '');
+    // Ya existe → transacción: lectura+decisión+escritura atómicas.
+    // Dos reintentos concurrentes sobre el mismo claim 'failed'/'unknown':
+    // el perdedor reintenta la transacción, re-lee status='sending' y
+    // obtiene 'busy' — nunca dos envíos.
+    const now = new Date().toISOString();
+    return db.runTransaction(async (tx) => {
+      const snap = await tx.get(ref);
+      if (!snap.exists) return { state: 'busy' as ClaimState };
+      const data = snap.data() || {};
+      const status = String(data.status || '');
 
-    if (status === 'sent') return { state: 'already_sent' };
+      if (status === 'sent') return { state: 'already_sent' as ClaimState };
 
-    if (status === 'sending') {
-      // Lease: un 'sending' fresco está en curso → busy. Uno viejo es un
-      // claim huérfano (función muerta a mitad de envío): el resultado es
-      // incierto → 'unknown', nunca reenvío automático.
-      if (claimAgeMs(data) > CLAIM_STALE_MS) {
-        await ref.update({
-          status: 'unknown',
-          unknownAt: new Date().toISOString(),
-          unknownReason: 'claim_huerfano: envio interrumpido, resultado no verificable',
-        }).catch(() => {});
-        return { state: 'unknown' };
+      if (status === 'sending') {
+        // Lease: 'sending' fresco = envío en curso → busy. Viejo = huérfano
+        // (función muerta a mitad de envío) → 'unknown', no reenvío solo.
+        if (claimAgeMs(data) > CLAIM_STALE_MS) {
+          tx.update(ref, {
+            status: 'unknown',
+            unknownAt: now,
+            unknownReason: 'claim_huerfano: envio interrumpido, resultado no verificable',
+          });
+          return { state: 'unknown' as ClaimState };
+        }
+        return { state: 'busy' as ClaimState };
       }
-      return { state: 'busy' };
-    }
 
-    if (status === 'unknown') {
-      // Resultado ambiguo previo: solo un reintento humano explícito puede
-      // reclamarlo (el operador ya verificó en el canal de Telegram).
-      if (forceRetry) {
-        await ref.update({
+      if (status === 'unknown' || status === 'failed') {
+        // 'unknown' = ambiguo: solo forceRetry explícito (operador ya
+        // verificó en el canal). 'failed' = error confirmado por Telegram.
+        if (!forceRetry) {
+          return { state: (status === 'unknown' ? 'unknown' : 'busy') as ClaimState };
+        }
+        tx.update(ref, {
           status: 'sending',
-          claimedAt: new Date().toISOString(),
+          claimedAt: now,
           attempts: (typeof data.attempts === 'number' ? data.attempts : 1) + 1,
         });
-        return { state: 'claimed', ref };
+        return { state: 'claimed' as ClaimState, ref };
       }
-      return { state: 'unknown' };
-    }
-
-    if (status === 'failed' && forceRetry) {
-      await ref.update({
-        status: 'sending',
-        claimedAt: new Date().toISOString(),
-        attempts: (typeof data.attempts === 'number' ? data.attempts : 1) + 1,
-      });
-      return { state: 'claimed', ref };
-    }
-    return { state: 'busy' };
+      return { state: 'busy' as ClaimState };
+    });
   }
 }
 
@@ -343,29 +340,43 @@ export async function resolveTelegramClaim(
   resolution: { action: 'sent' | 'retry'; messageId?: number; note?: string },
 ): Promise<{ ok: boolean; status?: string; error?: string }> {
   const ref = db.collection(CLAIMS).doc(`telegram_${slug}`);
-  const snap = await ref.get();
-  if (!snap.exists) return { ok: false, error: 'claim_not_found' };
-  const status = String(snap.data()?.status || '');
-  if (!['sending', 'unknown', 'failed'].includes(status)) {
-    return { ok: false, error: `claim_not_resolvable:${status}` };
+  const action = resolution.action === 'sent' ? 'sent' : resolution.action === 'retry' ? 'retry' : null;
+  if (!action) return { ok: false, error: 'invalid_action' };
+  if (action === 'sent' && resolution.messageId !== undefined && !Number.isInteger(resolution.messageId)) {
+    return { ok: false, error: 'invalid_messageId' };
   }
-  if (resolution.action === 'sent') {
-    await ref.update(stripUndefined({
-      status: 'sent',
-      resolvedAt: new Date().toISOString(),
+
+  // Transacción: validación de estado + escritura atómicas. Dos operadores
+  // resolviendo a la vez → el perdedor reintenta, re-lee el nuevo estado y
+  // es rechazado (un claim ya 'sent' no es resoluble; un 'failed' post-retry
+  // tampoco vuelve a 'failed' sin nueva ambigüedad).
+  return db.runTransaction(async (tx) => {
+    const snap = await tx.get(ref);
+    if (!snap.exists) return { ok: false, error: 'claim_not_found' };
+    const status = String(snap.data()?.status || '');
+    if (!['sending', 'unknown', 'failed'].includes(status)) {
+      return { ok: false, error: `claim_not_resolvable:${status}` };
+    }
+    const resolvedAt = new Date().toISOString();
+    const note = typeof resolution.note === 'string' ? resolution.note.slice(0, 500) : undefined;
+    if (action === 'sent') {
+      tx.update(ref, stripUndefined({
+        status: 'sent',
+        resolvedAt,
+        resolvedBy: 'manual',
+        resolutionNote: note,
+        messageId: resolution.messageId,
+      }));
+      return { ok: true, status: 'sent' };
+    }
+    tx.update(ref, stripUndefined({
+      status: 'failed',
+      resolvedAt,
       resolvedBy: 'manual',
-      resolutionNote: resolution.note,
-      messageId: resolution.messageId,
+      resolutionNote: note,
     }));
-    return { ok: true, status: 'sent' };
-  }
-  await ref.update({
-    status: 'failed',
-    resolvedAt: new Date().toISOString(),
-    resolvedBy: 'manual',
-    resolutionNote: resolution.note,
+    return { ok: true, status: 'failed' };
   });
-  return { ok: true, status: 'failed' };
 }
 
 // ── Clasificación de errores ────────────────────────────────
