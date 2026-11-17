@@ -308,6 +308,14 @@ export async function POST(request: NextRequest) {
             reason: 'Contenido de violencia extrema no aprobable',
           });
         } catch (e) { /* noop */ }
+        // Cancelar reintentos pendientes: la nota archivada no debe
+        // volver a enviarse por la cola de distribución.
+        if (data.slug) {
+          try {
+            const { cancelarPendienteDistribucion } = await import('@/lib/distribution/channels');
+            await cancelarPendienteDistribucion(db, data.slug, 'limpiar_sucesos');
+          } catch (e) { /* noop */ }
+        }
         eliminadas.push({ id: doc.id, titulo, razon: 'Contenido de violencia extrema no aprobable (archivada)' });
         continue;
       }

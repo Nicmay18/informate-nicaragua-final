@@ -872,6 +872,12 @@ export async function applySafeAutoFixes(
               { estado: 'archivado', archived: true },
               { actor: 'supervisor-autofix', reason: 'Borrador abandonado >7d' },
             );
+            if (data.slug) {
+              try {
+                const { cancelarPendienteDistribucion } = await import('@/lib/distribution/channels');
+                await cancelarPendienteDistribucion(db, data.slug, 'supervisor_borrador_abandonado');
+              } catch { /* noop */ }
+            }
             fixed++;
             details.push(`Archivado borrador abandonado: "${data.titulo?.substring(0, 40)}"`);
           }

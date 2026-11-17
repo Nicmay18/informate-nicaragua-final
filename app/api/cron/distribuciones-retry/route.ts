@@ -4,7 +4,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
 import {
   enviarTelegram, enviarFacebook, enviarIndexNow, enviarPush, enviarTwitter,
-  yaDistribuido, type Noticia, type ChannelResult,
+  yaDistribuido, esNoticiaDistribuible, type Noticia, type ChannelResult,
 } from '@/lib/distribution/channels';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { normalizeTelegramSlug } from '@/lib/distribution/telegram';
@@ -32,6 +32,7 @@ const BATCH = 20;
 const TERMINAL_STATES = new Set([
   'legacy', 'fallo_definitivo', 'requiere_verificacion',
   'procesado', 'procesado_con_fallos', 'noticia_no_existe',
+  'noticia_no_publicada', 'cancelado',
 ]);
 const TERMINAL_RETRY_AT = '9999-12-31T00:00:00.000Z';
 
@@ -100,7 +101,17 @@ export async function GET(request: NextRequest) {
         resultados.push({ slug: p.slug, estado: 'noticia_no_existe' });
         continue;
       }
-      const noticia = noticiaSnap.docs[0].data() as Noticia;
+      const noticiaData = noticiaSnap.docs[0].data() as Noticia & { publicado?: boolean; estado?: string; archived?: boolean };
+      // Una nota archivada/eliminada/borrador NO debe reenviarse: el doc
+      // sigue existiendo con el mismo slug tras soft-delete. Sin este
+      // chequeo, "eliminar" una noticia no detenía la cola de reintentos
+      // y el contenido "volvía" a Telegram.
+      if (!esNoticiaDistribuible(noticiaData)) {
+        await docSnap.ref.update({ estado: 'noticia_no_publicada', motivo: 'noticia_archivada_o_no_publicada', proximoIntento: TERMINAL_RETRY_AT, resueltoAt: ahora.toISOString() });
+        resultados.push({ slug: p.slug, estado: 'noticia_no_publicada' });
+        continue;
+      }
+      const noticia = noticiaData as Noticia;
 
       const detalle: Record<string, unknown> = {};
       for (const canal of p.canalesFallidos || []) {

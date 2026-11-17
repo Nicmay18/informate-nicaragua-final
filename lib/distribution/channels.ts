@@ -14,6 +14,9 @@ export interface Noticia {
   imagen?: string;
   imagenRedes?: string;
   fecha?: unknown;
+  publicado?: boolean;
+  estado?: string;
+  archived?: boolean;
 }
 
 export type ChannelResult = { ok: boolean; skipped?: boolean; error?: string; ambiguous?: boolean; claimStatus?: string };
@@ -32,6 +35,43 @@ export async function getTelegramConfig(db: Firestore) {
       token: process.env.TG_TOKEN || '',
       chatId: process.env.TG_CHAT_ID || process.env.TG_CHAT || '',
     };
+  }
+}
+
+/**
+ * Una noticia solo es distribuible si está realmente publicada.
+ * Tras soft-delete el doc sigue existiendo con el mismo slug
+ * (publicado:false / estado:'archivado' / archived:true) — sin este
+ * chequeo, "eliminar" no detenía reenvíos por cola o distribución manual.
+ */
+export function esNoticiaDistribuible(n: { publicado?: boolean; estado?: string; archived?: boolean } | null | undefined): boolean {
+  if (!n) return false;
+  if (n.archived === true || n.estado === 'archivado' || n.estado === 'borrador') return false;
+  // publicado===false es marcador explícito de "no publicado" (incluye
+  // soft-delete y docs inconsistentes) → fail-safe, no reenviar.
+  if (n.publicado === false) return false;
+  return n.publicado === true || n.estado === 'publicado';
+}
+
+/**
+ * Cancela la entrada de la cola de reintentos de un slug (sin borrarla:
+ * queda estado 'cancelado' con trazabilidad). Llamar al eliminar/archivar
+ * una noticia para que ningún proceso automático la reenvíe.
+ */
+export async function cancelarPendienteDistribucion(db: Firestore, slug: string, motivo = 'noticia_eliminada'): Promise<void> {
+  try {
+    await db.collection('distribuciones_pendientes').doc(slug).set(
+      {
+        estado: 'cancelado',
+        motivo,
+        proximoIntento: '9999-12-31T00:00:00.000Z',
+        resueltoAt: new Date().toISOString(),
+      },
+      { merge: true },
+    );
+  } catch (e) {
+    // No bloquea el borrado: el chequeo esDistribuible en el sender es la barrera real.
+    console.warn('[channels] cancelarPendienteDistribucion falló:', e);
   }
 }
 
@@ -75,6 +115,9 @@ export async function enviarTelegram(noticia: Noticia, db: Firestore, opts?: { f
       categoria: noticia.categoria,
       imagen: noticia.imagen,
       imagenRedes: noticia.imagenRedes,
+      publicado: noticia.publicado,
+      estado: noticia.estado,
+      archived: noticia.archived,
     },
     { db, forceRetry: opts?.forceRetry === true },
   );

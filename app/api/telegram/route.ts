@@ -73,6 +73,9 @@ export async function POST(request: NextRequest) {
         categoria: noticia.categoria,
         imagen: noticia.imagen,
         imagenRedes: noticia.imagenRedes,
+        publicado: noticia.publicado,
+        estado: noticia.estado,
+        archived: noticia.archived,
       },
       { db, forceRetry: body.retry === true },
     );

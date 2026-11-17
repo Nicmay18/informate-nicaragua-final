@@ -202,6 +202,28 @@ describe('Telegram — envío: timeout, errores, retry, idempotencia', () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
+  it('nota archivada/eliminada → NOT_PUBLISHABLE, sin claim ni fetch', async () => {
+    // El doc sigue existiendo tras soft-delete; el sender debe rechazarlo.
+    const db = makeDb();
+    for (const lifecycle of [
+      { publicado: false, estado: 'archivado', archived: true },
+      { estado: 'borrador' },
+      { publicado: false, estado: 'publicado' },
+    ]) {
+      const r = await sendTelegramArticle({ ...ART, ...lifecycle }, { db });
+      expect(r.ok).toBe(false);
+      expect(r.errorCode).toBe('NOT_PUBLISHABLE');
+      expect(r.claimStatus).toBe('blocked');
+    }
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(Object.keys(db._store)).toHaveLength(0); // ni siquiera creó el claim
+  });
+
+  it('nota publicada con ciclo de vida declarado → envía normal', async () => {
+    const r = await sendTelegramArticle({ ...ART, publicado: true, estado: 'publicado' }, { db: makeDb() });
+    expect(r.ok).toBe(true);
+  });
+
   it('429 → retryable; si el retry también falla, ok=false', async () => {
     fetchSpy.mockImplementation(async () => ({
       ok: true, status: 429,

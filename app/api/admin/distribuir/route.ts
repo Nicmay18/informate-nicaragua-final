@@ -3,7 +3,7 @@ import { NO_STORE_401_HEADERS, verifyAdminOrCronToken } from '@/lib/auth';
 import { applyTechnicalMutation } from '@/lib/editorial/mutation-policy';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { logger } from '@/lib/logger';
-import { enviarTelegram, enviarFacebook, enviarIndexNow, enviarPush, enviarTwitter, yaDistribuido, type Noticia } from '@/lib/distribution/channels';
+import { enviarTelegram, enviarFacebook, enviarIndexNow, enviarPush, enviarTwitter, yaDistribuido, esNoticiaDistribuible, type Noticia } from '@/lib/distribution/channels';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -31,7 +31,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Noticia no encontrada' }, { status: 404 });
     }
 
-    const noticia = snap.docs[0].data() as Noticia;
+    const noticia = snap.docs[0].data() as Noticia & { publicado?: boolean; estado?: string; archived?: boolean };
+    // No distribuir notas archivadas/eliminadas/borrador: el doc sigue
+    // existiendo tras soft-delete y sin este chequeo se reenviaba a Telegram.
+    if (!esNoticiaDistribuible(noticia)) {
+      return NextResponse.json({ error: 'La noticia no está publicada (archivada, borrador o eliminada)' }, { status: 409 });
+    }
     const resultados: Record<string, { ok: boolean; skipped?: boolean; error?: string; ambiguous?: boolean; claimStatus?: string }> = {};
 
     const promises: Promise<void>[] = [];

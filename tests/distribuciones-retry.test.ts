@@ -19,6 +19,8 @@ vi.mock('@/lib/distribution/channels', () => ({
   enviarPush: vi.fn(async () => ({ ok: true })),
   enviarTwitter: vi.fn(async () => ({ ok: true })),
   yaDistribuido: vi.fn(async () => false),
+  esNoticiaDistribuible: (n: any) => !!n && n.archived !== true && n.estado !== 'archivado' && n.estado !== 'borrador' && n.publicado !== false && (n.publicado === true || n.estado === 'publicado'),
+  cancelarPendienteDistribucion: vi.fn(async () => {}),
 }));
 
 /* Firestore mínimo */
@@ -97,7 +99,7 @@ describe('distribuciones-retry — estados terminales y claims', () => {
       slug: 'nota-1', estado: 'requiere_verificacion', reintentos: 1,
       proximoIntento: '2020-01-01T00:00:00.000Z', canalesFallidos: ['telegram'], fecha: new Date().toISOString(),
     };
-    noticias['nota-1'] = { slug: 'nota-1', titulo: 'Nota' };
+    noticias['nota-1'] = { slug: 'nota-1', titulo: 'Nota', publicado: true, estado: 'publicado' };
     claims['telegram_nota-1'] = { status: 'unknown' };
 
     const res = await GET(req());
@@ -114,7 +116,7 @@ describe('distribuciones-retry — estados terminales y claims', () => {
       slug: 'nota-2', reintentos: 0,
       proximoIntento: '2020-01-01T00:00:00.000Z', canalesFallidos: ['telegram'], fecha: new Date().toISOString(),
     };
-    noticias['nota-2'] = { slug: 'nota-2', titulo: 'Nota 2' };
+    noticias['nota-2'] = { slug: 'nota-2', titulo: 'Nota 2', publicado: true, estado: 'publicado' };
     claims['telegram_nota-2'] = { status: 'unknown', claimedAt: new Date().toISOString() };
 
     const res = await GET(req());
@@ -129,7 +131,7 @@ describe('distribuciones-retry — estados terminales y claims', () => {
       slug: 'nota-3', reintentos: 0,
       proximoIntento: '2020-01-01T00:00:00.000Z', canalesFallidos: ['telegram'], fecha: new Date().toISOString(),
     };
-    noticias['nota-3'] = { slug: 'nota-3', titulo: 'Nota 3' };
+    noticias['nota-3'] = { slug: 'nota-3', titulo: 'Nota 3', publicado: true, estado: 'publicado' };
     claims['telegram_nota-3'] = { status: 'failed', claimedAt: new Date().toISOString() };
 
     const res = await GET(req());
@@ -140,6 +142,45 @@ describe('distribuciones-retry — estados terminales y claims', () => {
     expect(added.length).toBe(1);
     // Sin campos undefined en el registro
     expect(JSON.stringify(added[0])).not.toContain('undefined');
+  });
+
+  it('nota archivada/eliminada en cola → noticia_no_publicada, sin envío', async () => {
+    pendientes['nota-borrada'] = {
+      slug: 'nota-borrada', reintentos: 0,
+      proximoIntento: '2020-01-01T00:00:00.000Z', canalesFallidos: ['telegram'], fecha: new Date().toISOString(),
+    };
+    // Soft-delete real: el doc sigue existiendo con el mismo slug
+    noticias['nota-borrada'] = { slug: 'nota-borrada', titulo: 'Nota', publicado: false, estado: 'archivado', archived: true };
+
+    const res = await GET(req());
+    expect(res.status).toBe(200);
+    expect(tgMock).not.toHaveBeenCalled();
+    expect(pendientes['nota-borrada'].estado).toBe('noticia_no_publicada');
+    expect(pendientes['nota-borrada'].proximoIntento).toBe('9999-12-31T00:00:00.000Z');
+  });
+
+  it('nota en borrador en cola → noticia_no_publicada, sin envío', async () => {
+    pendientes['nota-draft'] = {
+      slug: 'nota-draft', reintentos: 0,
+      proximoIntento: '2020-01-01T00:00:00.000Z', canalesFallidos: ['telegram'], fecha: new Date().toISOString(),
+    };
+    noticias['nota-draft'] = { slug: 'nota-draft', titulo: 'Draft', estado: 'borrador' };
+
+    await GET(req());
+    expect(tgMock).not.toHaveBeenCalled();
+    expect(pendientes['nota-draft'].estado).toBe('noticia_no_publicada');
+  });
+
+  it('doc cancelado manualmente no se reprocesa', async () => {
+    pendientes['nota-cancel'] = {
+      slug: 'nota-cancel', estado: 'cancelado', reintentos: 0,
+      proximoIntento: '2020-01-01T00:00:00.000Z', canalesFallidos: ['telegram'], fecha: new Date().toISOString(),
+    };
+    noticias['nota-cancel'] = { slug: 'nota-cancel', titulo: 'N', publicado: true, estado: 'publicado' };
+
+    await GET(req());
+    expect(tgMock).not.toHaveBeenCalled();
+    expect(pendientes['nota-cancel'].estado).toBe('cancelado');
   });
 
   it('sin credencial → 401', async () => {

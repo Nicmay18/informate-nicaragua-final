@@ -17,6 +17,7 @@
 import type { Firestore } from 'firebase-admin/firestore';
 import { getTelegramConfig } from '@/lib/telegram';
 import { logger } from '@/lib/logger';
+import { esNoticiaDistribuible } from '@/lib/distribution/channels';
 
 const TG_TIMEOUT_MS = 8000;
 const CAPTION_LIMIT = 1024; // límite Telegram para sendPhoto
@@ -52,6 +53,10 @@ export interface TelegramArticleInput {
   imagen?: string;
   imagenRedes?: string;
   articleId?: string;
+  /** Ciclo de vida de la noticia (si el caller lo declara). */
+  publicado?: boolean;
+  estado?: string;
+  archived?: boolean;
 }
 
 export type TelegramErrorCode =
@@ -63,7 +68,8 @@ export type TelegramErrorCode =
   | 'TELEGRAM_API'
   | 'NETWORK'
   | 'CLAIM_BUSY'
-  | 'AMBIGUOUS';
+  | 'AMBIGUOUS'
+  | 'NOT_PUBLISHABLE';
 
 export interface TelegramSendResult {
   ok: boolean;
@@ -76,7 +82,7 @@ export interface TelegramSendResult {
   /** true cuando el resultado es incierto: Telegram pudo haber recibido el mensaje. */
   ambiguous?: boolean;
   /** Estado del claim en distribuciones_envios tras la operación. */
-  claimStatus?: 'sent' | 'failed' | 'unknown' | 'sending';
+  claimStatus?: 'sent' | 'failed' | 'unknown' | 'sending' | 'blocked';
   messageId?: number;
   distributionId?: string;
   sentAt: string;
@@ -507,6 +513,16 @@ export async function sendTelegramArticle(
 
   if (!input.slug || !input.titulo) {
     return { ...base, ok: false, error: 'Faltan slug o título', errorCode: 'VALIDATION' };
+  }
+
+  // Defensa en profundidad: si el caller declara el ciclo de vida y la
+  // noticia no es publicable (archivada/eliminada/borrador), se rechaza
+  // ANTES de reclamar — una nota "eliminada" no debe reenviarse aunque
+  // el doc siga existiendo en Firestore con el mismo slug.
+  if (input.publicado !== undefined || input.estado !== undefined || input.archived !== undefined) {
+    if (!esNoticiaDistribuible(input)) {
+      return { ...base, ok: false, skipped: true, reason: 'noticia_no_publicable', error: 'La noticia no está publicada (archivada, borrador o eliminada)', errorCode: 'NOT_PUBLISHABLE', claimStatus: 'blocked' };
+    }
   }
 
   const db = options?.db;
