@@ -17,13 +17,13 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
   {
     slug: 'apostillar-documentos-nicaragua-2026',
     title: 'Guía completa para apostillar documentos desde Nicaragua en 2026',
-    seoTitle: 'Cómo apostillar documentos en Nicaragua: citas 2026',
-    description: 'Requisitos, pasos, costos, tiempos y dónde apostillar documentos nicaragüenses para usarlos en el extranjero. Guía actualizada 2026.',
+    seoTitle: 'Cómo apostillar documentos en Nicaragua: guía de citas 2026',
+    description: 'Requisitos, pasos, costos y tiempos reales para apostillar documentos nicaragüenses en 2026. Citas en citas.cancilleria.gob.ni, espera de 2 a 4 meses y tabla de costos. Guía actualizada.',
     category: 'Trámites',
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-01-15',
-    updatedDate: '2026-07-30',
+    updatedDate: '2026-11-17',
     content: `
       <blockquote><h3>Qué cambió desde la última actualización (24 de mayo de 2026)</h3><ul><li>El trámite ahora se agenda por una <strong>plataforma de citas en línea</strong> (citas.cancilleria.gob.ni), no de forma presencial sin cita.</li><li>Las citas disponibles se están agotando con <strong>hasta 4 meses de espera</strong>, según un reporte de mayo de 2026.</li><li>Surgió un <strong>mercado negro de citas</strong>, con precios de USD 100 a 400 por un cupo, según denuncias ciudadanas.</li><li>Los tiempos de "3 a 5 días hábiles" que indicábamos antes <strong>ya no reflejan la realidad del trámite</strong> para la mayoría de solicitantes.</li></ul></blockquote>
       <p>La apostilla es un sello que certifica la autenticidad de documentos públicos nicaragüenses para que sean válidos en países que forman parte de la Convención de La Haya. Nicaragua es miembro desde 2013, por lo que los documentos apostillados en el país son reconocidos en más de 120 naciones sin necesidad de legalización consular adicional. Sin embargo, en 2026 el trámite enfrenta demoras importantes que todo solicitante debe conocer antes de planificar un viaje o trámite migratorio.</p>
@@ -42,11 +42,14 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
       <p>Los documentos extranjeros no se apostillan en Nicaragua. Deben ser apostillados en el país de origen antes de ser presentados en el país.</p>
       <h2>Dónde realizar el trámite</h2>
       <p>La apostilla se realiza en la Dirección General de Asuntos Consulares y Migratorios del Ministerio de Relaciones Exteriores (MINREX), en Managua. También existen oficinas delegadas en principales ciudades del país. Se recomienda verificar los horarios de atención y disponibilidad del servicio antes de acudir, incluso teniendo cita confirmada.</p>
+      <p><strong>Ojo con el nombre:</strong> la plataforma de citas <strong>citas.cancilleria.gob.ni</strong> es operada por el MINREX. Si busca "citas MINREX" o "citas Cancillería", es el mismo sistema y la misma cita — no son dos trámites distintos. Algunas búsquedas también lo llaman "citas de la Cancillería" o "cita para apostillar"; todas desembocan en el mismo portal.</p>
       <h2>Costos actualizados 2026</h2>
       <table style="width:100%;border-collapse:collapse;margin:16px 0;"><thead><tr style="background:var(--primary);color:#fff;"><th style="padding:10px;text-align:left;">Servicio</th><th style="padding:10px;text-align:left;">Costo aproximado</th></tr></thead><tbody><tr style="border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Apostilla estándar</td><td style="padding:10px;text-align:left;">C$ 150 - 300 por documento</td></tr><tr style="background:#f9fafb;border-bottom:1px solid #e5e7eb;"><td style="padding:10px;text-align:left;">Autenticación previa de documentos académicos (INATEC)</td><td style="padding:10px;text-align:left;">C$ 30</td></tr><tr style=""><td style="padding:10px;text-align:left;">Cupos de cita revendidos en el mercado informal (no oficial, no recomendado)</td><td style="padding:10px;text-align:left;">USD 100 - 400</td></tr></tbody></table>
       <p>Los costos oficiales pueden variar según el tipo de documento; confirme el monto exacto al momento del trámite. Evite pagar por cupos de cita fuera de la plataforma oficial: es un servicio no autorizado y no hay garantía de que la cita sea válida.</p>
     `,
     faqs: [
+      { question: '¿La cita de MINREX es la misma que la de la Cancillería?', answer: 'Sí. La plataforma citas.cancilleria.gob.ni es operada por el MINREX (Ministerio de Relaciones Exteriores). "Citas MINREX", "citas Cancillería" y "cita para apostillar" son el mismo trámite y el mismo portal.' },
+      { question: '¿Dónde saco la cita para apostillar documentos?', answer: 'En citas.cancilleria.gob.ni: seleccione institución, departamento y sede, complete el formulario y verifique su correo para descargar el comprobante.' },
       { question: '¿Se puede apostillar en línea en Nicaragua?', answer: 'Solo la cita se agenda en línea. El trámite de apostillado en sí sigue siendo presencial, en la Cancillería o sus oficinas delegadas.' },
       { question: '¿Cuánto tiempo real toma conseguir cita para apostillar?', answer: 'A mediados de 2026, las esperas reportadas van de 2 a 4 meses, dependiendo de la demanda y la sede elegida.' },
       { question: '¿Es seguro comprar una cita a un intermediario?', answer: 'No es un canal oficial. La Cancillería no ha validado ni autorizado la reventa de citas, y pagar por un cupo no garantiza que el trámite se complete sin problemas.' },
@@ -367,13 +370,13 @@ export const EVERGREEN_ARTICLES: EvergreenArticle[] = [
   {
     slug: 'salario-minimo-nicaragua-2026',
     title: 'Salario mínimo Nicaragua 2026: tabla completa por sector y categoría',
-    seoTitle: 'Salario mínimo Nicaragua 2026: tabla por sector',
-    description: 'Cuánto es el salario mínimo en Nicaragua en 2026. Tabla actualizada por sector: agropecuario, servicios, industria, comercio, construcción y hogar.',
+    seoTitle: 'Salario mínimo Nicaragua 2026: cuánto es por sector',
+    description: 'Salario mínimo Nicaragua 2026: de C$6,188 (agropecuario) a C$13,848 (construcción y financieros). Tabla oficial por sector, vigente de marzo 2026 a febrero 2027.',
     category: 'Economía',
     author: 'Keyling Elieth Rivera Muñoz',
     authorSlug: 'keyling-rivera',
     publishedDate: '2026-01-05',
-    updatedDate: '2026-07-30',
+    updatedDate: '2026-11-17',
     content: `
       <blockquote><h3>Qué cambió desde la última actualización (17 de junio de 2026)</h3><ul><li>La tabla de sectores que publicábamos antes no coincidía con las categorías oficiales de la Ley 625: son <strong>9 sectores</strong> (no 5), más zona franca aparte.</li><li>El ajuste vigente para el período <strong>marzo 2026 - febrero 2027</strong> fue de <strong>4%</strong> para 8 de los 9 sectores, aprobado el <strong>5 de marzo de 2026</strong>, con retroactividad al 1 de marzo.</li><li>Zona franca tuvo un ajuste distinto, de <strong>6.7%</strong>, por un acuerdo separado firmado en octubre de 2022.</li><li>El salario mínimo promedio (C$9,314) cubre apenas el <strong>43.8%</strong> del costo de la canasta básica familiar, según cifras del INIDE de enero de 2026.</li></ul></blockquote>
       <p>El salario mínimo en Nicaragua para el período que va de marzo de 2026 a febrero de 2027 fue fijado por la Comisión Nacional del Salario Mínimo el 5 de marzo de 2026, con un ajuste del 4% para la mayoría de sectores, tras un acuerdo entre el Ministerio del Trabajo (MITRAB), representantes sindicales y empresariales. El ajuste beneficia a unos 325,000 trabajadores formales de nueve sectores económicos. Esta guía detalla los montos vigentes por sector, quién los fija y qué hacer si su empleador le paga menos del mínimo.</p>
