@@ -1,4 +1,5 @@
 import type { MeniPrioridad, MeniCategoria } from './types';
+import { TIER_THRESHOLDS, type EditorialTier } from './editorial-tiers';
 
 export const MIN_APPROVED_SCORE = Number(process.env.MENI_MIN_APPROVED_SCORE || '90');
 
@@ -40,10 +41,16 @@ export function computePriority(veredicto: string): MeniPrioridad {
   }
 }
 
-export function scoreToGrade(score: number): string {
+export function scoreToGrade(score: number, tier?: EditorialTier): string {
   if (score >= 95) return 'PUBLICABLE ORO';
   if (score >= 90) return 'PUBLICABLE';
   if (score >= 80) return 'MEJORAR';
+  // Piso por tier: una nota corta puede ser viable para su formato aunque
+  // no alcance la banda global de 80 — se etiqueta MEJORAR, no NO PUBLICAR.
+  if (tier) {
+    const pisoTier = TIER_THRESHOLDS[tier]?.minAdnNI ?? 0;
+    if (score >= pisoTier) return 'MEJORAR';
+  }
   return 'NO PUBLICAR';
 }
 

@@ -4,6 +4,7 @@
  */
 
 import type { EntityType, KnowledgeEntity } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 const DEPARTAMENTOS_NI = [
   'Managua', 'León', 'Granada', 'Masaya', 'Chinandega', 'Estelí',
@@ -211,9 +212,7 @@ function isValidEntityName(name: string): boolean {
   return /[A-ZÁÉÍÓÚÑ0-9]/.test(rest);
 }
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function normalizeName(name: string): string {
   return name

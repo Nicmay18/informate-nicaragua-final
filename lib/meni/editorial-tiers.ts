@@ -10,6 +10,8 @@
  * Nivel 4 — INVESTIGACION: activa todos los motores y exige el máximo nivel.
  */
 
+import { htmlToPlainText, countVisibleWords } from '@/lib/utils/html-text';
+
 export type EditorialTier = 'FLASH' | 'NOTICIA' | 'REPORTAJE' | 'INVESTIGACION';
 
 export interface TierThresholds {
@@ -90,8 +92,10 @@ export function detectTier(input: {
   contenido: string;
   categoria?: string;
 }): EditorialTier {
-  const textoPlano = input.contenido.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  const palabras = textoPlano.split(/\s+/).filter(Boolean).length;
+  // Conteo canónico: ignora scripts/estilos/comentarios y decodifica
+  // entidades — antes un <script> o "&nbsp;" inflaba el conteo.
+  const textoPlano = htmlToPlainText(input.contenido);
+  const palabras = countVisibleWords(input.contenido);
 
   // Si tiene menos de 120 palabras, es flash
   if (palabras < 120) return 'FLASH';

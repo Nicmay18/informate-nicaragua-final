@@ -6,10 +6,9 @@
  */
 
 import type { EditorialBrainInput, ReaderRetentionDecision, RetentionRisk } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function analizarRiesgos(texto: string): RetentionRisk[] {
   const riesgos: RetentionRisk[] = [];

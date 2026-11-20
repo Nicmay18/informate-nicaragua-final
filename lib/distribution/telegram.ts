@@ -18,6 +18,7 @@ import type { Firestore } from 'firebase-admin/firestore';
 import { getTelegramConfig } from '@/lib/telegram';
 import { logger } from '@/lib/logger';
 import { esNoticiaDistribuible } from '@/lib/distribution/channels';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 const TG_TIMEOUT_MS = 8000;
 const CAPTION_LIMIT = 1024; // límite Telegram para sendPhoto
@@ -91,19 +92,7 @@ export interface TelegramSendResult {
 // ── Limpieza / escape ───────────────────────────────────────
 
 export function stripHtml(html: string): string {
-  return (html || '')
-    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
-    // Solo tags reales: exige letra tras '<' para no comerse "< pequeños >"
-    .replace(/<\/?[a-zA-Z][^>]*?>/g, ' ')
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;|&apos;/gi, "'")
-    .replace(/\s+/g, ' ')
-    .trim();
+  return htmlToPlainText(html);
 }
 
 /** Escape para Telegram parse_mode:HTML — solo &, <, >, " */

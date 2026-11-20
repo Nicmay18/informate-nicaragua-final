@@ -15,10 +15,9 @@
  */
 
 import type { StoryPlannerInput, StoryPlan, StoryType, NarrativeBlock } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function detectarTipo(texto: string, categoria?: string): StoryType {
   const t = texto.toLowerCase();

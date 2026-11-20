@@ -2,6 +2,8 @@
  * Utilidades generales de MENI
  */
 
+import { htmlToPlainText } from '@/lib/utils/html-text';
+
 export function slugify(texto: string): string {
   return texto
     .toLowerCase()
@@ -30,5 +32,5 @@ export function clamp(value: number, min = 0, max = 100): number {
 }
 
 export function stripHtml(html: string): string {
-  return (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return htmlToPlainText(html || '');
 }

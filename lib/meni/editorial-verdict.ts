@@ -30,6 +30,7 @@ import type { QualityGateIssue } from './quality-gate/types';
 import type { FactualitySignal } from '@/lib/editorial/factuality-signals';
 import type { SupervisorDecision } from '@/lib/supervisor/types';
 import type { ExplainabilityItem } from '@/lib/editorial/core/types';
+import { htmlToVisibleText } from '@/lib/utils/html-text';
 
 export type FindingSeverity = 'BLOCKER' | 'WARNING' | 'RECOMMENDATION' | 'INFO';
 export type EditorialSeverity = 'CUMPLE' | 'SUGERENCIA' | 'REVISAR' | 'BLOQUEANTE';
@@ -84,12 +85,7 @@ export interface EditorialVerdict {
 // ─────────────────────────────────────────────────────────────
 
 function splitParagraphs(contenido: string): string[] {
-  const plain = contenido
-    .replace(/<\/p>/gi, '\n')
-    .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/<h[1-6][^>]*>/gi, '\n')
-    .replace(/<[^>]+>/g, ' ');
-  return plain
+  return htmlToVisibleText(contenido)
     .split(/\n+/)
     .map((p) => p.replace(/\s+/g, ' ').trim())
     .filter((p) => p.length > 0);

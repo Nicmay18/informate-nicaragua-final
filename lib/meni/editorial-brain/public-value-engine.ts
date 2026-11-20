@@ -6,10 +6,9 @@
  */
 
 import type { EditorialBrainInput, PublicValueDecision } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function detectarTipo(texto: string): string {
   const t = texto.toLowerCase();

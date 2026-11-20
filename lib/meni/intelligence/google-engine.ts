@@ -3,10 +3,7 @@
  */
 
 import type { IntelligenceEngineInput, GoogleDecision } from './types';
-
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 export function limpiarSufijoLugar(titulo: string): string {
   // Evitar títulos tipo "... - Managua" o "... - M" generados por fuentes/agentes.
@@ -25,7 +22,7 @@ function generarTituloSEO(titulo: string, _departamento?: string): string {
 }
 
 function generarMetaDescripcion(texto: string, titulo: string): string {
-  const textoPlano = stripHtml(texto);
+  const textoPlano = htmlToPlainText(texto);
   let meta = textoPlano.slice(0, 155);
   if (meta.length === 155) {
     meta = meta.replace(/\s+\S*$/, '') + '…';

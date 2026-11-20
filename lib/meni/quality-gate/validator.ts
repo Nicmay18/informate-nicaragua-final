@@ -6,17 +6,19 @@
  */
 
 import type { EntityMap, QualityGateIssue } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 import { getPerfilEditorial } from '../editorial-profiles';
 import {
   TERMINOLOGY_VARIANTS,
   FILLER_WORDS,
   SENSATIONALIST_PHRASES,
+  SENSATIONALIST_WARNING_TERMS,
   UNSUPPORTED_CLAIM_PATTERNS,
   CHRONOLOGY_CONTRADICTION_PATTERNS,
 } from './rules';
 
 export function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return htmlToPlainText(html || '');
 }
 
 function escapeRegex(str: string): string {
@@ -347,6 +349,20 @@ export function detectSensationalism(textoPlano: string, categoria?: string): Qu
       categoria: 'sensacionalismo',
       severidad: 'blocking',
       mensaje: `Lenguaje sensacionalista detectado: ${frasesEncontradas.join(', ')}`,
+      corregible: true,
+    });
+  }
+
+  // 1b. Términos de carga gráfica: observación editorial, no veto.
+  // Pueden ser descriptors legítimos ("la masacre de…") — el bloqueo
+  // queda reservado a los encuadres alarmistas de SENSATIONALIST_PHRASES.
+  const terminosEncontrados = SENSATIONALIST_WARNING_TERMS.filter((p) => lower.includes(p));
+  if (terminosEncontrados.length > 0) {
+    issues.push({
+      categoria: 'sensacionalismo',
+      severidad: 'warning',
+      mensaje: `Términos de carga gráfica que conviene revisar en contexto: ${terminosEncontrados.join(', ')}`,
+      evidencia: terminosEncontrados.join(', '),
       corregible: true,
     });
   }

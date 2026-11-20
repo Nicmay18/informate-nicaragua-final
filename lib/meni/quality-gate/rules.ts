@@ -17,14 +17,24 @@ export const FILLER_WORDS = [
 ];
 
 // Frases sensacionalistas que deben eliminarse o neutralizarse.
+// Solo encuadres claramente alarmistas bloquean. Términos factuales
+// ('masacre', 'devorado', 'desgarró') pueden ser descriptors
+// periodísticos legítimos en notas judiciales/de sucesos — van a
+// SENSATIONALIST_WARNING_TERMS como observación, nunca como veto.
 export const SENSATIONALIST_PHRASES = [
   'bañado en sangre',
-  'devorado',
-  'desgarró',
   'cuerpo destrozado',
   'escena de terror',
   'escena dantesca',
   'baño de sangre',
+];
+
+// Términos de carga gráfica que en contexto sensacionalista son defecto,
+// pero por sí solos pueden ser hechos ("la masacre de…", "el animal
+// devoró a la víctima"). Se reportan como warning → sugerencia.
+export const SENSATIONALIST_WARNING_TERMS = [
+  'devorado',
+  'desgarró',
   'masacre',
 ];
 

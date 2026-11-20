@@ -2,21 +2,20 @@
  * Canonical word count for the Informate Nicaragua project.
  *
  * Rules:
- * - Strips HTML tags.
- * - Replaces HTML entities with a space.
- * - Collapses any whitespace to a single space.
- * - Splits on whitespace and counts non-empty tokens.
+ * - Strips HTML tags AND non-visible content (comments, <script>,
+ *   <style>, <noscript>, <template>).
+ * - Decodes HTML entities (&amp;, &oacute;, &#233;, &nbsp;…) before
+ *   counting — entities no longer glue or split words incorrectly.
+ * - Counts whitespace-separated tokens of the visible text.
  *
  * This function is the single source of truth for word counting
  * across NIOS, MENI, dashboards and editorial tooling.
+ * Implementation: lib/utils/html-text.ts (countVisibleWords).
  */
+import { countVisibleWords } from './html-text';
+
 export function countWords(text = ''): number {
-  const normalized = text
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&(?:[a-zA-Z]+|#[0-9]+|#x[0-9a-fA-F]+);/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-  return normalized ? normalized.split(/\s+/).length : 0;
+  return countVisibleWords(text);
 }
 
 /** Alias for modules that already import cleanWordCount. */

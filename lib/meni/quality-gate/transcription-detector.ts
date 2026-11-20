@@ -7,6 +7,7 @@
  */
 
 import type { QualityGateIssue } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 export interface ParagraphTranscription {
   indice: number;
@@ -39,9 +40,7 @@ export interface TranscriptionReport {
 const PARAGRAPH_SIMILARITY_THRESHOLD = Number(process.env.MENI_MAX_PARAGRAPH_SIMILARITY || '60');
 const NGRAM_SIZE = 5;
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function normalizar(texto: string): string {
   return texto

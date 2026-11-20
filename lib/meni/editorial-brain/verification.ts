@@ -10,10 +10,9 @@
  */
 
 import type { EditorialVerification, EditorialVerificationItem, EditorialDecision } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
-}
+const stripHtml = (html: string): string => htmlToPlainText(html).toLowerCase();
 
 function containsAny(text: string, terms: string[]): boolean {
   return terms.some(term => text.includes(term.toLowerCase()));

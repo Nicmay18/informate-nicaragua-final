@@ -29,7 +29,7 @@ export function reconcileMeniResult(result: MeniResult): MeniResult {
     calificacion: !valid ? 'ERROR DE EVALUACIÓN'
       : blocked ? 'NO PUBLICAR — BLOQUEANTE'
       : review ? 'REVISAR — requiere comprobación'
-      : scoreToGrade(result.scoreFinal!),
+      : scoreToGrade(result.scoreFinal!, result.editorialTier),
     riesgo: {
       nivel: blocked ? 'ROJO' : review ? 'AMARILLO' : 'VERDE',
       motivo: verdict.resumen,

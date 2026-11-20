@@ -7,10 +7,7 @@
  */
 
 import type { IntelligenceEngineInput, OriginalityDecision } from './types';
-
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+import { htmlToPlainText, htmlToVisibleText, countHeadings, countStrongEmphasis, countBlockquotes } from '@/lib/utils/html-text';
 
 const TRANSICIONES_IA = [
   'en un giro inesperado',
@@ -36,8 +33,8 @@ const PALABRAS_RELLENO = [
 
 function detectarNivelTranscripcion(texto: string, titulo: string, fuente?: string): number {
   if (!fuente) return 50;
-  const textoNoticia = stripHtml(`${titulo} ${texto}`).toLowerCase();
-  const textoFuente = stripHtml(fuente).toLowerCase();
+  const textoNoticia = htmlToPlainText(`${titulo} ${texto}`).toLowerCase();
+  const textoFuente = htmlToPlainText(fuente).toLowerCase();
   const palabrasNoticia = textoNoticia.split(/\s+/).filter(Boolean);
   let coincidencias = 0;
   const ventana = 3;
@@ -49,14 +46,19 @@ function detectarNivelTranscripcion(texto: string, titulo: string, fuente?: stri
   return Math.round((coincidencias / total) * 100);
 }
 
-function detectarNivelReorganizacion(texto: string): number {
-  const parrafos = texto.split(/\n+/).filter((p) => p.trim().length > 20);
+function detectarNivelReorganizacion(contenidoHtml: string): number {
+  // Los párrafos reales son bloques del HTML (<p>, <h2>, <li>…), no líneas
+  // del código fuente: dividir el HTML crudo por '\n' casi siempre producía
+  // un solo "párrafo" y subestimaba la reorganización.
+  const parrafos = htmlToVisibleText(contenidoHtml)
+    .split('\n\n+')
+    .filter((p) => p.trim().length > 20);
   if (parrafos.length <= 1) return 20;
   let score = 40;
   if (parrafos.length >= 3) score += 20;
-  if (/<h2/i.test(texto)) score += 20;
-  if (/<strong/i.test(texto)) score += 10;
-  if (/<blockquote/i.test(texto)) score += 10;
+  if (countHeadings(contenidoHtml, 2) >= 1) score += 20;
+  if (countStrongEmphasis(contenidoHtml) >= 1) score += 10;
+  if (countBlockquotes(contenidoHtml) >= 1) score += 10;
   return Math.min(score, 100);
 }
 
@@ -137,7 +139,7 @@ function computeScore(
 }
 
 export function runOriginalityEngine(input: IntelligenceEngineInput): OriginalityDecision {
-  const texto = stripHtml(input.contenido);
+  const texto = htmlToPlainText(input.contenido);
   const nivelTranscripcion = detectarNivelTranscripcion(texto, input.titulo, input.fuente);
   const nivelReorganizacion = detectarNivelReorganizacion(input.contenido);
   const nivelAporteContexto = detectarNivelAporteContexto(texto);

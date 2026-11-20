@@ -2,6 +2,7 @@ import type { NoticiaInput } from './types';
 import type { MeniResult } from './types';
 import type { EntityMap } from './quality-gate/types';
 import { extractKeywords } from './utils/keywords';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 const DEFAULT_MAX_TITLE = 60;
 const MAX_META = 160;
@@ -13,9 +14,7 @@ export interface AutoCorrection {
   descripcion: string;
 }
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 export function shortenTitle(title: string, max: number = DEFAULT_MAX_TITLE): string {
   if (title.length <= max) return title;

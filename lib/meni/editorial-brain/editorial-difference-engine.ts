@@ -9,10 +9,9 @@
 
 import type { EditorialBrainInput, EditorialDifferenceDecision, CompetitionDecision } from './types';
 import { runCompetitionEngine } from './competition-engine';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function calcularPorcentajeDiferencia(enfoqueNI: string, enfoquesCompetencia: string[]): number {
   const palabrasNI = new Set(enfoqueNI.toLowerCase().split(/\W+/).filter(w => w.length > 4));

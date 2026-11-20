@@ -4,10 +4,7 @@
  */
 
 import type { IntelligenceEngineInput, ReaderValueDecision } from './types';
-
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 const PATRONES_SIN_VALOR = [
   /\bsegún informaciones\b/i,
@@ -138,7 +135,7 @@ function computeScore(queGana: string[], queFalta: string[], bloquear: boolean):
 }
 
 export function runReaderValueEngine(input: IntelligenceEngineInput): ReaderValueDecision {
-  const texto = stripHtml(input.contenido);
+  const texto = htmlToPlainText(input.contenido);
   const titulo = input.titulo;
   const queGanaElLector = detectarQueGanaElLector(texto, titulo);
   const queFaltaExplicar = detectarQueFaltaExplicar(texto, titulo);

@@ -24,6 +24,7 @@ import { detectarDuplicadoAdmin } from '@/lib/analizador-duplicados';
 import { runQualityGate } from '@/lib/meni/quality-gate';
 import { computeExplanationIndex, computeOriginalityPercent } from '@/lib/meni/quality-gate/editorScore';
 import { stripHtml } from '@/lib/meni/quality-gate/validator';
+import { countVisibleWords } from '@/lib/utils/html-text';
 import {
   buildMeniDiagnostics,
   buildDuplicateBlockingIssue,
@@ -243,7 +244,9 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
   // Deterministic timestamp: same input must produce same evaluationTimestamp
   qualityGate.timestamp = now.toISOString();
 
-  const palabrasTexto = textoPlano.split(/\s+/).filter(Boolean).length;
+  // Conteo canónico sobre el HTML original: si evidence.textoPlano falta,
+  // el fallback anterior contaba etiquetas HTML como palabras.
+  const palabrasTexto = countVisibleWords(input.contenido || '');
 
   // Quality Gate: solo bloquear por issues técnicos/factuales que el
   // Editorial Brain no evalúa (contradicciones, cronología, duplicados).
@@ -290,7 +293,7 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     || (factualityCritical ? `Contradicción factual interna: ${factualitySignals.find((s) => s.severity === 'CRITICAL')?.desc}` : null)
     || (tierQualityGateBloqueado ? tierBlockingIssues[0]?.mensaje : null)
     || (adnTranscripcionBloquear ? `Copia expresiva supera el máximo del tier (${thresholds.maxTranscripcion}%)` : null);
-  const calificacionBase = scoreIsValid ? scoreToGrade(scoreFinal!) : 'ERROR DE EVALUACIÓN';
+  const calificacionBase = scoreIsValid ? scoreToGrade(scoreFinal!, tier) : 'ERROR DE EVALUACIÓN';
   const calificacion = !aprobadoFinal && scoreIsValid && scoreFinal! >= MIN_APPROVED_SCORE
     ? `${calificacionBase} — BLOQUEADO${motivoBloqueoPanel ? `: ${motivoBloqueoPanel}` : ''}`
     : calificacionBase;
@@ -368,7 +371,11 @@ function evaluateMeni(input: NoticiaInput, activeAdjustments?: ActiveAdjustments
     categoria,
   });
 
-  const { blockingIssues, warnings } = buildMeniDiagnostics({ qualityGate, scoreFinal, aprobado: aprobadoFinal, editorialDna });
+  const { blockingIssues, warnings } = buildMeniDiagnostics({
+    qualityGate, scoreFinal, aprobado: aprobadoFinal, editorialDna,
+    scoreFloor: thresholds.minAdnNI,
+    umbralesDna: { exclusividad: thresholds.minExclusividad, wow: thresholds.minWow },
+  });
   // MENI 4 Final — veredicto unificado del Editor Jefe (fase MENI pura;
   // duplicado/factualidad/Supervisor se agregan aguas abajo y recomputan).
   const editorialVerdict = buildEditorialVerdict({

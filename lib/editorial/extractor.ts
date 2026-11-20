@@ -28,6 +28,13 @@ import type {
 import { detectCategory } from './category-detector';
 import { OFFICIAL_SOURCE_CI_RE } from './known-sources';
 import { detectContentProfile } from '@/lib/meni/profile-detector';
+import {
+  htmlToVisibleText,
+  countHeadings,
+  countStrongEmphasis,
+  countBlockquotes,
+  extractHeadings,
+} from '@/lib/utils/html-text';
 
 // Patrones reutilizables
 const ADJETIVOS_EMOCIONALES = /\b(?:incre[ií]ble|impresionante|escalofriante|conmocionado|indignado|furibundo|escandaloso|brutal|terrible|horrendo|devastador|espectacular|maravilloso|fant[aá]stico|extraordinario|impactante|alarmante|preocupante|grave|urgente|cr[ií]tico|catastr[oó]fico)\b/gi;
@@ -77,12 +84,9 @@ export function normalizeKeywords(value?: unknown): string[] {
 
 export function extract(noticia: NoticiaInput): ArticleEvidence {
   const contenidoStr = typeof noticia.contenido === 'string' ? noticia.contenido : String(noticia.contenido || '');
-  const textoPlano = contenidoStr
-    .replace(/<p[^>]*>/gi, '\n')
-    .replace(/<\/p>/gi, '\n')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/[ \t]+/g, ' ')
-    .trim();
+  // Texto visible canónico: sin scripts/estilos/comentarios, entidades
+  // decodificadas, bloques separados por línea en blanco.
+  const textoPlano = htmlToVisibleText(contenidoStr);
 
   const parrafos = textoPlano.split(/\n+/).map(p => p.trim()).filter(p => p.length > 20);
   const palabraCount = textoPlano.split(/\s+/).filter(Boolean).length;
@@ -92,8 +96,8 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     tituloLength: noticia.titulo.length,
     resumenLength: noticia.resumen?.length ?? 0,
     slug: noticia.slug,
-    h2Count: (noticia.contenido.match(/<h2[^>]*>/gi) || []).length,
-    strongCount: (noticia.contenido.match(/<strong[^>]*>/gi) || []).length,
+    h2Count: countHeadings(noticia.contenido, 2),
+    strongCount: countStrongEmphasis(noticia.contenido),
     keywords: noticia.palabrasClave?.length
       ? noticia.palabrasClave
       : normalizeKeywords(noticia.keywords),
@@ -153,8 +157,8 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
   const tieneTrabajoCampo = /en\s+el\s+lugar\s+del\s+hecho|testigos?\s+identificados?|fotograf[íi]as\s+propias|datos\s+obtenidos\s+por|report[oó]\s+desde|entrevist\w+\s+(?:a|con)\s+/i.test(textoPlano);
   // Estructura editorial propia: secciones, listas de servicio, múltiples
   // fuentes/lugares y densidad de datos verificables.
-  const h2Total = (contenidoStr.match(/<h2[^>]*>/gi) || []).length;
-  const h2Pregunta = (contenidoStr.match(/<h2[^>]*>[^<]*[¿?]/gi) || []).length;
+  const h2Total = countHeadings(contenidoStr, 2);
+  const h2Pregunta = extractHeadings(contenidoStr, 2).filter(h => /[¿?]/.test(h)).length;
   const tieneListasServicio = /<(ul|ol)\b[^>]*>/i.test(contenidoStr);
   const lugaresDetectados = (textoPlano.match(LUGARES_REGEX) || []).length;
   const datosVerificablesCount = (textoPlano.match(CIFRAS_REGEX) || []).length + (textoPlano.match(FECHAS_REGEX) || []).length;
@@ -198,9 +202,9 @@ export function extract(noticia: NoticiaInput): ArticleEvidence {
     transicionesIA: [...new Set(transicionesIA)],
     tieneRedundancia: parrafos.length > 2 && parrafos.some((p, i) => i > 0 && p.slice(0, 30) === parrafos[i - 1].slice(0, 30)),
     estructuraHtml: {
-      h2: (contenidoStr.match(/<h2[^>]*>/gi) || []).length,
-      strong: (contenidoStr.match(/<strong[^>]*>/gi) || []).length,
-      blockquote: (contenidoStr.match(/<blockquote[^>]*>/gi) || []).length,
+      h2: countHeadings(contenidoStr, 2),
+      strong: countStrongEmphasis(contenidoStr),
+      blockquote: countBlockquotes(contenidoStr),
     },
     riesgosLegales: [...new Set(riesgosLegales)],
     tiposContaminacion,
