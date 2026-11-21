@@ -95,6 +95,10 @@ const SENSITIVE_API_PATHS = [
   '/api/revalidate',
   '/api/indexnow',
   '/api/nios',
+  // /api/entity ejecuta escaneos sin límite sobre kb_relations/kb_timeline
+  // por request y no tiene consumidor público conocido (las páginas de
+  // entidad usan loadEntityPage server-side). Se cierra a admin.
+  '/api/entity',
 ];
 
 function isSensitiveApiPath(pathname: string): boolean {

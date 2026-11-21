@@ -157,26 +157,34 @@ export function mergeArticleData(
 /**
  * Carga noticias desde Firestore.
  */
-export async function loadNoticiasFromFirestore(db: Firestore, limit = 500): Promise<Noticia[]> {
+export async function loadNoticiasFromFirestore(
+  db: Firestore,
+  limit = 500,
+  opts?: { includeContenido?: boolean },
+): Promise<Noticia[]> {
+  // 'contenido' (~10KB/doc) solo se proyecta cuando el consumidor lo necesita
+  // (p.ej. detección forense MENI). El pipeline de métricas fusionadas no lo
+  // usa: ArticleFusion trabaja con metadatos + palabras.
+  const fields = [
+    'slug',
+    'titulo',
+    'categoria',
+    'autor',
+    'fecha',
+    'palabras',
+    'scoreMeni',
+    'tags',
+    'related_links',
+    'estado',
+    'publicado',
+    'archived',
+    'resumen',
+    'imagen',
+    ...(opts?.includeContenido ? ['contenido'] : []),
+  ];
   const snap = await db
     .collection('noticias')
-    .select(
-      'slug',
-      'titulo',
-      'categoria',
-      'autor',
-      'fecha',
-      'palabras',
-      'contenido',
-      'scoreMeni',
-      'tags',
-      'related_links',
-      'estado',
-      'publicado',
-      'archived',
-      'resumen',
-      'imagen',
-    )
+    .select(...fields)
     .orderBy('fecha', 'desc')
     .limit(limit)
     .get();

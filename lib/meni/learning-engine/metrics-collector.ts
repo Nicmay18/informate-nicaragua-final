@@ -44,7 +44,17 @@ export async function collectArticleMetrics(
   config: LearningConfig,
 ): Promise<ArticleMetrics[]> {
   const cutoff = new Date(Date.now() - config.daysToAnalyze * 24 * 60 * 60 * 1000);
-  const snap = await db.collection('noticias').get();
+  // Solo los campos que consume el análisis: el documento completo incluía
+  // `contenido` (~10KB/doc) innecesario para métricas agregadas.
+  const snap = await db.collection('noticias')
+    .select(
+      'slug', 'titulo', 'categoria', 'departamento', 'autor', 'fecha',
+      'vistas', 'palabras', 'scoreMeni', 'aprobadoMeni', 'imagen',
+      'imagenDestacada', 'resumen', 'distribuida', 'fechaDistribucion',
+      'tiempoLecturaSeg', 'ctrFacebook', 'vistasDiscover', 'tasaRetencion',
+      'tipoIntroduccion',
+    )
+    .get();
 
   const articles: ArticleMetrics[] = [];
 

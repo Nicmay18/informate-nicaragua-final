@@ -48,7 +48,11 @@ export function hasRenderableContent(article: Partial<Noticia>): boolean {
   return (
     !!article.slug?.trim() &&
     (article.titulo || '').trim().length > 5 &&
-    (article.contenido || '').trim().length > 20
+    // Los listados proyectan `palabras` en lugar de `contenido` (control de
+    // costos Firestore): un conteo de palabras > 3 implica un cuerpo > 20
+    // chars en la práctica. Cuando `contenido` sí viene (detalle/sitemap),
+    // se conserva el umbral original.
+    ((article.contenido || '').trim().length > 20 || (article.palabras ?? 0) > 3)
   );
 }
 

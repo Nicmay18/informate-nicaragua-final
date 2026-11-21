@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache';
 import { logger } from './logger';
 
 export interface CorreccionPublica {
@@ -40,7 +41,19 @@ function formatCampo(campo: string): string {
  * Carga las correcciones editoriales públicas desde Firestore.
  * Une cada corrección con el título y slug de la noticia original.
  */
+// /correcciones es force-dynamic: sin caché cada visita ejecutaba ~60
+// lecturas Firestore. Las correcciones cambian solo por acciones editoriales.
+const _cachedPublicCorrections = unstable_cache(
+  async (limit: number) => loadPublicCorrections(limit),
+  ['public-corrections'],
+  { revalidate: 300, tags: ['correcciones'] }
+);
+
 export async function getPublicCorrections(limit = 50): Promise<CorreccionPublica[]> {
+  return _cachedPublicCorrections(limit);
+}
+
+async function loadPublicCorrections(limit: number): Promise<CorreccionPublica[]> {
   try {
     const { adminDb } = await import('./firebase-admin');
     const snap = await adminDb

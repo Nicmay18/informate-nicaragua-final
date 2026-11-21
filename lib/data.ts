@@ -28,11 +28,16 @@ type FirestoreNoticiaData = Partial<Noticia> & {
   fechaPublicacion?: any;
 };
 
+// NOTA DE COSTOS: 'contenido' NO va en LIST_FIELDS. Cada doc pesa ~10KB
+// casi todo por el HTML del cuerpo; los listados (portada, /noticias,
+// categorías, relacionadas, más leídas) solo renderizan tarjetas con
+// título/resumen/imagen. El guard de renderabilidad usa `palabras`
+// (ver hasRenderableContent). El detalle (_cachedGetBySlug) y el sitemap
+// sí proyectan 'contenido' porque lo necesitan.
 export const LIST_FIELDS = [
   'slug',
   'titulo',
   'resumen',
-  'contenido',
   'imagen',
   'imagenRedes',
   'categoria',
@@ -287,12 +292,15 @@ export async function fetchPublishedDocs(fields: string[], fetchLimit: number, c
     safeGet('fecha-string', base().where('fecha', '>=', FECHA_STRING_BOUNDARY).orderBy('fecha', 'desc').select(...selectFields).limit(fetchLimit)),
   ]);
 
-  // publishedAt cubre docs sin `fecha` o con fecha inválida. Intenta el query
-  // indexado (estado[+categoria]+publishedAt); si el índice compuesto no
-  // existe, cae al orderBy single-field con filtro en memoria.
+  // publishedAt cubre docs sin `fecha` o con fecha inválida. En el corpus
+  // actual el 100% de los publicados tiene `fecha` (verificado 2026-11), así
+  // que esta rama es casi puramente redundante: se acota a 100 docs recientes
+  // — suficiente para rescatar cualquier doc sin `fecha`, sin pagar
+  // fetchLimit lecturas duplicadas en cada regeneración de caché.
   let publishedAtDocs: QueryDocumentSnapshot[] = [];
   {
-    const q: any = base().orderBy('publishedAt', 'desc').select(...selectFields).limit(fetchLimit);
+    const publishedAtLimit = Math.min(fetchLimit, 100);
+    const q: any = base().orderBy('publishedAt', 'desc').select(...selectFields).limit(publishedAtLimit);
     publishedAtDocs = await safeGet('publishedAt-indexed', q);
     if (publishedAtDocs.length === 0) {
       const fbLimit = Math.min(Math.max(fetchLimit * 2, 250), 500);
@@ -355,15 +363,22 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
 // de fetchPublishedDocs contra Firestore. El tag 'noticias' lo invalidan todas
 // las rutas de publicación, así que una nota nueva/edición sigue apareciendo
 // de inmediato.
-const _cachedGetNews = unstable_cache(
-  async (count: number) => fetchNoticiasList([...LIST_FIELDS], count),
-  ['news-list'],
-  { revalidate: 60, tags: ['noticias'] }
+//
+// POOL ÚNICO: antes cada valor de `count` (30, 80, 100, 120, 500…) generaba
+// su propia entrada de caché y su propia tanda de ~600 lecturas cada 5 min.
+// Como fetchLimit ya está topado en 200 por rama, un único pool de 200 cubre
+// todos los consumidores; getNews(count) solo rebanada en memoria. El top-N
+// resultante es idéntico (o más completo) que con fetches por count.
+const _cachedGetNewsPool = unstable_cache(
+  async () => fetchNoticiasList([...LIST_FIELDS], 200),
+  ['news-pool'],
+  { revalidate: 300, tags: ['noticias'] }
 );
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
   const validatedCount = validateCount(count, DEFAULT_NEWS_COUNT);
-  return _cachedGetNews(validatedCount);
+  const pool = await _cachedGetNewsPool();
+  return pool.slice(0, validatedCount);
 }
 
 const _cachedGetNewsByCategory = unstable_cache(
@@ -391,7 +406,7 @@ const _cachedGetNewsByCategory = unstable_cache(
     }
   },
   ['news-by-category'],
-  { revalidate: 60, tags: ['noticias'] }
+  { revalidate: 900, tags: ['noticias'] }
 );
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -436,7 +451,7 @@ const _cachedGetMasLeidas = unstable_cache(
     }
   },
   ['mas-leidas'],
-  { revalidate: 60, tags: ['noticias', 'popular-news'] }
+  { revalidate: 900, tags: ['noticias', 'popular-news'] }
 );
 
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
@@ -560,7 +575,7 @@ export async function getAllSlugs(): Promise<string[]> {
     const snap = await adminDb
       .collection('noticias')
       .where('estado', '==', 'publicado')
-      .select('slug', 'titulo', 'contenido', 'aprobadoMeni', 'publicado', 'archived', 'estado', 'noindex', 'perfil', 'categoria')
+      .select('slug', 'titulo', 'palabras', 'aprobadoMeni', 'publicado', 'archived', 'estado', 'noindex', 'perfil', 'categoria')
       .limit(2000)
       .get();
 
@@ -570,7 +585,7 @@ export async function getAllSlugs(): Promise<string[]> {
         const article: Partial<Noticia> = {
           slug: data.slug,
           titulo: data.titulo,
-          contenido: data.contenido,
+          palabras: data.palabras,
           aprobadoMeni: data.aprobadoMeni,
           publicado: data.publicado,
           archived: data.archived,
@@ -627,7 +642,7 @@ const _cachedRelatedPool = unstable_cache(
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
   },
   ['related-pool'],
-  { revalidate: 300, tags: ['noticias'] }
+  { revalidate: 900, tags: ['noticias'] }
 );
 
 export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
@@ -821,9 +836,11 @@ const _cachedGetSitemapNews = unstable_cache(
           'imagen',
           'imagenRedes',
           'resumen',
-          // 'contenido' se incluye: el guard de página exige contenido>20 chars
-          // y el sitemap NO puede listar URLs que la página 404ea (SEO).
-          'contenido',
+          // 'contenido' se reemplazó por 'palabras': el guard de renderabilidad
+          // acepta el conteo de palabras (hasRenderableContent) y proyectar el
+          // HTML completo de ~1000 docs multiplicaba la transferencia del
+          // sitemap por ~10x sin aportar nada al XML final.
+          'palabras',
         ],
         MAX_SITEMAP_LIMIT
       );
@@ -861,6 +878,7 @@ const _cachedGetSitemapNews = unstable_cache(
             archived: data.archived,
             aprobadoMeni: data.aprobadoMeni,
             noindex: !!data.noindex,
+            palabras: typeof data.palabras === 'number' ? data.palabras : undefined,
           };
           return isRenderableArticle(noticia) && shouldIndexArticle(noticia) ? noticia : null;
         })

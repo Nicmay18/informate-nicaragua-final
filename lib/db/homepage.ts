@@ -199,7 +199,7 @@ const SECTION_LIMITS: Record<string, number> = {
 const _cachedGetHomePageData = unstable_cache(
   async () => buildHomePageData(),
   ['homepage-data'],
-  { revalidate: 60, tags: ['noticias'] }
+  { revalidate: 300, tags: ['noticias'] }
 );
 
 export async function getHomePageData(): Promise<HomePageData> {
