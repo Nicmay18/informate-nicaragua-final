@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { revalidateTag } from 'next/cache';
 import { FieldValue } from 'firebase-admin/firestore';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { actor, adminGuard, privateJson, readBody } from './seguridad';
@@ -91,6 +92,16 @@ export async function saveCommercial(request: Request, collection: string, id: s
     const diff = Object.fromEntries(changed.filter((k) => !privateFields.has(k)).map((k) => [k, { antes: before[k] ?? null, despues: data[k] ?? null }]));
     tx.set(audit, { entidad: collection, entidadId: id, accion: creating ? 'crear' : 'actualizar', actor: who, timestamp, campos: changed, diff });
   });
+  // El directorio público cachea 5 min con tag 'negocios' (lib/negocios/datos.ts):
+  // una aprobación, suspensión o pago confirmado debe verse de inmediato.
+  if (collection === NEGOCIOS_COLLECTION || collection === CAMPANAS_COLLECTION) {
+    try {
+      revalidateTag('negocios');
+    } catch {
+      // Fuera de un request context (tests, scripts) la invalidación no aplica;
+      // la mutación ya quedó confirmada en la transacción.
+    }
+  }
 }
 export function commercialFailure(err: unknown) {
   if (err instanceof CommercialError) return privateJson({ error: err.message }, err.status);
