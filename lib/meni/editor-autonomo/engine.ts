@@ -8,6 +8,7 @@ import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
 import { runEditorBrain, type EditorBrainResult } from '@/lib/meni/editor-brain';
 import { limpiarSufijoLugar } from '@/lib/meni/intelligence/google-engine';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 import { validateQuotesAndAttributions } from '@/lib/editorial/quote-guard';
 import { computePublicationAllowed } from './decision';
 import type { MeniAutonomousInput, MeniAutonomousResult } from './types';
@@ -179,9 +180,7 @@ PIE DE FOTO: ${instr.pieFoto}
 Redacta el artículo completo siguiendo el Story Planner. Mínimo 400 palabras.`;
 }
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function decisionRiesgoToRiesgo(riesgo: 'BAJO' | 'MEDIO' | 'ALTO'): 'VERDE' | 'AMARILLO' | 'ROJO' {
   return riesgo === 'BAJO' ? 'VERDE' : riesgo === 'MEDIO' ? 'AMARILLO' : 'ROJO';

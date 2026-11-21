@@ -5,6 +5,7 @@ import { logger } from '@/lib/logger';
 import { runCEOLoop } from '@/lib/nios/ceo-loop';
 import { validateTrafficReader } from '@/lib/analytics/traffic-reader';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
+import { isNiosStageAllowed } from '@/lib/cost-guard';
 
 // Vercel Hobby (este proyecto NO tiene Fluid compute): máximo real 60s.
 // El pipeline completo mide ~163s (collect ~35s + analyze ~40s + CEO ~53s
@@ -321,7 +322,9 @@ export async function GET(request: NextRequest) {
     // Guard de prerrequisitos
     const missing = PREREQUISITES[stage].filter((p) => {
       const s = run.stages[p]?.status;
-      return s !== 'completed' && !(stage === 'finalize' && p === 'ceo' && s === 'failed');
+      // 'skipped' satisface prerrequisitos: una etapa omitida por cost_guard
+      // no debe bloquear las etapas siguientes del pipeline.
+      return s !== 'completed' && s !== 'skipped' && !(stage === 'finalize' && p === 'ceo' && s === 'failed');
     });
     if (missing.length > 0) {
       return NextResponse.json(
@@ -341,16 +344,23 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Lock de etapa
-    await writeRunState(db, date, {
-      stages: {
-        [stage]: {
-          status: 'running',
-          startedAt: new Date().toISOString(),
-          lockedUntil: new Date(Date.now() + STAGE_LEASE_MS).toISOString(),
+    // Cost guard (config/cost_guard, modo economy): la etapa se marca
+    // 'skipped' — honesto y auditable — en vez de ejecutarse. Fail-open:
+    // si el guard no se puede leer, la etapa corre con normalidad.
+    const stageAllowed = await isNiosStageAllowed(db, stage);
+
+    // Lock de etapa (solo si va a ejecutarse)
+    if (stageAllowed) {
+      await writeRunState(db, date, {
+        stages: {
+          [stage]: {
+            status: 'running',
+            startedAt: new Date().toISOString(),
+            lockedUntil: new Date(Date.now() + STAGE_LEASE_MS).toISOString(),
+          },
         },
-      },
-    });
+      });
+    }
 
     const stageStarted = Date.now();
     let stageData: Record<string, unknown> = {};
@@ -358,7 +368,9 @@ export async function GET(request: NextRequest) {
     let stageError: string | null = null;
 
     try {
-      switch (stage) {
+      if (!stageAllowed) {
+        stageData = { reason: 'cost_guard', mode: 'economy' };
+      } else switch (stage) {
         case 'collect': {
           const r = await execCollect(db, date);
           stageData = { articlesCount: r.articlesCount, gsc: r.gsc, ga4: r.ga4 };
@@ -405,8 +417,13 @@ export async function GET(request: NextRequest) {
     }
 
     const stageDuration = Date.now() - stageStarted;
-    await markStage(db, date, stage, stageFailed ? 'failed' : 'completed', {
-      detail: stageError ?? (typeof stageData.summary === 'string' ? stageData.summary.slice(0, 400) : undefined),
+    const finalStatus: StageState['status'] = !stageAllowed
+      ? 'skipped'
+      : stageFailed ? 'failed' : 'completed';
+    await markStage(db, date, stage, finalStatus, {
+      detail: stageError ?? (!stageAllowed
+        ? 'cost_guard: etapa desactivada (modo economy)'
+        : typeof stageData.summary === 'string' ? stageData.summary.slice(0, 400) : undefined),
       data: stageData,
       durationMs: stageDuration,
     });

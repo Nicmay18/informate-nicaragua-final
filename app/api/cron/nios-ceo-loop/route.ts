@@ -7,6 +7,7 @@ import { runCEOLoop } from '@/lib/nios/ceo-loop';
 import { getNiosExecutiveData } from '@/lib/nios/executive-center';
 import { buildNiosBrief } from '@/lib/nios/nios-speaks';
 import { proposeActionsFromOpportunities } from '@/lib/nios/action-engine';
+import { isCronAllowed } from '@/lib/cost-guard';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -25,6 +26,10 @@ export async function GET(request: NextRequest) {
 
   try {
     const db = getAdminDb();
+    if (!(await isCronAllowed(db, '/api/cron/nios-ceo-loop'))) {
+      await recordCronHeartbeat('/api/cron/nios-ceo-loop', { durationMs: Date.now() - startedAt, note: 'cost_guard: omitido (modo economy)' });
+      return NextResponse.json({ ok: true, skipped: 'cost_guard' });
+    }
     const { record, autonomy } = await runCEOLoop(db, 'cron/nios-ceo-loop');
 
     // Proceso explícito de propuesta de acciones (único productor).

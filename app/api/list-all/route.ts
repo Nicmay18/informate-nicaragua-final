@@ -6,7 +6,10 @@ async function fetchListAll(categoria: string | null, limit: number) {
   const db = getAdminDb();
   // Solo publicadas — este endpoint es público (lo consume Header.tsx);
   // sin el filtro exponía borradores y archivadas.
-  const fields = ['slug', 'titulo', 'contenido', 'resumen', 'fecha', 'publishedAt', 'fechaPublicacion'];
+  // 'contenido' se proyectaba solo para reportar su longitud (diagnóstico);
+  // transfería ~10KB/doc sin uso real — el consumidor (Header) solo usa
+  // slug/titulo/fecha. `palabras` es el conteo canónico ya almacenado.
+  const fields = ['slug', 'titulo', 'palabras', 'resumen', 'fecha', 'publishedAt', 'fechaPublicacion'];
   const base = () => {
     let q: FirebaseFirestore.Query = db.collection('noticias').where('estado', '==', 'publicado');
     if (categoria) q = q.where('categoria', '==', categoria);
@@ -45,7 +48,7 @@ async function fetchListAll(categoria: string | null, limit: number) {
       id: d.id,
       slug: data.slug || d.id,
       titulo: data.titulo || '(sin título)',
-      contenidoLength: (data.contenido || '').length,
+      palabras: typeof data.palabras === 'number' ? data.palabras : 0,
       resumenLength: (data.resumen || '').length,
       fecha: data.fecha?.toDate?.() || data.fecha,
     };

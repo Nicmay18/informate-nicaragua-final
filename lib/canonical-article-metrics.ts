@@ -1,4 +1,5 @@
 import { getAdminDb } from '@/lib/firebase-admin';
+import { FieldPath } from 'firebase-admin/firestore';
 import { logger } from '@/lib/logger';
 import { getMetricDefinition, type MetricScope } from '@/lib/nios/intelligence/metric-truth';
 
@@ -43,13 +44,22 @@ export async function getCanonicalArticleMetrics(slug: string): Promise<Canonica
   try {
     const db = getAdminDb();
 
-    const docRef = db.collection('noticias').doc(slug);
-    let docSnap = await docRef.get();
+    // Solo se necesita `vistas`: proyectar el documento completo transfería
+    // el HTML entero (~10KB) en CADA pageview de artículo (server action
+    // getArticleMetricsAction se dispara en cada visita con JS).
+    let docSnap = await db
+      .collection('noticias')
+      .where(FieldPath.documentId(), '==', slug)
+      .select('vistas')
+      .limit(1)
+      .get()
+      .then((s) => (s.empty ? null : s.docs[0]));
 
-    if (!docSnap.exists) {
+    if (!docSnap) {
       const snap = await db
         .collection('noticias')
         .where('slug', '==', slug)
+        .select('vistas')
         .limit(1)
         .get();
       if (snap.empty) {

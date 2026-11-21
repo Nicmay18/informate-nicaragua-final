@@ -15,7 +15,7 @@ describe('Guías — SEO title absoluto', () => {
 
   it('seoTitle editorial tiene prioridad sobre el title largo', () => {
     const g = getEvergreenBySlug('apostillar-documentos-nicaragua-2026')!;
-    expect(evergreenSeoTitle(g)).toBe('Cómo apostillar documentos en Nicaragua: citas 2026');
+    expect(evergreenSeoTitle(g)).toBe('Cómo apostillar documentos en Nicaragua: guía de citas 2026');
   });
 
   it('sin seoTitle, el title largo se recorta en límite de palabra', () => {

@@ -59,9 +59,14 @@ export function computeEditorialDNA(opts: ComputeDnaOptions): EditorialDnaResult
   const evaluacion = opts.evaluacion;
   const qualityGate = opts.qualityGate;
 
-  // Umbrales y pesos dinamicos por categoria
-  const minExcl = opts.umbralesBloqueo?.exclusividad ?? opts.minExclusividad ?? MIN_DNA_SCORE;
-  const minWow = opts.umbralesBloqueo?.wow ?? opts.minWow ?? MIN_DNA_SCORE;
+  // Umbrales y pesos dinamicos por categoria.
+  // Precedencia: tier editorial (proporcional a la extensión/formato de la
+  // nota — FLASH no exige lo mismo que INVESTIGACION) > umbrales del perfil
+  // de categoría > default. Antes el perfil siempre ganaba y los umbrales
+  // por tier eran código muerto: un flash de 100 palabras necesitaba la
+  // exclusividad de una investigación.
+  const minExcl = opts.minExclusividad ?? opts.umbralesBloqueo?.exclusividad ?? MIN_DNA_SCORE;
+  const minWow = opts.minWow ?? opts.umbralesBloqueo?.wow ?? MIN_DNA_SCORE;
   const minTranscripcion = opts.umbralesBloqueo?.transcripcion ?? MIN_DNA_SCORE;
   const minMemoria = opts.umbralesBloqueo?.memoria ?? 30;
   const pesosAdn = opts.pesosAdnNI ?? DEFAULT_ADN_WEIGHTS;

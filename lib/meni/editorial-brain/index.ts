@@ -39,6 +39,7 @@ import { applyPatternsToDiagnostic } from '@/lib/meni/editor-jefe/correction-tra
 import { buildMemoriaEditorial } from '@/lib/meni/editor-jefe/editorial-memory';
 
 import { getCategoryProfile } from './profiles';
+import { htmlToPlainText, htmlToVisibleText } from '@/lib/utils/html-text';
 
 type HumanEditorCheck = {
   id: 'lead_5w' | 'title_length' | 'ai_transitions' | 'emotional_filler';
@@ -56,15 +57,17 @@ type HumanEditorCheck = {
 
 function runHumanEditorChecks(input: EditorialBrainInput): HumanEditorCheck[] {
   const title = (input.titulo || '').trim();
-  const body = (input.contenido || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  // Texto visible canónico: sin scripts/estilos, entidades decodificadas
+  // (un "sin&nbsp;embargo" antes no se detectaba como transición).
+  const body = htmlToPlainText(input.contenido || '');
   // El lead periodístico en NI es la bajada (resumen) + primer párrafo real del
   // cuerpo. Los encabezados <h1>-<h6> no son párrafos: se eliminan antes de
   // partir para que un H2 inicial ("¿Dónde está X?") no se evalúe como lead.
-  const contenidoSinEncabezados = (input.contenido || '')
-    .replace(/<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/gi, '\n\n');
+  const contenidoSinEncabezados = htmlToVisibleText(
+    (input.contenido || '').replace(/<h[1-6]\b[^>]*>[\s\S]*?<\/h[1-6]\s*>/gi, '\n\n')
+  );
   const firstParagraph = contenidoSinEncabezados
-    .replace(/<[^>]+>/g, ' ')
-    .split(/\n\s*\n|\r\n\r\n/)
+    .split(/\n+/)
     .map(p => p.replace(/\s+/g, ' ').trim())
     .find(Boolean) || body.slice(0, 450);
   const leadText = [input.resumen, firstParagraph].filter(Boolean).join(' ');
@@ -426,8 +429,12 @@ export function runEditorialBrain(input: EditorialBrainInput): EditorialDecision
 
   // Veredicto ejecutivo se deriva del score transparente, no de pesos heredados.
   // Alineado con el umbral canónico de aprobación de MENI: >= MIN_APPROVED_SCORE es PUBLICABLE.
+  // Piso de 'revisar' proporcional al tier editorial: un flash completo no
+  // debe caer en revisión dura por no alcanzar el listón de un reportaje.
+  // Sin tierThresholds (llamadas directas al motor) se conserva el piso 75.
+  const scoreFloorRevisar = input.tierThresholds?.minAdnNI ?? 75;
   const finalRecomendacion: RecomendacionEditorial =
-    editorialDna.bloquear || tieneProblemasGraves || humanCriticalIssues.length > 0 || score < 75
+    editorialDna.bloquear || tieneProblemasGraves || humanCriticalIssues.length > 0 || score < scoreFloorRevisar
       ? 'revisar'
       : humanCheckActions.length > 0 || score < MIN_APPROVED_SCORE
       ? 'mejorar'

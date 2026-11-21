@@ -4,6 +4,7 @@
  */
 
 import type { IntelligenceEngineInput, ContextDecision, Entity } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 const DEPARTAMENTOS_NI = [
   'Managua', 'León', 'Granada', 'Masaya', 'Chinandega', 'Estelí',
@@ -30,9 +31,7 @@ const INSTITUCIONES_NI: Record<string, string> = {
   'Contraloría': 'Contraloría General de la República',
 };
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function detectPersonas(text: string): string[] {
   const personas = new Set<string>();

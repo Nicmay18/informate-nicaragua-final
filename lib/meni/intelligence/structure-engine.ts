@@ -4,10 +4,7 @@
  */
 
 import type { IntelligenceEngineInput, StructureDecision, StructureBlock } from './types';
-
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+import { htmlToPlainText, countHeadings, countStrongEmphasis } from '@/lib/utils/html-text';
 
 type TipoHecho = 'accidente' | 'incendio' | 'homicidio' | 'detencion' | 'economia' | 'salud' | 'politica' | 'deporte' | 'general';
 
@@ -125,18 +122,21 @@ function buildBloques(tipo: TipoHecho): StructureBlock[] {
   }));
 }
 
-function computeScore(bloques: StructureBlock[], texto: string): number {
+function computeScore(bloques: StructureBlock[], contenidoHtml: string): number {
   let score = 50;
-  const parrafos = stripHtml(texto).split(/\.\s+/).filter((s) => s.trim().length > 30);
-  if (parrafos.length >= bloques.length) score += 20;
-  if (/<h2/i.test(texto)) score += 15;
-  if (/<strong/i.test(texto)) score += 10;
+  const textoPlano = htmlToPlainText(contenidoHtml);
+  const oraciones = textoPlano.split(/\.\s+/).filter((s) => s.trim().length > 30);
+  if (oraciones.length >= bloques.length) score += 20;
+  // H2/STRONG solo cuentan si son etiquetas reales con contenido —
+  // no apariciones dentro de comentarios, scripts o atributos.
+  if (countHeadings(contenidoHtml, 2) >= 1) score += 15;
+  if (countStrongEmphasis(contenidoHtml) >= 1) score += 10;
   if (bloques.length >= 4) score += 5;
   return Math.min(score, 100);
 }
 
 export function runStructureEngine(input: IntelligenceEngineInput): StructureDecision {
-  const textoPlano = stripHtml(`${input.titulo} ${input.contenido}`);
+  const textoPlano = htmlToPlainText(`${input.titulo} ${input.contenido}`);
   const tipo = detectarTipoHecho(textoPlano);
   const bloques = buildBloques(tipo);
   const orden = bloques.map((b) => b.tipo);

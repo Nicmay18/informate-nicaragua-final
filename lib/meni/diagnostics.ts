@@ -123,8 +123,12 @@ const CODE_META: Record<string, IssueMeta> = {
 
 // Categorías de estilo/servicio: sus warnings son SUGERENCIA editorial,
 // no verificación de un dato central. No deben forzar REVISAR solas.
+// 'terminologia' = consistencia de variantes (corregible, estilo).
+// 'originalidad'  = repetición del inicio del titular vs notas recientes
+//                   (preferencia de portada, no defecto del artículo).
 const STYLE_INFO_CATEGORIES = new Set([
   'lenguaje', 'sensacionalismo', 'servicio', 'valor_diferencial', 'explicacion',
+  'terminologia', 'originalidad',
 ]);
 
 function mapQualityGateIssue(issue: QualityGateIssue): MeniBlockingIssue {
@@ -163,7 +167,14 @@ export function buildMeniDiagnostics(opts: {
   scoreFinal: number | null;
   aprobado: boolean;
   editorialDna?: EditorialDnaResult;
+  /** Piso de calidad por tier (TIER_THRESHOLDS[tier].minAdnNI). Sin él se
+   *  usa NO_PUBLISH_FLOOR (80) — comportamiento histórico. */
+  scoreFloor?: number;
+  /** Umbrales reales aplicados por el ADN (tier/perfil). Se muestran en
+   *  expectedValue para que el diagnóstico coincida con el motor. */
+  umbralesDna?: { exclusividad?: number; wow?: number };
 }): { blockingIssues: MeniBlockingIssue[]; warnings: MeniBlockingIssue[] } {
+  const scoreFloor = opts.scoreFloor ?? NO_PUBLISH_FLOOR;
   const blockingIssues: MeniBlockingIssue[] = [];
   const warnings: MeniBlockingIssue[] = [];
 
@@ -192,7 +203,7 @@ export function buildMeniDiagnostics(opts: {
         title: 'Valor diferencial insuficiente',
         description: dna.exclusividad.razon,
         currentValue: `${dna.exclusividad.score}%`,
-        expectedValue: `≥ ${MIN_APPROVED_SCORE}%`,
+        expectedValue: `≥ ${opts.umbralesDna?.exclusividad ?? MIN_APPROVED_SCORE}%`,
         howToFix: 'Incluí contexto, explicación, antecedentes o utilidad que otros medios no aportan.',
         field: 'contenido',
       });
@@ -205,7 +216,7 @@ export function buildMeniDiagnostics(opts: {
         title: 'El lector no aprende nada nuevo',
         description: dna.wow.razon,
         currentValue: `${dna.wow.score}%`,
-        expectedValue: `≥ ${MIN_APPROVED_SCORE}%`,
+        expectedValue: `≥ ${opts.umbralesDna?.wow ?? MIN_APPROVED_SCORE}%`,
         howToFix: 'Respondé qué ocurrió, por qué, qué significa, qué cambia y cómo afecta al lector.',
         field: 'contenido',
       });
@@ -264,9 +275,9 @@ export function buildMeniDiagnostics(opts: {
     // la decisión final la toma el Editor Jefe (humano), no el algoritmo.
     // Solo por debajo del piso de calidad (80 = 'NO PUBLICAR') el score
     // insuficiente se convierte en bloqueo real.
-    if (opts.scoreFinal >= NO_PUBLISH_FLOOR) {
+    if (opts.scoreFinal >= scoreFloor) {
       // Score = metrica, no decision (MENI 2.1.1-PROD): una nota sin
-      // defectos materiales en banda 80-89 no termina en REVISAR.
+      // defectos materiales sobre el piso de su tier no termina en REVISAR.
       // El hallazgo queda INFO — visible en diagnostico, sin decidir.
       warnings.push({
         code: 'MENI_SCORE_THRESHOLD',
@@ -284,10 +295,10 @@ export function buildMeniDiagnostics(opts: {
         code: 'MENI_SCORE_FLOOR',
         module: 'meni-core',
         severity: 'WARNING',
-        title: 'Score final por debajo del piso de calidad',
+        title: 'Score final por debajo del piso de calidad del tier',
         description: `La nota obtuvo ${opts.scoreFinal} puntos. El score requiere revisión editorial; por sí solo no demuestra un error factual.`,
         currentValue: opts.scoreFinal,
-        expectedValue: `≥ ${NO_PUBLISH_FLOOR}`,
+        expectedValue: `≥ ${scoreFloor} (piso del tier)`,
         howToFix: 'La nota presenta deficiencias sustantivas; revisar los hallazgos del diagnóstico.',
         field: 'general',
       });

@@ -3,6 +3,8 @@ import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NO
 import { recordCronHeartbeat, writeHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runDepartamentoCentralCycle } from '@/lib/departamento-central/cycle';
 import { saveDepartamentoReport } from '@/lib/departamento-central/store';
+import { getAdminDb } from '@/lib/firebase-admin';
+import { isCronAllowed } from '@/lib/cost-guard';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -21,6 +23,10 @@ export async function GET(request: Request) {
   const started = Date.now();
 
   try {
+    if (!(await isCronAllowed(getAdminDb(), '/api/cron/departamento-daily'))) {
+      await recordCronHeartbeat('/api/cron/departamento-daily', { durationMs: Date.now() - started, note: 'cost_guard: omitido (modo economy)' });
+      return NextResponse.json({ success: true, skipped: 'cost_guard', durationMs: Date.now() - started });
+    }
     const report = await runDepartamentoCentralCycle();
     await saveDepartamentoReport(report);
 

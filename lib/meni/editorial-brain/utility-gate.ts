@@ -16,6 +16,7 @@ import type {
 } from './types';
 import type { ReaderJourneyResult } from '@/lib/meni/reader-journey/types';
 import type { StoryPlan } from '@/lib/meni/story-planner/types';
+import { countVisibleWords } from '@/lib/utils/html-text';
 
 export function runUtilityGate(params: {
   readerJourney: ReaderJourneyResult;
@@ -70,7 +71,8 @@ export function runUtilityGate(params: {
   }
 
   // 7. ¿El contenido es demasiado breve para aportar valor?
-  const palabras = contenido.split(/\s+/).filter(Boolean).length;
+  // Conteo sobre texto visible — antes se contaban etiquetas HTML como palabras.
+  const palabras = countVisibleWords(contenido);
   if (palabras < 30 && queAprende.length === 0) {
     recomendacionesEditoriales.push('El hecho es demasiado breve. Amplía con contexto, antecedentes o explicación para generar valor informativo.');
   }

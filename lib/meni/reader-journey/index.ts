@@ -16,10 +16,9 @@
 
 import type { ReaderJourneyInput, ReaderJourneyResult } from './types';
 import { classifySports, isIndividualSport, type SportsClassification } from '../sports-classifier';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 type TipoHecho = 'operativo' | 'accidente' | 'homicidio' | 'incendio' | 'salud' | 'economia' | 'politica' | 'internacional' | 'deporte' | 'desastre' | 'educacion' | 'comercial' | 'general';
 

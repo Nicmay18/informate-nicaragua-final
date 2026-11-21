@@ -3,10 +3,9 @@
  */
 
 import type { IntelligenceEngineInput, BackgroundDecision } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function detectarAntecedentes(texto: string, categoria: string): { hecho: string; relevancia: string }[] {
   const antecedentes: { hecho: string; relevancia: string }[] = [];

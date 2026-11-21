@@ -6,10 +6,9 @@
 
 import type { KnowledgeTimelineEntry } from './types';
 import type { ExtractedEntity } from './entity-extractor';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function buildSummary(content: string, maxLen = 200): string {
   const plain = stripHtml(content);

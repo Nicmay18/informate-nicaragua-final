@@ -17,6 +17,7 @@ import { checkMediumHealth, applySafeAutoFixes } from '@/lib/supervisor';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { logger } from '@/lib/logger';
 import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
+import { isCronAllowed } from '@/lib/cost-guard';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -37,6 +38,10 @@ export async function GET(request: Request) {
   const db = getAdminDb();
 
   try {
+    if (!(await isCronAllowed(db, '/api/cron/supervisor-watch'))) {
+      await recordCronHeartbeat('/api/cron/supervisor-watch', { durationMs: Date.now() - startedAt, note: 'cost_guard: omitido (modo economy)' });
+      return NextResponse.json({ success: true, skipped: 'cost_guard', durationMs: Date.now() - startedAt });
+    }
     // 1. Health check rápido
     const health = await checkMediumHealth(db);
 

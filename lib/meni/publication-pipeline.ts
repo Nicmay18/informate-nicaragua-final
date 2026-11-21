@@ -12,6 +12,7 @@
 import type { Firestore } from 'firebase-admin/firestore';
 import { canCallLLM, recordCall } from '@/lib/supervisor/cost-guard';
 import { logger } from '@/lib/logger';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 export interface PipelineInput {
   db: Firestore;
@@ -67,12 +68,10 @@ const EMOJI_CAT: Record<string, string> = {
   General: '📰',
 };
 
-function stripHtml(html: string): string {
-  return (html || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function extraerOraciones(texto: string, max: number = 4): string[] {
-  const limpio = texto.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const limpio = stripHtml(texto);
   return limpio
     .split(/[.!?]+/)
     .map(s => s.trim())

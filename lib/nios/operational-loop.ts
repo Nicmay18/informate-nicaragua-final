@@ -1354,6 +1354,8 @@ export async function reconcileOperationalApprovals(db: Firestore): Promise<{
 }
 
 export async function loadNoticiasAsInputs(db: Firestore, limit = 3): Promise<NoticiaInput[]> {
-  const noticias = await loadNoticiasFromFirestore(db, limit);
+  // La detección forense MENI evalúa regexes sobre el cuerpo HTML:
+  // necesita `contenido` real (son solo `limit` docs — costo despreciable).
+  const noticias = await loadNoticiasFromFirestore(db, limit, { includeContenido: true });
   return noticias.map(mapNoticiaToNoticiaInput);
 }

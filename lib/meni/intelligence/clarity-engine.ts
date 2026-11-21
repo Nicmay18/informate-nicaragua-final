@@ -4,10 +4,9 @@
  */
 
 import type { IntelligenceEngineInput, ClarityDecision } from './types';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 const SIGLAS_NI: Record<string, string> = {
   MINED: 'Ministerio de Educación',

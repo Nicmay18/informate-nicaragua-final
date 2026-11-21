@@ -130,7 +130,10 @@ export default function HomePagePro({ data, sponsor }: HomePageProProps) {
                 {hero.autor && <span className="rd-sep" />}
                 <FullRelativeTime date={hero.fecha} />
                 <span className="rd-sep" />
-                <span>{tiempoLectura(hero.contenido || hero.resumen || '')} min de lectura</span>
+                {/* Los listados ya no proyectan `contenido` (control de costos
+                    Firestore): `palabras` es el mismo conteo que usa
+                    tiempoLectura (palabras/200 min). Fallback al texto plano. */}
+                <span>{hero.palabras ? Math.max(1, Math.ceil(hero.palabras / 200)) : tiempoLectura(hero.resumen || '')} min de lectura</span>
               </div>
             </article>
 

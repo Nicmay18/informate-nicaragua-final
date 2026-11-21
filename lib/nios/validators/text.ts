@@ -8,16 +8,10 @@ import {
   FUNCTION_WORDS,
   NON_VERB_TOKENS,
 } from './consts';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
 export function stripHtml(html: string): string {
-  if (!html) return '';
-  return html
-    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;|&amp;|&quot;|&lt;|&gt;|&#\d+;/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return htmlToPlainText(html);
 }
 
 export function tokenize(text: string): string[] {

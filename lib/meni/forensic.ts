@@ -2,6 +2,7 @@ import type { EvaluacionEditorial } from '@/lib/editorial';
 import type { MeniForense, MeniRecomendacion, MeniForenseEvidencia } from './types';
 import type { NoticiaInput } from './types';
 import type { MeniContentProfile } from './profile-detector';
+import { htmlToPlainText, countBlockquotes } from '@/lib/utils/html-text';
 
 type EvidenciaTipo =
   | 'citaDirecta'
@@ -24,7 +25,9 @@ function normalize(text: string): string {
 }
 
 function fullText(input: NoticiaInput): string {
-  return `${input.titulo || ''} ${input.resumen || ''} ${input.contenido || ''}`;
+  // Texto visible canónico: sin etiquetas ni scripts — las frases
+  // editoriales se comparan contra lo que el lector realmente ve.
+  return htmlToPlainText(`${input.titulo || ''} ${input.resumen || ''} ${input.contenido || ''}`);
 }
 
 function contieneFrases(texto: string, frases: string[]): boolean {
@@ -37,9 +40,11 @@ function contienePalabras(texto: string, palabras: string[]): boolean {
   return palabras.some((w) => new RegExp(`\\b${w}\\b`, 'i').test(n));
 }
 
-function detectarCitaDirecta(texto: string): boolean {
-  // Comillas en una o varias líneas (hasta 600 caracteres) o contenido en blockquote.
-  return /["«»“”‘’].{3,600}?["«»“”‘’]/s.test(texto) || /<blockquote[^>]*>/i.test(texto);
+function detectarCitaDirecta(texto: string, contenidoHtml?: string): boolean {
+  // Comillas en una o varias líneas (hasta 600 caracteres) o blockquote real
+  // con contenido (no una subcadena '<blockquote' dentro de un script).
+  return /["«»“”‘’].{3,600}?["«»“”‘’]/s.test(texto)
+    || (contenidoHtml ? countBlockquotes(contenidoHtml) >= 1 : /<blockquote[^>]*>/i.test(texto));
 }
 
 function detectarAtribucion(texto: string): boolean {
@@ -209,9 +214,9 @@ function behaviorFor(
   }
 }
 
-function checkEvidencia(tipo: EvidenciaTipo, texto: string): boolean {
+function checkEvidencia(tipo: EvidenciaTipo, texto: string, contenidoHtml?: string): boolean {
   switch (tipo) {
-    case 'citaDirecta': return detectarCitaDirecta(texto);
+    case 'citaDirecta': return detectarCitaDirecta(texto, contenidoHtml);
     case 'atribucionPeriodistica': return detectarAtribucion(texto);
     case 'precios': return detectarPrecios(texto);
     case 'horarios': return detectarHorarios(texto);
@@ -277,7 +282,7 @@ function buildForensicChecks(input: NoticiaInput, mode: ForensicMode, perfilLabe
     if (behavior === 'NO_APLICA') {
       return { tipo: EVIDENCIA_LABELS[tipo], estado: 'NO_APLICA', mensaje: `No aplica al perfil forense de esta noticia.` };
     }
-    const presente = checkEvidencia(tipo, texto);
+    const presente = checkEvidencia(tipo, texto, input.contenido || '');
     if (presente) {
       return { tipo: EVIDENCIA_LABELS[tipo], estado: 'OK', mensaje: 'Evidencia presente en el texto.' };
     }

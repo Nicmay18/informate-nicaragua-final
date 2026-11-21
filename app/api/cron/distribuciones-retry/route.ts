@@ -8,6 +8,7 @@ import {
 } from '@/lib/distribution/channels';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { normalizeTelegramSlug } from '@/lib/distribution/telegram';
+import { isCronAllowed } from '@/lib/cost-guard';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -59,6 +60,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const db = getAdminDb();
+    if (!(await isCronAllowed(db, '/api/cron/distribuciones-retry'))) {
+      return NextResponse.json({ success: true, skipped: 'cost_guard' });
+    }
     const ahora = new Date();
     const legacyCutoff = new Date(ahora.getTime() - LEGACY_DAYS * 864e5).toISOString();
 

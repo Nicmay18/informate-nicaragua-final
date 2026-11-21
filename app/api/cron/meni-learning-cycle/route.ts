@@ -17,6 +17,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { runLearningCycle } from '@/lib/meni/learning-engine';
 import { runExperienceHarvest } from '@/lib/meni/learning-engine/experience-harvest';
 import { logger } from '@/lib/logger';
+import { isCronAllowed } from '@/lib/cost-guard';
 
 export const maxDuration = 60;
 
@@ -31,6 +32,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const db = getAdminDb();
+    if (!(await isCronAllowed(db, '/api/cron/meni-learning-cycle'))) {
+      return NextResponse.json({ ok: true, skipped: 'cost_guard' });
+    }
     const [cycle, harvest] = await Promise.all([
       runLearningCycle(db).catch((err) => {
         logger.warn('[meni-learning-cycle] runLearningCycle falló:', err);

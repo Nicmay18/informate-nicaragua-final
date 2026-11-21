@@ -29,6 +29,7 @@ import { applyAutoFix } from './autoFix';
 import { findGenerationDefects } from '@/lib/editorial/content-integrity';
 import { computeExplanationIndex, computeOriginalityPercent, computeEditorScore } from './editorScore';
 import { detectParagraphTranscription } from './transcription-detector';
+import { countHeadings } from '@/lib/utils/html-text';
 import { logger } from '@/lib/logger';
 
 export type { EntityMap, QualityGateInput, QualityGateIssue, QualityGateResult } from './types';
@@ -43,7 +44,8 @@ function estimarCtrFacebook(titulo: string, textoPlano: string): number {
 }
 
 function discoverListo(titulo: string, contenidoHtml: string): boolean {
-  const tieneH2 = /<h2/i.test(contenidoHtml);
+  // H2 real con contenido — no una subcadena '<h2' en un comentario o script.
+  const tieneH2 = countHeadings(contenidoHtml, 2) >= 1;
   const tituloOk = titulo.length >= 40 && titulo.length <= 90;
   const parrafos = contenidoHtml.split(/<\/p>/i).filter((p) => stripHtml(p).length > 20);
   return tieneH2 && tituloOk && parrafos.length >= 3;

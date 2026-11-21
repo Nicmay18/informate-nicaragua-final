@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { runScheduler } from '@/lib/departamento-central/scheduler';
+import { getAdminDb } from '@/lib/firebase-admin';
+import { isCronAllowed } from '@/lib/cost-guard';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -20,6 +22,10 @@ export async function GET(request: Request) {
   const started = Date.now();
 
   try {
+    if (!(await isCronAllowed(getAdminDb(), '/api/cron/departamento-central'))) {
+      await recordCronHeartbeat('/api/cron/departamento-central', { durationMs: Date.now() - started, note: 'cost_guard: omitido (modo economy)' });
+      return NextResponse.json({ success: true, skipped: 'cost_guard', durationMs: Date.now() - started });
+    }
     const result = await runScheduler();
     await recordCronHeartbeat('/api/cron/departamento-central', { durationMs: Date.now() - started });
     return NextResponse.json({

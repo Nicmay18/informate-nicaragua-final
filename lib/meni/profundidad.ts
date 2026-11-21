@@ -1,9 +1,8 @@
 import type { EditorialBrainInput } from './editorial-brain/types';
 import type { EvaluacionEditorial } from '@/lib/editorial';
+import { htmlToPlainText } from '@/lib/utils/html-text';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
+const stripHtml = htmlToPlainText;
 
 function clamp(n: number, min = 0, max = 100): number {
   return Math.max(min, Math.min(max, n));

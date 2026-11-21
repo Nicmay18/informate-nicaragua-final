@@ -47,6 +47,8 @@ function mockFirestore(articleCount = 0) {
       add: async (data: unknown) => { docs.set(`${name}/auto-${docs.size}`, data); },
       orderBy: () => ({ limit: () => ({ get: async () => ({ empty: true, docs: [] }) }) }),
       where: () => ({ orderBy: () => ({ limit: () => ({ get: async () => ({ empty: true, docs: [] }) }) }) }),
+      // .select() existe en la API real de Firestore (proyección de campos).
+      select: () => ({ get: async () => ({ empty: true, docs: [], size: articleCount, forEach: () => {} }) }),
       get: async () => ({ empty: true, docs: [], size: articleCount, forEach: () => {} }),
     }),
   } as unknown as Firestore;

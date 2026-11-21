@@ -25,6 +25,7 @@ db._store.set('noticias', new Map([['noticia-e2e-local', {
   contenido: '<p>Esta noticia sintética permite comprobar la portada y el detalle. No describe un hecho real y nunca se publica en producción.</p>',
   categoria: 'Nacionales', estado: 'publicado', publicado: true, aprobadoMeni: true,
   archived: false, noindex: false, fecha, publishedAt: fecha, vistas: 1,
+  palabras: 24,
   imagen: '/logo.png',
 }]]));
 const firestore = require('firebase-admin/firestore');
