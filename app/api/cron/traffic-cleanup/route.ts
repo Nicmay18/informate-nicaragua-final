@@ -3,6 +3,7 @@ import { getAdminDb } from '@/lib/firebase-admin';
 import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 import { recordCronHeartbeat } from '@/lib/departamento-central/heartbeat';
 import { cleanupTrafficLog, trafficLogTTLDays } from '@/lib/analytics/traffic-ttl';
+import { recordDailyCostSnapshot } from '@/lib/cost-guard';
 import { logger } from '@/lib/logger';
 
 export const maxDuration = 60;
@@ -28,11 +29,21 @@ export async function GET(request: NextRequest) {
     const olderThanDays = trafficLogTTLDays();
     const result = await cleanupTrafficLog(db, olderThanDays, 500);
 
+    // Snapshot diario de métricas de costo (count() — barato). Best-effort:
+    // un fallo aquí no debe romper la limpieza de traffic_log.
+    let costSnapshot: Record<string, number> | null = null;
+    try {
+      costSnapshot = await recordDailyCostSnapshot(db);
+    } catch (snapErr) {
+      logger.warn('[cron/traffic-cleanup] cost snapshot falló (no fatal):', snapErr instanceof Error ? snapErr.message : String(snapErr));
+    }
+
     await recordCronHeartbeat('/api/cron/traffic-cleanup', { durationMs: Date.now() - startedAt });
     return NextResponse.json({
       success: true,
       olderThanDays,
       ...result,
+      costSnapshot,
       note: 'La política TTL de Firestore es el método preferido; este endpoint actúa como respaldo manual.',
     });
   } catch (error) {
