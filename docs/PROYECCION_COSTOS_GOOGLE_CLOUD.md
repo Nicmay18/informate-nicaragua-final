@@ -67,7 +67,19 @@ Escenarios que sí acercarían a US$5–10/mes (decisión de arquitectura, no de
 
 Implementación sugerida: registrar conteos estimados en `nios_daily_snapshots` (un doc/día, costo despreciable) + presupuesto de billing en consola con alertas 50/90/100%.
 
-## 6. Riesgos residuales
+## 6. Decisión sobre migración `fecha` → Timestamp (Fase 9, revisada)
+
+Datos verificados en prod: `fecha` = 539 Timestamp + 212 String; `publishedAt` = 497 Timestamp + 254 ausentes.
+
+**La migración se DESCARTÓ** tras verificar el modelo de facturación: Firestore cobra por documento devuelto, y las queries duales ya reparten los docs sin duplicarlos. Migrar los 212 strings a Timestamp no reduce lecturas (~751 docs se leen igual) — solo elimina 1 query overhead. El "−60%" estimado inicialmente aplicaba al modelo viejo de triple-scan. Detalle en `PLAN_RECUPERACION_Y_ROLLBACK.md` §4.
+
+## 7. Protección financiera implementada
+
+- `config/cost_guard` (Firestore): modo economy omite crons/etapas NIOS pesadas sin deploy. Fail-open.
+- `cost_daily/{fecha}`: snapshot diario con count() + deltas vs ayer.
+- Guía de budgets/alertas para consola: `PLAN_PROTECCION_FINANCIERA.md`.
+
+## 8. Riesgos residuales
 
 - **`revalidateTag('noticias')` en cada publicación** invalida todo el árbol público — correcto, pero si el volumen de publicaciones creciera mucho (p.ej. >200/día) las regeneraciones escalarían linealmente. Mitigación futura: invalidación granular por categoría/slug.
 - **ISR por región**: el Data Cache es global, pero el shell ISR se regenera por PoP — ya mitigado porque los datos vienen del Data Cache.
