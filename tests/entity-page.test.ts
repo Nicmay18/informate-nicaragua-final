@@ -4,7 +4,11 @@ import type { Firestore, DocumentSnapshot } from 'firebase-admin/firestore';
 
 /** Mock mínimo de Firestore para loadEntityPage. */
 function mockDb(opts: { entity?: unknown; relations?: unknown[]; timeline?: unknown[] }) {
-  const coll = (name: string) => ({
+  const coll = (name: string) => {
+    const relDocs = () => ({
+      docs: (name === 'kb_relations' ? opts.relations : opts.timeline)?.map((d) => ({ data: () => d })) ?? [],
+    });
+    return {
     where: () => ({
       limit: () => ({
         get: async () => ({
@@ -12,14 +16,17 @@ function mockDb(opts: { entity?: unknown; relations?: unknown[]; timeline?: unkn
           docs: opts.entity ? [{ data: () => opts.entity }] : [],
         }),
       }),
-      get: async () => ({
-        docs: (name === 'kb_relations' ? opts.relations : opts.timeline)?.map((d) => ({ data: () => d })) ?? [],
+      // orderBy dentro de where: usado por kb_timeline (date) y kb_relations (strength)
+      orderBy: () => ({
+        limit: () => ({ get: async () => relDocs() }),
       }),
+      get: async () => relDocs(),
     }),
     orderBy: () => ({ limit: () => ({ get: async () => ({ docs: [] }) }), offset: () => ({ limit: () => ({ get: async () => ({ docs: [] }) }) }) }),
     doc: (id: string) => ({ id, path: `${name}/${id}` }),
     count: () => ({ get: async () => ({ data: () => ({ count: 0 }) }) }),
-  });
+    };
+  };
   const db = {
     collection: coll,
     getAll: vi.fn(async (...refs: { path: string }[]) => refs.map(() => ({ exists: false }) as unknown as DocumentSnapshot)),
