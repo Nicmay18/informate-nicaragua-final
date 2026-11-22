@@ -34,26 +34,29 @@ Firestore facturaba **US$19.58 reads + US$19.36 egress en 19 días** por:
 
 **SHA en producción: `d330ee2a`** · URL: https://nicaraguainformate.com
 
-## 4. 🔴 Incidente activo: quota Firestore agotada (RESOURCE_EXHAUSTED)
+## 4. Incidente resuelto: quota Firestore RESOURCE_EXHAUSTED
 
-Desde ~19:00 UTC del 2026-11-21, **toda** query a Firestore devuelve `8 RESOURCE_EXHAUSTED: Quota exceeded` — incluso `limit(1)`. Verificado desde local (bypassea Vercel) → el límite está en la cuenta/proyecto GCP, no en el código ni en Vercel.
+**Causa raíz confirmada (2026-11-22 ~03:30 UTC):** el proyecto `informate-instant-nicaragua` estaba **desvinculado de toda cuenta de facturación** → operaba en plan Spark/free → tope duro de **50,000 lecturas/día** (verificado en GCP Console → APIs → Quotas: 50,157/50,000 = 100%). El sitio agotaba el cupo cada día y quedaba bloqueado el resto del día.
 
-**Duración >2 h sostenidas** → no es un pico de rate-limit por minuto; probablemente:
-- cuota manual ajustada en APIs & Services → Quotas, o
-- presupuesto de billing con acción de corte, o
-- throttling sostenido de Google por el volumen histórico del proyecto.
+**Por qué pasó desapercibido:** el presupuesto de billing era de **US$1/mes** con alertas al 50/90/100% (= US$0.50+) — imposible que nadie las viera; probablemente cayeron en spam o nunca hubo contactos de billing configurados.
 
-**Consecuencia en producción (estado actual):**
-- `/` y páginas ISR: sirven el prerender **vacío** del build (sin artículos) hasta que Firestore responda; ISR regenera solo (revalidate 300 s + tag `noticias`).
-- `/noticias`, feeds dinámicos: 504/vacíos mientras Firestore esté caído.
-- `/categoria/nacionales`: aún muestra artículos reales (entradas `unstable_cache` heredadas del deployment anterior, expiran en ~5 min).
-- **Auto-recuperación**: en cuanto la quota vuelva, todo se rellena en ≤5 min sin intervención.
+**Resolución:** propietario revinculó el proyecto a la cuenta "Pago de Firebase" (`017858-4F02A9-A3CFD8`) → Blaze restaurado → Firestore operativo de inmediato.
 
-### Acción requerida del propietario (única vía de desbloqueo)
-1. GCP Console → **APIs & Services → Firestore API → Quotas** → ¿hay quota en 0/excedida?
-2. GCP Console → **Billing → Budgets** → ¿hay presupuesto con acción de suspensión?
-3. GCP Console → **IAM → Service Accounts** → la cuenta de servicio de Firebase Admin, ¿sigue activa?
-4. Si nada aparece: esperar ~24 h (throttling de Google decae) o abrir ticket de soporte GCP.
+**Efecto secundario resuelto:** el deploy `d330ee2a` se había generado con Firestore caído → prerender vacío → Cloudflare "Cache Everything" retuvo el HTML vacío (~80 min). Resuelto con **Purge Everything** en dashboard Cloudflare. Lección: tras cualquier deploy durante un apagón de datos, purgar CF.
+
+## 4b. Estado final verificado (2026-11-22 ~04:00 UTC)
+
+| Verificación | Resultado |
+|---|---|
+| Firestore probe (local) | ✅ OK |
+| Smoke tests producción | ✅ **15/15 rutas 200** |
+| Portada | ✅ ~49 enlaces a artículos reales |
+| `/noticias`, categorías | ✅ 200 con contenido |
+| `/sitemap.xml` | ✅ 200 — **903 URLs** (el 504 era la quota, no un bug) |
+| `/news-sitemap.xml` | ✅ 200 — 6 URLs (ventana 48h Google News) |
+| `/feed.json` | ✅ 200 — 50 items |
+| Feeds RSS/XML | ✅ 200 |
+| `/guia/*`, `/buscar`, `/nosotros` | ✅ 200 |
 
 ## 5. Pruebas ejecutadas
 
@@ -94,8 +97,8 @@ Desde ~19:00 UTC del 2026-11-21, **toda** query a Firestore devuelve `8 RESOURCE
 
 ## 9. Pendientes del propietario
 
-1. **URGENTE**: revisar quota/billing GCP (§4) — el sitio no puede mostrar noticias hasta que Firestore responda.
-2. Configurar budget GCP US$10/mes con alertas 50/75/90/100% + verificar contactos de billing (por eso no hubo avisos previos).
+1. ~~URGENTE: quota/billing~~ → **RESUELTO**: proyecto revinculado a billing, Firestore operativo.
+2. **Configurar budget GCP US$25-30/mes** con alertas 50/90/100% + verificar contactos de billing (el presupuesto actual de US$1/mes explicaba por qué nadie fue alertado del gasto).
 3. Revisar Vercel plan y Usage del ciclo (los ~US$15).
 4. Inventariar backups Firestore (sospecha: subcolecciones NIOS).
 5. Los **8 titulares** de `PENDIENTES_PROPIETARIO.md` siguen autorizados sin aplicar — script listo.
@@ -111,7 +114,7 @@ Desde ~19:00 UTC del 2026-11-21, **toda** query a Firestore devuelve `8 RESOURCE
 | Sin `contenido` innecesario | ✅ |
 | Vercel sin ejecuciones evitables | ✅ TTLs + ISR + build resiliente |
 | Mecanismos de protección | ✅ cost_guard + cost_daily + guía budgets |
-| Sitio funciona / Google rastrea | ⚠️ Deploy OK pero **contenido vacío por quota Firestore** — pendiente §4 |
-| Sitemap operativo | ❌ 504 pre-existente — re-test post-quota |
+| Sitio funciona / Google rastrea | ✅ 15/15 rutas 200, contenido real verificado |
+| Sitemap operativo | ✅ 200 — 903 URLs |
 | Costos medibles diariamente | ✅ cost_daily + guía billing |
 | Propietario sabe qué paga | ✅ Docs entregados |
