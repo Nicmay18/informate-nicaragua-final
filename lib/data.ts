@@ -6,6 +6,7 @@ import { unstable_cache, revalidateTag, revalidatePath } from 'next/cache';
 import { getEditorialDecision, isRenderableArticle, resolvePublicCategory, shouldIndexArticle } from './editorial/canonical';
 import { cleanArticleBody } from './sanitize';
 import { isToxicSlug } from './seo-toxic';
+import { trackRegen } from './metrics/daily-counters';
 
 /** Todas las sub-queries de Firestore fallaron: es un apagón, no un corpus vacío. */
 export class FirestoreOutageError extends Error {
@@ -397,7 +398,11 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
 // todos los consumidores; getNews(count) solo rebanada en memoria. El top-N
 // resultante es idéntico (o más completo) que con fetches por count.
 const _cachedGetNewsPool = unstable_cache(
-  async () => fetchNoticiasList([...LIST_FIELDS], 200),
+  async () => {
+    const list = await fetchNoticiasList([...LIST_FIELDS], 200);
+    await trackRegen('news_pool', { docs: list.length });
+    return list;
+  },
   ['news-pool'],
   // 600s (antes 300s): cada regeneración lee ~450 docs. La fresquedad real la
   // da revalidateTag('noticias') en cada publicación — el TTL solo acota la
@@ -426,9 +431,11 @@ const _cachedGetNewsByCategory = unstable_cache(
           unique.set(n.slug, n);
         }
       }
-      return Array.from(unique.values()).sort((a, b) =>
+      const deduped = Array.from(unique.values()).sort((a, b) =>
         new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
       ).slice(0, count);
+      await trackRegen('news_by_category', { key: categoria, docs: docs.length });
+      return deduped;
     } catch (err) {
       if (err instanceof FirestoreOutageError) throw err;
       logger.error(`[data.ts] getNewsByCategory error ${categoria}:`, err instanceof Error ? err.message : String(err));
@@ -457,6 +464,7 @@ const _cachedGetMasLeidas = unstable_cache(
         .select(...LIST_FIELDS)
         .get();
 
+      await trackRegen('mas_leidas', { docs: snap.size });
       const noticias = snap.docs.map(mapDocToNoticia).filter((n) => isPublicNews(n) && !isToxicSlug(n.slug));
 
       const now = Date.now();
@@ -579,6 +587,7 @@ const _cachedGetBySlug = unstable_cache(
           logger.warn('[data.ts] Noticia no renderizable:', { slug: docSlug, razon: getEditorialDecision(noticia).razon });
           return null;
         }
+        await trackRegen('article', { docs: 1, bytes: (noticia.contenido || '').length });
         return noticia;
       }
     } catch (err) {
@@ -639,7 +648,7 @@ export async function getAllSlugs(): Promise<string[]> {
 const _cachedRelatedPool = unstable_cache(
   async (categoria: string, fetchLimit: number): Promise<Noticia[]> => {
     const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
-    return docs
+    const pool = docs
       .map((doc: any) => {
         const data = doc.data();
         return {
@@ -670,6 +679,8 @@ const _cachedRelatedPool = unstable_cache(
       })
       .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+    await trackRegen('related_pool', { key: categoria, docs: docs.length });
+    return pool;
   },
   ['related-pool'],
   { revalidate: 900, tags: ['noticias'] }
@@ -708,10 +719,12 @@ const _cachedGetNewsPaginated = unstable_cache(
     const fetchLimit = offset + pageSize * 4;
     const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit);
 
-    return docs.map(mapDocToNoticia)
+    const result = docs.map(mapDocToNoticia)
       .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(offset, offset + pageSize);
+    await trackRegen('news_paginated', { key: `p${page}`, docs: docs.length });
+    return result;
   },
   ['noticias-paginadas'],
   // 900s: páginas profundas las rastrean crawlers; la publicación invalida
@@ -778,10 +791,12 @@ const _cachedGetCategoryPaginated = unstable_cache(
     const fetchLimit = offset + pageSize * 4;
     const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit, categoria);
 
-    return docs.map(mapDocToNoticia)
+    const result = docs.map(mapDocToNoticia)
       .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
       .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
       .slice(offset, offset + pageSize);
+    await trackRegen('category_paginated', { key: `${categoria}_p${page}`, docs: docs.length });
+    return result;
   },
   ['categoria-paginada'],
   // 900s: mismo criterio que noticias-paginadas — crawlers + invalidación por tag.
@@ -878,6 +893,7 @@ const _cachedGetSitemapNews = unstable_cache(
         MAX_SITEMAP_LIMIT
       );
 
+      await trackRegen('sitemap_news', { docs: docs.length });
       return docs
         .map((d: any) => {
           const data = d.data() as FirestoreNoticiaData;

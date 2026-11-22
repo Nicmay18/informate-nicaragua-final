@@ -8,6 +8,7 @@ import { getNews, getNewsByCategory, getMasLeidas } from '@/lib/data';
 import { incrementView, flush } from '@/lib/view-counter';
 import { CATEGORIES, type Noticia } from '@/lib/types';
 import { selectHomeSections } from '@/lib/home-ranking';
+import { trackRegen } from '@/lib/metrics/daily-counters';
 
 const SLUG_RE = /^[a-zA-Z0-9_-]+$/;
 const SLUG_MAX_LEN = 200;
@@ -197,7 +198,15 @@ const SECTION_LIMITS: Record<string, number> = {
 // 'noticias' se invalida en cada publicación/edición, así que la portada sigue
 // reflejando noticias nuevas de inmediato.
 const _cachedGetHomePageData = unstable_cache(
-  async () => buildHomePageData(),
+  async () => {
+    const data = await buildHomePageData();
+    const docs =
+      (data.ultimas?.length ?? 0) +
+      (data.masLeidas?.length ?? 0) +
+      Object.values(data.porCategoria ?? {}).reduce((s, arr) => s + (arr?.length ?? 0), 0);
+    await trackRegen('homepage', { docs });
+    return data;
+  },
   ['homepage-data'],
   { revalidate: 300, tags: ['noticias'] }
 );
