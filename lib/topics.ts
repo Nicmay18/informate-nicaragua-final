@@ -4,6 +4,7 @@ import { logger } from '@/lib/logger';
 import type { Noticia } from '@/lib/types';
 import { FALLBACK_IMAGE } from '@/lib/types';
 import { EVERGREEN_ARTICLES } from '@/lib/evergreen';
+import { trackRegen } from '@/lib/metrics/daily-counters';
 
 function normalizeImage(imagen: string): string {
   if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return FALLBACK_IMAGE;
@@ -161,6 +162,7 @@ async function loadTemaArticlesRaw(tema: Tema): Promise<Noticia[]> {
       .limit(50)
       .get();
 
+    await trackRegen('tema_articles', { key: tema.slug, docs: snap.size });
     const all = normalizeTemaNews(snap.docs);
     return all.filter((n) => matchesTema(n, tema));
   } catch (err) {
@@ -191,6 +193,10 @@ export const getCachedTemaArticlesPaginated = unstable_cache(
         .limit(500)
         .get();
 
+      // Medición de transferencia real: esta query lee docs COMPLETOS
+      // (matchesTema usa `contenido` en el haystack) — ~500 × ~12KB por regen.
+      const bytes = snap.docs.reduce((s, d) => s + JSON.stringify(d.data()).length, 0);
+      await trackRegen('tema_paginated', { key: tema.slug, docs: snap.size, bytes });
       const all = normalizeTemaNews(snap.docs).filter((n) => matchesTema(n, tema));
       const total = all.length;
       const offset = (page - 1) * pageSize;

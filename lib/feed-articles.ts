@@ -1,5 +1,6 @@
 import { adminDb } from '@/lib/firebase-admin';
 import { normalizeEditorialTitle } from '@/lib/formateo';
+import { trackRegen } from '@/lib/metrics/daily-counters';
 
 export interface FeedArticle {
   title: string;
@@ -41,6 +42,11 @@ export async function fetchFeedArticles(limit = 50): Promise<FeedArticle[]> {
     .where('estado', '==', 'publicado')
     .limit(Math.max(limit * 4, 200))
     .get();
+
+  // Medición: docs completos (~12KB c/u) — esta query NO usa .select(),
+  // es uno de los mayores contribuyentes a Firestore Data Transfer Out.
+  const feedBytes = snapshot.docs.reduce((s, d) => s + JSON.stringify(d.data()).length, 0);
+  await trackRegen('feed', { docs: snapshot.size, bytes: feedBytes });
 
   const publicDocs = snapshot.docs
     .map((doc) => ({ doc, d: doc.data() }))

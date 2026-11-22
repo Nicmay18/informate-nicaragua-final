@@ -5,6 +5,7 @@
 
 import type { Firestore } from 'firebase-admin/firestore';
 import type { KnowledgeEntity, KnowledgeTimelineEntry, KnowledgeRelation } from './types';
+import { trackRegen } from '@/lib/metrics/daily-counters';
 
 export interface EntityPageData {
   entity: KnowledgeEntity;
@@ -130,6 +131,13 @@ export async function loadEntityPage(
   }
 
   relatedEntities.sort((a, b) => b.strength - a.strength);
+
+  // Medición: loadEntityPage solo corre en regeneración ISR de /entidad/[slug]
+  // (y en /api/entity). docs = 1 entidad + timeline + relations ×2 + getAll.
+  await trackRegen('entity', {
+    key: slug,
+    docs: 1 + timelineSnap.size + relationsSnap.size + reverseRelSnap.size + relatedDocs.length,
+  });
 
   return {
     entity,
