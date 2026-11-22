@@ -2,8 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { loadEntityPage, listAllEntities, generateEntitySchema } from '@/lib/meni/knowledge-base/entity-page';
 import { logger } from '@/lib/logger';
+import { unstable_cache } from 'next/cache';
 
 export const dynamic = 'force-dynamic';
+
+// Blindaje anti-abuso (2026-11-22): esta ruta era force-dynamic sin caché —
+// cada request anónimo releía ~290 docs de kb_* en Firestore. Ahora comparte
+// la misma ventana de caché que la página /entidad/[slug] (1h).
+const cachedEntityPage = unstable_cache(
+  async (slug: string) => loadEntityPage(getAdminDb(), slug),
+  ['api-entity-page'],
+  { revalidate: 3600, tags: ['noticias'] }
+);
+const cachedEntityList = unstable_cache(
+  async () => listAllEntities(getAdminDb(), 200),
+  ['api-entity-list'],
+  { revalidate: 3600, tags: ['noticias'] }
+);
 
 export async function GET(request: NextRequest) {
   try {
@@ -11,10 +26,8 @@ export async function GET(request: NextRequest) {
     const slug = searchParams.get('slug');
     const list = searchParams.get('list');
 
-    const db = getAdminDb();
-
     if (list === 'true') {
-      const entities = await listAllEntities(db, 200);
+      const entities = await cachedEntityList();
       return NextResponse.json({ success: true, entities });
     }
 
@@ -22,7 +35,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Parámetro slug requerido o list=true' }, { status: 400 });
     }
 
-    const data = await loadEntityPage(db, slug);
+    const data = await cachedEntityPage(slug);
     if (!data) {
       return NextResponse.json({ error: 'Entidad no encontrada' }, { status: 404 });
     }
