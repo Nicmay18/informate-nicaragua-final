@@ -304,25 +304,35 @@ export async function fetchPublishedDocs(fields: string[], fetchLimit: number, c
   ]);
 
   // publishedAt cubre docs sin `fecha` o con fecha inválida. En el corpus
-  // actual el 100% de los publicados tiene `fecha` (verificado 2026-11), así
-  // que esta rama es casi puramente redundante: se acota a 100 docs recientes
-  // — suficiente para rescatar cualquier doc sin `fecha`, sin pagar
-  // fetchLimit lecturas duplicadas en cada regeneración de caché.
+  // actual el 100% de los publicados tiene `fecha` (verificado 2026-11: 0/736
+  // carecen de fecha; los 238 sin `publishedAt` sí tienen `fecha` y llegan por
+  // la rama timestamp). El índice compuesto estado+publishedAt NO existe, así
+  // que la query indexada falla siempre y el fallback leía 250 docs por llamada
+  // — el 100% duplicados que el Map deduplica (~500K lecturas/día de
+  // desperdicio medido). Ahora el fallback SOLO corre cuando las ramas de
+  // fecha no llenaron el cupo: señal de posibles huecos (docs sin fecha).
+  // Si el corpus está completo, publishedAt no puede aportar nada nuevo.
   let publishedAtDocs: QueryDocumentSnapshot[] = [];
   {
-    const publishedAtLimit = Math.min(fetchLimit, 100);
-    const q: any = base().orderBy('publishedAt', 'desc').select(...selectFields).limit(publishedAtLimit);
-    publishedAtDocs = await safeGet('publishedAt-indexed', q);
-    if (publishedAtDocs.length === 0) {
-      const fbLimit = Math.min(Math.max(fetchLimit * 2, 250), 500);
-      const snap = await safeGet('publishedAt-single-field',
-        adminDb.collection('noticias').orderBy('publishedAt', 'desc').select(...selectFields).limit(fbLimit));
-      publishedAtDocs = snap.filter((d) => {
-        const data = d.data() as FirestoreNoticiaData;
-        if (data.estado !== 'publicado') return false;
-        if (categoria && data.categoria !== categoria) return false;
-        return true;
-      });
+    // Las ramas publishedAt (indexada + fallback) solo se ejecutan cuando el
+    // cupo de fecha quedó incompleto — única situación en que pueden aportar
+    // docs sin `fecha`. Con corpus completo son 100% duplicados.
+    const fechaDocs = tsDocs.length + stringDocs.length;
+    if (fechaDocs < fetchLimit) {
+      const publishedAtLimit = Math.min(fetchLimit, 100);
+      const q: any = base().orderBy('publishedAt', 'desc').select(...selectFields).limit(publishedAtLimit);
+      publishedAtDocs = await safeGet('publishedAt-indexed', q);
+      if (publishedAtDocs.length === 0) {
+        const fbLimit = Math.min(Math.max(fetchLimit - fechaDocs, 50), 250);
+        const snap = await safeGet('publishedAt-single-field',
+          adminDb.collection('noticias').orderBy('publishedAt', 'desc').select(...selectFields).limit(fbLimit));
+        publishedAtDocs = snap.filter((d) => {
+          const data = d.data() as FirestoreNoticiaData;
+          if (data.estado !== 'publicado') return false;
+          if (categoria && data.categoria !== categoria) return false;
+          return true;
+        });
+      }
     }
   }
 
@@ -389,7 +399,10 @@ async function fetchNoticiasList(fields: string[], limit: number): Promise<Notic
 const _cachedGetNewsPool = unstable_cache(
   async () => fetchNoticiasList([...LIST_FIELDS], 200),
   ['news-pool'],
-  { revalidate: 300, tags: ['noticias'] }
+  // 600s (antes 300s): cada regeneración lee ~450 docs. La fresquedad real la
+  // da revalidateTag('noticias') en cada publicación — el TTL solo acota la
+  // deriva de contadores (vistas/trending), que no justifica 288 regens/día.
+  { revalidate: 600, tags: ['noticias'] }
 );
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -701,7 +714,9 @@ const _cachedGetNewsPaginated = unstable_cache(
       .slice(offset, offset + pageSize);
   },
   ['noticias-paginadas'],
-  { revalidate: 300, tags: ['noticias'] }
+  // 900s: páginas profundas las rastrean crawlers; la publicación invalida
+  // el tag 'noticias' al instante, el TTL solo cubre deriva de contadores.
+  { revalidate: 900, tags: ['noticias'] }
 );
 
 export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
@@ -769,7 +784,8 @@ const _cachedGetCategoryPaginated = unstable_cache(
       .slice(offset, offset + pageSize);
   },
   ['categoria-paginada'],
-  { revalidate: 300, tags: ['noticias'] }
+  // 900s: mismo criterio que noticias-paginadas — crawlers + invalidación por tag.
+  { revalidate: 900, tags: ['noticias'] }
 );
 
 export async function getCategoryPaginated(categoria: string, page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {

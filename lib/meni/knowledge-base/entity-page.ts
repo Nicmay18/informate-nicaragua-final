@@ -31,10 +31,24 @@ export async function loadEntityPage(
 
   const entity = snap.docs[0].data() as unknown as KnowledgeEntity;
 
+  // OPTIMIZACIÓN COSTOS (2026-11-22): las queries de kb_timeline/kb_relations
+  // no tenían límite — una entidad hub leía hasta ~1,700 docs por regeneración
+  // (máx observado: 410 timeline + 421 relations source + 56 target + ~800
+  // getAll). La página solo muestra 30 entradas de timeline y 12 entidades
+  // relacionadas ordenadas por strength, así que los límites dejan margen
+  // amplio (60/150/150) sin perder nada visible.
+  const ENTITY_PAGE_LIMITS = { timeline: 60, relationsPerDirection: 150, relatedEntities: 60 } as const;
+
   const [timelineSnap, relationsSnap] = await Promise.all([
-    db.collection('kb_timeline').where('entityId', '==', entity.id).get(),
+    db.collection('kb_timeline')
+      .where('entityId', '==', entity.id)
+      .orderBy('date', 'desc')
+      .limit(ENTITY_PAGE_LIMITS.timeline)
+      .get(),
     db.collection('kb_relations')
       .where('sourceId', '==', entity.id)
+      .orderBy('strength', 'desc')
+      .limit(ENTITY_PAGE_LIMITS.relationsPerDirection)
       .get(),
   ]);
 
@@ -57,6 +71,8 @@ export async function loadEntityPage(
   const reverseRelSnap = await db
     .collection('kb_relations')
     .where('targetId', '==', entity.id)
+    .orderBy('strength', 'desc')
+    .limit(ENTITY_PAGE_LIMITS.relationsPerDirection)
     .get();
 
   const reverseRelations: KnowledgeRelation[] = reverseRelSnap.docs.map(
@@ -68,7 +84,19 @@ export async function loadEntityPage(
   }
 
   const allRelations = [...relations, ...reverseRelations];
-  const relatedEntityIdArr = Array.from(relatedEntityIds);
+
+  // Rankear destinos por fuerza ANTES del getAll: la página muestra solo las
+  // 12 más fuertes, así que leer las 300 entidades del universo de relaciones
+  // era desperdicio puro en entidades hub (~800 docs en el peor caso real).
+  const strengthByTarget = new Map<string, number>();
+  for (const r of allRelations) {
+    const other = r.sourceId === entity.id ? r.targetId : r.sourceId;
+    const prev = strengthByTarget.get(other) ?? -1;
+    if ((r.strength ?? 0) > prev) strengthByTarget.set(other, r.strength ?? 0);
+  }
+  const relatedEntityIdArr = Array.from(relatedEntityIds)
+    .sort((a, b) => (strengthByTarget.get(b) ?? 0) - (strengthByTarget.get(a) ?? 0))
+    .slice(0, ENTITY_PAGE_LIMITS.relatedEntities);
 
   // Batch read all related entities in a single call (fixes N+1).
   // getAll() con cero refs no es válido — entidad sin relaciones devuelve [].
