@@ -15,6 +15,17 @@ export class FirestoreOutageError extends Error {
   }
 }
 
+/**
+ * Durante `next build` (generación estática/ISR en Vercel) un apagón de
+ * Firestore NO debe matar el deploy: las páginas se prerenderizan vacías y
+ * el ISR las regenera en cuanto Firestore responda (revalidate + tags).
+ * En runtime el comportamiento no cambia: el error se propaga para que el
+ * caller distinga "corpus vacío" de "Firestore caído".
+ */
+function isProductionBuildPhase(): boolean {
+  return process.env.NEXT_PHASE === 'phase-production-build';
+}
+
 const DEFAULT_NEWS_COUNT = 30;
 const DEFAULT_MAS_LEIDAS_COUNT = 5;
 const MAX_COUNT = 500;
@@ -319,7 +330,13 @@ export async function fetchPublishedDocs(fields: string[], fetchLimit: number, c
   for (const d of [...tsDocs, ...stringDocs, ...publishedAtDocs]) merged.set(d.id, d);
 
   // Si todas las queries fallaron, un resultado vacío es ERROR — no EMPTY.
+  // Excepción: en build-phase devolvemos [] para no abortar el deploy; el
+  // ISR regenerará con datos reales en runtime (ver isProductionBuildPhase).
   if (merged.size === 0 && queryErrors > 0 && queryErrors >= queriesRun) {
+    if (isProductionBuildPhase()) {
+      logger.warn('[data.ts] fetchPublishedDocs: Firestore no disponible durante build — se genera contenido vacío; ISR recuperará en runtime');
+      return [];
+    }
     throw new FirestoreOutageError(`[data.ts] fetchPublishedDocs: ${queryErrors}/${queriesRun} queries fallaron — Firestore no disponible, no corpus vacío`);
   }
   // Reordenar por fecha canónica: el orden de Firestore por tipo mixto no es
