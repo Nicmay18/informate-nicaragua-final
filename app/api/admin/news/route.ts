@@ -8,7 +8,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
 import { categoryToSlug } from '@/lib/types';
 import { findBlockingDefects, repairMechanicalDefects } from '@/lib/editorial/content-integrity';
-import { computeTemaSlugs } from '@/lib/topics';
+import { computeTemaSlugs } from '@/lib/temas';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';

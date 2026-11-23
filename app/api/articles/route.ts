@@ -7,7 +7,7 @@ import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import type { NoticiaInput } from '@/lib/meni';
 import { logger } from '@/lib/logger';
 import { countWords } from '@/lib/utils/word-count';
-import { computeTemaSlugs } from '@/lib/topics';
+import { computeTemaSlugs } from '@/lib/temas';
 import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 
 export const maxDuration = 30;

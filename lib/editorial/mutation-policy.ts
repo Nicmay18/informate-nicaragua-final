@@ -22,7 +22,7 @@ import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { findBlockingDefects } from '@/lib/editorial/content-integrity';
-import { computeTemaSlugs } from '@/lib/topics';
+import { computeTemaSlugs } from '@/lib/temas';
 
 /** Campos cubiertos por computeInputHash + campos que renderizan contenido editorial. */
 export const SUBSTANTIVE_FIELDS = new Set([

@@ -11,7 +11,7 @@ config({ path: '.env.local' });
 import type { DocumentReference } from 'firebase-admin/firestore';
 
 const { getAdminDb } = await import('../lib/firebase-admin');
-const { computeTemaSlugs } = await import('../lib/topics');
+const { computeTemaSlugs } = await import('../lib/temas');
 
 const APPLY = process.argv.includes('--apply');
 const db = getAdminDb();

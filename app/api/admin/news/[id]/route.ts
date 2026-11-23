@@ -12,7 +12,7 @@ import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { findBlockingDefects } from '@/lib/editorial/content-integrity';
 import { applyTechnicalMutation, isApprovalCurrent } from '@/lib/editorial/mutation-policy';
-import { computeTemaSlugs } from '@/lib/topics';
+import { computeTemaSlugs } from '@/lib/temas';
 import { logger } from '@/lib/logger';
 
 function isAuthorized(request: NextRequest): boolean {

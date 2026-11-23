@@ -10,7 +10,7 @@ import { guardarConMeni, mapMeniScoreToNivel } from '@/lib/editorial/guardar-con
 import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import { findBlockingDefects, repairMechanicalDefects } from '@/lib/editorial/content-integrity';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
-import { computeTemaSlugs } from '@/lib/topics';
+import { computeTemaSlugs } from '@/lib/temas';
 import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
