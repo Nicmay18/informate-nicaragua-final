@@ -63,15 +63,16 @@ comportamiento efectivo. Documentado como residual aceptado.
 | Idempotencia | `jobId` = sha256(reason + mutationKey + URLs ordenadas). Mismo job no se duplica; `mutationKey` = id doc + timestamp/attemptId por mutación |
 | No bloqueo | `enqueueAndPurgeCloudflare` nunca lanza; envuelta en try/catch en cada ruta; timeout API 8s |
 | Persistencia | Job en Firestore `cf_purge_jobs/{jobId}`: urls, reason, slug, status, attempts, lastError, timestamps |
-| Reintentos | `/api/cron/cf-purge-retry` cada 15min (vercel.json): backoff 2→10→30→60→120min, máx. 5 intentos → `dead` |
+| Reintentos | `/api/cron/cf-purge-retry` **1×/día** (04:30 UTC — límite del plan Hobby de Vercel: máx 1 ejecución diaria por cron) + **drenado oportunista**: cada publicación/edición exitosa también procesa hasta 10 jobs pendientes. Las mutaciones editoriales (~4-8/día) son el reintento primario; el cron diario es respaldo |
 | Recuperación | Si CF cae: job queda `failed` → cron reintenta solo. Peor caso = comportamiento actual (stale ≤2h), NUNCA peor |
 | Anti-duplicados | status `pending`/`sent`/`done` bloquea re-encolado del mismo jobId |
 | Límite URLs | `MAX_URLS_PER_JOB=30` (también límite API CF por llamada); prioridad: artículo+categorías+temas antes que feeds |
 | Errores API | Parse de `success:false` + `errors[]` de CF; sanitizado (sin token); log warn |
 | Respuestas no-2xx/timeout | `callCloudflarePurge` captura todo → `failed` → reintento |
 
-**Coste del cron**: 1 query indexada (`status in [pending,failed]`, máx 20
-docs) por corrida ×96/día ≈ despreciable; respeta `isCronAllowed` (cost_guard).
+**Coste**: cron 1×/día (1 query) + drenado oportunista ~1 query por
+mutación exitosa (~4-8/día) ≈ **~10 reads/día total** — despreciable.
+Respeta `isCronAllowed` (cost_guard).
 
 ## 4. Seguridad
 
@@ -149,7 +150,7 @@ Billing CSV por SKU.
 | `app/api/admin/guardar-directo/route.ts` | Hook purge en guardado (edit/create) |
 | `app/api/articles/route.ts` | Hook purge en publicación automatizada |
 | `lib/editorial/mutation-policy.ts` | Hooks purge en 3 mutaciones sustantivas (enrich/clean crons) |
-| `vercel.json` | +cron `/api/cron/cf-purge-retry` cada 15min |
+| `vercel.json` | +cron `/api/cron/cf-purge-retry` 1×/día (límite Hobby) + drenado oportunista en cada mutación |
 | `tests/cloudflare-purge.test.ts` | **NUEVO** — 5 tests de matriz URL (✅ pasando) |
 | `docs/CF_PURGE_PROPOSAL.md` | Este documento |
 

@@ -206,6 +206,10 @@ export async function enqueueAndPurgeCloudflare(ctx: PurgeContext): Promise<{ sk
   const result = await callCloudflarePurge(urls);
   if (result.ok) {
     await markJob(jobId, { status: 'sent', lastError: null, sentAt: new Date().toISOString() });
+    // Drenado oportunista: cada publicación/edición también reintenta jobs
+    // pendientes — Vercel Hobby limita crons a 1/día, así que las
+    // mutaciones editoriales (varias/día) son el reintento primario.
+    await processPendingCloudflarePurges(10).catch(() => ({ processed: 0, sent: 0, failed: 0, dead: 0 }));
     return { jobId, purged: urls.length };
   }
   await markJob(jobId, { status: 'failed', attempts: 1, lastError: result.error || 'unknown' });
