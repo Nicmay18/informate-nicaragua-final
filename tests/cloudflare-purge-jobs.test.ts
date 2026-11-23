@@ -82,6 +82,8 @@ vi.mock('@/lib/logger', () => ({
 import {
   enqueueAndPurgeCloudflare,
   processPendingCloudflarePurges,
+  claimJob,
+  completeClaimedJob,
 } from '@/lib/cloudflare-purge';
 
 const ORIGIN = 'https://nicaraguainformate.com';
@@ -248,6 +250,59 @@ describe('processPendingCloudflarePurges — cola y concurrencia', () => {
     expect(out.sent).toBeLessThanOrEqual(10);
     const remaining = [...fake.store.values()].filter((j) => j.status === 'pending' || j.status === 'failed');
     expect(remaining.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('PRUEBA A — ejecutor viejo no puede sobrescribir el sent de otro', async () => {
+    // Secuencia real: A reclama → lease vence → B reclama y completa → A intenta completar.
+    seedJob('j-stale', { status: 'pending' });
+    const claimA = await claimJob(fake.db, 'j-stale', 'exec-A');
+    expect(claimA.claimed).toBe(true);
+    expect(getJob('j-stale')?.status).toBe('processing');
+    expect(getJob('j-stale')?.claimedBy).toBe('exec-A');
+
+    // Lease de A vence (CF_PURGE_LEASE_MS=50ms en beforeEach).
+    await new Promise((r) => setTimeout(r, 80));
+
+    // B reclama el mismo job y lo completa correctamente.
+    const outB = await processPendingCloudflarePurges();
+    expect(outB.sent).toBe(1);
+    expect(getJob('j-stale')?.status).toBe('sent');
+    expect(getJob('j-stale')?.claimedBy).toBeNull();
+
+    // A despierta tarde e intenta escribir su resultado con su execId viejo.
+    const wrote = await completeClaimedJob(fake.db, 'j-stale', 'exec-A', {
+      status: 'failed', lastError: 'STALE_WRITE', attempts: 99,
+    });
+    expect(wrote).toBe(false); // rechazado: claimedBy ya no es exec-A
+    const final = getJob('j-stale');
+    expect(final?.status).toBe('sent');
+    expect(final?.lastError).not.toBe('STALE_WRITE');
+    expect(final?.attempts).not.toBe(99);
+  });
+
+  it('PRUEBA B — resurrección dead: solo >24h, atómica, resurrectionCount máx 1', async () => {
+    seedJob('dead-25h', { status: 'dead', deadAt: iso(25 * 3600_000), attempts: 5 });
+    seedJob('dead-23h', { status: 'dead', deadAt: iso(23 * 3600_000), attempts: 5 });
+    seedJob('dead-recount', { status: 'dead', deadAt: iso(48 * 3600_000), attempts: 5, resurrectionCount: 1 });
+
+    // Dos drenados concurrentes compiten por resucitar dead-25h.
+    const [a, b] = await Promise.all([
+      processPendingCloudflarePurges(),
+      processPendingCloudflarePurges(),
+    ]);
+    const resurrectedTotal = a.resurrected + b.resurrected;
+    expect(resurrectedTotal).toBe(1); // solo uno ganó la transacción
+
+    const r = getJob('dead-25h');
+    // Resucitó (pending→sent en el mismo drain) y resurrectionCount === 1.
+    expect(r?.status).toBe('sent');
+    expect(r?.resurrectionCount).toBe(1);
+    expect(r?.resurrectedAt).toBeTruthy();
+
+    // <24h no resucita; resurrectionCount=1 nunca resucita aunque tenga >24h.
+    expect(getJob('dead-23h')?.status).toBe('dead');
+    expect(getJob('dead-recount')?.status).toBe('dead');
+    expect(getJob('dead-recount')?.resurrectionCount).toBe(1);
   });
 
   it('enqueue idempotente: misma mutación no duplica job ni llamada API', async () => {

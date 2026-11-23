@@ -33,7 +33,9 @@ const JOBS_COLLECTION = 'cf_purge_jobs';
 const MAX_URLS_PER_JOB = 30;
 const MAX_ATTEMPTS = 5;
 const PURGE_TIMEOUT_MS = 8000;
-const LEASE_MS = Number(process.env.CF_PURGE_LEASE_MS || 60_000);
+function leaseMs(): number {
+  return Number(process.env.CF_PURGE_LEASE_MS || 60_000);
+}
 const MAX_DRAIN_JOBS = 10;
 const RESURRECT_AFTER_MS = 24 * 60 * 60_000;
 const MAX_RESURRECTIONS = 1;
@@ -162,7 +164,7 @@ async function callCloudflarePurge(files: string[]): Promise<PurgeApiResult> {
   }
 }
 
-type AdminDb = ReturnType<typeof getAdminDb>;
+export type AdminDb = ReturnType<typeof getAdminDb>;
 
 function tsMs(v: unknown): number {
   const t = new Date(v as string).getTime();
@@ -186,7 +188,7 @@ const EMPTY_RESULT = { processed: 0, sent: 0, failed: 0, dead: 0, resurrected: 0
  * Si attempts ya llegó a MAX_ATTEMPTS, el job pasa a 'dead' (terminal,
  * visible para revisión) en lugar de reclamarse.
  */
-async function claimJob(db: AdminDb, jobId: string, execId: string): Promise<{ claimed: boolean; dead?: boolean; skip?: string; attempts?: number }> {
+export async function claimJob(db: AdminDb, jobId: string, execId: string): Promise<{ claimed: boolean; dead?: boolean; skip?: string; attempts?: number }> {
   const ref = db.collection(JOBS_COLLECTION).doc(jobId);
   return db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
@@ -206,7 +208,7 @@ async function claimJob(db: AdminDb, jobId: string, execId: string): Promise<{ c
     tx.set(ref, {
       status: 'processing',
       claimedBy: execId,
-      leaseUntil: new Date(now + LEASE_MS).toISOString(),
+      leaseUntil: new Date(now + leaseMs()).toISOString(),
       attempts: attempts + 1,
       updatedAt: nowIso,
     }, { merge: true });
@@ -220,7 +222,7 @@ async function claimJob(db: AdminDb, jobId: string, execId: string): Promise<{ c
  * proceso reclamó el job tras expirar la reserva, esta escritura se
  * descarta — un ejecutor viejo nunca sobrescribe un estado más reciente.
  */
-async function completeClaimedJob(db: AdminDb, jobId: string, execId: string, patch: Record<string, unknown>): Promise<boolean> {
+export async function completeClaimedJob(db: AdminDb, jobId: string, execId: string, patch: Record<string, unknown>): Promise<boolean> {
   const ref = db.collection(JOBS_COLLECTION).doc(jobId);
   return db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
