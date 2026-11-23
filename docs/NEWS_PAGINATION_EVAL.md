@@ -44,7 +44,7 @@ mapeado+filtrado+ordenado (~741 items); `getNewsPaginated` solo hace
 ## 4. Por qué NO conviene (análisis de costos)
 
 - La índice regenera en CADA ventana de 900s mientras `/noticias` reciba
-  tráfico (crawlers continuos) → hasta ~96 regens/día.
+  tráfico (crawlers continuos).
 - Cada regen del índice cuesta **~991 lecturas**: 741 docs del corpus +
   **~250 del fallback `publishedAt`** — `fetchPublishedDocs` ejecuta la
   rama publishedAt cuando `fechaDocs < fetchLimit`; con fetchLimit=1500
@@ -52,15 +52,29 @@ mapeado+filtrado+ordenado (~741 items); `getNewsPaginated` solo hace
   query indexada `estado+publishedAt` **falla siempre** (índice compuesto
   inexistente — FAILED_PRECONDITION verificado), así que paga la rama
   single-field de 250 docs que son 100% duplicados.
-- Peor caso estimado: ~991 × 96 ≈ **~95K lecturas/día** vs ~2-3K actuales
-  → **regresión ~30-40x**, no optimización.
-- Las páginas individuales antiguas nunca pagaban el fallback porque su
-  fetchLimit (≤708) queda por debajo del corpus (741).
 
-Para que el índice ganara haría falta una query dedicada de dos ramas sin
-fallback (~741/regen) + TTL largo — aún así ~18-70K/día > actual. **El
-problema no es la paginación sino la frecuencia de invalidación**
-(`revalidateTag('noticias')` global — PR #50, congelado).
+### Escenarios de costo diario (separando observado / estimado / hipotético)
+
+Costo por regen del índice: **~991 lecturas** (estimación basada en corpus
+real de 741 docs + fallback medido de ~250).
+
+| Escenario | Regens/día | Lecturas/día estimadas | vs actual |
+|---|---|---|---|
+| Observado bajo | 2 | ~1,982 | ~2.4x PEOR que 834 observadas |
+| Observado medio | 4 | ~3,964 | ~2.3x PEOR |
+| Observado alto | 8 | ~7,928 | ~3.3x PEOR que 2,385 observadas |
+| **Extremo hipotético** | 96 (techo si /noticias recibiera tráfico continuo toda ventana de 900s) | ~95,136 | ~40x peor — **NO es consumo observado** |
+
+Incluso en el escenario observado más favorable (2 regens/día), la caché
+compartida cuesta ~2.4x más lecturas que la implementación actual, porque
+cada regeneración del índice relee el corpus completo (~991 docs) mientras
+las páginas individuales solo leen `offset+48` docs y la mayoría de
+regeneraciones observadas son páginas someras (p1 ≈ 48-96 docs).
+
+**Conclusión**: la propuesta es una regresión a CUALQUIER frecuencia
+observada, no solo en el peor caso. El problema real no es la paginación
+sino la frecuencia de invalidación (`revalidateTag('noticias')` global —
+PR #50, congelado hasta tener métricas).
 
 ## 5. Respuestas a las preguntas obligatorias
 
@@ -72,8 +86,12 @@ problema no es la paginación sino la frecuencia de invalidación**
   que hoy; si la caché falla, el siguiente request reintenta.
 - **Contrato**: `getNewsPaginated(page,pageSize)` firma y salida
   `Noticia[]` sin cambios; único consumidor `/noticias`.
-- **Ahorro estimado**: NEGATIVO (~30-40x peor). **Medido**: paridad exacta;
-  freq ~2-8 regens/día; docs ~2.4K/día.
+- **Ahorro estimado**: NEGATIVO — ~2.4-3.3x más lecturas que la actual a
+  las frecuencias observadas (2-8 regens/día); ~40x solo en el escenario
+  hipotético extremo de 96 regens/día.
+- **Medido**: paridad exacta 0/60 páginas; freq 2-8 regens/día;
+  docs ~0.8-2.4K/día; corpus 741; fallback publishedAt ~250 lecturas
+  desperdiciadas por regen del índice.
 
 ## 6. Recomendación
 
