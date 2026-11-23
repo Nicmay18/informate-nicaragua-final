@@ -7,6 +7,7 @@ import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import type { NoticiaInput } from '@/lib/meni';
 import { logger } from '@/lib/logger';
 import { countWords } from '@/lib/utils/word-count';
+import { computeTemaSlugs } from '@/lib/topics';
 import { NO_STORE_401_HEADERS, extractRequestSecret, QUERY_SECRET_DEPRECATION_NOTE, verifyAdminOrCronToken } from '@/lib/auth';
 
 export const maxDuration = 30;
@@ -133,6 +134,7 @@ export async function POST(request: NextRequest) {
         ...meniUpdateData,
         titulo,
         slug: finalSlug,
+        temas: computeTemaSlugs({ ...meniUpdateData, titulo, categoria: finalCategoria }),
         // resumen/contenido canónicos vienen de meniUpdateData (textoCorregido);
         // nunca persistir el input crudo por encima de la versión evaluada.
         categoria: finalCategoria,

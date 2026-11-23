@@ -141,30 +141,62 @@ const normalizeTemaNews = (docs: FirebaseFirestore.QueryDocumentSnapshot[]): Not
       palabras: data.palabras,
       tags: data.tags,
       estado: data.estado || 'publicado',
+      publicado: data.publicado,
+      archived: data.archived,
       noindex: !!data.noindex,
     } as Noticia;
   });
 
-function matchesTema(noticia: Noticia, tema: Tema): boolean {
-  const haystack = `${noticia.titulo} ${noticia.resumen} ${noticia.contenido || ''} ${(noticia.tags || []).join(' ')}`.toLowerCase();
-  return (
-    tema.relatedCategories.includes(noticia.categoria) ||
-    tema.keywords.some((k) => haystack.includes(k.toLowerCase()))
-  );
+/**
+ * Slugs de temas que corresponden a una noticia — la misma lógica que
+ * antes se aplicaba en memoria sobre docs completos (keywords +
+ * relatedCategories). Se persiste en el
+ * campo `temas` al escribir la noticia para que /tema/[slug] no tenga
+ * que leer 500 documentos completos por regeneración.
+ */
+export function computeTemaSlugs(data: {
+  titulo?: unknown;
+  resumen?: unknown;
+  contenido?: unknown;
+  tags?: unknown;
+  categoria?: unknown;
+}): string[] {
+  const tagsText = Array.isArray(data.tags) ? data.tags.join(' ') : String(data.tags ?? '');
+  const haystack = `${data.titulo ?? ''} ${data.resumen ?? ''} ${data.contenido ?? ''} ${tagsText}`.toLowerCase();
+  const categoria = String(data.categoria ?? 'General');
+  return TOPICS.filter(
+    (t) => t.relatedCategories.includes(categoria) || t.keywords.some((k) => haystack.includes(k.toLowerCase())),
+  ).map((t) => t.slug);
 }
+
+// Campos que la tarjeta de /tema/[slug] realmente usa — SIN `contenido`
+// (~10KB/doc). Antes la página leía hasta 500 docs completos por
+// regeneración para filtrar por keywords en memoria; ahora el campo
+// `temas` (precalculado al escribir la noticia) hace el filtrado en
+// Firestore y solo viajan los artículos que sí corresponden al tema.
+const TEMA_CARD_FIELDS = [
+  'slug', 'titulo', 'resumen', 'categoria', 'imagen', 'fecha',
+  'fechaActualizacion', 'autor', 'autorFoto', 'destacada', 'vistas',
+  'palabras', 'tags', 'estado', 'publicado', 'archived', 'noindex', 'temas',
+];
 
 async function loadTemaArticlesRaw(tema: Tema): Promise<Noticia[]> {
   try {
+    // Solo array-contains (índice de un solo campo — sin índice compuesto
+    // nuevo). estado/publicado/archived se filtran en memoria: los matches
+    // por tema son decenas, no cientos.
     const snap = await adminDb
       .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .orderBy('fecha', 'desc')
-      .limit(50)
+      .where('temas', 'array-contains', tema.slug)
+      .limit(200)
+      .select(...TEMA_CARD_FIELDS)
       .get();
 
     await trackRegen('tema_articles', { key: tema.slug, docs: snap.size });
-    const all = normalizeTemaNews(snap.docs);
-    return all.filter((n) => matchesTema(n, tema));
+    return normalizeTemaNews(snap.docs)
+      .filter((n) => n.estado === 'publicado')
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+      .slice(0, 50);
   } catch (err) {
     logger.error(`[topics] Error cargando artículos del tema ${tema.slug}:`, err);
     return [];
@@ -186,18 +218,22 @@ export const getCachedTemaArticlesPaginated = unstable_cache(
     const tema = TOPICS.find((t) => t.slug === slug);
     if (!tema) return { articles: [] as Noticia[], total: 0 };
     try {
+      // Filtrado por el campo `temas` precomputado (ver computeTemaSlugs) —
+      // antes leía hasta 500 documentos completos (~5MB) por regeneración.
+      // Sin orderBy (evita índice compuesto nuevo): se leen TODOS los
+      // matches (acotados por el tamaño de la colección) y se ordenan en
+      // memoria — necesario para `total` y paginación profunda correctas.
       const snap = await adminDb
         .collection('noticias')
-        .where('estado', '==', 'publicado')
-        .orderBy('fecha', 'desc')
-        .limit(500)
+        .where('temas', 'array-contains', tema.slug)
+        .limit(1000)
+        .select(...TEMA_CARD_FIELDS)
         .get();
 
-      // Medición de transferencia real: esta query lee docs COMPLETOS
-      // (matchesTema usa `contenido` en el haystack) — ~500 × ~12KB por regen.
-      const bytes = snap.docs.reduce((s, d) => s + JSON.stringify(d.data()).length, 0);
-      await trackRegen('tema_paginated', { key: tema.slug, docs: snap.size, bytes });
-      const all = normalizeTemaNews(snap.docs).filter((n) => matchesTema(n, tema));
+      await trackRegen('tema_paginated', { key: tema.slug, docs: snap.size });
+      const all = normalizeTemaNews(snap.docs)
+        .filter((n) => n.estado === 'publicado')
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
       const total = all.length;
       const offset = (page - 1) * pageSize;
       const articles = all.slice(offset, offset + pageSize);

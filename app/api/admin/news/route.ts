@@ -8,6 +8,7 @@ import { Timestamp } from 'firebase-admin/firestore';
 import type { NoticiaInput } from '@/lib/meni';
 import { categoryToSlug } from '@/lib/types';
 import { findBlockingDefects, repairMechanicalDefects } from '@/lib/editorial/content-integrity';
+import { computeTemaSlugs } from '@/lib/topics';
 import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
@@ -297,6 +298,7 @@ export async function POST(request: NextRequest) {
       ...meniUpdateData,
       id: docRef.id,
       titulo: tituloLimpio,
+      temas: computeTemaSlugs({ ...meniUpdateData, titulo: tituloLimpio, categoria: finalCategoria }),
       // resumen/contenido canónicos vienen de meniUpdateData (textoCorregido);
       // nunca persistir el input crudo por encima de la versión evaluada.
       imagen: imagen || '',

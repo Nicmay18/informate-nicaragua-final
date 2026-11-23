@@ -12,6 +12,7 @@ import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { findBlockingDefects } from '@/lib/editorial/content-integrity';
 import { applyTechnicalMutation, isApprovalCurrent } from '@/lib/editorial/mutation-policy';
+import { computeTemaSlugs } from '@/lib/topics';
 import { logger } from '@/lib/logger';
 
 function isAuthorized(request: NextRequest): boolean {
@@ -166,6 +167,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         updateData.slug = await ensureUniqueSlug(body.titulo, slugExists);
       }
       updateData.fechaActualizacion = Timestamp.now();
+      // Mantener `temas` sincronizado con el contenido final (merge doc
+      // existente + cambios) — /tema/[slug] filtra por este campo.
+      updateData.temas = computeTemaSlugs({ ...(snap.data() || {}), ...updateData });
 
       await ref.update(updateData);
 

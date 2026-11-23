@@ -22,6 +22,7 @@ import { guardarConMeni } from '@/lib/editorial/guardar-con-meni';
 import type { NoticiaInput } from '@/lib/meni';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { findBlockingDefects } from '@/lib/editorial/content-integrity';
+import { computeTemaSlugs } from '@/lib/topics';
 
 /** Campos cubiertos por computeInputHash + campos que renderizan contenido editorial. */
 export const SUBSTANTIVE_FIELDS = new Set([
@@ -247,6 +248,14 @@ export async function applySubstantiveMutation(
       titulo: canonical?.titulo || merged.titulo,
       contenido: canonical?.contenido || merged.contenido,
       resumen: canonical?.resumen || merged.resumen,
+      // `temas` sincronizado con el contenido final — /tema/[slug] filtra por él.
+      temas: computeTemaSlugs({
+        titulo: canonical?.titulo || merged.titulo,
+        resumen: canonical?.resumen || merged.resumen,
+        contenido: canonical?.contenido || merged.contenido,
+        categoria: merged.categoria,
+        tags: before.tags,
+      }),
       requiresReevaluation: false,
       fechaActualizacion: new Date(),
       mutationLog: appendLog(before.mutationLog, {
@@ -314,6 +323,7 @@ export async function applySubstantiveMutation(
     // la aprobación anterior NO es válida para el nuevo contenido.
     await ref.update({
       ...mutation,
+      temas: computeTemaSlugs({ ...before, ...mutation }),
       aprobadoMeni: false,
       scoreMeni: null,
       supervisorApproved: false,
@@ -384,6 +394,7 @@ export async function flagSubstantiveMutation(
 
   await ref.update({
     ...sanitized,
+    temas: computeTemaSlugs({ ...before, ...sanitized }),
     aprobadoMeni: false,
     scoreMeni: null,
     supervisorApproved: false,
