@@ -709,26 +709,35 @@ export async function getRelatedNews(categoria: string, excludeSlug: string, cou
 
 export const PAGE_SIZE = 12;
 
-// Tag 'noticias': asocia el listado al tag que invalidan todas las rutas de
-// publicación (invalidateFirestoreCache / /api/revalidate). Sin esta capa,
-// revalidateTag no tocaba /noticias porque sus datos no estaban etiquetados.
-const _cachedGetNewsPaginated = unstable_cache(
-  async (page: number, pageSize: number): Promise<Noticia[]> => {
-    const offset = (page - 1) * pageSize;
-    // Traer más para compensar el filtro isPublicNews
-    const fetchLimit = offset + pageSize * 4;
-    const docs = await fetchPublishedDocs([...LIST_FIELDS], fetchLimit);
+// ── Índice compartido del listado /noticias ─────────────────────────────
+// ANTES: cada (page,pageSize) era una entrada unstable_cache propia que
+// ejecutaba fetchPublishedDocs con fetchLimit = offset + pageSize*4 —
+// la página 56 releía ~708 docs (todo el corpus) por regeneración, y las
+// ~60 páginas cacheadas producían un coste O(n²) medido en metrics_daily
+// (p56 = 738 docs/regen).
+//
+// AHORA: UNA sola entrada de caché contiene el listado completo ya
+// mapeado+filtrado+ordenado; cada página solo hace slice() en memoria —
+// cero consultas Firestore por página. Misma data, mismo orden, mismo
+// tag 'noticias' → la invalidación por publicación es idéntica.
+//
+// Límite del índice: holgura sobre el corpus actual (~750 publicados)
+// para crecimiento; fetchPublishedDocs solo devuelve docs existentes.
+const NEWS_INDEX_FETCH_LIMIT = 1500;
 
-    const result = docs.map(mapDocToNoticia)
+const _cachedGetNewsIndex = unstable_cache(
+  async (): Promise<Noticia[]> => {
+    const docs = await fetchPublishedDocs([...LIST_FIELDS], NEWS_INDEX_FETCH_LIMIT);
+    const all = docs
+      .map(mapDocToNoticia)
       .filter((n) => isPublicNews(n) && !isToxicSlug(n.slug))
-      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
-      .slice(offset, offset + pageSize);
-    await trackRegen('news_paginated', { key: `p${page}`, docs: docs.length });
-    return result;
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+    await trackRegen('news_index', { docs: docs.length });
+    return all;
   },
-  ['noticias-paginadas'],
-  // 900s: páginas profundas las rastrean crawlers; la publicación invalida
-  // el tag 'noticias' al instante, el TTL solo cubre deriva de contadores.
+  ['noticias-index'],
+  // 900s: igual que el paginado anterior; la publicación invalida el tag
+  // 'noticias' al instante, el TTL solo cubre deriva de contadores.
   { revalidate: 900, tags: ['noticias'] }
 );
 
@@ -736,7 +745,9 @@ export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE
   const validatedPage = Math.max(1, page);
   const validatedPageSize = Math.max(1, pageSize);
   try {
-    return await _cachedGetNewsPaginated(validatedPage, validatedPageSize);
+    const all = await _cachedGetNewsIndex();
+    const offset = (validatedPage - 1) * validatedPageSize;
+    return all.slice(offset, offset + validatedPageSize);
   } catch (err) {
     if (err instanceof FirestoreOutageError) throw err;
     logger.error('[data.ts] getNewsPaginated error:', err instanceof Error ? err.message : String(err));
