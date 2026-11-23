@@ -5,6 +5,12 @@ import type { Noticia } from '@/lib/types';
 import { FALLBACK_IMAGE } from '@/lib/types';
 import { EVERGREEN_ARTICLES } from '@/lib/evergreen';
 import { trackRegen } from '@/lib/metrics/daily-counters';
+import { TOPICS } from '@/lib/temas';
+import type { Tema } from '@/lib/temas';
+
+// Re-export para compatibilidad con imports existentes.
+export { TOPICS, computeTemaSlugs } from '@/lib/temas';
+export type { Tema } from '@/lib/temas';
 
 function normalizeImage(imagen: string): string {
   if (!imagen || imagen === 'null' || imagen === 'undefined' || imagen === 'NaN') return FALLBACK_IMAGE;
@@ -67,60 +73,6 @@ function safeDateString(value: unknown): string {
   return '';
 }
 
-export interface Tema {
-  slug: string;
-  name: string;
-  description: string;
-  keywords: string[];
-  relatedCategories: string[];
-  image?: string;
-}
-
-export const TOPICS: Tema[] = [
-  {
-    slug: 'apostilla',
-    name: 'Apostilla de documentos en Nicaragua',
-    description: 'Guías, trámites y noticias sobre cómo apostillar documentos nicaragüenses para usar en el extranjero.',
-    keywords: ['apostilla', 'cancillería', 'documentos', 'legalización', 'migración', 'trámites Nicaragua'],
-    relatedCategories: ['Nacionales'],
-  },
-  {
-    slug: 'policia-nacional',
-    name: 'Policía Nacional de Nicaragua',
-    description: 'Noticias, reportes y guías sobre la Policía Nacional, antecedentes penales y seguridad ciudadana.',
-    keywords: ['policía', 'antecedentes penales', 'récord policial', 'seguridad', 'capturas'],
-    relatedCategories: ['Sucesos', 'Nacionales'],
-  },
-  {
-    slug: 'turismo-nicaragua',
-    name: 'Turismo en Nicaragua',
-    description: 'Destinos turísticos, guías de viaje, volcanes, playas y cultura nicaragüense.',
-    keywords: ['turismo', 'viajes', 'Granada', 'León', 'Ometepe', 'volcanes', 'playas'],
-    relatedCategories: ['Nacionales', 'Espectáculos'],
-  },
-  {
-    slug: 'tecnologia-nicaragua',
-    name: 'Tecnología en Nicaragua',
-    description: 'Innovación, startups, internet, telecomunicaciones y transformación digital en Nicaragua.',
-    keywords: ['tecnología', 'internet', 'startups', 'telecomunicaciones', 'digital'],
-    relatedCategories: ['Tecnología'],
-  },
-  {
-    slug: 'deportes-nicaragua',
-    name: 'Deportes en Nicaragua',
-    description: 'Resultados, fichajes y noticias del deporte nicaragüense: fútbol, béisbol y atletismo.',
-    keywords: ['fútbol', 'béisbol', 'liga primera', 'selección nacional', 'deportes'],
-    relatedCategories: ['Deportes'],
-  },
-  {
-    slug: 'economia-nicaragua',
-    name: 'Economía de Nicaragua',
-    description: 'Noticias sobre economía, comercio, inversión y desarrollo económico en Nicaragua.',
-    keywords: ['economía', 'inversión', 'comercio', 'precios', 'mercado', 'finanzas'],
-    relatedCategories: ['Nacionales'],
-  },
-];
-
 const normalizeTemaNews = (docs: FirebaseFirestore.QueryDocumentSnapshot[]): Noticia[] =>
   docs.map((doc) => {
     const data = doc.data();
@@ -141,30 +93,40 @@ const normalizeTemaNews = (docs: FirebaseFirestore.QueryDocumentSnapshot[]): Not
       palabras: data.palabras,
       tags: data.tags,
       estado: data.estado || 'publicado',
+      publicado: data.publicado,
+      archived: data.archived,
       noindex: !!data.noindex,
     } as Noticia;
   });
 
-function matchesTema(noticia: Noticia, tema: Tema): boolean {
-  const haystack = `${noticia.titulo} ${noticia.resumen} ${noticia.contenido || ''} ${(noticia.tags || []).join(' ')}`.toLowerCase();
-  return (
-    tema.relatedCategories.includes(noticia.categoria) ||
-    tema.keywords.some((k) => haystack.includes(k.toLowerCase()))
-  );
-}
+// Campos que la tarjeta de /tema/[slug] realmente usa — SIN `contenido`
+// (~10KB/doc). Antes la página leía hasta 500 docs completos por
+// regeneración para filtrar por keywords en memoria; ahora el campo
+// `temas` (precalculado al escribir la noticia) hace el filtrado en
+// Firestore y solo viajan los artículos que sí corresponden al tema.
+const TEMA_CARD_FIELDS = [
+  'slug', 'titulo', 'resumen', 'categoria', 'imagen', 'fecha',
+  'fechaActualizacion', 'autor', 'autorFoto', 'destacada', 'vistas',
+  'palabras', 'tags', 'estado', 'publicado', 'archived', 'noindex', 'temas',
+];
 
 async function loadTemaArticlesRaw(tema: Tema): Promise<Noticia[]> {
   try {
+    // Solo array-contains (índice de un solo campo — sin índice compuesto
+    // nuevo). estado/publicado/archived se filtran en memoria: los matches
+    // por tema son decenas, no cientos.
     const snap = await adminDb
       .collection('noticias')
-      .where('estado', '==', 'publicado')
-      .orderBy('fecha', 'desc')
-      .limit(50)
+      .where('temas', 'array-contains', tema.slug)
+      .limit(200)
+      .select(...TEMA_CARD_FIELDS)
       .get();
 
     await trackRegen('tema_articles', { key: tema.slug, docs: snap.size });
-    const all = normalizeTemaNews(snap.docs);
-    return all.filter((n) => matchesTema(n, tema));
+    return normalizeTemaNews(snap.docs)
+      .filter((n) => n.estado === 'publicado')
+      .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
+      .slice(0, 50);
   } catch (err) {
     logger.error(`[topics] Error cargando artículos del tema ${tema.slug}:`, err);
     return [];
@@ -186,18 +148,22 @@ export const getCachedTemaArticlesPaginated = unstable_cache(
     const tema = TOPICS.find((t) => t.slug === slug);
     if (!tema) return { articles: [] as Noticia[], total: 0 };
     try {
+      // Filtrado por el campo `temas` precomputado (ver computeTemaSlugs) —
+      // antes leía hasta 500 documentos completos (~5MB) por regeneración.
+      // Sin orderBy (evita índice compuesto nuevo): se leen TODOS los
+      // matches (acotados por el tamaño de la colección) y se ordenan en
+      // memoria — necesario para `total` y paginación profunda correctas.
       const snap = await adminDb
         .collection('noticias')
-        .where('estado', '==', 'publicado')
-        .orderBy('fecha', 'desc')
-        .limit(500)
+        .where('temas', 'array-contains', tema.slug)
+        .limit(1000)
+        .select(...TEMA_CARD_FIELDS)
         .get();
 
-      // Medición de transferencia real: esta query lee docs COMPLETOS
-      // (matchesTema usa `contenido` en el haystack) — ~500 × ~12KB por regen.
-      const bytes = snap.docs.reduce((s, d) => s + JSON.stringify(d.data()).length, 0);
-      await trackRegen('tema_paginated', { key: tema.slug, docs: snap.size, bytes });
-      const all = normalizeTemaNews(snap.docs).filter((n) => matchesTema(n, tema));
+      await trackRegen('tema_paginated', { key: tema.slug, docs: snap.size });
+      const all = normalizeTemaNews(snap.docs)
+        .filter((n) => n.estado === 'publicado')
+        .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
       const total = all.length;
       const offset = (page - 1) * pageSize;
       const articles = all.slice(offset, offset + pageSize);

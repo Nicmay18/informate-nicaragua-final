@@ -10,6 +10,7 @@ import { guardarConMeni, mapMeniScoreToNivel } from '@/lib/editorial/guardar-con
 import { updateDecisionLog } from '@/lib/editorial/decision-log';
 import { findBlockingDefects, repairMechanicalDefects } from '@/lib/editorial/content-integrity';
 import { sanitizeArticleHtml } from '@/lib/sanitize';
+import { computeTemaSlugs } from '@/lib/temas';
 import { logger } from '@/lib/logger';
 
 export const maxDuration = 30;
@@ -330,6 +331,8 @@ export async function POST(request: NextRequest) {
     } catch {
       updateData.related_links = await getRelatedLinks(db, (categoria as string) || 'General', articleDocId || '');
     }
+    // Mantener `temas` sincronizado (merge doc existente + cambios).
+    updateData.temas = computeTemaSlugs({ ...existingData, ...updateData });
     if (id) {
       await db.collection('noticias').doc(id).update(updateData);
     } else {
