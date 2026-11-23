@@ -62,17 +62,31 @@ comportamiento efectivo. Documentado como residual aceptado.
 |---|---|
 | Idempotencia | `jobId` = sha256(reason + mutationKey + URLs ordenadas). Mismo job no se duplica; `mutationKey` = id doc + timestamp/attemptId por mutación |
 | No bloqueo | `enqueueAndPurgeCloudflare` nunca lanza; envuelta en try/catch en cada ruta; timeout API 8s |
-| Persistencia | Job en Firestore `cf_purge_jobs/{jobId}`: urls, reason, slug, status, attempts, lastError, timestamps |
-| Reintentos | `/api/cron/cf-purge-retry` **1×/día** (04:30 UTC — límite del plan Hobby de Vercel: máx 1 ejecución diaria por cron) + **drenado oportunista**: cada publicación/edición exitosa también procesa hasta 10 jobs pendientes. Las mutaciones editoriales (~4-8/día) son el reintento primario; el cron diario es respaldo |
-| Recuperación | Si CF cae: job queda `failed` → cron reintenta solo. Peor caso = comportamiento actual (stale ≤2h), NUNCA peor |
-| Anti-duplicados | status `pending`/`sent`/`done` bloquea re-encolado del mismo jobId |
+| Persistencia | Job en Firestore `cf_purge_jobs/{jobId}`: urls, reason, slug, status (`pending`/`processing`/`failed`/`sent`/`dead`), attempts, claimedBy, leaseUntil, nextRetryAt, lastError, timestamps |
+| Reintentos | **Drenado oportunista primario**: tras CADA mutación (éxito o fallo de su propia purga) se procesan hasta 10 jobs pendientes — las ~4-8 mutaciones editoriales/día son el motor de recuperación. Respaldo: `/api/cron/cf-purge-retry` **1×/día** (04:30 UTC — límite del plan Hobby: máx 1 ejecución diaria por cron) |
+| Concurrencia | **Reserva atómica por transacción Firestore**: `claimJob` marca `processing` + `claimedBy`(execId) + `leaseUntil`(now+60s) e incrementa `attempts`. Dos procesos no pueden reclamar el mismo job; un ejecutor viejo no puede sobrescribir el resultado de otro (`completeClaimedJob` verifica `claimedBy` dentro de la transacción). Reserva con lease vencido se recupera sin perder el job |
+| Anti-duplicados | `jobId` determinista; status `pending`/`processing`/`sent`/`done` bloquea re-encolado del mismo jobId |
 | Límite URLs | `MAX_URLS_PER_JOB=30` (también límite API CF por llamada); prioridad: artículo+categorías+temas antes que feeds |
+| Límite drenado | `MAX_DRAIN_JOBS=10` trabajos por ejecución |
 | Errores API | Parse de `success:false` + `errors[]` de CF; sanitizado (sin token); log warn |
-| Respuestas no-2xx/timeout | `callCloudflarePurge` captura todo → `failed` → reintento |
+| Respuestas no-2xx/timeout | `callCloudflarePurge` captura todo → `failed` + `nextRetryAt` (backoff) → reintento |
+| Jobs `dead` | Tras 5 intentos → `dead` terminal con `deadAt`. **Una única resurrección automática** si lleva >24h muerto: `resurrectionCount`+`resurrectedAt`, `attempts` reset. `resurrectionCount>=1` nunca resucita de nuevo → token inválido permanente no genera ciclo infinito. Los `dead` quedan visibles en la colección para revisión manual |
+| Recuperación real (Hobby) | Ver tabla de tiempos máximos abajo |
 
-**Coste**: cron 1×/día (1 query) + drenado oportunista ~1 query por
-mutación exitosa (~4-8/día) ≈ **~10 reads/día total** — despreciable.
-Respeta `isCronAllowed` (cost_guard).
+**Tiempos máximos de recuperación (honesto)**:
+
+| Escenario | Peor caso |
+|---|---|
+| CF responde al publicar | <10s |
+| CF cae en horario editorial | Siguiente mutación (~3-6h) o cron diario |
+| CF cae de noche/finde sin mutaciones | ~24h (cron 04:30 UTC) |
+| Job agota 5 intentos → `dead` | Resurrección a las 24h (una vez) o intervención manual |
+| **Piso de frescura si NUNCA se purga** | Edge TTL ~2h por PoP — la purga nunca empeora el estado actual |
+
+**Coste**: por mutación ~1 query de drenado (≤10 docs) + transacciones de
+reserva/resultado (~2-4 docs) + cron diario. ~4-8 mutaciones/día ≈
+**~60-120 reads + ~30-50 writes/día** — orden de **US$0.005/mes**,
+despreciable frente al corpus editorial. Respeta `isCronAllowed` (cost_guard).
 
 ## 4. Seguridad
 
@@ -152,6 +166,7 @@ Billing CSV por SKU.
 | `lib/editorial/mutation-policy.ts` | Hooks purge en 3 mutaciones sustantivas (enrich/clean crons) |
 | `vercel.json` | +cron `/api/cron/cf-purge-retry` 1×/día (límite Hobby) + drenado oportunista en cada mutación |
 | `tests/cloudflare-purge.test.ts` | **NUEVO** — 5 tests de matriz URL (✅ pasando) |
+| `tests/cloudflare-purge-jobs.test.ts` | **NUEVO** — 11 tests de cola: nextRetryAt, reserva atómica, lease expirado, resurrección única de dead, drenado tras fallo, fail-open, límite 10, idempotencia (✅ pasando) |
 | `docs/CF_PURGE_PROPOSAL.md` | Este documento |
 
 **Variables de entorno nuevas** (configurar en Vercel, NO en repo):
