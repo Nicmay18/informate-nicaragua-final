@@ -9,20 +9,33 @@ function mockDb(opts: { entity?: unknown; relations?: unknown[]; timeline?: unkn
       docs: (name === 'kb_relations' ? opts.relations : opts.timeline)?.map((d) => ({ data: () => d })) ?? [],
     });
     return {
-    where: () => ({
-      limit: () => ({
-        get: async () => ({
-          empty: !opts.entity,
-          docs: opts.entity ? [{ data: () => opts.entity }] : [],
-        }),
-      }),
+    where: () => {
+      const entityGet = async () => ({
+        empty: !opts.entity,
+        docs: opts.entity ? [{ data: () => opts.entity }] : [],
+      });
+      const limitResult = () => ({
+        get: entityGet,
+        // .select() proyecta campos — el mock devuelve los mismos docs.
+        select: () => ({ get: entityGet }),
+      });
+      return {
+      limit: () => limitResult(),
       // orderBy dentro de where: usado por kb_timeline (date) y kb_relations (strength)
       orderBy: () => ({
-        limit: () => ({ get: async () => relDocs() }),
+        limit: () => {
+          const relGet = async () => relDocs();
+          return { get: relGet, select: () => ({ get: relGet }) };
+        },
       }),
       get: async () => relDocs(),
+      select: () => ({ get: async () => relDocs() }),
+      };
+    },
+    orderBy: () => ({
+      limit: () => ({ get: async () => ({ docs: [] }), select: () => ({ get: async () => ({ docs: [] }) }) }),
+      offset: () => ({ limit: () => ({ get: async () => ({ docs: [] }), select: () => ({ get: async () => ({ docs: [] }) }) }) }),
     }),
-    orderBy: () => ({ limit: () => ({ get: async () => ({ docs: [] }) }), offset: () => ({ limit: () => ({ get: async () => ({ docs: [] }) }) }) }),
     doc: (id: string) => ({ id, path: `${name}/${id}` }),
     count: () => ({ get: async () => ({ data: () => ({ count: 0 }) }) }),
     };
