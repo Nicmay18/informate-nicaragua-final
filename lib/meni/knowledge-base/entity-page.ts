@@ -18,15 +18,34 @@ export interface EntityPageData {
   newsIds: string[];
 }
 
+// Proyecciones para la página pública (/entidad/[slug]): solo los campos
+// que EntityPageClient y generateEntitySchema renderizan. La API
+// /api/entity sigue usando el modo completo (lite=false por defecto).
+const ENTITY_LITE_FIELDS = [
+  'id', 'name', 'slug', 'type', 'description', 'articleCount',
+  'firstSeen', 'lastSeen', 'keywords', 'categoriasRelacionadas',
+];
+const TIMELINE_LITE_FIELDS = [
+  'articleId', 'articleTitle', 'articleSlug', 'date', 'category', 'summary',
+];
+const RELATION_LITE_FIELDS = ['sourceId', 'targetId', 'type', 'strength'];
+
+export interface LoadEntityPageOptions {
+  /** true = proyección de campos para la página pública (menos bytes). */
+  lite?: boolean;
+}
+
 export async function loadEntityPage(
   db: Firestore,
   slug: string,
+  opts: LoadEntityPageOptions = {},
 ): Promise<EntityPageData | null> {
-  const snap = await db
+  const lite = opts.lite === true;
+  const entityQuery = db
     .collection('kb_entities')
     .where('slug', '==', slug)
-    .limit(1)
-    .get();
+    .limit(1);
+  const snap = lite ? await entityQuery.select(...ENTITY_LITE_FIELDS).get() : await entityQuery.get();
 
   if (snap.empty) return null;
 
@@ -37,20 +56,26 @@ export async function loadEntityPage(
   // (máx observado: 410 timeline + 421 relations source + 56 target + ~800
   // getAll). La página solo muestra 30 entradas de timeline y 12 entidades
   // relacionadas ordenadas por strength, así que los límites dejan margen
-  // amplio (60/150/150) sin perder nada visible.
-  const ENTITY_PAGE_LIMITS = { timeline: 60, relationsPerDirection: 150, relatedEntities: 60 } as const;
+  // amplio sin perder nada visible.
+  // (2026-11-23) Ajuste fino post-medición: la página muestra 30/12 —
+  // 40/100/24 mantienen margen y reducen ~35% las lecturas del peor caso.
+  const ENTITY_PAGE_LIMITS = { timeline: 40, relationsPerDirection: 100, relatedEntities: 24 } as const;
 
   const [timelineSnap, relationsSnap] = await Promise.all([
-    db.collection('kb_timeline')
-      .where('entityId', '==', entity.id)
-      .orderBy('date', 'desc')
-      .limit(ENTITY_PAGE_LIMITS.timeline)
-      .get(),
-    db.collection('kb_relations')
-      .where('sourceId', '==', entity.id)
-      .orderBy('strength', 'desc')
-      .limit(ENTITY_PAGE_LIMITS.relationsPerDirection)
-      .get(),
+    (() => {
+      const q = db.collection('kb_timeline')
+        .where('entityId', '==', entity.id)
+        .orderBy('date', 'desc')
+        .limit(ENTITY_PAGE_LIMITS.timeline);
+      return lite ? q.select(...TIMELINE_LITE_FIELDS).get() : q.get();
+    })(),
+    (() => {
+      const q = db.collection('kb_relations')
+        .where('sourceId', '==', entity.id)
+        .orderBy('strength', 'desc')
+        .limit(ENTITY_PAGE_LIMITS.relationsPerDirection);
+      return lite ? q.select(...RELATION_LITE_FIELDS).get() : q.get();
+    })(),
   ]);
 
   const timeline: KnowledgeTimelineEntry[] = timelineSnap.docs.map(
@@ -69,12 +94,14 @@ export async function loadEntityPage(
     relatedEntityIds.add(rel.targetId);
   }
 
-  const reverseRelSnap = await db
+  const reverseQuery = db
     .collection('kb_relations')
     .where('targetId', '==', entity.id)
     .orderBy('strength', 'desc')
-    .limit(ENTITY_PAGE_LIMITS.relationsPerDirection)
-    .get();
+    .limit(ENTITY_PAGE_LIMITS.relationsPerDirection);
+  const reverseRelSnap = lite
+    ? await reverseQuery.select(...RELATION_LITE_FIELDS).get()
+    : await reverseQuery.get();
 
   const reverseRelations: KnowledgeRelation[] = reverseRelSnap.docs.map(
     (d) => d.data() as unknown as KnowledgeRelation,
@@ -169,11 +196,13 @@ export async function listEntitiesPaginated(
   pageSize: number,
 ): Promise<KnowledgeEntity[]> {
   const offset = (page - 1) * pageSize;
+  // Solo lo que EntityIndexClient renderiza (tarjeta + filtro por tipo).
   const snap = await db
     .collection('kb_entities')
     .orderBy('articleCount', 'desc')
     .offset(offset)
     .limit(pageSize)
+    .select('id', 'name', 'slug', 'type', 'description', 'articleCount')
     .get();
 
   return snap.docs.map((d) => d.data() as unknown as KnowledgeEntity);

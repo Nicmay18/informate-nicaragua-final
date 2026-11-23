@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 import { getAdminDb } from '@/lib/firebase-admin';
 import { loadEntityPage, generateEntitySchema } from '@/lib/meni/knowledge-base/entity-page';
 import EntityPageClient from '@/components/knowledge-graph/EntityPageClient';
@@ -7,14 +8,21 @@ import { escapeJsonLd } from '@/lib/jsonld';
 
 export const revalidate = 3600;
 
+// generateMetadata y el componente llaman loadEntityPage en la MISMA
+// request — sin dedupe cada regeneración ISR leía kb_* dos veces
+// (~421 docs × 2, verificado en metrics_daily: entity.agua = 842 docs).
+// React cache() memoiza por request: 1 ejecución, misma data.
+const getEntityPage = cache((slug: string) =>
+  loadEntityPage(getAdminDb(), slug, { lite: true }),
+);
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const db = getAdminDb();
-  const data = await loadEntityPage(db, slug);
+  const data = await getEntityPage(slug);
   if (!data) {
     notFound();
   }
@@ -42,8 +50,7 @@ export default async function EntityPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const db = getAdminDb();
-  const data = await loadEntityPage(db, slug);
+  const data = await getEntityPage(slug);
 
   if (!data) notFound();
 
