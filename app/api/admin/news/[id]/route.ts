@@ -302,6 +302,27 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     revalidatePath('/news-sitemap.xml');
     revalidatePath('/sitemap.xml');
 
+    // Purga selectiva Cloudflare Edge (ver lib/cloudflare-purge.ts).
+    // Cubre slug/categoría/temas antes y después del cambio. Fail-safe.
+    try {
+      const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+      const beforeData = snap.data() || {};
+      const afterData = after.data() || {};
+      await enqueueAndPurgeCloudflare({
+        reason: 'edit',
+        slug: String(afterData.slug || slug || ''),
+        slugAnterior: beforeData.slug ? String(beforeData.slug) : undefined,
+        categoria: afterData.categoria ? String(afterData.categoria) : undefined,
+        categoriaAnterior: catBefore ? String(catBefore) : undefined,
+        temas: Array.isArray(afterData.temas) ? afterData.temas.map(String) : undefined,
+        temasAnteriores: Array.isArray(beforeData.temas) ? beforeData.temas.map(String) : undefined,
+        autorNombre: afterData.autor ? String(afterData.autor) : undefined,
+        mutationKey: `${id}:${Date.now()}`,
+      });
+    } catch (e) {
+      logger.warn('[admin/news PUT] cf-purge error (non-blocking):', e);
+    }
+
     // Invalidar cache en memoria de Firestore
     try {
       const { invalidateFirestoreCache } = await import('@/lib/data');
@@ -408,6 +429,20 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
       if (slugBefore) revalidatePath(`/noticias/${slugBefore}`);
       if (beforeData.categoria) revalidatePath(`/categoria/${categoryToSlug(String(beforeData.categoria))}`);
 
+      try {
+        const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+        await enqueueAndPurgeCloudflare({
+          reason: 'unpublish',
+          slug: slugBefore || undefined,
+          categoria: beforeData.categoria ? String(beforeData.categoria) : undefined,
+          temas: Array.isArray(beforeData.temas) ? beforeData.temas.map(String) : undefined,
+          autorNombre: beforeData.autor ? String(beforeData.autor) : undefined,
+          mutationKey: `${id}:soft:${Date.now()}`,
+        });
+      } catch (e) {
+        logger.warn('[admin/news DELETE soft] cf-purge error (non-blocking):', e);
+      }
+
       return NextResponse.json({
         success: true,
         action: 'SOFT_DELETE',
@@ -467,6 +502,20 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     revalidatePath('/noticias');
     if (slugBefore) revalidatePath(`/noticias/${slugBefore}`);
     if (beforeData.categoria) revalidatePath(`/categoria/${categoryToSlug(String(beforeData.categoria))}`);
+
+    try {
+      const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+      await enqueueAndPurgeCloudflare({
+        reason: 'delete',
+        slug: slugBefore || undefined,
+        categoria: beforeData.categoria ? String(beforeData.categoria) : undefined,
+        temas: Array.isArray(beforeData.temas) ? beforeData.temas.map(String) : undefined,
+        autorNombre: beforeData.autor ? String(beforeData.autor) : undefined,
+        mutationKey: `${id}:hard:${Date.now()}`,
+      });
+    } catch (e) {
+      logger.warn('[admin/news DELETE hard] cf-purge error (non-blocking):', e);
+    }
 
     return NextResponse.json({
       success: !existsAfter,

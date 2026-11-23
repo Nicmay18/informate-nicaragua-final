@@ -372,6 +372,27 @@ export async function POST(request: NextRequest) {
     revalidatePath('/sitemap.xml');
     revalidatePath('/news-sitemap.xml');
 
+    // Purga selectiva Cloudflare Edge (ver lib/cloudflare-purge.ts).
+    // Fail-safe: nunca bloquea el guardado; reintento vía cron.
+    try {
+      const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+      const prevTemas = Array.isArray(existingData.temas) ? existingData.temas.map(String) : undefined;
+      const newTemas = Array.isArray(updateData.temas) ? (updateData.temas as unknown[]).map(String) : undefined;
+      await enqueueAndPurgeCloudflare({
+        reason: existingData.id ? 'edit' : 'publish',
+        slug: slugParaRevalidar || undefined,
+        slugAnterior: (existingData.slug as string) || undefined,
+        categoria: updateData.categoria ? String(updateData.categoria) : (existingData.categoria ? String(existingData.categoria) : undefined),
+        categoriaAnterior: (existingData.categoria as string) || undefined,
+        temas: newTemas,
+        temasAnteriores: prevTemas,
+        autorNombre: (updateData.autor as string) || (existingData.autor as string) || undefined,
+        mutationKey: `${articleDocId || 'new'}:${Date.now()}`,
+      });
+    } catch (e) {
+      logger.warn('[guardar-directo] cf-purge error (non-blocking):', e);
+    }
+
     // Invalidar cache en memoria de Firestore
     try {
       const { invalidateFirestoreCache } = await import('@/lib/data');

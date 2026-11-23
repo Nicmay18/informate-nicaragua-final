@@ -217,6 +217,22 @@ export async function POST(request: NextRequest) {
       logger.warn('[articles] revalidatePath error (non-blocking):', e);
     }
 
+    // Purga selectiva Cloudflare Edge (ver lib/cloudflare-purge.ts).
+    // Fail-safe: nunca bloquea la publicación automatizada.
+    try {
+      const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+      await enqueueAndPurgeCloudflare({
+        reason: 'publish',
+        slug: finalSlug,
+        categoria: finalCategoria,
+        temas: computeTemaSlugs({ ...meniUpdateData, titulo, categoria: finalCategoria }),
+        autorNombre: autor || 'Redacción Nicaragua Informate',
+        mutationKey: `${articleId}:${Date.now()}`,
+      });
+    } catch (e) {
+      logger.warn('[articles] cf-purge error (non-blocking):', e);
+    }
+
     // Notificar a Google Indexing API (post-respuesta, errores visibles)
     const articleUrl = `https://nicaraguainformate.com/noticias/${finalSlug}`;
     after(async () => {
