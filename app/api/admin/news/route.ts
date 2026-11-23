@@ -385,6 +385,24 @@ export async function POST(request: NextRequest) {
     revalidatePath('/news-sitemap.xml');
     revalidatePath('/sitemap.xml');
 
+    // Purga selectiva Cloudflare Edge: la Cache Rule del dominio ignora el
+    // Cache-Control del origen (~2h por PoP), así que sin esto una noticia
+    // tarda hasta ~2h en aparecer en edge. Fail-safe: nunca bloquea la
+    // publicación; los fallos quedan en cf_purge_jobs para reintento.
+    try {
+      const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+      await enqueueAndPurgeCloudflare({
+        reason: 'publish',
+        slug,
+        categoria: finalCategoria,
+        temas: computeTemaSlugs({ ...meniUpdateData, titulo: tituloLimpio, categoria: finalCategoria }),
+        autorNombre: autor || 'Nicaragua Informate',
+        mutationKey: `${docRef.id}:${Date.now()}`,
+      });
+    } catch (e) {
+      logger.warn('[admin/news POST] cf-purge error (non-blocking):', e);
+    }
+
     // Notificar a Google Indexing API cuando la noticia se publica
     let googleIndexing: { ok: boolean; status: 'sent' | 'duplicate' | 'error' | 'skipped' } = { ok: false, status: 'skipped' };
     if (publicado !== false) {

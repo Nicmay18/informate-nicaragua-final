@@ -58,6 +58,8 @@ export const DECLARED_CRONS = [
   { path: '/api/cron/traffic-cleanup', schedule: '0 3 * * *' },
   { path: '/api/cron/distribuciones-retry', schedule: '15 5 * * *' },
   { path: '/api/cron/meni-learning-cycle', schedule: '0 6 * * 0' },
+  // Propuesta dormida (CF_PURGE_ENABLED off): reintento diario de cf_purge_jobs.
+  { path: '/api/cron/cf-purge-retry', schedule: '30 4 * * *' },
 ];
 
 /**
@@ -290,7 +292,7 @@ export function buildBoard(input: BoardInput, now = new Date()): SwissWatchBoard
       'Crons declarados en vercel.json',
       `${DECLARED_CRONS.length} cron(s) declarados con expresiones diarias`,
       'config',
-      DECLARED_CRONS.length === 13,
+      DECLARED_CRONS.length === 14,
     ),
     ...cronSecret.evidence,
   ];

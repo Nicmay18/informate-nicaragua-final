@@ -270,6 +270,30 @@ export async function applySubstantiveMutation(
         reeval: reevalInfo,
       }),
     });
+    // Purga selectiva Cloudflare Edge — la mutación cambió contenido
+    // público; sin esto el edge sirve la versión vieja hasta ~2h.
+    // Fail-safe: nunca rompe la mutación; reintento vía cron.
+    try {
+      const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+      await enqueueAndPurgeCloudflare({
+        reason: 'edit',
+        slug: merged.slug || undefined,
+        categoria: merged.categoria || undefined,
+        categoriaAnterior: before.categoria ? String(before.categoria) : undefined,
+        temas: computeTemaSlugs({
+          titulo: canonical?.titulo || merged.titulo,
+          resumen: canonical?.resumen || merged.resumen,
+          contenido: canonical?.contenido || merged.contenido,
+          categoria: merged.categoria,
+          tags: before.tags,
+        }),
+        temasAnteriores: Array.isArray(before.temas) ? before.temas.map(String) : undefined,
+        autorNombre: merged.autor || undefined,
+        mutationKey: `${articleId}:${meni.articleHash || Date.now()}`,
+      });
+    } catch (purgeErr) {
+      console.warn('[mutation-policy] cf-purge falló (no bloqueante):', purgeErr);
+    }
     // Learning 4.0 (FASE 1): una mutación sustantiva APLICADA es una
     // corrección editorial real — alimenta editor_corrections → editor_patterns.
     // Antes de esta conexión el canal quedaba vacío (0 correcciones en 125
@@ -343,6 +367,21 @@ export async function applySubstantiveMutation(
         reeval: reevalInfo,
       }),
     });
+    try {
+      const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+      await enqueueAndPurgeCloudflare({
+        reason: 'edit',
+        slug: String(before.slug || ''),
+        categoria: mutation.categoria !== undefined ? String(mutation.categoria) : (before.categoria ? String(before.categoria) : undefined),
+        categoriaAnterior: before.categoria ? String(before.categoria) : undefined,
+        temas: computeTemaSlugs({ ...before, ...mutation }),
+        temasAnteriores: Array.isArray(before.temas) ? before.temas.map(String) : undefined,
+        autorNombre: before.autor ? String(before.autor) : undefined,
+        mutationKey: `${articleId}:review:${Date.now()}`,
+      });
+    } catch (purgeErr) {
+      console.warn('[mutation-policy] cf-purge falló (no bloqueante):', purgeErr);
+    }
     return {
       applied: true,
       reviewRequired: true,
@@ -414,6 +453,21 @@ export async function flagSubstantiveMutation(
       reeval: { required: true },
     }),
   });
+  try {
+    const { enqueueAndPurgeCloudflare } = await import('@/lib/cloudflare-purge');
+    await enqueueAndPurgeCloudflare({
+      reason: 'edit',
+      slug: before.slug ? String(before.slug) : undefined,
+      categoria: sanitized.categoria !== undefined ? String(sanitized.categoria) : (before.categoria ? String(before.categoria) : undefined),
+      categoriaAnterior: before.categoria ? String(before.categoria) : undefined,
+      temas: computeTemaSlugs({ ...before, ...sanitized }),
+      temasAnteriores: Array.isArray(before.temas) ? before.temas.map(String) : undefined,
+      autorNombre: before.autor ? String(before.autor) : undefined,
+      mutationKey: `${articleId}:flag:${Date.now()}`,
+    });
+  } catch (purgeErr) {
+    console.warn('[mutation-policy] cf-purge falló (no bloqueante):', purgeErr);
+  }
   return { applied: true };
 }
 
