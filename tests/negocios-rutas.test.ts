@@ -322,8 +322,11 @@ describe('rutas — directorio público y estados', () => {
     const res = await GET(new NextRequest('https://ni.test/api/negocios'));
     const j = await res.json();
     expect(j.items.map((n: { slug: string }) => n.slug)).toEqual(['ok']);
-    const { default: sitemap, dynamic } = await import('@/app/sitemap');
-    expect(dynamic).toBe('force-dynamic');
+    // sitemap.xml es ISR (revalidate=3600) desde la contención Fast Origin
+    // Transfer: la frescura de moderación la garantiza revalidatePath
+    // ('/sitemap.xml') dentro de saveCommercial, no force-dynamic.
+    const { default: sitemap, revalidate } = await import('@/app/sitemap');
+    expect(revalidate).toBe(3600);
     const businessUrls = (await sitemap()).filter((x) => x.url.includes('/negocios/')).map((x) => x.url);
     expect(businessUrls).toEqual(expect.arrayContaining(['https://nicaraguainformate.com/negocios/ok']));
     for (const slug of ['exp', 'pend', 'susp', 'rech']) expect(businessUrls).not.toContain(`https://nicaraguainformate.com/negocios/${slug}`);

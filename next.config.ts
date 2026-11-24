@@ -245,6 +245,31 @@ const nextConfig: NextConfig = {
         destination: '/feed.xml',
         permanent: true,
       },
+      // Contención Fast Origin Transfer: feeds duplicados legacy que
+      // renderizaban ~280KB por request sin caché edge (force-dynamic +
+      // bypass /api/ en Cloudflare). 308 preserva lectores RSS.
+      // /rss además usaba una query sin filtro de estado (posible fuga
+      // de no publicados) — el canonical /feed.xml sí filtra.
+      {
+        source: '/api/rss',
+        destination: '/feed.xml',
+        permanent: true,
+      },
+      {
+        source: '/api/feed-xml',
+        destination: '/feed.xml',
+        permanent: true,
+      },
+      {
+        source: '/rss',
+        destination: '/feed.xml',
+        permanent: true,
+      },
+      {
+        source: '/feed',
+        destination: '/feed.xml',
+        permanent: true,
+      },
       {
         source: '/admin/news',
         destination: '/panel.html?tab=noticias&v=2',
