@@ -204,8 +204,12 @@ export async function POST(request: NextRequest) {
     // quedaban invisibles en /noticias y su categoría hasta que expirara el
     // ISR. Revalidar igual que guardar-directo y admin/news.
     try {
-      const { revalidatePath } = await import('next/cache');
+      const { revalidatePath, revalidateTag } = await import('next/cache');
       const { categoryToSlug } = await import('@/lib/types');
+      // El sitemap ISR lee cachedGetSitemapNews (tags sitemap-news /
+      // sitemap-news-full): sin estos tags la URL nueva tardaría hasta 1h.
+      revalidateTag('sitemap-news');
+      revalidateTag('sitemap-news-full');
       revalidatePath('/');
       revalidatePath('/noticias');
       revalidatePath(`/noticias/${finalSlug}`);

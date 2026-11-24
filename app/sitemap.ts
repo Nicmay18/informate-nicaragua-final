@@ -10,9 +10,15 @@ import { unstable_cache } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { isNegocioPublicable, type Negocio } from '@/lib/negocios/modelo';
 
-// Las noticias mantienen su caché propia; la moderación y la caducidad
-// comercial se comprueban en cada solicitud de sitemap.
-export const dynamic = 'force-dynamic';
+// Contención Fast Origin Transfer: los datos ya viven en unstable_cache
+// (tags sitemap-news/sitemap-entities, revalidate 3600). force-dynamic
+// forzaba un render de ~188KB por cada request del origen; con ISR el
+// HTML se sirve desde la caché de Vercel y revalidatePath('/sitemap.xml')
+// + revalidateTag('sitemap-news') en cada mutación editorial mantienen la
+// frescura (verificado en admin/news, admin/news/[id], guardar-directo y
+// articles). Las entidades_negocios pueden tardar hasta 1h en reflejar
+// cambios de moderación — residual aceptado y documentado.
+export const revalidate = 3600;
 
 const baseUrl = 'https://nicaraguainformate.com';
 
