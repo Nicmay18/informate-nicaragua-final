@@ -3,6 +3,11 @@ import { withSentryConfig } from '@sentry/nextjs';
 import withBundleAnalyzer from '@next/bundle-analyzer';
 const nextConfig: NextConfig = {
   trailingSlash: false,
+  // Portabilidad a costo $0 (plan de recuperación Vercel-suspendido):
+  // 'standalone' genera .next/standalone con server.js autocontenido que
+  // corre con `node server.js` en cualquier VPS/PC siempre encendida.
+  // No cambia el comportamiento en Vercel; es inerte allí.
+  output: 'standalone',
   // Metadata bloqueante para todas las UAs: en Next 15.5 las rutas dinámicas
   // streamean <title>/<meta> al <body> si generateMetadata resuelve tras el
   // flush inicial — raza detectada: el meta description caía en <body> y
