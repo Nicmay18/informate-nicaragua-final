@@ -250,3 +250,8 @@ public/data/meni-*.json
 .env.vercel-*
 
 .audit/
+
+# OpenNext/Cloudflare audit artifacts
+.open-next/
+.dev.vars
+.wrangler/

@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { logger } from '@/lib/logger';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 export const maxDuration = 10;
 
 const CITIES = [
