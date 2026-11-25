@@ -9,7 +9,7 @@ import { escapeJsonLd } from '@/lib/jsonld';
 import type { Author } from '@/lib/authors';
 
 // Dynamic rendering: evita timeout en build y garantiza 404 reales para autores inexistentes
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;

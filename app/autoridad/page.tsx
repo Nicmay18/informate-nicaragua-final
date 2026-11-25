@@ -6,7 +6,7 @@ import { getCspNonce } from '@/lib/nonce';
 import { buildOrganizationJsonLdEnhanced, buildWebSiteJsonLdEnhanced } from '@/lib/seo/schema';
 import { escapeJsonLd } from '@/lib/jsonld';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: 'Centro de Autoridad Editorial | Nicaragua Informate',

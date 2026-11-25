@@ -422,8 +422,8 @@ describe('Swiss Watch — tablero global', () => {
     }
   });
 
-  it('declara los 13 crons del protocolo', () => {
-    expect(DECLARED_CRONS).toHaveLength(13);
+  it('declara los 4 crons del portal de noticias', () => {
+    expect(DECLARED_CRONS).toHaveLength(4);
     DECLARED_CRONS.forEach((c) => {
       expect(c.path.startsWith('/api/cron/')).toBe(true);
       expect(c.schedule.split(' ')).toHaveLength(5);

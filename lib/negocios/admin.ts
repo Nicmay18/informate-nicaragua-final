@@ -100,6 +100,8 @@ export async function saveCommercial(request: Request, collection: string, id: s
       revalidateTag('negocios');
       revalidatePath('/sitemap.xml');
       revalidatePath('/negocios');
+      // La ficha /negocios/[slug] es ISR (3600): el id del doc es el slug.
+      if (collection === NEGOCIOS_COLLECTION) revalidatePath(`/negocios/${id}`);
     } catch {
       // Fuera de un request context (tests, scripts) la invalidación no aplica;
       // la mutación ya quedó confirmada en la transacción.

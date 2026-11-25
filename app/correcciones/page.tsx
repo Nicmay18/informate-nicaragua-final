@@ -5,7 +5,7 @@ import { AlertCircle, Mail, Clock, FileText, CheckCircle } from 'lucide-react';
 import { getPublicCorrections } from '@/lib/correcciones';
 import { formatDateES } from '@/lib/formateo';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
   title: 'Política de Correcciones',

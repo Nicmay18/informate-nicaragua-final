@@ -21,7 +21,7 @@ import { unstable_cache } from 'next/cache';
 import type { RelatedLink } from '@/lib/article-links';
 import { getAuspiciadorPublico } from '@/lib/ads/server';
 
-export const revalidate = 300;
+export const revalidate = 3600;
 export const dynamicParams = true;
 
 const NOTICIA_TIPOS: ReadonlyArray<NoticiaTipo> = [

@@ -5,7 +5,7 @@ import { listarNegociosPublicos } from '@/lib/negocios/datos';
 import { CATEGORIAS_NEGOCIO, DEPARTAMENTOS_NI, type PublicNegocio } from '@/lib/negocios/modelo';
 import { MapPin, Search, Store } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: { absolute: 'Negocios en Nicaragua | Nicaragua Informate' },
