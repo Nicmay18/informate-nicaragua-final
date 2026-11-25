@@ -17,13 +17,13 @@ import { getCspNonce } from '@/lib/nonce';
 import { getAuspiciadorPublico } from '@/lib/ads/server';
 
 // ============================================================================
-// ISR: la portada se regenera cada 5 minutos. Las noticias nuevas NO dependen
+// ISR: la portada se regenera cada 30 minutos. Las noticias nuevas NO dependen
 // de este TTL: cada publicación/edición ejecuta revalidateTag('noticias'),
 // que invalida al instante el Data Cache y el árbol ISR. El TTL solo acota la
 // deriva de contadores (vistas/trending), que no justifica regenerar ~2.000
 // lecturas Firestore por minuto.
 // ============================================================================
-export const revalidate = 300;
+export const revalidate = 1800;
 
 const getCachedHomepageAudit = unstable_cache(
   async () => auditHomepage(getAdminDb()),

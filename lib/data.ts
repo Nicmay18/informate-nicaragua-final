@@ -407,7 +407,7 @@ const _cachedGetNewsPool = unstable_cache(
   // 600s (antes 300s): cada regeneración lee ~450 docs. La fresquedad real la
   // da revalidateTag('noticias') en cada publicación — el TTL solo acota la
   // deriva de contadores (vistas/trending), que no justifica 288 regens/día.
-  { revalidate: 600, tags: ['noticias'] }
+  { revalidate: 3600, tags: ['noticias'] }
 );
 
 export async function getNews(count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -443,7 +443,7 @@ const _cachedGetNewsByCategory = unstable_cache(
     }
   },
   ['news-by-category'],
-  { revalidate: 900, tags: ['noticias'] }
+  { revalidate: 3600, tags: ['noticias'] }
 );
 
 export async function getNewsByCategory(categoria: string, count: number = DEFAULT_NEWS_COUNT): Promise<Noticia[]> {
@@ -489,7 +489,7 @@ const _cachedGetMasLeidas = unstable_cache(
     }
   },
   ['mas-leidas'],
-  { revalidate: 900, tags: ['noticias', 'popular-news'] }
+  { revalidate: 3600, tags: ['noticias', 'popular-news'] }
 );
 
 export async function getMasLeidas(count: number = DEFAULT_MAS_LEIDAS_COUNT): Promise<Noticia[]> {
@@ -597,7 +597,7 @@ const _cachedGetBySlug = unstable_cache(
     return null;
   },
   ['noticia-slug'],
-  { revalidate: 300, tags: ['noticias'] }
+  { revalidate: 1800, tags: ['noticias'] }
 );
 
 export async function getNewsBySlug(slug: string): Promise<Noticia | null> {
@@ -683,7 +683,7 @@ const _cachedRelatedPool = unstable_cache(
     return pool;
   },
   ['related-pool'],
-  { revalidate: 900, tags: ['noticias'] }
+  { revalidate: 3600, tags: ['noticias'] }
 );
 
 export async function getRelatedNews(categoria: string, excludeSlug: string, count: number = 3): Promise<Noticia[]> {
@@ -729,7 +729,7 @@ const _cachedGetNewsPaginated = unstable_cache(
   ['noticias-paginadas'],
   // 900s: páginas profundas las rastrean crawlers; la publicación invalida
   // el tag 'noticias' al instante, el TTL solo cubre deriva de contadores.
-  { revalidate: 900, tags: ['noticias'] }
+  { revalidate: 3600, tags: ['noticias'] }
 );
 
 export async function getNewsPaginated(page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
@@ -778,7 +778,7 @@ const _cachedGetNewsCount = unstable_cache(
     }
   },
   ['noticias-count'],
-  { revalidate: 300, tags: ['noticias'] }
+  { revalidate: 1800, tags: ['noticias'] }
 );
 
 export async function getNewsCount(): Promise<number> {
@@ -800,7 +800,7 @@ const _cachedGetCategoryPaginated = unstable_cache(
   },
   ['categoria-paginada'],
   // 900s: mismo criterio que noticias-paginadas — crawlers + invalidación por tag.
-  { revalidate: 900, tags: ['noticias'] }
+  { revalidate: 3600, tags: ['noticias'] }
 );
 
 export async function getCategoryPaginated(categoria: string, page: number = 1, pageSize: number = PAGE_SIZE): Promise<Noticia[]> {
@@ -850,7 +850,7 @@ const _cachedGetCategoryCount = unstable_cache(
     }
   },
   ['categoria-count'],
-  { revalidate: 300, tags: ['noticias'] }
+  { revalidate: 1800, tags: ['noticias'] }
 );
 
 export async function getCategoryCount(categoria: string): Promise<number> {

@@ -46,7 +46,7 @@ function formatCampo(campo: string): string {
 const _cachedPublicCorrections = unstable_cache(
   async (limit: number) => loadPublicCorrections(limit),
   ['public-corrections'],
-  { revalidate: 300, tags: ['correcciones'] }
+  { revalidate: 86400, tags: ['correcciones'] }
 );
 
 export async function getPublicCorrections(limit = 50): Promise<CorreccionPublica[]> {

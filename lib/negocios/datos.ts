@@ -32,7 +32,7 @@ const _cachedListarNegocios = unstable_cache(
       );
   },
   ['negocios-publicos'],
-  { revalidate: 300, tags: ['negocios'] }
+  { revalidate: 1800, tags: ['negocios'] }
 );
 
 /** Perfiles aprobados y vigentes para el directorio público. */
@@ -57,7 +57,7 @@ const _cachedNegocioBySlug = unstable_cache(
     return toPublicNegocio(doc.id, { ...n, patrocinado: sponsored, piloto: campaign?.data().estadoPago === 'piloto', destacado: sponsored && n.destacado });
   },
   ['negocio-slug'],
-  { revalidate: 300, tags: ['negocios'] }
+  { revalidate: 1800, tags: ['negocios'] }
 );
 
 export async function getNegocioPublicoBySlug(slug: string): Promise<PublicNegocio | null> {

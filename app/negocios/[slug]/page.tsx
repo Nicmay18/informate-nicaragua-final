@@ -8,7 +8,7 @@ import { getNegocioPublicoBySlug } from '@/lib/negocios/datos';
 import { escapeJsonLd } from '@/lib/jsonld';
 import { MapPin, Clock } from 'lucide-react';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 export const dynamicParams = true;
 
 const getCached = getNegocioPublicoBySlug;

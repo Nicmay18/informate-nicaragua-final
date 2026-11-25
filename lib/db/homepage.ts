@@ -208,7 +208,7 @@ const _cachedGetHomePageData = unstable_cache(
     return data;
   },
   ['homepage-data'],
-  { revalidate: 300, tags: ['noticias'] }
+  { revalidate: 1800, tags: ['noticias'] }
 );
 
 export async function getHomePageData(): Promise<HomePageData> {

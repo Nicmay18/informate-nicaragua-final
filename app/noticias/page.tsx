@@ -11,7 +11,7 @@ import NoticiasList from '@/components/NoticiasList';
 import { logger } from '@/lib/logger';
 
 export const dynamicParams = true;
-export const revalidate = 300;
+export const revalidate = 1800;
 
 const SITE_URL = 'https://nicaraguainformate.com';
 

@@ -1,4 +1,4 @@
-﻿import { getSitemapNews } from '@/lib/data';
+import { getSitemapNews } from '@/lib/data';
 import { normalizeEditorialTitle } from '@/lib/formateo';
 import { parseFechaReal } from '@/app/sitemap';
 import { logger } from '@/lib/logger';
@@ -9,7 +9,7 @@ const SITE_URL = 'https://nicaraguainformate.com';
 
 // Google News Sitemap: solo noticias de las últimas 48 horas
 // Requisitos: https://support.google.com/news/publisher-center/answer/74245
-export const dynamic = 'force-dynamic';
+export const revalidate = 900;
 
 function escapeXml(str: string): string {
   return String(str || '')
