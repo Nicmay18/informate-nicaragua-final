@@ -36,31 +36,45 @@ abrir puertos del router ni IP fija.
 
 ## Pasos de despliegue (ejecuta el propietario 👤)
 
-### Opción A — PC siempre encendida (la más rápida)
+### Opción A — PC Windows siempre encendida (la más rápida) ✅ IMPLEMENTADA
 
-1. En la máquina (Windows/Linux/Mac siempre encendida):
-   ```bash
-   git clone https://github.com/Nicmay18/informate-nicaragua-final.git
-   cd informate-nicaragua-final && git checkout <rama aprobada>
-   npm ci && npm run build
+> **El procedimiento automatizado completo está en `deploy/windows/`**
+> (instalador, vigía con auto-restart, túnel Cloudflare, Task Scheduler para
+> los 13 crons, actualización y rollback). Resumen abajo; los scripts son la
+> fuente de verdad.
+
+1. En la máquina (Windows siempre encendida):
+   ```powershell
+   cd deploy\windows
+   .\Install-SelfHost.ps1 -SourceDir "E:\PROYECTO\informate-nicaragua-final"
+   # compila standalone, monta ~\informate-prod\runtime, registra la tarea
+   # 'InformateServer' (arranque de Windows + auto-restart + logs rotativos)
    ```
 2. Copiar variables de entorno: las mismas de `.env.local`
    (FIREBASE_*, NEXT_PUBLIC_*, TELEGRAM_*, GOOGLE_INDEXING_*, etc.) a
    `.env.local` del servidor — **nunca en Git**.
-3. Arrancar:
-   ```bash
-   cd .next/standalone && cp -r ../../public . && cp -r ../../.next/static .next/static
-   node server.js   # escucha :3000 por defecto (PORT env para cambiar)
-   ```
+   ⚠️ `CRON_SECRET` está VACÍO en `.env.local` local: cópialo de Vercel
+   → Project Settings → Environment Variables antes de instalar.
+3. Probar local: `curl http://localhost:3000/api/admin/estado` → 200.
 4. Exponer con Cloudflare Tunnel (gratis):
-   ```bash
-   cloudflared tunnel login        # 👤 autoriza en dashboard CF
-   cloudflared tunnel create informate
-   # crear DNS route: cloudflared tunnel route dns informate nicaraguainformate.com
-   cloudflared tunnel run informate
+   ```powershell
+   .\Setup-Tunnel.ps1 -TempHostname staging.nicaraguainformate.com -RouteDns
    ```
-   Esto reemplaza el registro A/CNAME del apex por el túnel —
-   👤 lo haces tú en el dashboard de Cloudflare (mi zona DNS no la toco).
+   Crea túnel persistente + servicio Windows + DNS del hostname TEMPORAL.
+   **El apex productivo NO se toca** hasta autorizar el cutover.
+5. Crons (cuando el servidor esté estable):
+   ```powershell
+   .\Install-Crontasks.ps1 -WhatIfOnly   # plan
+   .\Install-Crontasks.ps1               # registra 13 tareas
+   ```
+   4 activas / 9 deshabilitadas por `cost_guard=economy` (ver `deploy/windows/CRONS.md`).
+
+Actualización futura: `.\Update-SelfHost.ps1 -SourceDir <repo>`
+Rollback local: `.\Uninstall-SelfHost.ps1`
+
+> El cambio del apex productivo a la ruta del túnel es un paso 👤 separado
+> y autorizado (ver `deploy/windows/README.md` sección Rollback).
+
 5. ISR/cachés: funcionan igual (filesystem cache en `.next/cache`).
 
 ### Opción B — Oracle Cloud Always Free (más robusto, requiere cuenta 👤)
