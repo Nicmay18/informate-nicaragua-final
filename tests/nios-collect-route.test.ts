@@ -34,12 +34,13 @@ describe('cron/nios-collect — etapas reanudables dentro del límite Hobby 60s'
     expect(routeSrc).toContain('stage_prerequisite_missing');
   });
 
-  it('vercel.json programa las 4 etapas escalonadas', () => {
+  it('vercel.json NO programa las etapas NIOS (retiradas del schedule 2026-11-24)', () => {
+    // Las etapas siguen existiendo para invocación manual/admin, pero ningún
+    // cron las ejecuta: el portal solo conserva sus 4 crons esenciales.
     for (const stage of ['collect', 'analyze', 'ceo', 'finalize']) {
-      expect(vercelSrc).toContain(`stage=${stage}`);
+      expect(vercelSrc).not.toContain(`stage=${stage}`);
     }
-    expect(vercelSrc).toContain('30 8 * * *');
-    expect(vercelSrc).toContain('30 9 * * *');
+    expect(vercelSrc).not.toContain('nios-collect');
   });
 
   it('heartbeat healthy SOLO si las 4 etapas esenciales completaron limpias', () => {
